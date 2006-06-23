@@ -190,11 +190,15 @@
     </jar>
     <jar destfile="${deploy.dir}/${app.name}-micasa.jar">
       <fileset dir="${classes.dir}" includes="com/threerings/micasa/**"/>
-      <fileset dir="${classes.dir}" includes="rsrc/config/micasa/**"/>
+      <fileset dir="${classes.dir}" includes="rsrc/**/micasa/**"/>
+    </jar>
+    <jar destfile="${deploy.dir}/${app.name}-stage.jar">
+      <fileset dir="${classes.dir}" includes="com/threerings/stage/**"/>
+      <fileset dir="${classes.dir}" includes="rsrc/**/stage/**"/>
     </jar>
     <jar destfile="${deploy.dir}/${app.name}-whirled.jar">
       <fileset dir="${classes.dir}" includes="com/threerings/whirled/**"/>
-      <fileset dir="${classes.dir}" includes="rsrc/config/whirled/**"/>
+      <fileset dir="${classes.dir}" includes="rsrc/**/whirled/**"/>
     </jar>
   </target>
 
