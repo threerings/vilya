@@ -1,0 +1,115 @@
+<!-- build configuration -->
+<project name="vilya tests" default="compile" basedir=".">
+
+  <!-- things you may want to change -->
+  <property name="junit.fork"     value="true"/>
+
+  <!-- things you probably don't want to change -->
+  <property name="test.dir"   value="."/>
+  <property name="src.dir"    value="src/java"/>
+  <property name="deploy.dir" value="dist"/>
+
+  <!-- declare our classpath -->
+  <property name="classes.dir" value="${deploy.dir}/classes"/>
+  <property name="vilya.classes.dir" value="../${deploy.dir}/classes"/>
+  <path id="classpath">
+    <pathelement location="${classes.dir}"/>
+    <pathelement location="${vilya.classes.dir}"/>
+    <fileset dir="../lib" includes="**/*.jar"/>
+  </path>
+
+  <!-- generates additional methods for distributed object classes -->
+  <target name="gendobj" depends="prepare"> 
+    <taskdef name="dobj"
+             classname="com.threerings.presents.tools.GenDObjectTask"
+             classpathref="classpath"/>
+    <!-- make sure the dobject class files are all compiled -->
+    <javac srcdir="src/java" destdir="${classes.dir}"
+           debug="on" optimize="${build.optimize}" deprecation="on"
+           source="1.4" target="1.4">
+      <classpath refid="classpath"/>
+      <include name="**/*Object.java"/>
+    </javac>
+    <!-- now generate the associated files -->
+    <dobj classpathref="classpath">
+      <fileset dir="src/java" includes="**/*Object.java"/>
+    </dobj>
+  </target>
+
+  <!-- generates marshaller and dispatcher classes for all invocation -->
+  <!-- service declarations -->
+  <target name="genservice"> 
+    <taskdef name="service" classpathref="classpath"
+             classname="com.threerings.presents.tools.GenServiceTask"/>
+    <!-- make sure the service class files are all compiled -->
+    <javac srcdir="src/java" destdir="${classes.dir}"
+           debug="on" optimize="${build.optimize}" deprecation="on"
+           source="1.5" target="1.5">
+      <classpath refid="classpath"/>
+      <include name="**/*Service.java"/>
+      <exclude name="**/InvocationService.java"/>
+    </javac>
+    <!-- now generate the associated files -->
+    <service header="lib/SOURCE_HEADER" classpathref="classpath">
+      <fileset dir="src/java" includes="**/*Service.java"/>
+    </service>
+  </target>
+
+  <!-- generates sender and decoder classes for all invocation -->
+  <!-- receiver declarations -->
+  <target name="genreceiver"> 
+    <taskdef name="receiver" classpathref="classpath"
+             classname="com.threerings.presents.tools.GenReceiverTask"/>
+    <!-- make sure the receiver class files are all compiled -->
+    <javac srcdir="src/java" destdir="${classes.dir}"
+           debug="on" optimize="${build.optimize}" deprecation="on"
+           source="1.5" target="1.5">
+      <classpath refid="classpath"/>
+      <include name="**/*Receiver.java"/>
+    </javac>
+    <!-- now generate the associated files -->
+    <receiver header="lib/SOURCE_HEADER" classpathref="classpath">
+      <fileset dir="src/java" includes="**/*Receiver.java"/>
+    </receiver>
+  </target>
+
+  <!-- prepares the application directories -->
+  <target name="prepare">
+    <mkdir dir="${deploy.dir}"/>
+    <mkdir dir="${classes.dir}"/>
+    <copy todir="${classes.dir}">
+      <fileset dir="${src.dir}" includes="**/*.properties"/>
+    </copy>
+    <copy todir="${classes.dir}/rsrc">
+      <fileset dir="rsrc" includes="**/*"/>
+    </copy>
+  </target>
+
+  <!-- cleans out the installed application -->
+  <target name="clean">
+    <delete dir="${deploy.dir}"/>
+  </target>
+
+  <!-- build the java class files -->
+  <target name="compile" depends="prepare">
+    <javac srcdir="${src.dir}" destdir="${classes.dir}"
+      debug="on" optimize="off" deprecation="off">
+      <classpath refid="classpath"/>
+    </javac>
+  </target>
+
+  <!-- run the tests -->
+  <target name="test" depends="compile" description="Run the tests.">
+    <junit printsummary="no" haltonfailure="yes" fork="${junit.fork}">
+      <classpath refid="classpath"/>
+      <sysproperty key="test_dir" value="${test.dir}"/>
+      <sysproperty key="resource_dir" value="${test.dir}/rsrc"/>
+      <formatter type="brief" usefile="false"/>
+      <batchtest>
+        <fileset dir="${src.dir}">
+          <include name="**/*Test.java"/>
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+</project>
