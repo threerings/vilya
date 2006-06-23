@@ -1,12 +1,12 @@
 <?xml version="1.0" standalone="yes"?>
 <!-- build configuration -->
-<project name="narya" default="compile" basedir=".">
+<project name="vilya" default="compile" basedir=".">
 
   <!-- import overriding properties -->
   <property file="build.properties"/>
 
   <!-- configuration parameters -->
-  <property name="app.name"       value="narya"/>
+  <property name="app.name"       value="vilya"/>
   <property name="deploy.dir"     value="dist"/>
   <property name="savedoc.dir"    value="docs"/>
   <property name="lib.version"    value="1.0"/>
@@ -149,7 +149,7 @@
     <javadoc sourcepath="src/java" packagenames="com.threerings.*"
              destdir="${javadoc.home}" stylesheetfile="docs/stylesheet.css"
              additionalparam="-breakiterator"
-             link="http://www.threerings.net/code/narya/narya/docs/api">
+             link="http://www.threerings.net/code/vilya/vilya/docs/api">
       <classpath refid="classpath"/>
       <link href="http://java.sun.com/j2se/1.5/docs/api/"/>
       <!-- ant documentation is not available online, sorry kids -->
@@ -262,31 +262,31 @@
   <target name="distrib">
      <echo message="You may want to stop and run 'ant savedoc' first."/>
      <echo message="Building ${lib.version} tar.gz distribution..."/>
-     <tar destfile="narya-${lib.version}.tar.gz" compression="gzip">
+     <tar destfile="vilya-${lib.version}.tar.gz" compression="gzip">
        <tarfileset dir=".." mode="0775" dirmode="0775">
-         <include name="narya/bin/**"/>
-         <include name="narya/tests/bin/**"/>
+         <include name="vilya/bin/**"/>
+         <include name="vilya/tests/bin/**"/>
          <exclude name="**/CVS"/>
        </tarfileset>
        <tarfileset dir=".." mode="0664" dirmode="0775">
-         <include name="narya/**"/>
+         <include name="vilya/**"/>
          <exclude name="**/CVS"/>
-         <exclude name="narya/bin/**"/>
-         <exclude name="narya/tests/bin/**"/>
-         <exclude name="narya/tests/dist/**"/>
-         <exclude name="narya/dist/**"/>
-         <exclude name="narya/code/**"/>
-         <exclude name="narya/narya-*.*"/>
+         <exclude name="vilya/bin/**"/>
+         <exclude name="vilya/tests/bin/**"/>
+         <exclude name="vilya/tests/dist/**"/>
+         <exclude name="vilya/dist/**"/>
+         <exclude name="vilya/code/**"/>
+         <exclude name="vilya/vilya-*.*"/>
        </tarfileset>
      </tar>
      <echo message="Building ${lib.version} zip distribution..."/>
-     <zip destfile="narya-${lib.version}.zip">
+     <zip destfile="vilya-${lib.version}.zip">
        <fileset dir="..">
-         <include name="narya/**"/>
+         <include name="vilya/**"/>
          <exclude name="**/CVS"/>
-         <exclude name="narya/dist/**"/>
-         <exclude name="narya/code/**"/>
-         <exclude name="narya/narya-*.*"/>
+         <exclude name="vilya/dist/**"/>
+         <exclude name="vilya/code/**"/>
+         <exclude name="vilya/vilya-*.*"/>
        </fileset>
      </zip>
   </target>
