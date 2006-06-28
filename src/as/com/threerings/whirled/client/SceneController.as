@@ -21,6 +21,7 @@
 
 package com.threerings.whirled.client {
 
+import com.threerings.presents.dobj.MessageAdapter;
 import com.threerings.presents.dobj.MessageEvent;
 import com.threerings.presents.dobj.MessageListener;
 

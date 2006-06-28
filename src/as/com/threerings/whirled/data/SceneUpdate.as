@@ -80,14 +80,13 @@ public class SceneUpdate
         //throws IllegalStateException
     {
         if (model.sceneId != _targetId) {
-            var errmsg :String = "Wrong target scene, expected id " +
-                _targetId + " got id " + model.sceneId;
-            throw new IllegalOperationError(errmsg);
-        }
-        if (model.version != _targetVersion) {
-            var errmsg :String = "Target scene not proper version, expected " +
-                _targetVersion + " got " + model.version;
-            throw new IllegalOperationError(errmsg);
+            throw new IllegalOperationError("Wrong target scene, expected id " +
+                _targetId + " got id " + model.sceneId);
+
+        } else if (model.version != _targetVersion) {
+            throw new IllegalOperationError("Target scene not proper " +
+                "version, expected " + _targetVersion +
+                " got " + model.version);
         }
     }
 

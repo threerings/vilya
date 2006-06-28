@@ -22,6 +22,7 @@
 package com.threerings.whirled.spot.client {
 
 import com.threerings.presents.client.Client;
+import com.threerings.presents.client.ConfirmListener;
 import com.threerings.presents.client.InvocationService;
 
 import com.threerings.whirled.client.SceneService_SceneMoveListener;

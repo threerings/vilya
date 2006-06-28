@@ -271,7 +271,7 @@ public class SceneDirector extends BasicDirector
             } catch (ise :IllegalOperationError) {
                 log.warning("Scene update failed validation [model=" + model +
                             ", update=" + update +
-                            ", error=" + ise.getMessage() + "].");
+                            ", error=" + ise.message + "].");
                 failure = true;
                 break;
             }
