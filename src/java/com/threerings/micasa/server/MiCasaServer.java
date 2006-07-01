@@ -21,7 +21,15 @@
 
 package com.threerings.micasa.server;
 
+import com.threerings.util.Name;
+
+import com.threerings.presents.net.AuthRequest;
+import com.threerings.presents.server.ClientFactory;
+import com.threerings.presents.server.ClientResolver;
+import com.threerings.presents.server.PresentsClient;
+
 import com.threerings.crowd.server.CrowdServer;
+
 import com.threerings.parlor.server.ParlorManager;
 
 import com.threerings.micasa.Log;
@@ -49,7 +57,14 @@ public class MiCasaServer extends CrowdServer
         super.init();
 
         // configure the client manager to use our client class
-        clmgr.setClientClass(MiCasaClient.class);
+        clmgr.setClientFactory(new ClientFactory() {
+            public PresentsClient createClient (AuthRequest areq) {
+                return new MiCasaClient();
+            }
+            public ClientResolver createClientResolver (Name username) {
+                return new ClientResolver();
+            }
+        });
 
         // initialize our parlor manager
         parmgr.init(invmgr, plreg);

@@ -21,6 +21,13 @@
 
 package com.threerings.whirled.server;
 
+import com.threerings.util.Name;
+
+import com.threerings.presents.net.AuthRequest;
+import com.threerings.presents.server.ClientFactory;
+import com.threerings.presents.server.ClientResolver;
+import com.threerings.presents.server.PresentsClient;
+
 import com.threerings.crowd.server.CrowdServer;
 
 import com.threerings.whirled.Log;
@@ -46,7 +53,14 @@ public abstract class WhirledServer extends CrowdServer
         super.init();
 
         // configure the client to use our whirled client
-        clmgr.setClientClass(WhirledClient.class);
+        clmgr.setClientFactory(new ClientFactory() {
+            public PresentsClient createClient (AuthRequest areq) {
+                return new WhirledClient();
+            }
+            public ClientResolver createClientResolver (Name username) {
+                return new ClientResolver();
+            }
+        });
 
         // create the scene repository
         _screp = createSceneRepository();
