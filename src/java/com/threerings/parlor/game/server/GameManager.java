@@ -736,8 +736,18 @@ public class GameManager extends PlaceManager
         // queue up a runnable to start the game which will allow the
         // endGame() to propagate before we start things up
         if (_committedState == GameObject.IN_PLAY) {
+            if (_postponedStart) {
+                // We've already tried postponing once, doesn't do us any
+                //  good to throw ourselves into a frenzy trying again.
+                Log.warning("Tried to postpone the start of a " +
+                    "still-ending game multiple times " +
+                    "[which=" + _gameobj.which() + "].");
+                _postponedStart = false;
+                return false;
+            }
             Log.info("Postponing start of still-ending game " +
                      "[which=" + _gameobj.which() + "].");
+            _postponedStart = true;
             CrowdServer.omgr.postRunnable(new Runnable() {
                 public void run () {
                     startGame();
@@ -745,6 +755,9 @@ public class GameManager extends PlaceManager
             });
             return true;
         }
+
+        // Ah, good, not postponing.
+        _postponedStart = false;
 
         // let the derived class do its pre-start stuff
         gameWillStart();
@@ -1312,6 +1325,9 @@ public class GameManager extends PlaceManager
 
     /** TEMP: debugging the pending rating double release bug. */
     protected RepeatCallTracker _gameEndTracker = new RepeatCallTracker();
+
+    /** Whether we have already postponed the start of the game. */
+    protected boolean _postponedStart = false;
 
     /** A list of all currently active game managers. */
     protected static ArrayList<GameManager> _managers =
