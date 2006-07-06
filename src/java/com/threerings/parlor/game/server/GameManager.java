@@ -748,9 +748,18 @@ public class GameManager extends PlaceManager
             Log.info("Postponing start of still-ending game " +
                      "[which=" + _gameobj.which() + "].");
             _postponedStart = true;
+            // TEMP: track down weirdness
+            final Exception firstCall = new Exception();
+            // End: temp
             CrowdServer.omgr.postRunnable(new Runnable() {
                 public void run () {
-                    startGame();
+                    boolean result = startGame();
+                    // TEMP: track down weirdness
+                    if (!result && !_postponedStart) {
+                        Log.warning("First call to startGame: ");
+                        Log.logStackTrace(firstCall);
+                    }
+                    // End: temp
                 }
             });
             return true;
