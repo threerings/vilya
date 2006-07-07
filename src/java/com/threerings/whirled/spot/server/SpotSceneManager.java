@@ -91,7 +91,12 @@ public class SpotSceneManager extends SceneManager
      */
     public void mapEnteringBody (BodyObject body, int portalId)
     {
-        _enterers.put(body.getOid(), portalId);
+        // small optimization: don't save portalId -1, because it simply means
+        // "use the default entrance" and retrieving an unset value will
+        // return -1 anyway
+        if (portalId != -1) {
+            _enterers.put(body.getOid(), portalId);
+        }
     }
 
     /**

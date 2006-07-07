@@ -47,7 +47,8 @@ public class Portal extends SimpleStreamableObject
     public int targetSceneId;
 
     /** The portal identifier of the portal at which a body will enter
-     * the target scene when they "use" this portal. */
+     * the target scene when they "use" this portal, or -1 to specify
+     * that the body enters on the default portal, whatever id it is.  */
     public short targetPortalId;
 
     /**
@@ -78,7 +79,9 @@ public class Portal extends SimpleStreamableObject
      */
     public boolean isValid ()
     {
-        return (targetSceneId > 0) && (targetPortalId > 0);
+        return (targetSceneId > 0) &&
+            // the target portal must be positive, or -1
+            ((targetPortalId > 0) || (targetPortalId == -1));
     }
 
     /**

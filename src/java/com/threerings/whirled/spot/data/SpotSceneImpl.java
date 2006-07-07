@@ -63,6 +63,9 @@ public class SpotSceneImpl
     // documentation inherited from interface
     public Portal getPortal (int portalId)
     {
+        if (portalId == -1) {
+            portalId = _smodel.defaultEntranceId;
+        }
         return (Portal)_portals.get(portalId);
     }
 
@@ -93,7 +96,7 @@ public class SpotSceneImpl
     // documentation inherited from interface
     public Portal getDefaultEntrance ()
     {
-        return getPortal(_smodel.defaultEntranceId);
+        return getPortal(-1); // -1 is a shortcut meaning "default"
     }
 
     // documentation inherited from interface
