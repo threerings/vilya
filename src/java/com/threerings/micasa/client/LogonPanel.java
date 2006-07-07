@@ -162,6 +162,11 @@ public class LogonPanel extends JPanel
     }
 
     // documentation inherited from interface
+    public void clientDidClear (Client client)
+    {
+    }
+
+    // documentation inherited from interface
     public void clientFailedToLogon (Client client, Exception cause)
     {
         String msg;
