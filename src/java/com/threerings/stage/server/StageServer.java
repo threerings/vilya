@@ -54,7 +54,7 @@ public abstract class StageServer extends WhirledServer
 
         // create the resource manager
         rsrcmgr = new ResourceManager("rsrc");
-        rsrcmgr.initBundles(null, "config/resource/manager.properties", null);
+        rsrcmgr.initBundles(null, getResourceConfig(), null);
 
         // create our tile manager and repository
         tilemgr = new TileManager(null);
@@ -63,5 +63,16 @@ public abstract class StageServer extends WhirledServer
                                          StageCodes.TILESET_RSRC_SET));
 
         Log.info("Stage server initialized.");
+    }
+
+    /**
+     * Returns the path to the configuration file for the resource manager that
+     * will be created for use by the server. This is a resource path (meaning
+     * it should be relative to the resource prefix (which is
+     * <code>rsrc</code>).
+     */
+    protected String getResourceConfig ()
+    {
+        return "config/resource/manager.properties";
     }
 }
