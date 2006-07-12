@@ -57,6 +57,9 @@ public class SpotSceneImpl
     // documentation inherited from interface
     public function getPortal (portalId :int) :Portal
     {
+        if (portalId == -1) {
+            portalId = _smodel.defaultEntranceId;
+        }
         return (_portals.get(portalId) as Portal);
     }
 
@@ -87,7 +90,7 @@ public class SpotSceneImpl
     // documentation inherited from interface
     public function getDefaultEntrance () :Portal
     {
-        return getPortal(_smodel.defaultEntranceId);
+        return getPortal(-1); // -1 is a shortcut meaning "default"
     }
 
     // documentation inherited from interface

@@ -82,11 +82,13 @@ public class Portal
     /**
      * Returns true if the portal has a potentially valid target scene and
      * portal id (they are not guaranteed to exist, but they are at least
-     * potentially valid values rather than -1 or 0).
+     * potentially valid values rather than 0).
      */
     public function isValid () :Boolean
     {
-        return (targetSceneId > 0) && (targetPortalId > 0);
+        return (targetSceneId > 0) &&
+            // the target portal must be positive, or -1
+            ((targetPortalId > 0) || (targetPortalId == -1));
     }
 
     // documentation inherited from interface Streamable
@@ -110,8 +112,7 @@ public class Portal
     // documentation inherited from interface Cloneable
     public function clone () :Object
     {
-        var clazz :Class = ClassUtil.getClass(this);
-        var p :Portal = new clazz();
+        var p :Portal = (ClassUtil.newInstance(this) as Portal);
         p.portalId = portalId;
         p.loc = loc;
         p.targetSceneId = targetSceneId;
