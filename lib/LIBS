@@ -1,6 +1,7 @@
 commons-digester.jar
 commons-lang.jar
 commons-logging.jar
+junit-3.7.jar
 narya-base.jar
 narya-distrib.jar
 narya-tests.jar
