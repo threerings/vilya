@@ -1,19 +1,6 @@
-ant.jar
-commons-beanutils.jar
-commons-collections.jar
 commons-digester.jar
-commons-io.jar
 commons-lang.jar
 commons-logging.jar
-jme-awt.jar
-jme-bui.jar
-jme-effects.jar
-jme.jar
-jme-model.jar
-jme-sound.jar
-junit-3.7.jar
-lwjgl.jar
-lwjgl_util.jar
 narya-base.jar
 narya-distrib.jar
 narya-tests.jar
@@ -23,5 +10,4 @@ nenya-miso.jar
 nenya-rsrc.jar
 retroweaver-all-1.2.2.jar
 samskivert.jar
-velocity-1.5-dev.jar
 xml-writer.jar

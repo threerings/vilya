@@ -9,7 +9,6 @@
   <property name="app.name"       value="vilya"/>
   <property name="deploy.dir"     value="dist"/>
   <property name="savedoc.dir"    value="docs"/>
-  <property name="lib.version"    value="1.0"/>
 
   <!-- derived properties -->  
   <property name="javadoc.home"   value="${deploy.dir}/docs"/>
@@ -265,8 +264,8 @@
   <!-- creates a tarball and zipfile for source distribution -->
   <target name="distrib">
      <echo message="You may want to stop and run 'ant savedoc' first."/>
-     <echo message="Building ${lib.version} tar.gz distribution..."/>
-     <tar destfile="vilya-${lib.version}.tar.gz" compression="gzip">
+     <echo message="Building snapshot tar.gz distribution..."/>
+     <tar destfile="../vilya-snapshot.tar.gz" compression="gzip">
        <tarfileset dir=".." mode="0775" dirmode="0775">
          <include name="vilya/bin/**"/>
          <include name="vilya/tests/bin/**"/>
@@ -283,8 +282,8 @@
          <exclude name="vilya/vilya-*.*"/>
        </tarfileset>
      </tar>
-     <echo message="Building ${lib.version} zip distribution..."/>
-     <zip destfile="vilya-${lib.version}.zip">
+     <echo message="Building snapshot zip distribution..."/>
+     <zip destfile="../vilya-snapshot.zip">
        <fileset dir="..">
          <include name="vilya/**"/>
          <exclude name="**/CVS"/>
