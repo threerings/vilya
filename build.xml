@@ -266,16 +266,9 @@
      <echo message="You may want to stop and run 'ant savedoc' first."/>
      <echo message="Building snapshot tar.gz distribution..."/>
      <tar destfile="../vilya-snapshot.tar.gz" compression="gzip">
-       <tarfileset dir=".." mode="0775" dirmode="0775">
-         <include name="vilya/bin/**"/>
-         <include name="vilya/tests/bin/**"/>
-         <exclude name="**/CVS"/>
-       </tarfileset>
        <tarfileset dir=".." mode="0664" dirmode="0775">
          <include name="vilya/**"/>
-         <exclude name="**/CVS"/>
-         <exclude name="vilya/bin/**"/>
-         <exclude name="vilya/tests/bin/**"/>
+         <exclude name="**/.svn"/>
          <exclude name="vilya/tests/dist/**"/>
          <exclude name="vilya/dist/**"/>
          <exclude name="vilya/code/**"/>
@@ -286,7 +279,8 @@
      <zip destfile="../vilya-snapshot.zip">
        <fileset dir="..">
          <include name="vilya/**"/>
-         <exclude name="**/CVS"/>
+         <exclude name="**/.svn"/>
+         <exclude name="vilya/tests/dist/**"/>
          <exclude name="vilya/dist/**"/>
          <exclude name="vilya/code/**"/>
          <exclude name="vilya/vilya-*.*"/>
