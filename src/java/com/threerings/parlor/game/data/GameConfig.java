@@ -146,7 +146,7 @@ public abstract class GameConfig extends PlaceConfig implements Cloneable
         try {
             return super.clone();
         } catch (CloneNotSupportedException cnse) {
-            throw new RuntimeException("clone() failed: " + cnse);
+            throw new RuntimeException(cnse);
         }
     }
 }

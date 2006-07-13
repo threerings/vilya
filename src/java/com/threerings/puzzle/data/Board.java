@@ -55,7 +55,7 @@ public abstract class Board
             board._rando = (BoardRandom)_rando.clone();
             return board;
         } catch (CloneNotSupportedException cnse) {
-            throw new RuntimeException("All is wrong with universe.");
+            throw new RuntimeException(cnse);
         }
     }
 
@@ -175,7 +175,7 @@ public abstract class Board
             try {
                 return super.clone();
             } catch (CloneNotSupportedException cnse) {
-                throw new RuntimeException("All is wrong with universe.");
+                throw new RuntimeException(cnse);
             }
         }
 

@@ -127,7 +127,7 @@ public class StageLocation extends SimpleStreamableObject
         try {
             return (StageLocation)super.clone();
         } catch (CloneNotSupportedException cnse) {
-            throw new RuntimeException("StageLocation.clone() failed " + cnse);
+            throw new RuntimeException(cnse);
         }
     }
 }

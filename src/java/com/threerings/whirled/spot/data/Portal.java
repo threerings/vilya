@@ -90,9 +90,9 @@ public class Portal extends SimpleStreamableObject
     public Object clone ()
     {
         try {
-            return (Portal)super.clone();
+            return super.clone();
         } catch (CloneNotSupportedException cnse) {
-            throw new RuntimeException("Portal.clone() failed " + cnse);
+            throw new RuntimeException(cnse);
         }
     }
 
