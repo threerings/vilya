@@ -22,8 +22,8 @@
 package com.threerings.whirled.spot.client {
 
 import com.threerings.presents.client.Client;
-import com.threerings.presents.client.ConfirmListener;
 import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.client.InvocationService_ConfirmListener;
 
 import com.threerings.whirled.client.SceneService_SceneMoveListener;
 import com.threerings.whirled.spot.data.Location;
@@ -59,7 +59,7 @@ public interface SpotService extends InvocationService
      */
     function changeLocation (
             client :Client, sceneId :int, loc :Location,
-            listener :ConfirmListener) :void;
+            listener :InvocationService_ConfirmListener) :void;
 
     /**
      * Requests that this client start or join the specified cluster. They
@@ -71,7 +71,8 @@ public interface SpotService extends InvocationService
      * if they are not already in one.
      */
     function joinCluster (
-            client :Client, friendOid :int, listener :ConfirmListener) :void;
+            client :Client, friendOid :int,
+            listener :InvocationService_ConfirmListener) :void;
 
     /**
      * Requests that the supplied message be delivered to listeners in the

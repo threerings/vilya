@@ -1,6 +1,6 @@
 package com.threerings.whirled.client {
 
-import com.threerings.presents.client.InvocationListener;
+import com.threerings.presents.client.InvocationService_InvocationListener;
 
 import com.threerings.io.TypedArray;
 
@@ -12,7 +12,8 @@ import com.threerings.whirled.data.SceneUpdate;
 /**
  * Used to communicate the response to a {@link #moveTo} request.
  */
-public interface SceneService_SceneMoveListener extends InvocationListener
+public interface SceneService_SceneMoveListener
+    extends InvocationService_InvocationListener
 {
     /**
      * Indicates that a move succeeded.
