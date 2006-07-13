@@ -66,7 +66,7 @@ public class SpotSceneImpl
         if (portalId == -1) {
             portalId = _smodel.defaultEntranceId;
         }
-        return (Portal)_portals.get(portalId);
+        return _portals.get(portalId);
     }
 
     // documentation inherited from interface
@@ -76,7 +76,7 @@ public class SpotSceneImpl
     }
 
     // documentation inherited from interface
-    public Iterator getPortals ()
+    public Iterator<Portal> getPortals ()
     {
         return _portals.values().iterator();
     }
@@ -152,7 +152,7 @@ public class SpotSceneImpl
     protected SpotSceneModel _smodel;
 
     /** A mapping from portal id to portal. */
-    protected HashIntMap _portals = new HashIntMap();
+    protected HashIntMap<Portal> _portals = new HashIntMap<Portal>();
 
     /** We don't allow more than ~32k portals in a scene. Things would
      * slow down *way* before we got there. */
