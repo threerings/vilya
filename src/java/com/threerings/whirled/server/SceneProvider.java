@@ -135,9 +135,12 @@ public class SceneProvider
 
         // check to see if they need a newer version of the scene data
         SceneModel model = scmgr.getScene().getSceneModel();
-        if (sceneVersion < model.version) {
-            // try getting updates
-            SceneUpdate[] updates = scmgr.getUpdates(sceneVersion);
+        if (sceneVersion != model.version) {
+            SceneUpdate[] updates = null;
+            if (sceneVersion < model.version) {
+                // try getting updates to bring the client to the right version
+                updates = scmgr.getUpdates(sceneVersion);
+            }
             if (updates != null) {
                 listener.moveSucceededWithUpdates(ploid, config, updates);
             } else {
