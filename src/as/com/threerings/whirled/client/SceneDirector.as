@@ -468,7 +468,8 @@ public class SceneDirector extends BasicDirector
             _screp.storeSceneModel(model);
         } catch (ioe :IOError) {
             log.warning("Failed to update repository with updated scene " +
-                        "[sceneId=" + model.sceneId + "].");
+                "[sceneId=" + model.sceneId + ", nvers=" + model.version +
+                "].");
             log.logStackTrace(ioe);
         }
     }
