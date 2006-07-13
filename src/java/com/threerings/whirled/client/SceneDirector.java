@@ -309,14 +309,8 @@ public class SceneDirector extends BasicDirector
             return;
         }
 
-        // store the updated scene in the repository
-        try {
-            _screp.storeSceneModel(model);
-        } catch (IOException ioe) {
-            Log.warning("Failed to update repository with updated scene " +
-                        "[sceneId=" + model.sceneId + "].");
-            Log.logStackTrace(ioe);
-        }
+        // store the updated version
+        persistSceneModel(model);
 
         // finally pass through to the normal success handler
         moveSucceeded(placeId, config);
@@ -331,14 +325,7 @@ public class SceneDirector extends BasicDirector
                  model.name + "/" + model.version + "].");
 
         // update the model in the repository
-        try {
-            _screp.storeSceneModel(model);
-        } catch (IOException ioe) {
-            Log.warning("Failed to update repository with new version " +
-                        "[sceneId=" + model.sceneId +
-                        ", nvers=" + model.version + "].");
-            Log.logStackTrace(ioe);
-        }
+        persistSceneModel(model);
 
         // update our scene cache
         _scache.put(Integer.valueOf(model.sceneId), model);
@@ -356,6 +343,16 @@ public class SceneDirector extends BasicDirector
 
         // let our observers know that something has gone horribly awry
         _locdir.failedToMoveTo(sceneId, reason);
+    }
+
+    /**
+     * Called by SceneController instances to tell us about an update
+     * to the current scene.
+     */
+    public void updateReceived (SceneUpdate update)
+    {
+        _scene.updateReceived(update);
+        persistSceneModel(_scene.getSceneModel());
     }
 
     /**
@@ -466,6 +463,21 @@ public class SceneDirector extends BasicDirector
         }
 
         return model;
+    }
+
+    /**
+     * Persist the scene model to the clientside persistant cache.
+     */
+    protected void persistSceneModel (SceneModel model)
+    {
+        // store the updated scene in the repository
+        try {
+            _screp.storeSceneModel(model);
+        } catch (IOException ioe) {
+            Log.warning("Failed to update repository with updated scene " +
+                        "[sceneId=" + model.sceneId + "].");
+            Log.logStackTrace(ioe);
+        }
     }
 
     // documentation inherited from interface

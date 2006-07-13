@@ -70,12 +70,7 @@ public abstract class SceneController extends PlaceController
     protected void sceneUpdated (SceneUpdate update)
     {
         // apply the update to the scene
-        _wctx.getSceneDirector().getScene().updateReceived(update);
-
-        // we don't persistify these updates in this circumstance, but
-        // next time we come to this scene we'll redownload the update and
-        // apply it to the repository; as the updates are meant to be very
-        // small, this shouldn't be horribly less efficient
+        _wctx.getSceneDirector().updateReceived(update);
     }
 
     /** Used to listen for scene updates. */
