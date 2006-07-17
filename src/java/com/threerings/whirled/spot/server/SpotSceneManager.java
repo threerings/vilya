@@ -190,6 +190,15 @@ public class SpotSceneManager extends SceneManager
 
         // we don't actually populate their occupant info, but instead assign
         // them their starting location in the scene
+        assignStartingLocation(body);
+    }
+
+    /**
+     * Give our new body a starting location.
+     * @param body The new body entering the scene.
+     */
+    protected void assignStartingLocation (BodyObject body)
+    {
         int portalId = _enterers.remove(body.getOid());
         Portal entry;
         if (portalId != -1) {
