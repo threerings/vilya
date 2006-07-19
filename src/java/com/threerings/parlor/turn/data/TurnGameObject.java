@@ -61,4 +61,10 @@ public interface TurnGameObject
      * Returns the array of player names involved in the game.
      */
     public Name[] getPlayers ();
+
+    /**
+     * Returns true if the game is in play, false if not. If a game is not in
+     * play after a turn has ended, the next turn will not be started.
+     */
+    public boolean isInPlay ();
 }
