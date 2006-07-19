@@ -144,7 +144,17 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
 
         // and start the next turn if desired
         if (_turnIdx != -1) {
-            startTurn();
+            // prevent infinite loops if the game manager decides to
+            // unwittingly call endTurn() in turnDidStart()
+            if (_startingTurn) {
+                Log.warning("Refusing to start looping in endTurn() " +
+                            "[game=" + where() + "].");
+                Thread.dumpStack();
+            } else {
+                _startingTurn = true;
+                startTurn();
+            }
+            _startingTurn = false;
 
         } else {
             // otherwise, clear out the turn holder
@@ -243,4 +253,8 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
     /** The player index of the current turn holder or <code>-1</code> if
      * it's no one's turn. */
     protected int _turnIdx = -1;
+
+    /** Used to avoid infinite loops in buggy game managers that call endTurn()
+     * from startTurn(). */
+    protected boolean _startingTurn;
 }
