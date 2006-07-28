@@ -55,7 +55,8 @@ public interface ParlorReceiver extends InvocationReceiver
      * @param config the configuration information for the game to which
      * we've been invited.
      */
-    function receivedInvite (remoteId :int, inviter :Name, config :GameConfig);
+    function receivedInvite (
+            remoteId :int, inviter :Name, config :GameConfig) :void;
 
     /**
      * Called by the invocation services when another user has responded
@@ -72,7 +73,8 @@ public interface ParlorReceiver extends InvocationReceiver
      * provided). In the case of a countered invitation, a new game config
      * object with the modified game configuration.
      */
-    function receivedInviteResponse (remoteId :int, code :int, arg :Object);
+    function receivedInviteResponse (
+            remoteId :int, code :int, arg :Object) :void;
 
     /**
      * Called by the invocation services when an outstanding invitation
@@ -80,6 +82,6 @@ public interface ParlorReceiver extends InvocationReceiver
      *
      * @param remoteId the indentifier of the cancelled invitation.
      */
-    function receivedInviteCancellation (remoteId :int);
+    function receivedInviteCancellation (remoteId :int) :void;
 }
 }

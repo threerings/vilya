@@ -25,6 +25,8 @@ import com.threerings.util.Name;
 
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.client.InvocationService_InvocationListener;
+import com.threerings.presents.client.InvocationService_ConfirmListener;
 
 import com.threerings.parlor.data.TableConfig;
 
@@ -54,7 +56,7 @@ public interface ParlorService extends InvocationService
      */
     function invite (
             client :Client, invitee :Name, config :GameConfig,
-            listener :InviteListener) :void;
+            listener :ParlorService_InviteListener) :void;
 
     /**
      * You probably don't want to call this directly, but want to call one
@@ -76,7 +78,7 @@ public interface ParlorService extends InvocationService
      */
     function respond (
             client :Client, inviteId :int, code :int, arg :Object,
-            listener :InvocationListener) :void;
+            listener :InvocationService_InvocationListener) :void;
 
     /**
      * You probably don't want to call this directly, but want to call
@@ -89,7 +91,8 @@ public interface ParlorService extends InvocationService
      * @param listener will receive and process the response.
      */
     function cancel (
-            client :Client, inviteId :int, listener :InvocationListener) :void;
+            client :Client, inviteId :int,
+            listener :InvocationService_InvocationListener) :void;
 
     /**
      * You probably don't want to call this directly, but want to call
@@ -106,7 +109,7 @@ public interface ParlorService extends InvocationService
      */
     function createTable (
             client :Client, lobbyOid :int, tableConfig :TableConfig,
-            config :GameConfig, listener :TableListener) :void;
+            config :GameConfig, listener :ParlorService_TableListener) :void;
 
     /**
      * You probably don't want to call this directly, but want to call
@@ -122,8 +125,8 @@ public interface ParlorService extends InvocationService
      * @param listener will receive and process the response.
      */
     function joinTable (
-            client :Client, lobbyOid :int, tableId :int,
-            position :int, listener :InvocationListener) :void;
+            client :Client, lobbyOid :int, tableId :int, position :int,
+            listener :InvocationService_InvocationListener) :void;
 
     /**
      * You probably don't want to call this directly, but want to call
@@ -138,7 +141,7 @@ public interface ParlorService extends InvocationService
      */
     function leaveTable (
             client :Client, lobbyOid :int, tableId :int,
-            listener :InvocationListener) :void;
+            listener :InvocationService_InvocationListener) :void;
 
     /**
      * Requests to start a single player game with the specified game
@@ -146,6 +149,6 @@ public interface ParlorService extends InvocationService
      */
     function startSolitaire (
             client :Client, config :GameConfig,
-            listener :ConfirmListener) :void;
+            listener :InvocationService_ConfirmListener) :void;
 }
 }

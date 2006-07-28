@@ -25,6 +25,7 @@ import com.threerings.parlor.client.ParlorReceiver;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.presents.client.InvocationDecoder;
 import com.threerings.util.Name;
+import com.threerings.util.Integer;
 
 /**
  * Dispatches calls to a {@link ParlorReceiver} instance.

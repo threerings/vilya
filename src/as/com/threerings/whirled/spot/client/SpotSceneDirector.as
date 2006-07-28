@@ -381,7 +381,10 @@ public class SpotSceneDirector extends BasicDirector
         clearCluster(true);
 
         // stop listening to the client object
-        event.getClient().getClientObject().removeListener(this);
+        var clientObj :ClientObject = event.getClient().getClientObject();
+        if (clientObj != null) {
+            clientObj.removeListener(this);
+        }
         _self = null;
     }
 

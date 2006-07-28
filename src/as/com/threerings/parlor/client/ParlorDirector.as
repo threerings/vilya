@@ -27,9 +27,10 @@ import com.threerings.util.Name;
 
 import com.threerings.presents.client.BasicDirector;
 import com.threerings.presents.client.Client;
+import com.threerings.presents.client.ClientEvent;
 import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.client.InvocationService_ConfirmListener;
 
-import com.threerings.parlor.Log;
 import com.threerings.parlor.data.ParlorCodes;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.util.ParlorContext;
@@ -42,7 +43,7 @@ import com.threerings.parlor.util.ParlorContext;
  * that started.
  */
 public class ParlorDirector extends BasicDirector
-    implements ParlorCodes, ParlorReceiver
+    implements ParlorReceiver
 {
     /**
      * Constructs a parlor director and provides it with the parlor
@@ -113,9 +114,9 @@ public class ParlorDirector extends BasicDirector
     {
         // create the invitation record
         var invite :Invitation = new Invitation(
-            _ctx, _pservice, invitee, config, observer);
+            _pctx, _pservice, invitee, config, observer);
         // submit the invitation request to the server
-        _pservice.invite(_ctx.getClient(), invitee, config, invite);
+        _pservice.invite(_pctx.getClient(), invitee, config, invite);
         // and return the invitation to the caller
         return invite;
     }
@@ -129,13 +130,13 @@ public class ParlorDirector extends BasicDirector
      * cannot be started.
      */
     public function startSolitaire (
-        config :GameConfig, listener :InvocationService.ConfirmListener) :void
+        config :GameConfig, listener :InvocationService_ConfirmListener) :void
     {
-        _pservice.startSolitaire(_ctx.getClient(), config, listener);
+        _pservice.startSolitaire(_pctx.getClient(), config, listener);
     }
 
     // documentation inherited
-    public function clientDidLogoff (event :ClientEvent) :void
+    override public function clientDidLogoff (event :ClientEvent) :void
     {
         super.clientDidLogoff(event);
         _pservice = null;
@@ -143,10 +144,11 @@ public class ParlorDirector extends BasicDirector
     }
 
     // documentation inherited
-    protected function fetchServices (client :Client) :void
+    override protected function fetchServices (client :Client) :void
     {
         // get a handle on our parlor services
         _pservice = (client.requireService(ParlorService) as ParlorService);
+        super.fetchServices(client);
     }
 
     // documentation inherited from interface
@@ -164,7 +166,7 @@ public class ParlorDirector extends BasicDirector
         // if none of the observers took matters into their own hands,
         // then we'll head on over to the game room ourselves
         if (!handled) {
-            _ctx.getLocationDirector().moveTo(gameOid);
+            _pctx.getLocationDirector().moveTo(gameOid);
         }
     }
 
@@ -173,8 +175,8 @@ public class ParlorDirector extends BasicDirector
             remoteId :int, inviter :Name, config :GameConfig) :void
     {
         // create an invitation record for this invitation
-        invite :Invitation = new Invitation(
-            _ctx, _pservice, inviter, config, null);
+        var invite :Invitation = new Invitation(
+            _pctx, _pservice, inviter, config, null);
         invite.inviteId = remoteId;
 
         // put it in the pending invitations table
@@ -218,7 +220,7 @@ public class ParlorDirector extends BasicDirector
      * Register a new invitation in our pending invitations table. The
      * invitation will call this when it knows its invitation id.
      */
-    protected function registerInvitation (invite :Invitation) :void
+    public function registerInvitation (invite :Invitation) :void
     {
         _pendingInvites.put(invite.inviteId, invite);
     }
@@ -227,7 +229,7 @@ public class ParlorDirector extends BasicDirector
      * Called by an invitation when it knows it is no longer and can be
      * cleared from the pending invitations table.
      */
-    protected function clearInvitation (invite :Invitation) :void
+    public function clearInvitation (invite :Invitation) :void
     {
         _pendingInvites.remove(invite.inviteId);
     }
@@ -249,4 +251,5 @@ public class ParlorDirector extends BasicDirector
     /** We notify the entities on this list when we get a game ready
      * notification. */
     protected var _grobs :Array = new Array();
+}
 }

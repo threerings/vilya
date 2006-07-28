@@ -25,6 +25,7 @@ import com.threerings.util.ClassUtil;
 import com.threerings.util.Cloneable;
 import com.threerings.util.Hashable;
 import com.threerings.util.Name;
+import com.threerings.util.StringUtil;
 
 import com.threerings.io.TypedArray;
 
@@ -70,9 +71,9 @@ public /*abstract*/ class GameConfig extends PlaceConfig
      * used to translate the translatable strings used to describe the
      * game config parameters.
      */
-    public function getBundleName () :String
+    public /*abstract*/ function getBundleName () :String
     {
-        Log.getLog(this).warning("this method is actually abstract.");
+        throw new Error("abstract");
     }
 
     /**
@@ -80,7 +81,10 @@ public /*abstract*/ class GameConfig extends PlaceConfig
      * for configuring this instance prior to starting the game. If no
      * configuration is necessary, this method should return null.
      */
-    public function createConfigurator () :GameConfigurator
+    public /*abstract*/ function createConfigurator () :GameConfigurator
+    {
+        throw new Error("abstract");
+    }
 
     /**
      * Creates a table configurator for initializing 'table' properties
@@ -151,7 +155,7 @@ public /*abstract*/ class GameConfig extends PlaceConfig
     // from Cloneable
     public function clone () :Object
     {
-        var copy :GameConfig = ClassUtil.newInstance(this);
+        var copy :GameConfig = (ClassUtil.newInstance(this) as GameConfig);
         copy.players = this.players;
         copy.rated = this.rated;
         copy.ais = this.ais;

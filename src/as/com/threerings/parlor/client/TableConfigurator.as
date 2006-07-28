@@ -91,7 +91,7 @@ public /*abstract*/ class TableConfigurator
      */
     public /*abstract*/ function isEmpty () :Boolean
     {
-        return true;
+        throw new Error("abstract");
     }
 
     /**
