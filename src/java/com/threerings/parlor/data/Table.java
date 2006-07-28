@@ -43,7 +43,7 @@ public class Table
     implements DSet.Entry, ParlorCodes
 {
     /** The unique identifier for this table. */
-    public Integer tableId;
+    public int tableId;
 
     /** The object id of the lobby object with which this table is
      * associated. */
@@ -80,7 +80,7 @@ public class Table
     public Table (int lobbyOid, TableConfig tconfig, GameConfig config)
     {
         // assign a unique table id
-        tableId = Integer.valueOf(++_tableIdCounter);
+        tableId = ++_tableIdCounter;
 
         // keep track of our lobby oid
         this.lobbyOid = lobbyOid;
@@ -108,14 +108,6 @@ public class Table
      */
     public Table ()
     {
-    }
-    
-    /**
-     * A convenience function for accessing the table id as an int.
-     */
-    public int getTableId ()
-    {
-        return tableId.intValue();
     }
 
     /**
@@ -363,13 +355,13 @@ public class Table
     public boolean equals (Object other)
     {
         return (other instanceof Table) &&
-            tableId.equals(((Table) other).tableId);
+            (tableId == ((Table) other).tableId);
     }
 
     // documentation inherited
     public int hashCode ()
     {
-        return tableId.intValue();
+        return tableId;
     }
 
     /**

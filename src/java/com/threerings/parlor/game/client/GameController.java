@@ -134,8 +134,8 @@ public abstract class GameController extends PlaceController
      */
     public boolean isGameOver ()
     {
-        boolean gameOver =
-            ((_gobj != null) ? (_gobj.state != GameObject.IN_PLAY) : true);
+        boolean gameOver = (_gobj == null) ||
+            (_gobj.state != GameObject.IN_PLAY);
         return (_gameOver || gameOver);
     }
 
@@ -199,10 +199,10 @@ public abstract class GameController extends PlaceController
     {
         // deal with game state changes
         if (event.getName().equals(GameObject.STATE)) {
-            if (!stateDidChange(event.getIntValue())) {
+            int newState = event.getIntValue();
+            if (!stateDidChange(newState)) {
                 Log.warning("Game transitioned to unknown state " +
-                            "[gobj=" + _gobj +
-                            ", state=" + event.getIntValue() + "].");
+                            "[gobj=" + _gobj + ", state=" + newState + "].");
             }
         }
     }

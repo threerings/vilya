@@ -260,16 +260,16 @@ public class TableDirector extends BasicDirector
     public void entryRemoved (EntryRemovedEvent event)
     {
         if (event.getName().equals(_tableField)) {
-            Integer tableId = (Integer)event.getKey();
+            int tableId = ((Integer) event.getKey()).intValue();
 
             // check to see if our table just disappeared
-            if (_ourTable != null && tableId.equals(_ourTable.tableId)) {
+            if (_ourTable != null && tableId == _ourTable.tableId) {
                 _ourTable = null;
                 notifySeatedness(false);
             }
 
             // now let the observer know what's up
-            _observer.tableRemoved(tableId.intValue());
+            _observer.tableRemoved(tableId);
         }
     }
 

@@ -155,7 +155,6 @@ public class GameObject extends PlaceObject
             (playerStatus == null || isActivePlayerStatus(playerStatus[pidx]));
     }
 
-
     /**
      * Returns the player index of the given user in the game, or 
      * <code>-1</code> if the player is not involved in the game.
@@ -194,7 +193,7 @@ public class GameObject extends PlaceObject
      */
     public boolean isWinner (int pidx)
     {
-        return (winners == null) ? false : winners[pidx];
+        return (winners != null) && winners[pidx];
     }
 
     /**

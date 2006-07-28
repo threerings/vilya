@@ -113,7 +113,7 @@ public abstract class TableConfigurator
     protected ParlorContext _ctx;
 
     /** The config we're configurating. */
-    protected TableConfig  _config;
+    protected TableConfig _config;
 
     /** The game configurator, which we may wish to reference. */
     protected GameConfigurator _gameConfigurator;

@@ -129,7 +129,7 @@ public class TableManager
         _boidMap.put(creator.getOid(), table);
 
         // also stick it into our tables tables
-        _tables.put(table.getTableId(), table);
+        _tables.put(table.tableId, table);
 
         // if the table has only one seat, start the game immediately
         if (table.shouldBeStarted()) {
@@ -137,7 +137,7 @@ public class TableManager
         }
 
         // finally let the caller know what the new table id is
-        return table.getTableId();
+        return table.tableId;
     }
 
     /**
@@ -163,7 +163,7 @@ public class TableManager
         throws InvocationException
     {
         // look the table up
-        Table table = (Table)_tables.get(tableId);
+        Table table = _tables.get(tableId);
         if (table == null) {
             throw new InvocationException(NO_SUCH_TABLE);
         }
@@ -207,7 +207,7 @@ public class TableManager
         throws InvocationException
     {
         // look the table up
-        Table table = (Table)_tables.get(tableId);
+        Table table = _tables.get(tableId);
         if (table == null) {
             throw new InvocationException(NO_SUCH_TABLE);
         }
@@ -239,7 +239,7 @@ public class TableManager
     protected void purgeTable (Table table)
     {
         // remove the table from our tables table
-        _tables.remove(table.getTableId());
+        _tables.remove(table.tableId);
 
         // clear out all matching entries in the boid map
         for (int i = 0; i < table.bodyOids.length; i++) {
@@ -308,9 +308,7 @@ public class TableManager
     protected void unmapTable (int gameOid)
     {
         // look through our tables table for a table with a matching game
-        Iterator iter = _tables.values().iterator();
-        while (iter.hasNext()) {
-            Table table = (Table)iter.next();
+        for (Table table : _tables.values()) {
             if (table.gameOid == gameOid) {
                 purgeTable(table);
                 return; // all done
@@ -337,7 +335,7 @@ public class TableManager
 
         // look up the table to which this occupant is mapped
         int bodyOid = event.getOid();
-        Table pender = (Table)_boidMap.remove(bodyOid);
+        Table pender = _boidMap.remove(bodyOid);
         if (pender == null) {
             return;
         }
@@ -365,10 +363,10 @@ public class TableManager
     protected TableLobbyObject _tlobj;
 
     /** The table of pending tables. */
-    protected HashIntMap _tables = new HashIntMap();
+    protected HashIntMap<Table> _tables = new HashIntMap<Table>();
 
     /** A mapping from body oid to table. */
-    protected HashIntMap _boidMap = new HashIntMap();
+    protected HashIntMap<Table> _boidMap = new HashIntMap<Table>();
 
     /** A listener that prunes tables after the game dies. */
     protected ChangeListener _gameDeathListener = new ObjectDeathListener() {

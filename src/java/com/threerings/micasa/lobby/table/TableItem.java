@@ -199,12 +199,12 @@ public class TableItem
                             "click came from [event=" + event + "].");
             } else {
                 // otherwise, request to join the table at this position
-                _tdtr.joinTable(table.getTableId(), position);
+                _tdtr.joinTable(table.tableId, position);
             }
 
         } else if (cmd.equals("leave")) {
             // if we're not joining, we're leaving
-            _tdtr.leaveTable(table.getTableId());
+            _tdtr.leaveTable(table.tableId);
 
         } else if (cmd.equals("go")) {
             // they want to see the game... so go there
