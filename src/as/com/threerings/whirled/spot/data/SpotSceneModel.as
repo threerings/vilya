@@ -21,6 +21,7 @@
 
 package com.threerings.whirled.spot.data {
 
+import com.threerings.util.ArrayUtil;
 import com.threerings.util.ClassUtil;
 
 import com.threerings.io.Streamable;
@@ -41,8 +42,7 @@ public class SpotSceneModel
     implements Streamable, AuxModel
 {
     /** An array containing all portals in this scene. */
-    public var portals :TypedArray =
-        new TypedArray(TypedArray.getJavaType(Portal));
+    public var portals :TypedArray = TypedArray.create(Portal);
 
     /** The portal id of the default entrance to this scene. If a body
      * enters the scene without coming from another scene, this is the
@@ -62,12 +62,7 @@ public class SpotSceneModel
      */
     public function removePortal (portal :Portal) :void
     {
-        for (var ii :int = 0; ii < portals.length; ii++) {
-            if (portal.equals(portals[ii])) {
-                portals.splice(ii, 1);
-                return;
-            }
-        }
+        ArrayUtil.removeFirst(portals, portal);
     }
 
     // documentation inherited from superinterface Cloneable

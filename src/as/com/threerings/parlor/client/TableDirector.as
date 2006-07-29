@@ -21,6 +21,8 @@
 
 package com.threerings.parlor.client {
 
+import com.threerings.util.ArrayUtil;
+
 import com.threerings.presents.client.BasicDirector;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.ClientEvent;
@@ -306,11 +308,8 @@ public class TableDirector extends BasicDirector
         // look for our username in the occupants array
         var self :BodyObject =
             (_pctx.getClient().getClientObject() as BodyObject);
-        for (var ii :int = 0; ii < table.occupants.length; ii++) {
-            if (self.getVisibleName().equals(table.occupants[i])) {
-                _ourTable = table;
-                break;
-            }
+        if (ArrayUtil.contains(table.occupants, self.getVisibleName())) {
+            _ourTable = table;
         }
 
         // if nothing changed, bail now

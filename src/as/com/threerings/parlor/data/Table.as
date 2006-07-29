@@ -129,27 +129,27 @@ public class Table
      * For a team game, get the team member indices of the compressed
      * players array returned by getPlayers().
      */
-    public function getTeamMemberIndices () :Array /* of Array of int */
+    public function getTeamMemberIndices () :TypedArray /* of Array of int */
     {
         var teams :Array = tconfig.teamMemberIndices;
         if (teams == null) {
             return null;
         }
 
-// TODO
         // compress the team indexes down
-        ArrayIntSet set = new ArrayIntSet();
-        int[][] newTeams = new int[teams.length][];
-        Name[] players = getPlayers();
-        for (int ii=0; ii < teams.length; ii++) {
-            set.clear();
-            for (int jj=0; jj < teams[ii].length; jj++) {
-                Name occ = occupants[teams[ii][jj]];
+        var newTeams :TypedArray = new TypedArray("[[I");
+        var players :TypedArray = getPlayers();
+        for (var ii :int = 0; ii < teams.length; ii++) {
+            var subTeams :Array = (teams[ii] as Array);
+            var newSubTeams :TypedArray = TypedArray.create(int);
+            for (var jj :int = 0; jj < subTeams.length; jj++) {
+                var occ :Name = (occupants[(subTeams[jj] as int)] as Name);
                 if (occ != null) {
-                    set.add(ListUtil.indexOf(players, occ));
+                    newSubTeams.push(ArrayUtil.indexOf(players, occ));
                 }
             }
-            newTeams[ii] = set.toIntArray();
+            newSubTeams.sort(null, Array.NUMERIC);
+            newTeams[ii] = newSubTeams;
         }
 
         return newTeams;

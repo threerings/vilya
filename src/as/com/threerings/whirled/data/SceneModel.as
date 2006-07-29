@@ -54,8 +54,7 @@ public class SceneModel
     public var version :int;
 
     /** Auxiliary scene model information. */
-    public var auxModels :TypedArray =
-        new TypedArray("[Lcom.threerings.whirled.data.AuxModel;");
+    public var auxModels :TypedArray = TypedArray.create(AuxModel);
 
     /**
      * Adds the specified auxiliary model to this scene model.
