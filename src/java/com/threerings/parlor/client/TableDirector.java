@@ -23,6 +23,8 @@ package com.threerings.parlor.client;
 
 import java.util.ArrayList;
 
+import com.samskivert.util.ListUtil;
+
 import com.threerings.presents.client.BasicDirector;
 import com.threerings.presents.client.Client;
 
@@ -303,11 +305,8 @@ public class TableDirector extends BasicDirector
 
         // look for our username in the occupants array
         BodyObject self = (BodyObject)_ctx.getClient().getClientObject();
-        for (int i = 0; i < table.occupants.length; i++) {
-            if (self.getVisibleName().equals(table.occupants[i])) {
-                _ourTable = table;
-                break;
-            }
+        if (ListUtil.contains(table.occupants, self.getVisibleName())) {
+            _ourTable = table;
         }
 
         // if nothing changed, bail now
