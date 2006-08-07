@@ -2,11 +2,15 @@ package com.threerings.parlor.data {
 
 import com.threerings.util.Integer;
 
+import com.threerings.presents.dobj.InvocationResponseEvent;
+
 import com.threerings.presents.data.InvocationMarshaller_ListenerMarshaller;
+
+import com.threerings.parlor.client.ParlorService_InviteListener;
 
 public class ParlorMarshaller_InviteMarshaller
     extends InvocationMarshaller_ListenerMarshaller
-    implements InviteListener
+    implements ParlorService_InviteListener
 {
     /** The method id used to dispatch {@link #inviteReceived}
      * responses. */
@@ -15,7 +19,6 @@ public class ParlorMarshaller_InviteMarshaller
     // documentation inherited from interface
     public function inviteReceived (arg1 :int) :void
     {
-        _invId = null;
         omgr.postEvent(new InvocationResponseEvent(
                            callerOid, requestId, INVITE_RECEIVED,
                            [ Integer.valueOf(arg1) ]));
@@ -26,7 +29,7 @@ public class ParlorMarshaller_InviteMarshaller
     {
         switch (methodId) {
         case INVITE_RECEIVED:
-            (listener as InviteListener).inviteReceived(
+            (listener as ParlorService_InviteListener).inviteReceived(
                 (args[0] as Integer).value);
             return;
 

@@ -22,13 +22,20 @@
 package com.threerings.parlor.data {
 
 import com.threerings.parlor.client.ParlorService;
+import com.threerings.parlor.client.ParlorService_InviteListener;
+import com.threerings.parlor.client.ParlorService_TableListener;
 import com.threerings.parlor.data.TableConfig;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.client.InvocationService_ConfirmListener;
 import com.threerings.presents.client.InvocationService_InvocationListener;
 import com.threerings.presents.data.InvocationMarshaller;
+import com.threerings.presents.data.InvocationMarshaller_ConfirmMarshaller;
+import com.threerings.presents.data.InvocationMarshaller_ListenerMarshaller;
 import com.threerings.presents.dobj.InvocationResponseEvent;
+
+import com.threerings.util.Integer;
 import com.threerings.util.Name;
 
 /**
@@ -89,7 +96,7 @@ public class ParlorMarshaller extends InvocationMarshaller
     // documentation inherited from interface
     public function joinTable (arg1 :Client, arg2 :int, arg3 :int, arg4 :int, arg5 :InvocationService_InvocationListener) :void
     {
-        var listener5 :InvocationMarshaller_ListenerMarshaller listener5 =
+        var listener5 :InvocationMarshaller_ListenerMarshaller =
             new InvocationMarshaller_ListenerMarshaller();
         listener5.listener = arg5;
         sendRequest(arg1, JOIN_TABLE, [
@@ -118,7 +125,7 @@ public class ParlorMarshaller extends InvocationMarshaller
     public function respond (arg1 :Client, arg2 :int, arg3 :int, arg4 :Object, arg5 :InvocationService_InvocationListener) :void
     {
         var listener5 :InvocationMarshaller_ListenerMarshaller =
-            new InvocationMarshallerListenerMarshaller();
+            new InvocationMarshaller_ListenerMarshaller();
         listener5.listener = arg5;
         sendRequest(arg1, RESPOND, [
             Integer.valueOf(arg2), Integer.valueOf(arg3), arg4, listener5
