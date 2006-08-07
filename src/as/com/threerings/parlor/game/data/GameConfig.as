@@ -27,6 +27,8 @@ import com.threerings.util.Hashable;
 import com.threerings.util.Name;
 import com.threerings.util.StringUtil;
 
+import com.threerings.io.ObjectInputStream;
+import com.threerings.io.ObjectOutputStream;
 import com.threerings.io.TypedArray;
 
 import com.threerings.crowd.data.PlaceConfig;
@@ -161,6 +163,24 @@ public /*abstract*/ class GameConfig extends PlaceConfig
         copy.ais = this.ais;
 
         return copy;
+    }
+
+    override public function writeObject (out :ObjectOutputStream) :void
+    {
+        super.writeObject(out);
+
+        out.writeObject(players);
+        out.writeBoolean(rated);
+        out.writeObject(ais);
+    }
+
+    override public function readObject (ins :ObjectInputStream) :void
+    {
+        super.readObject(ins);
+
+        players = (ins.readObject() as TypedArray);
+        rated = ins.readBoolean();
+        ais = (ins.readObject() as TypedArray);
     }
 }
 }

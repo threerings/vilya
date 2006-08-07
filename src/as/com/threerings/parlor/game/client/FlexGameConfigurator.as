@@ -19,7 +19,7 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-package com.threerings.parlor.game.client;
+package com.threerings.parlor.game.client {
 
 import mx.core.Container;
 import mx.core.UIComponent;
@@ -74,4 +74,5 @@ public /*abstract*/ class FlexGameConfigurator extends GameConfigurator
 
     /** The grid on which the config options are placed. */
     protected var _grid :Grid = new Grid();
+}
 }

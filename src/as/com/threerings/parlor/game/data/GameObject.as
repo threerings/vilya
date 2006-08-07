@@ -25,6 +25,8 @@ import com.threerings.util.Integer;
 import com.threerings.util.langBoolean;
 import com.threerings.util.Name;
 
+import com.threerings.io.ObjectInputStream;
+import com.threerings.io.ObjectOutputStream;
 import com.threerings.io.TypedArray;
 
 import com.threerings.crowd.data.PlaceObject;
@@ -438,5 +440,35 @@ public class GameObject extends PlaceObject
         this.playerStatus[index] = value;
     }
     // AUTO-GENERATED: METHODS END
+
+    override public function writeObject (out :ObjectOutputStream) :void
+    {
+        super.writeObject(out);
+
+        out.writeObject(gameService);
+        out.writeInt(state);
+        out.writeBoolean(isRated);
+        out.writeBoolean(isPrivate);
+        out.writeObject(players);
+        out.writeField(winners);
+        out.writeInt(roundId);
+        out.writeField(playerStatus);
+    }
+
+    override public function readObject (ins :ObjectInputStream) :void
+    {
+        super.readObject(ins);
+
+        gameService = (ins.readObject() as GameMarshaller);
+        state = ins.readInt();
+        isRated = ins.readBoolean();
+        isPrivate = ins.readBoolean();
+        players = (ins.readObject() as TypedArray);
+        winners = (ins.readField(TypedArray.getJavaType(Boolean))
+            as TypedArray);
+        roundId = ins.readInt();
+        playerStatus = (ins.readField(TypedArray.getJavaType(int))
+            as TypedArray);
+    }
 }
 }
