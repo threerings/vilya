@@ -30,10 +30,10 @@ import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.util.CrowdContext;
 
-import com.threerings.parlor.Log;
 import com.threerings.parlor.game.data.GameCodes;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.game.data.GameObject;
+import com.threerings.parlor.game.data.PartyGameCodes;
 import com.threerings.parlor.game.data.PartyGameConfig;
 import com.threerings.parlor.util.ParlorContext;
 
@@ -69,7 +69,7 @@ public /*abstract*/ class GameController extends PlaceController
         // super.init() calls createPlaceView(), we have our casted
         // references already in place
         _ctx = (ctx as ParlorContext);
-        _config = (config as GameConfig);
+        _gconfig = (config as GameConfig);
 
         super.init(ctx, config);
     }
@@ -195,7 +195,7 @@ public /*abstract*/ class GameController extends PlaceController
     {
         // deal with game state changes
         var name :String = event.getName();
-        if (GameObject.STATE.equals(name)) {
+        if (GameObject.STATE == name) {
             var newState :int = int(event.getValue());
             if (!stateDidChange(newState)) {
                 log.warning("Game transitioned to unknown state " +
@@ -314,16 +314,16 @@ public /*abstract*/ class GameController extends PlaceController
      */
     protected function isPartyGame () :Boolean
     {
-        return (_config is PartyGameConfig) &&
-            (PartyGameConfig(_config).getPartyGameType() !=
-                 PartyGameConfig.NOT_PARTY_GAME);
+        return (_gconfig is PartyGameConfig) &&
+            (PartyGameConfig(_gconfig).getPartyGameType() !=
+                 PartyGameCodes.NOT_PARTY_GAME);
     }
 
     /** A reference to the active parlor context. */
     protected var _pctx :ParlorContext;
 
     /** Our game configuration information. */
-    protected var _config :GameConfig;
+    protected var _gconfig :GameConfig;
 
     /** A reference to the game object for the game that we're
      * controlling. */

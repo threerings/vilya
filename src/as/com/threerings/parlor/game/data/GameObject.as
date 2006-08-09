@@ -21,9 +21,11 @@
 
 package com.threerings.parlor.game.data {
 
+import com.threerings.util.ArrayUtil;
 import com.threerings.util.Integer;
 import com.threerings.util.langBoolean;
 import com.threerings.util.Name;
+import com.threerings.util.StringBuilder;
 
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
@@ -200,7 +202,7 @@ public class GameObject extends PlaceObject
      */
     public function getWinnerCount () :int
     {
-        int count = 0;
+        var count :int = 0;
         if (winners != null) {
             for (var ii :int = 0; ii < winners.length; ii++) {
                 if (winners[ii]) {
@@ -236,7 +238,7 @@ public class GameObject extends PlaceObject
      */
     public function getPartyGameType () :int
     {
-        return PartyGameConfig.NOT_PARTY_GAME;
+        return PartyGameCodes.NOT_PARTY_GAME;
     }
 
     /**
