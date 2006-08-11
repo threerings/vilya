@@ -375,6 +375,16 @@ public class GameManager extends PlaceManager
     }
 
     /**
+     * Is the specified oid that of a player in this game?
+     */
+    public int getPlayerIndex (int bodyOid)
+    {
+        return (_playerOids == null)
+            ? -1
+            : IntListUtil.indexOf(_playerOids, bodyOid);
+    }
+
+    /**
      * Returns the user object oid of the player with the specified index.
      */
     public int getPlayerOid (int index)
