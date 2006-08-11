@@ -203,7 +203,8 @@ public class ParlorManager
 
             // configure the game config with the player info
             invite.config.players = new Name[] {
-                invite.invitee.username, invite.inviter.username };
+                invite.invitee.getVisibleName(),
+                invite.inviter.getVisibleName() };
 
             // create the game manager and begin it's initialization
             // process. the game manager will take care of notifying the
