@@ -375,9 +375,10 @@ public class GameManager extends PlaceManager
     }
 
     /**
-     * Is the specified oid that of a player in this game?
+     * Get the player index of the specified oid, or -1 if the oid is
+     * not a player or is a player that is not presently in the game.
      */
-    public int getPlayerIndex (int bodyOid)
+    public int getPresentPlayerIndex (int bodyOid)
     {
         return (_playerOids == null)
             ? -1
