@@ -133,7 +133,7 @@ public /*abstract*/ class GameConfig extends PlaceConfig
     public function equals (other :Object) :Boolean
     {
         // make sure they're of the same class
-        if (ClassUtil.getClassName(other) == ClassUtil.getClassName(this)) {
+        if (ClassUtil.isSameClass(other, this)) {
             var that :GameConfig = GameConfig(other);
             return this.rated == that.rated;
 
