@@ -250,14 +250,10 @@ public /*abstract*/ class GameController extends PlaceController
         // clear out our game over flag
         setGameOver(false);
 
-/* TODO
         // let our delegates do their business
-        applyToDelegates(new DelegateOp() {
-            public void apply (PlaceControllerDelegate delegate) {
-                ((GameControllerDelegate)delegate).gameDidStart();
-            }
+        applyToDelegates(function (del :GameControllerDelegate) :void {
+            del.gameDidStart();
         });
-*/
     }
 
     /**
@@ -267,14 +263,10 @@ public /*abstract*/ class GameController extends PlaceController
      */
     protected function gameDidEnd () :void
     {
-/* TODO
         // let our delegates do their business
-        applyToDelegates(new DelegateOp() {
-            public void apply (PlaceControllerDelegate delegate) {
-                ((GameControllerDelegate)delegate).gameDidEnd();
-            }
+        applyToDelegates(function (del :GameControllerDelegate) :void {
+            del.gameDidEnd();
         });
-*/
     }
 
     /**
@@ -282,14 +274,10 @@ public /*abstract*/ class GameController extends PlaceController
      */
     protected function gameWasCancelled () :void
     {
-/*
         // let our delegates do their business
-        applyToDelegates(new DelegateOp() {
-            public void apply (PlaceControllerDelegate delegate) {
-                ((GameControllerDelegate)delegate).gameWasCancelled();
-            }
+        applyToDelegates(function (del :GameControllerDelegate) :void {
+            del.gameWasCancelled();
         });
-*/
     }
 
     /**
@@ -299,14 +287,10 @@ public /*abstract*/ class GameController extends PlaceController
      */
     protected function gameWillReset () :void
     {
-/* TODO
         // let our delegates do their business
-        applyToDelegates(new DelegateOp() {
-            public void apply (PlaceControllerDelegate delegate) {
-                ((GameControllerDelegate)delegate).gameWillReset();
-            }
+        applyToDelegates(function (del :GameControllerDelegate) :void {
+            del.gameWillReset();
         });
-*/
     }
 
     /**
