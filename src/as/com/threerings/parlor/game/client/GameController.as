@@ -68,7 +68,7 @@ public /*abstract*/ class GameController extends PlaceController
         // cast our references before we call super.init() so that when
         // super.init() calls createPlaceView(), we have our casted
         // references already in place
-        _ctx = (ctx as ParlorContext);
+        _pctx = (ctx as ParlorContext);
         _gconfig = (config as GameConfig);
 
         super.init(ctx, config);
