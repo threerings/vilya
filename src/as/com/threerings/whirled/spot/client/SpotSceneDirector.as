@@ -223,17 +223,17 @@ public class SpotSceneDirector extends BasicDirector
 
         _pendingLoc = (loc.clone() as Location);
         var clist :ConfirmAdapter = new ConfirmAdapter(
+            function (reason :String) :void {
+                _pendingLoc = null;
+                if (listener != null) {
+                    listener.requestFailed(new Error(reason));
+                }
+            },
             function () :void {
                 _location = _pendingLoc;
                 _pendingLoc = null;
                 if (listener != null) {
                     listener.requestCompleted(_location);
-                }
-            },
-            function (reason :String) :void {
-                _pendingLoc = null;
-                if (listener != null) {
-                    listener.requestFailed(new Error(reason));
                 }
             });
         _sservice.changeLocation(_wctx.getClient(), sceneId, loc, clist);
@@ -263,14 +263,14 @@ public class SpotSceneDirector extends BasicDirector
         log.info("Joining cluster [friend=" + froid + "].");
 
         _sservice.joinCluster(_wctx.getClient(), froid, new ConfirmAdapter(
-            function () :void {
-                if (listener != null) {
-                    listener.requestCompleted(null);
-                }
-            },
             function (reason :String) :void {
                 if (listener != null) {
                     listener.requestFailed(new Error(reason));
+                }
+            },
+            function () :void {
+                if (listener != null) {
+                    listener.requestCompleted(null);
                 }
             }));
     }
