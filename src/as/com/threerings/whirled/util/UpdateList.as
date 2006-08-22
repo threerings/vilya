@@ -59,7 +59,7 @@ public class UpdateList
             } else if (gotVersion < expVersion) {
                 // we somehow got an update that's older than updates we
                 // already have? wick wick wack
-                throw new IllegalArgumentError("Invalid update version " +
+                throw new ArgumentError("Invalid update version " +
                     "[want=" + expVersion + ", got=" + update + "]");
             }
         }

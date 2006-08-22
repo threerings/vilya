@@ -68,7 +68,7 @@ public class Cluster extends Rectangle
     /**
      * Generates a string representation of this instance.
      */
-    public function toString () :String
+    override public function toString () :String
     {
         return super.toString() + ", clusterOid=" + clusterOid;
     }

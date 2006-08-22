@@ -41,7 +41,7 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
      * Create a TableConfigurator that allows for the specified configuration
      * parameters.
      */
-    public function DefaultSwingTableConfigurator (
+    public function DefaultFlexTableConfigurator (
             desiredPlayers :int, minPlayers :int = -1, maxPlayers :int = -1,
             allowPrivate :Boolean = false)
     {
@@ -72,7 +72,7 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
     }
 
     // documentation inherited
-    protected function createConfigInterface () :void
+    override protected function createConfigInterface () :void
     {
         super.createConfigInterface();
 

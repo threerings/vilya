@@ -24,8 +24,6 @@ package com.threerings.whirled.spot.data {
 import com.threerings.presents.dobj.DObject;
 import com.threerings.presents.dobj.OidList;
 
-import com.threerings.crowd.chat.data.SpeakObject;
-
 /**
  * Used to dispatch chat in clusters.
  */

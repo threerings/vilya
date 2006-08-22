@@ -21,12 +21,15 @@
 
 package com.threerings.parlor.data {
 
+import com.threerings.util.ArrayUtil;
+import com.threerings.util.ClassUtil;
 import com.threerings.util.Hashable;
 import com.threerings.util.Name;
 import com.threerings.util.StringBuilder;
 
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
+import com.threerings.io.TypedArray;
 
 import com.threerings.presents.dobj.DSet;
 import com.threerings.presents.dobj.DSet_Entry;
@@ -35,6 +38,7 @@ import com.threerings.crowd.data.BodyObject;
 
 import com.threerings.parlor.data.ParlorCodes;
 import com.threerings.parlor.game.data.GameConfig;
+import com.threerings.parlor.game.data.PartyGameCodes;
 import com.threerings.parlor.game.data.PartyGameConfig;
 
 /**
@@ -42,7 +46,7 @@ import com.threerings.parlor.game.data.PartyGameConfig;
  * the Parlor services.
  */
 public class Table
-    implements Hashable, DSet_Entry, ParlorCodes
+    implements Hashable, DSet_Entry
 {
     /** The unique identifier for this table. */
     public var tableId :int;
@@ -138,7 +142,7 @@ public class Table
 
         // compress the team indexes down
         var newTeams :TypedArray = new TypedArray("[[I");
-        var players :TypedArray = getPlayers();
+        var players :Array = getPlayers();
         for (var ii :int = 0; ii < teams.length; ii++) {
             var subTeams :Array = (teams[ii] as Array);
             var newSubTeams :TypedArray = TypedArray.create(int);
@@ -160,12 +164,12 @@ public class Table
      */
     public function isPartyGame () :Boolean
     {
-        return (PartyGameConfig.NOT_PARTY_GAME != getPartyGameType());
+        return (PartyGameCodes.NOT_PARTY_GAME != getPartyGameType());
     }
 
     /**
      * Get the type of party game being played at this table, or
-     * PartyGameConfig.NOT_PARTY_GAME.
+     * PartyGameCodes.NOT_PARTY_GAME.
      */
     public function getPartyGameType () :int
     {
@@ -173,7 +177,7 @@ public class Table
             return (config as PartyGameConfig).getPartyGameType();
 
         } else {
-            return PartyGameConfig.NOT_PARTY_GAME;
+            return PartyGameCodes.NOT_PARTY_GAME;
         }
     }
 
@@ -192,12 +196,12 @@ public class Table
     {
         // make sure the requested position is a valid one
         if (position >= tconfig.desiredPlayerCount || position < 0) {
-            return INVALID_TABLE_POSITION;
+            return ParlorCodes.INVALID_TABLE_POSITION;
         }
 
         // make sure the requested position is not already occupied
         if (occupants[position] != null) {
-            return TABLE_POSITION_OCCUPIED;
+            return ParlorCodes.TABLE_POSITION_OCCUPIED;
         }
 
         // otherwise all is well, stick 'em in
@@ -224,7 +228,7 @@ public class Table
      * removed, false if the user was never seated at the table in the
      * first place.
      */
-    public function clearOccupant (username :Name) :void
+    public function clearOccupant (username :Name) :Boolean
     {
         var dex :int = ArrayUtil.indexOf(occupants, username);
         if (dex != -1) {
@@ -242,7 +246,7 @@ public class Table
      * removed, false if the user was never seated at the table in the
      * first place.
      */
-    public function clearOccupant (bodyOid :int) :Boolean
+    public function clearOccupantByOid (bodyOid :int) :Boolean
     {
         var dex :int = ArrayUtil.indexOf(bodyOids, bodyOid);
         if (dex != -1) {
@@ -319,7 +323,7 @@ public class Table
     public function equals (other :Object) :Boolean
     {
         return (other is Table) &&
-            (tableId == ((Table) other).tableId);
+            (tableId == (other as Table).tableId);
     }
 
     // from Hashable

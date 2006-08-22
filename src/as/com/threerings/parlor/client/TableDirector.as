@@ -226,7 +226,7 @@ public class TableDirector extends BasicDirector
     }
 
     // documentation inherited
-    protected function fetchServices (Client client) :void
+    override protected function fetchServices (client :Client) :void
     {
         // get a handle on our parlor services
         _pservice = (client.requireService(ParlorService) as ParlorService);
