@@ -184,6 +184,7 @@
     <!-- build our various jar files -->
     <jar destfile="${deploy.dir}/${app.name}-parlor.jar">
       <fileset dir="${classes.dir}" includes="com/threerings/parlor/**"/>
+      <fileset dir="${classes.dir}" includes="com/threerings/ezgame/**"/>
     </jar>
     <jar destfile="${deploy.dir}/${app.name}-puzzle.jar">
       <fileset dir="${classes.dir}" includes="com/threerings/puzzle/**"/>
