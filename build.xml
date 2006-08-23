@@ -183,6 +183,7 @@
   <target name="dist" depends="prepare,compile,tests">
     <!-- build our various jar files -->
     <jar destfile="${deploy.dir}/${app.name}-parlor.jar">
+      <fileset dir="${classes.dir}" includes="rsrc/i18n/game/**"/>
       <fileset dir="${classes.dir}" includes="com/threerings/parlor/**"/>
       <fileset dir="${classes.dir}" includes="com/threerings/ezgame/**"/>
     </jar>

@@ -56,7 +56,7 @@ public class LogonPanel extends JPanel
     {
         // keep these around for later
         _ctx = ctx;
-        _msgs = _ctx.getMessageManager().getBundle("micasa");
+        _msgs = _ctx.getMessageManager().getBundle("micasa.logon");
 
 	setLayout(new VGroupLayout());
 
