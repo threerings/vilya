@@ -254,7 +254,7 @@ public class GameObject extends PlaceObject
     override protected function whichBuf (buf :StringBuilder) :void
     {
         super.whichBuf(buf);
-        buf.append(players.join());
+        buf.append("(").append(players.join()).append(")");
         buf.append(":").append(state);
     }
 
