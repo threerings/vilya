@@ -15,6 +15,10 @@ import mx.core.IChildList;
 
 import mx.utils.DisplayUtil;
 
+import com.threerings.util.MediaContainer;
+
+import com.threerings.mx.controls.ChatDisplayBox;
+
 import com.threerings.crowd.client.PlaceView;
 import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.util.CrowdContext;
@@ -35,20 +39,16 @@ public class EZGamePanel extends VBox
         // add a listener so that we hear about all new children
         addEventListener(Event.ADDED, childAdded);
 
-        // TODO: figure out how we're going to add the client game
         var cfg :EZGameConfig = (ctrl.getPlaceConfig() as EZGameConfig);
-        //_gameView = new MsoySprite(cfg.game);
-        //addChild(_gameView);
+        _gameView = new MediaContainer(cfg.configData); // TODO
+        addChild(_gameView);
 
-        // TODO: move chat component into narya?
-        //addChild(new ChatTextArea(ctx));
+        addChild(new ChatDisplayBox(ctx));
     }
 
     // from PlaceView
     public function willEnterPlace (plobj :PlaceObject) :void
     {
-        var thisPanel :DisplayObject = this;
-
         // don't start notifying anything of the game until we've
         // notified the game manager that we're in the game
         // (done in GameController, and it uses callLater, so we do it twice!)
@@ -56,7 +56,7 @@ public class EZGamePanel extends VBox
             _ctx.getClient().callLater(function () :void {
                 _ezObj = (plobj as EZGameObject);
 
-                notifyOfGame(thisPanel);
+                notifyOfGame(_gameView);
             });
         });
     }
@@ -98,6 +98,8 @@ public class EZGamePanel extends VBox
 
     protected var _ctx :CrowdContext;
     protected var _ctrl :EZGameController;
+
+    protected var _gameView :MediaContainer;
 
     /** A weak-key hash of the Game interfaces we've already seen. */
     protected var _seenGames :Dictionary = new Dictionary(true);

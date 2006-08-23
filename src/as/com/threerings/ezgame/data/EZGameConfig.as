@@ -23,8 +23,10 @@ import com.threerings.ezgame.client.EZGameController;
 public /* abstract */ class EZGameConfig extends GameConfig
     implements PartyGameConfig
 {
-    /** A creator-submitted name of the game. */
-    public var gameName :String;
+    // TODO: this will eventually contain various XML configuration bits,
+    // or we'll expand this to contain other information.
+    // For now, the configData is either a classname or url.
+    public var configData :String;
 
     override public function createController () :PlaceController
     {
@@ -41,7 +43,7 @@ public /* abstract */ class EZGameConfig extends GameConfig
 
     override public function getGameName () :String
     {
-        return MessageBundle.taint(gameName);
+        return MessageBundle.taint(configData);
     }
 
     // from PartyGameConfig
@@ -58,26 +60,26 @@ public /* abstract */ class EZGameConfig extends GameConfig
         }
 
         var that :EZGameConfig = (other as EZGameConfig);
-        return (this.gameName === that.gameName);
+        return (this.configData === that.configData);
     }
 
     override public function hashCode () :int
     {
-        return super.hashCode(); // TODO: incorporate gamename?
+        return super.hashCode(); // TODO: incorporate configData?
     }
 
     override public function writeObject (out :ObjectOutputStream) :void
     {
         super.writeObject(out);
 
-        out.writeField(gameName);
+        out.writeField(configData);
     }
 
     override public function readObject (ins :ObjectInputStream) :void
     {
         super.readObject(ins);
 
-        gameName = (ins.readField(String) as String);
+        configData = (ins.readField(String) as String);
     }
 }
 }

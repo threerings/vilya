@@ -15,8 +15,10 @@ import com.threerings.parlor.game.data.PartyGameConfig;
 public class EZGameConfig extends GameConfig
     implements PartyGameConfig
 {
-    /** A creator-submitted name of the game. */
-    public String gameName;
+    // TODO: this will eventually contain various XML configuration bits,
+    // or we'll expand this to contain other information.
+    // For now, the configData is either a classname or url.
+    public String configData;
 
     // from abstract GameConfig
     public String getBundleName ()
@@ -33,7 +35,7 @@ public class EZGameConfig extends GameConfig
     @Override
     public String getGameName ()
     {
-        return MessageBundle.taint(gameName);
+        return MessageBundle.taint(configData);
     }
 
     // from abstract PlaceConfig
@@ -57,12 +59,12 @@ public class EZGameConfig extends GameConfig
         }
 
         EZGameConfig that = (EZGameConfig) other;
-        return this.gameName.equals(that.gameName);
+        return this.configData.equals(that.configData);
     }
 
     @Override
     public int hashCode ()
     {
-        return super.hashCode(); // TODO: incorp game name?
+        return super.hashCode(); // TODO: incorp configData?
     }
 }
