@@ -47,6 +47,8 @@ public class EZGamePanel extends VBox
     // from PlaceView
     public function willEnterPlace (plobj :PlaceObject) :void
     {
+        var thisPanel :DisplayObject = this;
+
         // don't start notifying anything of the game until we've
         // notified the game manager that we're in the game
         // (done in GameController, and it uses callLater, so we do it twice!)
@@ -54,7 +56,7 @@ public class EZGamePanel extends VBox
             _ctx.getClient().callLater(function () :void {
                 _ezObj = (plobj as EZGameObject);
 
-                notifyOfGame(this);
+                notifyOfGame(thisPanel);
             });
         });
     }

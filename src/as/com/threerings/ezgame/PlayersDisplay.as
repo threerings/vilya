@@ -22,7 +22,7 @@ public class PlayersDisplay extends Sprite
     implements Game
 {
     // implementation of Game method
-    public function setGameObject (gameObj :GameObject) :void
+    public function setGameObject (gameObj :EZGame) :void
     {
         _gameObj = gameObj;
         _gameObj.addEventListener(StateChangedEvent.TURN_CHANGED, recheckTurn);
@@ -112,7 +112,7 @@ public class PlayersDisplay extends Sprite
     }
 
     /** Our game object. */
-    protected var _gameObj :GameObject;
+    protected var _gameObj :EZGame;
 
     /** An array of labels, one for each player name. */
     protected var _playerLabels :Array = [];

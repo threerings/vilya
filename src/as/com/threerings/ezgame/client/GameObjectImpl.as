@@ -25,11 +25,11 @@ import com.threerings.ezgame.data.EZGameObject;
 import com.threerings.ezgame.data.PropertySetEvent;
 import com.threerings.ezgame.util.EZObjectMarshaller;
 
-import com.threerings.ezgame.GameObject;
+import com.threerings.ezgame.EZGame;
 import com.threerings.ezgame.PropertyChangedEvent;
 
 public class GameObjectImpl extends EventDispatcher
-    implements GameObject
+    implements EZGame
 {
     public function GameObjectImpl (ctx :CrowdContext, ezObj :EZGameObject)
     {
@@ -38,13 +38,13 @@ public class GameObjectImpl extends EventDispatcher
         _gameData = new GameData(this, _ezObj.getUserProps());
     }
 
-    // from GameObject
+    // from EZGame
     public function get data () :Object
     {
         return _gameData;
     }
 
-    // from GameObject
+    // from EZGame
     public function get (propName :String, index :int = -1) :Object
     {
         var value :Object = data[propName];
@@ -60,7 +60,7 @@ public class GameObjectImpl extends EventDispatcher
         return value;
     }
 
-    // from GameObject
+    // from EZGame
     public function set (propName :String, value :Object, index :int = -1) :void
     {
         validatePropertyChange(propName, value, index);
@@ -74,19 +74,19 @@ public class GameObjectImpl extends EventDispatcher
         _ezObj.applyPropertySet(propName, value, index);
     }
 
-    // from GameObject
+    // from EZGame
     public function setCollection (collName :String, values :Array) :void
     {
         populateCollection(collName, values, true);
     }
 
-    // from GameObject
+    // from EZGame
     public function addToCollection (collName :String, values :Array) :void
     {
         populateCollection(collName, values, false);
     }
 
-    // from GameObject
+    // from EZGame
     public function pickFromCollection (
         collName :String, count :int, msgOrPropName :String,
         playerIndex :int = -1) :void
@@ -95,7 +95,7 @@ public class GameObjectImpl extends EventDispatcher
             false, null);
     }
 
-    // from GameObject
+    // from EZGame
     public function dealFromCollection (
         collName :String, count :int, msgOrPropName :String,
         callback :Function = null, playerIndex :int = -1) :void
@@ -104,7 +104,7 @@ public class GameObjectImpl extends EventDispatcher
             true, callback);
     }
 
-    // from GameObject
+    // from EZGame
     public function mergeCollection (srcColl :String, intoColl :String) :void
     {
         validateName(srcColl);
@@ -113,7 +113,7 @@ public class GameObjectImpl extends EventDispatcher
             srcColl, intoColl, createLoggingListener("mergeCollection"));
     }
 
-    // from GameObject
+    // from EZGame
     public function sendMessage (
         messageName :String, value :Object, playerIndex :int = -1) :void
     {
@@ -126,7 +126,7 @@ public class GameObjectImpl extends EventDispatcher
             createLoggingListener("sendMessage"));
     }
 
-    // from GameObject
+    // from EZGame
     public function sendChat (msg :String) :void
     {
         validateChat(msg);
@@ -135,7 +135,7 @@ public class GameObjectImpl extends EventDispatcher
         _ezObj.postMessage(EZGameObject.GAME_CHAT, [ msg ]);
     }
 
-    // from GameObject
+    // from EZGame
     public function localChat (msg :String) :void
     {
         validateChat(msg);
@@ -145,7 +145,7 @@ public class GameObjectImpl extends EventDispatcher
         _ctx.getChatDirector().displayInfo(null, MessageBundle.taint(msg));
     }
 
-    // from GameObject
+    // from EZGame
     public function getPlayerNames () :Array
     {
         var names :Array = new Array();
@@ -155,19 +155,19 @@ public class GameObjectImpl extends EventDispatcher
         return names;
     }
 
-    // from GameObject
+    // from EZGame
     public function getMyIndex () :int
     {
         return _ezObj.getPlayerIndex(getUsername());
     }
 
-    // from GameObject
+    // from EZGame
     public function getTurnHolderIndex () :int
     {
         return _ezObj.getPlayerIndex(_ezObj.turnHolder);
     }
 
-    // from GameObject
+    // from EZGame
     public function getWinnerIndexes () :Array /* of int */
     {
         var arr :Array = new Array();
@@ -181,26 +181,26 @@ public class GameObjectImpl extends EventDispatcher
         return arr;
     }
 
-    // from GameObject
+    // from EZGame
     public function isMyTurn () :Boolean
     {
         return getUsername().equals(_ezObj.turnHolder);
     }
 
-    // from GameObject
+    // from EZGame
     public function isInPlay () :Boolean
     {
         return _ezObj.isInPlay();
     }
 
-    // from GameObject
+    // from EZGame
     public function endTurn (nextPlayerIndex :int = -1) :void
     {
         _ezObj.ezGameService.endTurn(_ctx.getClient(), nextPlayerIndex,
             createLoggingListener("endTurn"));
     }
 
-    // from GameObject
+    // from EZGame
     public function endGame (winnerIndex :int, ... rest) :void
     {
         var winners :TypedArray = TypedArray.create(int);
@@ -257,7 +257,7 @@ public class GameObjectImpl extends EventDispatcher
         service :String) :InvocationService_ConfirmListener
     {
         return new ConfirmAdapter(function (cause :String) :void {
-            Log.getLog(GameObject).warning("Service failure " +
+            Log.getLog(this).warning("Service failure " +
                 "[service=" + service + ", cause=" + cause + "].");
         });
     }

@@ -11,6 +11,6 @@ public interface Game
      * Called by the mysterious powers of the cosmos to initialize
      * your game with the GameObject.
      */
-    function setGameObject (gameObj :GameObject) :void;
+    function setGameObject (gameObj :EZGame) :void;
 }
 }

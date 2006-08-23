@@ -6,7 +6,7 @@ package com.threerings.ezgame {
  */
 public class CardDeck
 {
-    public function CardDeck (gameObj :GameObject, deckName :String = "deck")
+    public function CardDeck (gameObj :EZGame, deckName :String = "deck")
     {
         _gameObj = gameObj;
         _deckName = deckName;
@@ -35,7 +35,7 @@ public class CardDeck
     }
 
     /** The game object. */
-    protected var _gameObj :GameObject;
+    protected var _gameObj :EZGame;
 
     /** The name of our deck. */
     protected var _deckName :String;
