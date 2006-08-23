@@ -149,7 +149,7 @@ public class LobbyRegistry
             // lobbyReady() when it has obtained a reference to its lobby
             // object and is ready to roll
             LobbyManager lobmgr = (LobbyManager)
-                MiCasaServer.plreg.createPlace(config, null);
+                MiCasaServer.plreg.createPlace(config);
             lobmgr.init(this, props);
 
         } catch (Exception e) {

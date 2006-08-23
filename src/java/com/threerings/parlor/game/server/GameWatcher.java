@@ -26,29 +26,30 @@ import com.threerings.presents.dobj.AttributeChangedEvent;
 
 import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.server.PlaceManager;
-import com.threerings.crowd.server.PlaceRegistry;
 
 import com.threerings.parlor.game.data.GameObject;
 
 /**
- * An abstract convenience class used server-side to keep an eye on a game
- * and perform a one-time game-over activity when the game ends.  Classes
- * that care to make use of the game watcher should create an instance,
- * implement {@link #gameDidEnd}, and pass the instance to the place
- * registry in the call to {@link PlaceRegistry#createPlace} when the
- * puzzle is created.
+ * An abstract convenience class used server-side to keep an eye on a game and
+ * perform a one-time game-over activity when the game ends.  Classes that care
+ * to make use of the game watcher should create an instance with their newly
+ * created {@link GameObject} and implement {@link #gameDidEnd}.
  */
 public abstract class GameWatcher
-    implements PlaceRegistry.CreationObserver, AttributeChangeListener
+    implements AttributeChangeListener
 {
-    // documentation inherited
-    public void placeCreated (PlaceObject place, PlaceManager pmgr)
+    public void init (PlaceManager plmgr)
     {
-        _gameobj = (GameObject)place;
+        init((GameObject)plmgr.getPlaceObject());
+    }
+
+    public void init (GameObject gameobj)
+    {
+        _gameobj = gameobj;
         _gameobj.addListener(this);
     }
 
-    // documentation inherited
+    // from interface AttributeChangeListener
     public void attributeChanged (AttributeChangedEvent event)
     {
         if (event.getName().equals(GameObject.STATE)) {
@@ -66,8 +67,8 @@ public abstract class GameWatcher
     }
 
     /**
-     * Called when the game ends to give derived classes a chance to
-     * engage in their game-over antics.
+     * Called when the game ends to give derived classes a chance to engage in
+     * their game-over antics.
      */
     protected abstract void gameDidEnd (GameObject gameobj);
 

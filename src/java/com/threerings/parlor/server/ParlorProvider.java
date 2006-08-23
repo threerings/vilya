@@ -181,14 +181,11 @@ public class ParlorProvider
                 config.players = new Name[] { user.getVisibleName() };
             }
 
-            // create the game manager and begin its initialization
-            // process
-            GameManager gmgr = (GameManager)
-                CrowdServer.plreg.createPlace(config, null);
+            // create the game manager and begin its initialization process
+            CrowdServer.plreg.createPlace(config);
 
-            // the game manager will take care of notifying the player
-            // that the game has been created once it has been started up;
-            // but we let the caller know that we processed their request
+            // the game manager will notify the player that their game is
+            // "ready", but tell the caller that we processed their request
             listener.requestProcessed();
 
         } catch (InstantiationException ie) {

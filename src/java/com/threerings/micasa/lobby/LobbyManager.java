@@ -24,6 +24,7 @@ package com.threerings.micasa.lobby;
 import java.util.Properties;
 import com.samskivert.util.StringUtil;
 
+import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.server.PlaceManager;
 import com.threerings.micasa.Log;
 
@@ -44,8 +45,8 @@ public class LobbyManager extends PlaceManager
         _gameIdent = getConfigValue(config, "ugi");
         _name = getConfigValue(config, "name");
 
-        // keep this for later
-        _lobreg = lobreg;
+        // let the lobby registry know that we're up and running
+        lobreg.lobbyReady(_plobj.getOid(), _gameIdent, _name);
 
         Log.info("Lobby manager initialized [ident=" + _gameIdent +
                  ", name=" + _name + "].");
@@ -64,19 +65,10 @@ public class LobbyManager extends PlaceManager
         return value;
     }
 
-    // documentation inherited
-    protected Class getPlaceObjectClass ()
+    @Override // from PlaceManager
+    protected PlaceObject createPlaceObject ()
     {
-        return LobbyObject.class;
-    }
-
-    // documentation inherited
-    protected void didStartup ()
-    {
-        super.didStartup();
-
-        // let the lobby registry know that we're up and running
-        _lobreg.lobbyReady(_plobj.getOid(), _gameIdent, _name);
+        return new LobbyObject();
     }
 
     /** The universal game identifier for the game matchmade by this
@@ -85,7 +77,4 @@ public class LobbyManager extends PlaceManager
 
     /** The human readable name of this lobby. */
     protected String _name;
-
-    /** A reference to the lobby registry. */
-    protected LobbyRegistry _lobreg;
 }

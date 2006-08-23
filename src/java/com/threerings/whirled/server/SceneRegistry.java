@@ -30,6 +30,8 @@ import com.threerings.presents.server.InvocationManager;
 
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.server.CrowdServer;
+import com.threerings.crowd.server.PlaceManager;
+import com.threerings.crowd.server.PlaceRegistry;
 
 import com.threerings.whirled.Log;
 import com.threerings.whirled.data.Scene;
@@ -142,17 +144,16 @@ public class SceneRegistry
     }
 
     /**
-     * Requests that the specified scene be resolved, which means loaded
-     * into the server and initialized if the scene is not currently
-     * active. The supplied callback instance will be notified, on the
-     * dobjmgr thread, when the scene has been resolved. If the scene is
-     * already active, it will be notified immediately (before the call to
-     * {@link #resolveScene} returns).
+     * Requests that the specified scene be resolved, which means loaded into
+     * the server and initialized if the scene is not currently active. The
+     * supplied callback instance will be notified, on the dobjmgr thread, when
+     * the scene has been resolved. If the scene is already active, it will be
+     * notified immediately (before the call to {@link #resolveScene} returns).
      *
      * @param sceneId the id of the scene to resolve.
-     * @param target a reference to a callback instance that will be
-     * notified when the scene has been resolved (which may be immediately
-     * if the scene is already active).
+     * @param target a reference to a callback instance that will be notified
+     * when the scene has been resolved (which may be immediately if the scene
+     * is already active).
      */
     public void resolveScene (int sceneId, ResolutionListener target)
     {
@@ -239,7 +240,7 @@ public class SceneRegistry
      * Called when the scene resolution has completed successfully.
      */
     protected void processSuccessfulResolution (
-        SceneModel model, UpdateList updates)
+        SceneModel model, final UpdateList updates)
     {
         // now that the scene is loaded, we can create a scene manager for
         // it. that will be initialized by the place registry and when
@@ -248,17 +249,21 @@ public class SceneRegistry
 
         try {
             // first create our scene instance
-            Scene scene = _scfact.createScene(
+            final Scene scene = _scfact.createScene(
                 model, _confact.createPlaceConfig(model));
 
             // now create our scene manager
-            SceneManager scmgr = (SceneManager)
-                CrowdServer.plreg.createPlace(scene.getPlaceConfig(), null);
-            scmgr.setSceneData(scene, updates, this);
+            CrowdServer.plreg.createPlace(scene.getPlaceConfig(),
+                new PlaceRegistry.PreStartupHook() {
+                    public void invoke (PlaceManager pmgr) {
+                        ((SceneManager)pmgr).setSceneData(
+                            scene, updates, SceneRegistry.this);
+                    }
+                });
 
-            // when the scene manager completes its startup procedings, it
-            // will call back to the scene registry and let us know that
-            // we can turn the penders loose
+            // when the scene manager completes its startup procedings, it will
+            // call back to the scene registry and let us know that we can turn
+            // the penders loose
 
         } catch (Exception e) {
             // so close, but no cigar

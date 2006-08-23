@@ -206,13 +206,10 @@ public class ParlorManager
                 invite.invitee.getVisibleName(),
                 invite.inviter.getVisibleName() };
 
-            // create the game manager and begin it's initialization
-            // process. the game manager will take care of notifying the
-            // players that the game has been created once it has been
-            // started up (which is done by the place registry once the
-            // game object creation has completed)
-            GameManager gmgr = (GameManager)
-                _plreg.createPlace(invite.config, null);
+            // create the game manager and begin it's initialization process;
+            // the game manager will take care of notifying the players that
+            // the game has been created
+            _plreg.createPlace(invite.config);
 
         } catch (Exception e) {
             Log.warning("Unable to create game manager [invite=" + invite +

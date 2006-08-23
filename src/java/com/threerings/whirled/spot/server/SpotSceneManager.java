@@ -462,11 +462,29 @@ public class SpotSceneManager extends SceneManager
      * one another.
      */
     protected class ClusterRecord extends HashIntMap
-        implements Subscriber
     {
         public ClusterRecord ()
         {
-            CrowdServer.omgr.createObject(ClusterObject.class, this);
+            _clobj = CrowdServer.omgr.registerObject(new ClusterObject());
+            _clusters.put(_clobj.getOid(), this);
+
+            // let any mapped users know about our cluster
+            Iterator iter = values().iterator();
+            while (iter.hasNext()) {
+                ClusteredBodyObject body = (ClusteredBodyObject)iter.next();
+                body.setClusterOid(_clobj.getOid());
+                _clobj.addToOccupants(((BodyObject)body).getOid());
+            }
+
+            // configure our cluster record and publish it
+            _cluster.clusterOid = _clobj.getOid();
+            _ssobj.addToClusters(_cluster);
+
+            // if we didn't manage to add our creating user when we first
+            // started up, there's no point in our sticking around
+            if (size() == 0) {
+                destroy(true);
+            }
         }
 
         public boolean addBody (BodyObject body)
@@ -563,44 +581,6 @@ public class SpotSceneManager extends SceneManager
         public Cluster getCluster ()
         {
             return _cluster;
-        }
-
-        public void objectAvailable (DObject object)
-        {
-            // keep this feller around
-            _clobj = (ClusterObject)object;
-            _clusters.put(_clobj.getOid(), this);
-
-            // let any mapped users know about our cluster
-            Iterator iter = values().iterator();
-            while (iter.hasNext()) {
-                ClusteredBodyObject body = (ClusteredBodyObject)iter.next();
-                body.setClusterOid(_clobj.getOid());
-                _clobj.addToOccupants(((BodyObject)body).getOid());
-            }
-
-            // configure our cluster record and publish it
-            _cluster.clusterOid = _clobj.getOid();
-            _ssobj.addToClusters(_cluster);
-
-            // if we didn't manage to add our creating user when we first
-            // started up, there's no point in our sticking around
-            if (size() == 0) {
-                destroy(true);
-            }
-        }
-
-        public void requestFailed (int oid, ObjectAccessException cause)
-        {
-            Log.warning("Aiya! Failed to create cluster object " +
-                        "[cause=" + cause + ", penders=" + size() + "].");
-
-            // let any mapped users know that we're hosed
-            Iterator iter = values().iterator();
-            while (iter.hasNext()) {
-                ClusteredBodyObject body = (ClusteredBodyObject)iter.next();
-                body.setClusterOid(-1);
-            }
         }
 
         public String toString ()

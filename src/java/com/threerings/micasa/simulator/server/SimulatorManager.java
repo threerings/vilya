@@ -34,7 +34,6 @@ import com.threerings.presents.server.InvocationManager;
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.server.PlaceManager;
-import com.threerings.crowd.server.PlaceRegistry.CreationObserver;
 import com.threerings.crowd.server.PlaceRegistry;
 
 import com.threerings.parlor.game.data.GameAI;
@@ -83,7 +82,7 @@ public class SimulatorManager
         new CreateGameTask(source, config, simClass, playerCount);
     }
 
-    public class CreateGameTask implements CreationObserver
+    public class CreateGameTask
     {
         public CreateGameTask (
             BodyObject source, GameConfig config, String simClass,
@@ -97,10 +96,8 @@ public class SimulatorManager
 
             try {
                 // create the game manager and begin its initialization
-                // process. the game manager will take care of notifying
-                // the players that the game has been created once it has
-                // been started up (which is done by the place registry
-                // once the game object creation has completed)
+                // process. the game manager will take care of notifying the
+                // players that the game has been created
 
                 // configure the game config with the player names
                 config.players = new Name[_playerCount];
@@ -108,23 +105,16 @@ public class SimulatorManager
                 for (int ii = 1; ii < _playerCount; ii++) {
                     config.players[ii] = new Name("simulant" + ii);
                 }
-
-                // we needn't hang around and wait for game object
-                // creation if it's just us
-                CreationObserver obs = (_playerCount == 1) ? null : this;
-                _gmgr = (GameManager)_plreg.createPlace(config, obs);
+                _gmgr = (GameManager)_plreg.createPlace(config);
 
             } catch (Exception e) {
                 Log.warning("Unable to create game manager [e=" + e + "].");
                 Log.logStackTrace(e);
+                return;
             }
-        }
 
-        // documentation inherited
-        public void placeCreated (PlaceObject place, PlaceManager pmgr)
-        {
             // cast the place to the game object for the game we're creating
-            _gobj = (GameObject)place;
+            _gobj = (GameObject)_gmgr.getPlaceObject();
 
             // determine the AI player skill level
             byte skill;
@@ -142,19 +132,15 @@ public class SimulatorManager
             // resolve the simulant body objects
             ClientResolutionListener listener = new ClientResolutionListener()
             {
-                public void clientResolved (Name username, ClientObject clobj)
-                {
+                public void clientResolved (Name username, ClientObject clobj) {
                     // hold onto the body object for later game creation
                     _sims.add(clobj);
-
                     // create the game if we've received all body objects
                     if (_sims.size() == (_playerCount - 1)) {
                         createSimulants();
                     }
                 }
-
-                public void resolutionFailed (Name username, Exception cause)
-                {
+                public void resolutionFailed (Name username, Exception cause) {
                     Log.warning("Unable to create simulant body object " +
                                 "[error=" + cause + "].");
                 }

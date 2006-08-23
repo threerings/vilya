@@ -40,7 +40,6 @@ import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.server.CrowdServer;
 import com.threerings.crowd.server.PlaceManager;
-import com.threerings.crowd.server.PlaceRegistry;
 
 import com.threerings.parlor.Log;
 import com.threerings.parlor.data.ParlorCodes;
@@ -261,14 +260,9 @@ public class TableManager
         // fill the players array into the game config
         table.config.players = table.getPlayers();
 
-        PlaceRegistry.CreationObserver obs =
-            new PlaceRegistry.CreationObserver() {
-            public void placeCreated (PlaceObject plobj, PlaceManager pmgr) {
-                gameCreated(table, plobj);
-            }
-        };
         try {
-            CrowdServer.plreg.createPlace(table.config, obs);
+            PlaceManager pmgr = CrowdServer.plreg.createPlace(table.config);
+            gameCreated(table, (GameObject)pmgr.getPlaceObject());
         } catch (Throwable t) {
             Log.warning("Failed to create manager for game " +
                         "[config=" + table.config + "]: " + t);
@@ -277,16 +271,16 @@ public class TableManager
     }
 
     /**
-     * Called when our game has been created, we take this opportunity to
-     * clean up the table and transition it to "in play" mode.
+     * Called when our game has been created, we take this opportunity to clean
+     * up the table and transition it to "in play" mode.
      */
-    protected void gameCreated (Table table, PlaceObject plobj)
+    protected void gameCreated (Table table, GameObject gameobj)
     {
         // update the table with the newly created game object
-        table.gameOid = plobj.getOid();
+        table.gameOid = gameobj.getOid();
 
         // configure the privacy of the game
-        ((GameObject) plobj).setIsPrivate(table.tconfig.privateTable);
+        gameobj.setIsPrivate(table.tconfig.privateTable);
 
         // clear the occupant to table mappings as this game is underway
         for (int i = 0; i < table.bodyOids.length; i++) {
@@ -295,7 +289,7 @@ public class TableManager
 
         // add an object death listener to unmap the table when the game
         // finally goes away
-        plobj.addListener(_gameDeathListener);
+        gameobj.addListener(_gameDeathListener);
 
         // and then update the lobby object that contains the table
         _tlobj.updateTables(table);
