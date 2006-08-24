@@ -252,9 +252,9 @@ public class EZGameManager extends GameManager
     }
 
     @Override
-    protected Class<? extends PlaceObject> getPlaceObjectClass ()
+    protected PlaceObject createPlaceObject ()
     {
-        return EZGameObject.class;
+        return new EZGameObject();
     }
 
     @Override

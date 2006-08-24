@@ -21,6 +21,7 @@
 
 package com.threerings.micasa.lobby.table;
 
+import com.threerings.crowd.data.PlaceObject;
 import com.threerings.parlor.server.TableManager;
 import com.threerings.parlor.server.TableManagerProvider;
 import com.threerings.micasa.lobby.LobbyManager;
@@ -43,9 +44,9 @@ public class TableLobbyManager
     }
 
     // documentation inherited
-    protected Class getPlaceObjectClass ()
+    protected PlaceObject createPlaceObject ()
     {
-        return TableLobbyObject.class;
+        return new TableLobbyObject();
     }
 
     // documentation inherited

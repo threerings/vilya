@@ -41,6 +41,7 @@ import com.threerings.presents.dobj.DObject;
 import com.threerings.crowd.chat.server.SpeakProvider;
 
 import com.threerings.crowd.data.BodyObject;
+import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.server.CrowdServer;
 import com.threerings.crowd.server.PlaceManager;
 import com.threerings.crowd.server.PlaceManagerDelegate;
@@ -485,9 +486,9 @@ public class GameManager extends PlaceManager
     }
 
     // documentation inherited
-    protected Class getPlaceObjectClass ()
+    protected PlaceObject createPlaceObject ()
     {
-        return GameObject.class;
+        return new GameObject();
     }
 
     // documentation inherited

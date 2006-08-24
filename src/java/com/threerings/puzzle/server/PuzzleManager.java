@@ -33,6 +33,7 @@ import com.threerings.presents.dobj.DObject;
 import com.threerings.presents.dobj.OidList;
 
 import com.threerings.crowd.data.BodyObject;
+import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.server.CrowdServer;
 
 import com.threerings.parlor.game.data.GameObject;
@@ -169,9 +170,9 @@ public abstract class PuzzleManager extends GameManager
     }
 
     // documentation inherited
-    protected Class getPlaceObjectClass ()
+    protected PlaceObject createPlaceObject ()
     {
-        return PuzzleObject.class;
+        return new PuzzleObject();
     }
 
     // documentation inherited
