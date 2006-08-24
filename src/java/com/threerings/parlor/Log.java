@@ -21,19 +21,22 @@
 
 package com.threerings.parlor;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
- * A placeholder class that contains a reference to the log object used by
- * the Parlor services.
+ * Contains a reference to the log object used by the Parlor services.
  */
 public class Log
 {
-    public static com.samskivert.util.Log log =
-	new com.samskivert.util.Log("parlor");
+    /** We dispatch our log messages through this logger. */
+    public static Logger log =
+        Logger.getLogger("com.threerings.vilya.parlor");
 
     /** Convenience function. */
     public static void debug (String message)
     {
-	log.debug(message);
+	log.fine(message);
     }
 
     /** Convenience function. */
@@ -51,6 +54,6 @@ public class Log
     /** Convenience function. */
     public static void logStackTrace (Throwable t)
     {
-	log.logStackTrace(com.samskivert.util.Log.WARNING, t);
+	log.log(Level.WARNING, t.getMessage(), t);
     }
 }

@@ -235,7 +235,7 @@ public abstract class GameController extends PlaceController
     protected void playerReady ()
     {
         Log.info("Reporting ready " + _gobj.which() + ".");
-        _gobj.gameService.playerReady(_ctx.getClient());
+        _gobj.manager.invoke("playerReady");
     }
 
     /**

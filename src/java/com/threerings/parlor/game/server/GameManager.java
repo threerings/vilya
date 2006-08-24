@@ -37,6 +37,7 @@ import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.dobj.AttributeChangeListener;
 import com.threerings.presents.dobj.AttributeChangedEvent;
 import com.threerings.presents.dobj.DObject;
+import com.threerings.presents.dobj.MessageEvent;
 
 import com.threerings.crowd.chat.server.SpeakProvider;
 
@@ -51,7 +52,6 @@ import com.threerings.parlor.data.ParlorCodes;
 import com.threerings.parlor.game.data.GameAI;
 import com.threerings.parlor.game.data.GameCodes;
 import com.threerings.parlor.game.data.GameConfig;
-import com.threerings.parlor.game.data.GameMarshaller;
 import com.threerings.parlor.game.data.GameObject;
 import com.threerings.parlor.game.data.PartyGameConfig;
 import com.threerings.parlor.server.ParlorSender;
@@ -68,37 +68,8 @@ import com.threerings.util.MessageBundle;
  * bodies in that location.
  */
 public class GameManager extends PlaceManager
-    implements ParlorCodes, GameCodes, GameProvider, AttributeChangeListener
+    implements ParlorCodes, GameCodes
 {
-    // documentation inherited
-    protected void didInit ()
-    {
-        super.didInit();
-
-        // save off a casted reference to our config
-        _gameconfig = (GameConfig)_config;
-
-        // register this game manager
-        _managers.add(this);
-
-        // and start up a tick interval if we've not already got one
-        if (_tickInterval == null) {
-            _tickInterval = new Interval(CrowdServer.omgr) {
-                public void expired () {
-                    tickAllGames();
-                }
-            };
-            _tickInterval.schedule(TICK_DELAY, true);
-        }
-
-        // configure our AIs
-        for (int ii = 0; ii < _gameconfig.ais.length; ii++) {
-            if (_gameconfig.ais[ii] != null) {
-                setAI(ii, _gameconfig.ais[ii]);
-            }
-        }
-    }
-
     /**
      * Returns the configuration object for the game being managed by this
      * manager.
@@ -213,19 +184,6 @@ public class GameManager extends PlaceManager
     }
 
     /**
-     * Called when a player was added to the game.  Derived classes may
-     * override this method to perform any game-specific actions they
-     * desire, but should be sure to call
-     * <code>super.playerWasAdded()</code>.
-     *
-     * @param player the username of the player added to the game.
-     * @param pidx the player index of the player added to the game.
-     */
-    protected void playerWasAdded (Name player, int pidx)
-    {
-    }
-
-    /**
      * Removes the given player from the game.  This is most likely to be
      * used to allow players involved in a party game to leave the game
      * early-on if they realize they'd rather not play for some reason.
@@ -269,20 +227,6 @@ public class GameManager extends PlaceManager
     }
 
     /**
-     * Called when a player was removed from the game.  Derived classes
-     * may override this method to perform any game-specific actions they
-     * desire, but should be sure to call
-     * <code>super.playerWasRemoved()</code>.
-     *
-     * @param player the username of the player removed from the game.
-     * @param pidx the player index of the player before they were removed
-     * from the game.
-     */
-    protected void playerWasRemoved (Name player, int pidx)
-    {
-    }
-
-    /**
      * Replaces the player at the specified index and calls {@link
      * #playerWasReplaced} to let derived classes and delegates know
      * what's going on.
@@ -302,14 +246,6 @@ public class GameManager extends PlaceManager
                     pidx, oplayer, player);
             }
         });
-    }
-
-    /**
-     * Called when a player has been replaced via a call to {@link
-     * #replacePlayer}.
-     */
-    protected void playerWasReplaced (int pidx, Name oldPlayer, Name newPlayer)
-    {
     }
 
     /**
@@ -468,6 +404,322 @@ public class GameManager extends PlaceManager
     }
 
     /**
+     * This is called when the game is ready to start (all players
+     * involved have delivered their "am ready" notifications). It calls
+     * {@link #gameWillStart}, sets the necessary wheels in motion and
+     * then calls {@link #gameDidStart}.  Derived classes should override
+     * one or both of the calldown functions (rather than this function)
+     * if they need to do things before or after the game starts.
+     *
+     * @return true if the game was started, false if it could not be
+     * started because it was already in play or because all players have
+     * not yet reported in.
+     */
+    public boolean startGame ()
+    {
+        // complain if we're already started
+        if (_gameobj.state == GameObject.IN_PLAY) {
+            Log.warning("Requested to start an already in-play game " +
+                        "[game=" + _gameobj.which() + "].");
+            Thread.dumpStack();
+            return false;
+        }
+
+        // TEMP: clear out our game end tracker
+        _gameEndTracker.clear();
+
+        // make sure everyone has turned up
+        if (!allPlayersReady()) {
+            Log.warning("Requested to start a game that is still " +
+                        "awaiting players [game=" + _gameobj.which() +
+                        ", pnames=" + StringUtil.toString(_gameobj.players) +
+                        ", poids=" + StringUtil.toString(_playerOids) + "].");
+            return false;
+        }
+
+        // if we're still waiting for a call to endGame() to propagate,
+        // queue up a runnable to start the game which will allow the
+        // endGame() to propagate before we start things up
+        if (_committedState == GameObject.IN_PLAY) {
+            if (_postponedStart) {
+                // We've already tried postponing once, doesn't do us any
+                //  good to throw ourselves into a frenzy trying again.
+                Log.warning("Tried to postpone the start of a " +
+                    "still-ending game multiple times " +
+                    "[which=" + _gameobj.which() + "].");
+                _postponedStart = false;
+                return false;
+            }
+            Log.info("Postponing start of still-ending game " +
+                     "[which=" + _gameobj.which() + "].");
+            _postponedStart = true;
+            // TEMP: track down weirdness
+            final Exception firstCall = new Exception();
+            // End: temp
+            CrowdServer.omgr.postRunnable(new Runnable() {
+                public void run () {
+                    boolean result = startGame();
+                    // TEMP: track down weirdness
+                    if (!result && !_postponedStart) {
+                        Log.warning("First call to startGame: ");
+                        Log.logStackTrace(firstCall);
+                    }
+                    // End: temp
+                }
+            });
+            return true;
+        }
+
+        // Ah, good, not postponing.
+        _postponedStart = false;
+
+        // let the derived class do its pre-start stuff
+        gameWillStart();
+
+        // transition the game to started
+        _gameobj.setState(GameObject.IN_PLAY);
+
+        // when our events are applied, we'll call gameDidStart()
+        return true;
+    }
+
+    /**
+     * Ends the game for the given player.
+     */
+    public void endPlayerGame (int pidx)
+    {
+        // go for a little transactional efficiency
+        _gameobj.startTransaction();
+        try {
+            // end the player's game
+            if (_gameobj.playerStatus != null) {
+                _gameobj.setPlayerStatusAt(GameObject.PLAYER_LEFT_GAME, pidx);
+            }
+
+            // let derived classes do some business
+            playerGameDidEnd(pidx);
+
+            announcePlayerGameOver(pidx);
+
+        } finally {
+            _gameobj.commitTransaction();
+        }
+
+        // if it's time to end the game, then do so
+        if (shouldEndGame()) {
+            endGame();
+        } else {
+            // otherwise report that the player was knocked out to other
+            // people in his/her room
+            reportPlayerKnockedOut(pidx);
+        }
+    }
+
+    /**
+     * Called when the game is known to be over. This will call some
+     * calldown functions to determine the winner of the game and then
+     * transition the game to the {@link GameObject#GAME_OVER} state.
+     */
+    public void endGame ()
+    {
+        // TEMP: debug pending rating repeat bug
+        if (_gameEndTracker.checkCall(
+                "Requested to end already ended game " +
+                "[game=" + _gameobj.which() + "].")) {
+            return;
+        }
+        // END TEMP
+
+        if (!_gameobj.isInPlay()) {
+            Log.info("Refusing to end game that was not in play " +
+                     "[game=" + _gameobj.which() + "].");
+            return;
+        }
+
+        _gameobj.startTransaction();
+        try {
+            // let the derived class do its pre-end stuff
+            gameWillEnd();
+
+            // determine winners and set them in the game object
+            boolean[] winners = new boolean[getPlayerSlots()];
+            assignWinners(winners);
+            _gameobj.setWinners(winners);
+
+            // transition to the game over state
+            _gameobj.setState(GameObject.GAME_OVER);
+
+        } finally {
+            _gameobj.commitTransaction();
+        }
+
+        // wait until we hear the game state transition on the game object
+        // to invoke our game over code so that we can be sure that any
+        // final events dispatched on the game object prior to the call to
+        // endGame() have been dispatched
+    }
+
+    /**
+     * Sets the state of the game to {@link GameObject#CANCELLED}.
+     *
+     * @return true if the game was cancelled, false if it was already over or
+     * cancelled.
+     */
+    public boolean cancelGame ()
+    {
+        if (_gameobj.state != GameObject.GAME_OVER &&
+            _gameobj.state != GameObject.CANCELLED) {
+            _gameobj.setState(GameObject.CANCELLED);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Returns whether game conclusion antics such as rating updates
+     * should be performed when an in-play game is ended.  Derived classes
+     * may wish to override this method to customize the conditions under
+     * which the game is concluded.
+     */
+    public boolean shouldConcludeGame ()
+    {
+        return (_gameobj.state == GameObject.GAME_OVER);
+    }
+
+    /**
+     * Called when the game is to be reset to its starting state in
+     * preparation for a new game without actually ending the current
+     * game. It calls {@link #gameWillReset} followed by the standard game
+     * start processing ({@link #gameWillStart} and {@link
+     * #gameDidStart}). Derived classes should override these calldown
+     * functions (rather than this function) if they need to do things
+     * before or after the game resets.
+     */
+    public void resetGame ()
+    {
+        // let the derived class do its pre-reset stuff
+        gameWillReset();
+        // do the standard game start processing
+        gameWillStart();
+        // transition to in-play which will trigger a call to gameDidStart()
+        _gameobj.setState(GameObject.IN_PLAY);
+    }
+
+    /**
+     * Called by the client when the player is ready for the game to start.
+     * This method is dispatched dynamically by {@link #messageReceived}.
+     */
+    public void playerReady (BodyObject caller)
+    {
+        // get the user's player index
+        int pidx = _gameobj.getPlayerIndex(caller.getVisibleName());
+        if (pidx == -1) {
+            // only complain if this is not a party game, since it's
+            // perfectly normal to receive a player ready notification
+            // from a user entering a party game in which they're not yet
+            // a participant
+            if (!isPartyGame()) {
+                Log.warning("Received playerReady() from non-player? " +
+                            "[caller=" + caller + "].");
+            }
+            return;
+        }
+
+        // make a note of this player's oid
+        _playerOids[pidx] = caller.getOid();
+
+        // if everyone is now ready to go, get things underway
+        if (allPlayersReady()) {
+            playersAllHere();
+        }
+    }
+
+    /**
+     * Returns true if all (non-AI) players have delivered their {@link
+     * #playerReady} notifications, false if they have not.
+     */
+    public boolean allPlayersReady ()
+    {
+        for (int ii = 0; ii < getPlayerSlots(); ii++) {
+            if (!playerIsReady(ii)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Returns true if the player at the specified slot is ready (or if
+     * there is meant to be no player in that slot), false if there is
+     * meant to be a player in the specified slot and they have not yet
+     * reported that they are ready.
+     */
+    public boolean playerIsReady (int pidx)
+    {
+        return (!_gameobj.isOccupiedPlayer(pidx) ||  // unoccupied slot
+                _playerOids[pidx] != 0 ||            // player is ready
+                isAI(pidx));                         // player is AI
+    }
+
+    /**
+     * Returns true if this game requires a no-show timer. The default
+     * implementation returns true for non-party games and false for party
+     * games. Derived classes may wish to change or augment this behavior.
+     */
+    protected boolean needsNoShowTimer ()
+    {
+        return !isPartyGame();
+    }
+
+    /**
+     * Derived classes that need their AIs to be ticked periodically
+     * should override this method and return true. Many AIs can act
+     * entirely in reaction to game state changes and need no periodic
+     * ticking which is why ticking is disabled by default.
+     *
+     * @see #tickAIs
+     */
+    protected boolean needsAITick ()
+    {
+        return false;
+    }
+
+    /**
+     * Called when a player was added to the game.  Derived classes may
+     * override this method to perform any game-specific actions they
+     * desire, but should be sure to call
+     * <code>super.playerWasAdded()</code>.
+     *
+     * @param player the username of the player added to the game.
+     * @param pidx the player index of the player added to the game.
+     */
+    protected void playerWasAdded (Name player, int pidx)
+    {
+    }
+
+    /**
+     * Called when a player was removed from the game.  Derived classes
+     * may override this method to perform any game-specific actions they
+     * desire, but should be sure to call
+     * <code>super.playerWasRemoved()</code>.
+     *
+     * @param player the username of the player removed from the game.
+     * @param pidx the player index of the player before they were removed
+     * from the game.
+     */
+    protected void playerWasRemoved (Name player, int pidx)
+    {
+    }
+
+    /**
+     * Called when a player has been replaced via a call to {@link
+     * #replacePlayer}.
+     */
+    protected void playerWasReplaced (int pidx, Name oldPlayer, Name newPlayer)
+    {
+    }
+
+    /**
      * Report to the knocked-out player's room that they were knocked out.
      */
     protected void reportPlayerKnockedOut (int pidx)
@@ -485,11 +737,41 @@ public class GameManager extends PlaceManager
         }
     }
 
-    // documentation inherited
+    @Override // from PlaceManager
+    protected void didInit ()
+    {
+        super.didInit();
+
+        // save off a casted reference to our config
+        _gameconfig = (GameConfig)_config;
+
+        // register this game manager
+        _managers.add(this);
+
+        // and start up a tick interval if we've not already got one
+        if (_tickInterval == null) {
+            _tickInterval = new Interval(CrowdServer.omgr) {
+                public void expired () {
+                    tickAllGames();
+                }
+            };
+            _tickInterval.schedule(TICK_DELAY, true);
+        }
+
+        // configure our AIs
+        for (int ii = 0; ii < _gameconfig.ais.length; ii++) {
+            if (_gameconfig.ais[ii] != null) {
+                setAI(ii, _gameconfig.ais[ii]);
+            }
+        }
+    }
+
+    @Override // from PlaceManager
     protected void didStartup ()
     {
         // obtain a casted reference to our game object
         _gameobj = (GameObject)_plobj;
+        _gameobj.addListener(_stateListener);
 
         // stick the players into the game object
         _gameobj.setPlayers(_gameconfig.players);
@@ -503,11 +785,6 @@ public class GameManager extends PlaceManager
 
         // instantiate a player oid array which we'll fill in later
         _playerOids = new int[getPlayerSlots()];
-
-        // create and fill in our game service object
-        GameMarshaller service = (GameMarshaller)
-            _invmgr.registerDispatcher(new GameDispatcher(this), false);
-        _gameobj.setGameService(service);
 
         // give delegates a chance to do their thing
         super.didStartup();
@@ -542,30 +819,7 @@ public class GameManager extends PlaceManager
         }
     }
 
-    /**
-     * Returns true if this game requires a no-show timer. The default
-     * implementation returns true for non-party games and false for party
-     * games. Derived classes may wish to change or augment this behavior.
-     */
-    protected boolean needsNoShowTimer ()
-    {
-        return !isPartyGame();
-    }
-
-    /**
-     * Derived classes that need their AIs to be ticked periodically
-     * should override this method and return true. Many AIs can act
-     * entirely in reaction to game state changes and need no periodic
-     * ticking which is why ticking is disabled by default.
-     *
-     * @see #tickAIs
-     */
-    protected boolean needsAITick ()
-    {
-        return false;
-    }
-
-    // documentation inherited
+    @Override // from PlaceManager
     protected void didShutdown ()
     {
         super.didShutdown();
@@ -579,11 +833,13 @@ public class GameManager extends PlaceManager
             _tickInterval = null;
         }
 
-        // clear out our service registration
-        _invmgr.clearDispatcher(_gameobj.gameService);
+        if (_gameobj != null) {
+            // remove our state listener
+            _gameobj.removeListener(_stateListener);
+        }
     }
 
-    // documentation inherited
+    @Override // from PlaceManager
     protected void bodyLeft (int bodyOid)
     {
         // first resign the player from the game
@@ -702,86 +958,6 @@ public class GameManager extends PlaceManager
                      ", poids=" + StringUtil.toString(_playerOids) + "].");
             playersAllHere();
         }
-    }
-
-    /**
-     * This is called when the game is ready to start (all players
-     * involved have delivered their "am ready" notifications). It calls
-     * {@link #gameWillStart}, sets the necessary wheels in motion and
-     * then calls {@link #gameDidStart}.  Derived classes should override
-     * one or both of the calldown functions (rather than this function)
-     * if they need to do things before or after the game starts.
-     *
-     * @return true if the game was started, false if it could not be
-     * started because it was already in play or because all players have
-     * not yet reported in.
-     */
-    public boolean startGame ()
-    {
-        // complain if we're already started
-        if (_gameobj.state == GameObject.IN_PLAY) {
-            Log.warning("Requested to start an already in-play game " +
-                        "[game=" + _gameobj.which() + "].");
-            Thread.dumpStack();
-            return false;
-        }
-
-        // TEMP: clear out our game end tracker
-        _gameEndTracker.clear();
-
-        // make sure everyone has turned up
-        if (!allPlayersReady()) {
-            Log.warning("Requested to start a game that is still " +
-                        "awaiting players [game=" + _gameobj.which() +
-                        ", pnames=" + StringUtil.toString(_gameobj.players) +
-                        ", poids=" + StringUtil.toString(_playerOids) + "].");
-            return false;
-        }
-
-        // if we're still waiting for a call to endGame() to propagate,
-        // queue up a runnable to start the game which will allow the
-        // endGame() to propagate before we start things up
-        if (_committedState == GameObject.IN_PLAY) {
-            if (_postponedStart) {
-                // We've already tried postponing once, doesn't do us any
-                //  good to throw ourselves into a frenzy trying again.
-                Log.warning("Tried to postpone the start of a " +
-                    "still-ending game multiple times " +
-                    "[which=" + _gameobj.which() + "].");
-                _postponedStart = false;
-                return false;
-            }
-            Log.info("Postponing start of still-ending game " +
-                     "[which=" + _gameobj.which() + "].");
-            _postponedStart = true;
-            // TEMP: track down weirdness
-            final Exception firstCall = new Exception();
-            // End: temp
-            CrowdServer.omgr.postRunnable(new Runnable() {
-                public void run () {
-                    boolean result = startGame();
-                    // TEMP: track down weirdness
-                    if (!result && !_postponedStart) {
-                        Log.warning("First call to startGame: ");
-                        Log.logStackTrace(firstCall);
-                    }
-                    // End: temp
-                }
-            });
-            return true;
-        }
-
-        // Ah, good, not postponing.
-        _postponedStart = false;
-
-        // let the derived class do its pre-start stuff
-        gameWillStart();
-
-        // transition the game to started
-        _gameobj.setState(GameObject.IN_PLAY);
-
-        // when our events are applied, we'll call gameDidStart()
-        return true;
     }
 
     /**
@@ -917,38 +1093,6 @@ public class GameManager extends PlaceManager
     }
 
     /**
-     * Ends the game for the given player.
-     */
-    public void endPlayerGame (int pidx)
-    {
-        // go for a little transactional efficiency
-        _gameobj.startTransaction();
-        try {
-            // end the player's game
-            if (_gameobj.playerStatus != null) {
-                _gameobj.setPlayerStatusAt(GameObject.PLAYER_LEFT_GAME, pidx);
-            }
-
-            // let derived classes do some business
-            playerGameDidEnd(pidx);
-
-            announcePlayerGameOver(pidx);
-
-        } finally {
-            _gameobj.commitTransaction();
-        }
-
-        // if it's time to end the game, then do so
-        if (shouldEndGame()) {
-            endGame();
-        } else {
-            // otherwise report that the player was knocked out to other
-            // people in his/her room
-            reportPlayerKnockedOut(pidx);
-        }
-    }
-
-    /**
      * Announce to everyone in the game that a player's game has ended.
      */
     protected void announcePlayerGameOver (int pidx)
@@ -983,66 +1127,6 @@ public class GameManager extends PlaceManager
     }
 
     /**
-     * Called when the game is known to be over. This will call some
-     * calldown functions to determine the winner of the game and then
-     * transition the game to the {@link GameObject#GAME_OVER} state.
-     */
-    public void endGame ()
-    {
-        // TEMP: debug pending rating repeat bug
-        if (_gameEndTracker.checkCall(
-                "Requested to end already ended game " +
-                "[game=" + _gameobj.which() + "].")) {
-            return;
-        }
-        // END TEMP
-
-        if (!_gameobj.isInPlay()) {
-            Log.info("Refusing to end game that was not in play " +
-                     "[game=" + _gameobj.which() + "].");
-            return;
-        }
-
-        _gameobj.startTransaction();
-        try {
-            // let the derived class do its pre-end stuff
-            gameWillEnd();
-
-            // determine winners and set them in the game object
-            boolean[] winners = new boolean[getPlayerSlots()];
-            assignWinners(winners);
-            _gameobj.setWinners(winners);
-
-            // transition to the game over state
-            _gameobj.setState(GameObject.GAME_OVER);
-
-        } finally {
-            _gameobj.commitTransaction();
-        }
-
-        // wait until we hear the game state transition on the game object
-        // to invoke our game over code so that we can be sure that any
-        // final events dispatched on the game object prior to the call to
-        // endGame() have been dispatched
-    }
-
-    /**
-     * Sets the state of the game to {@link GameObject#CANCELLED}.
-     *
-     * @return true if the game was cancelled, false if it was already over or
-     * cancelled.
-     */
-    public boolean cancelGame ()
-    {
-        if (_gameobj.state != GameObject.GAME_OVER &&
-            _gameobj.state != GameObject.CANCELLED) {
-            _gameobj.setState(GameObject.CANCELLED);
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * Assigns the final winning status for each player to their respect
      * player index in the supplied array.  This will be called by {@link
      * #endGame} when the game is over.  The default implementation marks
@@ -1052,17 +1136,6 @@ public class GameManager extends PlaceManager
     protected void assignWinners (boolean[] winners)
     {
         Arrays.fill(winners, false);
-    }
-
-    /**
-     * Returns whether game conclusion antics such as rating updates
-     * should be performed when an in-play game is ended.  Derived classes
-     * may wish to override this method to customize the conditions under
-     * which the game is concluded.
-     */
-    public boolean shouldConcludeGame ()
-    {
-        return (_gameobj.state == GameObject.GAME_OVER);
     }
 
     /**
@@ -1162,25 +1235,6 @@ public class GameManager extends PlaceManager
     }
 
     /**
-     * Called when the game is to be reset to its starting state in
-     * preparation for a new game without actually ending the current
-     * game. It calls {@link #gameWillReset} followed by the standard game
-     * start processing ({@link #gameWillStart} and {@link
-     * #gameDidStart}). Derived classes should override these calldown
-     * functions (rather than this function) if they need to do things
-     * before or after the game resets.
-     */
-    public void resetGame ()
-    {
-        // let the derived class do its pre-reset stuff
-        gameWillReset();
-        // do the standard game start processing
-        gameWillStart();
-        // transition to in-play which will trigger a call to gameDidStart()
-        _gameobj.setState(GameObject.IN_PLAY);
-    }
-
-    /**
      * Called when the game is about to reset, but before the board has
      * been re-initialized or any other clearing out of game data has
      * taken place.  Derived classes should override this if they need to
@@ -1199,61 +1253,6 @@ public class GameManager extends PlaceManager
         });
     }
 
-    // documentation inherited from interface
-    public void playerReady (ClientObject caller)
-    {
-        BodyObject plobj = (BodyObject)caller;
-
-        // get the user's player index
-        int pidx = _gameobj.getPlayerIndex(plobj.getVisibleName());
-        if (pidx == -1) {
-            // only complain if this is not a party game, since it's
-            // perfectly normal to receive a player ready notification
-            // from a user entering a party game in which they're not yet
-            // a participant
-            if (!isPartyGame()) {
-                Log.warning("Received playerReady() from non-player? " +
-                            "[caller=" + caller + "].");
-            }
-            return;
-        }
-
-        // make a note of this player's oid
-        _playerOids[pidx] = plobj.getOid();
-
-        // if everyone is now ready to go, get things underway
-        if (allPlayersReady()) {
-            playersAllHere();
-        }
-    }
-
-    /**
-     * Returns true if all (non-AI) players have delivered their {@link
-     * #playerReady} notifications, false if they have not.
-     */
-    public boolean allPlayersReady ()
-    {
-        for (int ii = 0; ii < getPlayerSlots(); ii++) {
-            if (!playerIsReady(ii)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Returns true if the player at the specified slot is ready (or if
-     * there is meant to be no player in that slot), false if there is
-     * meant to be a player in the specified slot and they have not yet
-     * reported that they are ready.
-     */
-    public boolean playerIsReady (int pidx)
-    {
-        return (!_gameobj.isOccupiedPlayer(pidx) ||  // unoccupied slot
-                _playerOids[pidx] != 0 ||            // player is ready
-                isAI(pidx));                         // player is AI
-    }
-
     /**
      * Gives game managers an opportunity to perform periodic processing
      * that is not driven by events generated by the player.
@@ -1261,15 +1260,6 @@ public class GameManager extends PlaceManager
     protected void tick (long tickStamp)
     {
         // nothing for now
-    }
-
-    // documentation inherited
-    public void attributeChanged (AttributeChangedEvent event)
-    {
-        if (event.getName().equals(GameObject.STATE)) {
-            stateDidChange(_committedState = event.getIntValue(),
-                           ((Integer)event.getOldValue()).intValue());
-        }
     }
 
     /**
@@ -1310,6 +1300,17 @@ public class GameManager extends PlaceManager
         protected int _pidx;
         protected GameAI _ai;
     }
+
+    /** Listens for game state changes. */
+    protected AttributeChangeListener _stateListener =
+        new AttributeChangeListener() {
+        public void attributeChanged (AttributeChangedEvent event) {
+            if (event.getName().equals(GameObject.STATE)) {
+                stateDidChange(_committedState = event.getIntValue(),
+                    ((Integer)event.getOldValue()).intValue());
+            }
+        }
+    };
 
     /** A reference to our game config. */
     protected GameConfig _gameconfig;
