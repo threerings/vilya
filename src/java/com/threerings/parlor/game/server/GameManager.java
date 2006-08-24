@@ -486,12 +486,6 @@ public class GameManager extends PlaceManager
     }
 
     // documentation inherited
-    protected PlaceObject createPlaceObject ()
-    {
-        return new GameObject();
-    }
-
-    // documentation inherited
     protected void didStartup ()
     {
         // obtain a casted reference to our game object
