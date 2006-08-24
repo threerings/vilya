@@ -6,7 +6,7 @@ import flash.events.Event;
  * Property change events are dispatched after the property change was
  * validated on the server.
  */
-public class PropertyChangedEvent extends Event
+public class PropertyChangedEvent extends EZEvent
 {
     /** The type of a property change event. */
     public static const TYPE :String = "PropChanged";
@@ -47,9 +47,10 @@ public class PropertyChangedEvent extends Event
      * Constructor.
      */
     public function PropertyChangedEvent (
-        propName :String, newValue :Object, oldValue :Object, index :int = -1)
+        ezgame :EZGame, propName :String, newValue :Object,
+        oldValue :Object, index :int = -1)
     {
-        super(TYPE);
+        super(TYPE, ezgame);
         _name = propName;
         _newValue = newValue;
         _oldValue = oldValue;
@@ -64,7 +65,8 @@ public class PropertyChangedEvent extends Event
 
     override public function clone () :Event
     {
-        return new PropertyChangedEvent(_name, _newValue, _oldValue, _index);
+        return new PropertyChangedEvent(
+            _ezgame, _name, _newValue, _oldValue, _index);
     }
 
     /** Our implementation details. */

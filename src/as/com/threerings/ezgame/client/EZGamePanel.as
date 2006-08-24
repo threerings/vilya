@@ -38,6 +38,7 @@ public class EZGamePanel extends VBox
 
         // add a listener so that we hear about all new children
         addEventListener(Event.ADDED, childAdded);
+        addEventListener(Event.REMOVED, childRemoved);
 
         var cfg :EZGameConfig = (ctrl.getPlaceConfig() as EZGameConfig);
         _gameView = new MediaContainer(cfg.configData); // TODO
@@ -64,6 +65,7 @@ public class EZGamePanel extends VBox
     // from PlaceView
     public function didLeavePlace (plobj :PlaceObject) :void
     {
+        removeListeners(_gameView);
         _ezObj = null;
     }
 
@@ -74,6 +76,17 @@ public class EZGamePanel extends VBox
     {
         if (_ezObj != null) {
             notifyOfGame(event.target as DisplayObject);
+        }
+    }
+
+    /**
+     * Handle REMOVED events.
+     */
+    protected function childRemoved (event :Event) :void
+    {
+        trace("Child removed: " + event.target);
+        if (_ezObj != null) {
+            removeListeners(event.target as DisplayObject);
         }
     }
 
@@ -93,6 +106,17 @@ public class EZGamePanel extends VBox
                         _seenGames[disp] = true;
                     }
                 }
+                // always check to see if it's a listener
+                _ctrl.gameObjImpl.registerListener(disp);
+            });
+    }
+
+    protected function removeListeners (root :DisplayObject) :void
+    {
+        DisplayUtil.walkDisplayObjects(root,
+            function (disp :DisplayObject) :void
+            {
+                _ctrl.gameObjImpl.unregisterListener(disp);
             });
     }
 

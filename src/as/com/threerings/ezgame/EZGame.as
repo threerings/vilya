@@ -24,6 +24,19 @@ public interface EZGame
     function set (propName :String, value :Object, index :int = -1) :void;
 
     /**
+     * Register an object to receive whatever events it should receive,
+     * based on which event listeners it implements. Note that it is not
+     * necessary to register any objects which appear on the display list,
+     * as they'll be registered automatically.
+     */
+    function registerListener (obj :Object) :void;
+
+    /**
+     * Unregister the specified object from receiving events.
+     */
+    function unregisterListener (obj :Object) :void;
+
+    /**
      * Set the specified collection to contain the specified values,
      * clearing any previous values.
      */

@@ -68,7 +68,7 @@ public class EZGameController extends GameController
     public function turnDidChange (turnHolder :Name) :void
     {
         dispatchUserEvent(
-            new StateChangedEvent(StateChangedEvent.TURN_CHANGED));
+            new StateChangedEvent(StateChangedEvent.TURN_CHANGED, gameObjImpl));
     }
 
     // from PropertySetListener
@@ -76,8 +76,8 @@ public class EZGameController extends GameController
     {
         // notify the user game
         dispatchUserEvent(new PropertyChangedEvent(
-            event.getName(), event.getValue(), event.getOldValue(),
-            event.getIndex()));
+            gameObjImpl, event.getName(), event.getValue(),
+            event.getOldValue(), event.getIndex()));
     }
 
     // from MessageListener
@@ -114,7 +114,7 @@ public class EZGameController extends GameController
     protected function dispatchUserMessage (args :Array) :void
     {
         dispatchUserEvent(new MessageReceivedEvent(
-            (args[0] as String),
+            gameObjImpl, (args[0] as String),
             EZObjectMarshaller.decode(args[1])));
     }
 
@@ -127,14 +127,14 @@ public class EZGameController extends GameController
     {
         super.gameDidStart();
         dispatchUserEvent(
-            new StateChangedEvent(StateChangedEvent.GAME_STARTED));
+            new StateChangedEvent(StateChangedEvent.GAME_STARTED, gameObjImpl));
     }
 
     override protected function gameDidEnd () :void
     {
         super.gameDidEnd();
         dispatchUserEvent(
-            new StateChangedEvent(StateChangedEvent.GAME_ENDED));
+            new StateChangedEvent(StateChangedEvent.GAME_ENDED, gameObjImpl));
     }
 
     protected function dispatchUserEvent (event :Event) :void

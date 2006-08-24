@@ -26,7 +26,12 @@ import com.threerings.ezgame.data.PropertySetEvent;
 import com.threerings.ezgame.util.EZObjectMarshaller;
 
 import com.threerings.ezgame.EZGame;
+import com.threerings.ezgame.MessageReceivedEvent;
+import com.threerings.ezgame.MessageReceivedListener;
 import com.threerings.ezgame.PropertyChangedEvent;
+import com.threerings.ezgame.PropertyChangedListener;
+import com.threerings.ezgame.StateChangedEvent;
+import com.threerings.ezgame.StateChangedListener;
 
 public class GameObjectImpl extends EventDispatcher
     implements EZGame
@@ -72,6 +77,59 @@ public class GameObjectImpl extends EventDispatcher
 
         // set it immediately in the game object
         _ezObj.applyPropertySet(propName, value, index);
+    }
+
+    // from EZGame
+    public function registerListener (obj :Object) :void
+    {
+        if (obj is MessageReceivedListener) {
+            var mrl :MessageReceivedListener = (obj as MessageReceivedListener);
+            addEventListener(
+                MessageReceivedEvent.TYPE, mrl.messageReceived,
+                false, 0, true);
+        }
+        if (obj is PropertyChangedListener) {
+            var pcl :PropertyChangedListener = (obj as PropertyChangedListener);
+            addEventListener(
+                PropertyChangedEvent.TYPE, pcl.propertyChanged,
+                false, 0, true);
+        }
+        if (obj is StateChangedListener) {
+            var scl :StateChangedListener = (obj as StateChangedListener);
+            addEventListener(
+                StateChangedEvent.GAME_STARTED, scl.stateChanged,
+                false, 0, true);
+            addEventListener(
+                StateChangedEvent.TURN_CHANGED, scl.stateChanged,
+                false, 0, true);
+            addEventListener(
+                StateChangedEvent.GAME_ENDED, scl.stateChanged,
+                false, 0, true);
+        }
+    }
+
+    // from EZGame
+    public function unregisterListener (obj :Object) :void
+    {
+        if (obj is MessageReceivedListener) {
+            var mrl :MessageReceivedListener = (obj as MessageReceivedListener);
+            removeEventListener(
+                MessageReceivedEvent.TYPE, mrl.messageReceived);
+        }
+        if (obj is PropertyChangedListener) {
+            var pcl :PropertyChangedListener = (obj as PropertyChangedListener);
+            removeEventListener(
+                PropertyChangedEvent.TYPE, pcl.propertyChanged);
+        }
+        if (obj is StateChangedListener) {
+            var scl :StateChangedListener = (obj as StateChangedListener);
+            removeEventListener(
+                StateChangedEvent.GAME_STARTED, scl.stateChanged);
+            removeEventListener(
+                StateChangedEvent.TURN_CHANGED, scl.stateChanged);
+            removeEventListener(
+                StateChangedEvent.GAME_ENDED, scl.stateChanged);
+        }
     }
 
     // from EZGame
