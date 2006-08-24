@@ -21,6 +21,7 @@ import com.threerings.miso.util.MisoSceneMetrics;
 import com.threerings.miso.util.MisoUtil;
 
 import com.threerings.crowd.data.BodyObject;
+import com.threerings.crowd.data.PlaceObject;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationException;
 
@@ -260,9 +261,9 @@ public class StageSceneManager extends SpotSceneManager
     }
 
     // documentation inherited
-    protected Class getPlaceObjectClass ()
+    protected PlaceObject createPlaceObject ()
     {
-        return StageSceneObject.class;
+        return new StageSceneObject();
     }
 
     // documentation inherited
