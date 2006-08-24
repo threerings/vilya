@@ -84,7 +84,6 @@ public class EZGamePanel extends VBox
      */
     protected function childRemoved (event :Event) :void
     {
-        trace("Child removed: " + event.target);
         if (_ezObj != null) {
             removeListeners(event.target as DisplayObject);
         }
