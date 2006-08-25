@@ -197,5 +197,5 @@ public class SceneUpdate
     protected transient int _targetVersion;
     
     /** Used when serializing this update for storage in the database. */
-    protected static ThreadLocal _dbSer = new ThreadLocal();
+    protected static ThreadLocal<Boolean> _dbSer = new ThreadLocal<Boolean>();
 }
