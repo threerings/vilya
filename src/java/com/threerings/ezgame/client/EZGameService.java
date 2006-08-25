@@ -13,6 +13,10 @@ public interface EZGameService extends InvocationService
 {
     /**
      * Request to set the specified property.
+     *
+     * @param value either a byte[] if setting a non-array property
+     * or a property at an array index, or a byte[][] if setting
+     * an array property where index is -1.
      */
     public void setProperty (
         Client client, String propName, Object value, int index,
@@ -35,6 +39,10 @@ public interface EZGameService extends InvocationService
     /**
      * Request to send a private message to one other player in
      * the game.
+     *
+     * @param value either a byte[] if setting a non-array property
+     * or a property at an array index, or a byte[][] if setting
+     * an array property where index is -1.
      */
     public void sendMessage (
         Client client, String msgName, Object value, int playerIdx,

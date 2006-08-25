@@ -17,6 +17,8 @@ import com.threerings.io.Streamable;
 import com.threerings.parlor.game.data.GameObject;
 import com.threerings.parlor.turn.data.TurnGameObject;
 
+import com.threerings.ezgame.util.EZObjectMarshaller;
+
 /**
  * Contains the data for an ez game.
  */
@@ -43,6 +45,14 @@ public class EZGameObject extends GameObject
     /** The service interface for requesting special things from the server. */
     public EZGameMarshaller ezGameService;
 
+    /**
+     * Access the underlying user properties
+     */
+    public HashMap<String, Object> getUserProps ()
+    {
+        return _props;
+    }
+
     // from TurnGameObject
     public String getTurnHolderFieldName ()
     {
@@ -64,23 +74,40 @@ public class EZGameObject extends GameObject
     /**
      * Called by PropertySetEvent to effect the property update.
      */
-    protected void applyPropertySet (String propName, Object data, int index)
+    public Object applyPropertySet (String propName, Object data, int index)
     {
+        Object oldValue = _props.get(propName);
         if (index >= 0) {
-            Object something = _props.get(propName);
-            byte[][] arr = (something instanceof byte[][])
-                ? (byte[][]) something : null;
-            if (arr == null || arr.length <= index) {
-                // TODO: in case a user sets element 0 and element 90000,
-                // we might want to store elements in a hash
-                byte[][] newArr = new byte[index + 1][];
-                if (arr != null) {
-                    System.arraycopy(arr, 0, newArr, 0, arr.length);
+            if (isOnServer()) {
+                byte[][] arr = (oldValue instanceof byte[][])
+                    ? (byte[][]) oldValue : null;
+                if (arr == null || arr.length <= index) {
+                    // TODO: in case a user sets element 0 and element 90000,
+                    // we might want to store elements in a hash
+                    byte[][] newArr = new byte[index + 1][];
+                    if (arr != null) {
+                        System.arraycopy(arr, 0, newArr, 0, arr.length);
+                    }
+                    _props.put(propName, newArr);
+                    arr = newArr;
                 }
-                _props.put(propName, newArr);
-                arr = newArr;
+                oldValue = arr[index];
+                arr[index] = (byte[]) data;
+
+            } else {
+                Object[] arr = (oldValue instanceof Object[])
+                    ? (Object[]) oldValue : null;
+                if (arr == null || arr.length <= index) {
+                    Object[] newArr = new Object[index + 1];
+                    if (arr != null) {
+                        System.arraycopy(arr, 0, newArr, 0, arr.length);
+                    }
+                    _props.put(propName, newArr);
+                    arr = newArr;
+                }
+                oldValue = arr[index];
+                arr[index] = data;
             }
-            arr[index] = (byte[]) data;
 
         } else if (data != null) {
             _props.put(propName, data);
@@ -88,6 +115,8 @@ public class EZGameObject extends GameObject
         } else {
             _props.remove(propName);
         }
+
+        return oldValue;
     }
 
     // AUTO-GENERATED: METHODS START
@@ -132,11 +161,15 @@ public class EZGameObject extends GameObject
     {
         out.defaultWriteObject();
 
-        // write the number of properties, followed by each one
-        out.writeInt(_props.size());
-        for (Map.Entry<String, Object> entry : _props.entrySet()) {
-            out.writeUTF(entry.getKey());
-            out.writeObject(entry.getValue());
+        if (isOnServer()) {
+            // write the number of properties, followed by each one
+            out.writeInt(_props.size());
+            for (Map.Entry<String, Object> entry : _props.entrySet()) {
+                out.writeUTF(entry.getKey());
+                out.writeObject(entry.getValue());
+            }
+        } else {
+            throw new IllegalStateException();
         }
     }
 
@@ -150,13 +183,31 @@ public class EZGameObject extends GameObject
 
         _props.clear();
         int count = ins.readInt();
+        boolean onClient = !isOnServer();
         while (count-- > 0) {
             String key = ins.readUTF();
-            _props.put(key, ins.readObject());
+            Object o = ins.readObject();
+            if (onClient) {
+                o = EZObjectMarshaller.decode(o);
+            }
+            _props.put(key, o);
         }
     }
 
-    /** The current state of game data, opaque to us here on the server. */
+    /**
+     * Called internally and by PropertySetEvent to determine if we're
+     * on the server or on the client.
+     */
+    boolean isOnServer ()
+    {
+        return _omgr.isManager(this);
+    }
+
+    /** The current state of game data.
+     * On the server, this will be a byte[] for normal properties
+     * and a byte[][] for array properties.
+     * On the client, the actual values are kept whole.
+     */
     protected transient HashMap<String, Object> _props =
         new HashMap<String, Object>();
 }

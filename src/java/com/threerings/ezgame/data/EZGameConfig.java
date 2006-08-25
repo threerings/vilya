@@ -29,7 +29,8 @@ public class EZGameConfig extends GameConfig
     // from abstract GameConfig
     public GameConfigurator createConfigurator ()
     {
-        return null; // nothing here on the java side
+        // TODO
+        return null;
     }
 
     @Override
