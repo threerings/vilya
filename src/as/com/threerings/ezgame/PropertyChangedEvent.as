@@ -60,7 +60,7 @@ public class PropertyChangedEvent extends EZEvent
     override public function toString () :String
     {
         return "[PropertyChangedEvent name=" + _name + ", value=" + _newValue +
-            ((index < 0) ? "" : (", index=" + index)) + "]";
+            ((_index < 0) ? "" : (", index=" + _index)) + "]";
     }
 
     override public function clone () :Event
