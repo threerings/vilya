@@ -26,7 +26,7 @@ import com.threerings.util.StreamableArrayList;
 /**
  * Instances of this class represent hands of cards.
  */
-public class Hand extends StreamableArrayList
+public class Hand extends StreamableArrayList<Card>
 {
     /**
      * Adds all of the specified cards to this hand.
