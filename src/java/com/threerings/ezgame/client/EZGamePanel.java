@@ -102,6 +102,8 @@ public class EZGamePanel extends JPanel
             public void apply (Component comp) {
                 if (comp instanceof Game) {
                     // only notify the Game if we haven't seen it before
+                    // TODO: what we really want is a weak identity map,
+                    // so that two keys that are equals() do not collide.
                     if (null == _seenGames.put(comp, Boolean.TRUE)) {
                         ((Game) comp).setGameObject(_ctrl.gameObjImpl);
                     }
