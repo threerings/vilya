@@ -53,7 +53,7 @@ public class SceneUpdateMarshaller
      * type, it should be replaced with null in the class list to reserve
      * the old type id that it represented.
      */
-    public SceneUpdateMarshaller (Class[] typesClasses)
+    public SceneUpdateMarshaller (Class ... typesClasses)
     {
         for (Class c : typesClasses) {
             registerUpdateClass(c);
