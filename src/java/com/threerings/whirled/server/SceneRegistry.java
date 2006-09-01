@@ -211,10 +211,10 @@ public class SceneRegistry
                 // this is run on the dobjmgr thread
                 public void handleResult ()
                 {
-                    if (_model != null) {
-                        processSuccessfulResolution(_model, _updates);
-                    } else if (_cause != null) {
+                    if (_cause != null) {
                         processFailedResolution(fsceneId, _cause);
+                    } else if (_model != null) {
+                        processSuccessfulResolution(_model, _updates);
                     } else {
                         Log.warning("Scene loading unit finished with " +
                                     "neither a scene nor a reason for " +
