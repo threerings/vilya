@@ -70,6 +70,10 @@ public class SceneModel
         var clazz :Class = ClassUtil.getClass(this);
         var model :SceneModel = new clazz();
 
+        model.sceneId = sceneId;
+        model.name = name;
+        model.version = version;
+
         for each (var aux :AuxModel in auxModels) {
             model.addAuxModel(aux.clone() as AuxModel);
         }
