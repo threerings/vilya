@@ -15,43 +15,18 @@ import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.SceneUpdate;
 
 public class SceneMarshaller_SceneMoveMarshaller extends InvocationMarshaller_ListenerMarshaller
-    implements SceneService_SceneMoveListener
 {
     /** The method id used to dispatch {@link #moveSucceeded}
      * responses. */
     public static const MOVE_SUCCEEDED :int = 1;
 
-    // documentation inherited from interface SceneService_SceneMoveListener
-    public function moveSucceeded (arg1 :int, arg2 :PlaceConfig) :void
-    {
-        omgr.postEvent(new InvocationResponseEvent(
-                           callerOid, requestId, MOVE_SUCCEEDED,
-                           [ new Integer(arg1), arg2 ]));
-    }
-
     /** The method id used to dispatch {@link #moveSucceededWithScene}
      * responses. */
     public static const MOVE_SUCCEEDED_WITH_SCENE :int = 2;
 
-    // documentation inherited from interface SceneService_SceneMoveListener
-    public function moveSucceededWithScene (arg1 :int, arg2 :PlaceConfig, arg3 :SceneModel) :void
-    {
-        omgr.postEvent(new InvocationResponseEvent(
-                           callerOid, requestId, MOVE_SUCCEEDED_WITH_SCENE,
-                           [ new Integer(arg1), arg2, arg3 ]));
-    }
-
     /** The method id used to dispatch {@link #moveSucceededWithUpdates}
      * responses. */
     public static const MOVE_SUCCEEDED_WITH_UPDATES :int = 3;
-
-    // documentation inherited from interface SceneService_SceneMoveListener
-    public function moveSucceededWithUpdates (arg1 :int, arg2 :PlaceConfig, arg3 :TypedArray /* of SceneUpdate */) :void
-    {
-        omgr.postEvent(new InvocationResponseEvent(
-                           callerOid, requestId, MOVE_SUCCEEDED_WITH_UPDATES,
-                           [ new Integer(arg1), arg2, arg3 ]));
-    }
 
     // documentation inherited
     override public function dispatchResponse (methodId :int, args :Array) :void

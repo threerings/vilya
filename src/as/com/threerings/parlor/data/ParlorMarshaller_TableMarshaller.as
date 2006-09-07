@@ -10,19 +10,10 @@ import com.threerings.parlor.client.ParlorService_TableListener;
 
 public class ParlorMarshaller_TableMarshaller
     extends InvocationMarshaller_ListenerMarshaller
-    implements ParlorService_TableListener
 {
     /** The method id used to dispatch {@link #tableCreated}
      * responses. */
     public static const TABLE_CREATED :int = 1;
-
-    // documentation inherited from interface
-    public function tableCreated (arg1 :int) :void
-    {
-        omgr.postEvent(new InvocationResponseEvent(
-                           callerOid, requestId, TABLE_CREATED, 
-                           [ Integer.valueOf(arg1) ]));
-    }
 
     // documentation inherited
     override public function dispatchResponse (methodId :int, args :Array) :void

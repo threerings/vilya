@@ -10,19 +10,10 @@ import com.threerings.parlor.client.ParlorService_InviteListener;
 
 public class ParlorMarshaller_InviteMarshaller
     extends InvocationMarshaller_ListenerMarshaller
-    implements ParlorService_InviteListener
 {
     /** The method id used to dispatch {@link #inviteReceived}
      * responses. */
     public static const INVITE_RECEIVED :int = 1;
-
-    // documentation inherited from interface
-    public function inviteReceived (arg1 :int) :void
-    {
-        omgr.postEvent(new InvocationResponseEvent(
-                           callerOid, requestId, INVITE_RECEIVED,
-                           [ Integer.valueOf(arg1) ]));
-    }
 
     // documentation inherited
     override public function dispatchResponse (methodId :int, args :Array) :void
