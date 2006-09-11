@@ -64,23 +64,23 @@ public class EZGameObject extends GameObject
         return players;
     }
 
-    // AUTO-GENERATED: METHODS START
-    /**
-     * Requests that the <code>turnHolder</code> field be set to the
-     * specified value. The local value will be updated immediately and an
-     * event will be propagated through the system to notify all listeners
-     * that the attribute did change. Proxied copies of this object (on
-     * clients) will apply the value change when they received the
-     * attribute changed notification.
-     */
-    public function setTurnHolder (value :Name) :void
-    {
-        var ovalue :Name = this.turnHolder;
-        requestAttributeChange(
-            TURN_HOLDER, value, ovalue);
-        this.turnHolder = value;
-    }
-    // AUTO-GENERATED: METHODS END
+//    // AUTO-GENERATED: METHODS START
+//    /**
+//     * Requests that the <code>turnHolder</code> field be set to the
+//     * specified value. The local value will be updated immediately and an
+//     * event will be propagated through the system to notify all listeners
+//     * that the attribute did change. Proxied copies of this object (on
+//     * clients) will apply the value change when they received the
+//     * attribute changed notification.
+//     */
+//    public function setTurnHolder (value :Name) :void
+//    {
+//        var ovalue :Name = this.turnHolder;
+//        requestAttributeChange(
+//            TURN_HOLDER, value, ovalue);
+//        this.turnHolder = value;
+//    }
+//    // AUTO-GENERATED: METHODS END
 
     /**
      * Called by a PropertySetEvent to enact a property change.
@@ -111,12 +111,19 @@ public class EZGameObject extends GameObject
         return oldValue;
     }
 
-    override public function writeObject (out :ObjectOutputStream) :void
-    {
-        super.writeObject(out);
-
-        throw new Error("Un-needed");
-    }
+//    override public function writeObject (out :ObjectOutputStream) :void
+//    {
+//        super.writeObject(out);
+//
+//        out.writeObject(turnHolder);
+//        out.writeObject(ezGameService);
+//
+//        out.writeInt(_props.length);
+//        for (var key :String in _props) {
+//            out.writeUTF(key);
+//            out.writeObject(EZObjectMarshaller.encode(_props[key]));
+//        }
+//    }
 
     override public function readObject (ins :ObjectInputStream) :void
     {

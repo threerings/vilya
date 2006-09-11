@@ -40,9 +40,9 @@ public interface ClusteredBodyObject extends ScenedBodyObject
      */
     function getClusterOid () :int;
 
-    /**
-     * Sets the oid of the cluster to which this user currently belongs.
-     */
-    function setClusterOid (clusterOid :int) :void;
+//    /**
+//     * Sets the oid of the cluster to which this user currently belongs.
+//     */
+//    function setClusterOid (clusterOid :int) :void;
 }
 }

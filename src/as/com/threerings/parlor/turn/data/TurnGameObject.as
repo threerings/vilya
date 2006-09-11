@@ -47,11 +47,11 @@ public interface TurnGameObject
      */
     function getTurnHolder () :Name;
 
-    /**
-     * Requests that the <code>turnHolder</code> field be set to the specified
-     * value.
-     */
-    function setTurnHolder (turnHolder :Name) :void;
+//    /**
+//     * Requests that the <code>turnHolder</code> field be set to the specified
+//     * value.
+//     */
+//    function setTurnHolder (turnHolder :Name) :void;
 
     /**
      * Returns the array of player names involved in the game.

@@ -258,204 +258,204 @@ public class GameObject extends PlaceObject
         buf.append(":").append(state);
     }
 
-    // AUTO-GENERATED: METHODS START
-    /**
-     * Requests that the <code>gameService</code> field be set to the
-     * specified value. The local value will be updated immediately and an
-     * event will be propagated through the system to notify all listeners
-     * that the attribute did change. Proxied copies of this object (on
-     * clients) will apply the value change when they received the
-     * attribute changed notification.
-     */
-    public function setGameService (value :GameMarshaller) :void
-    {
-        var ovalue :GameMarshaller = this.gameService;
-        requestAttributeChange(
-            GAME_SERVICE, value, ovalue);
-        this.gameService = value;
-    }
-
-    /**
-     * Requests that the <code>state</code> field be set to the
-     * specified value. The local value will be updated immediately and an
-     * event will be propagated through the system to notify all listeners
-     * that the attribute did change. Proxied copies of this object (on
-     * clients) will apply the value change when they received the
-     * attribute changed notification.
-     */
-    public function setState (value :int) :void
-    {
-        var ovalue :int = this.state;
-        requestAttributeChange(
-            STATE, Integer.valueOf(value), Integer.valueOf(ovalue));
-        this.state = value;
-    }
-
-    /**
-     * Requests that the <code>isRated</code> field be set to the
-     * specified value. The local value will be updated immediately and an
-     * event will be propagated through the system to notify all listeners
-     * that the attribute did change. Proxied copies of this object (on
-     * clients) will apply the value change when they received the
-     * attribute changed notification.
-     */
-    public function setIsRated (value :Boolean) :void
-    {
-        var ovalue :Boolean = this.isRated;
-        requestAttributeChange(
-            IS_RATED, langBoolean.valueOf(value), langBoolean.valueOf(ovalue));
-        this.isRated = value;
-    }
-
-    /**
-     * Requests that the <code>isPrivate</code> field be set to the
-     * specified value. The local value will be updated immediately and an
-     * event will be propagated through the system to notify all listeners
-     * that the attribute did change. Proxied copies of this object (on
-     * clients) will apply the value change when they received the
-     * attribute changed notification.
-     */
-    public function setIsPrivate (value :Boolean) :void
-    {
-        var ovalue :Boolean = this.isPrivate;
-        requestAttributeChange(
-            IS_PRIVATE, langBoolean.valueOf(value),
-            langBoolean.valueOf(ovalue));
-        this.isPrivate = value;
-    }
-
-    /**
-     * Requests that the <code>players</code> field be set to the
-     * specified value. The local value will be updated immediately and an
-     * event will be propagated through the system to notify all listeners
-     * that the attribute did change. Proxied copies of this object (on
-     * clients) will apply the value change when they received the
-     * attribute changed notification.
-     */
-    public function setPlayers (value :TypedArray) :void
-    {
-        var ovalue :TypedArray = this.players;
-        requestAttributeChange(
-            PLAYERS, value, ovalue);
-        this.players = (value == null) ? null : (value.clone() as TypedArray);
-    }
-
-    /**
-     * Requests that the <code>index</code>th element of
-     * <code>players</code> field be set to the specified value.
-     * The local value will be updated immediately and an event will be
-     * propagated through the system to notify all listeners that the
-     * attribute did change. Proxied copies of this object (on clients)
-     * will apply the value change when they received the attribute
-     * changed notification.
-     */
-    public function setPlayersAt (value :Name, index :int) :void
-    {
-        var ovalue :Name = (this.players[index] as Name);
-        requestElementUpdate(
-            PLAYERS, index, value, ovalue);
-        this.players[index] = value;
-    }
-
-    /**
-     * Requests that the <code>winners</code> field be set to the
-     * specified value. The local value will be updated immediately and an
-     * event will be propagated through the system to notify all listeners
-     * that the attribute did change. Proxied copies of this object (on
-     * clients) will apply the value change when they received the
-     * attribute changed notification.
-     */
-    public function setWinners (value :TypedArray) :void
-    {
-        var ovalue :TypedArray = this.winners;
-        requestAttributeChange(
-            WINNERS, value, ovalue);
-        this.winners = (value == null) ? null : (value.clone() as TypedArray);
-    }
-
-    /**
-     * Requests that the <code>index</code>th element of
-     * <code>winners</code> field be set to the specified value.
-     * The local value will be updated immediately and an event will be
-     * propagated through the system to notify all listeners that the
-     * attribute did change. Proxied copies of this object (on clients)
-     * will apply the value change when they received the attribute
-     * changed notification.
-     */
-    public function setWinnersAt (value :Boolean, index :int) :void
-    {
-        var ovalue :Boolean = (this.winners[index] as Boolean);
-        requestElementUpdate(
-            WINNERS, index, langBoolean.valueOf(value),
-            langBoolean.valueOf(ovalue));
-        this.winners[index] = value;
-    }
-
-    /**
-     * Requests that the <code>roundId</code> field be set to the
-     * specified value. The local value will be updated immediately and an
-     * event will be propagated through the system to notify all listeners
-     * that the attribute did change. Proxied copies of this object (on
-     * clients) will apply the value change when they received the
-     * attribute changed notification.
-     */
-    public function setRoundId (value :int) :void
-    {
-        var ovalue :int = this.roundId;
-        requestAttributeChange(
-            ROUND_ID, Integer.valueOf(value), Integer.valueOf(ovalue));
-        this.roundId = value;
-    }
-
-    /**
-     * Requests that the <code>playerStatus</code> field be set to the
-     * specified value. The local value will be updated immediately and an
-     * event will be propagated through the system to notify all listeners
-     * that the attribute did change. Proxied copies of this object (on
-     * clients) will apply the value change when they received the
-     * attribute changed notification.
-     */
-    public function setPlayerStatus (value :TypedArray) :void
-    {
-        var ovalue :TypedArray = this.playerStatus;
-        requestAttributeChange(
-            PLAYER_STATUS, value, ovalue);
-        this.playerStatus = (value == null) ? null
-            : (value.clone() as TypedArray);
-    }
-
-    /**
-     * Requests that the <code>index</code>th element of
-     * <code>playerStatus</code> field be set to the specified value.
-     * The local value will be updated immediately and an event will be
-     * propagated through the system to notify all listeners that the
-     * attribute did change. Proxied copies of this object (on clients)
-     * will apply the value change when they received the attribute
-     * changed notification.
-     */
-    public function setPlayerStatusAt (value :int, index :int) :void
-    {
-        var ovalue :int = (this.playerStatus[index] as int);
-        requestElementUpdate(
-            PLAYER_STATUS, index, Integer.valueOf(value),
-            Integer.valueOf(ovalue));
-        this.playerStatus[index] = value;
-    }
-    // AUTO-GENERATED: METHODS END
-
-    override public function writeObject (out :ObjectOutputStream) :void
-    {
-        super.writeObject(out);
-
-        out.writeObject(gameService);
-        out.writeInt(state);
-        out.writeBoolean(isRated);
-        out.writeBoolean(isPrivate);
-        out.writeObject(players);
-        out.writeField(winners);
-        out.writeInt(roundId);
-        out.writeField(playerStatus);
-    }
+//    // AUTO-GENERATED: METHODS START
+//    /**
+//     * Requests that the <code>gameService</code> field be set to the
+//     * specified value. The local value will be updated immediately and an
+//     * event will be propagated through the system to notify all listeners
+//     * that the attribute did change. Proxied copies of this object (on
+//     * clients) will apply the value change when they received the
+//     * attribute changed notification.
+//     */
+//    public function setGameService (value :GameMarshaller) :void
+//    {
+//        var ovalue :GameMarshaller = this.gameService;
+//        requestAttributeChange(
+//            GAME_SERVICE, value, ovalue);
+//        this.gameService = value;
+//    }
+//
+//    /**
+//     * Requests that the <code>state</code> field be set to the
+//     * specified value. The local value will be updated immediately and an
+//     * event will be propagated through the system to notify all listeners
+//     * that the attribute did change. Proxied copies of this object (on
+//     * clients) will apply the value change when they received the
+//     * attribute changed notification.
+//     */
+//    public function setState (value :int) :void
+//    {
+//        var ovalue :int = this.state;
+//        requestAttributeChange(
+//            STATE, Integer.valueOf(value), Integer.valueOf(ovalue));
+//        this.state = value;
+//    }
+//
+//    /**
+//     * Requests that the <code>isRated</code> field be set to the
+//     * specified value. The local value will be updated immediately and an
+//     * event will be propagated through the system to notify all listeners
+//     * that the attribute did change. Proxied copies of this object (on
+//     * clients) will apply the value change when they received the
+//     * attribute changed notification.
+//     */
+//    public function setIsRated (value :Boolean) :void
+//    {
+//        var ovalue :Boolean = this.isRated;
+//        requestAttributeChange(
+//            IS_RATED, langBoolean.valueOf(value), langBoolean.valueOf(ovalue));
+//        this.isRated = value;
+//    }
+//
+//    /**
+//     * Requests that the <code>isPrivate</code> field be set to the
+//     * specified value. The local value will be updated immediately and an
+//     * event will be propagated through the system to notify all listeners
+//     * that the attribute did change. Proxied copies of this object (on
+//     * clients) will apply the value change when they received the
+//     * attribute changed notification.
+//     */
+//    public function setIsPrivate (value :Boolean) :void
+//    {
+//        var ovalue :Boolean = this.isPrivate;
+//        requestAttributeChange(
+//            IS_PRIVATE, langBoolean.valueOf(value),
+//            langBoolean.valueOf(ovalue));
+//        this.isPrivate = value;
+//    }
+//
+//    /**
+//     * Requests that the <code>players</code> field be set to the
+//     * specified value. The local value will be updated immediately and an
+//     * event will be propagated through the system to notify all listeners
+//     * that the attribute did change. Proxied copies of this object (on
+//     * clients) will apply the value change when they received the
+//     * attribute changed notification.
+//     */
+//    public function setPlayers (value :TypedArray) :void
+//    {
+//        var ovalue :TypedArray = this.players;
+//        requestAttributeChange(
+//            PLAYERS, value, ovalue);
+//        this.players = (value == null) ? null : (value.clone() as TypedArray);
+//    }
+//
+//    /**
+//     * Requests that the <code>index</code>th element of
+//     * <code>players</code> field be set to the specified value.
+//     * The local value will be updated immediately and an event will be
+//     * propagated through the system to notify all listeners that the
+//     * attribute did change. Proxied copies of this object (on clients)
+//     * will apply the value change when they received the attribute
+//     * changed notification.
+//     */
+//    public function setPlayersAt (value :Name, index :int) :void
+//    {
+//        var ovalue :Name = (this.players[index] as Name);
+//        requestElementUpdate(
+//            PLAYERS, index, value, ovalue);
+//        this.players[index] = value;
+//    }
+//
+//    /**
+//     * Requests that the <code>winners</code> field be set to the
+//     * specified value. The local value will be updated immediately and an
+//     * event will be propagated through the system to notify all listeners
+//     * that the attribute did change. Proxied copies of this object (on
+//     * clients) will apply the value change when they received the
+//     * attribute changed notification.
+//     */
+//    public function setWinners (value :TypedArray) :void
+//    {
+//        var ovalue :TypedArray = this.winners;
+//        requestAttributeChange(
+//            WINNERS, value, ovalue);
+//        this.winners = (value == null) ? null : (value.clone() as TypedArray);
+//    }
+//
+//    /**
+//     * Requests that the <code>index</code>th element of
+//     * <code>winners</code> field be set to the specified value.
+//     * The local value will be updated immediately and an event will be
+//     * propagated through the system to notify all listeners that the
+//     * attribute did change. Proxied copies of this object (on clients)
+//     * will apply the value change when they received the attribute
+//     * changed notification.
+//     */
+//    public function setWinnersAt (value :Boolean, index :int) :void
+//    {
+//        var ovalue :Boolean = (this.winners[index] as Boolean);
+//        requestElementUpdate(
+//            WINNERS, index, langBoolean.valueOf(value),
+//            langBoolean.valueOf(ovalue));
+//        this.winners[index] = value;
+//    }
+//
+//    /**
+//     * Requests that the <code>roundId</code> field be set to the
+//     * specified value. The local value will be updated immediately and an
+//     * event will be propagated through the system to notify all listeners
+//     * that the attribute did change. Proxied copies of this object (on
+//     * clients) will apply the value change when they received the
+//     * attribute changed notification.
+//     */
+//    public function setRoundId (value :int) :void
+//    {
+//        var ovalue :int = this.roundId;
+//        requestAttributeChange(
+//            ROUND_ID, Integer.valueOf(value), Integer.valueOf(ovalue));
+//        this.roundId = value;
+//    }
+//
+//    /**
+//     * Requests that the <code>playerStatus</code> field be set to the
+//     * specified value. The local value will be updated immediately and an
+//     * event will be propagated through the system to notify all listeners
+//     * that the attribute did change. Proxied copies of this object (on
+//     * clients) will apply the value change when they received the
+//     * attribute changed notification.
+//     */
+//    public function setPlayerStatus (value :TypedArray) :void
+//    {
+//        var ovalue :TypedArray = this.playerStatus;
+//        requestAttributeChange(
+//            PLAYER_STATUS, value, ovalue);
+//        this.playerStatus = (value == null) ? null
+//            : (value.clone() as TypedArray);
+//    }
+//
+//    /**
+//     * Requests that the <code>index</code>th element of
+//     * <code>playerStatus</code> field be set to the specified value.
+//     * The local value will be updated immediately and an event will be
+//     * propagated through the system to notify all listeners that the
+//     * attribute did change. Proxied copies of this object (on clients)
+//     * will apply the value change when they received the attribute
+//     * changed notification.
+//     */
+//    public function setPlayerStatusAt (value :int, index :int) :void
+//    {
+//        var ovalue :int = (this.playerStatus[index] as int);
+//        requestElementUpdate(
+//            PLAYER_STATUS, index, Integer.valueOf(value),
+//            Integer.valueOf(ovalue));
+//        this.playerStatus[index] = value;
+//    }
+//    // AUTO-GENERATED: METHODS END
+//
+//    override public function writeObject (out :ObjectOutputStream) :void
+//    {
+//        super.writeObject(out);
+//
+//        out.writeObject(gameService);
+//        out.writeInt(state);
+//        out.writeBoolean(isRated);
+//        out.writeBoolean(isPrivate);
+//        out.writeObject(players);
+//        out.writeField(winners);
+//        out.writeInt(roundId);
+//        out.writeField(playerStatus);
+//    }
 
     override public function readObject (ins :ObjectInputStream) :void
     {

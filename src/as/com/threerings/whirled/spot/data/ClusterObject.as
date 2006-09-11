@@ -21,6 +21,9 @@
 
 package com.threerings.whirled.spot.data {
 
+import com.threerings.io.ObjectInputStream;
+import com.threerings.io.ObjectOutputStream;
+
 import com.threerings.presents.dobj.DObject;
 import com.threerings.presents.dobj.OidList;
 
@@ -39,26 +42,40 @@ public class ClusterObject extends DObject
      */
     public var occupants :OidList = new OidList();
 
-    // AUTO-GENERATED: METHODS START
-    /**
-     * Requests that <code>oid</code> be added to the <code>occupants</code>
-     * oid list. The list will not change until the event is actually
-     * propagated through the system.
-     */
-    public function addToOccupants (oid :int) :void
-    {
-        requestOidAdd(OCCUPANTS, oid);
-    }
+//    // AUTO-GENERATED: METHODS START
+//    /**
+//     * Requests that <code>oid</code> be added to the <code>occupants</code>
+//     * oid list. The list will not change until the event is actually
+//     * propagated through the system.
+//     */
+//    public function addToOccupants (oid :int) :void
+//    {
+//        requestOidAdd(OCCUPANTS, oid);
+//    }
+//
+//    /**
+//     * Requests that <code>oid</code> be removed from the
+//     * <code>occupants</code> oid list. The list will not change until the
+//     * event is actually propagated through the system.
+//     */
+//    public function removeFromOccupants (oid :int) :void
+//    {
+//        requestOidRemove(OCCUPANTS, oid);
+//    }
+//    // AUTO-GENERATED: METHODS END
+//
+//    override public function writeObject (out :ObjectOutputStream) :void
+//    {
+//        super.writeObject(out);
+//
+//        out.writeObject(occupants);
+//    }
 
-    /**
-     * Requests that <code>oid</code> be removed from the
-     * <code>occupants</code> oid list. The list will not change until the
-     * event is actually propagated through the system.
-     */
-    public function removeFromOccupants (oid :int) :void
+    override public function readObject (ins :ObjectInputStream) :void
     {
-        requestOidRemove(OCCUPANTS, oid);
+        super.readObject(ins);
+
+        occupants = (ins.readObject() as OidList);
     }
-    // AUTO-GENERATED: METHODS END
 }
 }

@@ -48,108 +48,108 @@ public class SpotSceneObject extends SceneObject
     /** Contains information on all {@link Cluster}s in this scene. */
     public var clusters :DSet = new DSet();
 
-    // AUTO-GENERATED: METHODS START
-    /**
-     * Requests that the specified entry be added to the
-     * <code>occupantLocs</code> set. The set will not change until the event is
-     * actually propagated through the system.
-     */
-    public function addToOccupantLocs (elem :DSet_Entry) :void
-    {
-        requestEntryAdd(OCCUPANT_LOCS, elem);
-    }
-
-    /**
-     * Requests that the entry matching the supplied key be removed from
-     * the <code>occupantLocs</code> set. The set will not change until the
-     * event is actually propagated through the system.
-     */
-    public function removeFromOccupantLocs (key :Object) :void
-    {
-        requestEntryRemove(OCCUPANT_LOCS, key);
-    }
-
-    /**
-     * Requests that the specified entry be updated in the
-     * <code>occupantLocs</code> set. The set will not change until the event is
-     * actually propagated through the system.
-     */
-    public function updateOccupantLocs (elem :DSet_Entry) :void
-    {
-        requestEntryUpdate(OCCUPANT_LOCS, elem);
-    }
-
-    /**
-     * Requests that the <code>occupantLocs</code> field be set to the
-     * specified value. Generally one only adds, updates and removes
-     * entries of a distributed set, but certain situations call for a
-     * complete replacement of the set value. The local value will be
-     * updated immediately and an event will be propagated through the
-     * system to notify all listeners that the attribute did
-     * change. Proxied copies of this object (on clients) will apply the
-     * value change when they received the attribute changed notification.
-     */
-    public function setOccupantLocs (value :DSet) :void
-    {
-        requestAttributeChange(OCCUPANT_LOCS, value, this.occupantLocs);
-        this.occupantLocs = value;
-    }
-
-    /**
-     * Requests that the specified entry be added to the
-     * <code>clusters</code> set. The set will not change until the event is
-     * actually propagated through the system.
-     */
-    public function addToClusters (elem :DSet_Entry) :void
-    {
-        requestEntryAdd(CLUSTERS, elem);
-    }
-
-    /**
-     * Requests that the entry matching the supplied key be removed from
-     * the <code>clusters</code> set. The set will not change until the
-     * event is actually propagated through the system.
-     */
-    public function removeFromClusters (key :Object) :void
-    {
-        requestEntryRemove(CLUSTERS, key);
-    }
-
-    /**
-     * Requests that the specified entry be updated in the
-     * <code>clusters</code> set. The set will not change until the event is
-     * actually propagated through the system.
-     */
-    public function updateClusters (elem :DSet_Entry) :void
-    {
-        requestEntryUpdate(CLUSTERS, elem);
-    }
-
-    /**
-     * Requests that the <code>clusters</code> field be set to the
-     * specified value. Generally one only adds, updates and removes
-     * entries of a distributed set, but certain situations call for a
-     * complete replacement of the set value. The local value will be
-     * updated immediately and an event will be propagated through the
-     * system to notify all listeners that the attribute did
-     * change. Proxied copies of this object (on clients) will apply the
-     * value change when they received the attribute changed notification.
-     */
-    public function setClusters (value :DSet) :void
-    {
-        requestAttributeChange(CLUSTERS, value, this.clusters);
-        this.clusters = value;
-    }
-    // AUTO-GENERATED: METHODS END
-
-    // documentation inherited
-    override public function writeObject (out :ObjectOutputStream) :void
-    {
-        super.writeObject(out);
-
-        out.writeObject(occupantLocs);
-        out.writeObject(clusters);
-    }
+//    // AUTO-GENERATED: METHODS START
+//    /**
+//     * Requests that the specified entry be added to the
+//     * <code>occupantLocs</code> set. The set will not change until the event is
+//     * actually propagated through the system.
+//     */
+//    public function addToOccupantLocs (elem :DSet_Entry) :void
+//    {
+//        requestEntryAdd(OCCUPANT_LOCS, elem);
+//    }
+//
+//    /**
+//     * Requests that the entry matching the supplied key be removed from
+//     * the <code>occupantLocs</code> set. The set will not change until the
+//     * event is actually propagated through the system.
+//     */
+//    public function removeFromOccupantLocs (key :Object) :void
+//    {
+//        requestEntryRemove(OCCUPANT_LOCS, key);
+//    }
+//
+//    /**
+//     * Requests that the specified entry be updated in the
+//     * <code>occupantLocs</code> set. The set will not change until the event is
+//     * actually propagated through the system.
+//     */
+//    public function updateOccupantLocs (elem :DSet_Entry) :void
+//    {
+//        requestEntryUpdate(OCCUPANT_LOCS, elem);
+//    }
+//
+//    /**
+//     * Requests that the <code>occupantLocs</code> field be set to the
+//     * specified value. Generally one only adds, updates and removes
+//     * entries of a distributed set, but certain situations call for a
+//     * complete replacement of the set value. The local value will be
+//     * updated immediately and an event will be propagated through the
+//     * system to notify all listeners that the attribute did
+//     * change. Proxied copies of this object (on clients) will apply the
+//     * value change when they received the attribute changed notification.
+//     */
+//    public function setOccupantLocs (value :DSet) :void
+//    {
+//        requestAttributeChange(OCCUPANT_LOCS, value, this.occupantLocs);
+//        this.occupantLocs = value;
+//    }
+//
+//    /**
+//     * Requests that the specified entry be added to the
+//     * <code>clusters</code> set. The set will not change until the event is
+//     * actually propagated through the system.
+//     */
+//    public function addToClusters (elem :DSet_Entry) :void
+//    {
+//        requestEntryAdd(CLUSTERS, elem);
+//    }
+//
+//    /**
+//     * Requests that the entry matching the supplied key be removed from
+//     * the <code>clusters</code> set. The set will not change until the
+//     * event is actually propagated through the system.
+//     */
+//    public function removeFromClusters (key :Object) :void
+//    {
+//        requestEntryRemove(CLUSTERS, key);
+//    }
+//
+//    /**
+//     * Requests that the specified entry be updated in the
+//     * <code>clusters</code> set. The set will not change until the event is
+//     * actually propagated through the system.
+//     */
+//    public function updateClusters (elem :DSet_Entry) :void
+//    {
+//        requestEntryUpdate(CLUSTERS, elem);
+//    }
+//
+//    /**
+//     * Requests that the <code>clusters</code> field be set to the
+//     * specified value. Generally one only adds, updates and removes
+//     * entries of a distributed set, but certain situations call for a
+//     * complete replacement of the set value. The local value will be
+//     * updated immediately and an event will be propagated through the
+//     * system to notify all listeners that the attribute did
+//     * change. Proxied copies of this object (on clients) will apply the
+//     * value change when they received the attribute changed notification.
+//     */
+//    public function setClusters (value :DSet) :void
+//    {
+//        requestAttributeChange(CLUSTERS, value, this.clusters);
+//        this.clusters = value;
+//    }
+//    // AUTO-GENERATED: METHODS END
+//
+//    // documentation inherited
+//    override public function writeObject (out :ObjectOutputStream) :void
+//    {
+//        super.writeObject(out);
+//
+//        out.writeObject(occupantLocs);
+//        out.writeObject(clusters);
+//    }
 
     // documentation inherited
     override public function readObject (ins :ObjectInputStream) :void

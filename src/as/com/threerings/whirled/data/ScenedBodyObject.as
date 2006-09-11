@@ -32,9 +32,9 @@ public interface ScenedBodyObject
      */
     function getSceneId () :int;
 
-    /**
-     * Sets the scene id currently occupied by this body.
-     */
-    function setSceneId (sceneId :int) :void;
+//    /**
+//     * Sets the scene id currently occupied by this body.
+//     */
+//    function setSceneId (sceneId :int) :void;
 }
 }
