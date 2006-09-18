@@ -21,9 +21,8 @@
 
 package com.threerings.parlor.client;
 
-import java.util.ArrayList;
-
 import com.samskivert.util.ListUtil;
+import com.samskivert.util.ObserverList;
 
 import com.threerings.presents.client.BasicDirector;
 import com.threerings.presents.client.Client;
@@ -322,20 +321,15 @@ public class TableDirector extends BasicDirector
     /**
      * Notifies the seatedness observers of a seatedness change.
      */
-    protected void notifySeatedness (boolean isSeated)
+    protected void notifySeatedness (final boolean isSeated)
     {
-        int slength = _seatedObservers.size();
-        for (int i = 0; i < slength; i++) {
-            SeatednessObserver observer = (SeatednessObserver)
-                _seatedObservers.get(i);
-            try {
-                observer.seatednessDidChange(isSeated);
-            } catch (Exception e) {
-                Log.warning("Observer choked in seatednessDidChange() " +
-                            "[observer=" + observer + "].");
-                Log.logStackTrace(e);
-            }
-        }
+        _seatedObservers.apply(
+            new ObserverList.ObserverOp<SeatednessObserver>() {
+                public boolean apply (SeatednessObserver so) {
+                    so.seatednessDidChange(isSeated);
+                    return true;
+                }
+            });
     }
 
     /** A context by which we can access necessary client services. */
@@ -358,5 +352,6 @@ public class TableDirector extends BasicDirector
 
     /** An array of entities that want to hear about when we stand up or
      * sit down. */
-    protected ArrayList _seatedObservers = new ArrayList();
+    protected ObserverList<SeatednessObserver> _seatedObservers =
+        new ObserverList<SeatednessObserver>(ObserverList.FAST_UNSAFE_NOTIFY);
 }

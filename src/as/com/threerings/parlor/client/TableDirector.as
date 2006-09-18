@@ -22,6 +22,7 @@
 package com.threerings.parlor.client {
 
 import com.threerings.util.ArrayUtil;
+import com.threerings.util.ObserverList;
 
 import com.threerings.presents.client.BasicDirector;
 import com.threerings.presents.client.Client;
@@ -121,7 +122,7 @@ public class TableDirector extends BasicDirector
      */
     public function addSeatednessObserver (observer :SeatednessObserver) :void
     {
-        _seatedObservers.push(observer);
+        _seatedObservers.add(observer);
     }
 
     /**
@@ -132,7 +133,7 @@ public class TableDirector extends BasicDirector
     public function removeSeatednessObserver (
             observer :SeatednessObserver) :void
     {
-        ArrayUtil.removeFirst(_seatedObservers, observer);
+        _seatedObservers.remove(observer);
     }
 
     /**
@@ -327,18 +328,9 @@ public class TableDirector extends BasicDirector
      */
     protected function notifySeatedness (isSeated :Boolean) :void
     {
-        var slength :int = _seatedObservers.length;
-        for (var ii :int = 0; ii < slength; ii++) {
-            var observer :SeatednessObserver =
-                (_seatedObservers[ii] as SeatednessObserver);
-            try {
-                observer.seatednessDidChange(isSeated);
-            } catch (err :Error) {
-                log.warning("Observer choked in seatednessDidChange() " +
-                            "[observer=" + observer + "].");
-                log.logStackTrace(err);
-            }
-        }
+        _seatedObservers.apply(function (so :SeatednessObserver) :void {
+            so.seatednessDidChange(isSeated);
+        });
     }
 
     /** A context by which we can access necessary client services. */
@@ -361,6 +353,6 @@ public class TableDirector extends BasicDirector
 
     /** An array of entities that want to hear about when we stand up or
      * sit down. */
-    protected var _seatedObservers :Array = new Array();
+    protected var _seatedObservers :ObserverList = new ObserverList();
 }
 }
