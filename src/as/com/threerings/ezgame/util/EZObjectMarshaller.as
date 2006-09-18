@@ -62,6 +62,9 @@ public class EZObjectMarshaller
             return dest;
         }
         var bytes :ByteArray = (encoded as ByteArray);
+        // re-set the position in case we're decoding the actual same byte
+        // array used to encode (and not a network reconstruction)
+        bytes.position = 0;
 
         // TODO: Our own decoding, that takes into account
         // the ApplicationDomain
