@@ -479,12 +479,6 @@ public class SpotSceneManager extends SceneManager
             // configure our cluster record and publish it
             _cluster.clusterOid = _clobj.getOid();
             _ssobj.addToClusters(_cluster);
-
-            // if we didn't manage to add our creating user when we first
-            // started up, there's no point in our sticking around
-            if (size() == 0) {
-                destroy(true);
-            }
         }
 
         public boolean addBody (BodyObject body)
