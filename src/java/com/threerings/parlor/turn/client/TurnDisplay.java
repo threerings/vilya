@@ -97,6 +97,15 @@ public class TurnDisplay extends JPanel
     }
 
     /**
+     * Sets the text to be displayed next to everyone's name in the event of a
+     * draw.
+     */
+    public void setDrawText (String drawText)
+    {
+        _drawText = drawText;
+    }
+
+    /**
      * Set optional icons to use for identifying each player in the game.
      */
     public void setPlayerIcons (Icon[] icons)
@@ -126,7 +135,8 @@ public class TurnDisplay extends JPanel
         labelC.gridwidth = GridBagConstraints.REMAINDER;
 
         Name[] names = _turnObj.getPlayers();
-        boolean[] winners = ((GameObject) _turnObj).winners;
+        GameObject gameobj = (GameObject)_turnObj;
+        boolean[] winners = gameobj.winners;
         Name holder = _turnObj.getTurnHolder();
         for (int ii=0, jj=0; ii < names.length; ii++, jj++) {
             if (names[ii] == null) continue;
@@ -136,10 +146,12 @@ public class TurnDisplay extends JPanel
                 if (names[ii].equals(holder)) {
                     iconLabel.setIcon(_turnIcon);
                 }
+            } else if (gameobj.isDraw()) {
+                iconLabel.setText(_drawText);
             } else if (winners[ii]) {
                 iconLabel.setText(_winnerText);
-                iconLabel.setForeground(Color.GREEN);
             }
+            iconLabel.setForeground(Color.BLACK);
             _labels.put(names[ii], iconLabel);
             add(iconLabel, iconC);
 
@@ -210,7 +222,10 @@ public class TurnDisplay extends JPanel
     protected Icon[] _playerIcons;
 
     /** The text to display next to a winner's name. */
-    protected String _winnerText;
+    protected String _winnerText = "";
+
+    /** The text to display next to a drawing player's name. */
+    protected String _drawText = "";
 
     /** The Icon we use for indicating the turn. */
     protected Icon _turnIcon;
