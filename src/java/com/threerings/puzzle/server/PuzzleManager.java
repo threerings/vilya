@@ -170,12 +170,6 @@ public abstract class PuzzleManager extends GameManager
     }
 
     // documentation inherited
-    protected PlaceObject createPlaceObject ()
-    {
-        return new PuzzleObject();
-    }
-
-    // documentation inherited
     protected void didInit ()
     {
         super.didInit();
