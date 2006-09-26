@@ -56,7 +56,7 @@ public class TableConfig
     {
         out.writeInt(desiredPlayerCount);
         out.writeInt(minimumPlayerCount);
-        out.writeField(teamMemberIndices);
+        out.writeObject(teamMemberIndices);
         out.writeBoolean(privateTable);
     }
 
@@ -65,7 +65,7 @@ public class TableConfig
     {
         desiredPlayerCount = ins.readInt();
         minimumPlayerCount = ins.readInt();
-        teamMemberIndices = (ins.readField("[[I") as TypedArray);
+        teamMemberIndices = (ins.readObject() as TypedArray);
         privateTable = ins.readBoolean();
     }
 }
