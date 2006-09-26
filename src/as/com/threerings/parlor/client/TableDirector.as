@@ -23,6 +23,7 @@ package com.threerings.parlor.client {
 
 import com.threerings.util.ArrayUtil;
 import com.threerings.util.ObserverList;
+import com.threerings.util.Util;
 
 import com.threerings.presents.client.BasicDirector;
 import com.threerings.presents.client.Client;
@@ -314,8 +315,7 @@ public class TableDirector extends BasicDirector
         }
 
         // if nothing changed, bail now
-        if (oldTable == _ourTable ||
-            (oldTable != null && oldTable.equals(_ourTable))) {
+        if (Util.equals(oldTable, _ourTable)) {
             return;
         }
 

@@ -22,6 +22,7 @@
 package com.threerings.parlor.client;
 
 import com.samskivert.util.ListUtil;
+import com.samskivert.util.ObjectUtil;
 import com.samskivert.util.ObserverList;
 
 import com.threerings.presents.client.BasicDirector;
@@ -309,8 +310,7 @@ public class TableDirector extends BasicDirector
         }
 
         // if nothing changed, bail now
-        if (oldTable == _ourTable ||
-            (oldTable != null && oldTable.equals(_ourTable))) {
+        if (ObjectUtil.equals(oldTable, _ourTable)) {
             return;
         }
 
