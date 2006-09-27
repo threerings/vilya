@@ -46,9 +46,6 @@ import com.threerings.crowd.data.PlaceObject;
 public class GameObject extends PlaceObject
 {
     // AUTO-GENERATED: FIELDS START
-    /** The field name of the <code>gameService</code> field. */
-    public static const GAME_SERVICE :String = "gameService";
-
     /** The field name of the <code>state</code> field. */
     public static const STATE :String = "state";
 
@@ -91,9 +88,6 @@ public class GameObject extends PlaceObject
      * of the game. NOTE: This can include a player choosing to leave a
      * game prematurely. */
     public static const PLAYER_LEFT_GAME :int = 1;
-
-    /** Provides general game invocation services. */
-    public var gameService :GameMarshaller;
 
     /** The game state, one of {@link #PRE_GAME}, {@link #IN_PLAY},
      * {@link #GAME_OVER}, or {@link #CANCELLED}. */
@@ -259,22 +253,6 @@ public class GameObject extends PlaceObject
     }
 
 //    // AUTO-GENERATED: METHODS START
-//    /**
-//     * Requests that the <code>gameService</code> field be set to the
-//     * specified value. The local value will be updated immediately and an
-//     * event will be propagated through the system to notify all listeners
-//     * that the attribute did change. Proxied copies of this object (on
-//     * clients) will apply the value change when they received the
-//     * attribute changed notification.
-//     */
-//    public function setGameService (value :GameMarshaller) :void
-//    {
-//        var ovalue :GameMarshaller = this.gameService;
-//        requestAttributeChange(
-//            GAME_SERVICE, value, ovalue);
-//        this.gameService = value;
-//    }
-//
 //    /**
 //     * Requests that the <code>state</code> field be set to the
 //     * specified value. The local value will be updated immediately and an
@@ -461,7 +439,6 @@ public class GameObject extends PlaceObject
     {
         super.readObject(ins);
 
-        gameService = (ins.readObject() as GameMarshaller);
         state = ins.readInt();
         isRated = ins.readBoolean();
         isPrivate = ins.readBoolean();
