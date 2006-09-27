@@ -60,6 +60,7 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
             _playerSlider.value = desiredPlayers;
             _playerSlider.minimum = minPlayers;
             _playerSlider.maximum = maxPlayers;
+            _playerSlider.snapInterval = 1;
 
         } else {
             _config.desiredPlayerCount = desiredPlayers;
