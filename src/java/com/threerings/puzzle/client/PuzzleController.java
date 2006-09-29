@@ -338,7 +338,7 @@ public abstract class PuzzleController extends GameController
                         gameDidStart();
                         // we don't always start the action immediately
                         return startActionImmediately() ?
-                               RESTART_ACTION : NO_RESTART_ACTION;
+                            RESTART_ACTION : CARE_NOT;
                     }
                 });
                 break;
