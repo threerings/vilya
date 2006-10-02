@@ -105,7 +105,9 @@ public class TableLobbyObject
     public void setTableSet (DSet value)
     {
         requestAttributeChange(TABLE_SET, value, this.tableSet);
-        this.tableSet = (value == null) ? null : value.typedClone();
+        @SuppressWarnings("unchecked") DSet clone =
+            (value == null) ? null : value.typedClone();
+        this.tableSet = clone;
     }
     // AUTO-GENERATED: METHODS END
 }

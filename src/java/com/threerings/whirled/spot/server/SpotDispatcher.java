@@ -1,9 +1,9 @@
 //
-// $Id: SpotDispatcher.java 4145 2006-05-24 01:24:24Z ray $
+// $Id$
 //
-// Narya library - tools for developing networked games
+// Vilya library - tools for developing networked games
 // Copyright (C) 2002-2006 Three Rings Design, Inc., All Rights Reserved
-// http://www.threerings.net/code/narya/
+// http://www.threerings.net/code/vilya/
 //
 // This library is free software; you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as published
@@ -47,13 +47,13 @@ public class SpotDispatcher extends InvocationDispatcher
         this.provider = provider;
     }
 
-    // documentation inherited
+    // from InvocationDispatcher
     public InvocationMarshaller createMarshaller ()
     {
         return new SpotMarshaller();
     }
 
-    // documentation inherited
+    @SuppressWarnings("unchecked") // from InvocationDispatcher
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
         throws InvocationException
