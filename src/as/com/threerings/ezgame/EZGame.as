@@ -90,6 +90,19 @@ public interface EZGame
         messageName :String, value :Object, playerIndex :int = -1) :void;
 
     /**
+     * Start the ticker with the specified name. It will deliver
+     * messages to the game object at the specified delay,
+     * the value of each message being a single integer, starting with 0
+     * and increasing by one with each messsage.
+     */
+    function startTicker (tickerName :String, msOfDelay :int) :void;
+
+    /**
+     * Stop the specified ticker.
+     */
+    function stopTicker (tickerName :String) :void;
+
+    /**
      * Send a message that will be heard by everyone in the game room,
      * even observers.
      */

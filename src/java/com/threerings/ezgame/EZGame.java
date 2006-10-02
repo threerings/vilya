@@ -111,6 +111,19 @@ public interface EZGame
         String messageName, Object value, int playerIndex);
 
     /**
+     * Start the ticker with the specified name. It will deliver
+     * messages to the game object at the specified delay,
+     * the value of each message being a single integer, starting with 0
+     * and increasing by one with each messsage.
+     */
+    public void startTicker (String tickerName, int msOfDelay);
+
+    /**
+     * Stop the specified ticker.
+     */
+    public void stopTicker (String tickerName);
+
+    /**
      * Send a message that will be heard by everyone in the game room,
      * even observers.
      */

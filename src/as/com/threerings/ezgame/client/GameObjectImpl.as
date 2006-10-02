@@ -185,6 +185,20 @@ public class GameObjectImpl extends EventDispatcher
     }
 
     // from EZGame
+    public function startTicker (tickerName :String, msOfDelay :int) :void
+    {
+        validateName(tickerName);
+        _ezObj.ezGameService.setTicker(_ctx.getClient(),
+            tickerName, msOfDelay, createLoggingListener("setTicker"));
+    }
+
+    // from EZGame
+    public function stopTicker (tickerName :String) :void
+    {
+        startTicker(tickerName, 0);
+    }
+
+    // from EZGame
     public function sendChat (msg :String) :void
     {
         validateChat(msg);

@@ -169,6 +169,20 @@ public class GameObjectImpl
     }
 
     // from EZGame
+    public void startTicker (String tickerName, int msOfDelay)
+    {
+        validateName(tickerName);
+        _ezObj.ezGameService.setTicker(_ctx.getClient(),
+            tickerName, msOfDelay, createLoggingListener("setTicker"));
+    }
+
+    // from EZGame
+    public void stopTicker (String tickerName)
+    {
+        startTicker(tickerName, 0);
+    }
+
+    // from EZGame
     public void sendChat (String msg)
     {
         validateChat(msg);

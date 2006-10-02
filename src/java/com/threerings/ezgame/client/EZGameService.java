@@ -72,4 +72,15 @@ public interface EZGameService extends InvocationService
     public void getFromCollection (
         Client client, String collName, boolean consume, int count,
         String msgOrPropName, int playerIndex, ConfirmListener listener);
+
+    /**
+     * Start a ticker that will send out timestamp information at
+     * the interval specified.
+     *
+     * @param msOfDelay must be at least 50, or 0 may be set to halt
+     * and clear a previously started ticker.
+     */
+    public void setTicker (
+        Client client, String tickerName, int msOfDelay,
+        InvocationListener listener);
 }

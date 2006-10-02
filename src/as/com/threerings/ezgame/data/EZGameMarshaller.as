@@ -121,5 +121,18 @@ public class EZGameMarshaller extends InvocationMarshaller
         ]);
     }
 
+    /** The method id used to dispatch {@link #setTicker} requests. */
+    public static const SET_TICKER :int = 8;
+
+    // documentation inherited from interface
+    public function setTicker (arg1 :Client, arg2 :String, arg3 :int, arg4 :InvocationService_InvocationListener) :void
+    {
+        var listener4 :InvocationMarshaller_ListenerMarshaller = new InvocationMarshaller_ListenerMarshaller();
+        listener4.listener = arg4;
+        sendRequest(arg1, SET_TICKER, [
+            arg2, Integer.valueOf(arg3), listener4
+        ]);
+    }
+
 }
 }

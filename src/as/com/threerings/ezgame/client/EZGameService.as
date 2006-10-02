@@ -74,5 +74,16 @@ public interface EZGameService extends InvocationService
         client :Client, collName :String, consume :Boolean, count :int,
         msgOrPropName :String, playerIndex :int,
         listener :InvocationService_ConfirmListener) :void;
+
+    /**
+     * Start a ticker that will send out timestamp information at
+     * the interval specified.
+     *
+     * @param msOfDelay must be at least 50, or 0 may be set to halt
+     * and clear a previously started ticker.
+     */
+    function setTicker (
+        client :Client, tickerName :String, msOfDelay :int,
+        listener :InvocationService_InvocationListener) :void;
 }
 }
