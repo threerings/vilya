@@ -4,6 +4,7 @@ import flash.events.Event;
 
 import flash.utils.ByteArray;
 
+import com.threerings.util.Integer;
 import com.threerings.util.Name;
 
 import com.threerings.presents.dobj.MessageAdapter;
@@ -91,6 +92,12 @@ public class EZGameController extends GameController
             // this is chat send by the game, let's route it like
             // localChat, which is also sent by the game
             gameObjImpl.localChat(String(event.getArgs()[0]));
+
+        } else if (EZGameObject.TICKER == name) {
+            var args :Array = event.getArgs();
+            dispatchUserEvent(new MessageReceivedEvent(
+                gameObjImpl, (args[0] as String),
+                (args[1] as Integer).value));
         }
     }
 

@@ -31,6 +31,9 @@ public class EZGameObject extends GameObject
     /** The identifier for a MessageEvent containing game-system chat. */
     public static final String GAME_CHAT = "Uchat";
 
+    /** The identifier for a MessageEvent containing ticker notifications. */
+    public static final String TICKER = "Utick";
+
     // AUTO-GENERATED: FIELDS START
     /** The field name of the <code>turnHolder</code> field. */
     public static final String TURN_HOLDER = "turnHolder";

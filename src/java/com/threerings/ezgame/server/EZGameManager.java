@@ -394,7 +394,7 @@ public class EZGameManager extends GameManager
             public void expired ()
             {
                 _omgr.postEvent(
-                    new MessageEvent(_oid, EZGameObject.USER_MESSAGE,
+                    new MessageEvent(_oid, EZGameObject.TICKER,
                         new Object[] { _name, _value++ }));
             }
         };
