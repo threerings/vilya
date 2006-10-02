@@ -306,7 +306,7 @@ public class EZGameManager extends GameManager
 
         _gameObj = (EZGameObject) _plobj;
 
-        _gameObj.setEZGameService(
+        _gameObj.setEzGameService(
             (EZGameMarshaller) CrowdServer.invmgr.registerDispatcher(
             new EZGameDispatcher(this), false));
     }

@@ -144,7 +144,7 @@ public class EZGameObject extends GameObject
      * clients) will apply the value change when they received the
      * attribute changed notification.
      */
-    public void setEZGameService (EZGameMarshaller value)
+    public void setEzGameService (EZGameMarshaller value)
     {
         EZGameMarshaller ovalue = this.ezGameService;
         requestAttributeChange(
