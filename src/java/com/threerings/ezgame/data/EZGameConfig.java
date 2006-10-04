@@ -5,9 +5,13 @@ package com.threerings.ezgame.data;
 
 import com.threerings.util.MessageBundle;
 
+import com.threerings.crowd.client.PlaceController;
+
 import com.threerings.parlor.game.client.GameConfigurator;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.game.data.PartyGameConfig;
+
+import com.threerings.ezgame.client.EZGameController;
 
 /**
  * A game config for a simple multiplayer game.
@@ -37,6 +41,12 @@ public class EZGameConfig extends GameConfig
     public String getGameName ()
     {
         return MessageBundle.taint(configData);
+    }
+
+    @Override // from PlaceConfig
+    public PlaceController createController ()
+    {
+        return new EZGameController();
     }
 
     // from abstract PlaceConfig
