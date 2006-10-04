@@ -41,7 +41,7 @@ public class StageSceneMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #addObject} requests. */
     public static final int ADD_OBJECT = 1;
 
-    // documentation inherited from interface
+    // from interface StageSceneService
     public void addObject (Client arg1, ObjectInfo arg2, InvocationService.ConfirmListener arg3)
     {
         InvocationMarshaller.ConfirmMarshaller listener3 = new InvocationMarshaller.ConfirmMarshaller();
@@ -54,7 +54,7 @@ public class StageSceneMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #removeObjects} requests. */
     public static final int REMOVE_OBJECTS = 2;
 
-    // documentation inherited from interface
+    // from interface StageSceneService
     public void removeObjects (Client arg1, ObjectInfo[] arg2, InvocationService.ConfirmListener arg3)
     {
         InvocationMarshaller.ConfirmMarshaller listener3 = new InvocationMarshaller.ConfirmMarshaller();
@@ -63,5 +63,4 @@ public class StageSceneMarshaller extends InvocationMarshaller
             arg2, listener3
         });
     }
-
 }

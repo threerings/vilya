@@ -40,12 +40,11 @@ public class SimulatorMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #createGame} requests. */
     public static final int CREATE_GAME = 1;
 
-    // documentation inherited from interface
+    // from interface SimulatorService
     public void createGame (Client arg1, GameConfig arg2, String arg3, int arg4)
     {
         sendRequest(arg1, CREATE_GAME, new Object[] {
             arg2, arg3, Integer.valueOf(arg4)
         });
     }
-
 }

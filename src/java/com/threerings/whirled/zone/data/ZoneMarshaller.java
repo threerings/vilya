@@ -40,7 +40,9 @@ import com.threerings.whirled.zone.data.ZoneSummary;
 public class ZoneMarshaller extends InvocationMarshaller
     implements ZoneService
 {
-    // documentation inherited
+    /**
+     * Marshalls results to implementations of {@link ZoneMoveListener}.
+     */
     public static class ZoneMoveMarshaller extends ListenerMarshaller
         implements ZoneMoveListener
     {
@@ -48,7 +50,7 @@ public class ZoneMarshaller extends InvocationMarshaller
          * responses. */
         public static final int MOVE_SUCCEEDED = 1;
 
-        // documentation inherited from interface
+        // from interface ZoneMoveMarshaller
         public void moveSucceeded (int arg1, PlaceConfig arg2, ZoneSummary arg3)
         {
             _invId = null;
@@ -61,7 +63,7 @@ public class ZoneMarshaller extends InvocationMarshaller
          * responses. */
         public static final int MOVE_SUCCEEDED_WITH_SCENE = 2;
 
-        // documentation inherited from interface
+        // from interface ZoneMoveMarshaller
         public void moveSucceededWithScene (int arg1, PlaceConfig arg2, ZoneSummary arg3, SceneModel arg4)
         {
             _invId = null;
@@ -74,7 +76,7 @@ public class ZoneMarshaller extends InvocationMarshaller
          * responses. */
         public static final int MOVE_SUCCEEDED_WITH_UPDATES = 3;
 
-        // documentation inherited from interface
+        // from interface ZoneMoveMarshaller
         public void moveSucceededWithUpdates (int arg1, PlaceConfig arg2, ZoneSummary arg3, SceneUpdate[] arg4)
         {
             _invId = null;
@@ -83,7 +85,7 @@ public class ZoneMarshaller extends InvocationMarshaller
                                new Object[] { Integer.valueOf(arg1), arg2, arg3, arg4 }));
         }
 
-        // documentation inherited
+        @Override // from InvocationMarshaller
         public void dispatchResponse (int methodId, Object[] args)
         {
             switch (methodId) {
@@ -112,7 +114,7 @@ public class ZoneMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #moveTo} requests. */
     public static final int MOVE_TO = 1;
 
-    // documentation inherited from interface
+    // from interface ZoneService
     public void moveTo (Client arg1, int arg2, int arg3, int arg4, ZoneService.ZoneMoveListener arg5)
     {
         ZoneMarshaller.ZoneMoveMarshaller listener5 = new ZoneMarshaller.ZoneMoveMarshaller();
@@ -121,5 +123,4 @@ public class ZoneMarshaller extends InvocationMarshaller
             Integer.valueOf(arg2), Integer.valueOf(arg3), Integer.valueOf(arg4), listener5
         });
     }
-
 }

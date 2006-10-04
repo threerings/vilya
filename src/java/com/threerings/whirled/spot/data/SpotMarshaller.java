@@ -43,7 +43,7 @@ public class SpotMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #changeLocation} requests. */
     public static final int CHANGE_LOCATION = 1;
 
-    // documentation inherited from interface
+    // from interface SpotService
     public void changeLocation (Client arg1, int arg2, Location arg3, InvocationService.ConfirmListener arg4)
     {
         InvocationMarshaller.ConfirmMarshaller listener4 = new InvocationMarshaller.ConfirmMarshaller();
@@ -56,7 +56,7 @@ public class SpotMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #clusterSpeak} requests. */
     public static final int CLUSTER_SPEAK = 2;
 
-    // documentation inherited from interface
+    // from interface SpotService
     public void clusterSpeak (Client arg1, String arg2, byte arg3)
     {
         sendRequest(arg1, CLUSTER_SPEAK, new Object[] {
@@ -67,7 +67,7 @@ public class SpotMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #joinCluster} requests. */
     public static final int JOIN_CLUSTER = 3;
 
-    // documentation inherited from interface
+    // from interface SpotService
     public void joinCluster (Client arg1, int arg2, InvocationService.ConfirmListener arg3)
     {
         InvocationMarshaller.ConfirmMarshaller listener3 = new InvocationMarshaller.ConfirmMarshaller();
@@ -80,7 +80,7 @@ public class SpotMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #traversePortal} requests. */
     public static final int TRAVERSE_PORTAL = 4;
 
-    // documentation inherited from interface
+    // from interface SpotService
     public void traversePortal (Client arg1, int arg2, int arg3, int arg4, SceneService.SceneMoveListener arg5)
     {
         SceneMarshaller.SceneMoveMarshaller listener5 = new SceneMarshaller.SceneMoveMarshaller();
@@ -89,5 +89,4 @@ public class SpotMarshaller extends InvocationMarshaller
             Integer.valueOf(arg2), Integer.valueOf(arg3), Integer.valueOf(arg4), listener5
         });
     }
-
 }

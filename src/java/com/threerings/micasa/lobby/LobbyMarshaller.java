@@ -37,7 +37,9 @@ import java.util.List;
 public class LobbyMarshaller extends InvocationMarshaller
     implements LobbyService
 {
-    // documentation inherited
+    /**
+     * Marshalls results to implementations of {@link CategoriesListener}.
+     */
     public static class CategoriesMarshaller extends ListenerMarshaller
         implements CategoriesListener
     {
@@ -45,7 +47,7 @@ public class LobbyMarshaller extends InvocationMarshaller
          * responses. */
         public static final int GOT_CATEGORIES = 1;
 
-        // documentation inherited from interface
+        // from interface CategoriesMarshaller
         public void gotCategories (String[] arg1)
         {
             _invId = null;
@@ -54,7 +56,7 @@ public class LobbyMarshaller extends InvocationMarshaller
                                new Object[] { arg1 }));
         }
 
-        // documentation inherited
+        @Override // from InvocationMarshaller
         public void dispatchResponse (int methodId, Object[] args)
         {
             switch (methodId) {
@@ -70,7 +72,9 @@ public class LobbyMarshaller extends InvocationMarshaller
         }
     }
 
-    // documentation inherited
+    /**
+     * Marshalls results to implementations of {@link LobbiesListener}.
+     */
     public static class LobbiesMarshaller extends ListenerMarshaller
         implements LobbiesListener
     {
@@ -78,7 +82,7 @@ public class LobbyMarshaller extends InvocationMarshaller
          * responses. */
         public static final int GOT_LOBBIES = 1;
 
-        // documentation inherited from interface
+        // from interface LobbiesMarshaller
         public void gotLobbies (List arg1)
         {
             _invId = null;
@@ -87,7 +91,7 @@ public class LobbyMarshaller extends InvocationMarshaller
                                new Object[] { arg1 }));
         }
 
-        // documentation inherited
+        @Override // from InvocationMarshaller
         public void dispatchResponse (int methodId, Object[] args)
         {
             switch (methodId) {
@@ -106,7 +110,7 @@ public class LobbyMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #getCategories} requests. */
     public static final int GET_CATEGORIES = 1;
 
-    // documentation inherited from interface
+    // from interface LobbyService
     public void getCategories (Client arg1, LobbyService.CategoriesListener arg2)
     {
         LobbyMarshaller.CategoriesMarshaller listener2 = new LobbyMarshaller.CategoriesMarshaller();
@@ -119,7 +123,7 @@ public class LobbyMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #getLobbies} requests. */
     public static final int GET_LOBBIES = 2;
 
-    // documentation inherited from interface
+    // from interface LobbyService
     public void getLobbies (Client arg1, String arg2, LobbyService.LobbiesListener arg3)
     {
         LobbyMarshaller.LobbiesMarshaller listener3 = new LobbyMarshaller.LobbiesMarshaller();
@@ -128,5 +132,4 @@ public class LobbyMarshaller extends InvocationMarshaller
             arg2, listener3
         });
     }
-
 }

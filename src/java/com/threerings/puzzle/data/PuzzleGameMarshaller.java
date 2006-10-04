@@ -40,7 +40,7 @@ public class PuzzleGameMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #updateProgress} requests. */
     public static final int UPDATE_PROGRESS = 1;
 
-    // documentation inherited from interface
+    // from interface PuzzleGameService
     public void updateProgress (Client arg1, int arg2, int[] arg3)
     {
         sendRequest(arg1, UPDATE_PROGRESS, new Object[] {
@@ -51,12 +51,11 @@ public class PuzzleGameMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #updateProgressSync} requests. */
     public static final int UPDATE_PROGRESS_SYNC = 2;
 
-    // documentation inherited from interface
+    // from interface PuzzleGameService
     public void updateProgressSync (Client arg1, int arg2, int[] arg3, Board[] arg4)
     {
         sendRequest(arg1, UPDATE_PROGRESS_SYNC, new Object[] {
             Integer.valueOf(arg2), arg3, arg4
         });
     }
-
 }

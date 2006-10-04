@@ -40,7 +40,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #addToCollection} requests. */
     public static final int ADD_TO_COLLECTION = 1;
 
-    // documentation inherited from interface
+    // from interface EZGameService
     public void addToCollection (Client arg1, String arg2, byte[][] arg3, boolean arg4, InvocationService.InvocationListener arg5)
     {
         ListenerMarshaller listener5 = new ListenerMarshaller();
@@ -53,7 +53,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #endGame} requests. */
     public static final int END_GAME = 2;
 
-    // documentation inherited from interface
+    // from interface EZGameService
     public void endGame (Client arg1, int[] arg2, InvocationService.InvocationListener arg3)
     {
         ListenerMarshaller listener3 = new ListenerMarshaller();
@@ -66,7 +66,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #endTurn} requests. */
     public static final int END_TURN = 3;
 
-    // documentation inherited from interface
+    // from interface EZGameService
     public void endTurn (Client arg1, int arg2, InvocationService.InvocationListener arg3)
     {
         ListenerMarshaller listener3 = new ListenerMarshaller();
@@ -79,7 +79,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #getFromCollection} requests. */
     public static final int GET_FROM_COLLECTION = 4;
 
-    // documentation inherited from interface
+    // from interface EZGameService
     public void getFromCollection (Client arg1, String arg2, boolean arg3, int arg4, String arg5, int arg6, InvocationService.ConfirmListener arg7)
     {
         InvocationMarshaller.ConfirmMarshaller listener7 = new InvocationMarshaller.ConfirmMarshaller();
@@ -92,7 +92,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #mergeCollection} requests. */
     public static final int MERGE_COLLECTION = 5;
 
-    // documentation inherited from interface
+    // from interface EZGameService
     public void mergeCollection (Client arg1, String arg2, String arg3, InvocationService.InvocationListener arg4)
     {
         ListenerMarshaller listener4 = new ListenerMarshaller();
@@ -105,7 +105,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #sendMessage} requests. */
     public static final int SEND_MESSAGE = 6;
 
-    // documentation inherited from interface
+    // from interface EZGameService
     public void sendMessage (Client arg1, String arg2, Object arg3, int arg4, InvocationService.InvocationListener arg5)
     {
         ListenerMarshaller listener5 = new ListenerMarshaller();
@@ -118,7 +118,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #setProperty} requests. */
     public static final int SET_PROPERTY = 7;
 
-    // documentation inherited from interface
+    // from interface EZGameService
     public void setProperty (Client arg1, String arg2, Object arg3, int arg4, InvocationService.InvocationListener arg5)
     {
         ListenerMarshaller listener5 = new ListenerMarshaller();
@@ -131,7 +131,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #setTicker} requests. */
     public static final int SET_TICKER = 8;
 
-    // documentation inherited from interface
+    // from interface EZGameService
     public void setTicker (Client arg1, String arg2, int arg3, InvocationService.InvocationListener arg4)
     {
         ListenerMarshaller listener4 = new ListenerMarshaller();
@@ -140,5 +140,4 @@ public class EZGameMarshaller extends InvocationMarshaller
             arg2, Integer.valueOf(arg3), listener4
         });
     }
-
 }

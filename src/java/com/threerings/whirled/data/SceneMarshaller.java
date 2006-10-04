@@ -39,7 +39,9 @@ import com.threerings.whirled.data.SceneUpdate;
 public class SceneMarshaller extends InvocationMarshaller
     implements SceneService
 {
-    // documentation inherited
+    /**
+     * Marshalls results to implementations of {@link SceneMoveListener}.
+     */
     public static class SceneMoveMarshaller extends ListenerMarshaller
         implements SceneMoveListener
     {
@@ -47,7 +49,7 @@ public class SceneMarshaller extends InvocationMarshaller
          * responses. */
         public static final int MOVE_SUCCEEDED = 1;
 
-        // documentation inherited from interface
+        // from interface SceneMoveMarshaller
         public void moveSucceeded (int arg1, PlaceConfig arg2)
         {
             _invId = null;
@@ -60,7 +62,7 @@ public class SceneMarshaller extends InvocationMarshaller
          * responses. */
         public static final int MOVE_SUCCEEDED_WITH_SCENE = 2;
 
-        // documentation inherited from interface
+        // from interface SceneMoveMarshaller
         public void moveSucceededWithScene (int arg1, PlaceConfig arg2, SceneModel arg3)
         {
             _invId = null;
@@ -73,7 +75,7 @@ public class SceneMarshaller extends InvocationMarshaller
          * responses. */
         public static final int MOVE_SUCCEEDED_WITH_UPDATES = 3;
 
-        // documentation inherited from interface
+        // from interface SceneMoveMarshaller
         public void moveSucceededWithUpdates (int arg1, PlaceConfig arg2, SceneUpdate[] arg3)
         {
             _invId = null;
@@ -82,7 +84,7 @@ public class SceneMarshaller extends InvocationMarshaller
                                new Object[] { Integer.valueOf(arg1), arg2, arg3 }));
         }
 
-        // documentation inherited
+        @Override // from InvocationMarshaller
         public void dispatchResponse (int methodId, Object[] args)
         {
             switch (methodId) {
@@ -111,7 +113,7 @@ public class SceneMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #moveTo} requests. */
     public static final int MOVE_TO = 1;
 
-    // documentation inherited from interface
+    // from interface SceneService
     public void moveTo (Client arg1, int arg2, int arg3, SceneService.SceneMoveListener arg4)
     {
         SceneMarshaller.SceneMoveMarshaller listener4 = new SceneMarshaller.SceneMoveMarshaller();
@@ -120,5 +122,4 @@ public class SceneMarshaller extends InvocationMarshaller
             Integer.valueOf(arg2), Integer.valueOf(arg3), listener4
         });
     }
-
 }

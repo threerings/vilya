@@ -40,7 +40,7 @@ public class TrickCardGameMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #playCard} requests. */
     public static final int PLAY_CARD = 1;
 
-    // documentation inherited from interface
+    // from interface TrickCardGameService
     public void playCard (Client arg1, Card arg2, int arg3)
     {
         sendRequest(arg1, PLAY_CARD, new Object[] {
@@ -51,7 +51,7 @@ public class TrickCardGameMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #requestRematch} requests. */
     public static final int REQUEST_REMATCH = 2;
 
-    // documentation inherited from interface
+    // from interface TrickCardGameService
     public void requestRematch (Client arg1)
     {
         sendRequest(arg1, REQUEST_REMATCH, new Object[] {
@@ -62,12 +62,11 @@ public class TrickCardGameMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #sendCardsToPlayer} requests. */
     public static final int SEND_CARDS_TO_PLAYER = 3;
 
-    // documentation inherited from interface
+    // from interface TrickCardGameService
     public void sendCardsToPlayer (Client arg1, int arg2, Card[] arg3)
     {
         sendRequest(arg1, SEND_CARDS_TO_PLAYER, new Object[] {
             Integer.valueOf(arg2), arg3
         });
     }
-
 }

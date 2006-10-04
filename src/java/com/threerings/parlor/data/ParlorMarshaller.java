@@ -40,7 +40,9 @@ import com.threerings.util.Name;
 public class ParlorMarshaller extends InvocationMarshaller
     implements ParlorService
 {
-    // documentation inherited
+    /**
+     * Marshalls results to implementations of {@link InviteListener}.
+     */
     public static class InviteMarshaller extends ListenerMarshaller
         implements InviteListener
     {
@@ -48,7 +50,7 @@ public class ParlorMarshaller extends InvocationMarshaller
          * responses. */
         public static final int INVITE_RECEIVED = 1;
 
-        // documentation inherited from interface
+        // from interface InviteMarshaller
         public void inviteReceived (int arg1)
         {
             _invId = null;
@@ -57,7 +59,7 @@ public class ParlorMarshaller extends InvocationMarshaller
                                new Object[] { Integer.valueOf(arg1) }));
         }
 
-        // documentation inherited
+        @Override // from InvocationMarshaller
         public void dispatchResponse (int methodId, Object[] args)
         {
             switch (methodId) {
@@ -73,7 +75,9 @@ public class ParlorMarshaller extends InvocationMarshaller
         }
     }
 
-    // documentation inherited
+    /**
+     * Marshalls results to implementations of {@link TableListener}.
+     */
     public static class TableMarshaller extends ListenerMarshaller
         implements TableListener
     {
@@ -81,7 +85,7 @@ public class ParlorMarshaller extends InvocationMarshaller
          * responses. */
         public static final int TABLE_CREATED = 1;
 
-        // documentation inherited from interface
+        // from interface TableMarshaller
         public void tableCreated (int arg1)
         {
             _invId = null;
@@ -90,7 +94,7 @@ public class ParlorMarshaller extends InvocationMarshaller
                                new Object[] { Integer.valueOf(arg1) }));
         }
 
-        // documentation inherited
+        @Override // from InvocationMarshaller
         public void dispatchResponse (int methodId, Object[] args)
         {
             switch (methodId) {
@@ -109,7 +113,7 @@ public class ParlorMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #cancel} requests. */
     public static final int CANCEL = 1;
 
-    // documentation inherited from interface
+    // from interface ParlorService
     public void cancel (Client arg1, int arg2, InvocationService.InvocationListener arg3)
     {
         ListenerMarshaller listener3 = new ListenerMarshaller();
@@ -122,7 +126,7 @@ public class ParlorMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #createTable} requests. */
     public static final int CREATE_TABLE = 2;
 
-    // documentation inherited from interface
+    // from interface ParlorService
     public void createTable (Client arg1, int arg2, TableConfig arg3, GameConfig arg4, ParlorService.TableListener arg5)
     {
         ParlorMarshaller.TableMarshaller listener5 = new ParlorMarshaller.TableMarshaller();
@@ -135,7 +139,7 @@ public class ParlorMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #invite} requests. */
     public static final int INVITE = 3;
 
-    // documentation inherited from interface
+    // from interface ParlorService
     public void invite (Client arg1, Name arg2, GameConfig arg3, ParlorService.InviteListener arg4)
     {
         ParlorMarshaller.InviteMarshaller listener4 = new ParlorMarshaller.InviteMarshaller();
@@ -148,7 +152,7 @@ public class ParlorMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #joinTable} requests. */
     public static final int JOIN_TABLE = 4;
 
-    // documentation inherited from interface
+    // from interface ParlorService
     public void joinTable (Client arg1, int arg2, int arg3, int arg4, InvocationService.InvocationListener arg5)
     {
         ListenerMarshaller listener5 = new ListenerMarshaller();
@@ -161,7 +165,7 @@ public class ParlorMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #leaveTable} requests. */
     public static final int LEAVE_TABLE = 5;
 
-    // documentation inherited from interface
+    // from interface ParlorService
     public void leaveTable (Client arg1, int arg2, int arg3, InvocationService.InvocationListener arg4)
     {
         ListenerMarshaller listener4 = new ListenerMarshaller();
@@ -174,7 +178,7 @@ public class ParlorMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #respond} requests. */
     public static final int RESPOND = 6;
 
-    // documentation inherited from interface
+    // from interface ParlorService
     public void respond (Client arg1, int arg2, int arg3, Object arg4, InvocationService.InvocationListener arg5)
     {
         ListenerMarshaller listener5 = new ListenerMarshaller();
@@ -187,7 +191,7 @@ public class ParlorMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #startSolitaire} requests. */
     public static final int START_SOLITAIRE = 7;
 
-    // documentation inherited from interface
+    // from interface ParlorService
     public void startSolitaire (Client arg1, GameConfig arg2, InvocationService.ConfirmListener arg3)
     {
         InvocationMarshaller.ConfirmMarshaller listener3 = new InvocationMarshaller.ConfirmMarshaller();
@@ -196,5 +200,4 @@ public class ParlorMarshaller extends InvocationMarshaller
             arg2, listener3
         });
     }
-
 }
