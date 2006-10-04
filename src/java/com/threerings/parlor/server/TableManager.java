@@ -335,7 +335,7 @@ public class TableManager
         }
 
         // remove this occupant from the table
-        if (!pender.clearOccupant(bodyOid)) {
+        if (!pender.clearOccupantByOid(bodyOid)) {
             Log.warning("Attempt to remove body from mapped table failed " +
                         "[table=" + pender + ", bodyOid=" + bodyOid + "].");
             return;

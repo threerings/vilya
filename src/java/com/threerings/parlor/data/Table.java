@@ -278,7 +278,7 @@ public class Table
      * removed, false if the user was never seated at the table in the
      * first place.
      */
-    public boolean clearOccupant (int bodyOid)
+    public boolean clearOccupantByOid (int bodyOid)
     {
         for (int i = 0; i < bodyOids.length; i++) {
             if (bodyOid == bodyOids[i]) {
