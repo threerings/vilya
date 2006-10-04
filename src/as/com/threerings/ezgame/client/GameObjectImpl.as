@@ -457,7 +457,11 @@ public class GameObjectImpl extends EventDispatcher
                 // kosher!
                 return;
             }
-            if (ClassUtil.getClass(value) != Object) {
+            var clazz :Class = ClassUtil.getClass(value);
+            if (clazz == ByteArray) {
+                return; // kosher
+            }
+            if (clazz != Object ) {
                 throw new ArgumentError(
                     "Non-simple properties may not be set.");
             }
