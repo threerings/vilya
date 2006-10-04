@@ -46,7 +46,7 @@ import com.threerings.parlor.game.data.PartyGameConfig;
  * the Parlor services.
  */
 public class Table
-    implements Hashable, DSet_Entry
+    implements DSet_Entry, Hashable
 {
     /** The unique identifier for this table. */
     public var tableId :int;
@@ -61,11 +61,11 @@ public class Table
 
     /** An array of the usernames of the occupants of this table (some
      * slots may not be filled), or null if a party game. */
-    public var occupants :TypedArray /* of Name */;
+    public var occupants :TypedArray;
 
     /** The body oids of the occupants of this table, or null if a party game.
      * (This is not propagated to remote instances.) */
-    public var bodyOids :TypedArray /* of int */;
+    public var bodyOids :TypedArray;
 
     /** The game config for the game that is being matchmade. */
     public var config :GameConfig;
@@ -76,19 +76,6 @@ public class Table
     /** Suitable for unserialization. */
     public function Table ()
     {
-    }
-
-    /**
-     * Returns true if there is no one sitting at this table.
-     */
-    public function isEmpty () :Boolean
-    {
-        for (var ii :int = 0; ii < bodyOids.length; ii++) {
-            if ((bodyOids[ii] as int) !== 0) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /**
@@ -313,8 +300,8 @@ public class Table
         return gameOid != -1;
     }
 
-    // documentation inherited
-    public function getKey () :Object
+    // from Hashable
+    public function hashCode () :int
     {
         return tableId;
     }
@@ -326,21 +313,36 @@ public class Table
             (tableId == (other as Table).tableId);
     }
 
-    // from Hashable
-    public function hashCode () :int
+    /**
+     * Generates a string representation of this table instance.
+     */
+    public function toString () :String
+    {
+        var buf :StringBuilder = new StringBuilder();
+        buf.append(ClassUtil.shortClassName(this));
+        buf.append(" [");
+        toStringBuilder(buf);
+        buf.append("]");
+        return buf.toString();
+    }
+
+    // documentation inherited
+    public function getKey () :Object
     {
         return tableId;
     }
 
-    // from Streamable
-    public function writeObject (out :ObjectOutputStream) :void
+    /**
+     * Returns true if there is no one sitting at this table.
+     */
+    public function isEmpty () :Boolean
     {
-        out.writeInt(tableId);
-        out.writeInt(lobbyOid);
-        out.writeInt(gameOid);
-        out.writeObject(occupants);
-        out.writeObject(config);
-        out.writeObject(tconfig);
+        for (var ii :int = 0; ii < bodyOids.length; ii++) {
+            if ((bodyOids[ii] as int) !== 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
     // from Streamable
@@ -354,23 +356,21 @@ public class Table
         tconfig = (ins.readObject() as TableConfig);
     }
 
-    /**
-     * Generates a string representation of this table instance.
-     */
-    public function toString () :String
+    // from Streamable
+    public function writeObject (out :ObjectOutputStream) :void
     {
-        var buf :StringBuilder = new StringBuilder();
-        buf.append(ClassUtil.shortClassName(this));
-        buf.append(" [");
-        toStringBuf(buf);
-        buf.append("]");
-        return buf.toString();
+        out.writeInt(tableId);
+        out.writeInt(lobbyOid);
+        out.writeInt(gameOid);
+        out.writeObject(occupants);
+        out.writeObject(config);
+        out.writeObject(tconfig);
     }
 
     /**
      * Helper method for toString, ripe for overrideability.
      */
-    protected function toStringBuf (buf :StringBuilder) :void
+    protected function toStringBuilder (buf :StringBuilder) :void
     {
         buf.append("tableId=").append(tableId);
         buf.append(", lobbyOid=").append(lobbyOid);
@@ -378,5 +378,8 @@ public class Table
         buf.append(", occupants=").append(occupants.join());
         buf.append(", config=").append(config);
     }
+
+    /** A counter for assigning table ids. */
+    protected static var _tableIdCounter :int = 0;
 }
 }

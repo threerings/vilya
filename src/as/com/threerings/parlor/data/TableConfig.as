@@ -2,8 +2,8 @@
 // $Id: TableConfig.java 3604 2005-06-17 20:25:28Z ray $
 //
 // Narya library - tools for developing networked games
-// Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved
-// http://www.threerings.net/code/narya/
+// Copyright (C) 2002-2006 Three Rings Design, Inc., All Rights Reserved
+// http://www.threerings.net/code/vilya/
 //
 // This library is free software; you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as published
@@ -23,15 +23,14 @@ package com.threerings.parlor.data {
 
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
-import com.threerings.io.Streamable;
+import com.threerings.io.SimpleStreamableObject;
 import com.threerings.io.TypedArray;
 
 /**
  * Table configuration parameters for a game that is to be matchmade
  * using the table services.
  */
-public class TableConfig
-    implements Streamable
+public class TableConfig extends SimpleStreamableObject
 {
     /** The total number of players that are desired for the table,
      * or -1 for a party game. For team games, this should be set to the
@@ -51,22 +50,27 @@ public class TableConfig
     /** Whether the table is "private". */
     public var privateTable :Boolean;
 
-    // from Streamable
-    public function writeObject (out :ObjectOutputStream) :void
+    public function TableConfig ()
     {
-        out.writeInt(desiredPlayerCount);
-        out.writeInt(minimumPlayerCount);
-        out.writeObject(teamMemberIndices);
-        out.writeBoolean(privateTable);
+        // nothing needed
     }
 
     // from Streamable
-    public function readObject (ins :ObjectInputStream) :void
+    override public function readObject (ins :ObjectInputStream) :void
     {
         desiredPlayerCount = ins.readInt();
         minimumPlayerCount = ins.readInt();
         teamMemberIndices = (ins.readObject() as TypedArray);
         privateTable = ins.readBoolean();
+    }
+
+    // from Streamable
+    override public function writeObject (out :ObjectOutputStream) :void
+    {
+        out.writeInt(desiredPlayerCount);
+        out.writeInt(minimumPlayerCount);
+        out.writeObject(teamMemberIndices);
+        out.writeBoolean(privateTable);
     }
 }
 }
