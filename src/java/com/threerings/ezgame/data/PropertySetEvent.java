@@ -80,7 +80,7 @@ public class PropertySetEvent extends NamedEvent
         }
     }
 
-    /** The index. */
+    /** The index of the property, if applicable. */
     protected int _index;
 
     /** The client-side data that is assigned to this property. */

@@ -20,19 +20,20 @@ import com.threerings.ezgame.client.EZGameController;
 /**
  * A game config for a simple multiplayer ez game.
  */
-public /* abstract */ class EZGameConfig extends GameConfig
-    implements PartyGameConfig
+public class EZGameConfig extends GameConfig
+    implements PartyGameConfig, Hashable
 {
     // TODO: this will eventually contain various XML configuration bits,
     // or we'll expand this to contain other information.
     // For now, the configData is either a classname or url.
     public var configData :String;
 
-    override public function createController () :PlaceController
+    public function EZGameConfig ()
     {
-        return new EZGameController();
+        // nothing needed
     }
 
+    // from abstract GameConfig
     override public function getBundleName () :String
     {
         return "general";
@@ -41,9 +42,22 @@ public /* abstract */ class EZGameConfig extends GameConfig
     // TODO
     //override public function createConfigurator () :GameConfigurator
 
+
     override public function getGameName () :String
     {
         return MessageBundle.taint(configData);
+    }
+
+    // from PlaceConfig
+    override public function createController () :PlaceController
+    {
+        return new EZGameController();
+    }
+
+    // from abstract PlaceConfig
+    public function getManagerClassName () :String
+    {
+        throw new Error("Not implemented.");
     }
 
     // from PartyGameConfig
@@ -51,6 +65,11 @@ public /* abstract */ class EZGameConfig extends GameConfig
     {
         // TODO
         return PartyGameCodes.NOT_PARTY_GAME;
+    }
+
+    override public function hashCode () :int
+    {
+        return super.hashCode(); // TODO: incorporate configData?
     }
 
     override public function equals (other :Object) :Boolean
@@ -63,23 +82,20 @@ public /* abstract */ class EZGameConfig extends GameConfig
         return (this.configData === that.configData);
     }
 
-    override public function hashCode () :int
-    {
-        return super.hashCode(); // TODO: incorporate configData?
-    }
-
-    override public function writeObject (out :ObjectOutputStream) :void
-    {
-        super.writeObject(out);
-
-        out.writeField(configData);
-    }
-
+    // from interface Streamable
     override public function readObject (ins :ObjectInputStream) :void
     {
         super.readObject(ins);
 
         configData = (ins.readField(String) as String);
+    }
+
+    // from interface Streamable
+    override public function writeObject (out :ObjectOutputStream) :void
+    {
+        super.writeObject(out);
+
+        out.writeField(configData);
     }
 }
 }

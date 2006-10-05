@@ -29,20 +29,20 @@ public class PropertySetEvent extends NamedEvent
         super(0, null);
     }
 
+    // from abstract DEvent
+    override public function applyToObject (target :DObject) :Boolean
+    {
+        _oldValue =
+            EZGameObject(target).applyPropertySet(_name, _data, _index);
+        return true;
+    }
+
     /**
      * Get the value that was set for the property.
      */
     public function getValue () :Object
     {
         return _data;
-    }
-
-    /**
-     * Get the old value.
-     */
-    public function getOldValue () :Object
-    {
-        return _oldValue;
     }
 
     /**
@@ -53,11 +53,28 @@ public class PropertySetEvent extends NamedEvent
         return _index;
     }
 
-    override public function applyToObject (target :DObject) :Boolean
+    /**
+     * Get the old value.
+     */
+    public function getOldValue () :Object
     {
-        _oldValue =
-            EZGameObject(target).applyPropertySet(_name, _data, _index);
-        return true;
+        return _oldValue;
+    }
+
+    // from interface Streamable
+    override public function readObject (ins :ObjectInputStream) :void
+    {
+        super.readObject(ins);
+        _index = ins.readInt();
+        _data = EZObjectMarshaller.decode(ins.readObject());
+    }
+
+    // from interface Streamable
+    override public function writeObject (out :ObjectOutputStream) :void
+    {
+        super.writeObject(out);
+        out.writeInt(_index);
+        out.writeObject(_data);
     }
 
     override protected function notifyListener (listener :Object) :void
@@ -65,14 +82,6 @@ public class PropertySetEvent extends NamedEvent
         if (listener is PropertySetListener) {
             (listener as PropertySetListener).propertyWasSet(this);
         }
-    }
-
-    override public function readObject (ins :ObjectInputStream) :void
-    {
-        super.readObject(ins);
-
-        _index = ins.readInt();
-        _data = EZObjectMarshaller.decode(ins.readObject());
     }
 
     /** The index of the property, if applicable. */
