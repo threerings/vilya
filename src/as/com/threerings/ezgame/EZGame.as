@@ -53,6 +53,15 @@ public interface EZGame
      * Pick (do not remove) the specified number of elements from a collection,
      * and distribute them to a specific player or set them as a property
      * in the game data.
+     *
+     * @param collName the collection name.
+     * @param count the number of elements to pick
+     * @param msgOrPropName the name of the message or property
+     *        that will contain the picked elements.
+     * @param playerIndex if -1 (or unset), the picked elements should be
+     *        set on the gameObject as a property for all to see.
+     *        If a playerIndex is specified, only that player will receive
+     *        the elements as a message.
      */
     // TODO: a way to specify exclusive picks vs. duplicate-OK picks?
     function pickFromCollection (
@@ -63,6 +72,15 @@ public interface EZGame
      * Deal (remove) the specified number of elements from a collection,
      * and distribute them to a specific player or set them as a property
      * in the game data.
+     *
+     * @param collName the collection name.
+     * @param count the number of elements to pick
+     * @param msgOrPropName the name of the message or property
+     *        that will contain the picked elements.
+     * @param playerIndex if -1 (or unset), the picked elements should be
+     *        set on the gameObject as a property for all to see.
+     *        If a playerIndex is specified, only that player will receive
+     *        the elements as a message.
      */
     // TODO: figure out the method signature of the callback
     function dealFromCollection (
