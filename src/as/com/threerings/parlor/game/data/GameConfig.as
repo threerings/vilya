@@ -68,6 +68,11 @@ public /*abstract*/ class GameConfig extends PlaceConfig
      * at all. */
     public var ais :TypedArray = TypedArray.create(GameAI);
 
+    public function GameConfig ()
+    {
+        // nothing needed
+    }
+
     /**
      * Returns the message bundle identifier for the bundle that should be
      * used to translate the translatable strings used to describe the
@@ -117,32 +122,6 @@ public /*abstract*/ class GameConfig extends PlaceConfig
     }
 
     /**
-     * Returns an Array of strings that describe the configuration of this
-     * game. Default implementation returns an empty array.
-     */
-    public function getDescription () :Array
-    {
-        return new Array(); // nothing by default
-    }
-
-    /**
-     * Returns true if this game config object is equal to the supplied
-     * object (meaning it is also a game config object and its
-     * configuration settings are the same as ours).
-     */
-    public function equals (other :Object) :Boolean
-    {
-        // make sure they're of the same class
-        if (ClassUtil.isSameClass(other, this)) {
-            var that :GameConfig = GameConfig(other);
-            return this.rated == that.rated;
-
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * Computes a hashcode for this game config object that supports our
      * {@link #equals} implementation. Objects that are equal should have
      * the same hashcode.
@@ -165,15 +144,33 @@ public /*abstract*/ class GameConfig extends PlaceConfig
         return copy;
     }
 
-    override public function writeObject (out :ObjectOutputStream) :void
+    /**
+     * Returns true if this game config object is equal to the supplied
+     * object (meaning it is also a game config object and its
+     * configuration settings are the same as ours).
+     */
+    public function equals (other :Object) :Boolean
     {
-        super.writeObject(out);
+        // make sure they're of the same class
+        if (ClassUtil.isSameClass(other, this)) {
+            var that :GameConfig = GameConfig(other);
+            return this.rated == that.rated;
 
-        out.writeObject(players);
-        out.writeBoolean(rated);
-        out.writeObject(ais);
+        } else {
+            return false;
+        }
     }
 
+    /**
+     * Returns an Array of strings that describe the configuration of this
+     * game. Default implementation returns an empty array.
+     */
+    public function getDescription () :Array
+    {
+        return new Array(); // nothing by default
+    }
+
+    // from interface Streamable
     override public function readObject (ins :ObjectInputStream) :void
     {
         super.readObject(ins);
@@ -181,6 +178,16 @@ public /*abstract*/ class GameConfig extends PlaceConfig
         players = (ins.readObject() as TypedArray);
         rated = ins.readBoolean();
         ais = (ins.readObject() as TypedArray);
+    }
+
+    // from interface Streamable
+    override public function writeObject (out :ObjectOutputStream) :void
+    {
+        super.writeObject(out);
+
+        out.writeObject(players);
+        out.writeBoolean(rated);
+        out.writeObject(ais);
     }
 }
 }

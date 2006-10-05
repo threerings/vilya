@@ -79,17 +79,17 @@ public class Table
     }
 
     /**
-     * Count the number of players currently occupying this table.
+     * Get the type of party game being played at this table, or
+     * PartyGameCodes.NOT_PARTY_GAME.
      */
-    public function getOccupiedCount () :int
+    public function getPartyGameType () :int
     {
-        var count :int = 0;
-        for (var ii :int = 0; ii < occupants.length; ii++) {
-            if (occupants[ii] != null) {
-                count++;
-            }
+        if (config is PartyGameConfig) {
+            return (config as PartyGameConfig).getPartyGameType();
+
+        } else {
+            return PartyGameCodes.NOT_PARTY_GAME;
         }
-        return count;
     }
 
     /**
@@ -114,6 +114,20 @@ public class Table
         }
 
         return players;
+    }
+
+    /**
+     * Count the number of players currently occupying this table.
+     */
+    public function getOccupiedCount () :int
+    {
+        var count :int = 0;
+        for (var ii :int = 0; ii < occupants.length; ii++) {
+            if (occupants[ii] != null) {
+                count++;
+            }
+        }
+        return count;
     }
 
     /**
@@ -152,20 +166,6 @@ public class Table
     public function isPartyGame () :Boolean
     {
         return (PartyGameCodes.NOT_PARTY_GAME != getPartyGameType());
-    }
-
-    /**
-     * Get the type of party game being played at this table, or
-     * PartyGameCodes.NOT_PARTY_GAME.
-     */
-    public function getPartyGameType () :int
-    {
-        if (config is PartyGameConfig) {
-            return (config as PartyGameConfig).getPartyGameType();
-
-        } else {
-            return PartyGameCodes.NOT_PARTY_GAME;
-        }
     }
 
     /**

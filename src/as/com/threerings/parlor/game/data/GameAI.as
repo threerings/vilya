@@ -5,13 +5,12 @@ package com.threerings.parlor.game.data {
 
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
-import com.threerings.io.Streamable;
+import com.threerings.io.SimpleStreamableObject;
 
 /**
  * Represents attributes of an AI player.
  */
-public class GameAI
-    implements Streamable
+public class GameAI extends SimpleStreamableObject
 {
     /** The "personality" of the AI, which can be interpreted by
      * each puzzle. */
@@ -31,17 +30,17 @@ public class GameAI
     }
 
     // from Streamable
-    public function writeObject (out :ObjectOutputStream) :void
-    {
-        out.writeInt(personality);
-        out.writeInt(skill);
-    }
-
-    // from Streamable
-    public function readObject (ins :ObjectInputStream) :void
+    override public function readObject (ins :ObjectInputStream) :void
     {
         personality = ins.readInt();
         skill = ins.readInt();
+    }
+
+    // from Streamable
+    override public function writeObject (out :ObjectOutputStream) :void
+    {
+        out.writeInt(personality);
+        out.writeInt(skill);
     }
 }
 }
