@@ -23,10 +23,12 @@ package com.threerings.whirled.spot.data {
 
 import com.threerings.util.ClassUtil;
 import com.threerings.util.Cloneable;
+import com.threerings.util.Hashable;
+import com.threerings.util.StringBuilder;
 
-import com.threerings.io.Streamable;
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
+import com.threerings.io.SimpleStreamableObject;
 
 import com.threerings.util.Hashable;
 
@@ -39,15 +41,14 @@ import com.threerings.util.Hashable;
  * when using this portal and the location at which the body sprite should
  * appear in that target scene.
  */
-public class Portal
-    implements Streamable, Hashable, Cloneable
+public class Portal extends SimpleStreamableObject
+    implements Cloneable, Hashable
 {
     /** This portal's unique identifier. */
     public var portalId :int;
 
-    /** The location of the portal. Typically this is a base Location (2d)
-     * class, but different games could use a different subclass of
-     * Location. */
+    /** The location of the portal.
+     * This field is present on client and server, it is streamed specially. */
     public var loc :Location;
 
     /** The scene identifier of the scene to which a body will exit when
@@ -55,16 +56,13 @@ public class Portal
     public var targetSceneId :int;
 
     /** The portal identifier of the portal at which a body will enter
-     * the target scene when they "use" this portal. */
+     * the target scene when they "use" this portal, or -1 to specify
+     * that the body enters on the default portal, whatever id it is.  */
     public var targetPortalId :int;
 
-    /**
-     * Returns a location instance configured with the location and
-     * orientation of this portal.
-     */
-    public function getLocation () :Location
+    public function Portal ()
     {
-        return (loc.clone() as Location);
+        // nothing needed
     }
 
     /**
@@ -79,34 +77,10 @@ public class Portal
         return loc.getOpposite();
     }
 
-    /**
-     * Returns true if the portal has a potentially valid target scene and
-     * portal id (they are not guaranteed to exist, but they are at least
-     * potentially valid values rather than 0).
-     */
-    public function isValid () :Boolean
+    // documentation inherited from interface Hashable
+    public function hashCode () :int
     {
-        return (targetSceneId > 0) &&
-            // the target portal must be positive, or -1
-            ((targetPortalId > 0) || (targetPortalId == -1));
-    }
-
-    // documentation inherited from interface Streamable
-    public function writeObject (out :ObjectOutputStream) :void
-    {
-        out.writeShort(portalId);
-        out.writeObject(loc);
-        out.writeInt(targetSceneId);
-        out.writeShort(targetPortalId);
-    }
-
-    // documentation inherited from interface Streamable
-    public function readObject (ins :ObjectInputStream) :void
-    {
-        portalId = ins.readShort();
-        loc = (ins.readObject() as Location);
-        targetSceneId = ins.readInt();
-        targetPortalId = ins.readShort();
+        return portalId;
     }
 
     // documentation inherited from interface Cloneable
@@ -127,16 +101,53 @@ public class Portal
             ((other as Portal).portalId == portalId);
     }
 
-    // documentation inherited from interface Hashable
-    public function hashCode () :int
+    /**
+     * Returns a location instance configured with the location and
+     * orientation of this portal.
+     */
+    public function getLocation () :Location
     {
-        return portalId;
+        return (loc.clone() as Location);
     }
 
-    public function toString () :String
+    /**
+     * Returns true if the portal has a potentially valid target scene and
+     * portal id (they are not guaranteed to exist, but they are at least
+     * potentially valid values rather than 0).
+     */
+    public function isValid () :Boolean
     {
-        return "Portal[id=" + portalId + ", destScene=" + targetSceneId +
-            ", loc=" + loc + "].";
+        return (targetSceneId > 0) &&
+            // the target portal must be positive, or -1
+            ((targetPortalId > 0) || (targetPortalId == -1));
+    }
+
+    // from interface Streamable
+    override public function readObject (ins :ObjectInputStream) :void
+    {
+        super.readObject(ins);
+        portalId = ins.readShort();
+        loc = (ins.readObject() as Location);
+        targetSceneId = ins.readInt();
+        targetPortalId = ins.readShort();
+    }
+
+    // from interface Streamable
+    override public function writeObject (out :ObjectOutputStream) :void
+    {
+        super.writeObject(out);
+        out.writeShort(portalId);
+        out.writeObject(loc);
+        out.writeInt(targetSceneId);
+        out.writeShort(targetPortalId);
+    }
+
+    // from SimpleStreamableObject
+    override protected function toStringBuilder (buf :StringBuilder): void
+    {
+        buf.append("id=").append(portalId);
+        buf.append(", destScene=").append(targetSceneId);
+        buf.append(", loc=").append(loc);
     }
 }
 }

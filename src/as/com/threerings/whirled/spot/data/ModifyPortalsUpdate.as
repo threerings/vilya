@@ -39,17 +39,9 @@ public class ModifyPortalsUpdate extends SceneUpdate
     /** The portals to be added to the scene. */
     public var portalsAdded :TypedArray;
 
-    /**
-     * Initialize the update with all necessary data.
-     */
-    public function initialize (
-            targetId :int, targetVersion :int, removed :TypedArray,
-            added :TypedArray) :void
+    public function ModifyPortalsUpdate ()
     {
-        init(targetId, targetVersion);
-
-        portalsRemoved = removed;
-        portalsAdded = added;
+        // nothing needed
     }
 
     override public function apply (model :SceneModel) :void
@@ -72,20 +64,33 @@ public class ModifyPortalsUpdate extends SceneUpdate
         }
     }
 
-    override public function writeObject (out :ObjectOutputStream) :void
+    /**
+     * Initialize the update with all necessary data.
+     */
+    public function initialize (
+            targetId :int, targetVersion :int, removed :TypedArray,
+            added :TypedArray) :void
     {
-        super.writeObject(out);
+        init(targetId, targetVersion);
 
-        out.writeObject(portalsRemoved);
-        out.writeObject(portalsAdded);
+        portalsRemoved = removed;
+        portalsAdded = added;
     }
 
+    // from interface Streamable
     override public function readObject (ins :ObjectInputStream) :void
     {
         super.readObject(ins);
-
         portalsRemoved = (ins.readObject() as TypedArray);
         portalsAdded = (ins.readObject() as TypedArray);
+    }
+
+    // from interface Streamable
+    override public function writeObject (out :ObjectOutputStream) :void
+    {
+        super.writeObject(out);
+        out.writeObject(portalsRemoved);
+        out.writeObject(portalsAdded);
     }
 }
 }

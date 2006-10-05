@@ -29,26 +29,36 @@ import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 import com.threerings.io.Streamable;
 
+import com.threerings.util.Cloneable;
+
 /**
  * Used to encapsulate updates to scenes in such a manner that updates can
  * be stored persistently and sent to clients to update their own local
  * copies of scenes.
  */
 public class SceneUpdate
-    implements Streamable /*, Cloneable */
+    implements Streamable, Cloneable
 {
-    /**
-     * Initializes this scene update such that it will operate on a scene
-     * with the specified target scene and version number.
-     *
-     * @param targetId the id of the scene on which we are to operate.
-     * @param targetVersion the version of the scene on which we are to
-     * operate.
-     */
-    public function init (targetId :int, targetVersion :int) :void
+    public function SceneUpdate ()
     {
-        _targetId = targetId;
-        _targetVersion = targetVersion;
+        // nothing needed
+    }
+
+    /**
+     * Applies this update to the specified scene model. Derived classes
+     * will want to override this method and apply updates of their own,
+     * being sure to call <code>super.apply</code>.
+     */
+    public function apply (model :SceneModel) :void
+    {
+        // increment the version; disallowing integer overflow
+        model.version = Math.max(_targetVersion + 1, model.version);
+
+        // sanity check for the amazing two billion updates
+        if (model.version == _targetVersion) {
+            Log.getLog(this).warning("Egads! This scene has been updated two" +
+                " billion times [model=" + model + ", update=" + this + "].");
+        }
     }
 
     /**
@@ -65,6 +75,44 @@ public class SceneUpdate
     public function getSceneVersion () :int
     {
         return _targetVersion;
+    }
+
+    /**
+     * Generates a string representation of this instance.
+     */
+    public function toString () :String
+    {
+        var buf :StringBuilder = new StringBuilder("[");
+        toStringBuilder(buf);
+        return buf.append("]").toString();
+    }
+
+    /**
+     * Initializes this scene update such that it will operate on a scene
+     * with the specified target scene and version number.
+     *
+     * @param targetId the id of the scene on which we are to operate.
+     * @param targetVersion the version of the scene on which we are to
+     * operate.
+     */
+    public function init (targetId :int, targetVersion :int) :void
+    {
+        _targetId = targetId;
+        _targetVersion = targetVersion;
+    }
+
+    // from interface Streamable
+    public function writeObject (out :ObjectOutputStream) :void
+    {
+        out.writeInt(_targetId);
+        out.writeInt(_targetVersion);
+    }
+
+    // from interface Streamable
+    public function readObject (ins :ObjectInputStream) :void
+    {
+        _targetId = ins.readInt();
+        _targetVersion = ins.readInt();
     }
 
     /**
@@ -90,54 +138,17 @@ public class SceneUpdate
         }
     }
 
-    /**
-     * Applies this update to the specified scene model. Derived classes
-     * will want to override this method and apply updates of their own,
-     * being sure to call <code>super.apply</code>.
-     */
-    public function apply (model :SceneModel) :void
+    // from interface Cloneable
+    public function clone () :Object
     {
-        // increment the version; disallowing integer overflow
-        model.version = Math.max(_targetVersion + 1, model.version);
-
-        // sanity check for the amazing two billion updates
-        if (model.version == _targetVersion) {
-            Log.getLog(this).warning("Egads! This scene has been updated two" +
-                " billion times [model=" + model + ", update=" + this + "].");
-        }
-    }
-
-    // documentation inherited from interface Streamable
-    public function writeObject (out :ObjectOutputStream) :void
-        //throws IOException
-    {
-        out.writeInt(_targetId);
-        out.writeInt(_targetVersion);
-    }
-
-    // documentation inherited from interface Streamable
-    public function readObject (ins :ObjectInputStream) :void
-        //throws IOException, ClassNotFoundException
-    {
-        _targetId = ins.readInt();
-        _targetVersion = ins.readInt();
-    }
-
-    /**
-     * Generates a string representation of this instance.
-     */
-    public function toString () :String
-    {
-        var buf :StringBuilder = new StringBuilder("[");
-        toStringBuf(buf);
-        return buf.append("]").toString();
+        throw new Error("Not implemented.");
     }
 
     /**
      * An extensible mechanism for generating a string representation of
      * this instance.
      */
-    protected function toStringBuf (buf :StringBuilder) :void
+    protected function toStringBuilder (buf :StringBuilder) :void
     {
         buf.append("sceneId=").append(_targetId);
         buf.append(", version=").append(_targetVersion);

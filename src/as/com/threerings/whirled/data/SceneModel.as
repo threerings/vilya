@@ -26,7 +26,7 @@ import com.threerings.util.Cloneable;
 
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
-import com.threerings.io.Streamable;
+import com.threerings.io.SimpleStreamableObject;
 import com.threerings.io.TypedArray;
 
 /**
@@ -38,8 +38,8 @@ import com.threerings.io.TypedArray;
  * what is transmitted over the wire when communicating scenes from the
  * server to the client.
  */
-public class SceneModel
-    implements Streamable, Cloneable
+public class SceneModel extends SimpleStreamableObject
+    implements Cloneable
 {
     /** This scene's unique identifier. */
     public var sceneId :int;
@@ -55,6 +55,21 @@ public class SceneModel
 
     /** Auxiliary scene model information. */
     public var auxModels :TypedArray = TypedArray.create(AuxModel);
+
+    /**
+     * Creates and returns a blank scene model.
+     */
+    public static function blankSceneModel () :SceneModel
+    {
+        var model :SceneModel = new SceneModel();
+        populateBlankSceneModel(model);
+        return model;
+    }
+
+    public function SceneModel ()
+    {
+        // nothing needed
+    }
 
     /**
      * Adds the specified auxiliary model to this scene model.
@@ -81,31 +96,23 @@ public class SceneModel
     }
 
     // documentation inherited from interface Streamable
-    public function writeObject (out :ObjectOutputStream) :void
+    override public function readObject (ins :ObjectInputStream) :void
     {
-        out.writeInt(sceneId);
-        out.writeField(name);
-        out.writeInt(version);
-        out.writeObject(auxModels);
-    }
-
-    // documentation inherited from interface Streamable
-    public function readObject (ins :ObjectInputStream) :void
-    {
+        super.readObject(ins);
         sceneId = ins.readInt();
         name = (ins.readField(String) as String);
         version = ins.readInt();
         auxModels = (ins.readObject() as TypedArray);
     }
 
-    /**
-     * Creates and returns a blank scene model.
-     */
-    public static function blankSceneModel () :SceneModel
+    // documentation inherited from interface Streamable
+    override public function writeObject (out :ObjectOutputStream) :void
     {
-        var model :SceneModel = new SceneModel();
-        populateBlankSceneModel(model);
-        return model;
+        super.writeObject(out);
+        out.writeInt(sceneId);
+        out.writeField(name);
+        out.writeInt(version);
+        out.writeObject(auxModels);
     }
 
     /**

@@ -25,6 +25,7 @@ import com.threerings.util.Hashable;
 
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
+import com.threerings.io.SimpleStreamableObject;
 
 import com.threerings.presents.dobj.DSet_Entry;
 
@@ -32,7 +33,7 @@ import com.threerings.presents.dobj.DSet_Entry;
  * Extends {@link Location} with the data and functionality needed to
  * represent a particular user's location in a scene.
  */
-public class SceneLocation
+public class SceneLocation extends SimpleStreamableObject
     implements DSet_Entry, Hashable
 {
     /** The oid of the body that occupies this location. */
@@ -50,10 +51,10 @@ public class SceneLocation
         this.bodyOid = bodyOid;
     }
 
-    // documentation inherited from interface DSet_Entry
-    public function getKey () :Object
+    // documentation inherited from interface Hashable
+    public function hashCode () :int
     {
-        return bodyOid;
+        return loc.hashCode();
     }
 
     // documentation inherited from interface Hashable
@@ -63,24 +64,29 @@ public class SceneLocation
             this.loc.equals((other as SceneLocation).loc);
     }
 
-    // documentation inherited from interface Hashable
-    public function hashCode () :int
+    // documentation inherited from interface DSet_Entry
+    public function getKey () :Object
     {
-        return loc.hashCode();
+        return bodyOid;
     }
 
     // documentation inherited from superinterface Streamable
-    public function writeObject (out :ObjectOutputStream) :void
+    override public function readObject (ins :ObjectInputStream) :void
     {
+        super.readObject(ins);
+        bodyOid = ins.readInt();
+        loc = (ins.readObject() as Location);
+    }
+
+    // documentation inherited from superinterface Streamable
+    override public function writeObject (out :ObjectOutputStream) :void
+    {
+        super.writeObject(out);
         out.writeInt(bodyOid);
         out.writeObject(loc);
     }
 
-    // documentation inherited from superinterface Streamable
-    public function readObject (ins :ObjectInputStream) :void
-    {
-        bodyOid = ins.readInt();
-        loc = (ins.readObject() as Location);
-    }
+    /** Used for {@link #getKey}. */
+    protected var _key :int;
 }
 }

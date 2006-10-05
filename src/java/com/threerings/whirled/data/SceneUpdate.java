@@ -28,6 +28,7 @@ import com.samskivert.util.StringUtil;
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 import com.threerings.io.Streamable;
+import com.threerings.util.ActionScript;
 
 import com.threerings.whirled.Log;
 
@@ -142,6 +143,7 @@ public class SceneUpdate
      * scene id and version fields are stored in separate columns and the rest
      * if the representation is contained in an opaque blob.
      */
+    @ActionScript(omit=true)
     public void persistTo (ObjectOutputStream out)
         throws IOException
     {
@@ -157,6 +159,7 @@ public class SceneUpdate
      * Unserializes this instance from the bare representation created by
      * {@link #persistTo}.
      */
+    @ActionScript(omit=true)
     public void unpersistFrom (ObjectInputStream in)
         throws IOException, ClassNotFoundException
     {
@@ -167,7 +170,7 @@ public class SceneUpdate
             _dbSer.set(null);
         }
     }
-    
+
     /**
      * Generates a string representation of this instance.
      */
@@ -182,6 +185,7 @@ public class SceneUpdate
      * An extensible mechanism for generating a string representation of
      * this instance.
      */
+    @ActionScript(name="toStringBuilder")
     protected void toString (StringBuilder buf)
     {
         buf.append("sceneId=").append(_targetId);
@@ -195,7 +199,8 @@ public class SceneUpdate
 
     /** The version number of the scene on which we operate. */
     protected transient int _targetVersion;
-    
+
     /** Used when serializing this update for storage in the database. */
+    @ActionScript(omit=true)
     protected static ThreadLocal<Boolean> _dbSer = new ThreadLocal<Boolean>();
 }

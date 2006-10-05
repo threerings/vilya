@@ -23,6 +23,8 @@ package com.threerings.whirled.spot.data {
 
 import flash.geom.Rectangle;
 
+import com.threerings.util.Hashable;
+
 import com.threerings.io.Streamable;
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
@@ -33,36 +35,21 @@ import com.threerings.presents.dobj.DSet_Entry;
  * Contains information on clusters.
  */
 public class Cluster extends Rectangle
-    implements DSet_Entry, Streamable
+    implements DSet_Entry, Streamable /*, Hashable */
 {
     /** A unique identifier for this cluster (also the distributed object
      * id of the cluster chat object). */
     public var clusterOid :int;
 
-    // documentation inherited from interface DSet_Entry
-    public function getKey () :Object
+    public function Cluster ()
+    {
+        // nothing needed
+    }
+
+    // documentation inherited
+    public function hashCode () :int
     {
         return clusterOid;
-    }
-
-    // documentation inherited from interface Streamable
-    public function writeObject (out :ObjectOutputStream) :void
-    {
-        out.writeInt(x);
-        out.writeInt(y);
-        out.writeInt(width);
-        out.writeInt(height);
-        out.writeInt(clusterOid);
-    }
-
-    // documentation inherited from interface Streamable
-    public function readObject (ins :ObjectInputStream) :void
-    {
-        x = ins.readInt();
-        y = ins.readInt();
-        width = ins.readInt();
-        height = ins.readInt();
-        clusterOid = ins.readInt();
     }
 
     /**
@@ -72,5 +59,26 @@ public class Cluster extends Rectangle
     {
         return super.toString() + ", clusterOid=" + clusterOid;
     }
+
+    // documentation inherited from interface DSet_Entry
+    public function getKey () :Object
+    {
+        return clusterOid;
+    }
+
+    // documentation inherited from interface Streamable
+    public function readObject (ins :ObjectInputStream) :void
+    {
+        clusterOid = ins.readInt();
+    }
+
+    // documentation inherited from interface Streamable
+    public function writeObject (out :ObjectOutputStream) :void
+    {
+        out.writeInt(clusterOid);
+    }
+
+    /** Used for {@link #getKey}. */
+    protected var _key :int;
 }
 }

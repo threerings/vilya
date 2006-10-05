@@ -24,9 +24,9 @@ package com.threerings.whirled.spot.data {
 import com.threerings.util.ArrayUtil;
 import com.threerings.util.ClassUtil;
 
-import com.threerings.io.Streamable;
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
+import com.threerings.io.SimpleStreamableObject;
 import com.threerings.io.TypedArray;
 
 import com.threerings.whirled.data.AuxModel;
@@ -38,8 +38,8 @@ import com.threerings.whirled.data.SceneModel;
  * scene and unchanging, so that portals can stably reference the target
  * portal in the scene to which they connect.
  */
-public class SpotSceneModel
-    implements Streamable, AuxModel
+public class SpotSceneModel extends SimpleStreamableObject
+    implements AuxModel
 {
     /** An array containing all portals in this scene. */
     public var portals :TypedArray = TypedArray.create(Portal);
@@ -48,48 +48,6 @@ public class SpotSceneModel
      * enters the scene without coming from another scene, this is the
      * portal at which they would appear. */
     public var defaultEntranceId :int = -1;
-
-    /**
-     * Adds a portal to this scene model.
-     */
-    public function addPortal (portal :Portal) :void
-    {
-        portals.push(portal);
-    }
-
-    /**
-     * Removes a portal from this model.
-     */
-    public function removePortal (portal :Portal) :void
-    {
-        ArrayUtil.removeFirst(portals, portal);
-    }
-
-    // documentation inherited from superinterface Cloneable
-    public function clone () :Object
-    {
-        var clazz :Class = ClassUtil.getClass(this);
-        var model :SpotSceneModel = new clazz();
-
-        for each (var portal :Portal in portals) {
-            model.portals.push(portal.clone());
-        }
-        return model;
-    }
-
-    // documentation inherited from interface Streamable
-    public function writeObject (out :ObjectOutputStream) :void
-    {
-        out.writeObject(portals);
-        out.writeInt(defaultEntranceId);
-    }
-
-    // documentation inherited from interface Streamable
-    public function readObject (ins :ObjectInputStream) :void
-    {
-        portals = (ins.readObject() as TypedArray);
-        defaultEntranceId = ins.readInt();
-    }
 
     /**
      * Locates and returns the {@link SpotSceneModel} among the auxiliary
@@ -105,6 +63,55 @@ public class SpotSceneModel
             }
         }
         return null;
+    }
+
+    public function SpotSceneModel ()
+    {
+        // nothing needed
+    }
+
+    /**
+     * Removes a portal from this model.
+     */
+    public function removePortal (portal :Portal) :void
+    {
+        ArrayUtil.removeFirst(portals, portal);
+    }
+
+    /**
+     * Adds a portal to this scene model.
+     */
+    public function addPortal (portal :Portal) :void
+    {
+        portals.push(portal);
+    }
+
+    // documentation inherited from superinterface Cloneable
+    public function clone () :Object
+    {
+        var clazz :Class = ClassUtil.getClass(this);
+        var model :SpotSceneModel = new clazz();
+
+        for each (var portal :Portal in portals) {
+            model.portals.push(portal.clone());
+        }
+        return model;
+    }
+
+    // from interface Streamable
+    override public function readObject (ins :ObjectInputStream) :void
+    {
+        super.readObject(ins);
+        portals = (ins.readObject() as TypedArray);
+        defaultEntranceId = ins.readInt();
+    }
+
+    // from interface Streamable
+    override public function writeObject (out :ObjectOutputStream) :void
+    {
+        super.writeObject(out);
+        out.writeObject(portals);
+        out.writeInt(defaultEntranceId);
     }
 }
 }

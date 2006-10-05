@@ -36,6 +36,11 @@ import com.threerings.whirled.client.SceneController;
  */
 public class DefaultSceneConfig extends PlaceConfig
 {
+    public function DefaultSceneConfig ()
+    {
+        // nothing needed
+    }
+
     // documentation inherited
     override public function getManagerClassName () :String
     {
