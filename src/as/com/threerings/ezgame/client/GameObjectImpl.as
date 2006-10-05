@@ -218,6 +218,12 @@ public class GameObjectImpl extends EventDispatcher
     }
 
     // from EZGame
+    public function getPlayerCount () :int
+    {
+        return _ezObj.getPlayerCount();
+    }
+
+    // from EZGame
     public function getPlayerNames () :Array
     {
         var names :Array = new Array();

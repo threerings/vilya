@@ -133,6 +133,11 @@ public interface EZGame
     function localChat (msg :String) :void;
 
     /**
+     * Get the number of players currently in the game.
+     */
+    function getPlayerCount () :int;
+
+    /**
      * Get the player names, as an array.
      */
     function getPlayerNames () :Array /* of String */;

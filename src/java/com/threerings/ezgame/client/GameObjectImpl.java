@@ -202,6 +202,12 @@ public class GameObjectImpl
     }
 
     // from EZGame
+    public int getPlayerCount ()
+    {
+        return _ezObj.getPlayerCount();
+    }
+
+    // from EZGame
     public String[] getPlayerNames ()
     {
         String[] names = new String[_ezObj.players.length];

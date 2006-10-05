@@ -136,6 +136,11 @@ public interface EZGame
     public void localChat (String msg);
 
     /**
+     * Get the number of players currently in the game.
+     */
+    public int getPlayerCount ();
+
+    /**
      * Get the player names, as an array.
      */
     public String[] getPlayerNames ();
