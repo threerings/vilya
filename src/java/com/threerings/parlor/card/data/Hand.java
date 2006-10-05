@@ -21,6 +21,7 @@
 
 package com.threerings.parlor.card.data;
 
+import com.threerings.util.ActionScript;
 import com.threerings.util.StreamableArrayList;
 
 /**
@@ -31,6 +32,7 @@ public class Hand extends StreamableArrayList<Card>
     /**
      * Adds all of the specified cards to this hand.
      */
+    @ActionScript(name="addAllCards")
     public void addAll (Card[] cards)
     {
         for (int i = 0; i < cards.length; i++) {
@@ -41,6 +43,7 @@ public class Hand extends StreamableArrayList<Card>
     /**
      * Removes all of the specified cards from this hand.
      */
+    @ActionScript(name="removeAllCards")
     public void removeAll (Card[] cards)
     {
         for (int i = 0; i < cards.length; i++) {
@@ -51,6 +54,7 @@ public class Hand extends StreamableArrayList<Card>
     /**
      * Checks whether this hand contains all of the specified cards.
      */
+    @ActionScript(name="containsAllCards")
     public boolean containsAll (Card[] cards)
     {
         for (int i = 0; i < cards.length; i++) {

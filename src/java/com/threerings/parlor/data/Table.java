@@ -25,6 +25,7 @@ import com.samskivert.util.ArrayIntSet;
 import com.samskivert.util.ListUtil;
 import com.samskivert.util.StringUtil;
 
+import com.threerings.util.ActionScript;
 import com.threerings.util.Name;
 
 import com.threerings.presents.dobj.DSet;
@@ -380,6 +381,7 @@ public class Table
     /**
      * Helper method for toString, ripe for overrideability.
      */
+    @ActionScript(name="toStringBuilder")
     protected void toString (StringBuilder buf)
     {
         buf.append("tableId=").append(tableId);
