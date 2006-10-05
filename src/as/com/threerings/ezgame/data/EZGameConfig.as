@@ -3,6 +3,7 @@
 
 package com.threerings.ezgame.data {
 
+import com.threerings.util.Hashable;
 import com.threerings.util.MessageBundle;
 
 import com.threerings.io.ObjectInputStream;
@@ -55,7 +56,7 @@ public class EZGameConfig extends GameConfig
     }
 
     // from abstract PlaceConfig
-    public function getManagerClassName () :String
+    override public function getManagerClassName () :String
     {
         throw new Error("Not implemented.");
     }
