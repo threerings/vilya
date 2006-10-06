@@ -200,4 +200,17 @@ public class ParlorMarshaller extends InvocationMarshaller
             arg2, listener3
         });
     }
+
+    /** The method id used to dispatch {@link #startTableNow} requests. */
+    public static final int START_TABLE_NOW = 8;
+
+    // from interface ParlorService
+    public void startTableNow (Client arg1, int arg2, int arg3, InvocationService.InvocationListener arg4)
+    {
+        ListenerMarshaller listener4 = new ListenerMarshaller();
+        listener4.listener = arg4;
+        sendRequest(arg1, START_TABLE_NOW, new Object[] {
+            Integer.valueOf(arg2), Integer.valueOf(arg3), listener4
+        });
+    }
 }

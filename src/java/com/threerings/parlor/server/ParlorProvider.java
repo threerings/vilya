@@ -166,6 +166,17 @@ public class ParlorProvider
     /**
      * Handles a {@link ParlorService#startSolitaire} request.
      */
+    public void startTableNow (ClientObject caller, int lobbyOid, int tableId,
+                               InvocationService.InvocationListener listener)
+        throws InvocationException
+    {
+        TableManager tmgr = getTableManager(lobbyOid);
+        tmgr.startTableNow((BodyObject) caller, tableId);
+    }
+
+    /**
+     * Handles a {@link ParlorService#startSolitaire} request.
+     */
     public void startSolitaire (ClientObject caller, GameConfig config,
                                 InvocationService.ConfirmListener listener)
         throws InvocationException

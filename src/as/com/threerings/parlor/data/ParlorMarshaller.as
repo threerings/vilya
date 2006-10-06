@@ -138,5 +138,18 @@ public class ParlorMarshaller extends InvocationMarshaller
             arg2, listener3
         ]);
     }
+
+    /** The method id used to dispatch {@link #startTableNow} requests. */
+    public static const START_TABLE_NOW :int = 8;
+
+    // from interface ParlorService
+    public function startTableNow (arg1 :Client, arg2 :int, arg3 :int, arg4 :InvocationService_InvocationListener) :void
+    {
+        var listener4 :InvocationMarshaller_ListenerMarshaller = new InvocationMarshaller_ListenerMarshaller();
+        listener4.listener = arg4;
+        sendRequest(arg1, START_TABLE_NOW, [
+            Integer.valueOf(arg2), Integer.valueOf(arg3), listener4
+        ]);
+    }
 }
 }

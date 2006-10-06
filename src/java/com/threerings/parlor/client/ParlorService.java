@@ -156,6 +156,16 @@ public interface ParlorService extends InvocationService
                             InvocationListener listener);
 
     /**
+     * You probably don't want to call this directly, but want to call
+     * {@link TableDirector#startTableNow}. Requests that the specified
+     * table be started now, even if all seats are not occupied. This
+     * will always fail if called by any other player than that seated
+     * in position 0 (usually the creator).
+     */
+    public void startTableNow (Client client, int lobbyOid, int tableId,
+                               InvocationListener listener);
+
+    /**
      * Requests to start a single player game with the specified game
      * configuration.
      */

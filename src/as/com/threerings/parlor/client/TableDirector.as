@@ -218,6 +218,22 @@ public class TableDirector extends BasicDirector
         _pservice.leaveTable(_pctx.getClient(), _lobby.getOid(), tableId, this);
     }
 
+    /**
+     * Sends a request to have the specified table start now, even if
+     * all the seats have not yet been filled.
+     */
+    public function startTableNow (tableId :int) :void
+    {
+        if (_lobby == null) {
+            log.warning("Requested to start a table but we're not " +
+                        "currently in a place [tableId=" + tableId + "].");
+            return;
+        }
+                        
+        _pservice.startTableNow(_ctx.getClient(), _lobby.getOid(),
+            tableId, this);
+    }
+
     // documentation inherited
     override public function clientDidLogoff (event :ClientEvent) :void
     {

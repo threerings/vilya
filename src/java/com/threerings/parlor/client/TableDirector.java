@@ -214,6 +214,22 @@ public class TableDirector extends BasicDirector
         _pservice.leaveTable(_ctx.getClient(), _lobby.getOid(), tableId, this);
     }
 
+    /**
+     * Sends a request to have the specified table start now, even if
+     * all the seats have not yet been filled.
+     */
+    public void startTableNow (int tableId)
+    {
+        if (_lobby == null) {
+            Log.warning("Requested to start a table but we're not " +
+                        "currently in a place [tableId=" + tableId + "].");
+            return;
+        }
+
+        _pservice.startTableNow(_ctx.getClient(), _lobby.getOid(),
+            tableId, this);
+    }
+
     // documentation inherited
     public void clientDidLogoff (Client client)
     {

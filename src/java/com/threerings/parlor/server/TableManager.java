@@ -232,6 +232,40 @@ public class TableManager
     }
 
     /**
+     * Requests that the specified table be started now, even if there are
+     * some vacant seats. This may only be done if the minimum number of
+     * players are already present at the table. By convention, only the
+     * player at seat 0 may request to have the game start early, as they
+     * are usually the creator.
+     *
+     * @param requester the body object of the user that wishes to start
+     * the table.
+     * @param tableId the id of the table to be started.
+     *
+     * @exception InvocationException thrown if the starting was not able
+     * processed for some reason. The explanation will be provided in the
+     * message data of the exception.
+     */
+    public void startTableNow (BodyObject requester, int tableId)
+        throws InvocationException
+    {
+        // look the table up
+        Table table = _tables.get(tableId);
+        if (table == null) {
+            throw new InvocationException(NO_SUCH_TABLE);
+
+        } else if (requester.getOid() != table.bodyOids[0]) {
+            throw new InvocationException(INVALID_TABLE_POSITION);
+
+        } else if (!table.mayBeStarted()) {
+            throw new InvocationException(INTERNAL_ERROR);
+        }
+
+        // I guess we're ready to go!
+        createGame(table);
+    }
+
+    /**
      * Removes the table from all of our internal tables and from its
      * lobby's distributed object.
      */

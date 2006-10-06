@@ -60,5 +60,8 @@ public interface ParlorService extends InvocationService
 
     // from Java interface ParlorService
     function startSolitaire (arg1 :Client, arg2 :GameConfig, arg3 :InvocationService_ConfirmListener) :void;
+
+    // from Java interface ParlorService
+    function startTableNow (arg1 :Client, arg2 :int, arg3 :int, arg4 :InvocationService_InvocationListener) :void;
 }
 }

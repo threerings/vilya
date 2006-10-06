@@ -108,6 +108,13 @@ public class ParlorDispatcher extends InvocationDispatcher
             );
             return;
 
+        case ParlorMarshaller.START_TABLE_NOW:
+            ((ParlorProvider)provider).startTableNow(
+                source,
+                ((Integer)args[0]).intValue(), ((Integer)args[1]).intValue(), (InvocationService.InvocationListener)args[2]
+            );
+            return;
+
         default:
             super.dispatchRequest(source, methodId, args);
             return;
