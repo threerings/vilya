@@ -257,7 +257,7 @@ public class SceneDirector extends BasicDirector
 
     // documentation inherited from interface SceneService_SceneMoveListener
     public function moveSucceededWithUpdates (
-            placeId :int, config :PlaceConfig, updates :TypedArray) :void
+            placeId :int, config :PlaceConfig, updates :Array) :void
     {
         log.info("Got updates [placeId=" + placeId + ", config=" + config +
                  ", updates=" + updates + "].");
