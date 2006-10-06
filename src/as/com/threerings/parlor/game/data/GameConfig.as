@@ -174,7 +174,6 @@ public /*abstract*/ class GameConfig extends PlaceConfig
     override public function readObject (ins :ObjectInputStream) :void
     {
         super.readObject(ins);
-
         players = (ins.readObject() as TypedArray);
         rated = ins.readBoolean();
         ais = (ins.readObject() as TypedArray);
@@ -184,7 +183,6 @@ public /*abstract*/ class GameConfig extends PlaceConfig
     override public function writeObject (out :ObjectOutputStream) :void
     {
         super.writeObject(out);
-
         out.writeObject(players);
         out.writeBoolean(rated);
         out.writeObject(ais);

@@ -25,6 +25,7 @@ import java.io.IOException;
 
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
+import com.threerings.util.ActionScript;
 
 import com.threerings.presents.dobj.DSet;
 
@@ -240,5 +241,6 @@ public class Card implements DSet.Entry, Comparable, CardCodes
     protected byte _value;
     
     /** The comparison key. */
+    @ActionScript(omit=true)
     protected transient Byte _key;
 }

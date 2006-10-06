@@ -32,6 +32,7 @@ public class GameAI extends SimpleStreamableObject
     // from Streamable
     override public function readObject (ins :ObjectInputStream) :void
     {
+        super.readObject(ins);
         personality = ins.readInt();
         skill = ins.readInt();
     }
@@ -39,6 +40,7 @@ public class GameAI extends SimpleStreamableObject
     // from Streamable
     override public function writeObject (out :ObjectOutputStream) :void
     {
+        super.writeObject(out);
         out.writeInt(personality);
         out.writeInt(skill);
     }

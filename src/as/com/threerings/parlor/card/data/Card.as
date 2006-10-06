@@ -198,10 +198,7 @@ public class Card
     // from interface DSet_Entry
     public function getKey () :Object
     {
-        if (_key == null) {
-            _key = Byte.valueOf(_value);
-        }
-        return _key;
+        return _value;
     }
 
     /**
@@ -244,8 +241,5 @@ public class Card
 
     /** The number of the card. */
     protected var _value :int;
-
-    /** The comparison key. */
-    protected var _key :Byte;
 }
 }

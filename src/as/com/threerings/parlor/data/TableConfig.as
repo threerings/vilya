@@ -58,6 +58,7 @@ public class TableConfig extends SimpleStreamableObject
     // from Streamable
     override public function readObject (ins :ObjectInputStream) :void
     {
+        super.readObject(ins);
         desiredPlayerCount = ins.readInt();
         minimumPlayerCount = ins.readInt();
         teamMemberIndices = (ins.readObject() as TypedArray);
@@ -67,6 +68,7 @@ public class TableConfig extends SimpleStreamableObject
     // from Streamable
     override public function writeObject (out :ObjectOutputStream) :void
     {
+        super.writeObject(out);
         out.writeInt(desiredPlayerCount);
         out.writeInt(minimumPlayerCount);
         out.writeObject(teamMemberIndices);
