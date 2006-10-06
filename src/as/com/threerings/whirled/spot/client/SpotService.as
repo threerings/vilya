@@ -1,9 +1,9 @@
 //
-// $Id: SpotService.java 3363 2005-02-22 18:54:48Z mdb $
+// $Id$
 //
-// Narya library - tools for developing networked games
-// Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved
-// http://www.threerings.net/code/narya/
+// Vilya library - tools for developing networked games
+// Copyright (C) 2002-2006 Three Rings Design, Inc., All Rights Reserved
+// http://www.threerings.net/code/vilya/
 //
 // This library is free software; you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as published
@@ -24,64 +24,28 @@ package com.threerings.whirled.spot.client {
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.client.InvocationService_ConfirmListener;
-
+import com.threerings.presents.client.InvocationService_InvocationListener;
+import com.threerings.presents.data.InvocationMarshaller_ConfirmMarshaller;
 import com.threerings.whirled.client.SceneService_SceneMoveListener;
+import com.threerings.whirled.data.SceneMarshaller_SceneMoveMarshaller;
+import com.threerings.whirled.spot.client.SpotService;
 import com.threerings.whirled.spot.data.Location;
 
 /**
- * Defines the mechanism by which the client can request to move around
- * within a scene and between scenes (taking exit and entry locations into
- * account). These services should not be used directly, but instead
- * should be accessed via the {@link SpotSceneDirector}.
+ * An ActionScript version of the Java SpotService interface.
  */
 public interface SpotService extends InvocationService
 {
-    /**
-     * Requests to traverse the specified portal.
-     *
-     * @param sceneId the player's current scene which is used to sanity
-     * check things when the request actually arrives.
-     * @param portalId the portal to be traversed.
-     * @param destSceneVer the version of the destination scene data that
-     * the client has in its local repository.
-     */
-    function traversePortal (
-            client :Client, sceneId :int, portalId :int, destSceneVer :int,
-            listener :SceneService_SceneMoveListener) :void;
+    // from Java interface SpotService
+    function changeLocation (arg1 :Client, arg2 :int, arg3 :Location, arg4 :InvocationService_ConfirmListener) :void;
 
-    /**
-     * Requests that this client's body be made to move to the specified
-     * location. The user will be removed from any cluster from which they
-     * are an occupant.
-     *
-     * @param sceneId the id of the scene in which to change location.
-     * @param loc the location to which to move.
-     */
-    function changeLocation (
-            client :Client, sceneId :int, loc :Location,
-            listener :InvocationService_ConfirmListener) :void;
+    // from Java interface SpotService
+    function clusterSpeak (arg1 :Client, arg2 :String, arg3 :int) :void;
 
-    /**
-     * Requests that this client start or join the specified cluster. They
-     * will be relocated appropriately by the scene manager.
-     *
-     * @param friendOid the bodyOid of another user or the oid of an
-     * existing cluster; the calling user will be made to join the cluster
-     * or target user's cluster, or create a cluster with the target user
-     * if they are not already in one.
-     */
-    function joinCluster (
-            client :Client, friendOid :int,
-            listener :InvocationService_ConfirmListener) :void;
+    // from Java interface SpotService
+    function joinCluster (arg1 :Client, arg2 :int, arg3 :InvocationService_ConfirmListener) :void;
 
-    /**
-     * Requests that the supplied message be delivered to listeners in the
-     * cluster to which the specified location belongs.
-     *
-     * @param message the text of the message to be spoken.
-     * @param mode an associated mode constant that can be used to
-     * identify different kinds of "speech" (emote, thought bubble, etc.).
-     */
-    function clusterSpeak (client :Client, message :String, mode :int) :void;
+    // from Java interface SpotService
+    function traversePortal (arg1 :Client, arg2 :int, arg3 :int, arg4 :int, arg5 :SceneService_SceneMoveListener) :void;
 }
 }

@@ -19,24 +19,25 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-package com.threerings.whirled.client {
+package com.threerings.whirled.zone.client {
 
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.client.InvocationService_InvocationListener;
-import com.threerings.whirled.client.SceneService;
-import com.threerings.whirled.client.SceneService_SceneMoveListener;
-import com.threerings.whirled.data.SceneMarshaller_SceneMoveMarshaller;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.SceneUpdate;
+import com.threerings.whirled.zone.client.ZoneService;
+import com.threerings.whirled.zone.client.ZoneService_ZoneMoveListener;
+import com.threerings.whirled.zone.data.ZoneMarshaller_ZoneMoveMarshaller;
+import com.threerings.whirled.zone.data.ZoneSummary;
 
 /**
- * An ActionScript version of the Java SceneService interface.
+ * An ActionScript version of the Java ZoneService interface.
  */
-public interface SceneService extends InvocationService
+public interface ZoneService extends InvocationService
 {
-    // from Java interface SceneService
-    function moveTo (arg1 :Client, arg2 :int, arg3 :int, arg4 :SceneService_SceneMoveListener) :void;
+    // from Java interface ZoneService
+    function moveTo (arg1 :Client, arg2 :int, arg3 :int, arg4 :int, arg5 :ZoneService_ZoneMoveListener) :void;
 }
 }

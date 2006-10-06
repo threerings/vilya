@@ -19,22 +19,23 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-package com.threerings.whirled.data {
+package com.threerings.whirled.zone.data {
 
 import com.threerings.util.*; // for Float, Integer, etc.
 
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller_ListenerMarshaller;
-import com.threerings.whirled.client.SceneService;
-import com.threerings.whirled.client.SceneService_SceneMoveListener;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.SceneUpdate;
+import com.threerings.whirled.zone.client.ZoneService;
+import com.threerings.whirled.zone.client.ZoneService_ZoneMoveListener;
+import com.threerings.whirled.zone.data.ZoneSummary;
 
 /**
- * Marshalls instances of the SceneService_SceneMoveMarshaller interface.
+ * Marshalls instances of the ZoneService_ZoneMoveMarshaller interface.
  */
-public class SceneMarshaller_SceneMoveMarshaller
+public class ZoneMarshaller_ZoneMoveMarshaller
     extends InvocationMarshaller_ListenerMarshaller
 {
     /** The method id used to dispatch {@link #moveSucceeded} responses. */
@@ -51,18 +52,18 @@ public class SceneMarshaller_SceneMoveMarshaller
     {
         switch (methodId) {
         case MOVE_SUCCEEDED:
-            (listener as SceneService_SceneMoveListener).moveSucceeded(
-                (args[0] as Integer).value, (args[1] as PlaceConfig));
+            (listener as ZoneService_ZoneMoveListener).moveSucceeded(
+                (args[0] as Integer).value, (args[1] as PlaceConfig), (args[2] as ZoneSummary));
             return;
 
         case MOVE_SUCCEEDED_WITH_SCENE:
-            (listener as SceneService_SceneMoveListener).moveSucceededWithScene(
-                (args[0] as Integer).value, (args[1] as PlaceConfig), (args[2] as SceneModel));
+            (listener as ZoneService_ZoneMoveListener).moveSucceededWithScene(
+                (args[0] as Integer).value, (args[1] as PlaceConfig), (args[2] as ZoneSummary), (args[3] as SceneModel));
             return;
 
         case MOVE_SUCCEEDED_WITH_UPDATES:
-            (listener as SceneService_SceneMoveListener).moveSucceededWithUpdates(
-                (args[0] as Integer).value, (args[1] as PlaceConfig), (args[2] as Array));
+            (listener as ZoneService_ZoneMoveListener).moveSucceededWithUpdates(
+                (args[0] as Integer).value, (args[1] as PlaceConfig), (args[2] as ZoneSummary), (args[3] as Array));
             return;
 
         default:

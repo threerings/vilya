@@ -1,89 +1,61 @@
 //
 // $Id$
+//
+// Vilya library - tools for developing networked games
+// Copyright (C) 2002-2006 Three Rings Design, Inc., All Rights Reserved
+// http://www.threerings.net/code/vilya/
+//
+// This library is free software; you can redistribute it and/or modify it
+// under the terms of the GNU Lesser General Public License as published
+// by the Free Software Foundation; either version 2.1 of the License, or
+// (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 package com.threerings.ezgame.client {
 
-import flash.utils.ByteArray;
-
-import com.threerings.io.TypedArray;
-
+import com.threerings.ezgame.client.EZGameService;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.client.InvocationService_ConfirmListener;
 import com.threerings.presents.client.InvocationService_InvocationListener;
+import com.threerings.presents.data.InvocationMarshaller_ConfirmMarshaller;
+import com.threerings.presents.data.InvocationMarshaller_InvocationMarshaller;
 
 /**
- * Provides services for ez games.
+ * An ActionScript version of the Java EZGameService interface.
  */
 public interface EZGameService extends InvocationService
 {
-    /**
-     * Request to set the specified property.
-     */
-    function setProperty (
-        client :Client, propName :String, value :Object, index :int,
-        listener :InvocationService_InvocationListener) :void;
+    // from Java interface EZGameService
+    function addToCollection (arg1 :Client, arg2 :String, arg3 :Array, arg4 :Boolean, arg5 :InvocationService_InvocationListener) :void;
 
-    /**
-     * Request to end the turn, possibly futzing the next turn holder unless
-     * -1 is specified for the nextPlayerIndex.
-     */
-    function endTurn (
-        client :Client, nextPlayerIndex :int,
-        listener :InvocationService_InvocationListener) :void;
+    // from Java interface EZGameService
+    function endGame (arg1 :Client, arg2 :Array, arg3 :InvocationService_InvocationListener) :void;
 
-    /**
-     * Request to end the game, with the specified player indices assigned
-     * as winners.
-     */
-    function endGame (
-        client :Client, winners :TypedArray /* of int */,
-        listener :InvocationService_InvocationListener) :void;
+    // from Java interface EZGameService
+    function endTurn (arg1 :Client, arg2 :int, arg3 :InvocationService_InvocationListener) :void;
 
-    /**
-     * Request to send a private message to one other player in
-     * the game.
-     */
-    function sendMessage (
-        client :Client, msgName :String, value :Object, playerIdx :int,
-        listener :InvocationService_InvocationListener) :void;
- 
-    /**
-     * Add to the specified named collection.
-     *
-     * @param clearExisting if true, wipe the old contents.
-     */
-    function addToCollection (
-        client :Client, collName :String, data :TypedArray /* of ByteArray */,
-        clearExisting :Boolean, listener :InvocationService_InvocationListener)
-        :void;
+    // from Java interface EZGameService
+    function getFromCollection (arg1 :Client, arg2 :String, arg3 :Boolean, arg4 :int, arg5 :String, arg6 :int, arg7 :InvocationService_ConfirmListener) :void;
 
-    /**
-     * Merge the specified collection into the other.
-     */
-    function mergeCollection (
-        client :Client, srcColl :String, intoColl :String,
-        listener :InvocationService_InvocationListener) :void;
+    // from Java interface EZGameService
+    function mergeCollection (arg1 :Client, arg2 :String, arg3 :String, arg4 :InvocationService_InvocationListener) :void;
 
-    /**
-     * Pick or deal some number of elements from the specified collection,
-     * and either set a property in the flash object, or delivery the
-     * picks to the specified player index via a game message.
-     */
-    function getFromCollection (
-        client :Client, collName :String, consume :Boolean, count :int,
-        msgOrPropName :String, playerIndex :int,
-        listener :InvocationService_ConfirmListener) :void;
+    // from Java interface EZGameService
+    function sendMessage (arg1 :Client, arg2 :String, arg3 :Object, arg4 :int, arg5 :InvocationService_InvocationListener) :void;
 
-    /**
-     * Start a ticker that will send out timestamp information at
-     * the interval specified.
-     *
-     * @param msOfDelay must be at least 50, or 0 may be set to halt
-     * and clear a previously started ticker.
-     */
-    function setTicker (
-        client :Client, tickerName :String, msOfDelay :int,
-        listener :InvocationService_InvocationListener) :void;
+    // from Java interface EZGameService
+    function setProperty (arg1 :Client, arg2 :String, arg3 :Object, arg4 :int, arg5 :InvocationService_InvocationListener) :void;
+
+    // from Java interface EZGameService
+    function setTicker (arg1 :Client, arg2 :String, arg3 :int, arg4 :InvocationService_InvocationListener) :void;
 }
 }

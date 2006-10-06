@@ -1,51 +1,50 @@
+//
+// $Id$
+//
+// Vilya library - tools for developing networked games
+// Copyright (C) 2002-2006 Three Rings Design, Inc., All Rights Reserved
+// http://www.threerings.net/code/vilya/
+//
+// This library is free software; you can redistribute it and/or modify it
+// under the terms of the GNU Lesser General Public License as published
+// by the Free Software Foundation; either version 2.1 of the License, or
+// (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+
 package com.threerings.whirled.client {
 
-import com.threerings.presents.client.InvocationService_InvocationListener;
-
-import com.threerings.io.TypedArray;
+import com.threerings.util.*; // for Float, Integer, etc.
 
 import com.threerings.crowd.data.PlaceConfig;
-
+import com.threerings.presents.client.Client;
+import com.threerings.presents.client.InvocationService_InvocationListener;
+import com.threerings.whirled.client.SceneService;
+import com.threerings.whirled.client.SceneService_SceneMoveListener;
+import com.threerings.whirled.data.SceneMarshaller_SceneMoveMarshaller;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.SceneUpdate;
 
 /**
- * Used to communicate the response to a {@link #moveTo} request.
+ * An ActionScript version of the Java SceneService_SceneMoveListener interface.
  */
 public interface SceneService_SceneMoveListener
     extends InvocationService_InvocationListener
 {
-    /**
-     * Indicates that a move succeeded.
-     *
-     * @param placeId the place object id of the newly occupied scene.
-     * @param config metadata related to the newly occupied scene.
-     */
-    function moveSucceeded (placeId :int, config :PlaceConfig) :void;
+    // from Java SceneService_SceneMoveListener
+    function moveSucceeded (arg1 :int, arg2 :PlaceConfig) :void
 
-    /**
-     * Indicates that a move succeeded and that the client's cached
-     * scene information should be updated with the supplied data.
-     *
-     * @param placeId the place object id of the newly occupied scene.
-     * @param config metadata related to the newly occupied scene.
-     * @param updates updates that must be applied to the client's
-     * copy of a scene model to bring it up to date.
-     */
-    function moveSucceededWithUpdates (
-            placeId :int, config :PlaceConfig,
-            updates :TypedArray /*of SceneUpdate*/) :void;
+    // from Java SceneService_SceneMoveListener
+    function moveSucceededWithScene (arg1 :int, arg2 :PlaceConfig, arg3 :SceneModel) :void
 
-    /**
-     * Indicates that a move succeeded and that the client's cached
-     * scene information should be updated with the supplied data.
-     *
-     * @param placeId the place object id of the newly occupied scene.
-     * @param config metadata related to the newly occupied scene.
-     * @param model a fresh copy of the most recent scene data for the
-     * newly occupied scene.
-     */
-    function moveSucceededWithScene (
-            placeId :int, config :PlaceConfig, model :SceneModel) :void;
+    // from Java SceneService_SceneMoveListener
+    function moveSucceededWithUpdates (arg1 :int, arg2 :PlaceConfig, arg3 :Array) :void
 }
 }

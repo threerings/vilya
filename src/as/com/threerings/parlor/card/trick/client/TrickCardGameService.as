@@ -19,24 +19,26 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-package com.threerings.whirled.client {
+package com.threerings.parlor.card.trick.client {
 
-import com.threerings.crowd.data.PlaceConfig;
+import com.threerings.parlor.card.data.Card;
+import com.threerings.parlor.card.trick.client.TrickCardGameService;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.client.InvocationService_InvocationListener;
-import com.threerings.whirled.client.SceneService;
-import com.threerings.whirled.client.SceneService_SceneMoveListener;
-import com.threerings.whirled.data.SceneMarshaller_SceneMoveMarshaller;
-import com.threerings.whirled.data.SceneModel;
-import com.threerings.whirled.data.SceneUpdate;
 
 /**
- * An ActionScript version of the Java SceneService interface.
+ * An ActionScript version of the Java TrickCardGameService interface.
  */
-public interface SceneService extends InvocationService
+public interface TrickCardGameService extends InvocationService
 {
-    // from Java interface SceneService
-    function moveTo (arg1 :Client, arg2 :int, arg3 :int, arg4 :SceneService_SceneMoveListener) :void;
+    // from Java interface TrickCardGameService
+    function playCard (arg1 :Client, arg2 :Card, arg3 :int) :void;
+
+    // from Java interface TrickCardGameService
+    function requestRematch (arg1 :Client) :void;
+
+    // from Java interface TrickCardGameService
+    function sendCardsToPlayer (arg1 :Client, arg2 :int, arg3 :Array) :void;
 }
 }

@@ -19,7 +19,7 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-package com.threerings.whirled.data {
+package com.threerings.whirled.zone.data {
 
 import com.threerings.util.*; // for Float, Integer, etc.
 
@@ -27,32 +27,33 @@ import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.data.InvocationMarshaller_ListenerMarshaller;
-import com.threerings.whirled.client.SceneService;
-import com.threerings.whirled.client.SceneService_SceneMoveListener;
-import com.threerings.whirled.data.SceneMarshaller_SceneMoveMarshaller;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.SceneUpdate;
+import com.threerings.whirled.zone.client.ZoneService;
+import com.threerings.whirled.zone.client.ZoneService_ZoneMoveListener;
+import com.threerings.whirled.zone.data.ZoneMarshaller_ZoneMoveMarshaller;
+import com.threerings.whirled.zone.data.ZoneSummary;
 
 /**
- * Provides the implementation of the {@link SceneService} interface
+ * Provides the implementation of the {@link ZoneService} interface
  * that marshalls the arguments and delivers the request to the provider
  * on the server. Also provides an implementation of the response listener
  * interfaces that marshall the response arguments and deliver them back
  * to the requesting client.
  */
-public class SceneMarshaller extends InvocationMarshaller
-    implements SceneService
+public class ZoneMarshaller extends InvocationMarshaller
+    implements ZoneService
 {
     /** The method id used to dispatch {@link #moveTo} requests. */
     public static const MOVE_TO :int = 1;
 
-    // from interface SceneService
-    public function moveTo (arg1 :Client, arg2 :int, arg3 :int, arg4 :SceneService_SceneMoveListener) :void
+    // from interface ZoneService
+    public function moveTo (arg1 :Client, arg2 :int, arg3 :int, arg4 :int, arg5 :ZoneService_ZoneMoveListener) :void
     {
-        var listener4 :SceneMarshaller_SceneMoveMarshaller = new SceneMarshaller_SceneMoveMarshaller();
-        listener4.listener = arg4;
+        var listener5 :ZoneMarshaller_ZoneMoveMarshaller = new ZoneMarshaller_ZoneMoveMarshaller();
+        listener5.listener = arg5;
         sendRequest(arg1, MOVE_TO, [
-            Integer.valueOf(arg2), Integer.valueOf(arg3), listener4
+            Integer.valueOf(arg2), Integer.valueOf(arg3), Integer.valueOf(arg4), listener5
         ]);
     }
 }

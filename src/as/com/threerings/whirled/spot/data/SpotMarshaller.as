@@ -1,9 +1,9 @@
 //
 // $Id$
 //
-// Narya library - tools for developing networked games
-// Copyright (C) 2002-2005 Three Rings Design, Inc., All Rights Reserved
-// http://www.threerings.net/code/narya/
+// Vilya library - tools for developing networked games
+// Copyright (C) 2002-2006 Three Rings Design, Inc., All Rights Reserved
+// http://www.threerings.net/code/vilya/
 //
 // This library is free software; you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as published
@@ -21,16 +21,13 @@
 
 package com.threerings.whirled.spot.data {
 
-import com.threerings.util.Byte;
-import com.threerings.util.Integer;
+import com.threerings.util.*; // for Float, Integer, etc.
 
 import com.threerings.presents.client.Client;
-import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.client.InvocationService_ConfirmListener;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.data.InvocationMarshaller_ConfirmMarshaller;
-import com.threerings.presents.dobj.InvocationResponseEvent;
-import com.threerings.whirled.client.SceneService;
+import com.threerings.presents.data.InvocationMarshaller_ListenerMarshaller;
 import com.threerings.whirled.client.SceneService_SceneMoveListener;
 import com.threerings.whirled.data.SceneMarshaller_SceneMoveMarshaller;
 import com.threerings.whirled.spot.client.SpotService;
@@ -49,52 +46,51 @@ public class SpotMarshaller extends InvocationMarshaller
     /** The method id used to dispatch {@link #changeLocation} requests. */
     public static const CHANGE_LOCATION :int = 1;
 
-    // documentation inherited from interface
+    // from interface SpotService
     public function changeLocation (arg1 :Client, arg2 :int, arg3 :Location, arg4 :InvocationService_ConfirmListener) :void
     {
         var listener4 :InvocationMarshaller_ConfirmMarshaller = new InvocationMarshaller_ConfirmMarshaller();
         listener4.listener = arg4;
         sendRequest(arg1, CHANGE_LOCATION, [
-            new Integer(arg2), arg3, listener4
+            Integer.valueOf(arg2), arg3, listener4
         ]);
     }
 
     /** The method id used to dispatch {@link #clusterSpeak} requests. */
     public static const CLUSTER_SPEAK :int = 2;
 
-    // documentation inherited from interface
+    // from interface SpotService
     public function clusterSpeak (arg1 :Client, arg2 :String, arg3 :int) :void
     {
         sendRequest(arg1, CLUSTER_SPEAK, [
-            arg2, new Byte(arg3)
+            arg2, Byte.valueOf(arg3)
         ]);
     }
 
     /** The method id used to dispatch {@link #joinCluster} requests. */
     public static const JOIN_CLUSTER :int = 3;
 
-    // documentation inherited from interface
+    // from interface SpotService
     public function joinCluster (arg1 :Client, arg2 :int, arg3 :InvocationService_ConfirmListener) :void
     {
         var listener3 :InvocationMarshaller_ConfirmMarshaller = new InvocationMarshaller_ConfirmMarshaller();
         listener3.listener = arg3;
         sendRequest(arg1, JOIN_CLUSTER, [
-            new Integer(arg2), listener3
+            Integer.valueOf(arg2), listener3
         ]);
     }
 
     /** The method id used to dispatch {@link #traversePortal} requests. */
     public static const TRAVERSE_PORTAL :int = 4;
 
-    // documentation inherited from interface
+    // from interface SpotService
     public function traversePortal (arg1 :Client, arg2 :int, arg3 :int, arg4 :int, arg5 :SceneService_SceneMoveListener) :void
     {
         var listener5 :SceneMarshaller_SceneMoveMarshaller = new SceneMarshaller_SceneMoveMarshaller();
         listener5.listener = arg5;
         sendRequest(arg1, TRAVERSE_PORTAL, [
-            new Integer(arg2), new Integer(arg3), new Integer(arg4), listener5
+            Integer.valueOf(arg2), Integer.valueOf(arg3), Integer.valueOf(arg4), listener5
         ]);
     }
-
 }
 }

@@ -19,40 +19,56 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-package com.threerings.whirled.data {
+package com.threerings.parlor.card.trick.data {
 
 import com.threerings.util.*; // for Float, Integer, etc.
 
-import com.threerings.crowd.data.PlaceConfig;
+import com.threerings.parlor.card.data.Card;
+import com.threerings.parlor.card.trick.client.TrickCardGameService;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.data.InvocationMarshaller_ListenerMarshaller;
-import com.threerings.whirled.client.SceneService;
-import com.threerings.whirled.client.SceneService_SceneMoveListener;
-import com.threerings.whirled.data.SceneMarshaller_SceneMoveMarshaller;
-import com.threerings.whirled.data.SceneModel;
-import com.threerings.whirled.data.SceneUpdate;
 
 /**
- * Provides the implementation of the {@link SceneService} interface
+ * Provides the implementation of the {@link TrickCardGameService} interface
  * that marshalls the arguments and delivers the request to the provider
  * on the server. Also provides an implementation of the response listener
  * interfaces that marshall the response arguments and deliver them back
  * to the requesting client.
  */
-public class SceneMarshaller extends InvocationMarshaller
-    implements SceneService
+public class TrickCardGameMarshaller extends InvocationMarshaller
+    implements TrickCardGameService
 {
-    /** The method id used to dispatch {@link #moveTo} requests. */
-    public static const MOVE_TO :int = 1;
+    /** The method id used to dispatch {@link #playCard} requests. */
+    public static const PLAY_CARD :int = 1;
 
-    // from interface SceneService
-    public function moveTo (arg1 :Client, arg2 :int, arg3 :int, arg4 :SceneService_SceneMoveListener) :void
+    // from interface TrickCardGameService
+    public function playCard (arg1 :Client, arg2 :Card, arg3 :int) :void
     {
-        var listener4 :SceneMarshaller_SceneMoveMarshaller = new SceneMarshaller_SceneMoveMarshaller();
-        listener4.listener = arg4;
-        sendRequest(arg1, MOVE_TO, [
-            Integer.valueOf(arg2), Integer.valueOf(arg3), listener4
+        sendRequest(arg1, PLAY_CARD, [
+            arg2, Integer.valueOf(arg3)
+        ]);
+    }
+
+    /** The method id used to dispatch {@link #requestRematch} requests. */
+    public static const REQUEST_REMATCH :int = 2;
+
+    // from interface TrickCardGameService
+    public function requestRematch (arg1 :Client) :void
+    {
+        sendRequest(arg1, REQUEST_REMATCH, [
+            
+        ]);
+    }
+
+    /** The method id used to dispatch {@link #sendCardsToPlayer} requests. */
+    public static const SEND_CARDS_TO_PLAYER :int = 3;
+
+    // from interface TrickCardGameService
+    public function sendCardsToPlayer (arg1 :Client, arg2 :int, arg3 :Array) :void
+    {
+        sendRequest(arg1, SEND_CARDS_TO_PLAYER, [
+            Integer.valueOf(arg2), arg3
         ]);
     }
 }
