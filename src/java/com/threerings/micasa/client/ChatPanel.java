@@ -247,7 +247,7 @@ public class ChatPanel
     }
 
     // documentation inherited from interface ChatDisplay
-    public void displayMessage (ChatMessage message)
+    public boolean displayMessage (ChatMessage message, boolean displayed)
     {
         if (message instanceof UserMessage) {
             UserMessage msg = (UserMessage) message;
@@ -258,13 +258,16 @@ public class ChatPanel
                 append("<" + msg.speaker + "> ", _nameStyle);
                 append(msg.message + "\n", _msgStyle);
             }
+            return true;
 
         } else if (message instanceof SystemMessage) {
             append(message.message + "\n", _noticeStyle);
+            return true;
 
         } else {
             Log.warning("Received unknown message type [message=" +
                         message + "].");
+            return false;
         }
     }
 
