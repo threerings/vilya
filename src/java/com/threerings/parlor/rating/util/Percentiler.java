@@ -84,7 +84,6 @@ public class Percentiler
             if (newmax > 2 * _max) {
                 Log.info("Holy christ! Big newmax [newmax=" + newmax +
                          ", oldmax=" + _max + "].");
-                Thread.dumpStack();
             }
 
             // create a new counts array and map the old array to the new
