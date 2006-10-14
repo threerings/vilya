@@ -18,13 +18,13 @@
     <include name="${libs.dir}/nenya-miso.jar"/>
     <include name="${libs.dir}/nenya-rsrc.jar"/>
     <!-- or from the build directories of the actual projects -->
-    <include name="${samskivert.dir}/dist/samskivert.jar"/>
-    <include name="${narya.dir}/dist/narya-base.jar"/>
-    <include name="${narya.dir}/dist/narya-distrib.jar"/>
-    <include name="${narya.dir}/dist/narya-tests.jar"/>
-    <include name="${nenya.dir}/dist/nenya-cast.jar"/>
-    <include name="${nenya.dir}/dist/nenya-media.jar"/>
-    <include name="${nenya.dir}/dist/nenya-miso.jar"/>
-    <include name="${nenya.dir}/dist/nenya-rsrc.jar"/>
+    <include name="${project.dir}/samskivert/dist/samskivert.jar"/>
+    <include name="${project.dir}/narya/dist/narya-base.jar"/>
+    <include name="${project.dir}/narya/dist/narya-distrib.jar"/>
+    <include name="${project.dir}/narya/dist/narya-tests.jar"/>
+    <include name="${project.dir}/nenya/dist/nenya-cast.jar"/>
+    <include name="${project.dir}/nenya/dist/nenya-media.jar"/>
+    <include name="${project.dir}/nenya/dist/nenya-miso.jar"/>
+    <include name="${project.dir}/nenya/dist/nenya-rsrc.jar"/>
   </fileset>
 </project>
