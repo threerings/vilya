@@ -68,10 +68,10 @@ public class PortalTool extends MouseInputAdapter
         switch (event.getButton()) {
         case MouseEvent.BUTTON1:
             savePortal();
+            dispose();
             break;
 
         case MouseEvent.BUTTON3:
-            savePortal();
             dispose();
             break;
         }
