@@ -71,6 +71,14 @@ public class Percentiler
      */
     public void recordValue (float value)
     {
+        recordValue(value, true);
+    }
+
+    /**
+     * See {@link #recordValue(float)}.
+     */
+    public void recordValue (float value, boolean logNewMax)
+    {
         // if this value is larger than our maximum value, we need to
         // redistribute our buckets
         if (value > _max) {
@@ -80,10 +88,13 @@ public class Percentiler
             int newmax = (int)Math.ceil(value*1.2);
             float newdelta = (float)newmax / BUCKET_COUNT;
 
-            Log.info("Resizing [newmax=" + newmax + ", oldmax=" + _max + "].");
-            if (newmax > 2 * _max) {
-                Log.info("Holy christ! Big newmax [newmax=" + newmax +
+            if (logNewMax) {
+                Log.info("Resizing [newmax=" + newmax +
                          ", oldmax=" + _max + "].");
+                if (newmax > 2 * _max) {
+                    Log.info("Holy christ! Big newmax [value=" + value +
+                             ", oldmax=" + _max + "].");
+                }
             }
 
             // create a new counts array and map the old array to the new
