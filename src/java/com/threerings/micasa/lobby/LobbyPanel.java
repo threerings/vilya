@@ -22,7 +22,10 @@
 package com.threerings.micasa.lobby;
 
 import javax.swing.*;
-import com.samskivert.swing.*;
+
+import com.samskivert.swing.Controller;
+import com.samskivert.swing.HGroupLayout;
+import com.samskivert.swing.VGroupLayout;
 
 import com.threerings.crowd.client.PlaceView;
 import com.threerings.crowd.data.PlaceObject;
@@ -49,15 +52,15 @@ public class LobbyPanel
 
         // create our primary layout which divides the display in two
         // horizontally
-        GroupLayout gl = new HGroupLayout(GroupLayout.STRETCH);
-        gl.setOffAxisPolicy(GroupLayout.STRETCH);
-        gl.setJustification(GroupLayout.RIGHT);
-        setLayout(gl);
+        HGroupLayout hgl = new HGroupLayout(HGroupLayout.STRETCH);
+        hgl.setOffAxisPolicy(HGroupLayout.STRETCH);
+        hgl.setJustification(HGroupLayout.RIGHT);
+        setLayout(hgl);
 
         // create our main panel
-        gl = new VGroupLayout(GroupLayout.STRETCH);
-        gl.setOffAxisPolicy(GroupLayout.STRETCH);
-        _main = new JPanel(gl);
+        VGroupLayout vgl = new VGroupLayout(VGroupLayout.STRETCH);
+        vgl.setOffAxisPolicy(VGroupLayout.STRETCH);
+        _main = new JPanel(vgl);
 
         // create our match-making view
         _main.add(config.createMatchMakingView(ctx));
@@ -69,31 +72,31 @@ public class LobbyPanel
         add(_main);
 
         // create our sidebar panel
-        gl = new VGroupLayout(GroupLayout.STRETCH);
-        gl.setOffAxisPolicy(GroupLayout.STRETCH);
-        JPanel sidePanel = new JPanel(gl);
+        vgl = new VGroupLayout(VGroupLayout.STRETCH);
+        vgl.setOffAxisPolicy(VGroupLayout.STRETCH);
+        JPanel sidePanel = new JPanel(vgl);
 
         // the sidebar contains a lobby info display...
 
         // ...a lobby selector...
         JLabel label = new JLabel("Select a lobby...");
-        sidePanel.add(label, GroupLayout.FIXED);
+        sidePanel.add(label, VGroupLayout.FIXED);
         LobbySelector selector = new LobbySelector(ctx);
         sidePanel.add(selector);
 
         // and an occupants list
         label = new JLabel("People in lobby");
-        sidePanel.add(label, GroupLayout.FIXED);
+        sidePanel.add(label, VGroupLayout.FIXED);
         _occupants = new OccupantList(ctx);
         sidePanel.add(_occupants);
 
         JButton logoff = new JButton("Logoff");
         logoff.addActionListener(Controller.DISPATCHER);
         logoff.setActionCommand("logoff");
-        sidePanel.add(logoff, GroupLayout.FIXED);
+        sidePanel.add(logoff, VGroupLayout.FIXED);
 
         // add our sidebar panel into the mix
-        add(sidePanel, GroupLayout.FIXED);
+        add(sidePanel, VGroupLayout.FIXED);
     }
 
     // documentation inherited

@@ -7,7 +7,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import com.samskivert.swing.*;
+import com.samskivert.swing.HGroupLayout;
+import com.samskivert.swing.VGroupLayout;
 
 import com.threerings.whirled.spot.data.Portal;
 import com.threerings.whirled.spot.tools.EditablePortal;
@@ -35,8 +36,8 @@ public class PortalDialog extends JInternalFrame
 	JPanel top = (JPanel)getContentPane();
 
 	// set up a layout manager for the panel
-	GroupLayout gl = new VGroupLayout(GroupLayout.STRETCH);
-	gl.setOffAxisPolicy(GroupLayout.STRETCH);
+	VGroupLayout gl = new VGroupLayout(VGroupLayout.STRETCH);
+	gl.setOffAxisPolicy(VGroupLayout.STRETCH);
 	top.setLayout(gl);
 	top.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
@@ -44,7 +45,7 @@ public class PortalDialog extends JInternalFrame
 	top.add(new JLabel("Enter settings for this portal:"));
 
 	// create a panel to contain the portal name info
-	JPanel sub = new JPanel(new HGroupLayout(GroupLayout.STRETCH));
+	JPanel sub = new JPanel(new HGroupLayout(HGroupLayout.STRETCH));
 	sub.add(new JLabel("Portal name:", SwingConstants.RIGHT));
 
 	// create and add the portal name text entry field
