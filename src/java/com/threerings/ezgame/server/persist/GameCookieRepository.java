@@ -116,9 +116,9 @@ public class GameCookieRepository extends SimpleRepository
 
                 } else {
                     PreparedStatement stmt = conn.prepareStatement(
-                        "update GAME_COOKIES set COOKIE=?" +
-                        " where GAME_ID=" + gameId +
-                        " and USER_ID=" + userId);
+                        "insert into GAME_COOKIES (GAME_ID, USER_ID, COOKIE) " +
+                        "values (" + gameId + "," + userId + ",?) " +
+                        "on duplicate key update COOKIE=values(COOKIE)");
                     try {
                         stmt.setBytes(1, cookie);
                         stmt.executeUpdate();
