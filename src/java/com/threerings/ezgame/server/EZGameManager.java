@@ -4,6 +4,7 @@
 package com.threerings.ezgame.server;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -85,6 +86,9 @@ public class EZGameManager extends GameManager
         InvocationService.InvocationListener listener)
         throws InvocationException
     {
+        if (!_gameObj.isInPlay()) {
+            throw new InvocationException("e.already_ended");
+        }
         validateStateModification(caller);
 
         _winnerIndexes = winners;
