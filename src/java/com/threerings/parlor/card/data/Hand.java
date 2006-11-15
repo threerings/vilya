@@ -83,7 +83,9 @@ public class Hand extends StreamableArrayList<Card>
     }
 
     /**
-     * Get an array of the cards in this hand.
+     * Converts this list of cards into an array. This only necessary if you
+     * need the cards in array form, use {@link #get} if you simply need to get
+     * a card from the hand.
      */
     public Card[] getCards ()
     {
