@@ -83,4 +83,16 @@ public interface EZGameService extends InvocationService
     public void setTicker (
         Client client, String tickerName, int msOfDelay,
         InvocationListener listener);
+
+    /**
+     * Request to get the specified user's cookie.
+     */
+    public void getCookie (
+        Client client, int playerIndex, InvocationListener listener);
+
+    /**
+     * Request to set our cookie.
+     */
+    public void setCookie (
+        Client client, byte[] cookie, InvocationListener listener);
 }

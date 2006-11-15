@@ -77,6 +77,13 @@ public class EZGameDispatcher extends InvocationDispatcher
             );
             return;
 
+        case EZGameMarshaller.GET_COOKIE:
+            ((EZGameProvider)provider).getCookie(
+                source,
+                ((Integer)args[0]).intValue(), (InvocationService.InvocationListener)args[1]
+            );
+            return;
+
         case EZGameMarshaller.GET_FROM_COLLECTION:
             ((EZGameProvider)provider).getFromCollection(
                 source,
@@ -95,6 +102,13 @@ public class EZGameDispatcher extends InvocationDispatcher
             ((EZGameProvider)provider).sendMessage(
                 source,
                 (String)args[0], (Object)args[1], ((Integer)args[2]).intValue(), (InvocationService.InvocationListener)args[3]
+            );
+            return;
+
+        case EZGameMarshaller.SET_COOKIE:
+            ((EZGameProvider)provider).setCookie(
+                source,
+                (byte[])args[0], (InvocationService.InvocationListener)args[1]
             );
             return;
 

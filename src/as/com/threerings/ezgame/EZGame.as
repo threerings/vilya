@@ -178,5 +178,42 @@ public interface EZGame
      * End the game. The specified player indexes are winners!
      */
     function endGame (winnerIndex :int, ... rest) :void;
+
+//    function getCurrentRoom () :int;
+//
+//    function sendPlayerToRoom (playerIndex :int, room :int) :void
+
+    /**
+     * Get the user-specific game data for the specified user. The
+     * first time this is requested per game instance it will be retrieved
+     * from the database. After that, it will be returned from memory.
+     */
+    function getUserCookie (playerIndex :int, callback :Function) :void;
+
+    /**
+     * Store persistent data that can later be retrieved by an instance
+     * of this game. The maximum size of this data is 4096 bytes AFTER
+     * AMF3 encoding.
+     *
+     * Note: there is no playerIndex parameter because a cookie may only
+     * be stored for the current player.
+     *
+     * @return false if the cookie could not be encoded to 4096 bytes
+     * or less; true if the cookie is going to try to be saved. There is
+     * no guarantee it will be saved and no way to find out if it failed,
+     * but if it fails it will be because the shit hit the fan so hard that
+     * there's nothing you can do anyway.
+     */
+    function setUserCookie (cookie :Object) :Boolean;
+//
+//    /**
+//     * Check to see if the user has the specified token.
+//     */
+//    function checkUserToken (token :String, callback :Function) :void;
+//
+//    /**
+//     * Take the user to a purchase page.
+//     */
+//    function purchaseUserToken (token :String, callback :Function) :void;
 }
 }

@@ -14,6 +14,8 @@ import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 import com.threerings.io.Streamable;
 
+import com.threerings.presents.dobj.DSet;
+
 import com.threerings.parlor.game.data.GameObject;
 import com.threerings.parlor.turn.data.TurnGameObject;
 
@@ -38,12 +40,18 @@ public class EZGameObject extends GameObject
     /** The field name of the <code>turnHolder</code> field. */
     public static final String TURN_HOLDER = "turnHolder";
 
+    /** The field name of the <code>userCookies</code> field. */
+    public static final String USER_COOKIES = "userCookies";
+
     /** The field name of the <code>ezGameService</code> field. */
     public static final String EZ_GAME_SERVICE = "ezGameService";
     // AUTO-GENERATED: FIELDS END
 
     /** The current turn holder. */
     public Name turnHolder;
+
+    /** A set of loaded user cookies. */
+    public DSet<UserCookie> userCookies;
 
     /** The service interface for requesting special things from the server. */
     public EZGameMarshaller ezGameService;
@@ -137,6 +145,54 @@ public class EZGameObject extends GameObject
         requestAttributeChange(
             TURN_HOLDER, value, ovalue);
         this.turnHolder = value;
+    }
+
+    /**
+     * Requests that the specified entry be added to the
+     * <code>userCookies</code> set. The set will not change until the event is
+     * actually propagated through the system.
+     */
+    public void addToUserCookies (UserCookie elem)
+    {
+        requestEntryAdd(USER_COOKIES, userCookies, elem);
+    }
+
+    /**
+     * Requests that the entry matching the supplied key be removed from
+     * the <code>userCookies</code> set. The set will not change until the
+     * event is actually propagated through the system.
+     */
+    public void removeFromUserCookies (Comparable key)
+    {
+        requestEntryRemove(USER_COOKIES, userCookies, key);
+    }
+
+    /**
+     * Requests that the specified entry be updated in the
+     * <code>userCookies</code> set. The set will not change until the event is
+     * actually propagated through the system.
+     */
+    public void updateUserCookies (UserCookie elem)
+    {
+        requestEntryUpdate(USER_COOKIES, userCookies, elem);
+    }
+
+    /**
+     * Requests that the <code>userCookies</code> field be set to the
+     * specified value. Generally one only adds, updates and removes
+     * entries of a distributed set, but certain situations call for a
+     * complete replacement of the set value. The local value will be
+     * updated immediately and an event will be propagated through the
+     * system to notify all listeners that the attribute did
+     * change. Proxied copies of this object (on clients) will apply the
+     * value change when they received the attribute changed notification.
+     */
+    public void setUserCookies (DSet<com.threerings.ezgame.data.UserCookie> value)
+    {
+        requestAttributeChange(USER_COOKIES, value, this.userCookies);
+        @SuppressWarnings("unchecked") DSet<com.threerings.ezgame.data.UserCookie> clone =
+            (value == null) ? null : value.typedClone();
+        this.userCookies = clone;
     }
 
     /**

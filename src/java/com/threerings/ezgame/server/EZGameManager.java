@@ -5,11 +5,15 @@ package com.threerings.ezgame.server;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
+import com.samskivert.util.ArrayIntSet;
 import com.samskivert.util.ArrayUtil;
 import com.samskivert.util.CollectionUtil;
+import com.samskivert.util.HashIntMap;
 import com.samskivert.util.Interval;
 import com.samskivert.util.RandomUtil;
+import com.samskivert.util.ResultListener;
 
 import com.threerings.util.Name;
 
@@ -17,6 +21,7 @@ import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.data.InvocationCodes;
 import com.threerings.presents.dobj.AccessController;
 import com.threerings.presents.dobj.DObjectManager;
+import com.threerings.presents.dobj.DSet;
 import com.threerings.presents.dobj.MessageEvent;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.server.InvocationException;
@@ -30,9 +35,13 @@ import com.threerings.parlor.game.server.GameManager;
 
 import com.threerings.parlor.turn.server.TurnGameManager;
 
+import com.threerings.ezgame.data.EZGameConfig;
 import com.threerings.ezgame.data.EZGameObject;
 import com.threerings.ezgame.data.EZGameMarshaller;
 import com.threerings.ezgame.data.PropertySetEvent;
+import com.threerings.ezgame.data.UserCookie;
+
+import static com.threerings.ezgame.server.Log.log;
 
 /**
  * A manager for "ez" games.
@@ -238,6 +247,90 @@ public class EZGameManager extends GameManager
         }
     }
 
+    // from EZGameProvider
+    public void getCookie (
+        ClientObject caller, final int playerIndex,
+        InvocationService.InvocationListener listener)
+        throws InvocationException
+    {
+        GameCookieManager gcm = getCookieManager();
+        if (_gameObj.userCookies.containsKey(playerIndex)) {
+            // already loaded: we do nothing
+            return;
+        }
+
+        if (_cookieLookups == null) {
+            _cookieLookups = new ArrayIntSet();
+        }
+        // we only start looking up the cookie if nobody else already is
+        if (!_cookieLookups.contains(playerIndex)) {
+            gcm.getCookie(getPersistentGameId(), getPlayer(playerIndex),
+                new ResultListener<byte[]>() {
+                    public void requestCompleted (byte[] result) {
+                        // Result may be null: that's ok, it means
+                        // we've looked up the user's nonexistant cookie.
+                        // Only set the cookie if the playerIndex is
+                        // still in the lookup set, otherwise they left!
+                        if (_cookieLookups.remove(playerIndex) &&
+                                _gameObj.isActive()) {
+                            _gameObj.addToUserCookies(
+                                new UserCookie(playerIndex, result));
+                        }
+                    }
+
+                    public void requestFailed (Exception cause) {
+                        log.warning("Unable to retrieve cookie " +
+                            "[cause=" + cause + "].");
+                        requestCompleted(null);
+                    }
+                });
+
+            // indicate that we're looking up a cookie
+            _cookieLookups.add(playerIndex);
+        }
+    }
+
+    // from EZGameProvider
+    public void setCookie (
+        ClientObject caller, byte[] value,
+        InvocationService.InvocationListener listener)
+        throws InvocationException
+    {
+        int playerIndex = getPresentPlayerIndex(caller.getOid());
+        if (playerIndex == -1) {
+            throw new InvocationException(ACCESS_DENIED);
+        }
+
+        GameCookieManager gcm = getCookieManager();
+        UserCookie cookie = new UserCookie(playerIndex, value);
+        if (_gameObj.userCookies.containsKey(playerIndex)) {
+            _gameObj.updateUserCookies(cookie);
+        } else {
+            _gameObj.addToUserCookies(cookie);
+        }
+
+        gcm.setCookie(getPersistentGameId(), caller, value);
+    }
+
+    /**
+     * Get the cookie manager, and do a bit of other setup.
+     */
+    protected GameCookieManager getCookieManager ()
+        throws InvocationException
+    {
+        GameCookieManager gcm = GameCookieManager.getInstance();
+        if (gcm == null) {
+            log.warning("GameCookieManager not initialized.");
+            throw new InvocationException(INTERNAL_ERROR);
+        }
+
+        if (_gameObj.userCookies == null) {
+            // lazy-init this
+            _gameObj.setUserCookies(new DSet<UserCookie>());
+        }
+        return gcm;
+    }
+
     /**
      * Helper method to send a private message to the specified player
      * index (must already be verified).
@@ -264,6 +357,19 @@ public class EZGameManager extends GameManager
     {
         _gameObj.postEvent(
             new PropertySetEvent(_gameObj.getOid(), propName, value, index));
+    }
+
+    /**
+     * Get the game id of this ezgame, as set in the config.
+     */
+    protected int getPersistentGameId ()
+        throws InvocationException
+    {
+        int id = ((EZGameConfig) _config).persistentGameId;
+        if (id == 0) {
+            throw new InvocationException("Persistent game id not set.");
+        }
+        return id;
     }
 
     /**
@@ -326,6 +432,22 @@ public class EZGameManager extends GameManager
         stopTickers();
 
         super.gameDidEnd();
+    }
+
+    @Override
+    protected void playerGameDidEnd (int pidx)
+    {
+        super.playerGameDidEnd(pidx);
+
+        // kill any of their cookies
+        if (_gameObj.userCookies != null &&
+                _gameObj.userCookies.containsKey(pidx)) {
+            _gameObj.removeFromUserCookies(pidx);
+        }
+        // halt the loading of their cookie, if in progress
+        if (_cookieLookups != null) {
+            _cookieLookups.remove(pidx);
+        }
     }
 
     @Override
@@ -411,14 +533,20 @@ public class EZGameManager extends GameManager
     /** Our turn delegate. */
     protected EZGameTurnDelegate _turnDelegate;
 
-    /** The array of winners, after the user has filled it in. */
-    protected int[] _winnerIndexes;
-
     /** The map of collections, lazy-initialized. */
     protected HashMap<String, ArrayList<byte[]>> _collections;
 
     /** The map of tickers, lazy-initialized. */
     protected HashMap<String, Ticker> _tickers;
+
+    /** Tracks which cookies are currently being retrieved from the db. */
+    protected ArrayIntSet _cookieLookups;
+
+//    /** User tokens, lazy-initialized. */
+//    protected HashIntMap<HashSet<String>> _tokens;
+
+    /** The array of winners, after the user has filled it in. */
+    protected int[] _winnerIndexes;
 
     /** The minimum delay a ticker can have. */
     protected static final int MIN_TICKER_DELAY = 50;

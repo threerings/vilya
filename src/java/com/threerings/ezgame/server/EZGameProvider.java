@@ -52,6 +52,12 @@ public interface EZGameProvider extends InvocationProvider
         throws InvocationException;
 
     /**
+     * Handles a {@link EZGameService#getCookie} request.
+     */
+    public void getCookie (ClientObject caller, int arg1, InvocationService.InvocationListener arg2)
+        throws InvocationException;
+
+    /**
      * Handles a {@link EZGameService#getFromCollection} request.
      */
     public void getFromCollection (ClientObject caller, String arg1, boolean arg2, int arg3, String arg4, int arg5, InvocationService.ConfirmListener arg6)
@@ -67,6 +73,12 @@ public interface EZGameProvider extends InvocationProvider
      * Handles a {@link EZGameService#sendMessage} request.
      */
     public void sendMessage (ClientObject caller, String arg1, Object arg2, int arg3, InvocationService.InvocationListener arg4)
+        throws InvocationException;
+
+    /**
+     * Handles a {@link EZGameService#setCookie} request.
+     */
+    public void setCookie (ClientObject caller, byte[] arg1, InvocationService.InvocationListener arg2)
         throws InvocationException;
 
     /**

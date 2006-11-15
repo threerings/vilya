@@ -7,6 +7,7 @@ import flash.events.EventDispatcher;
 
 import flash.utils.IExternalizable;
 import flash.utils.ByteArray;
+import flash.utils.Dictionary;
 
 import com.threerings.io.TypedArray;
 
@@ -18,11 +19,16 @@ import com.threerings.util.StringUtil;
 import com.threerings.presents.client.ConfirmAdapter;
 import com.threerings.presents.client.InvocationService_ConfirmListener;
 
+import com.threerings.presents.dobj.EntryAddedEvent;
+import com.threerings.presents.dobj.EntryUpdatedEvent;
+import com.threerings.presents.dobj.SetAdapter;
+
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.util.CrowdContext;
 
 import com.threerings.ezgame.data.EZGameObject;
 import com.threerings.ezgame.data.PropertySetEvent;
+import com.threerings.ezgame.data.UserCookie;
 import com.threerings.ezgame.util.EZObjectMarshaller;
 
 import com.threerings.ezgame.EZGame;
@@ -41,6 +47,8 @@ public class GameObjectImpl extends EventDispatcher
         _ctx = ctx;
         _ezObj = ezObj;
         _gameData = new GameData(this, _ezObj.getUserProps());
+
+        _ezObj.addListener(new SetAdapter(entryAdded, entryUpdated, null));
     }
 
     // from EZGame
@@ -257,6 +265,52 @@ public class GameObjectImpl extends EventDispatcher
             }
         }
         return arr;
+    }
+
+    // from EZGame
+    public function getUserCookie (playerIndex :int, callback :Function) :void
+    {
+        // see if that cookie is already published
+        if (_ezObj.userCookies != null) {
+            var uc :UserCookie =
+                (_ezObj.userCookies.get(playerIndex) as UserCookie);
+            if (uc != null) {
+                callback(uc.cookie);
+                return;
+            }
+        }
+
+        if (_cookieCallbacks == null) {
+            _cookieCallbacks = new Dictionary();
+        }
+        var arr :Array = (_cookieCallbacks[playerIndex] as Array);
+        if (arr == null) {
+            arr = [];
+            _cookieCallbacks[playerIndex] = arr;
+        }
+        arr.push(callback);
+
+        // request it to be made so by the server
+        _ezObj.ezGameService.getCookie(_ctx.getClient(), playerIndex,
+            createLoggingListener("getUserCookie"));
+    }
+
+    // from EZGame
+    public function setUserCookie (cookie :Object) :Boolean
+    {
+        var ba :ByteArray =
+            (EZObjectMarshaller.encode(cookie, false) as ByteArray);
+        if (ba.length > MAX_USER_COOKIE) {
+            // not saved!
+            return false;
+        }
+
+        _ezObj.ezGameService.setCookie(_ctx.getClient(), null, // ba,
+        // TODO
+        ///
+        /// TODO
+            createLoggingListener("setUserCookie"));
+        return true;
     }
 
     // from EZGame
@@ -480,10 +534,55 @@ public class GameObjectImpl extends EventDispatcher
         }
     }
 
+    /**
+     * Handle entry updated
+     */
+    private function entryAdded (event :EntryAddedEvent) :void
+    {
+        if (EZGameObject.USER_COOKIES == event.getName()) {
+            receivedUserCookie(event.getEntry() as UserCookie);
+        }
+    }
+
+    /**
+     * Handle entry updated
+     */
+    private function entryUpdated (event :EntryUpdatedEvent) :void
+    {
+        if (EZGameObject.USER_COOKIES == event.getName()) {
+            receivedUserCookie(event.getEntry() as UserCookie);
+        }
+    }
+
+    /**
+     * Handle the arrival of a new UserCookie.
+     */
+    private function receivedUserCookie (cookie :UserCookie) :void
+    {
+        if (_cookieCallbacks != null) {
+            var arr :Array = (_cookieCallbacks[cookie.playerIndex] as Array);
+            if (arr != null) {
+                delete _cookieCallbacks[cookie.playerIndex];
+                for each (var fn :Function in arr) {
+                    try {
+                        fn(cookie.cookie);
+                    } catch (err :Error) {
+                        // cope
+                    }
+                }
+            }
+        }
+    }
+
     protected var _ctx :CrowdContext;
 
     protected var _ezObj :EZGameObject;
 
     protected var _gameData :GameData;
+
+    /** playerIndex -> callback functions waiting for the cookie. */
+    protected var _cookieCallbacks :Dictionary;
+
+    protected static const MAX_USER_COOKIE :int = 4096;
 }
 }

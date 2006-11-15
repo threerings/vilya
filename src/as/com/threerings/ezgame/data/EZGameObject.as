@@ -10,6 +10,8 @@ import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 import com.threerings.io.TypedArray;
 
+import com.threerings.presents.dobj.DSet;
+
 import com.threerings.parlor.game.data.GameObject;
 import com.threerings.parlor.turn.data.TurnGameObject;
 
@@ -31,12 +33,18 @@ public class EZGameObject extends GameObject
     /** The field name of the <code>turnHolder</code> field. */
     public static const TURN_HOLDER :String = "turnHolder";
 
+    /** The field name of the <code>userCookies</code> field. */
+    public static const USER_COOKIES :String = "userCookies";
+
     /** The field name of the <code>ezGameService</code> field. */
     public static const EZ_GAME_SERVICE :String = "ezGameService";
     // AUTO-GENERATED: FIELDS END
 
     /** The current turn holder. */
     public var turnHolder :Name;
+
+    /** A set of loaded user cookies. */
+    public var userCookies :DSet;
 
     /** The service interface for requesting special things from the server. */
     public var ezGameService :EZGameMarshaller;
@@ -134,6 +142,7 @@ public class EZGameObject extends GameObject
 
         // first read any regular bits
         turnHolder = (ins.readObject() as Name);
+        userCookies = (ins.readObject() as DSet);
         ezGameService = (ins.readObject() as EZGameMarshaller);
 
         // then user properties

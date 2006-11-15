@@ -24,6 +24,10 @@ public class EZGameConfig extends GameConfig
     // For now, the configData is either a classname or url.
     public String configData;
 
+    /** If non-zero, a game id used to persistently identify the game.
+     * This could be thought of as a new-style rating id. */
+    public int persistentGameId;
+
     // from abstract GameConfig
     public String getBundleName ()
     {

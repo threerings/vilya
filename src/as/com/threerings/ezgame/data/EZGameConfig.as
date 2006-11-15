@@ -29,6 +29,10 @@ public class EZGameConfig extends GameConfig
     // For now, the configData is either a classname or url.
     public var configData :String;
 
+    /** If non-zero, a game id used to persistently identify the game.
+     * This could be thought of as a new-style rating id. */
+    public var persistentGameId:int;
+
     public function EZGameConfig ()
     {
         // nothing needed
@@ -89,6 +93,7 @@ public class EZGameConfig extends GameConfig
         super.readObject(ins);
 
         configData = (ins.readField(String) as String);
+        persistentGameId = ins.readInt();
     }
 
     // from interface Streamable
@@ -97,6 +102,7 @@ public class EZGameConfig extends GameConfig
         super.writeObject(out);
 
         out.writeField(configData);
+        out.writeInt(persistentGameId);
     }
 }
 }

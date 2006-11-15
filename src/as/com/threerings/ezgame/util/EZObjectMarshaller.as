@@ -7,6 +7,8 @@ import flash.system.ApplicationDomain;
 import flash.utils.ByteArray;
 import flash.utils.Endian;
 
+import com.threerings.util.StringUtil;
+
 import com.threerings.io.TypedArray;
 
 /**
@@ -45,6 +47,8 @@ public class EZObjectMarshaller
         bytes.endian = Endian.BIG_ENDIAN;
         bytes.objectEncoding = ObjectEncoding.AMF3;
         bytes.writeObject(obj);
+        Log.getLog(EZObjectMarshaller).info(
+            "The encoded bytes are: " + StringUtil.hexlate(bytes));
         return bytes;
     }
 

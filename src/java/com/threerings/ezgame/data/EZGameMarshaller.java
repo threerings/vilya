@@ -76,8 +76,21 @@ public class EZGameMarshaller extends InvocationMarshaller
         });
     }
 
+    /** The method id used to dispatch {@link #getCookie} requests. */
+    public static final int GET_COOKIE = 4;
+
+    // from interface EZGameService
+    public void getCookie (Client arg1, int arg2, InvocationService.InvocationListener arg3)
+    {
+        ListenerMarshaller listener3 = new ListenerMarshaller();
+        listener3.listener = arg3;
+        sendRequest(arg1, GET_COOKIE, new Object[] {
+            Integer.valueOf(arg2), listener3
+        });
+    }
+
     /** The method id used to dispatch {@link #getFromCollection} requests. */
-    public static final int GET_FROM_COLLECTION = 4;
+    public static final int GET_FROM_COLLECTION = 5;
 
     // from interface EZGameService
     public void getFromCollection (Client arg1, String arg2, boolean arg3, int arg4, String arg5, int arg6, InvocationService.ConfirmListener arg7)
@@ -90,7 +103,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #mergeCollection} requests. */
-    public static final int MERGE_COLLECTION = 5;
+    public static final int MERGE_COLLECTION = 6;
 
     // from interface EZGameService
     public void mergeCollection (Client arg1, String arg2, String arg3, InvocationService.InvocationListener arg4)
@@ -103,7 +116,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #sendMessage} requests. */
-    public static final int SEND_MESSAGE = 6;
+    public static final int SEND_MESSAGE = 7;
 
     // from interface EZGameService
     public void sendMessage (Client arg1, String arg2, Object arg3, int arg4, InvocationService.InvocationListener arg5)
@@ -115,8 +128,21 @@ public class EZGameMarshaller extends InvocationMarshaller
         });
     }
 
+    /** The method id used to dispatch {@link #setCookie} requests. */
+    public static final int SET_COOKIE = 8;
+
+    // from interface EZGameService
+    public void setCookie (Client arg1, byte[] arg2, InvocationService.InvocationListener arg3)
+    {
+        ListenerMarshaller listener3 = new ListenerMarshaller();
+        listener3.listener = arg3;
+        sendRequest(arg1, SET_COOKIE, new Object[] {
+            arg2, listener3
+        });
+    }
+
     /** The method id used to dispatch {@link #setProperty} requests. */
-    public static final int SET_PROPERTY = 7;
+    public static final int SET_PROPERTY = 9;
 
     // from interface EZGameService
     public void setProperty (Client arg1, String arg2, Object arg3, int arg4, InvocationService.InvocationListener arg5)
@@ -129,7 +155,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #setTicker} requests. */
-    public static final int SET_TICKER = 8;
+    public static final int SET_TICKER = 10;
 
     // from interface EZGameService
     public void setTicker (Client arg1, String arg2, int arg3, InvocationService.InvocationListener arg4)
