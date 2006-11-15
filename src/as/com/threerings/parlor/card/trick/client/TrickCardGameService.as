@@ -21,6 +21,7 @@
 
 package com.threerings.parlor.card.trick.client {
 
+import flash.utils.ByteArray;
 import com.threerings.parlor.card.data.Card;
 import com.threerings.parlor.card.trick.client.TrickCardGameService;
 import com.threerings.presents.client.Client;

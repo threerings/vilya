@@ -21,6 +21,7 @@
 
 package com.threerings.parlor.card.trick.data {
 
+import flash.utils.ByteArray;
 import com.threerings.util.*; // for Float, Integer, etc.
 
 import com.threerings.parlor.card.data.Card;

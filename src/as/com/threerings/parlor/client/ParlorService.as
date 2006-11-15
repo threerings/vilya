@@ -21,6 +21,7 @@
 
 package com.threerings.parlor.client {
 
+import flash.utils.ByteArray;
 import com.threerings.parlor.client.ParlorService;
 import com.threerings.parlor.client.ParlorService_InviteListener;
 import com.threerings.parlor.client.ParlorService_TableListener;

@@ -21,6 +21,7 @@
 
 package com.threerings.whirled.spot.data {
 
+import flash.utils.ByteArray;
 import com.threerings.util.*; // for Float, Integer, etc.
 
 import com.threerings.presents.client.Client;
