@@ -31,7 +31,7 @@ public class UserCookie
     public function readObject (ins :ObjectInputStream) :void
     {
         playerIndex = ins.readInt();
-        var ba :ByteArray = (ins.readObject() as ByteArray);
+        var ba :ByteArray = (ins.readField(ByteArray) as ByteArray);
         cookie = EZObjectMarshaller.decode(ba);
     }
 

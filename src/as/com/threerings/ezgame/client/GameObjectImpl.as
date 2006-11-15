@@ -305,10 +305,7 @@ public class GameObjectImpl extends EventDispatcher
             return false;
         }
 
-        _ezObj.ezGameService.setCookie(_ctx.getClient(), null, // ba,
-        // TODO
-        ///
-        /// TODO
+        _ezObj.ezGameService.setCookie(_ctx.getClient(), ba,
             createLoggingListener("setUserCookie"));
         return true;
     }
