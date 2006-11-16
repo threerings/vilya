@@ -11,23 +11,13 @@
     <include name="${libs.dir}/velocity-1.5-dev.jar"/>
     <include name="${libs.dir}/commons-io.jar"/>
     <include name="${libs.dir}/commons-collections.jar"/>
-    <!-- these might come from lib/ -->
-    <include name="${libs.dir}/samskivert.jar"/>
-    <include name="${libs.dir}/narya-base.jar"/>
-    <include name="${libs.dir}/narya-distrib.jar"/>
-    <include name="${libs.dir}/narya-tests.jar"/>
-    <include name="${libs.dir}/nenya-cast.jar"/>
-    <include name="${libs.dir}/nenya-media.jar"/>
-    <include name="${libs.dir}/nenya-miso.jar"/>
-    <include name="${libs.dir}/nenya-rsrc.jar"/>
-    <!-- or from the build directories of the actual projects -->
-    <include name="${project.dir}/samskivert/dist/samskivert.jar"/>
-    <include name="${project.dir}/narya/dist/narya-base.jar"/>
-    <include name="${project.dir}/narya/dist/narya-distrib.jar"/>
-    <include name="${project.dir}/narya/dist/narya-tests.jar"/>
-    <include name="${project.dir}/nenya/dist/nenya-cast.jar"/>
-    <include name="${project.dir}/nenya/dist/nenya-media.jar"/>
-    <include name="${project.dir}/nenya/dist/nenya-miso.jar"/>
-    <include name="${project.dir}/nenya/dist/nenya-rsrc.jar"/>
+    <include name="${distlib.dir}/samskivert.jar"/>
+    <include name="${distlib.dir}/narya-base.jar"/>
+    <include name="${distlib.dir}/narya-distrib.jar"/>
+    <include name="${distlib.dir}/narya-tests.jar"/>
+    <include name="${distlib.dir}/nenya-cast.jar"/>
+    <include name="${distlib.dir}/nenya-media.jar"/>
+    <include name="${distlib.dir}/nenya-miso.jar"/>
+    <include name="${distlib.dir}/nenya-rsrc.jar"/>
   </fileset>
 </project>
