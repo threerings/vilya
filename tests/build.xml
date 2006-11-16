@@ -9,6 +9,9 @@
   <property name="src.dir"    value="src/java"/>
   <property name="deploy.dir" value="dist"/>
 
+  <!-- import some targets to check dependency availability -->
+  <import file="../depends-incl.xml"/>
+
   <!-- declare our classpath -->
   <property name="classes.dir" value="${deploy.dir}/classes"/>
   <property name="vilya.classes.dir" value="../${deploy.dir}/classes"/>
@@ -95,6 +98,7 @@
     <javac srcdir="${src.dir}" destdir="${classes.dir}"
       debug="on" optimize="off" deprecation="off">
       <classpath refid="classpath"/>
+      <exclude name="com/threerings/**/tools/xml/**" unless="build.xml"/>
     </javac>
   </target>
 

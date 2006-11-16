@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<!-- build configuration -->
+<project name="vilya-checks" basedir=".">
+
+  <!-- checks the availability of certain libraries -->
+  <target name="check-available">
+    <available property="xml-writer.present"
+     classname="com.megginson.sax.DataWriter" classpathref="classpath"/>
+    <echo message="Have XML Writer: ${xml-writer.present}"/>
+
+    <condition property="build.xml">
+      <isset property="xml-writer.present"/>
+    </condition>
+  </target>
+
+</project>
