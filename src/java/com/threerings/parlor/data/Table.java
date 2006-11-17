@@ -69,7 +69,14 @@ public class Table
     public TableConfig tconfig;
 
     /**
-     * Creates a new table instance, and assigns it the next monotonically
+     * Constructs a blank table instance, suitable for unserialization.
+     */
+    public Table ()
+    {
+    }
+
+    /**
+     * Initializes a new table instance, and assigns it the next monotonically
      * increasing table id.
      *
      * @param lobbyOid the object id of the lobby in which this table is
@@ -78,7 +85,7 @@ public class Table
      * @param config the configuration of the game being matchmade by this
      * table.
      */
-    public Table (int lobbyOid, TableConfig tconfig, GameConfig config)
+    public void init (int lobbyOid, TableConfig tconfig, GameConfig config)
     {
         // assign a unique table id
         tableId = ++_tableIdCounter;
@@ -102,13 +109,6 @@ public class Table
                 occupants[ii] = new Name("AI " + (ii+1));
             }
         }
-    }
-
-    /**
-     * Constructs a blank table instance, suitable for unserialization.
-     */
-    public Table ()
-    {
     }
 
     /**

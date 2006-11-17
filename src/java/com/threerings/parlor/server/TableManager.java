@@ -78,6 +78,14 @@ public class TableManager
     }
 
     /**
+     * Set the subclass of Table that this instance should generate.
+     */
+    public void setTableClass (Class<? extends Table> tableClass)
+    {
+        _tableClass = tableClass;
+    }
+
+    /**
      * Requests that a new table be created to matchmake the game
      * described by the supplied game config instance. The config instance
      * provided must implement the {@link TableConfig} interface so that
@@ -108,7 +116,15 @@ public class TableManager
         }
 
         // create a brand spanking new table
-        Table table = new Table(_plobj.getOid(), tableConfig, config);
+        Table table;
+        try {
+            table = _tableClass.newInstance();
+        } catch (Exception e) {
+            Log.warning("Unable to create a new table instance! " +
+                "[tableClass=" + _tableClass + ", error=" + e + "].");
+            throw new InvocationException(INTERNAL_ERROR);
+        }
+        table.init(_plobj.getOid(), tableConfig, config);
 
         // stick the creator into the first non-AI position
         int cpos = (config.ais == null) ? 0 : config.ais.length;
@@ -386,6 +402,9 @@ public class TableManager
 
     /** A reference to the place object in which we're managing tables. */
     protected PlaceObject _plobj;
+
+    /** The class of table we instantiate. */
+    protected Class<? extends Table> _tableClass = Table.class;
 
     /** A reference to our place object casted to a table lobby object. */
     protected TableLobbyObject _tlobj;

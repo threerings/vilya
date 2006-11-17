@@ -168,90 +168,90 @@ public class Table
         }
     }
 
-    /**
-     * Requests to seat the specified user at the specified position in
-     * this table.
-     *
-     * @param position the position in which to seat the user.
-     * @param occupant the occupant to set.
-     *
-     * @return null if the user was successfully seated, a string error
-     * code explaining the failure if the user was not able to be seated
-     * at that position.
-     */
-    public function setOccupant (position :int, occupant :BodyObject) :String
-    {
-        // make sure the requested position is a valid one
-        if (position >= tconfig.desiredPlayerCount || position < 0) {
-            return ParlorCodes.INVALID_TABLE_POSITION;
-        }
-
-        // make sure the requested position is not already occupied
-        if (occupants[position] != null) {
-            return ParlorCodes.TABLE_POSITION_OCCUPIED;
-        }
-
-        // otherwise all is well, stick 'em in
-        setOccupantPos(position, occupant);
-        return null;
-    }
-
-    /**
-     * This method is used for party games, it does no bounds checking
-     * or verification of the player's ability to join, if you are unsure
-     * you should call 'setOccupant'.
-     */
-    public function setOccupantPos (position :int, occupant :BodyObject) :void
-    {
-        occupants[position] = occupant.getVisibleName();
-        bodyOids[position] = occupant.getOid();
-    }
-
-    /**
-     * Requests that the specified user be removed from their seat at this
-     * table.
-     *
-     * @return true if the user was seated at the table and has now been
-     * removed, false if the user was never seated at the table in the
-     * first place.
-     */
-    public function clearOccupant (username :Name) :Boolean
-    {
-        var dex :int = ArrayUtil.indexOf(occupants, username);
-        if (dex != -1) {
-            clearOccupantPos(dex);
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Requests that the user identified by the specified body object id
-     * be removed from their seat at this table.
-     *
-     * @return true if the user was seated at the table and has now been
-     * removed, false if the user was never seated at the table in the
-     * first place.
-     */
-    public function clearOccupantByOid (bodyOid :int) :Boolean
-    {
-        var dex :int = ArrayUtil.indexOf(bodyOids, bodyOid);
-        if (dex != -1) {
-            clearOccupantPos(dex);
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Called to clear an occupant at the specified position.
-     * Only call this method if you know what you're doing.
-     */
-    public function clearOccupantPos (position :int) :void
-    {
-        occupants[position] = null;
-        bodyOids[position] = 0;
-    }
+//    /**
+//     * Requests to seat the specified user at the specified position in
+//     * this table.
+//     *
+//     * @param position the position in which to seat the user.
+//     * @param occupant the occupant to set.
+//     *
+//     * @return null if the user was successfully seated, a string error
+//     * code explaining the failure if the user was not able to be seated
+//     * at that position.
+//     */
+//    public function setOccupant (position :int, occupant :BodyObject) :String
+//    {
+//        // make sure the requested position is a valid one
+//        if (position >= tconfig.desiredPlayerCount || position < 0) {
+//            return ParlorCodes.INVALID_TABLE_POSITION;
+//        }
+//
+//        // make sure the requested position is not already occupied
+//        if (occupants[position] != null) {
+//            return ParlorCodes.TABLE_POSITION_OCCUPIED;
+//        }
+//
+//        // otherwise all is well, stick 'em in
+//        setOccupantPos(position, occupant);
+//        return null;
+//    }
+//
+//    /**
+//     * This method is used for party games, it does no bounds checking
+//     * or verification of the player's ability to join, if you are unsure
+//     * you should call 'setOccupant'.
+//     */
+//    public function setOccupantPos (position :int, occupant :BodyObject) :void
+//    {
+//        occupants[position] = occupant.getVisibleName();
+//        bodyOids[position] = occupant.getOid();
+//    }
+//
+//    /**
+//     * Requests that the specified user be removed from their seat at this
+//     * table.
+//     *
+//     * @return true if the user was seated at the table and has now been
+//     * removed, false if the user was never seated at the table in the
+//     * first place.
+//     */
+//    public function clearOccupant (username :Name) :Boolean
+//    {
+//        var dex :int = ArrayUtil.indexOf(occupants, username);
+//        if (dex != -1) {
+//            clearOccupantPos(dex);
+//            return true;
+//        }
+//        return false;
+//    }
+//
+//    /**
+//     * Requests that the user identified by the specified body object id
+//     * be removed from their seat at this table.
+//     *
+//     * @return true if the user was seated at the table and has now been
+//     * removed, false if the user was never seated at the table in the
+//     * first place.
+//     */
+//    public function clearOccupantByOid (bodyOid :int) :Boolean
+//    {
+//        var dex :int = ArrayUtil.indexOf(bodyOids, bodyOid);
+//        if (dex != -1) {
+//            clearOccupantPos(dex);
+//            return true;
+//        }
+//        return false;
+//    }
+//
+//    /**
+//     * Called to clear an occupant at the specified position.
+//     * Only call this method if you know what you're doing.
+//     */
+//    public function clearOccupantPos (position :int) :void
+//    {
+//        occupants[position] = null;
+//        bodyOids[position] = 0;
+//    }
 
     /**
      * Returns true if this table has a sufficient number of occupants
@@ -359,12 +359,13 @@ public class Table
     // from Streamable
     public function writeObject (out :ObjectOutputStream) :void
     {
-        out.writeInt(tableId);
-        out.writeInt(lobbyOid);
-        out.writeInt(gameOid);
-        out.writeObject(occupants);
-        out.writeObject(config);
-        out.writeObject(tconfig);
+        throw new Error();
+//        out.writeInt(tableId);
+//        out.writeInt(lobbyOid);
+//        out.writeInt(gameOid);
+//        out.writeObject(occupants);
+//        out.writeObject(config);
+//        out.writeObject(tconfig);
     }
 
     /**
