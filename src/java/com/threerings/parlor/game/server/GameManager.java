@@ -112,7 +112,7 @@ public class GameManager extends PlaceManager
         // sanity-check the player index
         if (pidx == -1) {
             Log.warning("Couldn't find free player index for player  " +
-                        "[game=" + _gameobj.which() + ", player=" + player +
+                        "[game=" + where() + ", player=" + player +
                         ", players=" + StringUtil.toString(_gameobj.players) +
                         "].");
             return -1;
@@ -136,7 +136,7 @@ public class GameManager extends PlaceManager
         // make sure the specified player index is valid
         if (pidx < 0 || pidx >= getPlayerSlots()) {
             Log.warning("Attempt to add player at an invalid index " +
-                        "[game=" + _gameobj.which() + ", player=" + player +
+                        "[game=" + where() + ", player=" + player +
                         ", pidx=" + pidx + "].");
             return false;
         }
@@ -144,7 +144,7 @@ public class GameManager extends PlaceManager
         // make sure the player index is available
         if (_gameobj.players[pidx] != null) {
             Log.warning("Attempt to add player at occupied index " +
-                        "[game=" + _gameobj.which() + ", player=" + player +
+                        "[game=" + where() + ", player=" + player +
                         ", pidx=" + pidx + "].");
             return false;
         }
@@ -154,8 +154,7 @@ public class GameManager extends PlaceManager
         // them more than once
         if (_gameobj.getPlayerIndex(player) != -1) {
             Log.warning("Attempt to add player to game that they're already " +
-                        "playing [game=" + _gameobj.which() +
-                        ", player=" + player + "].");
+                        "playing [game=" + where() + ", player=" + player + "].");
             return false;
         }
 
@@ -163,8 +162,7 @@ public class GameManager extends PlaceManager
         BodyObject bobj = CrowdServer.lookupBody(player);
         if (bobj == null) {
             Log.warning("Unable to get body object while adding player " +
-                        "[game=" + _gameobj.which() +
-                        ", player=" + player + "].");
+                        "[game=" + where() + ", player=" + player + "].");
             return false;
         }
 
@@ -199,8 +197,7 @@ public class GameManager extends PlaceManager
         // sanity-check the player index
         if (pidx == -1) {
             Log.warning("Attempt to remove non-player from players list " +
-                        "[game=" + _gameobj.which() +
-                        ", player=" + player +
+                        "[game=" + where() + ", player=" + player +
                         ", players=" + StringUtil.toString(_gameobj.players) +
                         "].");
             return false;
@@ -420,7 +417,7 @@ public class GameManager extends PlaceManager
         // complain if we're already started
         if (_gameobj.state == GameObject.IN_PLAY) {
             Log.warning("Requested to start an already in-play game " +
-                        "[game=" + _gameobj.which() + "].");
+                        "[game=" + where() + "].");
             Thread.dumpStack();
             return false;
         }
@@ -431,7 +428,7 @@ public class GameManager extends PlaceManager
         // make sure everyone has turned up
         if (!allPlayersReady()) {
             Log.warning("Requested to start a game that is still " +
-                        "awaiting players [game=" + _gameobj.which() +
+                        "awaiting players [game=" + where() +
                         ", pnames=" + StringUtil.toString(_gameobj.players) +
                         ", poids=" + StringUtil.toString(_playerOids) + "].");
             return false;
@@ -443,15 +440,14 @@ public class GameManager extends PlaceManager
         if (_committedState == GameObject.IN_PLAY) {
             if (_postponedStart) {
                 // We've already tried postponing once, doesn't do us any
-                //  good to throw ourselves into a frenzy trying again.
-                Log.warning("Tried to postpone the start of a " +
-                    "still-ending game multiple times " +
-                    "[which=" + _gameobj.which() + "].");
+                // good to throw ourselves into a frenzy trying again.
+                Log.warning("Tried to postpone the start of a still-ending game " +
+                            "multiple times [game=" + where() + "].");
                 _postponedStart = false;
                 return false;
             }
             Log.info("Postponing start of still-ending game " +
-                     "[which=" + _gameobj.which() + "].");
+                     "[game=" + where() + "].");
             _postponedStart = true;
             // TEMP: track down weirdness
             final Exception firstCall = new Exception();
@@ -525,14 +521,14 @@ public class GameManager extends PlaceManager
         // TEMP: debug pending rating repeat bug
         if (_gameEndTracker.checkCall(
                 "Requested to end already ended game " +
-                "[game=" + _gameobj.which() + "].")) {
+                "[game=" + where() + "].")) {
             return;
         }
         // END TEMP
 
         if (!_gameobj.isInPlay()) {
             Log.info("Refusing to end game that was not in play " +
-                     "[game=" + _gameobj.which() + "].");
+                     "[game=" + where() + "].");
             return;
         }
 
@@ -620,7 +616,7 @@ public class GameManager extends PlaceManager
             // a participant
             if (!isPartyGame()) {
                 Log.warning("Received playerReady() from non-player? " +
-                            "[caller=" + caller + "].");
+                            "[game=" + where() + ", who=" + caller.who() + "].");
             }
             return;
         }
@@ -800,7 +796,7 @@ public class GameManager extends PlaceManager
             BodyObject bobj = CrowdServer.lookupBody(_gameobj.players[ii]);
             if (bobj == null) {
                 Log.warning("Unable to deliver game ready to non-existent " +
-                            "player [game=" + _gameobj.which() +
+                            "player [game=" + where() +
                             ", player=" + _gameobj.players[ii] + "].");
                 continue;
             }
@@ -861,8 +857,7 @@ public class GameManager extends PlaceManager
      */
     protected void placeBecameEmpty ()
     {
-//         Log.info("Game room empty. Going away. " +
-//                  "[game=" + _gameobj.which() + "].");
+//         Log.info("Game room empty. Going away. [game=" + where() + "].");
 
         // if we're in play then move to game over
         if (_gameobj.state != GameObject.PRE_GAME &&
@@ -908,8 +903,7 @@ public class GameManager extends PlaceManager
 
         // if there's no one in the room, go ahead and clear it out
         if (_plobj.occupants.size() == 0) {
-            Log.info("Cancelling total no-show " +
-                     "[game=" + _gameobj.which() +
+            Log.info("Cancelling total no-show [game=" + where() +
                      ", players=" + StringUtil.toString(_gameobj.players) +
                      ", poids=" + StringUtil.toString(_playerOids) + "].");
             placeBecameEmpty();
@@ -945,7 +939,7 @@ public class GameManager extends PlaceManager
 
         if ((humansHere == 0) && !startWithoutHumans()) {
             // if there are no human players in the game, just cancel it
-            Log.info("Canceling no-show game [game=" + _gameobj.which() +
+            Log.info("Canceling no-show game [game=" + where() +
                      ", players=" + StringUtil.toString(_playerOids) + "].");
             cancelGame();
 
@@ -953,8 +947,7 @@ public class GameManager extends PlaceManager
             // go ahead and report that everyone is ready (which will start the
             // game); gameDidStart() will take care of giving the boot to
             // anyone who isn't around
-            Log.info("Forcing start of partial no-show game " +
-                     "[game=" + _gameobj.which() +
+            Log.info("Forcing start of partial no-show game [game=" + where() +
                      ", poids=" + StringUtil.toString(_playerOids) + "].");
             playersAllHere();
         }
@@ -1062,7 +1055,7 @@ public class GameManager extends PlaceManager
         // be given le boote royale
         for (int ii = 0; ii < _playerOids.length; ii++) {
             if (_playerOids[ii] == -1) {
-                Log.info("Booting no-show player [game=" + _gameobj.which() +
+                Log.info("Booting no-show player [game=" + where() +
                          ", player=" + getPlayerName(ii) + "].");
                 _playerOids[ii] = 0; // unfiddle the blank oid
                 endPlayerGame(ii);
@@ -1275,8 +1268,8 @@ public class GameManager extends PlaceManager
             try {
                 gmgr.tick(now);
             } catch (Exception e) {
-                Log.warning("Game manager choked during tick " +
-                            "[gmgr=" + gmgr + "].");
+                Log.warning(
+                    "Game manager choked during tick [gmgr=" + gmgr + "].");
                 Log.logStackTrace(e);
             }
         }
