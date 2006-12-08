@@ -44,7 +44,7 @@ public class EZGamePanel extends VBox
         _gameView = new MediaContainer(cfg.configData); // TODO
         addChild(_gameView);
 
-        addChild(new ChatDisplayBox(ctx));
+        //addChild(new ChatDisplayBox(ctx));
     }
 
     // from PlaceView
