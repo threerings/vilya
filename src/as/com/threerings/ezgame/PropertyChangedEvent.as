@@ -47,7 +47,7 @@ public class PropertyChangedEvent extends EZEvent
      * Constructor.
      */
     public function PropertyChangedEvent (
-        ezgame :EZGame, propName :String, newValue :Object,
+        ezgame :EZGameControl, propName :String, newValue :Object,
         oldValue :Object, index :int = -1)
     {
         super(TYPE, ezgame);

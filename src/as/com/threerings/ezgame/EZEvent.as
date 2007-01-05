@@ -8,20 +8,20 @@ import flash.events.Event;
 public /*abstract*/ class EZEvent extends Event
 {
     /**
-     * Access the game object to which this event applies.
+     * Access the game control to which this event applies.
      */
-    public function get gameObject () :EZGame
+    public function get gameControl () :EZGameControl
     {
         return _ezgame;
     }
 
-    public function EZEvent (type :String, ezgame :EZGame)
+    public function EZEvent (type :String, ezgame :EZGameControl)
     {
         super(type);
         _ezgame = ezgame;
     }
 
-    /** The game object for this event. */
-    protected var _ezgame :EZGame;
+    /** The game control for this event. */
+    protected var _ezgame :EZGameControl;
 }
 }

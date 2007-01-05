@@ -6,9 +6,9 @@ package com.threerings.ezgame {
  */
 public class CardDeck
 {
-    public function CardDeck (gameObj :EZGame, deckName :String = "deck")
+    public function CardDeck (gameCtrl :EZGameControl, deckName :String = "deck")
     {
-        _gameObj = gameObj;
+        _gameCtrl = gameCtrl;
         _deckName = deckName;
 
         var deck :Array = new Array();
@@ -19,23 +19,23 @@ public class CardDeck
             }
         }
 
-        _gameObj.setCollection(_deckName, deck);
+        _gameCtrl.setCollection(_deckName, deck);
     }
 
     public function dealToPlayer (
         playerIdx :int, count :int, msgName :String) :void
     {
         // TODO: support the callback
-        _gameObj.dealFromCollection(_deckName, count, msgName, null, playerIdx);
+        _gameCtrl.dealFromCollection(_deckName, count, msgName, null, playerIdx);
     }
 
     public function dealToData (count :int, propName :String) :void
     {
-        _gameObj.dealFromCollection(_deckName, count, propName, null);
+        _gameCtrl.dealFromCollection(_deckName, count, propName, null);
     }
 
-    /** The game object. */
-    protected var _gameObj :EZGame;
+    /** The game control. */
+    protected var _gameCtrl :EZGameControl;
 
     /** The name of our deck. */
     protected var _deckName :String;

@@ -4,6 +4,7 @@ import flash.errors.IllegalOperationError;
 
 import flash.events.Event;
 import flash.events.EventDispatcher;
+import flash.events.IEventDispatcher;
 
 import flash.utils.IExternalizable;
 import flash.utils.ByteArray;
@@ -12,6 +13,7 @@ import flash.utils.Dictionary;
 import com.threerings.io.TypedArray;
 
 import com.threerings.util.ClassUtil;
+import com.threerings.util.Integer;
 import com.threerings.util.MessageBundle;
 import com.threerings.util.Name;
 import com.threerings.util.StringUtil;
@@ -20,61 +22,109 @@ import com.threerings.presents.client.ConfirmAdapter;
 import com.threerings.presents.client.InvocationService_ConfirmListener;
 
 import com.threerings.presents.dobj.EntryAddedEvent;
+import com.threerings.presents.dobj.EntryRemovedEvent;
 import com.threerings.presents.dobj.EntryUpdatedEvent;
-import com.threerings.presents.dobj.SetAdapter;
+import com.threerings.presents.dobj.SetListener;
+import com.threerings.presents.dobj.MessageAdapter;
+import com.threerings.presents.dobj.MessageEvent;
+import com.threerings.presents.dobj.MessageListener;
 
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.util.CrowdContext;
 
 import com.threerings.ezgame.data.EZGameObject;
 import com.threerings.ezgame.data.PropertySetEvent;
+import com.threerings.ezgame.data.PropertySetListener;
 import com.threerings.ezgame.data.UserCookie;
 import com.threerings.ezgame.util.EZObjectMarshaller;
 
-import com.threerings.ezgame.EZGame;
-import com.threerings.ezgame.MessageReceivedEvent;
-import com.threerings.ezgame.MessageReceivedListener;
-import com.threerings.ezgame.PropertyChangedEvent;
-import com.threerings.ezgame.PropertyChangedListener;
-import com.threerings.ezgame.StateChangedEvent;
-import com.threerings.ezgame.StateChangedListener;
-
-public class GameObjectImpl extends EventDispatcher
-    implements EZGame
+public class GameControlBackend
+    implements MessageListener, SetListener, PropertySetListener
 {
-    public function GameObjectImpl (ctx :CrowdContext, ezObj :EZGameObject)
+    public var log :Log = Log.getLog(this);
+
+    public function GameControlBackend (
+        ctx :CrowdContext, ezObj :EZGameObject)
     {
         _ctx = ctx;
         _ezObj = ezObj;
-        _gameData = new GameData(this, _ezObj.getUserProps());
+        _gameData = new GameData(setProperty_v1, _ezObj.getUserProps());
 
-        _ezObj.addListener(new SetAdapter(entryAdded, entryUpdated, null));
+        _ezObj.addListener(this);
+        _ctx.getClient().getClientObject().addListener(_userListener);
     }
 
-    // from EZGame
-    public function get data () :Object
+    public function setSharedEvents (disp :IEventDispatcher) :void
     {
-        return _gameData;
+        disp.addEventListener("ezgameQuery", handleEZQuery);
     }
 
-    // from EZGame
-    public function get (propName :String, index :int = -1) :Object
+    public function shutdown () :void
     {
-        var value :Object = data[propName];
-        if (index >= 0) {
-            if (value is Array) {
-                return (value as Array)[index];
+        _ezObj.removeListener(this);
+        _ctx.getClient().getClientObject().removeListener(_userListener);
+    }
 
-            } else {
-                throw new ArgumentError("Property " + propName +
-                    " is not an array.");
+    protected function handleEZQuery (evt :Object) :void
+    {
+        setUserCodeProperties(evt.userProps);
+        evt.ezProps = new Object();
+        populateProperties(evt.ezProps);
+    }
+
+    protected function setUserCodeProperties (o :Object) :void
+    {
+        // here we would handle adapting old functions to a new version
+
+        _userFuncs = o;
+    }
+
+    protected function callUserCode (name :String, ... args) :*
+    {
+        if (_userFuncs != null) {
+            try {
+                var func :Function = (_userFuncs[name] as Function);
+                if (func != null) {
+                    return func.apply(null, args);
+                }
+
+            } catch (err :Error) {
+                log.warning("Error in user-code: " + err);
+                log.logStackTrace(err);
             }
         }
-        return value;
+        return undefined;
     }
 
-    // from EZGame
-    public function set (propName :String, value :Object, index :int = -1) :void
+    protected function populateProperties (o :Object) :void
+    {
+        // straight data
+        o["gameData"] = _gameData;
+
+        // functions
+        o["setProperty_v1"] = setProperty_v1;
+        o["mergeCollection_v1"] = mergeCollection_v1;
+        o["sendMessage_v1"] = sendMessage_v1;
+        o["setTicker_v1"] = setTicker_v1;
+        o["sendChat_v1"] = sendChat_v1;
+        o["localChat_v1"] = localChat_v1;
+        o["getPlayerCount_v1"] = getPlayerCount_v1;
+        o["getPlayerNames_v1"] = getPlayerNames_v1;
+        o["getMyIndex_v1"] = getMyIndex_v1;
+        o["getTurnHolderIndex_v1"] = getTurnHolderIndex_v1;
+        o["getWinnerIndexes_v1"] = getWinnerIndexes_v1;
+        o["getUserCookie_v1"] = getUserCookie_v1;
+        o["setUserCookie_v1"] = setUserCookie_v1;
+        o["isMyTurn_v1"] = isMyTurn_v1;
+        o["isInPlay_v1"] = isInPlay_v1;
+        o["endTurn_v1"] = endTurn_v1;
+        o["endGame_v1"] = endGame_v1;
+        o["populateCollection_v1"] = populateCollection_v1;
+        o["getFromCollection_v1"] = getFromCollection_v1;
+    }
+
+    public function setProperty_v1 (
+        propName :String, value :Object, index :int) :void
     {
         validatePropertyChange(propName, value, index);
 
@@ -87,91 +137,8 @@ public class GameObjectImpl extends EventDispatcher
         _ezObj.applyPropertySet(propName, value, index);
     }
 
-    // from EZGame
-    public function registerListener (obj :Object) :void
-    {
-        if (obj is MessageReceivedListener) {
-            var mrl :MessageReceivedListener = (obj as MessageReceivedListener);
-            addEventListener(
-                MessageReceivedEvent.TYPE, mrl.messageReceived,
-                false, 0, true);
-        }
-        if (obj is PropertyChangedListener) {
-            var pcl :PropertyChangedListener = (obj as PropertyChangedListener);
-            addEventListener(
-                PropertyChangedEvent.TYPE, pcl.propertyChanged,
-                false, 0, true);
-        }
-        if (obj is StateChangedListener) {
-            var scl :StateChangedListener = (obj as StateChangedListener);
-            addEventListener(
-                StateChangedEvent.GAME_STARTED, scl.stateChanged,
-                false, 0, true);
-            addEventListener(
-                StateChangedEvent.TURN_CHANGED, scl.stateChanged,
-                false, 0, true);
-            addEventListener(
-                StateChangedEvent.GAME_ENDED, scl.stateChanged,
-                false, 0, true);
-        }
-    }
-
-    // from EZGame
-    public function unregisterListener (obj :Object) :void
-    {
-        if (obj is MessageReceivedListener) {
-            var mrl :MessageReceivedListener = (obj as MessageReceivedListener);
-            removeEventListener(
-                MessageReceivedEvent.TYPE, mrl.messageReceived);
-        }
-        if (obj is PropertyChangedListener) {
-            var pcl :PropertyChangedListener = (obj as PropertyChangedListener);
-            removeEventListener(
-                PropertyChangedEvent.TYPE, pcl.propertyChanged);
-        }
-        if (obj is StateChangedListener) {
-            var scl :StateChangedListener = (obj as StateChangedListener);
-            removeEventListener(
-                StateChangedEvent.GAME_STARTED, scl.stateChanged);
-            removeEventListener(
-                StateChangedEvent.TURN_CHANGED, scl.stateChanged);
-            removeEventListener(
-                StateChangedEvent.GAME_ENDED, scl.stateChanged);
-        }
-    }
-
-    // from EZGame
-    public function setCollection (collName :String, values :Array) :void
-    {
-        populateCollection(collName, values, true);
-    }
-
-    // from EZGame
-    public function addToCollection (collName :String, values :Array) :void
-    {
-        populateCollection(collName, values, false);
-    }
-
-    // from EZGame
-    public function pickFromCollection (
-        collName :String, count :int, msgOrPropName :String,
-        playerIndex :int = -1) :void
-    {
-        getFromCollection(collName, count, msgOrPropName, playerIndex,
-            false, null);
-    }
-
-    // from EZGame
-    public function dealFromCollection (
-        collName :String, count :int, msgOrPropName :String,
-        callback :Function = null, playerIndex :int = -1) :void
-    {
-        getFromCollection(collName, count, msgOrPropName, playerIndex,
-            true, callback);
-    }
-
-    // from EZGame
-    public function mergeCollection (srcColl :String, intoColl :String) :void
+    public function mergeCollection_v1 (
+        srcColl :String, intoColl :String) :void
     {
         validateName(srcColl);
         validateName(intoColl);
@@ -179,9 +146,8 @@ public class GameObjectImpl extends EventDispatcher
             srcColl, intoColl, createLoggingListener("mergeCollection"));
     }
 
-    // from EZGame
-    public function sendMessage (
-        messageName :String, value :Object, playerIndex :int = -1) :void
+    public function sendMessage_v1 (
+        messageName :String, value :Object, playerIndex :int) :void
     {
         validateName(messageName);
         validateValue(value);
@@ -192,22 +158,14 @@ public class GameObjectImpl extends EventDispatcher
             createLoggingListener("sendMessage"));
     }
 
-    // from EZGame
-    public function startTicker (tickerName :String, msOfDelay :int) :void
+    public function setTicker_v1 (tickerName :String, msOfDelay :int) :void
     {
         validateName(tickerName);
         _ezObj.ezGameService.setTicker(_ctx.getClient(),
             tickerName, msOfDelay, createLoggingListener("setTicker"));
     }
 
-    // from EZGame
-    public function stopTicker (tickerName :String) :void
-    {
-        startTicker(tickerName, 0);
-    }
-
-    // from EZGame
-    public function sendChat (msg :String) :void
+    public function sendChat_v1 (msg :String) :void
     {
         validateChat(msg);
         // Post a message to the game object, the controller
@@ -215,8 +173,7 @@ public class GameObjectImpl extends EventDispatcher
         _ezObj.postMessage(EZGameObject.GAME_CHAT, [ msg ]);
     }
 
-    // from EZGame
-    public function localChat (msg :String) :void
+    public function localChat_v1 (msg :String) :void
     {
         validateChat(msg);
         // The sendChat() messages will end up being routed
@@ -225,14 +182,12 @@ public class GameObjectImpl extends EventDispatcher
         _ctx.getChatDirector().displayInfo(null, MessageBundle.taint(msg));
     }
 
-    // from EZGame
-    public function getPlayerCount () :int
+    public function getPlayerCount_v1 () :int
     {
         return _ezObj.getPlayerCount();
     }
 
-    // from EZGame
-    public function getPlayerNames () :Array
+    public function getPlayerNames_v1 () :Array
     {
         var names :Array = new Array();
         for each (var name :Name in _ezObj.players) {
@@ -241,20 +196,17 @@ public class GameObjectImpl extends EventDispatcher
         return names;
     }
 
-    // from EZGame
-    public function getMyIndex () :int
+    public function getMyIndex_v1 () :int
     {
         return _ezObj.getPlayerIndex(getUsername());
     }
 
-    // from EZGame
-    public function getTurnHolderIndex () :int
+    public function getTurnHolderIndex_v1 () :int
     {
         return _ezObj.getPlayerIndex(_ezObj.turnHolder);
     }
 
-    // from EZGame
-    public function getWinnerIndexes () :Array /* of int */
+    public function getWinnerIndexes_v1 () :Array /* of int */
     {
         var arr :Array = new Array();
         if (_ezObj.winners != null) {
@@ -267,8 +219,8 @@ public class GameObjectImpl extends EventDispatcher
         return arr;
     }
 
-    // from EZGame
-    public function getUserCookie (playerIndex :int, callback :Function) :void
+    public function getUserCookie_v1 (
+        playerIndex :int, callback :Function) :void
     {
         // see if that cookie is already published
         if (_ezObj.userCookies != null) {
@@ -295,8 +247,7 @@ public class GameObjectImpl extends EventDispatcher
             createLoggingListener("getUserCookie"));
     }
 
-    // from EZGame
-    public function setUserCookie (cookie :Object) :Boolean
+    public function setUserCookie_v1 (cookie :Object) :Boolean
     {
         var ba :ByteArray =
             (EZObjectMarshaller.encode(cookie, false) as ByteArray);
@@ -310,91 +261,36 @@ public class GameObjectImpl extends EventDispatcher
         return true;
     }
 
-    // from EZGame
-    public function isMyTurn () :Boolean
+    public function isMyTurn_v1 () :Boolean
     {
         return getUsername().equals(_ezObj.turnHolder);
     }
 
-    // from EZGame
-    public function isInPlay () :Boolean
+    public function isInPlay_v1 () :Boolean
     {
         return _ezObj.isInPlay();
     }
 
-    // from EZGame
-    public function endTurn (nextPlayerIndex :int = -1) :void
+    public function endTurn_v1 (nextPlayerIndex :int = -1) :void
     {
         _ezObj.ezGameService.endTurn(_ctx.getClient(), nextPlayerIndex,
             createLoggingListener("endTurn"));
     }
 
-    // from EZGame
-    public function endGame (winnerIndex :int, ... rest) :void
+    public function endGame_v1 (... winnerDexes) :void
     {
         var winners :TypedArray = TypedArray.create(int);
-        winners.push(winnerIndex);
-        while (rest.length > 0) {
-            winners.push(int(rest.shift()));
+        while (winnerDexes.length > 0) {
+            winners.push(int(winnerDexes.shift()));
         }
         _ezObj.ezGameService.endGame(_ctx.getClient(), winners,
             createLoggingListener("endGame"));
     }
 
-    override public function willTrigger (type :String) :Boolean
-    {
-        throw new IllegalOperationError();
-    }
-
-    override public function dispatchEvent (event :Event) :Boolean
-    {
-        // Ideally we want to not be an IEventDispatcher so that people
-        // won't try to do this on us, but if we do that, then some other
-        // object will be the target during dispatch, and that's confusing.
-        // It's really nice to be able to 
-        throw new IllegalOperationError();
-    }
-
-    /**
-     * Secret function to dispatch property changed events.
-     */
-    internal function dispatch (event :Event) :void
-    {
-        try {
-            super.dispatchEvent(event);
-        } catch (err :Error) {
-            var log :Log = Log.getLog(this);
-            log.warning("Error dispatching event to user game.");
-            log.logStackTrace(err);
-        }
-    }
-
-    /**
-     * Convenience function to get our name.
-     */
-    private function getUsername () :Name
-    {
-        var body :BodyObject = 
-            (_ctx.getClient().getClientObject() as BodyObject);
-        return body.getVisibleName();
-    }
-
-    /**
-     * Create a listener for service requests.
-     */
-    private function createLoggingListener (
-        service :String) :InvocationService_ConfirmListener
-    {
-        return new ConfirmAdapter(function (cause :String) :void {
-            Log.getLog(this).warning("Service failure " +
-                "[service=" + service + ", cause=" + cause + "].");
-        });
-    }
-
     /**
      * Helper method for setCollection and addToCollection.
      */
-    private function populateCollection (
+    public function populateCollection_v1 (
         collName :String, values :Array, clearExisting :Boolean) :void
     {
         validateName(collName);
@@ -414,7 +310,7 @@ public class GameObjectImpl extends EventDispatcher
     /**
      * Helper method for pickFromCollection and dealFromCollection.
      */
-    private function getFromCollection(
+    public function getFromCollection_v1 (
         collName :String, count :int, msgOrPropName :String, playerIndex :int,
         consume :Boolean, callback :Function) :void
     {
@@ -447,9 +343,31 @@ public class GameObjectImpl extends EventDispatcher
     }
 
     /**
+     * Convenience function to get our name.
+     */
+    protected function getUsername () :Name
+    {
+        var body :BodyObject = 
+            (_ctx.getClient().getClientObject() as BodyObject);
+        return body.getVisibleName();
+    }
+
+    /**
+     * Create a listener for service requests.
+     */
+    protected function createLoggingListener (
+        service :String) :InvocationService_ConfirmListener
+    {
+        return new ConfirmAdapter(function (cause :String) :void {
+            Log.getLog(this).warning("Service failure " +
+                "[service=" + service + ", cause=" + cause + "].");
+        });
+    }
+
+    /**
      * Verify that the property name / value are valid.
      */
-    private function validatePropertyChange (
+    protected function validatePropertyChange (
         propName :String, value :Object, index :int) :void
     {
         validateName(propName);
@@ -469,7 +387,7 @@ public class GameObjectImpl extends EventDispatcher
     /**
      * Verify that the specified name is valid.
      */
-    private function validateName (name :String) :void
+    protected function validateName (name :String) :void
     {
         if (name == null) {
             throw new ArgumentError(
@@ -477,7 +395,7 @@ public class GameObjectImpl extends EventDispatcher
         }
     }
 
-    private function validateChat (msg :String) :void
+    protected function validateChat (msg :String) :void
     {
         if (StringUtil.isBlank(msg)) {
             throw new ArgumentError(
@@ -488,7 +406,7 @@ public class GameObjectImpl extends EventDispatcher
     /**
      * Verify that the value is legal to be streamed to other clients.
      */
-    private function validateValue (value :Object) :void
+    protected function validateValue (value :Object) :void
     {
         if (value == null) {
             return;
@@ -498,7 +416,7 @@ public class GameObjectImpl extends EventDispatcher
                 "IExternalizable is not yet supported");
 
         } else if (value is Array) {
-            if (ClassUtil.getClass(value) != Array) {
+            if (ClassUtil.getClassName(value) != "Array") {
                 // We can't allow arrays to be serialized as IExternalizables
                 // because we need to know element values (opaquely) on the
                 // server. Also, we don't allow other types because we wouldn't
@@ -532,29 +450,99 @@ public class GameObjectImpl extends EventDispatcher
     }
 
     /**
-     * Handle entry updated
+     * Called by the EZGameController when the turn changes.
      */
-    private function entryAdded (event :EntryAddedEvent) :void
+    public function turnDidChange () :void
+    {
+        callUserCode("turnDidChange_v1");
+    }
+
+    /**
+     * Called by the EZGameController when the game starts.
+     */
+    public function gameDidStart () :void
+    {
+        callUserCode("gameDidStart_v1");
+    }
+
+    /**
+     * Called by the EZGameController when the game ends.
+     */
+    public function gameDidEnd () :void
+    {
+        callUserCode("gameDidEnd_v1");
+    }
+
+    // from SetListener
+    public function entryAdded (event :EntryAddedEvent) :void
     {
         if (EZGameObject.USER_COOKIES == event.getName()) {
             receivedUserCookie(event.getEntry() as UserCookie);
         }
     }
 
-    /**
-     * Handle entry updated
-     */
-    private function entryUpdated (event :EntryUpdatedEvent) :void
+    // from SetListener
+    public function entryUpdated (event :EntryUpdatedEvent) :void
     {
         if (EZGameObject.USER_COOKIES == event.getName()) {
             receivedUserCookie(event.getEntry() as UserCookie);
         }
     }
+
+    // from SetListener
+    public function entryRemoved (event :EntryRemovedEvent) :void
+    {
+        // nada
+    }
+
+    // from PropertySetListener
+    public function propertyWasSet (event :PropertySetEvent) :void
+    {
+        callUserCode("propertyWasSet_v1", event.getName(), event.getValue(),
+            event.getOldValue(), event.getIndex());
+    }
+
+    public function messageReceived (event :MessageEvent) :void
+    {
+        var name :String = event.getName();
+        if (EZGameObject.USER_MESSAGE == name) {
+            var args :Array = event.getArgs();
+            callUserCode("messageReceived_v1", (args[0] as String),
+                EZObjectMarshaller.decode(args[1]));
+
+        } else if (EZGameObject.GAME_CHAT == name) {
+            // this is chat send by the game, let's route it like
+            // localChat, which is also sent by the game
+            localChat_v1(String(event.getArgs()[0]));
+
+        } else if (EZGameObject.TICKER == name) {
+            var targs :Array = event.getArgs();
+            callUserCode("messageReceived_v1", (targs[0] as String),
+                (targs[1] as Integer).value);
+        }
+    }
+
+    /**
+     * Called by our user listener when we receive a message event
+     * on the user object.
+     */
+    protected function messageReceivedOnUserObject (event :MessageEvent) :void
+    {
+        // see if it's a message about user games
+        var msgName :String =
+            EZGameObject.USER_MESSAGE + ":" + _ezObj.getOid();
+        if (msgName == event.getName()) {
+            var args :Array = event.getArgs();
+            callUserCode("messageReceived_v1", (args[0] as String),
+                EZObjectMarshaller.decode(args[1]));
+        }
+    }
+
 
     /**
      * Handle the arrival of a new UserCookie.
      */
-    private function receivedUserCookie (cookie :UserCookie) :void
+    protected function receivedUserCookie (cookie :UserCookie) :void
     {
         if (_cookieCallbacks != null) {
             var arr :Array = (_cookieCallbacks[cookie.playerIndex] as Array);
@@ -573,7 +561,12 @@ public class GameObjectImpl extends EventDispatcher
 
     protected var _ctx :CrowdContext;
 
+    protected var _userListener :MessageAdapter =
+        new MessageAdapter(messageReceivedOnUserObject);
+
     protected var _ezObj :EZGameObject;
+
+    protected var _userFuncs :Object;
 
     protected var _gameData :GameData;
 

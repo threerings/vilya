@@ -24,7 +24,7 @@ public class MessageReceivedEvent extends EZEvent
     }
 
     public function MessageReceivedEvent (
-        ezgame :EZGame, messageName :String, value :Object)
+        ezgame :EZGameControl, messageName :String, value :Object)
     {
         super(TYPE, ezgame);
         _name = messageName;

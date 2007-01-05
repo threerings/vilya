@@ -20,12 +20,15 @@ import flash.text.TextFieldAutoSize;
  * free to copy/modify or extend this class.
  */
 public class PlayersDisplay extends Sprite
-    implements Game, StateChangedListener
+    implements StateChangedListener
 {
-    // implementation of Game method
-    public function setGameObject (gameObj :EZGame) :void
+    /**
+     * Set the game control that will be used with this display.
+     */
+    public function setGameControl (gameCtrl :EZGameControl) :void
     {
-        _gameObj = gameObj;
+        _gameCtrl = gameCtrl;
+        _gameCtrl.registerListener(this);
 
         configureInterface();
     }
@@ -60,7 +63,7 @@ public class PlayersDisplay extends Sprite
 
         // create a label for each player
         var playerIndex :int = 0;
-        for each (var name :String in _gameObj.getPlayerNames()) {
+        for each (var name :String in _gameCtrl.getPlayerNames()) {
             label = createPlayerLabel(playerIndex, name);
             icon = createPlayerIcon(playerIndex, name);
             var iconW :int = 0;
@@ -156,15 +159,15 @@ public class PlayersDisplay extends Sprite
      */
     protected function displayCurrentTurn () :void
     {
-        var idx :int = _gameObj.isInPlay() ? _gameObj.getTurnHolderIndex() : -1;
+        var idx :int = _gameCtrl.isInPlay() ? _gameCtrl.getTurnHolderIndex() : -1;
         for (var ii :int = 0; ii < _playerLabels.length; ii++) {
             var label :TextField = (_playerLabels[ii] as TextField);
             label.backgroundColor = getBackground(ii == idx);
         }
     }
 
-    /** Our game object. */
-    protected var _gameObj :EZGame;
+    /** Our game Control. */
+    protected var _gameCtrl :EZGameControl;
 
     /** An array of labels, one for each player name. */
     protected var _playerLabels :Array = [];

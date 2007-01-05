@@ -10,9 +10,9 @@ use namespace flash_proxy;
 
 public class GameData extends Proxy
 {
-    public function GameData (gameObjImpl :GameObjectImpl, props :Object)
+    public function GameData (propSetFn :Function, props :Object)
     {
-        _gameObjImpl = gameObjImpl;
+        _propSetFn = propSetFn;
         _props = props;
     }
 
@@ -67,13 +67,13 @@ public class GameData extends Proxy
 
     override flash_proxy function setProperty (propName :*, value :*) :void
     {
-        _gameObjImpl.set(String(propName), value);
+        _propSetFn(String(propName), value, -1);
     }
 
     override flash_proxy function deleteProperty (propName :*) :Boolean
     {
         var hasProp :Boolean = hasProperty(propName);
-        _gameObjImpl.set(String(propName), null);
+        setProperty(propName, null);
         return hasProp;
     }
 
@@ -109,11 +109,11 @@ public class GameData extends Proxy
         return _props[nextName(index)];
     }
 
-    /** The GameObject that controls things. */
-    protected var _gameObjImpl :GameObjectImpl;
+    /** The function which we pass property setting to. */
+    protected var _propSetFn :Function;
 
     /** The object we're proxying. */
-    protected var _props :Object;
+    protected var _props :Object = { };
 
     /** Used temporarily while iterating over our names or values. */
     protected var _propertyList :Array;
