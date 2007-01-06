@@ -9,6 +9,11 @@ import flash.events.MouseEvent;
 
 import flash.display.DisplayObject;
 
+/**
+ * The single point of control for each client in your multiplayer EZGame.
+ *
+ * TODO: lots of documentation.
+ */
 public class EZGameControl extends EventDispatcher
 {
     /**
@@ -59,13 +64,17 @@ public class EZGameControl extends EventDispatcher
         }
     }
 
-    // from EZGame
+    /**
+     * Data accessor.
+     */
     public function get data () :Object
     {
         return _gameData;
     }
 
-    // from EZGame
+    /**
+     * Get a property from data.
+     */
     public function get (propName :String, index :int = -1) :Object
     {
         var value :Object = data[propName];
@@ -81,13 +90,20 @@ public class EZGameControl extends EventDispatcher
         return value;
     }
 
-    // from EZGame
+    /**
+     * Set a property that will be distributed. 
+     */
     public function set (propName :String, value :Object, index :int = -1) :void
     {
         callEZCode("setProperty_v1", propName, value, index);
     }
 
-    // from EZGame
+    /**
+     * Register an object to receive whatever events it should receive,
+     * based on which event listeners it implements. Note that it is not
+     * necessary to register any objects which appear on the display list,
+     * as they'll be registered automatically.
+     */
     public function registerListener (obj :Object) :void
     {
         if (obj is MessageReceivedListener) {
@@ -116,7 +132,9 @@ public class EZGameControl extends EventDispatcher
         }
     }
 
-    // from EZGame
+    /**
+     * Unregister the specified object from receiving events.
+     */
     public function unregisterListener (obj :Object) :void
     {
         if (obj is MessageReceivedListener) {
@@ -140,19 +158,40 @@ public class EZGameControl extends EventDispatcher
         }
     }
 
-    // from EZGame
+    /**
+     * Set the specified collection to contain the specified values,
+     * clearing any previous values.
+     */
     public function setCollection (collName :String, values :Array) :void
     {
         populateCollection(collName, values, true);
     }
 
-    // from EZGame
+    /**
+     * Add to an existing collection. If it doesn't exist, it will
+     * be created. The new values will be inserted randomly into the
+     * collection.
+     */
     public function addToCollection (collName :String, values :Array) :void
     {
         populateCollection(collName, values, false);
     }
 
-    // from EZGame
+    /**
+     * Pick (do not remove) the specified number of elements from a collection,
+     * and distribute them to a specific player or set them as a property
+     * in the game data.
+     *
+     * @param collName the collection name.
+     * @param count the number of elements to pick
+     * @param msgOrPropName the name of the message or property
+     *        that will contain the picked elements.
+     * @param playerIndex if -1 (or unset), the picked elements should be
+     *        set on the gameObject as a property for all to see.
+     *        If a playerIndex is specified, only that player will receive
+     *        the elements as a message.
+     */
+    // TODO: a way to specify exclusive picks vs. duplicate-OK picks?
     public function pickFromCollection (
         collName :String, count :int, msgOrPropName :String,
         playerIndex :int = -1) :void
@@ -161,7 +200,21 @@ public class EZGameControl extends EventDispatcher
             false, null);
     }
 
-    // from EZGame
+    /**
+     * Deal (remove) the specified number of elements from a collection,
+     * and distribute them to a specific player or set them as a property
+     * in the game data.
+     *
+     * @param collName the collection name.
+     * @param count the number of elements to pick
+     * @param msgOrPropName the name of the message or property
+     *        that will contain the picked elements.
+     * @param playerIndex if -1 (or unset), the picked elements should be
+     *        set on the gameObject as a property for all to see.
+     *        If a playerIndex is specified, only that player will receive
+     *        the elements as a message.
+     */
+    // TODO: figure out the method signature of the callback
     public function dealFromCollection (
         collName :String, count :int, msgOrPropName :String,
         callback :Function = null, playerIndex :int = -1) :void
@@ -170,104 +223,167 @@ public class EZGameControl extends EventDispatcher
             true, callback);
     }
 
-    // from EZGame
+    /**
+     * Merge the specified collection into the other collection.
+     * The source collection will be destroyed. The elements from
+     * The source collection will be shuffled and appended to the end
+     * of the destination collection.
+     */
     public function mergeCollection (srcColl :String, intoColl :String) :void
     {
         callEZCode("mergeCollection_v1", srcColl, intoColl);
     }
 
-    // from EZGame
+    /**
+     * Send a "message" to other clients subscribed to the game.
+     * These is similar to setting a property, except that the
+     * value will not be saved- it will merely end up coming out
+     * as a MessageReceivedEvent.
+     *
+     * @param playerIndex if -1, sends to all players, otherwise
+     * the message will be private to just one player
+     */
     public function sendMessage (
         messageName :String, value :Object, playerIndex :int = -1) :void
     {
         callEZCode("sendMessage_v1", messageName, value, playerIndex);
     }
 
-    // from EZGame
+    /**
+     * Start the ticker with the specified name. It will deliver
+     * messages to the game object at the specified delay,
+     * the value of each message being a single integer, starting with 0
+     * and increasing by one with each messsage.
+     */
     public function startTicker (tickerName :String, msOfDelay :int) :void
     {
         callEZCode("setTicker_v1", tickerName, msOfDelay);
     }
 
-    // from EZGame
+    /**
+     * Stop the specified ticker.
+     */
     public function stopTicker (tickerName :String) :void
     {
         startTicker(tickerName, 0);
     }
 
-    // from EZGame
+    /**
+     * Send a message that will be heard by everyone in the game room,
+     * even observers.
+     */
     public function sendChat (msg :String) :void
     {
         callEZCode("sendChat_v1", msg);
     }
 
-    // from EZGame
+    /**
+     * Display the specified message immediately locally: not sent
+     * to any other players or observers in the game room.
+     */
     public function localChat (msg :String) :void
     {
         callEZCode("localChat_v1", msg);
     }
 
-    // from EZGame
+    /**
+     * Get the number of players currently in the game.
+     */
     public function getPlayerCount () :int
     {
         return int(callEZCode("getPlayerCount_v1"));
     }
 
-    // from EZGame
+    /**
+     * Get the player names, as an array.
+     */
     public function getPlayerNames () :Array
     {
         return (callEZCode("getPlayerNames_v1") as Array);
     }
 
-    // from EZGame
+    /**
+     * Get the index into the player names array of the current player,
+     * or -1 if the user is not a player.
+     */
     public function getMyIndex () :int
     {
         return int(callEZCode("getMyIndex_v1"));
     }
 
-    // from EZGame
+    /**
+     * Get the turn holder's index, or -1 if it's nobody's turn.
+     */
     public function getTurnHolderIndex () :int
     {
         return int(callEZCode("getTurnHolderIndex_v1"));
     }
 
-    // from EZGame
+    /**
+     * Get the indexes of the winners
+     */
     public function getWinnerIndexes () :Array /* of int */
     {
         return (callEZCode("getWinnerIndexes_v1") as Array);
     }
 
-    // from EZGame
+    /**
+     * Get the user-specific game data for the specified user. The
+     * first time this is requested per game instance it will be retrieved
+     * from the database. After that, it will be returned from memory.
+     */
     public function getUserCookie (playerIndex :int, callback :Function) :void
     {
         callEZCode("getUserCookie_v1", playerIndex, callback);
     }
 
-    // from EZGame
+    /**
+     * Store persistent data that can later be retrieved by an instance
+     * of this game. The maximum size of this data is 4096 bytes AFTER
+     * AMF3 encoding.
+     *
+     * Note: there is no playerIndex parameter because a cookie may only
+     * be stored for the current player.
+     *
+     * @return false if the cookie could not be encoded to 4096 bytes
+     * or less; true if the cookie is going to try to be saved. There is
+     * no guarantee it will be saved and no way to find out if it failed,
+     * but if it fails it will be because the shit hit the fan so hard that
+     * there's nothing you can do anyway.
+     */
     public function setUserCookie (cookie :Object) :Boolean
     {
         return Boolean(callEZCode("setUserCookie_v1", cookie));
     }
 
-    // from EZGame
+    /**
+     * A convenience method to just check if it's our turn.
+     */
     public function isMyTurn () :Boolean
     {
         return Boolean(callEZCode("isMyTurn_v1"));
     }
 
-    // from EZGame
+    /**
+     * Is the game currently in play?
+     */
     public function isInPlay () :Boolean
     {
         return Boolean(callEZCode("isInPlay_v1"));
     }
 
-    // from EZGame
+    /**
+     * End the current turn. If no next player index is specified,
+     * then the next player after the current one is used.
+     */
     public function endTurn (nextPlayerIndex :int = -1) :void
     {
         callEZCode("endTurn_v1", nextPlayerIndex);
     }
 
-    // from EZGame
+    /**
+     * End the game. The specified player indexes are winners!
+     */
     public function endGame (... winnerIndexes) :void
     {
         var args :Array = winnerIndexes;
@@ -277,6 +393,9 @@ public class EZGameControl extends EventDispatcher
         callEZCode.apply(null, args);
     }
 
+    /**
+     * Your own events may not be dispatched here.
+     */
     override public function dispatchEvent (event :Event) :Boolean
     {
         // Ideally we want to not be an IEventDispatcher so that people
@@ -320,6 +439,9 @@ public class EZGameControl extends EventDispatcher
         o["dispatchEvent_v1"] = dispatch;
     }
 
+    /**
+     * Private method to post a PropertyChangedEvent.
+     */
     private function propertyWasSet_v1 (
         name :String, newValue :Object, oldValue :Object, index :int) :void
     {
@@ -327,21 +449,33 @@ public class EZGameControl extends EventDispatcher
             new PropertyChangedEvent(this, name, newValue, oldValue, index));
     }
 
+    /**
+     * Private method to post a StateChangedEvent.
+     */
     private function turnDidChange_v1 () :void
     {
         dispatch(new StateChangedEvent(StateChangedEvent.TURN_CHANGED, this));
     }
 
+    /**
+     * Private method to post a MessageReceivedEvent.
+     */
     private function messageReceived_v1 (name :String, value :Object) :void
     {
         dispatch(new MessageReceivedEvent(this, name, value));
     }
 
+    /**
+     * Private method to post a StateChangedEvent.
+     */
     private function gameDidStart_v1 () :void
     {
         dispatch(new StateChangedEvent(StateChangedEvent.GAME_STARTED, this));
     }
 
+    /**
+     * Private method to post a StateChangedEvent.
+     */
     private function gameDidEnd_v1 () :void
     {
         dispatch(new StateChangedEvent(StateChangedEvent.GAME_ENDED, this));
@@ -360,6 +494,9 @@ public class EZGameControl extends EventDispatcher
         _funcs = o;
     }
 
+    /**
+     * Call a method across the security boundary.
+     */
     protected function callEZCode (name :String, ... args) :*
     {
         if (_funcs != null) {
@@ -375,7 +512,7 @@ public class EZGameControl extends EventDispatcher
     }
 
     /**
-     * Internal method that is called whenever the mouse enters our root.
+     * Internal method that is called whenever the mouse clicks our root.
      */
     protected function handleRootClick (evt :MouseEvent) :void
     {
@@ -401,8 +538,10 @@ public class EZGameControl extends EventDispatcher
         }
     }
 
+    /** Contains the data properties shared by all players in the game. */
     protected var _gameData :Object;
 
+    /** Contains functions exposed to us from the EZGame host. */
     protected var _funcs :Object;
 }
 }
