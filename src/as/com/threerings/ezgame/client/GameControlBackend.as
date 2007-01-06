@@ -5,6 +5,12 @@ import flash.errors.IllegalOperationError;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
+import flash.events.KeyboardEvent;
+
+import flash.events.MouseEvent;
+
+import flash.display.DisplayObject;
+import flash.display.InteractiveObject;
 
 import flash.utils.IExternalizable;
 import flash.utils.ByteArray;
@@ -38,6 +44,9 @@ import com.threerings.ezgame.data.PropertySetListener;
 import com.threerings.ezgame.data.UserCookie;
 import com.threerings.ezgame.util.EZObjectMarshaller;
 
+/**
+ * Manages the backend of the game.
+ */
 public class GameControlBackend
     implements MessageListener, SetListener, PropertySetListener
 {
@@ -59,6 +68,11 @@ public class GameControlBackend
         disp.addEventListener("ezgameQuery", handleEZQuery);
     }
 
+    public function setContainer (container :GameContainer) :void
+    {
+        _container = container;
+    }
+
     public function shutdown () :void
     {
         _ezObj.removeListener(this);
@@ -75,6 +89,8 @@ public class GameControlBackend
     protected function setUserCodeProperties (o :Object) :void
     {
         // here we would handle adapting old functions to a new version
+
+        _ezDispatcher = (o["dispatchEvent_v1"] as Function);
 
         _userFuncs = o;
     }
@@ -121,6 +137,8 @@ public class GameControlBackend
         o["endGame_v1"] = endGame_v1;
         o["populateCollection_v1"] = populateCollection_v1;
         o["getFromCollection_v1"] = getFromCollection_v1;
+        o["alterKeyEvents_v1"] = alterKeyEvents_v1;
+        o["focusContainer_v1"] = focusContainer_v1;
     }
 
     public function setProperty_v1 (
@@ -340,6 +358,30 @@ public class GameControlBackend
         _ezObj.ezGameService.getFromCollection(
             _ctx.getClient(), collName, consume, count, msgOrPropName,
             playerIndex, listener);
+    }
+
+    public function alterKeyEvents_v1 (
+        keyEventType :String, add :Boolean) :void
+    {
+        if (add) {
+            _container.addEventListener(keyEventType, handleKeyEvent);
+        } else {
+            _container.removeEventListener(keyEventType, handleKeyEvent);
+        }
+    }
+
+    public function focusContainer_v1 () :void
+    {
+        _container.setFocus();
+    }
+    
+    /**
+     * Handle key events on our container and pass them into the game.
+     */
+    protected function handleKeyEvent (evt :KeyboardEvent) :void
+    {
+        // dispatch a cloned copy of the event, so that it's safe
+        _ezDispatcher(evt.clone());
     }
 
     /**
@@ -564,9 +606,15 @@ public class GameControlBackend
     protected var _userListener :MessageAdapter =
         new MessageAdapter(messageReceivedOnUserObject);
 
+    protected var _container :GameContainer;
+
     protected var _ezObj :EZGameObject;
 
     protected var _userFuncs :Object;
+
+    /** The function on the EZGameControl which we can use to directly
+     * dispatch events to the user's game. */
+    protected var _ezDispatcher :Function;
 
     protected var _gameData :GameData;
 

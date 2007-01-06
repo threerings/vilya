@@ -4,6 +4,8 @@ import flash.errors.IllegalOperationError;
 
 import flash.events.Event;
 import flash.events.EventDispatcher;
+import flash.events.KeyboardEvent;
+import flash.events.MouseEvent;
 
 import flash.display.DisplayObject;
 
@@ -20,6 +22,41 @@ public class EZGameControl extends EventDispatcher
         populateProperties(event.userProps);
         disp.root.loaderInfo.sharedEvents.dispatchEvent(event);
         setEZProps(event.ezProps);
+
+        // set up our focusing click handler
+        disp.root.addEventListener(MouseEvent.CLICK, handleRootClick);
+    }
+
+    // documentation inherited
+    override public function addEventListener (
+        type :String, listener :Function, useCapture :Boolean = false,
+        priority :int = 0, useWeakReference :Boolean = false) :void
+    {
+        super.addEventListener(type, listener, useCapture, priority,
+            useWeakReference);
+
+        switch (type) {
+        case KeyboardEvent.KEY_UP:
+        case KeyboardEvent.KEY_DOWN:
+            if (hasEventListener(type)) { // ensure it was added
+                callEZCode("alterKeyEvents_v1", type, true);
+            }
+        }
+    }
+
+    // documentation inherited
+    override public function removeEventListener (
+        type :String, listener :Function, useCapture :Boolean = false) :void
+    {
+        super.removeEventListener(type, listener, useCapture);
+
+        switch (type) {
+        case KeyboardEvent.KEY_UP:
+        case KeyboardEvent.KEY_DOWN:
+            if (!hasEventListener(type)) { // once it's no longer needed
+                callEZCode("alterKeyEvents_v1", type, false);
+            }
+        }
     }
 
     // from EZGame
@@ -240,11 +277,6 @@ public class EZGameControl extends EventDispatcher
         callEZCode.apply(null, args);
     }
 
-    override public function willTrigger (type :String) :Boolean
-    {
-        throw new IllegalOperationError();
-    }
-
     override public function dispatchEvent (event :Event) :Boolean
     {
         // Ideally we want to not be an IEventDispatcher so that people
@@ -285,6 +317,7 @@ public class EZGameControl extends EventDispatcher
         o["messageReceived_v1"] = messageReceived_v1;
         o["gameDidStart_v1"] = gameDidStart_v1;
         o["gameDidEnd_v1"] = gameDidEnd_v1;
+        o["dispatchEvent_v1"] = dispatch;
     }
 
     private function propertyWasSet_v1 (
@@ -339,6 +372,20 @@ public class EZGameControl extends EventDispatcher
                 trace("Unable to call ez code: " + err);
             }
         }
+    }
+
+    /**
+     * Internal method that is called whenever the mouse enters our root.
+     */
+    protected function handleRootClick (evt :MouseEvent) :void
+    {
+        try {
+            if (evt.target.stage.focus != null) {
+                return;
+            }
+        } catch (err :SecurityError) {
+        }
+        callEZCode("focusContainer_v1");
     }
 
     /**

@@ -49,10 +49,10 @@ public class EZGamePanel extends VBox
         _ezObj = (plobj as EZGameObject);
         backend = new GameControlBackend(_ctx, _ezObj);
 
-        _gameView = new GameContainer(cfg.configData); // TODO
-        _gameView.tabEnabled = true;
+        _gameView = new GameContainer(cfg.configData); // TODO?
         backend.setSharedEvents(
             Loader(_gameView.getMedia()).contentLoaderInfo.sharedEvents);
+        backend.setContainer(_gameView);
         addChild(_gameView);
     }
 
