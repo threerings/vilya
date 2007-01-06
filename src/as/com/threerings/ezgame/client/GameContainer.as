@@ -1,6 +1,6 @@
 package com.threerings.ezgame.client {
 
-import flash.display.Loader;
+import flash.display.DisplayObject;
 
 import flash.geom.Rectangle;
 
