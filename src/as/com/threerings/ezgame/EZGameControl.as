@@ -26,7 +26,11 @@ public class EZGameControl extends EventDispatcher
         event.userProps = new Object();
         populateProperties(event.userProps);
         disp.root.loaderInfo.sharedEvents.dispatchEvent(event);
-        setEZProps(event.ezProps);
+        if (event.ezProps != null) {
+            setEZProps(event.ezProps);
+        } else {
+            trace("The game is not being run in the ezgame environment");
+        }
 
         // set up our focusing click handler
         disp.root.addEventListener(MouseEvent.CLICK, handleRootClick);
@@ -100,9 +104,7 @@ public class EZGameControl extends EventDispatcher
 
     /**
      * Register an object to receive whatever events it should receive,
-     * based on which event listeners it implements. Note that it is not
-     * necessary to register any objects which appear on the display list,
-     * as they'll be registered automatically.
+     * based on which event listeners it implements.
      */
     public function registerListener (obj :Object) :void
     {
