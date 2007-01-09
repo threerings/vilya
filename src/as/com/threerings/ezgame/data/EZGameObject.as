@@ -141,9 +141,7 @@ public class EZGameObject extends GameObject
         super.readObject(ins);
 
         // first read any regular bits
-        turnHolder = (ins.readObject() as Name);
-        userCookies = (ins.readObject() as DSet);
-        ezGameService = (ins.readObject() as EZGameMarshaller);
+        readDefaultFields(ins);
 
         // then user properties
         var count :int = ins.readInt();
@@ -154,6 +152,16 @@ public class EZGameObject extends GameObject
         }
     }
 
+    /**
+     * Reads the fields written by the default serializer for this instance.
+     */
+    protected function readDefaultFields (ins :ObjectInputStream) :void
+    {
+        turnHolder = (ins.readObject() as Name);
+        userCookies = (ins.readObject() as DSet);
+        ezGameService = (ins.readObject() as EZGameMarshaller);
+    }
+    
     /** The raw properties set by the game. */
     protected var _props :Object = new Object();
 }
