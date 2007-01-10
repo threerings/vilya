@@ -47,7 +47,7 @@ public class EZGamePanel extends VBox
         var cfg :EZGameConfig = (_ctrl.getPlaceConfig() as EZGameConfig);
 
         _ezObj = (plobj as EZGameObject);
-        backend = new GameControlBackend(_ctx, _ezObj);
+        backend = createBackend();
 
         _gameView = new GameContainer(cfg.configData); // TODO?
         backend.setSharedEvents(
@@ -65,6 +65,14 @@ public class EZGamePanel extends VBox
         backend.shutdown();
     }
 
+    /**
+     * Creates the backend object that will handle requests from user code.
+     */
+    protected function createBackend () :GameControlBackend
+    {
+        return new GameControlBackend(_ctx, _ezObj);
+    }
+    
     protected var _ctx :CrowdContext;
     protected var _ctrl :EZGameController;
 
