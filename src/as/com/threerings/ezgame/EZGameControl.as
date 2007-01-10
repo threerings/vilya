@@ -26,14 +26,21 @@ public class EZGameControl extends EventDispatcher
         event.userProps = new Object();
         populateProperties(event.userProps);
         disp.root.loaderInfo.sharedEvents.dispatchEvent(event);
-        if (event.ezProps != null) {
+        if ("ezProps" in event) {
             setEZProps(event.ezProps);
-        } else {
-            trace("The game is not being run in the ezgame environment");
         }
 
         // set up our focusing click handler
         disp.root.addEventListener(MouseEvent.CLICK, handleRootClick);
+    }
+
+    /**
+     * Are we connected and running inside the EZGame environment, or
+     * has someone just loaded up this swf by itself?
+     */
+    public function isConnected () :Boolean
+    {
+        return (_gameData != null);
     }
 
     // documentation inherited
