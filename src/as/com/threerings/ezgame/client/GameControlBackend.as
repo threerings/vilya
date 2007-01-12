@@ -146,7 +146,7 @@ public class GameControlBackend
     {
         validatePropertyChange(propName, value, index);
 
-        var encoded :Object = EZObjectMarshaller.encode(value);
+        var encoded :Object = EZObjectMarshaller.encode(value, (index == -1));
         _ezObj.ezGameService.setProperty(
             _ctx.getClient(), propName, encoded, index,
             createLoggingListener("setProperty"));
@@ -170,7 +170,7 @@ public class GameControlBackend
         validateName(messageName);
         validateValue(value);
 
-        var encoded :Object = EZObjectMarshaller.encode(value);
+        var encoded :Object = EZObjectMarshaller.encode(value, false);
         _ezObj.ezGameService.sendMessage(_ctx.getClient(),
             messageName, encoded, playerIndex,
             createLoggingListener("sendMessage"));
@@ -420,6 +420,9 @@ public class GameControlBackend
                 throw new ArgumentError("Property " + propName +
                     " is not an Array.");
             }
+
+        } else if (index != -1) {
+            throw new ArgumentError("Invalid index specified: " + index);
         }
 
         // validate the value too
