@@ -10,6 +10,57 @@ import flash.events.MouseEvent;
 import flash.display.DisplayObject;
 
 /**
+ * Dispatched when a key is pressed when the game has focus.
+ *
+ * @eventType flash.events.KeyboardEvent.KEY_DOWN
+ */
+[Event(name="keyDown", type="flash.events.KeyboardEvent")]
+
+/**
+ * Dispatched when a key is released when the game has focus.
+ *
+ * @eventType flash.events.KeyboardEvent.KEY_UP
+ */
+[Event(name="keyUp", type="flash.events.KeyboardEvent")]
+
+/**
+ * Dispatched when the game starts, usually after all players are present.
+ *
+ * @eventType com.threerings.ezgame.StateChangedEvent.GAME_STARTED
+ */
+[Event(name="GameStarted", type="com.threerings.ezgame.StateChangedEvent")]
+
+/**
+ * Dispatched when the turn changes in a turn-based game.
+ *
+ * @eventType com.threerings.ezgame.StateChangedEvent.TURN_CHANGED
+ */
+[Event(name="GameStarted", type="com.threerings.ezgame.StateChangedEvent")]
+
+/**
+ * Dispatched when the game ends.
+ *
+ * @eventType com.threerings.ezgame.StateChangedEvent.GAME_ENDED
+ */
+[Event(name="GameStarted", type="com.threerings.ezgame.StateChangedEvent")]
+
+/**
+ * Dispatched when a property has changed in the shared game state.
+ *
+ * @eventType com.threerings.ezgame.PropertyChangedEvent.TYPE
+ */
+[Event(name="PropChanged", type="com.threerings.ezgame.PropertyChangedEvent")]
+
+/**
+ * Dispatched when a message arrives with information that is not part
+ * of the shared game state.
+ *
+ * @eventType com.threerings.ezgame.MessageReceivedEvent.TYPE
+ */
+[Event(name="msgReceived", type="com.threerings.ezgame.MessageReceivedEvent")]
+
+
+/**
  * The single point of control for each client in your multiplayer EZGame.
  *
  * TODO: lots of documentation.
