@@ -80,6 +80,14 @@ public class PropertySetEvent extends NamedEvent
         }
     }
 
+    @Override
+    protected void toString (StringBuilder buf)
+    {
+        buf.append("PropertySetEvent ");
+        super.toString(buf);
+        buf.append(", index=").append(_index);
+    }
+
     /** The index of the property, if applicable. */
     protected int _index;
 

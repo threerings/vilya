@@ -10,6 +10,8 @@ import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 import com.threerings.io.Streamer;
 
+import com.threerings.util.StringBuilder;
+
 import com.threerings.presents.dobj.DObject;
 import com.threerings.presents.dobj.NamedEvent;
 
@@ -82,6 +84,13 @@ public class PropertySetEvent extends NamedEvent
         if (listener is PropertySetListener) {
             (listener as PropertySetListener).propertyWasSet(this);
         }
+    }
+
+    override protected function toStringBuf (buf :StringBuilder) :void
+    {
+        buf.append("PropertySetEvent ");
+        super.toStringBuf(buf);
+        buf.append(", index=").append(_index);
     }
 
     /** The index of the property, if applicable. */
