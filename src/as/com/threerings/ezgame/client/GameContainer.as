@@ -8,6 +8,8 @@ import mx.core.mx_internal;
 import mx.core.IFlexDisplayObject;
 import mx.core.IInvalidating;
 
+import mx.containers.VBox;
+
 import mx.managers.IFocusManagerComponent;
 
 import mx.skins.ProgrammaticSkin;
@@ -21,16 +23,32 @@ import com.threerings.util.MediaContainer;
 // 3) When the mouse leaves the flash player and returns, this
 //    damn thing doesn't seem to grip onto the focus.
 // 
-public class GameContainer extends MediaContainer
+public class GameContainer extends VBox
     implements IFocusManagerComponent
 {
     public function GameContainer (url :String)
     {
-        super(url);
+        rawChildren.addChild(_game = new MediaContainer(url));
 
         tabEnabled = true; // turned off by Container
 //        focusRect = true; // we need the focus rect
     }
+
+    public function getMediaContainer () :MediaContainer
+    {
+        return _game;
+    }
+
+//    override public function setFocus () :void
+//    {
+//        if (stage) {
+//            try {
+//                stage.focus = this;
+//            } catch (e :Error) {
+//                trace("Apparently, this might happen: " + e)
+//            }
+//        }
+//    }
 
     override protected function adjustFocusRect (obj :DisplayObject = null) :void
     {
@@ -52,5 +70,7 @@ public class GameContainer extends MediaContainer
             }
         }
     }
+
+    protected var _game :MediaContainer;
 }
 }

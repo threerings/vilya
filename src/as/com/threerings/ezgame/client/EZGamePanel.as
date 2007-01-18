@@ -51,7 +51,8 @@ public class EZGamePanel extends VBox
 
         _gameView = new GameContainer(cfg.configData); // TODO?
         backend.setSharedEvents(
-            Loader(_gameView.getMedia()).contentLoaderInfo.sharedEvents);
+            Loader(_gameView.getMediaContainer().getMedia()).
+            contentLoaderInfo.sharedEvents);
         backend.setContainer(_gameView);
         addChild(_gameView);
     }
@@ -59,7 +60,7 @@ public class EZGamePanel extends VBox
     // from PlaceView
     public function didLeavePlace (plobj :PlaceObject) :void
     {
-        _gameView.shutdown(true);
+        _gameView.getMediaContainer().shutdown(true);
         removeChild(_gameView);
 
         backend.shutdown();
