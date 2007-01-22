@@ -21,9 +21,7 @@
 
 package com.threerings.parlor.card.data {
 
-import mx.collections.ArrayCollection;
-
-import com.threerings.util.Collections;
+import com.threerings.util.ArrayUtil;
 import com.threerings.util.StreamableArrayList;
 
 /**
@@ -58,7 +56,7 @@ public class Deck extends StreamableArrayList
             var hand :Hand = new Hand();
             var offset :int = length - size;
             for (var ii :int = 0; ii < size; ii++) {
-                hand.addItem(removeItemAt(offset));
+                hand.add(removeAt(offset));
             }
             return hand;
         }
@@ -72,7 +70,7 @@ public class Deck extends StreamableArrayList
     public function returnHand (hand :Hand) :void
     {
         addAll(hand);
-        hand.removeAll();
+        hand.clear();
     }
 
     /**
@@ -84,17 +82,17 @@ public class Deck extends StreamableArrayList
      */
     public function reset (includeJokers :Boolean) :void
     {
-        removeAll();
+        clear();
 
         for (var i :int = CardCodes.SPADES; i <= CardCodes.DIAMONDS; i++) {
             for (var j :int = 2; j <= CardCodes.ACE; j++) {
-                addItem(new Card(j, i));
+                add(new Card(j, i));
             }
         }
 
         if (includeJokers) {
-            addItem(new Card(CardCodes.RED_JOKER, 3));
-            addItem(new Card(CardCodes.BLACK_JOKER, 3));
+            add(new Card(CardCodes.RED_JOKER, 3));
+            add(new Card(CardCodes.BLACK_JOKER, 3));
         }
     }
 
@@ -103,7 +101,7 @@ public class Deck extends StreamableArrayList
      */
     public function shuffle () :void
     {
-        Collections.shuffle(this);
+        ArrayUtil.shuffle(_array);
     }
 }
 }

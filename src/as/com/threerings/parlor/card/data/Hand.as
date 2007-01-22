@@ -43,7 +43,7 @@ public class Hand extends StreamableArrayList
     {
         var members :int = 0;
         for (var i :int = 0; i < length; i++) {
-            if ((getItemAt(i) as Card).getSuit() == suit) {
+            if ((get(i) as Card).getSuit() == suit) {
                 members++;
             }
         }
@@ -63,9 +63,7 @@ public class Hand extends StreamableArrayList
      */
     public function addAllCards (cards :Array) :void
     {
-        for (var i :int = 0; i < cards.length; i++) {
-            addItem(cards[i]);
-        }
+        addAll(cards);
     }
 
     /**
@@ -74,7 +72,7 @@ public class Hand extends StreamableArrayList
     public function containsAllCards (cards :Array) :Boolean
     {
         for (var i :int = 0; i < cards.length; i++) {
-            if (indexOf(cards[i]) == -1) {
+            if (!contains(cards[i])) {
                 return false;
             }
         }
