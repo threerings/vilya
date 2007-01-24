@@ -64,6 +64,8 @@ public class ScoreAnimation extends FloatingTextAnimation
 
     /**
      * Create and configure a Label suitable for a ScoreAnimation with all the most common options.
+     *
+     * @deprecated This signature is retained for backwards compatibility.
      */
     public static Label createLabel (String score, Color c, Font font, MediaPanel host)
     {
