@@ -1,5 +1,5 @@
 //
-// $Id: ScoreAnimation.java 3479 2005-04-13 19:06:33Z mdb $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

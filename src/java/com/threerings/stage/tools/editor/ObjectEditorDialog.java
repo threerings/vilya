@@ -1,5 +1,5 @@
 
-// $Id: ObjectEditorDialog.java 16959 2004-08-30 22:09:53Z ray $
+// $Id$
 
 package com.threerings.stage.tools.editor;
 

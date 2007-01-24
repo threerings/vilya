@@ -1,5 +1,5 @@
 //
-// $Id: LobbyController.java 3440 2005-03-30 01:09:30Z mdb $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

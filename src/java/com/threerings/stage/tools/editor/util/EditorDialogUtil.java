@@ -1,5 +1,5 @@
 //
-// $Id: EditorDialogUtil.java 9223 2003-05-27 02:35:00Z mdb $
+// $Id$
 
 package com.threerings.stage.tools.editor.util;
 

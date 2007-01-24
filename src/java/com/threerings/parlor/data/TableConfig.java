@@ -1,5 +1,5 @@
 //
-// $Id: TableConfig.java 3604 2005-06-17 20:25:28Z ray $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

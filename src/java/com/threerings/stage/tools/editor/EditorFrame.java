@@ -1,5 +1,5 @@
 //
-// $Id: EditorFrame.java 19411 2005-02-19 00:28:49Z mdb $
+// $Id$
 
 package com.threerings.stage.tools.editor;
 

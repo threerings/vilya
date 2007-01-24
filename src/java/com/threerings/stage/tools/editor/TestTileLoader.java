@@ -1,5 +1,5 @@
 //
-// $Id: TestTileLoader.java 9938 2003-06-20 03:55:58Z mdb $
+// $Id$
 
 package com.threerings.stage.tools.editor;
 

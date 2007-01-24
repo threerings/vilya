@@ -1,5 +1,5 @@
 //
-// $Id: ExtrasPainter.java 7998 2003-04-18 18:34:41Z mdb $
+// $Id$
 
 package com.threerings.stage.tools.editor.util;
 

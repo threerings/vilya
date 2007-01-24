@@ -1,5 +1,5 @@
 //
-// $Id: TurnGameManager.java 3390 2005-03-10 00:13:25Z tedv $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

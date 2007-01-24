@@ -1,5 +1,5 @@
 //
-// $Id: DefaultSceneConfig.java 4026 2006-04-18 01:32:41Z mdb $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

@@ -1,5 +1,5 @@
 //
-// $Id: PlayerStatusView.java 3664 2005-07-28 21:10:11Z ray $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

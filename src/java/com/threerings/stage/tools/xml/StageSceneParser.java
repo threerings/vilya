@@ -1,5 +1,5 @@
 //
-// $Id: StageSceneParser.java 16546 2004-07-27 20:49:56Z ray $
+// $Id$
 
 package com.threerings.stage.tools.xml;
 

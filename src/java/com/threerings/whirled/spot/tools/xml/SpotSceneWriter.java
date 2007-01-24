@@ -1,5 +1,5 @@
 //
-// $Id: SpotSceneWriter.java 4077 2006-04-28 21:27:11Z ray $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

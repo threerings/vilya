@@ -1,5 +1,5 @@
 //
-// $Id: GameAI.java 3399 2005-03-12 07:37:34Z mdb $
+// $Id$
 
 package com.threerings.parlor.game.data;
 

@@ -1,5 +1,5 @@
 //
-// $Id: StageSceneConfig.java 8478 2003-05-07 05:12:26Z mdb $
+// $Id$
 
 package com.threerings.stage.data;
 

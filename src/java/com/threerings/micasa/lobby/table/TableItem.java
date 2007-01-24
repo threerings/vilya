@@ -1,5 +1,5 @@
 //
-// $Id: TableItem.java 3758 2005-11-10 23:18:58Z mdb $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

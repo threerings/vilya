@@ -1,5 +1,5 @@
 //
-// $Id: ViewerFrame.java 20143 2005-03-30 01:12:48Z mdb $
+// $Id$
 
 package com.threerings.stage.tools.viewer;
 

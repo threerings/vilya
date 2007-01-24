@@ -1,5 +1,5 @@
 //
-// $Id: TurnGameObject.java 3667 2005-08-03 07:46:54Z mdb $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

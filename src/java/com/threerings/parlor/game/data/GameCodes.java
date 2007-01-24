@@ -1,5 +1,5 @@
 //
-// $Id: PuzzleCodes.java 3184 2004-10-28 19:20:27Z mdb $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

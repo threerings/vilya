@@ -1,5 +1,5 @@
 //
-// $Id: DropBoardSummary.java 3495 2005-04-15 21:44:36Z ray $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

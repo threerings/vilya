@@ -1,5 +1,5 @@
 //
-// $Id: ZoneManager.java 3350 2005-02-15 00:58:16Z mdb $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

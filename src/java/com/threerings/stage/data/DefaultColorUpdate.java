@@ -1,5 +1,5 @@
 //
-// $Id: DefaultColorUpdate.java 16551 2004-07-27 20:53:28Z ray $
+// $Id$
 
 package com.threerings.stage.data;
 

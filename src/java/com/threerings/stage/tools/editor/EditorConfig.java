@@ -1,5 +1,5 @@
 //
-// $Id: EditorConfig.java 1352 2002-03-28 23:55:21Z ray $
+// $Id$
 
 package com.threerings.stage.tools.editor;
 

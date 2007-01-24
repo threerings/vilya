@@ -1,5 +1,5 @@
 //
-// $Id: DirectionButton.java 5784 2003-01-08 04:17:40Z mdb $
+// $Id$
 
 package com.threerings.stage.tools.editor;
 

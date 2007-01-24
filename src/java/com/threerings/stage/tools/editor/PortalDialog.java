@@ -1,5 +1,5 @@
 //
-// $Id: PortalDialog.java 9371 2003-06-02 20:28:21Z mdb $
+// $Id$
 
 package com.threerings.stage.tools.editor;
 

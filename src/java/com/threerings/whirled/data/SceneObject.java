@@ -1,5 +1,5 @@
 //
-// $Id: SceneObject.java 3288 2004-12-28 03:51:29Z mdb $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

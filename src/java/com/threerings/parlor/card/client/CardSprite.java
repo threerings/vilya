@@ -1,5 +1,5 @@
 //
-// $Id: CardSprite.java 3819 2006-01-24 19:46:34Z mthomas $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

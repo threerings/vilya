@@ -1,5 +1,5 @@
 //
-// $Id: WorldScenePanel.java 18366 2004-12-15 22:56:58Z ray $
+// $Id$
 
 package com.threerings.stage.client;
 

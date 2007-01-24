@@ -1,5 +1,5 @@
 //
-// $Id: WorldSceneService.java 14426 2004-03-12 12:12:32Z mdb $
+// $Id$
 
 package com.threerings.stage.client;
 

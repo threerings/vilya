@@ -1,5 +1,5 @@
 //
-// $Id: ParlorCodes.java 3359 2005-02-19 22:38:06Z mdb $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

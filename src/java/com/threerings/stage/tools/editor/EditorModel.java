@@ -1,5 +1,5 @@
 //
-// $Id: EditorModel.java 17780 2004-11-10 23:00:07Z ray $
+// $Id$
 
 package com.threerings.stage.tools.editor;
 

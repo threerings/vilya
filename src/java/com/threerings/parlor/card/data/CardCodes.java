@@ -1,5 +1,5 @@
 //
-// $Id: CardCodes.java 3224 2004-11-19 19:04:56Z andrzej $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

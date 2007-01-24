@@ -1,5 +1,5 @@
 //
-// $Id: TrickCardGameControllerDelegate.java 3465 2005-04-12 02:50:17Z andrzej $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

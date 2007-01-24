@@ -1,5 +1,5 @@
 //
-// $Id: YoScene.java 17013 2004-09-08 02:39:09Z ray $
+// $Id$
 
 package com.threerings.stage.data;
 

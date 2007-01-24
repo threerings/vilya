@@ -1,5 +1,5 @@
 //
-// $Id: StageSceneRuleSet.java 6370 2003-02-12 07:32:00Z mdb $
+// $Id$
 
 package com.threerings.stage.tools.xml;
 

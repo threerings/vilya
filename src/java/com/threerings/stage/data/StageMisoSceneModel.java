@@ -1,5 +1,5 @@
 //
-// $Id: YoMisoSceneModel.java 9680 2003-06-13 02:16:00Z mdb $
+// $Id$
 
 package com.threerings.stage.data;
 

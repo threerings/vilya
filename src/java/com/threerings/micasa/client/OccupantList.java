@@ -1,5 +1,5 @@
 //
-// $Id: OccupantList.java 3406 2005-03-15 02:12:03Z mdb $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

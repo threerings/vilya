@@ -1,5 +1,5 @@
 //
-// $Id: RoisterService.java 17829 2004-11-12 20:24:43Z mdb $
+// $Id$
 
 package com.threerings.parlor.card.trick.client;
 

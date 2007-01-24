@@ -1,5 +1,5 @@
 //
-// $Id: PuzzleContext.java 3524 2005-04-25 21:08:52Z mdb $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

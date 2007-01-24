@@ -1,5 +1,5 @@
 //
-// $Id: GameManager.java 4175 2006-06-06 15:51:48Z mdb $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

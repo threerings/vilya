@@ -1,5 +1,5 @@
 //
-// $Id: YoSceneModel.java 17643 2004-10-28 22:58:30Z mdb $
+// $Id$
 
 package com.threerings.stage.data;
 

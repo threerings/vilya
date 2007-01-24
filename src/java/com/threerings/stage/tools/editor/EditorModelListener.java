@@ -1,5 +1,5 @@
 //
-// $Id: EditorModelListener.java 217 2001-11-29 00:29:31Z mdb $
+// $Id$
 
 package com.threerings.stage.tools.editor;
 

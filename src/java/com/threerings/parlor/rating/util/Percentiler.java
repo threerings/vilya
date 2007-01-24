@@ -1,5 +1,5 @@
 //
-// $Id: TestConfig.java 4193 2006-06-13 23:06:48Z ray $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

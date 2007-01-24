@@ -1,5 +1,5 @@
 //
-// $Id: TileInfoPanel.java 17625 2004-10-28 17:50:03Z mdb $
+// $Id$
 
 package com.threerings.stage.tools.editor;
 

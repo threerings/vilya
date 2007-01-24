@@ -1,5 +1,5 @@
 //
-// $Id: ZoneProvider.java 3860 2006-02-17 01:08:01Z mthomas $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

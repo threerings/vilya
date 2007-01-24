@@ -1,5 +1,5 @@
 //
-// $Id: ParlorService.java 3525 2005-04-26 02:38:42Z ray $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

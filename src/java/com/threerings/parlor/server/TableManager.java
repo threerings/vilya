@@ -1,5 +1,5 @@
 //
-// $Id: TableManager.java 3804 2006-01-13 01:52:36Z ray $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

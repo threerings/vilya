@@ -1,5 +1,5 @@
 //
-// $Id: SpotSceneObject.java 4166 2006-05-31 04:16:57Z mdb $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

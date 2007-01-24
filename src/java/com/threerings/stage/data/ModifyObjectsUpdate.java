@@ -1,5 +1,5 @@
 //
-// $Id: AddObjectUpdate.java 15953 2004-06-11 23:40:47Z ray $
+// $Id$
 
 package com.threerings.stage.data;
 

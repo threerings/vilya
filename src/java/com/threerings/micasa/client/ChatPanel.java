@@ -1,5 +1,5 @@
 //
-// $Id: ChatPanel.java 3741 2005-10-25 11:13:51Z elizabeth $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

@@ -1,5 +1,5 @@
 //
-// $Id: EditorContext.java 7429 2003-04-01 02:19:34Z mdb $
+// $Id$
 
 package com.threerings.stage.tools.editor.util;
 

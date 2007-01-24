@@ -1,5 +1,5 @@
 //
-// $Id: DropManagerDelegate.java 3777 2005-12-07 19:19:11Z mjohnson $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

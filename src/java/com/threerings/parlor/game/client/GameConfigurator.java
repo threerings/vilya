@@ -1,5 +1,5 @@
 //
-// $Id: GameConfigurator.java 3590 2005-06-08 23:20:18Z ray $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

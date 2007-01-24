@@ -1,5 +1,5 @@
 //
-// $Id: SceneColorizer.java 17027 2004-09-10 00:10:46Z ray $
+// $Id$
 
 package com.threerings.stage.client;
 

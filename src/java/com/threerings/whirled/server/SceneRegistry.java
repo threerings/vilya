@@ -1,5 +1,5 @@
 //
-// $Id: SceneRegistry.java 3679 2005-08-11 22:30:40Z ray $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

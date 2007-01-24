@@ -1,5 +1,5 @@
 //
-// $Id: Log.java 49 2001-08-09 00:32:53Z mdb $
+// $Id$
 
 package com.threerings.stage;
 

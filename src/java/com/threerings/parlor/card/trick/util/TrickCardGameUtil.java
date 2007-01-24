@@ -1,5 +1,5 @@
 //
-// $Id: TrickCardGameObject.java 3382 2005-03-03 19:55:35Z mdb $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

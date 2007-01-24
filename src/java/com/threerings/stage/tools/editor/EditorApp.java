@@ -1,5 +1,5 @@
 //
-// $Id: EditorApp.java 19661 2005-03-09 02:40:29Z andrzej $
+// $Id$
 
 package com.threerings.stage.tools.editor;
 

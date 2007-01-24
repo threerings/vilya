@@ -1,5 +1,5 @@
 //
-// $Id: DropControllerDelegate.java 3772 2005-12-01 23:54:00Z ray $
+// $Id$
 //
 // Narya library - tools for developing networked games
 // Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved

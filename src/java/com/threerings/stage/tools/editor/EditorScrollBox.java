@@ -1,5 +1,5 @@
 //
-// $Id: EditorScrollBox.java 19363 2005-02-17 21:36:41Z ray $
+// $Id$
 
 package com.threerings.stage.tools.editor;
 
