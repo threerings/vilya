@@ -22,6 +22,7 @@
 package com.threerings.parlor.media;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 
 import com.samskivert.swing.Label;
@@ -36,8 +37,7 @@ public class ScoreAnimation extends FloatingTextAnimation
     }
 
     /**
-     * Constructs a score animation for the given score value centered at
-     * the given coordinates.
+     * Constructs a score animation for the given score value centered at the given coordinates.
      */
     public ScoreAnimation (Label label, int x, int y)
     {
@@ -45,9 +45,8 @@ public class ScoreAnimation extends FloatingTextAnimation
     }
 
     /**
-     * Constructs a score animation for the given score value centered at
-     * the given coordinates. The animation will float up the screen for
-     * 30 pixels.
+     * Constructs a score animation for the given score value centered at the given
+     * coordinates. The animation will float up the screen for 30 pixels.
      */
     public ScoreAnimation (Label label, int x, int y, long floatPeriod)
     {
@@ -55,22 +54,26 @@ public class ScoreAnimation extends FloatingTextAnimation
     }
 
     /**
-     * Constructs a score animation for the given score value starting at
-     * the given coordinates and floating toward the specified
-     * coordinates.
+     * Constructs a score animation for the given score value starting at the given coordinates and
+     * floating toward the specified coordinates.
      */
-    public ScoreAnimation (Label label, int sx, int sy,
-                           int destx, int desty, long floatPeriod)
+    public ScoreAnimation (Label label, int sx, int sy, int destx, int desty, long floatPeriod)
     {
         super(label, sx, sy, destx, desty, floatPeriod);
     }
 
     /**
-     * Create and configure a Label suitable for a ScoreAnimation with
-     * all the most common options.
+     * Create and configure a Label suitable for a ScoreAnimation with all the most common options.
      */
-    public static Label createLabel (String score, Color c, Font font,
-                                     MediaPanel host)
+    public static Label createLabel (String score, Color c, Font font, MediaPanel host)
+    {
+        return createLabel(score, c, font, host);
+    }
+
+    /**
+     * Create and configure a Label suitable for a ScoreAnimation with all the most common options.
+     */
+    public static Label createLabel (String score, Color c, Font font, Component host)
     {
         Label label = new Label(score);
         label.setTargetWidth(host.getWidth());
@@ -80,7 +83,6 @@ public class ScoreAnimation extends FloatingTextAnimation
         label.setFont(font);
         label.setAlignment(Label.CENTER);
         label.layout(host);
-
         return label;
     }
 }
