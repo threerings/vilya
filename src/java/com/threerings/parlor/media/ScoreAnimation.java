@@ -67,6 +67,7 @@ public class ScoreAnimation extends FloatingTextAnimation
      *
      * @deprecated This signature is retained for backwards compatibility.
      */
+    @Deprecated
     public static Label createLabel (String score, Color c, Font font, MediaPanel host)
     {
         return createLabel(score, c, font, (Component)host);
