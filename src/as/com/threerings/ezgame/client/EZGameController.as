@@ -65,8 +65,14 @@ public class EZGameController extends GameController
 
     override protected function createPlaceView (ctx :CrowdContext) :PlaceView
     {
-        _panel = new EZGamePanel(ctx, this);
-        return _panel;
+        return new EZGamePanel(ctx, this);
+    }
+
+    override protected function didInit () :void
+    {
+        super.didInit();
+        // retain a casted reference to our panel
+        _panel = (_view as EZGamePanel);
     }
 
     protected var _ezObj :EZGameObject;

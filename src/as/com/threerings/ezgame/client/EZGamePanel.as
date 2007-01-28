@@ -18,8 +18,6 @@ import mx.utils.DisplayUtil;
 
 import com.threerings.util.MediaContainer;
 
-import com.threerings.mx.controls.ChatDisplayBox;
-
 import com.threerings.crowd.client.PlaceView;
 import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.util.CrowdContext;
@@ -37,8 +35,6 @@ public class EZGamePanel extends VBox
     {
         _ctx = ctx;
         _ctrl = ctrl;
-
-        //addChild(new ChatDisplayBox(ctx));
     }
 
     // from PlaceView
