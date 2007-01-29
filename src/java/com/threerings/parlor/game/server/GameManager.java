@@ -495,8 +495,6 @@ public class GameManager extends PlaceManager
             // let derived classes do some business
             playerGameDidEnd(pidx);
 
-            announcePlayerGameOver(pidx);
-
         } finally {
             _gameobj.commitTransaction();
         }
@@ -1103,6 +1101,8 @@ public class GameManager extends PlaceManager
      */
     protected void playerGameDidEnd (int pidx)
     {
+        // report that the player's game is over to anyone still in the game room
+        announcePlayerGameOver(pidx);
     }
 
     /**
