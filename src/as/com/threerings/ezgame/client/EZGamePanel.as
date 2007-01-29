@@ -9,7 +9,6 @@ import flash.events.Event;
 import flash.utils.Dictionary;
 
 import mx.containers.Canvas;
-import mx.containers.VBox;
 
 import mx.core.Container;
 import mx.core.IChildList;
@@ -25,7 +24,7 @@ import com.threerings.crowd.util.CrowdContext;
 import com.threerings.ezgame.data.EZGameConfig;
 import com.threerings.ezgame.data.EZGameObject;
 
-public class EZGamePanel extends VBox
+public class EZGamePanel extends Canvas
     implements PlaceView
 {
     /** The game object backend. */
@@ -46,6 +45,8 @@ public class EZGamePanel extends VBox
         backend = createBackend();
 
         _gameView = new GameContainer(cfg.configData); // TODO?
+        _gameView.percentWidth = 100;
+        _gameView.percentHeight = 100;
         backend.setSharedEvents(
             Loader(_gameView.getMediaContainer().getMedia()).
             contentLoaderInfo.sharedEvents);
