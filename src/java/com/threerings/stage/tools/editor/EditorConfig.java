@@ -3,7 +3,7 @@
 
 package com.threerings.stage.tools.editor;
 
-import com.samskivert.util.Config;
+import com.samskivert.util.PrefsConfig;
 
 /**
  * Provides access to configuration data for the editor.
@@ -11,7 +11,7 @@ import com.samskivert.util.Config;
 public class EditorConfig
 {
     /** Provides access to config data for this package. */
-    public static Config config = new Config("rsrc/config/stage/tools/editor");
+    public static PrefsConfig config = new PrefsConfig("rsrc/config/stage/tools/editor");
 
     /**
      * Accessor method for getting the test tile directory.
