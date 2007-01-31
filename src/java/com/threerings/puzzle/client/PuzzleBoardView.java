@@ -22,6 +22,7 @@
 package com.threerings.puzzle.client;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -272,7 +273,7 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
         String score, Color color, Font font, int x, int y)
     {
         return createScoreAnimation(
-            ScoreAnimation.createLabel(score, color, font, this), x, y);
+            ScoreAnimation.createLabel(score, color, font, (Component)this), x, y);
     }
 
     /**
