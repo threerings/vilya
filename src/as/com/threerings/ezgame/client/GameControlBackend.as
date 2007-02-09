@@ -15,6 +15,7 @@ import flash.display.InteractiveObject;
 import flash.utils.IExternalizable;
 import flash.utils.ByteArray;
 import flash.utils.Dictionary;
+import flash.utils.getQualifiedSuperclassName;
 
 import com.threerings.io.TypedArray;
 
@@ -481,7 +482,9 @@ public class GameControlBackend
             if (clazz == ByteArray) {
                 return; // kosher
             }
-            if (clazz != Object ) {
+            var clazzparentname :String = getQualifiedSuperclassName (clazz);
+            var rootclass :Boolean = (clazzparentname == null);
+            if (! rootclass) {
                 throw new ArgumentError(
                     "Non-simple properties may not be set.");
             }
