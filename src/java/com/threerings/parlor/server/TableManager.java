@@ -157,7 +157,6 @@ public class TableManager
 
             // the creator will not be moved automatically, so we do it for them
             if (isParty) {
-                System.err.println("Trying to move creator");
                 CrowdServer.plreg.locprov.moveBody(creator, oid);
             }
         }
