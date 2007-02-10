@@ -96,11 +96,12 @@ public class TableDirector extends BasicDirector
      */
     public function willEnterPlace (place :PlaceObject) :void
     {
+        // the place should be a TableLobbyObject
+        _tlobj = TableLobbyObject(place);
+        _lobby = place;
+
         // add ourselves as a listener to the place object
         place.addListener(this);
-
-        // and remember this for later
-        _lobby = place;
     }
 
     /**
@@ -114,6 +115,7 @@ public class TableDirector extends BasicDirector
 
         // clear out our lobby reference
         _lobby = null;
+        _tlobj = null;
     }
 
     /**
@@ -298,8 +300,22 @@ public class TableDirector extends BasicDirector
     // documentation inherited from interface
     public function tableCreated (tableId :int) :void
     {
-        // nothing much to do here
-        log.info("Table creation succeeded [tableId=" + tableId + "].");
+        if (_lobby == null) {
+            // we've left, it's none of our concern anymore
+            log.info("Table created, but no lobby. [tableId=" + tableId + "].");
+            return;
+        }
+
+        // All this to check to see if we created a party game (and should now enter).
+        var table :Table = (_tlobj.getTables().get(tableId) as Table);
+        if (table == null) {
+            log.warning("Table created, but where is it? [tableId=" + tableId + "]");
+            return;
+        }
+        if (table.gameOid != 0 && table.isPartyGame()) {
+            // let's boogie!
+            _pctx.getParlorDirector().gameIsReady(table.gameOid);
+        }
     }
 
     // documentation inherited from interface
@@ -357,6 +373,9 @@ public class TableDirector extends BasicDirector
 
     /** The place object in which we're currently managing tables. */
     protected var _lobby :PlaceObject;
+
+    /** The place object, cast as a TableLobbyObject. */
+    protected var _tlobj :TableLobbyObject;
 
     /** The field name of the distributed set that contains our tables. */
     protected var _tableField :String;

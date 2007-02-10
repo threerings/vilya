@@ -154,11 +154,6 @@ public class TableManager
         // if the table has only one seat, start the game immediately
         if (table.shouldBeStarted()) {
             int oid = createGame(table);
-
-            // the creator will not be moved automatically, so we do it for them
-            if (isParty) {
-                CrowdServer.plreg.locprov.moveBody(creator, oid);
-            }
         }
 
         // finally let the caller know what the new table id is
