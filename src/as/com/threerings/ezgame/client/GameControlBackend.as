@@ -21,6 +21,7 @@ import com.threerings.io.TypedArray;
 
 import com.threerings.util.ClassUtil;
 import com.threerings.util.Integer;
+import com.threerings.util.Iterator;
 import com.threerings.util.MessageBundle;
 import com.threerings.util.Name;
 import com.threerings.util.StringUtil;
@@ -37,6 +38,7 @@ import com.threerings.presents.dobj.MessageEvent;
 import com.threerings.presents.dobj.MessageListener;
 
 import com.threerings.crowd.data.BodyObject;
+import com.threerings.crowd.data.OccupantInfo;
 import com.threerings.crowd.util.CrowdContext;
 
 import com.threerings.ezgame.data.EZGameObject;
@@ -203,21 +205,45 @@ public class GameControlBackend
 
     public function getPlayerCount_v1 () :int
     {
-        return _ezObj.getPlayerCount();
+        if (_ezObj.players.length == 0) {
+            // party game
+            return _ezObj.occupants.size();
+
+        } else {
+            return _ezObj.getPlayerCount();
+        }
     }
 
     public function getPlayerNames_v1 () :Array
     {
         var names :Array = new Array();
-        for each (var name :Name in _ezObj.players) {
-            names.push((name == null) ? null : name.toString());
+        if (_ezObj.players.length == 0) {
+            // party game, count all occupants
+            var itr :Iterator = _ezObj.occupantInfo.iterator();
+            while (itr.hasNext()) {
+                var occInfo :OccupantInfo = (itr.next() as OccupantInfo);
+                names.push(occInfo.username.toString());
+            }
+
+        } else {
+            for each (var name :Name in _ezObj.players) {
+                names.push((name == null) ? null : name.toString());
+            }
         }
         return names;
     }
 
     public function getMyIndex_v1 () :int
     {
-        return _ezObj.getPlayerIndex(getUsername());
+        if (_ezObj.players.length == 0) {
+            // party game
+            // TODO: this shouldn't be based off of the String form of the name.
+            var array :Array = getPlayerNames_v1();
+            return array.indexOf(getUsername().toString());
+
+        } else {
+            return _ezObj.getPlayerIndex(getUsername());
+        }
     }
 
     public function getTurnHolderIndex_v1 () :int
