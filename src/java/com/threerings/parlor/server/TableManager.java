@@ -29,12 +29,14 @@ import com.samskivert.util.StringUtil;
 import com.threerings.util.Name;
 
 import com.threerings.presents.dobj.ChangeListener;
+import com.threerings.presents.dobj.NamedEvent;
 import com.threerings.presents.dobj.ObjectAddedEvent;
 import com.threerings.presents.dobj.ObjectDeathListener;
 import com.threerings.presents.dobj.ObjectDestroyedEvent;
 import com.threerings.presents.dobj.ObjectRemovedEvent;
 import com.threerings.presents.dobj.OidListListener;
 import com.threerings.presents.server.InvocationException;
+import com.threerings.presents.server.PresentsServer;
 
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceObject;
@@ -126,29 +128,38 @@ public class TableManager
         }
         table.init(_plobj.getOid(), tableConfig, config);
 
-        // stick the creator into the first non-AI position
-        int cpos = (config.ais == null) ? 0 : config.ais.length;
-        String error = table.setOccupant(cpos, creator);
-        if (error != null) {
-            Log.warning("Unable to add creator to position zero of " +
-                        "table!? [table=" + table + ", creator=" + creator +
-                        ", error=" + error + "].");
-            // bail out now and abort the table creation process
-            throw new InvocationException(error);
+        boolean isParty = table.isPartyGame();
+        if (!isParty) {
+            // stick the creator into the first non-AI position
+            int cpos = (config.ais == null) ? 0 : config.ais.length;
+            String error = table.setOccupant(cpos, creator);
+            if (error != null) {
+                Log.warning("Unable to add creator to position zero of " +
+                            "table!? [table=" + table + ", creator=" + creator +
+                            ", error=" + error + "].");
+                // bail out now and abort the table creation process
+                throw new InvocationException(error);
+            }
+
+            // make a mapping from the creator to this table
+            _boidMap.put(creator.getOid(), table);
         }
 
         // stick the table into the table lobby object
         _tlobj.addToTables(table);
-
-        // make a mapping from the creator to this table
-        _boidMap.put(creator.getOid(), table);
 
         // also stick it into our tables tables
         _tables.put(table.tableId, table);
 
         // if the table has only one seat, start the game immediately
         if (table.shouldBeStarted()) {
-            createGame(table);
+            int oid = createGame(table);
+
+            // the creator will not be moved automatically, so we do it for them
+            if (isParty) {
+                System.err.println("Trying to move creator");
+                CrowdServer.plreg.locprov.moveBody(creator, oid);
+            }
         }
 
         // finally let the caller know what the new table id is
@@ -295,6 +306,9 @@ public class TableManager
             _boidMap.remove(table.bodyOids[i]);
         }
 
+        // remove the mapping by gameOid
+        _goidMap.remove(table.gameOid); // no-op if gameOid == 0
+
         // remove the table from the lobby object
         _tlobj.removeFromTables(table.tableId);
     }
@@ -303,8 +317,10 @@ public class TableManager
      * Called when we're ready to create a game (either an invitation has
      * been accepted or a table is ready to start. If there is a problem
      * creating the game manager, it should be reported in the logs.
+     *
+     * @return the oid of the newly-created game.
      */
-    protected void createGame (final Table table)
+    protected int createGame (final Table table)
         throws InvocationException
     {
         // fill the players array into the game config
@@ -312,7 +328,10 @@ public class TableManager
 
         try {
             PlaceManager pmgr = CrowdServer.plreg.createPlace(table.config);
-            gameCreated(table, (GameObject)pmgr.getPlaceObject());
+            GameObject gobj = (GameObject) pmgr.getPlaceObject();
+            gameCreated(table, gobj);
+            return gobj.getOid();
+
         } catch (Throwable t) {
             Log.warning("Failed to create manager for game " +
                         "[config=" + table.config + "]: " + t);
@@ -329,17 +348,22 @@ public class TableManager
         // update the table with the newly created game object
         table.gameOid = gameobj.getOid();
 
+        // add it to the gameOid map
+        _goidMap.put(table.gameOid, table);
+
         // configure the privacy of the game
         gameobj.setIsPrivate(table.tconfig.privateTable);
 
-        // clear the occupant to table mappings as this game is underway
-        for (int i = 0; i < table.bodyOids.length; i++) {
-            _boidMap.remove(table.bodyOids[i]);
+        if (!table.isPartyGame()) {
+            // clear the occupant to table mappings as this game is underway
+            for (int i = 0; i < table.bodyOids.length; i++) {
+                _boidMap.remove(table.bodyOids[i]);
+            }
         }
 
         // add an object death listener to unmap the table when the game
         // finally goes away
-        gameobj.addListener(_gameDeathListener);
+        gameobj.addListener(_gameListener);
 
         // and then update the lobby object that contains the table
         _tlobj.updateTables(table);
@@ -351,16 +375,36 @@ public class TableManager
      */
     protected void unmapTable (int gameOid)
     {
-        // look through our tables table for a table with a matching game
-        for (Table table : _tables.values()) {
-            if (table.gameOid == gameOid) {
-                purgeTable(table);
-                return; // all done
-            }
+        Table table = _goidMap.get(gameOid);
+        if (table != null) {
+            purgeTable(table);
+
+        } else {
+            Log.warning("Requested to unmap table that wasn't mapped " +
+                        "[gameOid=" + gameOid + "].");
+        }
+    }
+
+    /**
+     * Called when the occupants in a game change: publish new info.
+     */
+    protected void updateOccupants (int gameOid)
+    {
+        Table table = _goidMap.get(gameOid);
+        if (table == null) {
+            Log.warning("Unable to find table for running game " +
+                        "[gameOid=" + gameOid + "].");
+            return;
         }
 
-        Log.warning("Requested to unmap table that wasn't mapped " +
-                    "[gameOid=" + gameOid + "].");
+        GameObject gameObj = (GameObject) PresentsServer.omgr.getObject(gameOid);
+        table.watcherCount = (short) gameObj.occupants.size();
+
+        // TODO: this will become more complicated
+        // As we separate watchers and players
+
+        // finally, update the table
+        _tlobj.updateTables(table);
     }
 
     // documentation inherited
@@ -415,10 +459,38 @@ public class TableManager
     /** A mapping from body oid to table. */
     protected HashIntMap<Table> _boidMap = new HashIntMap<Table>();
 
-    /** A listener that prunes tables after the game dies. */
-    protected ChangeListener _gameDeathListener = new ObjectDeathListener() {
+    /** Once a game starts, a mapping from gameOid to table. */
+    protected HashIntMap<Table> _goidMap = new HashIntMap<Table>();
+
+    /** Listens to all games and updates the table objects as necessary. */
+    protected class GameListener
+        implements ObjectDeathListener, OidListListener
+    {
+        // from ObjectDeathListener
         public void objectDestroyed (ObjectDestroyedEvent event) {
             unmapTable(event.getTargetOid());
         }
-    };
+
+        // from OidListListener
+        public void objectAdded (ObjectAddedEvent event) {
+            maybeCheckOccupants(event);
+        }
+
+        // from OidListListener
+        public void objectRemoved (ObjectRemovedEvent event) {
+            maybeCheckOccupants(event);
+        }
+
+        /**
+         * Check to see if the set event causes us to update the table.
+         */
+        protected void maybeCheckOccupants (NamedEvent event) {
+            if (GameObject.OCCUPANTS.equals(event.getName())) {
+                updateOccupants(event.getTargetOid());
+            }
+        }
+    } // END: class GameDeathListener
+
+    /** A listener that prunes tables after the game dies. */
+    protected ChangeListener _gameListener = new GameListener();
 }

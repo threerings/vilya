@@ -32,9 +32,9 @@ import com.threerings.io.TypedArray;
  */
 public class TableConfig extends SimpleStreamableObject
 {
-    /** The total number of players that are desired for the table,
-     * or -1 for a party game. For team games, this should be set to the
-     * total number of players overall, as teams may be unequal. */
+    /** The total number of players that are desired for the table.
+     * For team games, this should be set to the total number of players 
+     * overall, as teams may be unequal. */
     public var desiredPlayerCount :int;
 
     /** The minimum number of players needed overall (or per-team if a

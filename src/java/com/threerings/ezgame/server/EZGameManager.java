@@ -424,6 +424,7 @@ public class EZGameManager extends GameManager
     @Override
     protected void didShutdown ()
     {
+        System.err.println("didShutdown!");
         CrowdServer.invmgr.clearDispatcher(_gameObj.ezGameService);
         stopTickers();
 

@@ -62,6 +62,14 @@ public class Table
      * (This is not propagated to remote instances.) */
     public transient int[] bodyOids;
 
+    /** For a running game, the total number of players. For FFA party games,
+     * this is everyone. */
+    public short playerCount;
+
+    /** For a running game, the total number of watchers. For FFA party games,
+     * this is always 0. */
+    public short watcherCount;
+
     /** The game config for the game that is being matchmade. */
     public GameConfig config;
 
@@ -98,7 +106,7 @@ public class Table
         this.config = config;
 
         // make room for the maximum number of players
-        if (tconfig.desiredPlayerCount != -1) {
+        if (!isPartyGame()) {
             occupants = new Name[tconfig.desiredPlayerCount];
             bodyOids = new int[occupants.length];
 
@@ -130,9 +138,11 @@ public class Table
     public int getOccupiedCount ()
     {
         int count = 0;
-        for (int ii = 0; ii < occupants.length; ii++) {
-            if (occupants[ii] != null) {
-                count++;
+        if (occupants != null) {
+            for (int ii = 0; ii < occupants.length; ii++) {
+                if (occupants[ii] != null) {
+                    count++;
+                }
             }
         }
         return count;
@@ -147,15 +157,19 @@ public class Table
      */
     public Name[] getPlayers ()
     {
-        if (isPartyGame()) {
-            return occupants;
+        // seated party games need a spot for every seat
+        if (PartyGameConfig.SEATED_PARTY_GAME == getPartyGameType()) {
+            return new Name[tconfig.desiredPlayerCount];
         }
 
-        // create and populate the players array
+        // FFA party games have 0-length players array, and non-party
+        // games will have the players who are ready-to-go for the game start.
         Name[] players = new Name[getOccupiedCount()];
-        for (int ii = 0, dex = 0; ii < occupants.length; ii++) {
-            if (occupants[ii] != null) {
-                players[dex++] = occupants[ii];
+        if (occupants != null) {
+            for (int ii = 0, dex = 0; ii < occupants.length; ii++) {
+                if (occupants[ii] != null) {
+                    players[dex++] = occupants[ii];
+                }
             }
         }
 
@@ -262,10 +276,12 @@ public class Table
      */
     public boolean clearOccupant (Name username)
     {
-        for (int i = 0; i < occupants.length; i++) {
-            if (username.equals(occupants[i])) {
-                clearOccupantPos(i);
-                return true;
+        if (occupants != null) {
+            for (int i = 0; i < occupants.length; i++) {
+                if (username.equals(occupants[i])) {
+                    clearOccupantPos(i);
+                    return true;
+                }
             }
         }
         return false;
@@ -281,10 +297,12 @@ public class Table
      */
     public boolean clearOccupantByOid (int bodyOid)
     {
-        for (int i = 0; i < bodyOids.length; i++) {
-            if (bodyOid == bodyOids[i]) {
-                clearOccupantPos(i);
-                return true;
+        if (bodyOids != null) {
+            for (int i = 0; i < bodyOids.length; i++) {
+                if (bodyOid == bodyOids[i]) {
+                    clearOccupantPos(i);
+                    return true;
+                }
             }
         }
         return false;
@@ -334,7 +352,8 @@ public class Table
      */
     public boolean shouldBeStarted ()
     {
-        return tconfig.desiredPlayerCount <= getOccupiedCount();
+        return isPartyGame() ||
+            (tconfig.desiredPlayerCount <= getOccupiedCount());
     }
 
     /**

@@ -65,7 +65,15 @@ public class Table
 
     /** The body oids of the occupants of this table, or null if a party game.
      * (This is not propagated to remote instances.) */
-    public var bodyOids :TypedArray;
+    public /*transient*/ var bodyOids :TypedArray;
+
+    /** For a running game, the total number of players. For FFA party games,
+     * this is everyone. */
+    public var playerCount :int;
+
+    /** For a running game, the total number of watchers. For FFA party games,
+     * this is always 0. */
+    public var watcherCount :int;
 
     /** The game config for the game that is being matchmade. */
     public var config :GameConfig;
@@ -84,9 +92,11 @@ public class Table
     public function getOccupiedCount () :int
     {
         var count :int = 0;
-        for (var ii :int = 0; ii < occupants.length; ii++) {
-            if (occupants[ii] != null) {
-                count++;
+        if (occupants != null) {
+            for (var ii :int = 0; ii < occupants.length; ii++) {
+                if (occupants[ii] != null) {
+                    count++;
+                }
             }
         }
         return count;
@@ -101,10 +111,6 @@ public class Table
      */
     public function getPlayers () :Array
     {
-        if (isPartyGame()) {
-            return occupants;
-        }
-
         // create and populate the players array
         var players :Array = new Array();
         for (var ii :int = 0; ii < occupants.length; ii++) {
@@ -288,7 +294,8 @@ public class Table
      */
     public function shouldBeStarted () :Boolean
     {
-        return tconfig.desiredPlayerCount <= getOccupiedCount();
+        return isPartyGame() ||
+            (tconfig.desiredPlayerCount <= getOccupiedCount());
     }
 
     /**
@@ -332,18 +339,18 @@ public class Table
         return tableId;
     }
 
-    /**
-     * Returns true if there is no one sitting at this table.
-     */
-    public function isEmpty () :Boolean
-    {
-        for (var ii :int = 0; ii < bodyOids.length; ii++) {
-            if ((bodyOids[ii] as int) !== 0) {
-                return false;
-            }
-        }
-        return true;
-    }
+//    /**
+//     * Returns true if there is no one sitting at this table.
+//     */
+//    public function isEmpty () :Boolean
+//    {
+//        for (var ii :int = 0; ii < bodyOids.length; ii++) {
+//            if ((bodyOids[ii] as int) !== 0) {
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
 
     // from Streamable
     public function readObject (ins :ObjectInputStream) :void
@@ -352,6 +359,8 @@ public class Table
         lobbyOid = ins.readInt();
         gameOid = ins.readInt();
         occupants = (ins.readObject() as TypedArray);
+        playerCount = ins.readShort();
+        watcherCount = ins.readShort();
         config = (ins.readObject() as GameConfig);
         tconfig = (ins.readObject() as TableConfig);
     }

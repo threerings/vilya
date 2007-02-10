@@ -24,6 +24,10 @@ public class EZGameConfig extends GameConfig
     // For now, the configData is either a classname or url.
     public String configData;
 
+    // TODO: this is separate right now, but may eventually be extracted
+    // from configData? Do not read this value, use getPartyGameType()
+    public byte partyGameType = NOT_PARTY_GAME;
+
     /** If non-zero, a game id used to persistently identify the game.
      * This could be thought of as a new-style rating id. */
     public int persistentGameId;
@@ -62,8 +66,7 @@ public class EZGameConfig extends GameConfig
     // from PartyGameConfig
     public byte getPartyGameType ()
     {
-        // TODO
-        return NOT_PARTY_GAME;
+        return partyGameType;
     }
 
     @Override

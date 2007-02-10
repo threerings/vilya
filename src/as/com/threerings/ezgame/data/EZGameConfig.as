@@ -29,6 +29,10 @@ public class EZGameConfig extends GameConfig
     // For now, the configData is either a classname or url.
     public var configData :String;
 
+    // TODO: this is separate right now, but may eventually be extracted
+    // from configData? Do not read this value, use getPartyGameType()
+    public var partyGameType :int = PartyGameCodes.NOT_PARTY_GAME;
+
     /** If non-zero, a game id used to persistently identify the game.
      * This could be thought of as a new-style rating id. */
     public var persistentGameId:int;
@@ -68,8 +72,7 @@ public class EZGameConfig extends GameConfig
     // from PartyGameConfig
     public function getPartyGameType () :int
     {
-        // TODO
-        return PartyGameCodes.NOT_PARTY_GAME;
+        return partyGameType;
     }
 
     override public function hashCode () :int
@@ -93,6 +96,7 @@ public class EZGameConfig extends GameConfig
         super.readObject(ins);
 
         configData = (ins.readField(String) as String);
+        partyGameType = ins.readByte();
         persistentGameId = ins.readInt();
     }
 
@@ -102,6 +106,7 @@ public class EZGameConfig extends GameConfig
         super.writeObject(out);
 
         out.writeField(configData);
+        out.writeByte(partyGameType);
         out.writeInt(persistentGameId);
     }
 }
