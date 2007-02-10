@@ -195,13 +195,15 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
     protected void setFirstTurnHolder ()
     {
         int size = _turnGame.getPlayers().length;
-        int firstPick = _turnIdx = RandomUtil.getInt(size);
-        while (!_tgmgr.isActivePlayer(_turnIdx)) {
-            _turnIdx = (_turnIdx + 1) % size;
-            if (_turnIdx == firstPick) {
-                Log.warning("No players eligible for first turn. Choking. " +
-                            "[game=" + where() + "].");
-                return;
+        if (size > 0) {
+            int firstPick = _turnIdx = RandomUtil.getInt(size);
+            while (!_tgmgr.isActivePlayer(_turnIdx)) {
+                _turnIdx = (_turnIdx + 1) % size;
+                if (_turnIdx == firstPick) {
+                    Log.warning("No players eligible for first turn. Choking. " +
+                                "[game=" + where() + "].");
+                    return;
+                }
             }
         }
     }
@@ -216,7 +218,7 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
     protected void setNextTurnHolder ()
     {
         // stick with the current player if they're the only participant
-        if (_tgmgr.getPlayerCount() == 1) {
+        if (_tgmgr.getPlayerCount() <= 1) {
             return;
         }
 
