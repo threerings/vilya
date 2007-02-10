@@ -42,7 +42,7 @@ import flash.display.DisplayObject;
  *
  * @eventType com.threerings.ezgame.StateChangedEvent.GAME_ENDED
  */
-[Event(name="GameStarted", type="com.threerings.ezgame.StateChangedEvent")]
+[Event(name="GameEnded", type="com.threerings.ezgame.StateChangedEvent")]
 
 /**
  * Dispatched when a property has changed in the shared game state.
