@@ -32,6 +32,7 @@ import com.threerings.crowd.data.PlaceObject;
 
 import com.threerings.crowd.server.CrowdServer;
 
+import com.threerings.parlor.game.data.PartyGameConfig;
 import com.threerings.parlor.game.server.GameManager;
 
 import com.threerings.parlor.turn.server.TurnGameManager;
@@ -382,8 +383,15 @@ public class EZGameManager extends GameManager
     protected void validateUser (ClientObject caller)
         throws InvocationException
     {
-        if (getPresentPlayerIndex(caller.getOid()) == -1) {
-            throw new InvocationException(InvocationCodes.ACCESS_DENIED);
+        switch (getPartyGameType()) {
+        case PartyGameConfig.FREE_FOR_ALL_PARTY_GAME:
+            return; // always validate.
+
+        default:
+            if (getPresentPlayerIndex(caller.getOid()) == -1) {
+                throw new InvocationException(InvocationCodes.ACCESS_DENIED);
+            }
+            return;
         }
     }
 
@@ -419,6 +427,10 @@ public class EZGameManager extends GameManager
         _gameObj.setEzGameService(
             (EZGameMarshaller) CrowdServer.invmgr.registerDispatcher(
             new EZGameDispatcher(this), false));
+
+        if (isPartyGame()) {
+            startGame();
+        }
     }
 
     @Override
