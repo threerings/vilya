@@ -301,8 +301,10 @@ public class TableManager
         _tables.remove(table.tableId);
 
         // clear out all matching entries in the boid map
-        for (int i = 0; i < table.bodyOids.length; i++) {
-            _boidMap.remove(table.bodyOids[i]);
+        if (table.bodyOids != null) {
+            for (int ii = 0; ii < table.bodyOids.length; ii++) {
+                _boidMap.remove(table.bodyOids[ii]);
+            }
         }
 
         // remove the mapping by gameOid
