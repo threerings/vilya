@@ -84,9 +84,19 @@ public class GameManager extends PlaceManager
      */
     public boolean isPartyGame ()
     {
-        return (_gameconfig instanceof PartyGameConfig) &&
-            (((PartyGameConfig)_gameconfig).getPartyGameType() !=
-                PartyGameConfig.NOT_PARTY_GAME);
+        return (getPartyGameType() != PartyGameConfig.NOT_PARTY_GAME);
+    }
+
+    /**
+     * Get the type of party game being played.
+     */
+    public byte getPartyGameType ()
+    {
+        if (_gameconfig instanceof PartyGameConfig) {
+            return ((PartyGameConfig) _gameconfig).getPartyGameType();
+        } else {
+            return PartyGameConfig.NOT_PARTY_GAME;
+        }
     }
 
     /**
