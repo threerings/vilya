@@ -36,10 +36,9 @@ import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.game.server.GameManager;
 
 /**
- * The parlor manager is responsible for the parlor services in
- * aggregate. This includes maintaining the registry of active games,
- * handling the necessary coordination for the matchmaking services and
- * anything else that falls outside the scope of an actual in-progress
+ * The parlor manager is responsible for the parlor services in aggregate. This includes
+ * maintaining the registry of active games, handling the necessary coordination for the
+ * matchmaking services and anything else that falls outside the scope of an actual in-progress
  * game.
  */
 public class ParlorManager
@@ -49,41 +48,36 @@ public class ParlorManager
     public ParlorProvider parprov;
 
     /**
-     * Initializes the parlor manager. This should be called by the server
-     * that is making use of the parlor services on the single instance of
-     * parlor manager that it has created.
+     * Initializes the parlor manager. This should be called by the server that is making use of
+     * the parlor services on the single instance of parlor manager that it has created.
      *
-     * @param invmgr a reference to the invocation manager in use by this
-     * server.
-     * @param plreg a reference to the place registry to be used by the
-     * parlor manager when creating game places.
+     * @param invmgr a reference to the invocation manager in use by this server.
+     * @param plreg a reference to the place registry to be used by the parlor manager when
+     * creating game places.
      */
     public void init (InvocationManager invmgr, PlaceRegistry plreg)
     {
         // create and register our invocation provider
         parprov = new ParlorProvider(this);
-        invmgr.registerDispatcher(new ParlorDispatcher(parprov), true);
+        invmgr.registerDispatcher(new ParlorDispatcher(parprov), PARLOR_GROUP);
 
         // keep this for later
         _plreg = plreg;
     }
 
     /**
-     * Issues an invitation from the <code>inviter</code> to the
-     * <code>invitee</code> for a game as described by the supplied config
-     * object.
+     * Issues an invitation from the <code>inviter</code> to the <code>invitee</code> for a game as
+     * described by the supplied config object.
      *
      * @param inviter the player initiating the invitation.
      * @param invitee the player being invited.
      * @param config the configuration of the game being proposed.
      *
-     * @return the invitation identifier for the newly created invitation
-     * record.
+     * @return the invitation identifier for the newly created invitation record.
      *
-     * @exception InvocationException thrown if the invitation was not
-     * able to be processed for some reason (like the invited player has
-     * requested not to be disturbed). The explanation will be provided in
-     * the message data of the exception.
+     * @exception InvocationException thrown if the invitation was not able to be processed for
+     * some reason (like the invited player has requested not to be disturbed). The explanation
+     * will be provided in the message data of the exception.
      */
     public int invite (BodyObject inviter, BodyObject invitee,
                        GameConfig config)
@@ -92,9 +86,8 @@ public class ParlorManager
 //          Log.info("Received invitation request [inviter=" + inviter +
 //                   ", invitee=" + invitee + ", config=" + config + "].");
 
-        // here we should check to make sure the invitee hasn't muted the
-        // inviter, and that the inviter isn't shunned and all that other
-        // access control type stuff
+        // here we should check to make sure the invitee hasn't muted the inviter, and that the
+        // inviter isn't shunned and all that other access control type stuff
 
         // create a new invitation record for this invitation
         Invitation invite = new Invitation(inviter, invitee, config);
@@ -103,31 +96,25 @@ public class ParlorManager
         _invites.put(invite.inviteId, invite);
 
         // deliver an invite notification to the invitee
-        ParlorSender.sendInvite(
-            invitee, invite.inviteId, inviter.getVisibleName(), config);
+        ParlorSender.sendInvite(invitee, invite.inviteId, inviter.getVisibleName(), config);
 
         // and let the caller know the invite id we assigned
         return invite.inviteId;
     }
 
     /**
-     * Effects a response to an invitation (accept, refuse or counter),
-     * made by the specified source user with the specified arguments.
+     * Effects a response to an invitation (accept, refuse or counter), made by the specified
+     * source user with the specified arguments.
      *
-     * @param source the body object of the user that is issuing this
-     * response.
-     * @param inviteId the identifier of the invitation to which we are
-     * responding.
-     * @param code the response code (either {@link
-     * #INVITATION_ACCEPTED}, {@link #INVITATION_REFUSED} or {@link
-     * #INVITATION_COUNTERED}).
-     * @param arg the argument that goes along with the response: an
-     * explanatory message in the case of a refusal (the empty string, not
-     * null, if no message was provided) or the new game configuration in
-     * the case of a counter-invitation.
+     * @param source the body object of the user that is issuing this response.
+     * @param inviteId the identifier of the invitation to which we are responding.
+     * @param code the response code (either {@link #INVITATION_ACCEPTED}, {@link
+     * #INVITATION_REFUSED} or {@link #INVITATION_COUNTERED}).
+     * @param arg the argument that goes along with the response: an explanatory message in the
+     * case of a refusal (the empty string, not null, if no message was provided) or the new game
+     * configuration in the case of a counter-invitation.
      */
-    public void respondToInvite (BodyObject source, int inviteId, int code,
-                                 Object arg)
+    public void respondToInvite (BodyObject source, int inviteId, int code, Object arg)
     {
         // look up the invitation
         Invitation invite = (Invitation)_invites.get(inviteId);
@@ -146,23 +133,21 @@ public class ParlorManager
             return;
         }
 
-        // let the other user know that a response was made to this
-        // invitation
+        // let the other user know that a response was made to this invitation
         ParlorSender.sendInviteResponse(
             invite.inviter, invite.inviteId, code, arg);
 
         switch (code) {
         case INVITATION_ACCEPTED:
-            // the invitation was accepted, so we'll need to start up the
-            // game and get the necessary balls rolling
+            // the invitation was accepted, so we'll need to start up the game and get the
+            // necessary balls rolling
             processAcceptedInvitation(invite);
             // and remove the invitation from the pending table
             _invites.remove(inviteId);
             break;
 
         case INVITATION_REFUSED:
-            // remove the invitation record from the pending table as it
-            // is no longer pending
+            // remove the invitation record from the pending table as it is no longer pending
             _invites.remove(inviteId);
             break;
 
@@ -172,9 +157,8 @@ public class ParlorManager
             break;
 
         default:
-            Log.warning("Requested to respond to invitation with " +
-                        "unknown response code [source=" + source +
-                        ", invite=" + invite + ", code=" + code +
+            Log.warning("Requested to respond to invitation with unknown response code " +
+                        "[source=" + source + ", invite=" + invite + ", code=" + code +
                         ", arg=" + arg + "].");
             break;
         }
@@ -183,8 +167,7 @@ public class ParlorManager
     /**
      * Requests that an outstanding invitation be cancelled.
      *
-     * @param source the body object of the user that is making the
-     * request.
+     * @param source the body object of the user that is making the request.
      * @param inviteId the unique id of the invitation to be cancelled.
      */
     public void cancelInvite (BodyObject source, int inviteId)
@@ -193,8 +176,7 @@ public class ParlorManager
     }
 
     /**
-     * Starts up and configures the game manager for an accepted
-     * invitation.
+     * Starts up and configures the game manager for an accepted invitation.
      */
     protected void processAcceptedInvitation (Invitation invite)
     {
@@ -202,25 +184,21 @@ public class ParlorManager
             Log.info("Creating game manager [invite=" + invite + "].");
 
             // configure the game config with the player info
-            invite.config.players = new Name[] {
-                invite.invitee.getVisibleName(),
-                invite.inviter.getVisibleName() };
+            invite.config.players = new Name[] { invite.invitee.getVisibleName(),
+                                                 invite.inviter.getVisibleName() };
 
-            // create the game manager and begin it's initialization process;
-            // the game manager will take care of notifying the players that
-            // the game has been created
+            // create the game manager and begin it's initialization process; the game manager will
+            // take care of notifying the players that the game has been created
             _plreg.createPlace(invite.config);
 
         } catch (Exception e) {
-            Log.warning("Unable to create game manager [invite=" + invite +
-                        ", error=" + e + "].");
+            Log.warning("Unable to create game manager [invite=" + invite + ", error=" + e + "].");
             Log.logStackTrace(e);
         }
     }
 
     /**
-     * The invitation record is used by the parlor manager to keep track
-     * of pending invitations.
+     * The invitation record is used by the parlor manager to keep track of pending invitations.
      */
     protected static class Invitation
     {
@@ -237,11 +215,9 @@ public class ParlorManager
         public GameConfig config;
 
         /**
-         * Constructs a new invitation with the specified participants and
-         * configuration.
+         * Constructs a new invitation with the specified participants and configuration.
          */
-        public Invitation (BodyObject inviter, BodyObject invitee,
-                           GameConfig config)
+        public Invitation (BodyObject inviter, BodyObject invitee, GameConfig config)
         {
             this.inviter = inviter;
             this.invitee = invitee;
@@ -249,8 +225,8 @@ public class ParlorManager
         }
 
         /**
-         * Swaps the inviter and invitee which is necessary when the
-         * invitee responds with a counter-invitation.
+         * Swaps the inviter and invitee which is necessary when the invitee responds with a
+         * counter-invitation.
          */
         public void swapControl ()
         {
@@ -266,7 +242,6 @@ public class ParlorManager
     /** The table of pending invitations. */
     protected HashIntMap _invites = new HashIntMap();
 
-    /** A counter used to generate unique identifiers for invitation
-     * records. */
+    /** A counter used to generate unique identifiers for invitation records. */
     protected static int _nextInviteId = 0;
 }

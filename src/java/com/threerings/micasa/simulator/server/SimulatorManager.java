@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import com.threerings.util.Name;
 
 import com.threerings.presents.data.ClientObject;
+import com.threerings.presents.data.InvocationCodes;
 import com.threerings.presents.dobj.RootDObjectManager;
 import com.threerings.presents.server.ClientManager;
 import com.threerings.presents.server.ClientResolutionListener;
@@ -44,26 +45,23 @@ import com.threerings.parlor.game.server.GameManager;
 import com.threerings.micasa.Log;
 
 /**
- * The simulator manager is responsible for handling the simulator
- * services on the server side.
+ * The simulator manager is responsible for handling the simulator services on the server side.
  */
 public class SimulatorManager
 {
     /**
-     * Initializes the simulator manager manager. This should be called by
-     * the server that is making use of the simulator services on the
-     * single instance of simulator manager that it has created.
+     * Initializes the simulator manager manager. This should be called by the server that is
+     * making use of the simulator services on the single instance of simulator manager that it has
+     * created.
      *
-     * @param invmgr a reference to the invocation manager in use by this
-     * server.
+     * @param invmgr a reference to the invocation manager in use by this server.
      */
-    public void init (InvocationManager invmgr, PlaceRegistry plreg,
-                      ClientManager clmgr, RootDObjectManager omgr,
-                      SimulatorServer simserv)
+    public void init (InvocationManager invmgr, PlaceRegistry plreg, ClientManager clmgr,
+                      RootDObjectManager omgr, SimulatorServer simserv)
     {
         // register our simulator provider
         SimulatorProvider sprov = new SimulatorProvider(this);
-        invmgr.registerDispatcher(new SimulatorDispatcher(sprov), true);
+        invmgr.registerDispatcher(new SimulatorDispatcher(sprov), InvocationCodes.GLOBAL_GROUP);
 
         // keep these for later
         _plreg = plreg;
@@ -73,20 +71,18 @@ public class SimulatorManager
     }
 
     /**
-     * Creates a game along with the specified number of simulant players
-     * and forcibly moves all players into the game room.
+     * Creates a game along with the specified number of simulant players and forcibly moves all
+     * players into the game room.
      */
-    public void createGame (
-        BodyObject source, GameConfig config, String simClass, int playerCount)
+    public void createGame (BodyObject source, GameConfig config, String simClass, int playerCount)
     {
         new CreateGameTask(source, config, simClass, playerCount);
     }
 
     public class CreateGameTask
     {
-        public CreateGameTask (
-            BodyObject source, GameConfig config, String simClass,
-            int playerCount)
+        public CreateGameTask (BodyObject source, GameConfig config, String simClass,
+                               int playerCount)
         {
             // save off game request info
             _source = source;
@@ -95,9 +91,8 @@ public class SimulatorManager
             _playerCount = playerCount;
 
             try {
-                // create the game manager and begin its initialization
-                // process. the game manager will take care of notifying the
-                // players that the game has been created
+                // create the game manager and begin its initialization process. the game manager
+                // will take care of notifying the players that the game has been created
 
                 // configure the game config with the player names
                 config.players = new Name[_playerCount];
@@ -141,8 +136,7 @@ public class SimulatorManager
                     }
                 }
                 public void resolutionFailed (Name username, Exception cause) {
-                    Log.warning("Unable to create simulant body object " +
-                                "[error=" + cause + "].");
+                    Log.warning("Unable to create simulant body object [error=" + cause + "].");
                 }
             };
 
@@ -154,8 +148,8 @@ public class SimulatorManager
         }
 
         /**
-         * Called when all simulant body objects are present and the
-         * simulants are ready to be created.
+         * Called when all simulant body objects are present and the simulants are ready to be
+         * created.
          */
         protected void createSimulants ()
         {
@@ -178,8 +172,8 @@ public class SimulatorManager
                 // give the simulant a chance to engage in place antics
                 sim.willEnterPlace(_gobj);
 
-                // move the simulant into the game room since they have no
-                // location director to move them automagically
+                // move the simulant into the game room since they have no location director to
+                // move them automagically
                 try {
                     _plreg.locprov.moveTo(bobj, _gobj.getOid());
                 } catch (Exception e) {

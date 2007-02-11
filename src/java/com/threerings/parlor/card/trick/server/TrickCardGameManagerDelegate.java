@@ -81,7 +81,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
         
         _trickCardGame.setTrickCardGameService(
             (TrickCardGameMarshaller)PresentsServer.invmgr.registerDispatcher(
-                new TrickCardGameDispatcher(this), false));
+                new TrickCardGameDispatcher(this)));
     }
     
     // Documentation inherited.

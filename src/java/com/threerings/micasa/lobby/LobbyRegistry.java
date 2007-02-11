@@ -26,6 +26,7 @@ import com.samskivert.util.*;
 import com.threerings.util.StreamableArrayList;
 
 import com.threerings.presents.data.ClientObject;
+import com.threerings.presents.data.InvocationCodes;
 import com.threerings.presents.server.InvocationManager;
 
 import com.threerings.crowd.data.BodyObject;
@@ -37,13 +38,12 @@ import com.threerings.micasa.server.MiCasaConfig;
 import com.threerings.micasa.server.MiCasaServer;
 
 /**
- * The lobby registry is the primary class that coordinates the lobby
- * services on the client. It sets up the necessary invocation services
- * and keeps track of the lobbies in operation on the server. Only one
- * lobby registry should be created on a server.
+ * The lobby registry is the primary class that coordinates the lobby services on the client. It
+ * sets up the necessary invocation services and keeps track of the lobbies in operation on the
+ * server. Only one lobby registry should be created on a server.
  *
- * <p> Presently, the lobby registry is configured with lobbies via the
- * server configuration. An example configuration follows:
+ * <p> Presently, the lobby registry is configured with lobbies via the server configuration. An
+ * example configuration follows:
  *
  * <pre>
  * lobby_ids = foolobby, barlobby, bazlobby
@@ -60,16 +60,13 @@ import com.threerings.micasa.server.MiCasaServer;
  * ...
  * </pre>
  *
- * This information will be loaded from the MiCasa server configuration
- * which means that it should live in
- * <code>rsrc/config/micasa/server.properties</code> somwhere in the
- * classpath where it will override the default MiCasa server properties
- * file.
+ * This information will be loaded from the MiCasa server configuration which means that it should
+ * live in <code>rsrc/config/micasa/server.properties</code> somwhere in the classpath where it
+ * will override the default MiCasa server properties file.
  *
- * <p> The <code>UGI</code> or universal game identifier is a string that
- * is used to uniquely identify every type of game and also to classify it
- * according to meaningful keywords. It is best described with a few
- * examples:
+ * <p> The <code>UGI</code> or universal game identifier is a string that is used to uniquely
+ * identify every type of game and also to classify it according to meaningful keywords. It is best
+ * described with a few examples:
  *
  * <pre>
  * backgammon,board,strategy
@@ -77,29 +74,28 @@ import com.threerings.micasa.server.MiCasaServer;
  * yahtzee,dice
  * </pre>
  *
- * As you can see, a UGI should start with an identifier uniquely
- * identifying the type of game and can be followed by a list of keywords
- * that classify it as a member of a particular category of games
- * (eg. board, card, dice, partner game, strategy game). A game can belong
- * to multiple categories.
+ * As you can see, a UGI should start with an identifier uniquely identifying the type of game and
+ * can be followed by a list of keywords that classify it as a member of a particular category of
+ * games (eg. board, card, dice, partner game, strategy game). A game can belong to multiple
+ * categories.
  *
- * <p> As long as the UGIs in use by a particular server make some kind of
- * sense, the client will be able to use them to search for lobbies
- * containing games of similar types using the provided facilities.
+ * <p> As long as the UGIs in use by a particular server make some kind of sense, the client will
+ * be able to use them to search for lobbies containing games of similar types using the provided
+ * facilities.
  */
 public class LobbyRegistry
     implements LobbyProvider
 {
     /**
-     * Initializes the registry. It will use the supplied configuration
-     * instance to determine which lobbies to load, etc.
+     * Initializes the registry. It will use the supplied configuration instance to determine which
+     * lobbies to load, etc.
      *
      * @param invmgr a reference to the server's invocation manager.
      */
     public void init (InvocationManager invmgr)
     {
         // register ourselves as an invocation service handler
-        invmgr.registerDispatcher(new LobbyDispatcher(this), true);
+        invmgr.registerDispatcher(new LobbyDispatcher(this), InvocationCodes.GLOBAL_GROUP);
 
         // create our lobby managers
         String[] lmgrs = null;
@@ -124,8 +120,8 @@ public class LobbyRegistry
     }
 
     /**
-     * Extracts the properties for a lobby from the server config and
-     * creates and initializes the lobby manager.
+     * Extracts the properties for a lobby from the server config and creates and initializes the
+     * lobby manager.
      */
     protected void loadLobby (String lobbyId)
     {
@@ -136,42 +132,33 @@ public class LobbyRegistry
             // get the lobby manager class and UGI
             String cfgClass = props.getProperty("config");
             if (StringUtil.isBlank(cfgClass)) {
-                throw new Exception("Missing 'config' definition in " +
-                                    "lobby configuration.");
+                throw new Exception("Missing 'config' definition in lobby configuration.");
             }
 
             // create and initialize the lobby config object
-            LobbyConfig config = (LobbyConfig)
-                Class.forName(cfgClass).newInstance();
+            LobbyConfig config = (LobbyConfig)Class.forName(cfgClass).newInstance();
             config.init(props);
 
-            // create and initialize the lobby manager. it will call
-            // lobbyReady() when it has obtained a reference to its lobby
-            // object and is ready to roll
-            LobbyManager lobmgr = (LobbyManager)
-                MiCasaServer.plreg.createPlace(config);
+            // create and initialize the lobby manager. it will call lobbyReady() when it has
+            // obtained a reference to its lobby object and is ready to roll
+            LobbyManager lobmgr = (LobbyManager)MiCasaServer.plreg.createPlace(config);
             lobmgr.init(this, props);
 
         } catch (Exception e) {
-            Log.warning("Unable to create lobby manager " +
-                        "[lobbyId=" + lobbyId + ", error=" + e + "].");
+            Log.warning("Unable to create lobby manager [lobbyId=" + lobbyId +
+                        ", error=" + e + "].");
         }
     }
 
     /**
-     * Returns information about all lobbies hosting games in the
-     * specified category.
+     * Returns information about all lobbies hosting games in the specified category.
      *
-     * @param requester the body object of the client requesting the lobby
-     * list (which can be used to filter the list based on their
-     * capabilities).
-     * @param category the category of game for which the lobbies are
-     * desired.
-     * @param target the list into which the matching lobbies will be
-     * deposited.
+     * @param requester the body object of the client requesting the lobby list (which can be used
+     * to filter the list based on their capabilities).
+     * @param category the category of game for which the lobbies are desired.
+     * @param target the list into which the matching lobbies will be deposited.
      */
-    public void getLobbies (BodyObject requester, String category,
-                            List target)
+    public void getLobbies (BodyObject requester, String category, List target)
     {
         ArrayList list = (ArrayList)_lobbies.get(category);
         if (list != null) {
@@ -180,18 +167,16 @@ public class LobbyRegistry
     }
 
     /**
-     * Returns an array containing the category identifiers of all the
-     * categories in which lobbies have been registered with the registry.
+     * Returns an array containing the category identifiers of all the categories in which lobbies
+     * have been registered with the registry.
      *
-     * @param requester the body object of the client requesting the
-     * cateogory list (which can be used to filter the list based on their
-     * capabilities).
+     * @param requester the body object of the client requesting the cateogory list (which can be
+     * used to filter the list based on their capabilities).
      */
     public String[] getCategories (BodyObject requester)
     {
-        // might want to cache this some day so that we don't recreate it
-        // every time someone wants it. we can cache the array until the
-        // category count changes
+        // might want to cache this some day so that we don't recreate it every time someone wants
+        // it. we can cache the array until the category count changes
         String[] cats = new String[_lobbies.size()];
         Iterator iter = _lobbies.keySet().iterator();
         for (int i = 0; iter.hasNext(); i++) {
@@ -201,8 +186,8 @@ public class LobbyRegistry
     }
 
     /**
-     * Processes a request by the client to obtain a list of the lobby
-     * categories available on this server.
+     * Processes a request by the client to obtain a list of the lobby categories available on this
+     * server.
      */
     public void getCategories (ClientObject caller, CategoriesListener listener)
     {
@@ -210,11 +195,10 @@ public class LobbyRegistry
     }
 
     /**
-     * Processes a request by the client to obtain a list of lobbies
-     * matching the supplied category string.
+     * Processes a request by the client to obtain a list of lobbies matching the supplied category
+     * string.
      */
-    public void getLobbies (ClientObject caller, String category,
-                            LobbiesListener listener)
+    public void getLobbies (ClientObject caller, String category, LobbiesListener listener)
     {
         StreamableArrayList target = new StreamableArrayList();
         ArrayList list = (ArrayList)_lobbies.get(category);
@@ -225,16 +209,15 @@ public class LobbyRegistry
     }
 
     /**
-     * Called by our lobby managers once they have started up and are
-     * ready to do their lobby duties.
+     * Called by our lobby managers once they have started up and are ready to do their lobby
+     * duties.
      */
     protected void lobbyReady (int placeOid, String gameIdent, String name)
     {
         // create a lobby record
         Lobby record = new Lobby(placeOid, gameIdent, name);
 
-        // if we don't already have a default lobby, this one is the big
-        // winner
+        // if we don't already have a default lobby, this one is the big winner
         if (_defLobbyOid == -1) {
             _defLobbyOid = placeOid;
         }
@@ -256,12 +239,11 @@ public class LobbyRegistry
             _lobbies.put(category, catlist);
         }
         catlist.add(record);
-        Log.info("Registered lobby [cat=" + category +
-                 ", record=" + record + "].");
+        Log.info("Registered lobby [cat=" + category + ", record=" + record + "].");
     }
 
-    /** A table containing references to all of our lobby records (in the
-     * form of category lists. */
+    /** A table containing references to all of our lobby records (in the form of category
+     * lists. */
     protected HashMap _lobbies = new HashMap();
 
     /** The oid of the default lobby. */

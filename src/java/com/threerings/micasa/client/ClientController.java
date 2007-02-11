@@ -73,6 +73,12 @@ public class ClientController extends Controller
     }
 
     // documentation inherited
+    public void clientWillLogon (Client client)
+    {
+        // nada
+    }
+
+    // documentation inherited
     public void clientDidLogon (Client client)
     {
         Log.info("Client did logon [client=" + client + "].");

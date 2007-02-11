@@ -248,8 +248,7 @@ public class StageSceneManager extends SpotSceneManager
 
         // register and fill in our stage scene service
         StageSceneMarshaller service = (StageSceneMarshaller)
-            StageServer.invmgr.registerDispatcher(
-                new StageSceneDispatcher(this), false);
+            StageServer.invmgr.registerDispatcher(new StageSceneDispatcher(this));
         _ssobj.setStageSceneService(service);
     }
 

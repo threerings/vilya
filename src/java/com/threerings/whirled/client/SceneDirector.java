@@ -496,6 +496,12 @@ public class SceneDirector extends BasicDirector
     }
 
     // documentation inherited from interface
+    protected void registerServices (Client client)
+    {
+        client.addServiceGroup(WHIRLED_GROUP);
+    }
+
+    // documentation inherited from interface
     protected void fetchServices (Client client)
     {
         // get a handle on our scene service

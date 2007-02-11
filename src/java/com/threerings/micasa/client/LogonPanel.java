@@ -149,6 +149,12 @@ public class LogonPanel extends JPanel
     }
 
     // documentation inherited from interface
+    public void clientWillLogon (Client client)
+    {
+        // nada
+    }
+
+    // documentation inherited from interface
     public void clientDidLogon (Client client)
     {
         _status.append(_msgs.get("m.logon_success") + "\n");
@@ -164,6 +170,7 @@ public class LogonPanel extends JPanel
     // documentation inherited from interface
     public void clientDidClear (Client client)
     {
+        // nada
     }
 
     // documentation inherited from interface

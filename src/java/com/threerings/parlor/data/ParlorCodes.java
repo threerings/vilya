@@ -28,6 +28,9 @@ import com.threerings.presents.data.InvocationCodes;
  */
 public interface ParlorCodes extends InvocationCodes
 {
+    /** Defines our invocation services group. */
+    public static final String PARLOR_GROUP = "parlor";
+
     /** The response code for an accepted invitation. */
     public static final int INVITATION_ACCEPTED = 0;
 

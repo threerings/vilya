@@ -36,21 +36,19 @@ import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.util.ParlorContext;
 
 /**
- * The parlor director manages the client side of the game configuration
- * and matchmaking processes. It is also the entity that is listening for
- * game start notifications which it then dispatches the client entity
- * that will actually create and display the user interface for the game
- * that started.
+ * The parlor director manages the client side of the game configuration and matchmaking
+ * processes. It is also the entity that is listening for game start notifications which it then
+ * dispatches the client entity that will actually create and display the user interface for the
+ * game that started.
  */
 public class ParlorDirector extends BasicDirector
     implements ParlorCodes, ParlorReceiver
 {
     /**
-     * Constructs a parlor director and provides it with the parlor
-     * context that it can use to access the client services that it needs
-     * to provide its own services. Only one parlor director should be
-     * active in the client at one time and it should be made available
-     * via the parlor context.
+     * Constructs a parlor director and provides it with the parlor context that it can use to
+     * access the client services that it needs to provide its own services. Only one parlor
+     * director should be active in the client at one time and it should be made available via the
+     * parlor context.
      *
      * @param ctx the parlor context in use by the client.
      */
@@ -59,16 +57,13 @@ public class ParlorDirector extends BasicDirector
         super(ctx);
         _ctx = ctx;
 
-        // register ourselves with the invocation director as a parlor
-        // notification receiver
-        _ctx.getClient().getInvocationDirector().registerReceiver(
-            new ParlorDecoder(this));
+        // register ourselves with the invocation director as a parlor notification receiver
+        _ctx.getClient().getInvocationDirector().registerReceiver(new ParlorDecoder(this));
     }
 
     /**
-     * Sets the invitation handler, which is the entity that will be
-     * notified when we receive incoming invitation notifications and when
-     * invitations have been cancelled.
+     * Sets the invitation handler, which is the entity that will be notified when we receive
+     * incoming invitation notifications and when invitations have been cancelled.
      *
      * @param handler our new invitation handler.
      */
@@ -78,8 +73,8 @@ public class ParlorDirector extends BasicDirector
     }
 
     /**
-     * Adds the specified observer to the list of entities that are
-     * notified when we receive a game ready notification.
+     * Adds the specified observer to the list of entities that are notified when we receive a game
+     * ready notification.
      */
     public void addGameReadyObserver (GameReadyObserver observer)
     {
@@ -87,8 +82,8 @@ public class ParlorDirector extends BasicDirector
     }
 
     /**
-     * Removes the specified observer from the list of entities that are
-     * notified when we receive a game ready notification.
+     * Removes the specified observer from the list of entities that are notified when we receive a
+     * game ready notification.
      */
     public void removeGameReadyObserver (GameReadyObserver observer)
     {
@@ -96,24 +91,19 @@ public class ParlorDirector extends BasicDirector
     }
 
     /**
-     * Requests that the named user be invited to a game described by the
-     * supplied game config.
+     * Requests that the named user be invited to a game described by the supplied game config.
      *
      * @param invitee the user to invite.
-     * @param config the configuration of the game to which the user is
-     * being invited.
-     * @param observer the entity that will be notified if this invitation
-     * is accepted, refused or countered.
+     * @param config the configuration of the game to which the user is being invited.
+     * @param observer the entity that will be notified if this invitation is accepted, refused or
+     * countered.
      *
-     * @return an invitation object that can be used to manage the
-     * outstanding invitation.
+     * @return an invitation object that can be used to manage the outstanding invitation.
      */
-    public Invitation invite (Name invitee, GameConfig config,
-                              InvitationResponseObserver observer)
+    public Invitation invite (Name invitee, GameConfig config, InvitationResponseObserver observer)
     {
         // create the invitation record
-        Invitation invite = new Invitation(
-            _ctx, _pservice, invitee, config, observer);
+        Invitation invite = new Invitation(_ctx, _pservice, invitee, config, observer);
         // submit the invitation request to the server
         _pservice.invite(_ctx.getClient(), invitee, config, invite);
         // and return the invitation to the caller
@@ -123,13 +113,10 @@ public class ParlorDirector extends BasicDirector
     /**
      * Requests that the specified single player game be started.
      *
-     * @param config the configuration of the single player game to be
-     * started.
-     * @param listener a listener to be informed of failure if the game
-     * cannot be started.
+     * @param config the configuration of the single player game to be started.
+     * @param listener a listener to be informed of failure if the game cannot be started.
      */
-    public void startSolitaire (
-        GameConfig config, InvocationService.ConfirmListener listener)
+    public void startSolitaire (GameConfig config, InvocationService.ConfirmListener listener)
     {
         _pservice.startSolitaire(_ctx.getClient(), config, listener);
     }
@@ -140,13 +127,6 @@ public class ParlorDirector extends BasicDirector
         super.clientDidLogoff(client);
         _pservice = null;
         _pendingInvites.clear();
-    }
-
-    // documentation inherited
-    protected void fetchServices (Client client)
-    {
-        // get a handle on our parlor services
-        _pservice = (ParlorService)client.requireService(ParlorService.class);
     }
 
     // documentation inherited from interface
@@ -161,8 +141,8 @@ public class ParlorDirector extends BasicDirector
             handled = grob.receivedGameReady(gameOid) || handled;
         }
 
-        // if none of the observers took matters into their own hands,
-        // then we'll head on over to the game room ourselves
+        // if none of the observers took matters into their own hands, then we'll head on over to
+        // the game room ourselves
         if (!handled) {
             _ctx.getLocationDirector().moveTo(gameOid);
         }
@@ -172,8 +152,7 @@ public class ParlorDirector extends BasicDirector
     public void receivedInvite (int remoteId, Name inviter, GameConfig config)
     {
         // create an invitation record for this invitation
-        Invitation invite = new Invitation(
-            _ctx, _pservice, inviter, config, null);
+        Invitation invite = new Invitation(_ctx, _pservice, inviter, config, null);
         invite.inviteId = remoteId;
 
         // put it in the pending invitations table
@@ -184,22 +163,19 @@ public class ParlorDirector extends BasicDirector
             _handler.invitationReceived(invite);
 
         } catch (Exception e) {
-            Log.warning("Invitation handler choked on invite " +
-                        "notification " + invite + ".");
+            Log.warning("Invitation handler choked on invite notification " + invite + ".");
             Log.logStackTrace(e);
         }
     }
 
     // documentation inherited from interface
-    public void receivedInviteResponse (
-        int remoteId, int code, Object arg)
+    public void receivedInviteResponse (int remoteId, int code, Object arg)
     {
         // look up the invitation record for this invitation
         Invitation invite = (Invitation)_pendingInvites.get(remoteId);
         if (invite == null) {
-            Log.warning("Have no record of invitation for which we " +
-                        "received a response?! [remoteId=" + remoteId +
-                        ", code=" + code + ", arg=" + arg + "].");
+            Log.warning("Have no record of invitation for which we received a response?! " +
+                        "[remoteId=" + remoteId + ", code=" + code + ", arg=" + arg + "].");
 
         } else {
             invite.receivedResponse(code, arg);
@@ -212,9 +188,22 @@ public class ParlorDirector extends BasicDirector
         // TBD
     }
 
+    @Override // from BasicDirector
+    protected void registerServices (Client client)
+    {
+        client.addServiceGroup(PARLOR_GROUP);
+    }
+
+    @Override // from BasicDirector
+    protected void fetchServices (Client client)
+    {
+        // get a handle on our parlor services
+        _pservice = (ParlorService)client.requireService(ParlorService.class);
+    }
+
     /**
-     * Register a new invitation in our pending invitations table. The
-     * invitation will call this when it knows its invitation id.
+     * Register a new invitation in our pending invitations table. The invitation will call this
+     * when it knows its invitation id.
      */
     protected void registerInvitation (Invitation invite)
     {
@@ -222,8 +211,8 @@ public class ParlorDirector extends BasicDirector
     }
 
     /**
-     * Called by an invitation when it knows it is no longer and can be
-     * cleared from the pending invitations table.
+     * Called by an invitation when it knows it is no longer and can be cleared from the pending
+     * invitations table.
      */
     protected void clearInvitation (Invitation invite)
     {
@@ -236,15 +225,13 @@ public class ParlorDirector extends BasicDirector
     /** Provides access to parlor server side services. */
     protected ParlorService _pservice;
 
-    /** The entity that has registered itself to handle incoming
-     * invitation notifications. */
+    /** The entity that has registered itself to handle incoming invitation notifications. */
     protected InvitationHandler _handler;
 
-    /** A table of acknowledged (but not yet accepted or refused)
-     * invitation requests, keyed on invitation id. */
+    /** A table of acknowledged (but not yet accepted or refused) invitation requests, keyed on
+     * invitation id. */
     protected HashIntMap _pendingInvites = new HashIntMap();
 
-    /** We notify the entities on this list when we get a game ready
-     * notification. */
+    /** We notify the entities on this list when we get a game ready notification. */
     protected ArrayList _grobs = new ArrayList();
 }

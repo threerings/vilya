@@ -188,7 +188,7 @@ public abstract class PuzzleManager extends GameManager
 
         // create and fill in our game service object
         PuzzleGameMarshaller service = (PuzzleGameMarshaller)
-            _invmgr.registerDispatcher(new PuzzleGameDispatcher(this), false);
+            _invmgr.registerDispatcher(new PuzzleGameDispatcher(this));
         _puzobj.setPuzzleGameService(service);
     }
 

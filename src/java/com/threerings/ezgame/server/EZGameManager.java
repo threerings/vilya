@@ -423,10 +423,8 @@ public class EZGameManager extends GameManager
         super.didStartup();
 
         _gameObj = (EZGameObject) _plobj;
-
         _gameObj.setEzGameService(
-            (EZGameMarshaller) CrowdServer.invmgr.registerDispatcher(
-            new EZGameDispatcher(this), false));
+            (EZGameMarshaller) CrowdServer.invmgr.registerDispatcher(new EZGameDispatcher(this)));
 
         if (isPartyGame()) {
             startGame();

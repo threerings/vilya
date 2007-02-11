@@ -28,6 +28,9 @@ import com.threerings.crowd.data.LocationCodes;
  */
 public interface SceneCodes extends LocationCodes
 {
+    /** Defines our invocation services group. */
+    public static final String WHIRLED_GROUP = "whirled";
+
     /** The message identifier for scene update messages. */
     public static final String SCENE_UPDATE = "scene_update";
 }
