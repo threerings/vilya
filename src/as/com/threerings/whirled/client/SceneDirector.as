@@ -488,7 +488,13 @@ public class SceneDirector extends BasicDirector
         _sservice = null;
     }
 
-    // documentation inherited
+    // from BasicDirector
+    override protected function registerServices (client :Client) :void
+    {
+        client.addServiceGroup(SceneCodes.WHIRLED_GROUP);
+    }
+
+    // from BasicDirector
     override protected function fetchServices (client :Client) :void
     {
         // get a handle on our scene service

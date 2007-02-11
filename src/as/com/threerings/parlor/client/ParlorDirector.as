@@ -143,14 +143,6 @@ public class ParlorDirector extends BasicDirector
         _pendingInvites.clear();
     }
 
-    // documentation inherited
-    override protected function fetchServices (client :Client) :void
-    {
-        // get a handle on our parlor services
-        _pservice = (client.requireService(ParlorService) as ParlorService);
-        super.fetchServices(client);
-    }
-
     // documentation inherited from interface
     public function gameIsReady (gameOid :int) :void
     {
@@ -232,6 +224,20 @@ public class ParlorDirector extends BasicDirector
     public function clearInvitation (invite :Invitation) :void
     {
         _pendingInvites.remove(invite.inviteId);
+    }
+
+    // from BasicDirector
+    override protected function registerServices (client :Client) :void
+    {
+        client.addServiceGroup(ParlorCodes.PARLOR_GROUP);
+    }
+
+    // from BasicDirector
+    override protected function fetchServices (client :Client) :void
+    {
+        // get a handle on our parlor services
+        _pservice = (client.requireService(ParlorService) as ParlorService);
+        super.fetchServices(client);
     }
 
     /** An active parlor context. */
