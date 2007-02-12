@@ -25,7 +25,6 @@ import com.threerings.parlor.client.ParlorReceiver;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.presents.client.InvocationDecoder;
 import com.threerings.util.Name;
-import com.threerings.util.Integer;
 
 /**
  * Dispatches calls to a {@link ParlorReceiver} instance.
@@ -73,25 +72,25 @@ public class ParlorDecoder extends InvocationDecoder
         var prec :ParlorReceiver = (receiver as ParlorReceiver);
         switch (methodId) {
         case GAME_IS_READY:
-            prec.gameIsReady((args[0] as Integer).value);
+            prec.gameIsReady(args[0] as int);
             return;
 
         case RECEIVED_INVITE:
             prec.receivedInvite(
-                (args[0] as Integer).value, (args[1] as Name),
+                (args[0] as int), (args[1] as Name),
                 (args[2] as GameConfig)
             );
             return;
 
         case RECEIVED_INVITE_CANCELLATION:
             prec.receivedInviteCancellation(
-                (args[0] as Integer).value
+                (args[0] as int)
             );
             return;
 
         case RECEIVED_INVITE_RESPONSE:
             prec.receivedInviteResponse(
-                (args[0] as Integer).value, (args[1] as Integer).value, args[2]
+                (args[0] as int), (args[1] as int), args[2]
             );
             return;
 
