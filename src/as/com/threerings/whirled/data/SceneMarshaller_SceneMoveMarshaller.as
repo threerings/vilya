@@ -53,17 +53,17 @@ public class SceneMarshaller_SceneMoveMarshaller
         switch (methodId) {
         case MOVE_SUCCEEDED:
             (listener as SceneService_SceneMoveListener).moveSucceeded(
-                (args[0] as Integer).value, (args[1] as PlaceConfig));
+                (args[0] as int), (args[1] as PlaceConfig));
             return;
 
         case MOVE_SUCCEEDED_WITH_SCENE:
             (listener as SceneService_SceneMoveListener).moveSucceededWithScene(
-                (args[0] as Integer).value, (args[1] as PlaceConfig), (args[2] as SceneModel));
+                (args[0] as int), (args[1] as PlaceConfig), (args[2] as SceneModel));
             return;
 
         case MOVE_SUCCEEDED_WITH_UPDATES:
             (listener as SceneService_SceneMoveListener).moveSucceededWithUpdates(
-                (args[0] as Integer).value, (args[1] as PlaceConfig), (args[2] as Array));
+                (args[0] as int), (args[1] as PlaceConfig), (args[2] as Array));
             return;
 
         default:

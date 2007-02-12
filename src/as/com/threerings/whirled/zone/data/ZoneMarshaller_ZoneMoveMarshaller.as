@@ -54,17 +54,17 @@ public class ZoneMarshaller_ZoneMoveMarshaller
         switch (methodId) {
         case MOVE_SUCCEEDED:
             (listener as ZoneService_ZoneMoveListener).moveSucceeded(
-                (args[0] as Integer).value, (args[1] as PlaceConfig), (args[2] as ZoneSummary));
+                (args[0] as int), (args[1] as PlaceConfig), (args[2] as ZoneSummary));
             return;
 
         case MOVE_SUCCEEDED_WITH_SCENE:
             (listener as ZoneService_ZoneMoveListener).moveSucceededWithScene(
-                (args[0] as Integer).value, (args[1] as PlaceConfig), (args[2] as ZoneSummary), (args[3] as SceneModel));
+                (args[0] as int), (args[1] as PlaceConfig), (args[2] as ZoneSummary), (args[3] as SceneModel));
             return;
 
         case MOVE_SUCCEEDED_WITH_UPDATES:
             (listener as ZoneService_ZoneMoveListener).moveSucceededWithUpdates(
-                (args[0] as Integer).value, (args[1] as PlaceConfig), (args[2] as ZoneSummary), (args[3] as Array));
+                (args[0] as int), (args[1] as PlaceConfig), (args[2] as ZoneSummary), (args[3] as Array));
             return;
 
         default:

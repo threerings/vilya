@@ -48,7 +48,7 @@ public class ParlorMarshaller_TableMarshaller
         switch (methodId) {
         case TABLE_CREATED:
             (listener as ParlorService_TableListener).tableCreated(
-                (args[0] as Integer).value);
+                (args[0] as int));
             return;
 
         default:

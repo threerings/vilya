@@ -48,7 +48,7 @@ public class ParlorMarshaller_InviteMarshaller
         switch (methodId) {
         case INVITE_RECEIVED:
             (listener as ParlorService_InviteListener).inviteReceived(
-                (args[0] as Integer).value);
+                (args[0] as int));
             return;
 
         default:
