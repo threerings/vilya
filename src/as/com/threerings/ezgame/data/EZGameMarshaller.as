@@ -28,9 +28,11 @@ import com.threerings.ezgame.client.EZGameService;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService_ConfirmListener;
 import com.threerings.presents.client.InvocationService_InvocationListener;
+import com.threerings.presents.client.InvocationService_ResultListener;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.data.InvocationMarshaller_ConfirmMarshaller;
 import com.threerings.presents.data.InvocationMarshaller_ListenerMarshaller;
+import com.threerings.presents.data.InvocationMarshaller_ResultMarshaller;
 
 /**
  * Provides the implementation of the {@link EZGameService} interface
@@ -55,8 +57,21 @@ public class EZGameMarshaller extends InvocationMarshaller
         ]);
     }
 
+    /** The method id used to dispatch {@link #checkDictionaryWord} requests. */
+    public static const CHECK_DICTIONARY_WORD :int = 2;
+
+    // from interface EZGameService
+    public function checkDictionaryWord (arg1 :Client, arg2 :String, arg3 :String, arg4 :InvocationService_ResultListener) :void
+    {
+        var listener4 :InvocationMarshaller_ResultMarshaller = new InvocationMarshaller_ResultMarshaller();
+        listener4.listener = arg4;
+        sendRequest(arg1, CHECK_DICTIONARY_WORD, [
+            arg2, arg3, listener4
+        ]);
+    }
+
     /** The method id used to dispatch {@link #endGame} requests. */
-    public static const END_GAME :int = 2;
+    public static const END_GAME :int = 3;
 
     // from interface EZGameService
     public function endGame (arg1 :Client, arg2 :Array, arg3 :InvocationService_InvocationListener) :void
@@ -69,7 +84,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #endTurn} requests. */
-    public static const END_TURN :int = 3;
+    public static const END_TURN :int = 4;
 
     // from interface EZGameService
     public function endTurn (arg1 :Client, arg2 :int, arg3 :InvocationService_InvocationListener) :void
@@ -82,7 +97,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #getCookie} requests. */
-    public static const GET_COOKIE :int = 4;
+    public static const GET_COOKIE :int = 5;
 
     // from interface EZGameService
     public function getCookie (arg1 :Client, arg2 :int, arg3 :InvocationService_InvocationListener) :void
@@ -94,8 +109,21 @@ public class EZGameMarshaller extends InvocationMarshaller
         ]);
     }
 
+    /** The method id used to dispatch {@link #getDictionaryLetterSet} requests. */
+    public static const GET_DICTIONARY_LETTER_SET :int = 6;
+
+    // from interface EZGameService
+    public function getDictionaryLetterSet (arg1 :Client, arg2 :String, arg3 :int, arg4 :InvocationService_ResultListener) :void
+    {
+        var listener4 :InvocationMarshaller_ResultMarshaller = new InvocationMarshaller_ResultMarshaller();
+        listener4.listener = arg4;
+        sendRequest(arg1, GET_DICTIONARY_LETTER_SET, [
+            arg2, Integer.valueOf(arg3), listener4
+        ]);
+    }
+
     /** The method id used to dispatch {@link #getFromCollection} requests. */
-    public static const GET_FROM_COLLECTION :int = 5;
+    public static const GET_FROM_COLLECTION :int = 7;
 
     // from interface EZGameService
     public function getFromCollection (arg1 :Client, arg2 :String, arg3 :Boolean, arg4 :int, arg5 :String, arg6 :int, arg7 :InvocationService_ConfirmListener) :void
@@ -108,7 +136,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #mergeCollection} requests. */
-    public static const MERGE_COLLECTION :int = 6;
+    public static const MERGE_COLLECTION :int = 8;
 
     // from interface EZGameService
     public function mergeCollection (arg1 :Client, arg2 :String, arg3 :String, arg4 :InvocationService_InvocationListener) :void
@@ -121,7 +149,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #sendMessage} requests. */
-    public static const SEND_MESSAGE :int = 7;
+    public static const SEND_MESSAGE :int = 9;
 
     // from interface EZGameService
     public function sendMessage (arg1 :Client, arg2 :String, arg3 :Object, arg4 :int, arg5 :InvocationService_InvocationListener) :void
@@ -134,7 +162,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #setCookie} requests. */
-    public static const SET_COOKIE :int = 8;
+    public static const SET_COOKIE :int = 10;
 
     // from interface EZGameService
     public function setCookie (arg1 :Client, arg2 :ByteArray, arg3 :InvocationService_InvocationListener) :void
@@ -147,7 +175,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #setProperty} requests. */
-    public static const SET_PROPERTY :int = 9;
+    public static const SET_PROPERTY :int = 11;
 
     // from interface EZGameService
     public function setProperty (arg1 :Client, arg2 :String, arg3 :Object, arg4 :int, arg5 :InvocationService_InvocationListener) :void
@@ -160,7 +188,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #setTicker} requests. */
-    public static const SET_TICKER :int = 10;
+    public static const SET_TICKER :int = 12;
 
     // from interface EZGameService
     public function setTicker (arg1 :Client, arg2 :String, arg3 :int, arg4 :InvocationService_InvocationListener) :void

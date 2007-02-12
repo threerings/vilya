@@ -49,6 +49,34 @@ public interface EZGameService extends InvocationService
         InvocationListener listener);
 
     /**
+     * Ask the dictionary service for a set of random letters
+     * appropriate for the given language/culture settings. These will be
+     * returned via a message back to the caller.
+     *
+     * @param client stores information about the caller
+     * @param locale is an RFC 3066 string specifying language settings,
+     *        for example, "en" or "en-us".
+     * @param count is the number of letters to be returned.
+     * @param listener is the callback function
+     */
+    public void getDictionaryLetterSet (
+        Client client, String locale, int count, ResultListener listener);
+    
+    /**
+     * Ask the dictionary service whether the specified word is valid
+     * with the given language/culture settings. The result will be returned
+     * via a message back to the caller.
+     *
+     * @param client stores information about the caller
+     * @param locale is an RFC 3066 string specifying language settings,
+     *        for example, "en" or "en-us".
+     * @param word is the word to be checked against the dictionary.
+     * @param listener is the callback function
+     */
+    public void checkDictionaryWord (
+        Client client, String locale, String word, ResultListener listener);
+
+    /**
      * Add to the specified named collection.
      *
      * @param clearExisting if true, wipe the old contents.

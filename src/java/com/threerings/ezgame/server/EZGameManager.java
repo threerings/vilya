@@ -124,6 +124,27 @@ public class EZGameManager extends GameManager
     }
 
     // from EZGameProvider
+    public void getDictionaryLetterSet (
+        ClientObject caller, String locale, int count, 
+        InvocationService.ResultListener listener)
+        throws InvocationException
+    {
+        // TODO: real logic here :)
+        String letters = "A,B,C";
+        listener.requestProcessed(letters);
+    }
+    
+    // from EZGameProvider
+    public void checkDictionaryWord (
+        ClientObject caller, String locale, String word, 
+        InvocationService.ResultListener listener)
+        throws InvocationException
+    {
+        // TODO: real logic here :)
+        listener.requestProcessed (true);
+    }  
+    
+    // from EZGameProvider
     public void addToCollection (
         ClientObject caller, String collName, byte[][] data,
         boolean clearExisting, InvocationService.InvocationListener listener)
@@ -176,7 +197,7 @@ public class EZGameManager extends GameManager
 
                 if (playerIndex >= 0 && playerIndex < _gameObj.players.length) {
                     sendPrivateMessage(playerIndex, msgOrPropName, result);
-
+                    
                 } else {
                     setProperty(msgOrPropName, result, -1);
                 }
@@ -185,11 +206,11 @@ public class EZGameManager extends GameManager
                 return;
             }
         }
-
+        
         // TODO: decide what we want to return here
         throw new InvocationException(String.valueOf(srcSize));
     }
-
+    
     // from EZGameProvider
     public void mergeCollection (
         ClientObject caller, String srcColl, String intoColl,

@@ -219,6 +219,42 @@ public class EZGameControl extends EventDispatcher
     }
 
     /**
+     * Requests a set of random letters from the dictionary service.
+     * The letters will arrive in a separate message with the specified key,
+     * as an array of strings.
+     *
+     * @param locale RFC 3066 string that represents language settings
+     * @param count the number of letters to be produced
+     * @param callback the function that will process the results, of the form:
+     *          function (letters :Array) :void
+     *        where letters is an array of strings containing letters
+     *        for the given language settings (potentially empty).
+     */
+    public function getDictionaryLetterSet (
+        locale :String, count :int, callback :Function) :void
+    {
+        callEZCode("getDictionaryLetterSet_v1", locale, count, callback);
+    }
+
+    /**
+     * Requests a set of random letters from the dictionary service.
+     * The letters will arrive in a separate message with the specified key,
+     * as an array of strings.
+     *
+     * @param RFC 3066 string that represents language settings
+     * @param word the string contains the word to be checked
+     * @param callback the function that will process the results, of the form:
+     *          function (word :String, result :Boolean) :void
+     *        where word is a copy of the word that was requested, and result
+     *        specifies whether the word is valid given language settings
+     */
+    public function checkDictionaryWord (
+        locale :String, word :String, callback :Function) :void
+    {
+        callEZCode("checkDictionaryWord_v1", locale, word, callback);
+    }
+
+    /**
      * Set the specified collection to contain the specified values,
      * clearing any previous values.
      */

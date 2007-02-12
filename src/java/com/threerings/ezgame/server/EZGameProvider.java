@@ -40,6 +40,12 @@ public interface EZGameProvider extends InvocationProvider
         throws InvocationException;
 
     /**
+     * Handles a {@link EZGameService#checkDictionaryWord} request.
+     */
+    public void checkDictionaryWord (ClientObject caller, String arg1, String arg2, InvocationService.ResultListener arg3)
+        throws InvocationException;
+
+    /**
      * Handles a {@link EZGameService#endGame} request.
      */
     public void endGame (ClientObject caller, int[] arg1, InvocationService.InvocationListener arg2)
@@ -55,6 +61,12 @@ public interface EZGameProvider extends InvocationProvider
      * Handles a {@link EZGameService#getCookie} request.
      */
     public void getCookie (ClientObject caller, int arg1, InvocationService.InvocationListener arg2)
+        throws InvocationException;
+
+    /**
+     * Handles a {@link EZGameService#getDictionaryLetterSet} request.
+     */
+    public void getDictionaryLetterSet (ClientObject caller, String arg1, int arg2, InvocationService.ResultListener arg3)
         throws InvocationException;
 
     /**

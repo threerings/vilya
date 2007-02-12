@@ -27,7 +27,9 @@ import com.threerings.util.Name;
 import com.threerings.util.StringUtil;
 
 import com.threerings.presents.client.ConfirmAdapter;
+import com.threerings.presents.client.ResultWrapper;
 import com.threerings.presents.client.InvocationService_ConfirmListener;
+import com.threerings.presents.client.InvocationService_ResultListener;
 
 import com.threerings.presents.dobj.EntryAddedEvent;
 import com.threerings.presents.dobj.EntryRemovedEvent;
@@ -138,6 +140,8 @@ public class GameControlBackend
         o["isInPlay_v1"] = isInPlay_v1;
         o["endTurn_v1"] = endTurn_v1;
         o["endGame_v1"] = endGame_v1;
+        o["getDictionaryLetterSet_v1"] = getDictionaryLetterSet_v1;
+        o["checkDictionaryWord_v1"] = checkDictionaryWord_v1;
         o["populateCollection_v1"] = populateCollection_v1;
         o["getFromCollection_v1"] = getFromCollection_v1;
         o["alterKeyEvents_v1"] = alterKeyEvents_v1;
@@ -152,7 +156,7 @@ public class GameControlBackend
         var encoded :Object = EZObjectMarshaller.encode(value, (index == -1));
         _ezObj.ezGameService.setProperty(
             _ctx.getClient(), propName, encoded, index,
-            createLoggingListener("setProperty"));
+            createLoggingConfirmListener("setProperty"));
 
         // set it immediately in the game object
         _ezObj.applyPropertySet(propName, value, index);
@@ -164,7 +168,7 @@ public class GameControlBackend
         validateName(srcColl);
         validateName(intoColl);
         _ezObj.ezGameService.mergeCollection(_ctx.getClient(),
-            srcColl, intoColl, createLoggingListener("mergeCollection"));
+            srcColl, intoColl, createLoggingConfirmListener("mergeCollection"));
     }
 
     public function sendMessage_v1 (
@@ -176,14 +180,14 @@ public class GameControlBackend
         var encoded :Object = EZObjectMarshaller.encode(value, false);
         _ezObj.ezGameService.sendMessage(_ctx.getClient(),
             messageName, encoded, playerIndex,
-            createLoggingListener("sendMessage"));
+            createLoggingConfirmListener("sendMessage"));
     }
 
     public function setTicker_v1 (tickerName :String, msOfDelay :int) :void
     {
         validateName(tickerName);
         _ezObj.ezGameService.setTicker(_ctx.getClient(),
-            tickerName, msOfDelay, createLoggingListener("setTicker"));
+            tickerName, msOfDelay, createLoggingConfirmListener("setTicker"));
     }
 
     public function sendChat_v1 (msg :String) :void
@@ -289,7 +293,7 @@ public class GameControlBackend
 
         // request it to be made so by the server
         _ezObj.ezGameService.getCookie(_ctx.getClient(), playerIndex,
-            createLoggingListener("getUserCookie"));
+            createLoggingConfirmListener("getUserCookie"));
     }
 
     public function setUserCookie_v1 (cookie :Object) :Boolean
@@ -302,7 +306,7 @@ public class GameControlBackend
         }
 
         _ezObj.ezGameService.setCookie(_ctx.getClient(), ba,
-            createLoggingListener("setUserCookie"));
+            createLoggingConfirmListener("setUserCookie"));
         return true;
     }
 
@@ -319,7 +323,7 @@ public class GameControlBackend
     public function endTurn_v1 (nextPlayerIndex :int = -1) :void
     {
         _ezObj.ezGameService.endTurn(_ctx.getClient(), nextPlayerIndex,
-            createLoggingListener("endTurn"));
+            createLoggingConfirmListener("endTurn"));
     }
 
     public function endGame_v1 (... winnerDexes) :void
@@ -329,7 +333,54 @@ public class GameControlBackend
             winners.push(int(winnerDexes.shift()));
         }
         _ezObj.ezGameService.endGame(_ctx.getClient(), winners,
-            createLoggingListener("endGame"));
+            createLoggingConfirmListener("endGame"));
+    }
+
+    public function getDictionaryLetterSet_v1 (
+        locale :String, count :int, callback :Function) :void
+    {
+        var listener :InvocationService_ResultListener;
+        if (callback != null) {
+            var failure :Function = function (cause :String = null) :void {
+                // ignore the cause, return an empty array
+                callback ([]);
+            }
+            var success :Function = function (result :String = null) :void {
+                // splice the resulting string, and return as array
+                var r : Array = result.split(",");
+                callback (r);
+            };
+            listener = new ResultWrapper (failure, success);
+        } else {
+            listener = createLoggingResultListener ("checkDictionaryWord");
+        }
+        
+        // just relay the data over to the server
+        _ezObj.ezGameService.getDictionaryLetterSet(_ctx.getClient(), locale, count, listener);
+    }
+
+    public function checkDictionaryWord_v1 (
+        locale :String, word :String, callback :Function) :void
+    {
+        var listener :InvocationService_ResultListener;
+        if (callback != null) {
+            var failure :Function = function (cause :String = null) :void {
+                // ignore the cause, return failure
+                callback (word, false);
+            }
+            var success :Function = function (result :Object = null) :void {
+                // server returns a boolean, so convert it and send it over
+                var r : Boolean = Boolean(result);
+                callback (word, r);
+            };
+            listener = new ResultWrapper (failure, success);
+        } else {
+            listener = createLoggingResultListener ("checkDictionaryWord");
+        }
+
+        // just relay the data over to the server
+        _ezObj.ezGameService.checkDictionaryWord(_ctx.getClient(), locale, word, listener);
+
     }
 
     /**
@@ -349,7 +400,7 @@ public class GameControlBackend
 
         _ezObj.ezGameService.addToCollection(
             _ctx.getClient(), collName, encodedValues, clearExisting,
-            createLoggingListener("populateCollection"));
+            createLoggingConfirmListener("populateCollection"));
     }
 
     /**
@@ -379,7 +430,7 @@ public class GameControlBackend
             listener = new ConfirmAdapter(fn, fn);
 
         } else {
-            listener = createLoggingListener("getFromCollection");
+            listener = createLoggingConfirmListener("getFromCollection");
         }
 
         _ezObj.ezGameService.getFromCollection(
@@ -422,12 +473,24 @@ public class GameControlBackend
     }
 
     /**
-     * Create a listener for service requests.
+     * Create a logging confirm listener for service requests.
      */
-    protected function createLoggingListener (
+    protected function createLoggingConfirmListener (
         service :String) :InvocationService_ConfirmListener
     {
         return new ConfirmAdapter(function (cause :String) :void {
+            Log.getLog(this).warning("Service failure " +
+                "[service=" + service + ", cause=" + cause + "].");
+        });
+    }
+
+    /**
+     * Create a logging result listener for service requests.
+     */
+    protected function createLoggingResultListener (
+        service :String) :InvocationService_ResultListener
+    {
+        return new ResultWrapper(function (cause :String) :void {
             Log.getLog(this).warning("Service failure " +
                 "[service=" + service + ", cause=" + cause + "].");
         });

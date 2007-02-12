@@ -63,6 +63,13 @@ public class EZGameDispatcher extends InvocationDispatcher
             );
             return;
 
+        case EZGameMarshaller.CHECK_DICTIONARY_WORD:
+            ((EZGameProvider)provider).checkDictionaryWord(
+                source,
+                (String)args[0], (String)args[1], (InvocationService.ResultListener)args[2]
+            );
+            return;
+
         case EZGameMarshaller.END_GAME:
             ((EZGameProvider)provider).endGame(
                 source,
@@ -81,6 +88,13 @@ public class EZGameDispatcher extends InvocationDispatcher
             ((EZGameProvider)provider).getCookie(
                 source,
                 ((Integer)args[0]).intValue(), (InvocationService.InvocationListener)args[1]
+            );
+            return;
+
+        case EZGameMarshaller.GET_DICTIONARY_LETTER_SET:
+            ((EZGameProvider)provider).getDictionaryLetterSet(
+                source,
+                (String)args[0], ((Integer)args[1]).intValue(), (InvocationService.ResultListener)args[2]
             );
             return;
 
