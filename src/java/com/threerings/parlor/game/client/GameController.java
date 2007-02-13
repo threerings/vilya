@@ -129,6 +129,14 @@ public abstract class GameController extends PlaceController
     }
 
     /**
+     * Convenience method to determine the type of game.
+     */
+    public byte getGameType ()
+    {
+        return _config.getGameType();
+    }
+
+    /**
      * Returns whether the game is over.
      */
     public boolean isGameOver ()
@@ -301,14 +309,6 @@ public abstract class GameController extends PlaceController
                 ((GameControllerDelegate)delegate).gameWillReset();
             }
         });
-    }
-
-    /**
-     * Convenience method to determine the type of game.
-     */
-    protected byte getGameType ()
-    {
-        return _config.getGameType();
     }
 
     /** A reference to the active parlor context. */
