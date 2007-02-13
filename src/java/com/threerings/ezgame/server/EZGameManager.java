@@ -130,9 +130,8 @@ public class EZGameManager extends GameManager
         InvocationService.ResultListener listener)
         throws InvocationException
     {
-        // TODO: real logic here :)
-        String letters = "A,B,C";
-        listener.requestProcessed(letters);
+        DictionaryService dictionary = getDictionaryService ();
+        dictionary.getLetterSet (locale, count, listener);
     }
     
     // from EZGameProvider
@@ -141,10 +140,24 @@ public class EZGameManager extends GameManager
         InvocationService.ResultListener listener)
         throws InvocationException
     {
-        // TODO: real logic here :)
-        listener.requestProcessed (true);
+        DictionaryService dictionary = getDictionaryService ();
+        dictionary.checkWord (locale, word, listener);
     }  
-    
+
+    /**
+     * Find the dictionary manager
+     */
+    protected DictionaryService getDictionaryService ()
+        throws InvocationException
+    {
+        DictionaryService dictionary = DictionaryService.getInstance ();
+        if (dictionary == null) {
+            log.warning("DictionaryService not initialized.");
+            throw new InvocationException(INTERNAL_ERROR);
+        }
+        return dictionary;
+    }
+
     // from EZGameProvider
     public void addToCollection (
         ClientObject caller, String collName, byte[][] data,
