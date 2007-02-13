@@ -37,7 +37,6 @@ import com.threerings.parlor.Log;
 import com.threerings.parlor.game.data.GameCodes;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.game.data.GameObject;
-import com.threerings.parlor.game.data.PartyGameConfig;
 import com.threerings.parlor.util.ParlorContext;
 
 /**
@@ -305,13 +304,11 @@ public abstract class GameController extends PlaceController
     }
 
     /**
-     * Used to determine if this game is a party game.
+     * Convenience method to determine the type of game.
      */
-    protected boolean isPartyGame ()
+    protected byte getGameType ()
     {
-        return (_config instanceof PartyGameConfig) &&
-            (((PartyGameConfig)_config).getPartyGameType() !=
-                 PartyGameConfig.NOT_PARTY_GAME);
+        return _config.getGameType();
     }
 
     /** A reference to the active parlor context. */

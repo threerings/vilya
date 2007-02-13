@@ -48,6 +48,19 @@ import com.threerings.parlor.game.client.GameConfigurator;
  */
 public abstract class GameConfig extends PlaceConfig implements Cloneable
 {
+    /** Game type constant: a game that is started with a list of players,
+     * and those are the only players that may play. */
+    public static final byte SEATED_GAME = 0;
+
+    /** Game type constant: a game that starts immediately, but only has
+     * a certain number of player slots. Users enter the game room, and
+     * then choose where to sit. */
+    public static final byte SEATED_CONTINUOUS = 1;
+
+    /** Game type constant: a game that starts immediately, and every
+     * user that enters is a player. */
+    public static final byte PARTY = 2;
+
     /** The usernames of the players involved in this game, or an empty
      * array if such information is not needed by this particular game. */
     public Name[] players = new Name[0];
@@ -60,6 +73,14 @@ public abstract class GameConfig extends PlaceConfig implements Cloneable
      * configuration for those AIs. A null array indicates no use of AIs
      * at all. */
     public GameAI[] ais = new GameAI[0];
+
+    /**
+     * Get the type of game.
+     */
+    public byte getGameType ()
+    {
+        return SEATED_GAME;
+    }
 
     /**
      * Returns the message bundle identifier for the bundle that should be

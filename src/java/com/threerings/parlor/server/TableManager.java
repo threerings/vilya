@@ -128,8 +128,7 @@ public class TableManager
         }
         table.init(_plobj.getOid(), tableConfig, config);
 
-        boolean isParty = table.isPartyGame();
-        if (!isParty) {
+        if (table.bodyOids != null && table.bodyOids.length > 0) {
             // stick the creator into the first non-AI position
             int cpos = (config.ais == null) ? 0 : config.ais.length;
             String error = table.setOccupant(cpos, creator);
@@ -350,7 +349,7 @@ public class TableManager
         // configure the privacy of the game
         gameobj.setIsPrivate(table.tconfig.privateTable);
 
-        if (!table.isPartyGame()) {
+        if (table.bodyOids != null) {
             // clear the occupant to table mappings as this game is underway
             for (int i = 0; i < table.bodyOids.length; i++) {
                 _boidMap.remove(table.bodyOids[i]);
@@ -398,6 +397,9 @@ public class TableManager
 
         // TODO: this will become more complicated
         // As we separate watchers and players
+
+        // TODO: for SEATED_CONTINUOUS, we will probably be showing the
+        // folks in the game...
 
         // finally, update the table
         _tlobj.updateTables(table);

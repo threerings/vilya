@@ -53,7 +53,6 @@ import com.threerings.parlor.game.data.GameAI;
 import com.threerings.parlor.game.data.GameCodes;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.game.data.GameObject;
-import com.threerings.parlor.game.data.PartyGameConfig;
 import com.threerings.parlor.server.ParlorSender;
 
 import com.threerings.util.MessageBundle;
@@ -80,23 +79,11 @@ public class GameManager extends PlaceManager
     }
 
     /**
-     * Used to determine if this game is a party game.
+     * A convenience method for getting the game type.
      */
-    public boolean isPartyGame ()
+    public byte getGameType ()
     {
-        return (getPartyGameType() != PartyGameConfig.NOT_PARTY_GAME);
-    }
-
-    /**
-     * Get the type of party game being played.
-     */
-    public byte getPartyGameType ()
-    {
-        if (_gameconfig instanceof PartyGameConfig) {
-            return ((PartyGameConfig) _gameconfig).getPartyGameType();
-        } else {
-            return PartyGameConfig.NOT_PARTY_GAME;
-        }
+        return _gameconfig.getGameType();
     }
 
     /**
@@ -622,7 +609,7 @@ public class GameManager extends PlaceManager
             // perfectly normal to receive a player ready notification
             // from a user entering a party game in which they're not yet
             // a participant
-            if (!isPartyGame()) {
+            if (needsNoShowTimer()) {
                 Log.warning("Received playerReady() from non-player? " +
                             "[game=" + where() + ", who=" + caller.who() + "].");
             }
@@ -672,7 +659,7 @@ public class GameManager extends PlaceManager
      */
     protected boolean needsNoShowTimer ()
     {
-        return !isPartyGame();
+        return (getGameType() == GameConfig.SEATED_GAME);
     }
 
     /**
@@ -891,7 +878,7 @@ public class GameManager extends PlaceManager
     {
         // start up the game if we're not a party game and if we haven't
         // already done so
-        if (!isPartyGame() && _gameobj.state == GameObject.PRE_GAME) {
+        if (needsNoShowTimer() && _gameobj.state == GameObject.PRE_GAME) {
             startGame();
         }
     }

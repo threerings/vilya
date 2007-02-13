@@ -55,6 +55,19 @@ import com.threerings.parlor.game.client.GameConfigurator;
 public /*abstract*/ class GameConfig extends PlaceConfig
     implements Cloneable, Hashable
 {
+    /** Game type constant: a game that is started with a list of players,
+     * and those are the only players that may play. */
+    public static const SEATED_GAME :int = 0;
+
+    /** Game type constant: a game that starts immediately, but only has
+     * a certain number of player slots. Users enter the game room, and
+     * then choose where to sit. */
+    public static const SEATED_CONTINUOUS :int = 1;
+
+    /** Game type constant: a game that starts immediately, and every
+     * user that enters is a player. */
+    public static const PARTY :int = 2;
+
     /** The usernames of the players involved in this game, or an empty
      * array if such information is not needed by this particular game. */
     public var players :TypedArray = TypedArray.create(Name);
@@ -71,6 +84,14 @@ public /*abstract*/ class GameConfig extends PlaceConfig
     public function GameConfig ()
     {
         // nothing needed
+    }
+
+    /**
+     * Get the type of game.
+     */
+    public function getGameType () :int
+    {
+        return SEATED_GAME;
     }
 
     /**

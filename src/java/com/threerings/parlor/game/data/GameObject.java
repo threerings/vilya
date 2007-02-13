@@ -232,15 +232,6 @@ public class GameObject extends PlaceObject
     }
 
     /**
-     * Returns the type of party game being played or NOT_PARTY_GAME.
-     * {@link PartyGameConfig}.
-     */
-    public byte getPartyGameType ()
-    {
-        return PartyGameConfig.NOT_PARTY_GAME;
-    }
-
-    /**
      * Used by {@link #isActivePlayer} to determine if the supplied status is
      * associated with an active player (one that has not resigned from the
      * game and/or left the game room).

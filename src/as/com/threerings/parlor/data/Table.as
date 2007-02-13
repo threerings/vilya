@@ -38,8 +38,6 @@ import com.threerings.crowd.data.BodyObject;
 
 import com.threerings.parlor.data.ParlorCodes;
 import com.threerings.parlor.game.data.GameConfig;
-import com.threerings.parlor.game.data.PartyGameCodes;
-import com.threerings.parlor.game.data.PartyGameConfig;
 
 /**
  * This class represents a table that is being used to matchmake a game by
@@ -152,28 +150,6 @@ public class Table
         return newTeams;
     }
 
-    /**
-     * Return true if the game is a party game.
-     */
-    public function isPartyGame () :Boolean
-    {
-        return (PartyGameCodes.NOT_PARTY_GAME != getPartyGameType());
-    }
-
-    /**
-     * Get the type of party game being played at this table, or
-     * PartyGameCodes.NOT_PARTY_GAME.
-     */
-    public function getPartyGameType () :int
-    {
-        if (config is PartyGameConfig) {
-            return (config as PartyGameConfig).getPartyGameType();
-
-        } else {
-            return PartyGameCodes.NOT_PARTY_GAME;
-        }
-    }
-
 //    /**
 //     * Requests to seat the specified user at the specified position in
 //     * this table.
@@ -265,6 +241,12 @@ public class Table
      */
     public function mayBeStarted () :Boolean
     {
+        switch (config.getGameType()) {
+        case GameConfig.SEATED_CONTINUOUS:
+        case GameConfig.PARTY:
+            return true;
+        }
+
         if (tconfig.teamMemberIndices == null) {
             // for a normal game, just check to see if we're past the minimum
             return tconfig.minimumPlayerCount <= getOccupiedCount();
@@ -288,15 +270,21 @@ public class Table
         }
     }
 
-    /**
-     * Returns true if sufficient seats are occupied that the game should
-     * be automatically started.
-     */
-    public function shouldBeStarted () :Boolean
-    {
-        return isPartyGame() ||
-            (tconfig.desiredPlayerCount <= getOccupiedCount());
-    }
+//    /**
+//     * Returns true if sufficient seats are occupied that the game should
+//     * be automatically started.
+//     */
+//    public function shouldBeStarted () :Boolean
+//    {
+//        switch (config.getGameType()) {
+//        case GameConfig.SEATED_CONTINUOUS:
+//        case GameConfig.PARTY:
+//            return true;
+//
+//        default:
+//            return (tconfig.desiredPlayerCount <= getOccupiedCount());
+//        }
+//    }
 
     /**
      * Returns true if this table is in play, false if it is still being

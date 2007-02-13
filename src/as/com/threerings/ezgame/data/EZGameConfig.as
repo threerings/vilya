@@ -13,8 +13,6 @@ import com.threerings.crowd.client.PlaceController;
 
 import com.threerings.parlor.game.client.GameConfigurator;
 import com.threerings.parlor.game.data.GameConfig;
-import com.threerings.parlor.game.data.PartyGameConfig;
-import com.threerings.parlor.game.data.PartyGameCodes;
 
 import com.threerings.ezgame.client.EZGameController;
 
@@ -22,7 +20,7 @@ import com.threerings.ezgame.client.EZGameController;
  * A game config for a simple multiplayer ez game.
  */
 public class EZGameConfig extends GameConfig
-    implements PartyGameConfig, Hashable
+    implements Hashable
 {
     // TODO: this will eventually contain various XML configuration bits,
     // or we'll expand this to contain other information.
@@ -30,8 +28,8 @@ public class EZGameConfig extends GameConfig
     public var configData :String;
 
     // TODO: this is separate right now, but may eventually be extracted
-    // from configData? Do not read this value, use getPartyGameType()
-    public var partyGameType :int = PartyGameCodes.NOT_PARTY_GAME;
+    // from configData? Do not read this value, use getGameType()
+    public var gameType :int = SEATED_GAME;
 
     /** If non-zero, a game id used to persistently identify the game.
      * This could be thought of as a new-style rating id. */
@@ -40,6 +38,11 @@ public class EZGameConfig extends GameConfig
     public function EZGameConfig ()
     {
         // nothing needed
+    }
+
+    override public function getGameType () :int
+    {
+        return gameType;
     }
 
     // from abstract GameConfig
@@ -69,12 +72,6 @@ public class EZGameConfig extends GameConfig
         throw new Error("Not implemented.");
     }
 
-    // from PartyGameConfig
-    public function getPartyGameType () :int
-    {
-        return partyGameType;
-    }
-
     override public function hashCode () :int
     {
         return super.hashCode(); // TODO: incorporate configData?
@@ -96,7 +93,7 @@ public class EZGameConfig extends GameConfig
         super.readObject(ins);
 
         configData = (ins.readField(String) as String);
-        partyGameType = ins.readByte();
+        gameType = ins.readByte();
         persistentGameId = ins.readInt();
     }
 
@@ -106,7 +103,7 @@ public class EZGameConfig extends GameConfig
         super.writeObject(out);
 
         out.writeField(configData);
-        out.writeByte(partyGameType);
+        out.writeByte(gameType);
         out.writeInt(persistentGameId);
     }
 }

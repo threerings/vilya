@@ -34,7 +34,6 @@ import com.threerings.crowd.data.BodyObject;
 
 import com.threerings.parlor.data.ParlorCodes;
 import com.threerings.parlor.game.data.GameConfig;
-import com.threerings.parlor.game.data.PartyGameConfig;
 
 /**
  * This class represents a table that is being used to matchmake a game by
@@ -106,7 +105,7 @@ public class Table
         this.config = config;
 
         // make room for the maximum number of players
-        if (!isPartyGame()) {
+        if (config.getGameType() != GameConfig.PARTY) {
             occupants = new Name[tconfig.desiredPlayerCount];
             bodyOids = new int[occupants.length];
 
@@ -158,7 +157,7 @@ public class Table
     public Name[] getPlayers ()
     {
         // seated party games need a spot for every seat
-        if (PartyGameConfig.SEATED_PARTY_GAME == getPartyGameType()) {
+        if (GameConfig.SEATED_CONTINUOUS == config.getGameType()) {
             return new Name[tconfig.desiredPlayerCount];
         }
 
@@ -203,28 +202,6 @@ public class Table
         }
 
         return newTeams;
-    }
-
-    /**
-     * Return true if the game is a party game.
-     */
-    public boolean isPartyGame ()
-    {
-        return (PartyGameConfig.NOT_PARTY_GAME != getPartyGameType());
-    }
-
-    /**
-     * Get the type of party game being played at this table, or
-     * PartyGameConfig.NOT_PARTY_GAME.
-     */
-    public byte getPartyGameType ()
-    {
-        if (config instanceof PartyGameConfig) {
-            return ((PartyGameConfig) config).getPartyGameType();
-
-        } else {
-            return PartyGameConfig.NOT_PARTY_GAME;
-        }
     }
 
     /**
@@ -324,6 +301,12 @@ public class Table
      */
     public boolean mayBeStarted ()
     {
+        switch (config.getGameType()) {
+        case GameConfig.SEATED_CONTINUOUS:
+        case GameConfig.PARTY:
+            return true;
+        }
+
         if (tconfig.teamMemberIndices == null) {
             // for a normal game, just check to see if we're past the minimum
             return tconfig.minimumPlayerCount <= getOccupiedCount();
@@ -352,8 +335,14 @@ public class Table
      */
     public boolean shouldBeStarted ()
     {
-        return isPartyGame() ||
-            (tconfig.desiredPlayerCount <= getOccupiedCount());
+        switch (config.getGameType()) {
+        case GameConfig.SEATED_CONTINUOUS:
+        case GameConfig.PARTY:
+            return true;
+
+        default:
+            return (tconfig.desiredPlayerCount <= getOccupiedCount());
+        }
     }
 
     /**

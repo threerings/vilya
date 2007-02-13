@@ -32,7 +32,8 @@ import com.threerings.crowd.data.PlaceObject;
 
 import com.threerings.crowd.server.CrowdServer;
 
-import com.threerings.parlor.game.data.PartyGameConfig;
+import com.threerings.parlor.game.data.GameConfig;
+
 import com.threerings.parlor.game.server.GameManager;
 
 import com.threerings.parlor.turn.server.TurnGameManager;
@@ -404,8 +405,8 @@ public class EZGameManager extends GameManager
     protected void validateUser (ClientObject caller)
         throws InvocationException
     {
-        switch (getPartyGameType()) {
-        case PartyGameConfig.FREE_FOR_ALL_PARTY_GAME:
+        switch (getGameType()) {
+        case GameConfig.PARTY:
             return; // always validate.
 
         default:
@@ -447,7 +448,8 @@ public class EZGameManager extends GameManager
         _gameObj.setEzGameService(
             (EZGameMarshaller) CrowdServer.invmgr.registerDispatcher(new EZGameDispatcher(this)));
 
-        if (isPartyGame()) {
+        // if we don't need the no-show timer, start.
+        if (!needsNoShowTimer()) {
             startGame();
         }
     }

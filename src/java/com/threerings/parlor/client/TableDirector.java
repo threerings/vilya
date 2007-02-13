@@ -308,7 +308,7 @@ public class TableDirector extends BasicDirector
             Log.warning("Table created, but where is it? [tableId=" + tableId + "]");
             return;
         }
-        if (table.gameOid != 0 && table.isPartyGame()) {
+        if (table.gameOid != -1 && table.occupants.length == 0) {
             // let's boogie!
             _ctx.getParlorDirector().gameIsReady(table.gameOid);
         }
