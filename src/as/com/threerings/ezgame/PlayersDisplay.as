@@ -58,7 +58,7 @@ public class PlayersDisplay extends Sprite
             label.y = y;
             addChild(label);
             y += label.textHeight + pad;
-            maxWidth = label.textWidth;
+            maxWidth = label.textWidth + TEXTWIDTH_ADD;
         }
 
         var players :Array = _gameCtrl.getPlayers();
@@ -82,7 +82,7 @@ public class PlayersDisplay extends Sprite
             label.y = y;
             addChild(label);
             y += Math.max(label.textHeight, iconH) + pad;
-            maxWidth = Math.max(maxWidth, iconW + label.textWidth);
+            maxWidth = Math.max(maxWidth, iconW + label.textWidth + TEXTWIDTH_ADD);
 
             _playerLabels.push(label);
         }
@@ -172,5 +172,9 @@ public class PlayersDisplay extends Sprite
 
     /** An array of labels, one for each player name. */
     protected var _playerLabels :Array = [];
+
+    /** These are fucking ridiculous. */
+    protected static const TEXTWIDTH_ADD :int = 5;
+    protected static const TEXTHEIGHT_ADD :int = 4;
 }
 }
