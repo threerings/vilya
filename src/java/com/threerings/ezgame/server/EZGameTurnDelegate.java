@@ -3,6 +3,10 @@
 
 package com.threerings.ezgame.server;
 
+import com.samskivert.util.ListUtil;
+
+import com.threerings.util.Name;
+
 import com.threerings.parlor.turn.server.TurnGameManagerDelegate;
 
 /**
@@ -16,11 +20,11 @@ public class EZGameTurnDelegate extends TurnGameManagerDelegate
     }
 
     /**
-     * A form of endTurn where you can specify the next turn holder index.
+     * A form of endTurn where you can specify the next turn holder oid.
      */
-    public void endTurn (int playerIndex)
+    public void endTurn (Name nextPlayer)
     {
-        _nextPlayerIndex = playerIndex;
+        _nextPlayer = nextPlayer;
         endTurn();
     }
 
@@ -28,19 +32,22 @@ public class EZGameTurnDelegate extends TurnGameManagerDelegate
     protected void setNextTurnHolder ()
     {
         // if the user-supplied value seems to make sense, use it!
-        if ((_nextPlayerIndex >= 0) &&
-                (_nextPlayerIndex < _turnGame.getPlayers().length)) {
-            _turnIdx = _nextPlayerIndex;
+        if (_nextPlayer != null) {
+            // copy the value, clear out _nextPlayer.
+            Name nextPlayer = _nextPlayer;
+            _nextPlayer = null;
 
-        } else {
-            // otherwise, do the default behavior
-            super.setNextTurnHolder();
+            int index = ListUtil.indexOf(_turnGame.getPlayers(), _nextPlayer);
+            if (index != -1) {
+                _turnIdx = index;
+                return;
+            }
         }
 
-        // always clear out the override
-        _nextPlayerIndex = -1;
+        // otherwise, do the default behavior
+        super.setNextTurnHolder();
     }
 
-    /** An override next turn holder, or -1. */
-    protected int _nextPlayerIndex = -1;
+    /** An override next turn holder, or null. */
+    protected Name _nextPlayer;
 }

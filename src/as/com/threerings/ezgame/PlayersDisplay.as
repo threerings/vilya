@@ -61,11 +61,13 @@ public class PlayersDisplay extends Sprite
             maxWidth = label.textWidth;
         }
 
+        var players :Array = _gameCtrl.getPlayers();
+
         // create a label for each player
-        var playerIndex :int = 0;
-        for each (var name :String in _gameCtrl.getPlayerNames()) {
-            label = createPlayerLabel(playerIndex, name);
-            icon = createPlayerIcon(playerIndex, name);
+        for each (var playerId :int in players) {
+            var name :String = _gameCtrl.getOccupantName(playerId);
+            label = createPlayerLabel(playerId, name);
+            icon = createPlayerIcon(playerId, name);
             var iconW :int = 0;
             var iconH :int = 0;
             if (icon != null) {
@@ -83,7 +85,6 @@ public class PlayersDisplay extends Sprite
             maxWidth = Math.max(maxWidth, iconW + label.textWidth);
 
             _playerLabels.push(label);
-            playerIndex++;
         }
 
         // make all the player labels the same width
@@ -123,7 +124,7 @@ public class PlayersDisplay extends Sprite
     /**
      * Create a TextArea that will be used to display player names.
      */
-    protected function createPlayerLabel (idx :int, name :String) :TextField
+    protected function createPlayerLabel (playerId :int, name :String) :TextField
     {
         var label :TextField = new TextField();
         label.autoSize = TextFieldAutoSize.LEFT;
@@ -133,7 +134,7 @@ public class PlayersDisplay extends Sprite
         return label;
     }
 
-    protected function createPlayerIcon (idx :int, name :String) :DisplayObject
+    protected function createPlayerIcon (playerId :int, name :String) :DisplayObject
     {
         return null;
     }
@@ -159,7 +160,7 @@ public class PlayersDisplay extends Sprite
      */
     protected function displayCurrentTurn () :void
     {
-        var idx :int = _gameCtrl.isInPlay() ? _gameCtrl.getTurnHolderIndex() : -1;
+        var idx :int = _gameCtrl.isInPlay() ? _gameCtrl.getPlayerPosition(_gameCtrl.getTurnHolder()) : -1;
         for (var ii :int = 0; ii < _playerLabels.length; ii++) {
             var label :TextField = (_playerLabels[ii] as TextField);
             label.backgroundColor = getBackground(ii == idx);

@@ -15,8 +15,8 @@ import com.threerings.ezgame.util.EZObjectMarshaller;
 public class UserCookie
     implements DSet_Entry
 {
-    /** The index of the player that has this cookie. */
-    public var playerIndex :int;
+    /** The id of the player that has this cookie. */
+    public var playerId :int;
 
     /** The decoded cookie value. */
     public var cookie :Object;
@@ -24,13 +24,13 @@ public class UserCookie
     // from DSet_Entry
     public function getKey () :Object
     {
-        return playerIndex;
+        return playerId;
     }
 
     // from superinterface Streamable
     public function readObject (ins :ObjectInputStream) :void
     {
-        playerIndex = ins.readInt();
+        playerId = ins.readInt();
         var ba :ByteArray = (ins.readField(ByteArray) as ByteArray);
         cookie = EZObjectMarshaller.decode(ba);
     }

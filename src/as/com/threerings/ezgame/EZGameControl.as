@@ -282,17 +282,17 @@ public class EZGameControl extends EventDispatcher
      * @param count the number of elements to pick
      * @param msgOrPropName the name of the message or property
      *        that will contain the picked elements.
-     * @param playerIndex if -1 (or unset), the picked elements should be
+     * @param playerId if 0 (or unset), the picked elements should be
      *        set on the gameObject as a property for all to see.
-     *        If a playerIndex is specified, only that player will receive
+     *        If a playerId is specified, only that player will receive
      *        the elements as a message.
      */
     // TODO: a way to specify exclusive picks vs. duplicate-OK picks?
     public function pickFromCollection (
         collName :String, count :int, msgOrPropName :String,
-        playerIndex :int = -1) :void
+        playerId :int = 0) :void
     {
-        getFromCollection(collName, count, msgOrPropName, playerIndex,
+        getFromCollection(collName, count, msgOrPropName, playerId,
             false, null);
     }
 
@@ -305,17 +305,17 @@ public class EZGameControl extends EventDispatcher
      * @param count the number of elements to pick
      * @param msgOrPropName the name of the message or property
      *        that will contain the picked elements.
-     * @param playerIndex if -1 (or unset), the picked elements should be
+     * @param playerId if 0 (or unset), the picked elements should be
      *        set on the gameObject as a property for all to see.
-     *        If a playerIndex is specified, only that player will receive
+     *        If a playerId is specified, only that player will receive
      *        the elements as a message.
      */
     // TODO: figure out the method signature of the callback
     public function dealFromCollection (
         collName :String, count :int, msgOrPropName :String,
-        callback :Function = null, playerIndex :int = -1) :void
+        callback :Function = null, playerId :int = 0) :void
     {
-        getFromCollection(collName, count, msgOrPropName, playerIndex,
+        getFromCollection(collName, count, msgOrPropName, playerId,
             true, callback);
     }
 
@@ -336,13 +336,13 @@ public class EZGameControl extends EventDispatcher
      * value will not be saved- it will merely end up coming out
      * as a MessageReceivedEvent.
      *
-     * @param playerIndex if -1, sends to all players, otherwise
+     * @param playerId if 0 (or unset), sends to all players, otherwise
      * the message will be private to just one player
      */
     public function sendMessage (
-        messageName :String, value :Object, playerIndex :int = -1) :void
+        messageName :String, value :Object, playerId :int = 0) :void
     {
-        callEZCode("sendMessage_v1", messageName, value, playerIndex);
+        callEZCode("sendMessage_v2", messageName, value, playerId);
     }
 
     /**
@@ -382,45 +382,52 @@ public class EZGameControl extends EventDispatcher
         callEZCode("localChat_v1", msg);
     }
 
-    /**
-     * Get the number of players currently in the game.
-     */
-    public function getPlayerCount () :int
+    // TODO: NEW
+    public function getOccupants () :Array /* of playerId */
     {
-        return int(callEZCode("getPlayerCount_v1"));
+        return (callEZCode("getOccupants_v1") as Array);
     }
 
+    // TODO: NEW
     /**
-     * Get the player names, as an array.
+     * Get the display name of the specified occupant.
+     * Two players may have the same name: always use playerId to
+     * purposes of identification and comparison. The name is for display
+     * only.
      */
-    public function getPlayerNames () :Array
+    public function getOccupantName (playerId :int) :String
     {
-        return (callEZCode("getPlayerNames_v1") as Array);
+        return String(callEZCode("getOccupantName_v1", playerId));
     }
 
+    // TODO: NEW: Table control
     /**
-     * Get the index into the player names array of the current player,
-     * or -1 if the user is not a player.
+     * Get the player's position, or -1 if not a player.
      */
-    public function getMyIndex () :int
+    public function getPlayerPosition (playerId :int) :int
     {
-        return int(callEZCode("getMyIndex_v1"));
+        return int(callEZCode("getPlayerPosition_v1", playerId));
     }
 
+    // TODO: NEW: Table control
     /**
-     * Get the turn holder's index, or -1 if it's nobody's turn.
+     * Get all the players at the table, in their seated position.
+     * Absent players will be represented by a 0.
      */
-    public function getTurnHolderIndex () :int
+    public function getPlayers () :Array /* of playerId (int) */
     {
-        return int(callEZCode("getTurnHolderIndex_v1"));
+        return (callEZCode("getPlayers_v1") as Array);
     }
 
-    /**
-     * Get the indexes of the winners
-     */
-    public function getWinnerIndexes () :Array /* of int */
+    // TODO: NEW
+    public function getMyId () :int
     {
-        return (callEZCode("getWinnerIndexes_v1") as Array);
+        return int(callEZCode("getMyId_v1"));
+    }
+
+    public function getTurnHolder () :int
+    {
+        return int(callEZCode("getTurnHolder_v1"));
     }
 
     /**
@@ -428,9 +435,9 @@ public class EZGameControl extends EventDispatcher
      * first time this is requested per game instance it will be retrieved
      * from the database. After that, it will be returned from memory.
      */
-    public function getUserCookie (playerIndex :int, callback :Function) :void
+    public function getUserCookie (playerId :int, callback :Function) :void
     {
-        callEZCode("getUserCookie_v1", playerIndex, callback);
+        callEZCode("getUserCookie_v1", playerId, callback);
     }
 
     /**
@@ -469,21 +476,21 @@ public class EZGameControl extends EventDispatcher
     }
 
     /**
-     * End the current turn. If no next player index is specified,
+     * End the current turn. If no next player id is specified,
      * then the next player after the current one is used.
      */
-    public function endTurn (nextPlayerIndex :int = -1) :void
+    public function endTurn (nextPlayerId :int = 0) :void
     {
-        callEZCode("endTurn_v1", nextPlayerIndex);
+        callEZCode("endTurn_v2", nextPlayerId);
     }
 
     /**
-     * End the game. The specified player indexes are winners!
+     * End the game. The specified player ids are winners!
      */
-    public function endGame (... winnerIndexes) :void
+    public function endGame (... winnerIds) :void
     {
-        var args :Array = winnerIndexes;
-        args.unshift("endGame_v1");
+        var args :Array = winnerIds;
+        args.unshift("endGame_v2");
 
         // goddamn var-args complications in actionscript
         callEZCode.apply(null, args);
@@ -513,12 +520,12 @@ public class EZGameControl extends EventDispatcher
     /**
      * Helper method for pickFromCollection and dealFromCollection.
      */
-    protected function getFromCollection(
-        collName :String, count :int, msgOrPropName :String, playerIndex :int,
+    protected function getFromCollection (
+        collName :String, count :int, msgOrPropName :String, playerId :int,
         consume :Boolean, callback :Function) :void
     {
-        callEZCode("getFromCollection_v1", collName, count, msgOrPropName,
-            playerIndex, consume, callback);
+        callEZCode("getFromCollection_v2", collName, count, msgOrPropName,
+            playerId, consume, callback);
     }
 
     /**

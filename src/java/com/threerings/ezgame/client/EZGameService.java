@@ -27,14 +27,14 @@ public interface EZGameService extends InvocationService
      * -1 is specified for the nextPlayerIndex.
      */
     public void endTurn (
-        Client client, int nextPlayerIndex, InvocationListener listener);
+        Client client, int nextPlayerId, InvocationListener listener);
 
     /**
-     * Request to end the game, with the specified player indices assigned
+     * Request to end the game, with the specified player oids assigned
      * as winners.
      */
     public void endGame (
-        Client client, int[] winners, InvocationListener listener);
+        Client client, int[] winnerOids, InvocationListener listener);
 
     /**
      * Request to send a private message to one other player in
@@ -45,7 +45,7 @@ public interface EZGameService extends InvocationService
      * an array property where index is -1.
      */
     public void sendMessage (
-        Client client, String msgName, Object value, int playerIdx,
+        Client client, String msgName, Object value, int playerId,
         InvocationListener listener);
 
     /**
@@ -99,7 +99,7 @@ public interface EZGameService extends InvocationService
      */
     public void getFromCollection (
         Client client, String collName, boolean consume, int count,
-        String msgOrPropName, int playerIndex, ConfirmListener listener);
+        String msgOrPropName, int playerId, ConfirmListener listener);
 
     /**
      * Start a ticker that will send out timestamp information at
@@ -116,7 +116,7 @@ public interface EZGameService extends InvocationService
      * Request to get the specified user's cookie.
      */
     public void getCookie (
-        Client client, int playerIndex, InvocationListener listener);
+        Client client, int playerId, InvocationListener listener);
 
     /**
      * Request to set our cookie.

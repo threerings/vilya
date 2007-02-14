@@ -29,23 +29,23 @@ import com.threerings.presents.dobj.DSet;
 public class UserCookie
     implements DSet.Entry
 {
-    /** The index of the player that has this cookie. */
-    public int playerIndex;
+    /** The id of the player that has this cookie. */
+    public int playerId;
 
     /** The cookie value. */
     public byte[] cookie;
 
     /**
      */
-    public UserCookie (int playerIndex, byte[] cookie)
+    public UserCookie (int playerId, byte[] cookie)
     {
-        this.playerIndex = playerIndex;
+        this.playerId = playerId;
         this.cookie = cookie;
     }
 
     // from DSet.Entry
     public Comparable getKey ()
     {
-        return playerIndex;
+        return playerId;
     }
 }

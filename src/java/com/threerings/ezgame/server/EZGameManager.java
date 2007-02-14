@@ -13,6 +13,7 @@ import com.samskivert.util.ArrayUtil;
 import com.samskivert.util.CollectionUtil;
 import com.samskivert.util.HashIntMap;
 import com.samskivert.util.Interval;
+import com.samskivert.util.IntListUtil;
 import com.samskivert.util.RandomUtil;
 import com.samskivert.util.ResultListener;
 
@@ -74,17 +75,26 @@ public class EZGameManager extends GameManager
 
     // from EZGameProvider
     public void endTurn (
-        ClientObject caller, int nextPlayerIndex,
+        ClientObject caller, int nextPlayerId,
         InvocationService.InvocationListener listener)
         throws InvocationException
     {
         validateStateModification(caller);
-        _turnDelegate.endTurn(nextPlayerIndex);
+
+        Name nextTurnHolder = null;
+        if (nextPlayerId != 0) {
+            BodyObject target = getPlayerByOid(nextPlayerId);
+            if (target != null) {
+                nextTurnHolder = target.getVisibleName();
+            }
+        }
+
+        _turnDelegate.endTurn(nextTurnHolder);
     }
 
     // from EZGameProvider
     public void endGame (
-        ClientObject caller, int[] winners,
+        ClientObject caller, int[] winnerOids,
         InvocationService.InvocationListener listener)
         throws InvocationException
     {
@@ -93,24 +103,24 @@ public class EZGameManager extends GameManager
         }
         validateStateModification(caller);
 
-        _winnerIndexes = winners;
+        _winnerIds = winnerOids;
         endGame();
     }
 
     // from EZGameProvider
     public void sendMessage (
-        ClientObject caller, String msg, Object data, int playerIdx,
+        ClientObject caller, String msg, Object data, int playerId,
         InvocationService.InvocationListener listener)
         throws InvocationException
     {
         validateUser(caller);
 
-        if (playerIdx < 0 || playerIdx >= _gameObj.players.length) {
+        if (playerId == 0) {
             _gameObj.postMessage(EZGameObject.USER_MESSAGE,
                 new Object[] { msg, data });
 
         } else {
-            sendPrivateMessage(playerIdx, msg, data);
+            sendPrivateMessage(playerId, msg, data);
         }
     }
 
@@ -186,7 +196,7 @@ public class EZGameManager extends GameManager
     // from EZGameProvider
     public void getFromCollection (
         ClientObject caller, String collName, boolean consume, int count,
-        String msgOrPropName, int playerIndex,
+        String msgOrPropName, int playerId,
         InvocationService.ConfirmListener listener)
         throws InvocationException
     {
@@ -209,11 +219,11 @@ public class EZGameManager extends GameManager
                     }
                 }
 
-                if (playerIndex >= 0 && playerIndex < _gameObj.players.length) {
-                    sendPrivateMessage(playerIndex, msgOrPropName, result);
+                if (playerId == 0) {
+                    setProperty(msgOrPropName, result, -1);
                     
                 } else {
-                    setProperty(msgOrPropName, result, -1);
+                    sendPrivateMessage(playerId, msgOrPropName, result);
                 }
                 // SUCCESS!
                 listener.requestProcessed();
@@ -289,12 +299,12 @@ public class EZGameManager extends GameManager
 
     // from EZGameProvider
     public void getCookie (
-        ClientObject caller, final int playerIndex,
+        ClientObject caller, final int playerId,
         InvocationService.InvocationListener listener)
         throws InvocationException
     {
         GameCookieManager gcm = getCookieManager();
-        if (_gameObj.userCookies.containsKey(playerIndex)) {
+        if (_gameObj.userCookies.containsKey(playerId)) {
             // already loaded: we do nothing
             return;
         }
@@ -303,18 +313,18 @@ public class EZGameManager extends GameManager
             _cookieLookups = new ArrayIntSet();
         }
         // we only start looking up the cookie if nobody else already is
-        if (!_cookieLookups.contains(playerIndex)) {
-            gcm.getCookie(getPersistentGameId(), getPlayer(playerIndex),
+        if (!_cookieLookups.contains(playerId)) {
+            gcm.getCookie(getPersistentGameId(), getPlayerByOid(playerId),
                 new ResultListener<byte[]>() {
                     public void requestCompleted (byte[] result) {
                         // Result may be null: that's ok, it means
                         // we've looked up the user's nonexistant cookie.
                         // Only set the cookie if the playerIndex is
                         // still in the lookup set, otherwise they left!
-                        if (_cookieLookups.remove(playerIndex) &&
+                        if (_cookieLookups.remove(playerId) &&
                                 _gameObj.isActive()) {
                             _gameObj.addToUserCookies(
-                                new UserCookie(playerIndex, result));
+                                new UserCookie(playerId, result));
                         }
                     }
 
@@ -326,7 +336,7 @@ public class EZGameManager extends GameManager
                 });
 
             // indicate that we're looking up a cookie
-            _cookieLookups.add(playerIndex);
+            _cookieLookups.add(playerId);
         }
     }
 
@@ -336,14 +346,11 @@ public class EZGameManager extends GameManager
         InvocationService.InvocationListener listener)
         throws InvocationException
     {
-        int playerIndex = getPresentPlayerIndex(caller.getOid());
-        if (playerIndex == -1) {
-            throw new InvocationException(ACCESS_DENIED);
-        }
+        validateUser(caller);
 
         GameCookieManager gcm = getCookieManager();
-        UserCookie cookie = new UserCookie(playerIndex, value);
-        if (_gameObj.userCookies.containsKey(playerIndex)) {
+        UserCookie cookie = new UserCookie(caller.getOid(), value);
+        if (_gameObj.userCookies.containsKey(cookie.getKey())) {
             _gameObj.updateUserCookies(cookie);
         } else {
             _gameObj.addToUserCookies(cookie);
@@ -372,14 +379,14 @@ public class EZGameManager extends GameManager
     }
 
     /**
-     * Helper method to send a private message to the specified player
-     * index (must already be verified).
+     * Helper method to send a private message to the specified player oid
+     * (must already be verified).
      */
     protected void sendPrivateMessage (
-        int playerIdx, String msg, Object data)
+        int playerId, String msg, Object data)
         throws InvocationException
     {
-        BodyObject target = getPlayer(playerIdx);
+        BodyObject target = getPlayerByOid(playerId);
         if (target == null) {
             // TODO: this code has no corresponding translation
             throw new InvocationException("m.player_not_around");
@@ -446,6 +453,33 @@ public class EZGameManager extends GameManager
         }
     }
 
+    /**
+     * Get the specified player body by Oid.
+     */
+    protected BodyObject getPlayerByOid (int oid)
+    {
+        // verify that they're in the room
+        if (!_gameObj.occupants.contains(oid)) {
+            return null;
+        }
+
+        // verify that they're a player
+        switch (getGameType()) {
+        case GameConfig.PARTY:
+            // all occupants are players in a party game
+            break;
+
+        default:
+            if (!IntListUtil.contains(_playerOids, oid)) {
+                return null; // not a player!
+            }
+            break;
+        }
+
+        // return the body
+        return (BodyObject) CrowdServer.omgr.getObject(oid);
+    }
+
     @Override
     protected PlaceObject createPlaceObject ()
     {
@@ -503,13 +537,14 @@ public class EZGameManager extends GameManager
     @Override
     protected void assignWinners (boolean[] winners)
     {
-        if (_winnerIndexes != null) {
-            for (int index : _winnerIndexes) {
+        if (_winnerIds != null) {
+            for (int oid : _winnerIds) {
+                int index = IntListUtil.indexOf(_playerOids, oid);
                 if (index >= 0 && index < winners.length) {
                     winners[index] = true;
                 }
             }
-            _winnerIndexes = null;
+            _winnerIds = null;
         }
     }
 
@@ -595,8 +630,8 @@ public class EZGameManager extends GameManager
 //    /** User tokens, lazy-initialized. */
 //    protected HashIntMap<HashSet<String>> _tokens;
 
-    /** The array of winners, after the user has filled it in. */
-    protected int[] _winnerIndexes;
+    /** The array of winner oids, after the user has filled it in. */
+    protected int[] _winnerIds;
 
     /** The minimum delay a ticker can have. */
     protected static final int MIN_TICKER_DELAY = 50;

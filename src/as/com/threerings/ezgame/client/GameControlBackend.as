@@ -19,6 +19,7 @@ import flash.utils.getQualifiedSuperclassName;
 
 import com.threerings.io.TypedArray;
 
+import com.threerings.util.ArrayUtil;
 import com.threerings.util.ClassUtil;
 import com.threerings.util.Integer;
 import com.threerings.util.Iterator;
@@ -125,27 +126,40 @@ public class GameControlBackend
         // functions
         o["setProperty_v1"] = setProperty_v1;
         o["mergeCollection_v1"] = mergeCollection_v1;
-        o["sendMessage_v1"] = sendMessage_v1;
         o["setTicker_v1"] = setTicker_v1;
         o["sendChat_v1"] = sendChat_v1;
         o["localChat_v1"] = localChat_v1;
-        o["getPlayerCount_v1"] = getPlayerCount_v1;
+        o["setUserCookie_v1"] = setUserCookie_v1;
+        o["isMyTurn_v1"] = isMyTurn_v1;
+        o["isInPlay_v1"] = isInPlay_v1;
+        o["getDictionaryLetterSet_v1"] = getDictionaryLetterSet_v1;
+        o["checkDictionaryWord_v1"] = checkDictionaryWord_v1;
+        o["populateCollection_v1"] = populateCollection_v1;
+        o["alterKeyEvents_v1"] = alterKeyEvents_v1;
+        o["focusContainer_v1"] = focusContainer_v1;
+
+        // newest
+        o["getFromCollection_v2"] = getFromCollection_v2;
+        o["sendMessage_v2"] = sendMessage_v2;
+        o["getOccupants_v1"] = getOccupants_v1;
+        o["getMyId_v1"] = getMyId_v1;
+        o["getUserCookie_v2"] = getUserCookie_v2;
+        o["endTurn_v2"] = endTurn_v2;
+        o["endGame_v2"] = endGame_v2;
+        o["getTurnHolder_v1"] = getTurnHolder_v1;
+        o["getPlayers_v1"] = getPlayers_v1;
+
+        // deprecated, will be removed soon
+        o["getFromCollection_v1"] = getFromCollection_v1;
+        o["sendMessage_v1"] = sendMessage_v1;
+        o["getPlayerCount_v1"] = getPlayerCount_v1; // no replacement
         o["getPlayerNames_v1"] = getPlayerNames_v1;
         o["getMyIndex_v1"] = getMyIndex_v1;
         o["getTurnHolderIndex_v1"] = getTurnHolderIndex_v1;
         o["getWinnerIndexes_v1"] = getWinnerIndexes_v1;
         o["getUserCookie_v1"] = getUserCookie_v1;
-        o["setUserCookie_v1"] = setUserCookie_v1;
-        o["isMyTurn_v1"] = isMyTurn_v1;
-        o["isInPlay_v1"] = isInPlay_v1;
         o["endTurn_v1"] = endTurn_v1;
         o["endGame_v1"] = endGame_v1;
-        o["getDictionaryLetterSet_v1"] = getDictionaryLetterSet_v1;
-        o["checkDictionaryWord_v1"] = checkDictionaryWord_v1;
-        o["populateCollection_v1"] = populateCollection_v1;
-        o["getFromCollection_v1"] = getFromCollection_v1;
-        o["alterKeyEvents_v1"] = alterKeyEvents_v1;
-        o["focusContainer_v1"] = focusContainer_v1;
     }
 
     public function setProperty_v1 (
@@ -171,15 +185,15 @@ public class GameControlBackend
             srcColl, intoColl, createLoggingConfirmListener("mergeCollection"));
     }
 
-    public function sendMessage_v1 (
-        messageName :String, value :Object, playerIndex :int) :void
+    public function sendMessage_v2 (
+        messageName :String, value :Object, playerId :int) :void
     {
         validateName(messageName);
         validateValue(value);
 
         var encoded :Object = EZObjectMarshaller.encode(value, false);
         _ezObj.ezGameService.sendMessage(_ctx.getClient(),
-            messageName, encoded, playerIndex,
+            messageName, encoded, playerId,
             createLoggingConfirmListener("sendMessage"));
     }
 
@@ -207,74 +221,63 @@ public class GameControlBackend
         _ctx.getChatDirector().displayInfo(null, MessageBundle.taint(msg));
     }
 
-    public function getPlayerCount_v1 () :int
+    public function getOccupants_v1 () :Array
     {
-        if (_ezObj.players.length == 0) {
-            // party game
-            return _ezObj.occupants.size();
-
-        } else {
-            return _ezObj.getPlayerCount();
+        var occs :Array = [];
+        for (var ii :int = _ezObj.occupants.size() - 1; ii >= 0; ii--) {
+            occs.push(_ezObj.occupants.get(ii));
         }
+
+        return occs;
     }
 
-    public function getPlayerNames_v1 () :Array
+    public function getPlayers_v1 () :Array
     {
-        var names :Array = new Array();
-        if (_ezObj.players.length == 0) {
-            // party game, count all occupants
-            var itr :Iterator = _ezObj.occupantInfo.iterator();
-            while (itr.hasNext()) {
-                var occInfo :OccupantInfo = (itr.next() as OccupantInfo);
-                names.push(occInfo.username.toString());
-            }
-
-        } else {
-            for each (var name :Name in _ezObj.players) {
-                names.push((name == null) ? null : name.toString());
-            }
+        var playerIds :Array = [];
+        for (var ii :int = 0; ii < _ezObj.players.length; ii++) {
+            var occInfo :OccupantInfo = _ezObj.getOccupantInfo(_ezObj.players[ii] as Name);
+            playerIds.push((occInfo == null) ? 0 : occInfo.bodyOid);
         }
-        return names;
+        return playerIds;
     }
 
-    public function getMyIndex_v1 () :int
+    public function getOccupantName_v1 (playerId :int) :String
     {
-        if (_ezObj.players.length == 0) {
-            // party game
-            // TODO: this shouldn't be based off of the String form of the name.
-            var array :Array = getPlayerNames_v1();
-            return array.indexOf(getUsername().toString());
+        var occInfo :OccupantInfo =
+            (_ezObj.occupantInfo.get(playerId) as OccupantInfo);
+        return (occInfo == null) ? null : occInfo.username.toString();
+    }
 
-        } else {
-            return _ezObj.getPlayerIndex(getUsername());
+    public function getMyId_v1 () :int
+    {
+        return _ctx.getClient().getClientObject().getOid();
+    }
+
+    // TODO: table games only
+    public function getPlayerPosition_v1 (playerId :int) :int
+    {
+        var occInfo :OccupantInfo =
+            (_ezObj.occupantInfo.get(playerId) as OccupantInfo);
+        if (occInfo == null) {
+            return -1;
         }
+        return ArrayUtil.indexOf(_ezObj.players, occInfo.username);
     }
 
-    public function getTurnHolderIndex_v1 () :int
+    // TODO: table only
+    public function getTurnHolder_v1 () :int
     {
-        return _ezObj.getPlayerIndex(_ezObj.turnHolder);
+        var occInfo :OccupantInfo = _ezObj.getOccupantInfo(_ezObj.turnHolder);
+        return (occInfo == null) ? 0 : occInfo.bodyOid;
     }
 
-    public function getWinnerIndexes_v1 () :Array /* of int */
-    {
-        var arr :Array = new Array();
-        if (_ezObj.winners != null) {
-            for (var ii :int = 0; ii < _ezObj.winners.length; ii++) {
-                if (_ezObj.winners[ii]) {
-                    arr.push(ii);
-                }
-            }
-        }
-        return arr;
-    }
-
-    public function getUserCookie_v1 (
-        playerIndex :int, callback :Function) :void
+    public function getUserCookie_v2 (
+        playerId :int, callback :Function) :void
     {
         // see if that cookie is already published
         if (_ezObj.userCookies != null) {
             var uc :UserCookie =
-                (_ezObj.userCookies.get(playerIndex) as UserCookie);
+                (_ezObj.userCookies.get(playerId) as UserCookie);
             if (uc != null) {
                 callback(uc.cookie);
                 return;
@@ -284,15 +287,15 @@ public class GameControlBackend
         if (_cookieCallbacks == null) {
             _cookieCallbacks = new Dictionary();
         }
-        var arr :Array = (_cookieCallbacks[playerIndex] as Array);
+        var arr :Array = (_cookieCallbacks[playerId] as Array);
         if (arr == null) {
             arr = [];
-            _cookieCallbacks[playerIndex] = arr;
+            _cookieCallbacks[playerId] = arr;
         }
         arr.push(callback);
 
         // request it to be made so by the server
-        _ezObj.ezGameService.getCookie(_ctx.getClient(), playerIndex,
+        _ezObj.ezGameService.getCookie(_ctx.getClient(), playerId,
             createLoggingConfirmListener("getUserCookie"));
     }
 
@@ -320,17 +323,17 @@ public class GameControlBackend
         return _ezObj.isInPlay();
     }
 
-    public function endTurn_v1 (nextPlayerIndex :int = -1) :void
+    public function endTurn_v2 (nextPlayerId :int) :void
     {
-        _ezObj.ezGameService.endTurn(_ctx.getClient(), nextPlayerIndex,
+        _ezObj.ezGameService.endTurn(_ctx.getClient(), nextPlayerId,
             createLoggingConfirmListener("endTurn"));
     }
 
-    public function endGame_v1 (... winnerDexes) :void
+    public function endGame_v2 (... winnerIds) :void
     {
         var winners :TypedArray = TypedArray.create(int);
-        while (winnerDexes.length > 0) {
-            winners.push(int(winnerDexes.shift()));
+        while (winnerIds.length > 0) {
+            winners.push(int(winnerIds.shift()));
         }
         _ezObj.ezGameService.endGame(_ctx.getClient(), winners,
             createLoggingConfirmListener("endGame"));
@@ -406,8 +409,8 @@ public class GameControlBackend
     /**
      * Helper method for pickFromCollection and dealFromCollection.
      */
-    public function getFromCollection_v1 (
-        collName :String, count :int, msgOrPropName :String, playerIndex :int,
+    public function getFromCollection_v2 (
+        collName :String, count :int, msgOrPropName :String, playerId :int,
         consume :Boolean, callback :Function) :void
     {
         validateName(collName);
@@ -435,7 +438,7 @@ public class GameControlBackend
 
         _ezObj.ezGameService.getFromCollection(
             _ctx.getClient(), collName, consume, count, msgOrPropName,
-            playerIndex, listener);
+            playerId, listener);
     }
 
     public function alterKeyEvents_v1 (
@@ -675,16 +678,15 @@ public class GameControlBackend
         }
     }
 
-
     /**
      * Handle the arrival of a new UserCookie.
      */
     protected function receivedUserCookie (cookie :UserCookie) :void
     {
         if (_cookieCallbacks != null) {
-            var arr :Array = (_cookieCallbacks[cookie.playerIndex] as Array);
+            var arr :Array = (_cookieCallbacks[cookie.playerId] as Array);
             if (arr != null) {
-                delete _cookieCallbacks[cookie.playerIndex];
+                delete _cookieCallbacks[cookie.playerId];
                 for each (var fn :Function in arr) {
                     try {
                         fn(cookie.cookie);
@@ -694,6 +696,131 @@ public class GameControlBackend
                 }
             }
         }
+    }
+
+    // Some methods included for backwards compatability.
+    // Most of these were only ever used internally, so we should be able to
+    // get rid of them sooner rather than later.
+
+    /**
+     * BackCompat: turn a player index into an oid.
+     */
+    protected function indexToId (index :int) :int
+    {
+        var name :Name = _ezObj.players[index];
+        if (name != null) {
+            var occInfo :OccupantInfo = _ezObj.getOccupantInfo(name);
+            if (occInfo != null) {
+                return occInfo.bodyOid;
+            }
+        }
+
+        return 0;
+    }
+
+    // OLD
+    protected function getFromCollection_v1 (
+        collName :String, count :int, msgOrPropName :String,
+        playerIndex :int, consume :Boolean, callback :Function) :void
+    {
+        getFromCollection_v2(collName,  count, msgOrPropName,
+            indexToId(playerIndex), consume, callback);
+    }
+
+    // OLD
+    public function sendMessage_v1 (
+        messageName :String, value :Object, playerIndex :int) :void
+    {
+        sendMessage_v2(messageName, value, indexToId(playerIndex));
+    }
+
+    // OLD
+    public function getPlayerCount_v1 () :int
+    {
+        if (_ezObj.players.length == 0) {
+            // party game
+            return _ezObj.occupants.size();
+
+        } else {
+            return _ezObj.getPlayerCount();
+        }
+    }
+
+    // OLD
+    public function getPlayerNames_v1 () :Array
+    {
+        var names :Array = new Array();
+        if (_ezObj.players.length == 0) {
+            // party game, count all occupants
+            var itr :Iterator = _ezObj.occupantInfo.iterator();
+            while (itr.hasNext()) {
+                var occInfo :OccupantInfo = (itr.next() as OccupantInfo);
+                names.push(occInfo.username.toString());
+            }
+
+        } else {
+            for each (var name :Name in _ezObj.players) {
+                names.push((name == null) ? null : name.toString());
+            }
+        }
+        return names;
+    }
+
+    // OLD
+    public function getMyIndex_v1 () :int
+    {
+        if (_ezObj.players.length == 0) {
+            // party game
+            // TODO: this shouldn't be based off of the String form of the name.
+            var array :Array = getPlayerNames_v1();
+            return array.indexOf(getUsername().toString());
+
+        } else {
+            return _ezObj.getPlayerIndex(getUsername());
+        }
+    }
+
+    // OLD
+    public function getTurnHolderIndex_v1 () :int
+    {
+        return _ezObj.getPlayerIndex(_ezObj.turnHolder);
+    }
+
+    // OLD
+    public function getWinnerIndexes_v1 () :Array /* of int */
+    {
+        var arr :Array = new Array();
+        if (_ezObj.winners != null) {
+            for (var ii :int = 0; ii < _ezObj.winners.length; ii++) {
+                if (_ezObj.winners[ii]) {
+                    arr.push(ii);
+                }
+            }
+        }
+        return arr;
+    }
+
+    // OLD
+    public function getUserCookie_v1 (
+        playerIndex :int, callback :Function) :void
+    {
+        getUserCookie_v2(indexToId(playerIndex), callback);
+    }
+
+    // OLD
+    public function endTurn_v1 (nextPlayerIndex :int) :void
+    {
+        endTurn_v2(indexToId(nextPlayerIndex));
+    }
+
+    // OLD
+    public function endGame_v1 (... winnerDexes) :void
+    {
+        var winnerIds :Array = [];
+        for each (var dex :int in winnerDexes) {
+            winnerIds.push(indexToId(dex));
+        }
+        endGame_v2.apply(this, winnerIds);
     }
 
     protected var _ctx :CrowdContext;
