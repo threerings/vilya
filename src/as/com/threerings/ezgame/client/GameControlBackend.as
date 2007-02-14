@@ -120,6 +120,9 @@ public class GameControlBackend
 
     protected function populateProperties (o :Object) :void
     {
+        // add in any backwards-compatible functions
+        new GameControlCompatibility(_ezObj, this).populateProperties(o);
+
         // straight data
         o["gameData"] = _gameData;
 
@@ -148,18 +151,6 @@ public class GameControlBackend
         o["endGame_v2"] = endGame_v2;
         o["getTurnHolder_v1"] = getTurnHolder_v1;
         o["getPlayers_v1"] = getPlayers_v1;
-
-        // deprecated, will be removed soon
-        o["getFromCollection_v1"] = getFromCollection_v1;
-        o["sendMessage_v1"] = sendMessage_v1;
-        o["getPlayerCount_v1"] = getPlayerCount_v1; // no replacement
-        o["getPlayerNames_v1"] = getPlayerNames_v1;
-        o["getMyIndex_v1"] = getMyIndex_v1;
-        o["getTurnHolderIndex_v1"] = getTurnHolderIndex_v1;
-        o["getWinnerIndexes_v1"] = getWinnerIndexes_v1;
-        o["getUserCookie_v1"] = getUserCookie_v1;
-        o["endTurn_v1"] = endTurn_v1;
-        o["endGame_v1"] = endGame_v1;
     }
 
     public function setProperty_v1 (
@@ -455,6 +446,16 @@ public class GameControlBackend
     {
         _container.setFocus();
     }
+
+    /**
+     * Convenience function to get our name.
+     */
+    public function getUsername () :Name
+    {
+        var body :BodyObject = 
+            (_ctx.getClient().getClientObject() as BodyObject);
+        return body.getVisibleName();
+    }
     
     /**
      * Handle key events on our container and pass them into the game.
@@ -463,16 +464,6 @@ public class GameControlBackend
     {
         // dispatch a cloned copy of the event, so that it's safe
         _ezDispatcher(evt.clone());
-    }
-
-    /**
-     * Convenience function to get our name.
-     */
-    protected function getUsername () :Name
-    {
-        var body :BodyObject = 
-            (_ctx.getClient().getClientObject() as BodyObject);
-        return body.getVisibleName();
     }
 
     /**
@@ -696,131 +687,6 @@ public class GameControlBackend
                 }
             }
         }
-    }
-
-    // Some methods included for backwards compatability.
-    // Most of these were only ever used internally, so we should be able to
-    // get rid of them sooner rather than later.
-
-    /**
-     * BackCompat: turn a player index into an oid.
-     */
-    protected function indexToId (index :int) :int
-    {
-        var name :Name = _ezObj.players[index];
-        if (name != null) {
-            var occInfo :OccupantInfo = _ezObj.getOccupantInfo(name);
-            if (occInfo != null) {
-                return occInfo.bodyOid;
-            }
-        }
-
-        return 0;
-    }
-
-    // OLD
-    protected function getFromCollection_v1 (
-        collName :String, count :int, msgOrPropName :String,
-        playerIndex :int, consume :Boolean, callback :Function) :void
-    {
-        getFromCollection_v2(collName,  count, msgOrPropName,
-            indexToId(playerIndex), consume, callback);
-    }
-
-    // OLD
-    public function sendMessage_v1 (
-        messageName :String, value :Object, playerIndex :int) :void
-    {
-        sendMessage_v2(messageName, value, indexToId(playerIndex));
-    }
-
-    // OLD
-    public function getPlayerCount_v1 () :int
-    {
-        if (_ezObj.players.length == 0) {
-            // party game
-            return _ezObj.occupants.size();
-
-        } else {
-            return _ezObj.getPlayerCount();
-        }
-    }
-
-    // OLD
-    public function getPlayerNames_v1 () :Array
-    {
-        var names :Array = new Array();
-        if (_ezObj.players.length == 0) {
-            // party game, count all occupants
-            var itr :Iterator = _ezObj.occupantInfo.iterator();
-            while (itr.hasNext()) {
-                var occInfo :OccupantInfo = (itr.next() as OccupantInfo);
-                names.push(occInfo.username.toString());
-            }
-
-        } else {
-            for each (var name :Name in _ezObj.players) {
-                names.push((name == null) ? null : name.toString());
-            }
-        }
-        return names;
-    }
-
-    // OLD
-    public function getMyIndex_v1 () :int
-    {
-        if (_ezObj.players.length == 0) {
-            // party game
-            // TODO: this shouldn't be based off of the String form of the name.
-            var array :Array = getPlayerNames_v1();
-            return array.indexOf(getUsername().toString());
-
-        } else {
-            return _ezObj.getPlayerIndex(getUsername());
-        }
-    }
-
-    // OLD
-    public function getTurnHolderIndex_v1 () :int
-    {
-        return _ezObj.getPlayerIndex(_ezObj.turnHolder);
-    }
-
-    // OLD
-    public function getWinnerIndexes_v1 () :Array /* of int */
-    {
-        var arr :Array = new Array();
-        if (_ezObj.winners != null) {
-            for (var ii :int = 0; ii < _ezObj.winners.length; ii++) {
-                if (_ezObj.winners[ii]) {
-                    arr.push(ii);
-                }
-            }
-        }
-        return arr;
-    }
-
-    // OLD
-    public function getUserCookie_v1 (
-        playerIndex :int, callback :Function) :void
-    {
-        getUserCookie_v2(indexToId(playerIndex), callback);
-    }
-
-    // OLD
-    public function endTurn_v1 (nextPlayerIndex :int) :void
-    {
-        endTurn_v2(indexToId(nextPlayerIndex));
-    }
-
-    // OLD
-    public function endGame_v1 (... winnerDexes) :void
-    {
-        var winnerIds :Array = [];
-        for each (var dex :int in winnerDexes) {
-            winnerIds.push(indexToId(dex));
-        }
-        endGame_v2.apply(this, winnerIds);
     }
 
     protected var _ctx :CrowdContext;
