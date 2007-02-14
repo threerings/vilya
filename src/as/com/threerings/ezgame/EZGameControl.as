@@ -190,6 +190,13 @@ public class EZGameControl extends EventDispatcher
                 StateChangedEvent.GAME_ENDED, scl.stateChanged,
                 false, 0, true);
         }
+        if (obj is OccupantChangedListener) {
+            var ocl :OccupantChangedListener = (obj as OccupantChangedListener);
+            addEventListener(OccupantChangedEvent.OCCUPANT_ENTERED, ocl.occupantEntered,
+                false, 0, true);
+            addEventListener(OccupantChangedEvent.OCCUPANT_LEFT, ocl.occupantLeft,
+                false, 0, true);
+        }
     }
 
     /**
@@ -215,6 +222,11 @@ public class EZGameControl extends EventDispatcher
                 StateChangedEvent.TURN_CHANGED, scl.stateChanged);
             removeEventListener(
                 StateChangedEvent.GAME_ENDED, scl.stateChanged);
+        }
+        if (obj is OccupantChangedListener) {
+            var ocl :OccupantChangedListener = (obj as OccupantChangedListener);
+            removeEventListener(OccupantChangedEvent.OCCUPANT_ENTERED, ocl.occupantEntered);
+            removeEventListener(OccupantChangedEvent.OCCUPANT_LEFT, ocl.occupantLeft);
         }
     }
 
@@ -540,6 +552,7 @@ public class EZGameControl extends EventDispatcher
         o["gameDidStart_v1"] = gameDidStart_v1;
         o["gameDidEnd_v1"] = gameDidEnd_v1;
         o["dispatchEvent_v1"] = dispatch;
+        o["occupantChanged_v1"] = occupantChanged_v1;
     }
 
     /**
@@ -582,6 +595,17 @@ public class EZGameControl extends EventDispatcher
     private function gameDidEnd_v1 () :void
     {
         dispatch(new StateChangedEvent(StateChangedEvent.GAME_ENDED, this));
+    }
+
+    /**
+     * Private method to post a OccupantEvent.
+     */
+    private function occupantChanged_v1 (occupantId :int, player :Boolean, enter :Boolean) :void
+    {
+        dispatch(new OccupantChangedEvent(
+            enter ? OccupantChangedEvent.OCCUPANT_ENTERED
+                  : OccupantChangedEvent.OCCUPANT_LEFT, 
+            this, occupantId, player));
     }
 
     /**

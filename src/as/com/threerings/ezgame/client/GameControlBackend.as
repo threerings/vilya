@@ -32,17 +32,25 @@ import com.threerings.presents.client.ResultWrapper;
 import com.threerings.presents.client.InvocationService_ConfirmListener;
 import com.threerings.presents.client.InvocationService_ResultListener;
 
+import com.threerings.presents.dobj.ElementUpdateListener;
+import com.threerings.presents.dobj.ElementUpdatedEvent;
 import com.threerings.presents.dobj.EntryAddedEvent;
 import com.threerings.presents.dobj.EntryRemovedEvent;
 import com.threerings.presents.dobj.EntryUpdatedEvent;
-import com.threerings.presents.dobj.SetListener;
 import com.threerings.presents.dobj.MessageAdapter;
 import com.threerings.presents.dobj.MessageEvent;
 import com.threerings.presents.dobj.MessageListener;
+import com.threerings.presents.dobj.ObjectAddedEvent;
+import com.threerings.presents.dobj.ObjectRemovedEvent;
+import com.threerings.presents.dobj.OidListListener;
+import com.threerings.presents.dobj.SetListener;
 
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.OccupantInfo;
+import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.util.CrowdContext;
+
+import com.threerings.parlor.game.data.GameObject;
 
 import com.threerings.ezgame.data.EZGameObject;
 import com.threerings.ezgame.data.PropertySetEvent;
@@ -54,7 +62,8 @@ import com.threerings.ezgame.util.EZObjectMarshaller;
  * Manages the backend of the game.
  */
 public class GameControlBackend
-    implements MessageListener, SetListener, PropertySetListener
+    implements MessageListener, SetListener, ElementUpdateListener,
+               PropertySetListener
 {
     public var log :Log = Log.getLog(this);
 
@@ -225,6 +234,10 @@ public class GameControlBackend
 
     public function getPlayers_v1 () :Array
     {
+        if (_ezObj.players.length == 0) {
+            // party game
+            return getOccupants_v1();
+        }
         var playerIds :Array = [];
         for (var ii :int = 0; ii < _ezObj.players.length; ii++) {
             var occInfo :OccupantInfo = _ezObj.getOccupantInfo(_ezObj.players[ii] as Name);
@@ -253,7 +266,7 @@ public class GameControlBackend
         if (occInfo == null) {
             return -1;
         }
-        return ArrayUtil.indexOf(_ezObj.players, occInfo.username);
+        return _ezObj.getPlayerIndex(occInfo.username);
     }
 
     // TODO: table only
@@ -608,23 +621,69 @@ public class GameControlBackend
     // from SetListener
     public function entryAdded (event :EntryAddedEvent) :void
     {
-        if (EZGameObject.USER_COOKIES == event.getName()) {
+        var name :String = event.getName();
+        switch (name) {
+        case EZGameObject.USER_COOKIES:
             receivedUserCookie(event.getEntry() as UserCookie);
+            break;
+
+        case PlaceObject.OCCUPANT_INFO:
+            var occInfo :OccupantInfo = (event.getEntry() as OccupantInfo)
+            callUserCode("occupantChanged_v1", occInfo.bodyOid, isPlayer(occInfo.username), true);
+            break;
         }
     }
 
     // from SetListener
     public function entryUpdated (event :EntryUpdatedEvent) :void
     {
-        if (EZGameObject.USER_COOKIES == event.getName()) {
+        var name :String = event.getName();
+        switch (name) {
+        case EZGameObject.USER_COOKIES:
             receivedUserCookie(event.getEntry() as UserCookie);
+            break;
         }
     }
 
     // from SetListener
     public function entryRemoved (event :EntryRemovedEvent) :void
     {
-        // nada
+        var name :String = event.getName();
+        switch (name) {
+        case PlaceObject.OCCUPANT_INFO:
+            var occInfo :OccupantInfo = (event.getOldEntry() as OccupantInfo)
+            callUserCode("occupantChanged_v1", occInfo.bodyOid, isPlayer(occInfo.username), false);
+            break;
+        }
+    }
+
+    // from ElementUpdateListener
+    public function elementUpdated (event :ElementUpdatedEvent) :void
+    {
+        var name :String = event.getName();
+        if (name == GameObject.PLAYERS) {
+            var oldPlayer :Name = (event.getOldValue() as Name);
+            var newPlayer :Name = (event.getValue() as Name);
+            var occInfo :OccupantInfo;
+            if (oldPlayer != null) {
+                occInfo = _ezObj.getOccupantInfo(oldPlayer);
+                if (occInfo != null) {
+                    // old player became a watcher
+                    // send player-left, then occupant-added
+                    callUserCode("occupantChanged_v1", occInfo.bodyOid, true, false);
+                    callUserCode("occupantChanged_v1", occInfo.bodyOid, false, true);
+                }
+            }
+            if (newPlayer != null) {
+                occInfo = _ezObj.getOccupantInfo(newPlayer);
+                if (occInfo != null) {
+                    // watcher became a player
+                    // send occupant-left, then player-added
+                    callUserCode("occupantChanged_v1", occInfo.bodyOid, false, false);
+                    callUserCode("occupantChanged_v1", occInfo.bodyOid, true, true);
+                }
+            }
+        }
     }
 
     // from PropertySetListener
@@ -688,6 +747,17 @@ public class GameControlBackend
                 }
             }
         }
+    }
+
+    /**
+     * Given the specified occupant name, return if they are a player.
+     */
+    protected function isPlayer (occupantName :Name) :Boolean
+    {
+        if (_ezObj.players.length == 0) {
+            return true; // party game: all occupants are players
+        }
+        return (-1 == _ezObj.getPlayerIndex(occupantName));
     }
 
     protected var _ctx :CrowdContext;
