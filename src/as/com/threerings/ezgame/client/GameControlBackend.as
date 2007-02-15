@@ -757,7 +757,7 @@ public class GameControlBackend
         if (_ezObj.players.length == 0) {
             return true; // party game: all occupants are players
         }
-        return (-1 == _ezObj.getPlayerIndex(occupantName));
+        return (-1 != _ezObj.getPlayerIndex(occupantName));
     }
 
     protected var _ctx :CrowdContext;
