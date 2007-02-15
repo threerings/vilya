@@ -175,15 +175,6 @@ public class DictionaryService
 
 
     /**
-     * Obsolete init function. I'm keeping it around to prevent
-     * any automated build breakage between the upcoming Vilya checkin
-     * and the subsequent MSoy checkin. But this will go away real soon.
-     */
-    public static void init ()
-    {
-    }
-
-    /**
      * Creates the singleton instance of the dictionary service.
      */
     public static void init (File dictionaryRoot)

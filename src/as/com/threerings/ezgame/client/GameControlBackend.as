@@ -72,7 +72,7 @@ public class GameControlBackend
     {
         _ctx = ctx;
         _ezObj = ezObj;
-        _gameData = new GameData(setProperty_v1, _ezObj.getUserProps());
+        _gameData = new GameData(setProperty_v2, _ezObj.getUserProps());
 
         _ezObj.addListener(this);
         _ctx.getClient().getClientObject().addListener(_userListener);
@@ -136,7 +136,7 @@ public class GameControlBackend
         o["gameData"] = _gameData;
 
         // functions
-        o["setProperty_v1"] = setProperty_v1;
+        o["setProperty_v2"] = setProperty_v2;
         o["mergeCollection_v1"] = mergeCollection_v1;
         o["setTicker_v1"] = setTicker_v1;
         o["sendChat_v1"] = sendChat_v1;
@@ -163,18 +163,18 @@ public class GameControlBackend
         o["getPlayers_v1"] = getPlayers_v1;
     }
 
-    public function setProperty_v1 (
-        propName :String, value :Object, index :int) :void
+    public function setProperty_v2 (
+        propName :String, value :Object, index :int, testAndSet :Boolean) :void
     {
         validatePropertyChange(propName, value, index);
 
         var encoded :Object = EZObjectMarshaller.encode(value, (index == -1));
         _ezObj.ezGameService.setProperty(
-            _ctx.getClient(), propName, encoded, index,
+            _ctx.getClient(), propName, encoded, index, testAndSet,
             createLoggingConfirmListener("setProperty"));
 
         // set it immediately in the game object
-        _ezObj.applyPropertySet(propName, value, index);
+        _ezObj.applyPropertySet(propName, value, index, testAndSet);
     }
 
     public function mergeCollection_v1 (

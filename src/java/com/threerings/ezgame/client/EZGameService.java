@@ -20,7 +20,7 @@ public interface EZGameService extends InvocationService
      */
     public void setProperty (
         Client client, String propName, Object value, int index,
-        InvocationListener listener);
+        boolean testAndSet, InvocationListener listener);
 
     /**
      * Request to end the turn, possibly futzing the next turn holder unless

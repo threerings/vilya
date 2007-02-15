@@ -85,46 +85,50 @@ public class EZGameObject extends GameObject
     /**
      * Called by PropertySetEvent to effect the property update.
      */
-    public Object applyPropertySet (String propName, Object data, int index)
+    public Object applyPropertySet (
+        String propName, Object data, int index, boolean testAndSet)
     {
         Object oldValue = _props.get(propName);
-        if (index >= 0) {
-            if (isOnServer()) {
-                byte[][] arr = (oldValue instanceof byte[][])
-                    ? (byte[][]) oldValue : null;
-                if (arr == null || arr.length <= index) {
-                    // TODO: in case a user sets element 0 and element 90000,
-                    // we might want to store elements in a hash
-                    byte[][] newArr = new byte[index + 1][];
-                    if (arr != null) {
-                        System.arraycopy(arr, 0, newArr, 0, arr.length);
+        if ((testAndSet && oldValue == null) || ! testAndSet)
+        {
+            if (index >= 0) {
+                if (isOnServer()) {
+                    byte[][] arr = (oldValue instanceof byte[][])
+                        ? (byte[][]) oldValue : null;
+                    if (arr == null || arr.length <= index) {
+                        // TODO: in case a user sets element 0 and element 90000,
+                        // we might want to store elements in a hash
+                        byte[][] newArr = new byte[index + 1][];
+                        if (arr != null) {
+                            System.arraycopy(arr, 0, newArr, 0, arr.length);
+                        }
+                        _props.put(propName, newArr);
+                        arr = newArr;
                     }
-                    _props.put(propName, newArr);
-                    arr = newArr;
+                    oldValue = arr[index];
+                    arr[index] = (byte[]) data;
+
+                } else {
+                    Object[] arr = (oldValue instanceof Object[])
+                        ? (Object[]) oldValue : null;
+                    if (arr == null || arr.length <= index) {
+                        Object[] newArr = new Object[index + 1];
+                        if (arr != null) {
+                            System.arraycopy(arr, 0, newArr, 0, arr.length);
+                        }
+                        _props.put(propName, newArr);
+                        arr = newArr;
+                    }
+                    oldValue = arr[index];
+                    arr[index] = data;
                 }
-                oldValue = arr[index];
-                arr[index] = (byte[]) data;
+
+            } else if (data != null) {
+                _props.put(propName, data);
 
             } else {
-                Object[] arr = (oldValue instanceof Object[])
-                    ? (Object[]) oldValue : null;
-                if (arr == null || arr.length <= index) {
-                    Object[] newArr = new Object[index + 1];
-                    if (arr != null) {
-                        System.arraycopy(arr, 0, newArr, 0, arr.length);
-                    }
-                    _props.put(propName, newArr);
-                    arr = newArr;
-                }
-                oldValue = arr[index];
-                arr[index] = data;
+                _props.remove(propName);
             }
-
-        } else if (data != null) {
-            _props.put(propName, data);
-
-        } else {
-            _props.remove(propName);
         }
 
         return oldValue;

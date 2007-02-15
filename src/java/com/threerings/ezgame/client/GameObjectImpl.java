@@ -61,22 +61,34 @@ public class GameObjectImpl
     // from EZGame
     public void set (String propName, Object value)
     {
-        set(propName, value, -1);
+        set(propName, value, -1, false);
+    }
+
+    // from EZGame
+    public void set (String propName, Object value, boolean testAndSet)
+    {
+        set(propName, value, -1, testAndSet);
     }
 
     // from EZGame
     public void set (String propName, Object value, int index)
+    {
+        set(propName, value, index, false);
+    }
+    
+    // from EZGame
+    public void set (String propName, Object value, int index, boolean testAndSet)
     {
         validatePropertyChange(propName, value, -1);
 
         Object encoded = EZObjectMarshaller.encode(value);
         Object reconstituted = EZObjectMarshaller.decode(encoded);
         _ezObj.ezGameService.setProperty(
-            _ctx.getClient(), propName, encoded, index,
+            _ctx.getClient(), propName, encoded, index, testAndSet,
             createLoggingListener("setProperty"));
 
         // set it immediately in the game object
-        _ezObj.applyPropertySet(propName, reconstituted, index);
+        _ezObj.applyPropertySet(propName, reconstituted, index, testAndSet);
     }
 
     // from EZGame

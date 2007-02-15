@@ -67,7 +67,7 @@ public interface EZGameService extends InvocationService
     function setCookie (arg1 :Client, arg2 :ByteArray, arg3 :InvocationService_InvocationListener) :void;
 
     // from Java interface EZGameService
-    function setProperty (arg1 :Client, arg2 :String, arg3 :Object, arg4 :int, arg5 :InvocationService_InvocationListener) :void;
+    function setProperty (arg1 :Client, arg2 :String, arg3 :Object, arg4 :int, arg5 :Boolean, arg6 :InvocationService_InvocationListener) :void;
 
     // from Java interface EZGameService
     function setTicker (arg1 :Client, arg2 :String, arg3 :int, arg4 :InvocationService_InvocationListener) :void;

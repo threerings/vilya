@@ -28,6 +28,16 @@ public interface EZGame
     public void set (String propName, Object value, int index);
 
     /**
+     * Set a property that will be distributed. 
+     */
+    public void set (String propName, Object value, boolean testAndSet);
+
+    /**
+     * Set a property that will be distributed. 
+     */
+    public void set (String propName, Object value, int index, boolean testAndSet);
+
+    /**
      * Register an object to receive whatever events it should receive,
      * based on which event listeners it implements. Note that it is not
      * necessary to register any objects which appear on the display list,

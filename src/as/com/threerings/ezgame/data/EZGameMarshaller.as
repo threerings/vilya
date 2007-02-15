@@ -178,12 +178,12 @@ public class EZGameMarshaller extends InvocationMarshaller
     public static const SET_PROPERTY :int = 11;
 
     // from interface EZGameService
-    public function setProperty (arg1 :Client, arg2 :String, arg3 :Object, arg4 :int, arg5 :InvocationService_InvocationListener) :void
+    public function setProperty (arg1 :Client, arg2 :String, arg3 :Object, arg4 :int, arg5 :Boolean, arg6 :InvocationService_InvocationListener) :void
     {
-        var listener5 :InvocationMarshaller_ListenerMarshaller = new InvocationMarshaller_ListenerMarshaller();
-        listener5.listener = arg5;
+        var listener6 :InvocationMarshaller_ListenerMarshaller = new InvocationMarshaller_ListenerMarshaller();
+        listener6.listener = arg6;
         sendRequest(arg1, SET_PROPERTY, [
-            arg2, arg3, Integer.valueOf(arg4), listener5
+            arg2, arg3, Integer.valueOf(arg4), langBoolean.valueOf(arg5), listener6
         ]);
     }
 

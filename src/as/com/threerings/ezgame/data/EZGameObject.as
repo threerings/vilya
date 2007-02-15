@@ -98,26 +98,30 @@ public class EZGameObject extends GameObject
      * @return the old value
      */
     public function applyPropertySet (
-        propName :String, value :Object, index :int) :Object
+        propName :String, value :Object, index :int, testAndSet :Boolean)
+        :Object
     {
         var oldValue :Object = _props[propName];
-        if (index >= 0) {
-            // set an array element
-            var arr :Array = (oldValue as Array);
-            if (arr == null) {
-                arr = [];
-                _props[propName] = arr;
+        if ((testAndSet && oldValue == null) || ! testAndSet)
+        {
+            if (index >= 0) {
+                // set an array element
+                var arr :Array = (oldValue as Array);
+                if (arr == null) {
+                    arr = [];
+                    _props[propName] = arr;
+                }
+                oldValue = arr[index];
+                arr[index] = value;
+                
+            } else if (value != null) {
+                // normal property set
+                _props[propName] = value;
+                
+            } else {
+                // remove a property
+                delete _props[propName];
             }
-            oldValue = arr[index];
-            arr[index] = value;
-
-        } else if (value != null) {
-            // normal property set
-            _props[propName] = value;
-
-        } else {
-            // remove a property
-            delete _props[propName];
         }
         return oldValue;
     }
