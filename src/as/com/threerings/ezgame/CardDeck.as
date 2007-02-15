@@ -23,10 +23,10 @@ public class CardDeck
     }
 
     public function dealToPlayer (
-        playerIdx :int, count :int, msgName :String) :void
+        playerId :int, count :int, msgName :String) :void
     {
         // TODO: support the callback
-        _gameCtrl.dealFromCollection(_deckName, count, msgName, null, playerIdx);
+        _gameCtrl.dealFromCollection(_deckName, count, msgName, null, playerId);
     }
 
     public function dealToData (count :int, propName :String) :void
