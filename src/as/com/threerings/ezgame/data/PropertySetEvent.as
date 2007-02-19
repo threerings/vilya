@@ -34,6 +34,7 @@ public class PropertySetEvent extends NamedEvent
     // from abstract DEvent
     override public function applyToObject (target :DObject) :Boolean
     {
+        // since we're in actionscript, we're always on the client
         _oldValue =
             EZGameObject(target).applyPropertySet(_name, _data, _index);
         return true;

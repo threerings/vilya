@@ -30,11 +30,12 @@ public class PropertySetEvent extends NamedEvent
      * Create a PropertySetEvent.
      */
     public PropertySetEvent (
-        int targetOid, String propName, Object value, int index)
+        int targetOid, String propName, Object value, int index, Object oldValue)
     {
         super(targetOid, propName);
         _data = value;
         _index = index;
+        _oldValue = oldValue;
     }
 
     /**
@@ -68,7 +69,10 @@ public class PropertySetEvent extends NamedEvent
         if (!ezObj.isOnServer()) {
             _data = EZObjectMarshaller.decode(_data);
         }
-        _oldValue = ezObj.applyPropertySet(_name, _data, _index);
+        if (_oldValue == UNSET_OLD_VALUE) {
+            // only apply the property change if we haven't already
+            _oldValue = ezObj.applyPropertySet(_name, _data, _index);
+        }
         return true;
     }
 
@@ -95,5 +99,5 @@ public class PropertySetEvent extends NamedEvent
     protected Object _data;
 
     /** The old value. */
-    protected transient Object _oldValue;
+    protected transient Object _oldValue = UNSET_OLD_VALUE;
 }

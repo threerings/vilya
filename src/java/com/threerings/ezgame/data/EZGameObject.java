@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.samskivert.util.ObjectUtil;
+
 import com.threerings.util.Name;
 
 import com.threerings.io.ObjectInputStream;
@@ -85,6 +87,8 @@ public class EZGameObject extends GameObject
 
     /**
      * Called by PropertySetEvent to effect the property update.
+     * 
+     * @return the old value.
      */
     public Object applyPropertySet (String propName, Object data, int index)
     {
@@ -123,6 +127,7 @@ public class EZGameObject extends GameObject
             
         } else if (data != null) {
             _props.put(propName, data);
+
         } else {
             _props.remove(propName);
         }
@@ -131,44 +136,70 @@ public class EZGameObject extends GameObject
     }
 
     /**
-     * Compares whether the old value and the test value are the same.
+     * Test the specified property against the specified value. This is
+     * called on the server to validate testAndSet events.
+     *
+     * @return true if the property contains the value specified.
      */
     public boolean testProperty (
-        String propName, int index, boolean testAndSet, Object testValue)
+        String propName, int index, Object testValue)
     {
-        boolean result = false;
-        if (! isOnServer() ||   // if this is the client, don't test - only test on server
-            ! testAndSet)       // test was not requested
-        {
-            result = true;
-          
-        } else {       
-            Object oldValue = _props.get(propName);
-            
-            // test if both are null
-            if (testValue == null || oldValue == null) {
-                result = (oldValue == testValue);
-                
-            } else {
+        Object curValue = _props.get(propName);
 
-                // if the old value is an array, extract the appropriate element first
-                if (index >= 0 && oldValue instanceof byte[][])
-                {
-                    byte[][] arr = (byte[][]) oldValue;
-                    if (arr != null) { oldValue = arr[index]; }
+        if (curValue != null && index >= 0) {
+            // see if there's an array there already
+            if (isOnServer()) {
+                if (curValue instanceof byte[][]) {
+                    byte[][] curArray = (byte[][]) curValue;
+                    if (curArray.length > index) {
+                        curValue = curArray[index];
+
+                    } else {
+                        // the index is out of range, but since we auto-grow,
+                        // we treat it like null
+                        curValue = null;
+                    }
+
+                } else {
+                    // curData is not an array, so the test fails
+                    return false;
                 }
-                
-                // now perform byte comparison
-                if (oldValue instanceof byte[] &&
-                    testValue instanceof byte[])
-                {
-                    result = Arrays.equals (
-                        (byte[]) oldValue, (byte[]) testValue);
+
+            } else {
+                if (curValue instanceof Object[]) {
+                    Object[] curArray = (Object[]) curValue;
+                    if (curArray.length > index) {
+                        curValue = curArray[index];
+
+                    } else {
+                        // the index is out of range, but since we auto-grow,
+                        // we treat it like null
+                        curValue = null;
+                    }
+
+                } else {
+                    // curData is not an array, so the test fails
+                    return false;
                 }
             }
         }
-        
-        return result;
+
+        // let's test the values!
+        if ((testValue instanceof Object[]) && (curValue instanceof Object[])) {
+            // testing an array against another array
+            return Arrays.deepEquals((Object[]) testValue, (Object[]) curValue);
+
+        } else if ((testValue instanceof byte[]) && (curValue instanceof byte[])) {
+            // testing a property against another property (may have
+            // been from inside an array)
+            return Arrays.equals((byte[]) testValue, (byte[]) curValue);
+
+        // TODO: other array types must be tested if we're on the client
+        // ??
+        } else {
+            // will catch null == null...
+            return ObjectUtil.equals(testValue, curValue);
+        }
     }
                 
         

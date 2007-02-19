@@ -173,9 +173,6 @@ public class GameControlBackend
         _ezObj.ezGameService.setProperty(
             _ctx.getClient(), propName, encoded, index,
             false, null, createLoggingConfirmListener("setProperty"));
-
-        // set it immediately in the game object
-        _ezObj.applyPropertySet(propName, value, index);
     }
 
     public function testAndSetProperty_v1 (
