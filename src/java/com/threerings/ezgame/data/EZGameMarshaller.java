@@ -171,12 +171,12 @@ public class EZGameMarshaller extends InvocationMarshaller
     public static final int SET_PROPERTY = 11;
 
     // from interface EZGameService
-    public void setProperty (Client arg1, String arg2, Object arg3, int arg4, boolean arg5, InvocationService.InvocationListener arg6)
+    public void setProperty (Client arg1, String arg2, Object arg3, int arg4, boolean arg5, Object arg6, InvocationService.InvocationListener arg7)
     {
-        ListenerMarshaller listener6 = new ListenerMarshaller();
-        listener6.listener = arg6;
+        ListenerMarshaller listener7 = new ListenerMarshaller();
+        listener7.listener = arg7;
         sendRequest(arg1, SET_PROPERTY, new Object[] {
-            arg2, arg3, Integer.valueOf(arg4), Boolean.valueOf(arg5), listener6
+            arg2, arg3, Integer.valueOf(arg4), Boolean.valueOf(arg5), arg6, listener7
         });
     }
 

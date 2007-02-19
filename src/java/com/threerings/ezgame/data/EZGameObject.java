@@ -5,6 +5,7 @@ package com.threerings.ezgame.data;
 
 import java.io.IOException;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,54 +86,92 @@ public class EZGameObject extends GameObject
     /**
      * Called by PropertySetEvent to effect the property update.
      */
-    public Object applyPropertySet (
-        String propName, Object data, int index, boolean testAndSet)
+    public Object applyPropertySet (String propName, Object data, int index)
     {
         Object oldValue = _props.get(propName);
-        if ((testAndSet && oldValue == null) || ! testAndSet)
-        {
-            if (index >= 0) {
-                if (isOnServer()) {
-                    byte[][] arr = (oldValue instanceof byte[][])
-                        ? (byte[][]) oldValue : null;
-                    if (arr == null || arr.length <= index) {
-                        // TODO: in case a user sets element 0 and element 90000,
-                        // we might want to store elements in a hash
-                        byte[][] newArr = new byte[index + 1][];
-                        if (arr != null) {
-                            System.arraycopy(arr, 0, newArr, 0, arr.length);
-                        }
-                        _props.put(propName, newArr);
-                        arr = newArr;
+        if (index >= 0) {
+            if (isOnServer()) {
+                byte[][] arr = (oldValue instanceof byte[][])
+                    ? (byte[][]) oldValue : null;
+                if (arr == null || arr.length <= index) {
+                    // TODO: in case a user sets element 0 and element 90000,
+                    // we might want to store elements in a hash
+                    byte[][] newArr = new byte[index + 1][];
+                    if (arr != null) {
+                        System.arraycopy(arr, 0, newArr, 0, arr.length);
                     }
-                    oldValue = arr[index];
-                    arr[index] = (byte[]) data;
-
-                } else {
-                    Object[] arr = (oldValue instanceof Object[])
-                        ? (Object[]) oldValue : null;
-                    if (arr == null || arr.length <= index) {
-                        Object[] newArr = new Object[index + 1];
-                        if (arr != null) {
-                            System.arraycopy(arr, 0, newArr, 0, arr.length);
-                        }
-                        _props.put(propName, newArr);
-                        arr = newArr;
-                    }
-                    oldValue = arr[index];
-                    arr[index] = data;
+                    _props.put(propName, newArr);
+                    arr = newArr;
                 }
-
-            } else if (data != null) {
-                _props.put(propName, data);
-
+                oldValue = arr[index];
+                arr[index] = (byte[]) data;
+                
             } else {
-                _props.remove(propName);
+                Object[] arr = (oldValue instanceof Object[])
+                    ? (Object[]) oldValue : null;
+                if (arr == null || arr.length <= index) {
+                    Object[] newArr = new Object[index + 1];
+                    if (arr != null) {
+                        System.arraycopy(arr, 0, newArr, 0, arr.length);
+                    }
+                    _props.put(propName, newArr);
+                    arr = newArr;
+                }
+                oldValue = arr[index];
+                arr[index] = data;
             }
+            
+        } else if (data != null) {
+            _props.put(propName, data);
+        } else {
+            _props.remove(propName);
         }
-
+    
         return oldValue;
     }
+
+    /**
+     * Compares whether the old value and the test value are the same.
+     */
+    public boolean testProperty (
+        String propName, int index, boolean testAndSet, Object testValue)
+    {
+        boolean result = false;
+        if (! isOnServer() ||   // if this is the client, don't test - only test on server
+            ! testAndSet)       // test was not requested
+        {
+            result = true;
+          
+        } else {       
+            Object oldValue = _props.get(propName);
+            
+            // test if both are null
+            if (testValue == null || oldValue == null) {
+                result = (oldValue == testValue);
+                
+            } else {
+
+                // if the old value is an array, extract the appropriate element first
+                if (index >= 0 && oldValue instanceof byte[][])
+                {
+                    byte[][] arr = (byte[][]) oldValue;
+                    if (arr != null) { oldValue = arr[index]; }
+                }
+                
+                // now perform byte comparison
+                if (oldValue instanceof byte[] &&
+                    testValue instanceof byte[])
+                {
+                    result = Arrays.equals (
+                        (byte[]) oldValue, (byte[]) testValue);
+                }
+            }
+        }
+        
+        return result;
+    }
+                
+        
 
     // AUTO-GENERATED: METHODS START
     /**

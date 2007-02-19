@@ -28,14 +28,16 @@ public interface EZGame
     public void set (String propName, Object value, int index);
 
     /**
-     * Set a property that will be distributed. 
+     * Set a property that will be distributed, if the previous value
+     * matches the test value.
      */
-    public void set (String propName, Object value, boolean testAndSet);
+    public void testAndSet (String propName, Object value, Object testValue);
 
     /**
-     * Set a property that will be distributed. 
+     * Set a property that will be distributed, if the previous value
+     * matches the test value.
      */
-    public void set (String propName, Object value, int index, boolean testAndSet);
+    public void testAndSet (String propName, Object value, Object testValue, int index);
 
     /**
      * Register an object to receive whatever events it should receive,

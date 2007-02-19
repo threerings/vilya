@@ -127,11 +127,12 @@ public class EZGameManager extends GameManager
     // from EZGameProvider
     public void setProperty (
         ClientObject caller, String propName, Object data, int index,
-        boolean testAndSet, InvocationService.InvocationListener listener)
+        boolean testAndSet, Object testValue,
+        InvocationService.InvocationListener listener)
         throws InvocationException
     {
         validateUser(caller);
-        setProperty(propName, data, index, testAndSet);
+        setProperty(propName, data, index, testAndSet, testValue);
     }
 
     // from EZGameProvider
@@ -220,7 +221,7 @@ public class EZGameManager extends GameManager
                 }
 
                 if (playerId == 0) {
-                    setProperty(msgOrPropName, result, -1, false);
+                    setProperty(msgOrPropName, result, -1, false, null);
                     
                 } else {
                     sendPrivateMessage(playerId, msgOrPropName, result);
@@ -401,11 +402,15 @@ public class EZGameManager extends GameManager
      * Helper method to post a property set event.
      */
     protected void setProperty (
-        String propName, Object value, int index, boolean testAndSet)
+        String propName, Object value, int index,
+        boolean testAndSet, Object testValue)
     {
-        _gameObj.postEvent(
-            new PropertySetEvent(
-                _gameObj.getOid(), propName, value, index, testAndSet));
+        if (_gameObj.testProperty (propName, index, testAndSet, testValue))
+        {
+            _gameObj.postEvent(
+                new PropertySetEvent(
+                    _gameObj.getOid(), propName, value, index));
+        }
     }
 
     /**

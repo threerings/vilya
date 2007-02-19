@@ -61,34 +61,40 @@ public class GameObjectImpl
     // from EZGame
     public void set (String propName, Object value)
     {
-        set(propName, value, -1, false);
-    }
-
-    // from EZGame
-    public void set (String propName, Object value, boolean testAndSet)
-    {
-        set(propName, value, -1, testAndSet);
+        set(propName, value, -1);
     }
 
     // from EZGame
     public void set (String propName, Object value, int index)
-    {
-        set(propName, value, index, false);
-    }
-    
-    // from EZGame
-    public void set (String propName, Object value, int index, boolean testAndSet)
     {
         validatePropertyChange(propName, value, -1);
 
         Object encoded = EZObjectMarshaller.encode(value);
         Object reconstituted = EZObjectMarshaller.decode(encoded);
         _ezObj.ezGameService.setProperty(
-            _ctx.getClient(), propName, encoded, index, testAndSet,
+            _ctx.getClient(), propName, encoded, index, false, null,
             createLoggingListener("setProperty"));
 
         // set it immediately in the game object
-        _ezObj.applyPropertySet(propName, reconstituted, index, testAndSet);
+        _ezObj.applyPropertySet(propName, reconstituted, index);
+    }
+    
+    // from EZGame
+    public void testAndSet (String propName, Object value, Object testValue)
+    {
+        testAndSet(propName, value, testValue, -1);
+    }
+
+    // from EZGame
+    public void testAndSet (
+        String propName, Object value, Object testValue, int index)
+    {
+        validatePropertyChange(propName, value, -1);
+
+        Object encoded = EZObjectMarshaller.encode(value);
+        _ezObj.ezGameService.setProperty(
+            _ctx.getClient(), propName, encoded, index, true, testValue,
+            createLoggingListener("testAndSet"));
     }
 
     // from EZGame

@@ -35,7 +35,7 @@ public class PropertySetEvent extends NamedEvent
     override public function applyToObject (target :DObject) :Boolean
     {
         _oldValue =
-            EZGameObject(target).applyPropertySet(_name, _data, _index, _testAndSet);
+            EZGameObject(target).applyPropertySet(_name, _data, _index);
         return true;
     }
 
@@ -69,7 +69,6 @@ public class PropertySetEvent extends NamedEvent
         super.readObject(ins);
         _index = ins.readInt();
         _data = EZObjectMarshaller.decode(ins.readObject());
-        _testAndSet = ins.readBoolean();
     }
 
     // from interface Streamable
@@ -78,7 +77,6 @@ public class PropertySetEvent extends NamedEvent
         super.writeObject(out);
         out.writeInt(_index);
         out.writeObject(_data);
-        out.writeBoolean(_testAndSet);
     }
 
     override protected function notifyListener (listener :Object) :void
@@ -100,9 +98,6 @@ public class PropertySetEvent extends NamedEvent
 
     /** The client-side data that is assigned to this property. */
     protected var _data :Object;
-
-    /** When true, the property will only be set if its previous value was null. */
-    protected var _testAndSet :Boolean;
 
     /** The old value. */
     protected var _oldValue :Object;

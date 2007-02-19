@@ -67,7 +67,7 @@ public class GameData extends Proxy
 
     override flash_proxy function setProperty (propName :*, value :*) :void
     {
-        _propSetFn(String(propName), value, -1, false);
+        _propSetFn(String(propName), value, -1);
     }
 
     override flash_proxy function deleteProperty (propName :*) :Boolean

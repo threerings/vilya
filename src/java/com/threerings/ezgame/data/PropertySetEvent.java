@@ -30,12 +30,11 @@ public class PropertySetEvent extends NamedEvent
      * Create a PropertySetEvent.
      */
     public PropertySetEvent (
-        int targetOid, String propName, Object value, int index, boolean testAndSet)
+        int targetOid, String propName, Object value, int index)
     {
         super(targetOid, propName);
         _data = value;
         _index = index;
-        _testAndSet = testAndSet;
     }
 
     /**
@@ -69,7 +68,7 @@ public class PropertySetEvent extends NamedEvent
         if (!ezObj.isOnServer()) {
             _data = EZObjectMarshaller.decode(_data);
         }
-        _oldValue = ezObj.applyPropertySet(_name, _data, _index, _testAndSet);
+        _oldValue = ezObj.applyPropertySet(_name, _data, _index);
         return true;
     }
 
@@ -95,9 +94,6 @@ public class PropertySetEvent extends NamedEvent
     /** The client-side data that is assigned to this property. */
     protected Object _data;
 
-    /** When true, the property will only be set if the old value was null. */
-    protected boolean _testAndSet;
-    
     /** The old value. */
     protected transient Object _oldValue;
 }

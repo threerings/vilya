@@ -153,24 +153,31 @@ public class EZGameControl extends EventDispatcher
     }
 
     /**
-     * Set a property that will be distributed.
+     * Set a property that will be distributed. 
      */
     public function set (propName :String, value :Object, index :int = -1) :void
     {
-        callEZCode("setProperty_v2", propName, value, index, false);
+        callEZCode("setProperty_v1", propName, value, index);
     }
 
     /**
-     * Set a property that will be distributed, but only if it was null before.
+     * Set a property that will be distributed, but only if it's equal
+     * to the specified test value.
+     *
+     * Please note that, unlike in the standard set() function, the property
+     * will not be updated right away, but will require a request to the server
+     * and a response back. For this reason, there may be a considerable delay
+     * between calling testAndSet, and seeing the result of the update.
      *
      * The operation is 'atomic', in the sense that testing and setting take place
      * during the same server event. In comparison, a separate 'get' followed by
      * a 'set' operation would involve two events with two network round-trips,
      * and no guarantee that the value won't change between the events.
      */
-    public function testAndSet (propName :String, value :Object, index :int = -1) :void
+    public function testAndSet (
+        propName :String, newValue :Object, testValue :Object, index :int = -1) :void
     {
-        callEZCode("setProperty_v2", propName, value, index, true);
+        callEZCode("testAndSetProperty_v1", propName, newValue, testValue, index);
     }
 
     /**
