@@ -157,7 +157,21 @@ public class EZGameControl extends EventDispatcher
      */
     public function set (propName :String, value :Object, index :int = -1) :void
     {
-        callEZCode("setProperty_v1", propName, value, index);
+        callEZCode("setProperty_v1", propName, value, index, false);
+    }
+
+    /**
+     * Set a property, but have this client immediately set the value so that
+     * it can be re-read. The property change event will still arrive and
+     * will be your clue as to when the other clients will see the newly
+     * set value. Be careful with this method, as it can allow data
+     * inconsistency: two clients may see different values for a property
+     * if one of them recently set it immediately, and the resultant
+     * PropertyChangedEvent's oldValue also may not be consistent.
+     */
+    public function setImmediate (propName :String, value :Object, index :int = -1) :void
+    {
+        callEZCode("setProperty_v1", propName, value, index, true);
     }
 
     /**

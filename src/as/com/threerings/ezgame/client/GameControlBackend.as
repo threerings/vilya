@@ -164,8 +164,17 @@ public class GameControlBackend
         o["getPlayers_v1"] = getPlayers_v1;
     }
 
+    /**
+     * Set a property.
+     *
+     * Note: immediate defaults to true, even though immediate=false is
+     * the general case. We are providing some backwards compatibility
+     * to old versions of setProperty_v1() that assumed immediate and did
+     * not pass a 4th value.
+     * All callers should now specify that value explicitely.
+     */
     public function setProperty_v1 (
-        propName :String, value :Object, index :int) :void
+        propName :String, value :Object, index :int, immediate :Boolean = true) :void
     {
         validatePropertyChange(propName, value, index);
 
@@ -173,6 +182,9 @@ public class GameControlBackend
         _ezObj.ezGameService.setProperty(
             _ctx.getClient(), propName, encoded, index,
             false, null, createLoggingConfirmListener("setProperty"));
+        if (immediate) {
+            _ezObj.applyPropertySet(propName, value, index);
+        }
     }
 
     public function testAndSetProperty_v1 (
