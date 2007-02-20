@@ -144,7 +144,7 @@ public class EZGameManager extends GameManager
         InvocationService.ResultListener listener)
         throws InvocationException
     {
-        DictionaryService dictionary = getDictionaryService ();
+        DictionaryManager dictionary = getDictionaryManager ();
         dictionary.getLetterSet (locale, count, listener);
     }
     
@@ -154,19 +154,19 @@ public class EZGameManager extends GameManager
         InvocationService.ResultListener listener)
         throws InvocationException
     {
-        DictionaryService dictionary = getDictionaryService ();
+        DictionaryManager dictionary = getDictionaryManager ();
         dictionary.checkWord (locale, word, listener);
     }  
 
     /**
      * Find the dictionary manager
      */
-    protected DictionaryService getDictionaryService ()
+    protected DictionaryManager getDictionaryManager ()
         throws InvocationException
     {
-        DictionaryService dictionary = DictionaryService.getInstance ();
+        DictionaryManager dictionary = DictionaryManager.getInstance ();
         if (dictionary == null) {
-            log.warning("DictionaryService not initialized.");
+            log.warning("DictionaryManager not initialized.");
             throw new InvocationException(INTERNAL_ERROR);
         }
         return dictionary;
