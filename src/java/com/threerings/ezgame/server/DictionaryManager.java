@@ -69,12 +69,10 @@ public class DictionaryManager
         {
             try
             {
+                CountHashMap <Character> letters = new CountHashMap <Character>();
+                
                 if (wordfile.exists() && wordfile.isFile() && wordfile.canRead())
                 {
-                    // File length will give us a rough starting point for the word array
-                    long bytecount = wordfile.length();
-                    int approxWords = (int) (bytecount / 5); // just a heuristic,
-
                     // Read it line by line
                     BufferedReader reader = new BufferedReader (new FileReader (wordfile));
                     String line = null;
@@ -86,14 +84,16 @@ public class DictionaryManager
                         // count characters
                         for (int ii = word.length() - 1; ii >= 0; ii--) {
                             char ch = word.charAt(ii);
-                            _letters.incrementCount(ch, 1);
+                            letters.incrementCount(ch, 1);
                         }
                     }
+
+                    initializeLetterCounts (letters);
 
                     log.log (Level.INFO,
                              "Loaded dictionary file " + wordfile.getName () +
                              " with " + _words.size () + " entries, " +
-                             _letters.size () + " letters.");
+                             _letters.length + " letters.");
                                                           
                 }
                 else
@@ -106,7 +106,8 @@ public class DictionaryManager
             {
                 log.log (Level.WARNING, "Failed to load dictionary file", ex);
                 _words.clear();  // dump everything
-                _letters.clear();
+                _letters = new char[] { };
+                _counts = new float[] { };
             }
         }
 
@@ -119,27 +120,54 @@ public class DictionaryManager
         /** Gets an array of random letters for the language, with uniform distribution. */
         public char[] randomLetters (int count)
         {
-            Set<Character> letterSet = _letters.keySet();
-            int letterCount = letterSet.size();
-            Character[] letters = new Character[letterCount];
-            letterSet.toArray(letters);
-            
             char[] results = new char[count];
-            for (int ii = 0; ii < count; ii++) {
-                results[ii] = letters[RandomUtil.getInt(letterCount)];
+            for (int i = 0; i < count; i++)
+            {
+                // find random index and get its letter
+                int index = RandomUtil.getWeightedIndex (_counts);
+                results[i] = _letters[index];
             }
 
             return results;
         }
-            
+
+
+        // PRIVATE HELPERS
+
+        /** Given a CountHashMap of letters, initializes the internal
+            letter and count arrays, used by RandomUtil. */
+        protected void initializeLetterCounts (CountHashMap <Character> letters)
+        {
+            Set<Character> keys = letters.keySet ();
+            int keycount = keys.size();
+            int total = letters.getTotalCount ();
+            if (total == 0) { return; } // Something went wrong, abort.
+
+            // Initialize storage
+            _letters = new char[keycount];
+            _counts = new float[keycount];
+
+            // Copy letters and normalize counts
+            for (Character key : keys)
+            {
+                keycount--;
+                _letters[keycount] = (char) key;
+                _counts[keycount] = ((float) letters.getCount (key)) / total; // normalize
+            }
+        }
+                
+                
 
         // PRIVATE STORAGE
 
         /** The words. */
         protected HashSet<String> _words = new HashSet<String>();
 
-        /** Letter frequency. */
-        protected CountHashMap<Character> _letters = new CountHashMap<Character>();
+        /** Letter array. */
+        protected char[] _letters = new char[] { };
+
+        /** Letter count array. */
+        protected float[] _counts = new float[] { };
     }
 
 
