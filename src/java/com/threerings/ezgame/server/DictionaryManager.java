@@ -34,6 +34,7 @@ import java.io.File;
 import java.lang.reflect.Array;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Random;
@@ -67,15 +68,12 @@ public class DictionaryManager
          */
         public Dictionary (File wordfile)
         {
+            ArrayList <Integer> list = new ArrayList <Integer> ();
+            
             try
             {
                 if (wordfile.exists() && wordfile.isFile() && wordfile.canRead())
                 {
-                    // File length will give us a rough starting point for the word array
-                    long bytecount = wordfile.length();
-                    int approxWords = (int) (bytecount / 5); // just a heuristic,
-                    _hashes.ensureCapacity (approxWords);    //   we'll trim the vector later
-
                     // Read it line by line
                     BufferedReader reader = new BufferedReader (new FileReader (wordfile));
                     String line = null;
@@ -83,7 +81,7 @@ public class DictionaryManager
                     {
                         // Add the word to the dictionary
                         int hash = hashWord (line); 
-                        _hashes.add (hash);
+                        list.add (hash);
                         
                         // Add each letter to a letter set
                         int len = line.length ();
@@ -99,16 +97,17 @@ public class DictionaryManager
                                 _letters.put (ch, _letters.get (ch) + 1);
                             }
                         }
-                        
                     }
 
-                    // Trim and sort the vector
-                    _hashes.trimToSize();
-                    Collections.sort (_hashes);
+                    // Now dump it into a tighter, unboxed, sorted array. 
+                    _hashes = new int[list.size()];
+                    int i = 0;
+                    for (Integer value : list) { _hashes[i++] = (int) value; }
+                    Arrays.sort (_hashes);
 
                     log.log (Level.INFO,
                              "Loaded dictionary file " + wordfile.getName () +
-                             " with " + _hashes.size () + " entries, " +
+                             " with " + _hashes.length + " entries, " +
                              _letters.size () + " letters.");
                                                           
                 }
@@ -121,7 +120,7 @@ public class DictionaryManager
             catch (Exception ex)
             {
                 log.log (Level.WARNING, "Failed to load dictionary file", ex);
-                _hashes.clear();  // dump everything
+                _hashes = new int[] { };  // dump everything
             }
         }
 
@@ -130,7 +129,7 @@ public class DictionaryManager
         {
             // Hash the word and check
             int hash = hashWord (word);
-            int result = Collections.binarySearch (_hashes, hash);
+            int result = Arrays.binarySearch (_hashes, hash);
             return (result >= 0);
         }
 
@@ -163,8 +162,8 @@ public class DictionaryManager
 
         // PRIVATE STORAGE
 
-        /** Sorted vector of word hashes */
-        private Vector <Integer> _hashes = new Vector <Integer> ();
+        /** Sorted array of word hashes */
+        private int[] _hashes;
 
         /** Mapping from letters in this language to their total count */
         private HashMap <Character, Integer> _letters = new HashMap <Character, Integer> ();
