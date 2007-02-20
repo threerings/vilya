@@ -33,14 +33,13 @@ import java.io.FileReader;
 import java.io.File;
 import java.lang.reflect.Array;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Random;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.Vector;
 import java.util.logging.Level;
+
+import com.samskivert.util.CountHashMap;
+import com.samskivert.util.RandomUtil;
 
 import static com.threerings.ezgame.server.Log.log;
 
@@ -68,46 +67,32 @@ public class DictionaryManager
          */
         public Dictionary (File wordfile)
         {
-            ArrayList <Integer> list = new ArrayList <Integer> ();
-            
             try
             {
                 if (wordfile.exists() && wordfile.isFile() && wordfile.canRead())
                 {
+                    // File length will give us a rough starting point for the word array
+                    long bytecount = wordfile.length();
+                    int approxWords = (int) (bytecount / 5); // just a heuristic,
+
                     // Read it line by line
                     BufferedReader reader = new BufferedReader (new FileReader (wordfile));
                     String line = null;
-                    while ((line = reader.readLine()) != null)
-                    {
+                    while ((line = reader.readLine()) != null) {
+                        String word = line.toLowerCase();
                         // Add the word to the dictionary
-                        int hash = hashWord (line); 
-                        list.add (hash);
-                        
-                        // Add each letter to a letter set
-                        int len = line.length ();
-                        for (int i = 0; i < len; i++)
-                        {
-                            char ch = line.charAt (i);
-                            if (! _letters.containsKey (ch))
-                            {
-                                _letters.put (ch, 1);
-                            }
-                            else
-                            {
-                                _letters.put (ch, _letters.get (ch) + 1);
-                            }
+                        _words.add(word);
+
+                        // count characters
+                        for (int ii = word.length() - 1; ii >= 0; ii--) {
+                            char ch = word.charAt(ii);
+                            _letters.incrementCount(ch, 1);
                         }
                     }
 
-                    // Now dump it into a tighter, unboxed, sorted array. 
-                    _hashes = new int[list.size()];
-                    int i = 0;
-                    for (Integer value : list) { _hashes[i++] = (int) value; }
-                    Arrays.sort (_hashes);
-
                     log.log (Level.INFO,
                              "Loaded dictionary file " + wordfile.getName () +
-                             " with " + _hashes.length + " entries, " +
+                             " with " + _words.size () + " entries, " +
                              _letters.size () + " letters.");
                                                           
                 }
@@ -120,56 +105,41 @@ public class DictionaryManager
             catch (Exception ex)
             {
                 log.log (Level.WARNING, "Failed to load dictionary file", ex);
-                _hashes = new int[] { };  // dump everything
+                _words.clear();  // dump everything
+                _letters.clear();
             }
         }
 
         /** Checks if the specified word exists in the word list */
         public boolean contains (String word)
         {
-            // Hash the word and check
-            int hash = hashWord (word);
-            int result = Arrays.binarySearch (_hashes, hash);
-            return (result >= 0);
+            return (word != null) && _words.contains(word.toLowerCase());
         }
 
         /** Gets an array of random letters for the language, with uniform distribution. */
         public char[] randomLetters (int count)
         {
-            Set <Character> letterSet = _letters.keySet();
+            Set<Character> letterSet = _letters.keySet();
             int letterCount = letterSet.size();
-            Character [] letters = new Character [letterCount];
-            letterSet.toArray (letters);
+            Character[] letters = new Character[letterCount];
+            letterSet.toArray(letters);
             
-            char [] results = new char [count];
-            
-            for (int i = 0; i < count; i++)
-            {
-                int r = _random.nextInt (letterCount);
-                char ch = letters[r];
-                results[i] = ch;
+            char[] results = new char[count];
+            for (int ii = 0; ii < count; ii++) {
+                results[ii] = letters[RandomUtil.getInt(letterCount)];
             }
 
             return results;
         }
             
 
-        /** Hashes the word, for use in storage */
-        private int hashWord (String word)
-        {
-            return word.toLowerCase().hashCode();
-        }
-
         // PRIVATE STORAGE
 
-        /** Sorted array of word hashes */
-        private int[] _hashes;
+        /** The words. */
+        protected HashSet<String> _words = new HashSet<String>();
 
-        /** Mapping from letters in this language to their total count */
-        private HashMap <Character, Integer> _letters = new HashMap <Character, Integer> ();
-
-        /** Random number generator */
-        private Random _random = new Random ();
+        /** Letter frequency. */
+        protected CountHashMap<Character> _letters = new CountHashMap<Character>();
     }
 
 
