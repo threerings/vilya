@@ -52,7 +52,6 @@ import com.samskivert.swing.event.AncestorAdapter;
 
 import com.threerings.util.Name;
 
-import com.threerings.crowd.chat.client.ChatDirector;
 import com.threerings.crowd.chat.client.ChatDisplay;
 import com.threerings.crowd.chat.data.ChatCodes;
 import com.threerings.crowd.chat.data.ChatMessage;
@@ -76,11 +75,8 @@ public class ChatPanel
         // keep this around for later
         _ctx = ctx;
 
-        // create our chat director and register ourselves with it
-        _chatdtr = new ChatDirector(_ctx, null, null);
-        // XXX - the line above royally borks things because it sends
-        // null, null downstream.
-        _chatdtr.addChatDisplay(this);
+        // register ourselves with the chat director
+        _ctx.getChatDirector().addChatDisplay(this);
 
         // register as an occupant observer
         _ctx.getOccupantDirector().addOccupantObserver(this);
@@ -225,15 +221,15 @@ public class ChatPanel
             String message = text.substring(uidx + username.length()).trim();
 
             // request to send this text as a tell message
-            _chatdtr.requestTell(new Name(username), message, null);
+            _ctx.getChatDirector().requestTell(new Name(username), message, null);
 
         } else if (text.startsWith("/clear")) {
             // clear the chat box
-            _chatdtr.clearDisplays();
+            _ctx.getChatDirector().clearDisplays();
 
         } else {
             // request to send this text as a chat message
-            _chatdtr.requestSpeak(null, text, ChatCodes.DEFAULT_MODE);
+            _ctx.getChatDirector().requestSpeak(null, text, ChatCodes.DEFAULT_MODE);
         }
 
         // clear out the input because we sent a request
@@ -320,7 +316,6 @@ public class ChatPanel
     }
 
     protected CrowdContext _ctx;
-    protected ChatDirector _chatdtr;
 
     protected boolean _focus = true;
 
