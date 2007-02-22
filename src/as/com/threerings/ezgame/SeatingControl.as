@@ -12,7 +12,7 @@ public class SeatingControl extends SubControl
      */
     public function getPlayerPosition (playerId :int) :int
     {
-        return int(_ctrl.callEZCode("getPlayerPosition_v1", playerId));
+        return int(_ctrl.callEZCodeFriend("getPlayerPosition_v1", playerId));
     }
 
     /**
@@ -21,7 +21,7 @@ public class SeatingControl extends SubControl
      */
     public function getPlayerIds () :Array /* of playerId (int) */
     {
-        return (_ctrl.callEZCode("getPlayers_v1") as Array);
+        return (_ctrl.callEZCodeFriend("getPlayers_v1") as Array);
     }
 
     // TODO: methods for allowing a player to pick a seat

@@ -37,7 +37,7 @@ public class CollectionsControl extends SubControl
      */
     public function merge (srcColl :String, intoColl :String) :void
     {
-        _ctrl.callEZCode("mergeCollection_v1", srcColl, intoColl);
+        _ctrl.callEZCodeFriend("mergeCollection_v1", srcColl, intoColl);
     }
 
     /**
@@ -93,7 +93,7 @@ public class CollectionsControl extends SubControl
     protected function populate (
         collName :String, values :Array, clearExisting :Boolean) :void
     {
-        _ctrl.callEZCode("populateCollection_v1", collName, values, clearExisting);
+        _ctrl.callEZCodeFriend("populateCollection_v1", collName, values, clearExisting);
     }
 
     /**
@@ -103,7 +103,7 @@ public class CollectionsControl extends SubControl
         collName :String, count :int, msgOrPropName :String, playerId :int,
         consume :Boolean, callback :Function) :void
     {
-        _ctrl.callEZCode("getFromCollection_v2", collName, count, msgOrPropName,
+        _ctrl.callEZCodeFriend("getFromCollection_v2", collName, count, msgOrPropName,
             playerId, consume, callback);
     }
 }

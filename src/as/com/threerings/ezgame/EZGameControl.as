@@ -557,7 +557,7 @@ public class EZGameControl extends BaseControl
     /**
      * Call a method across the security boundary.
      */
-    internal function callEZCode (name :String, ... args) :*
+    protected function callEZCode (name :String, ... args) :*
     {
         if (_funcs != null) {
             try {
@@ -569,6 +569,16 @@ public class EZGameControl extends BaseControl
                 trace("Unable to call ez code: " + err);
             }
         }
+    }
+
+    /**
+     * A "friend" version of callEZCode for subControls.
+     */
+    internal function callEZCodeFriend (name :String, ... args) :*
+    {
+        // var args
+        args.unshift(name);
+        callEZCode.apply(this, args);
     }
 
     /**
