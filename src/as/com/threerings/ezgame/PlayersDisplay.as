@@ -61,7 +61,7 @@ public class PlayersDisplay extends Sprite
             maxWidth = label.textWidth + TEXTWIDTH_ADD;
         }
 
-        var players :Array = _gameCtrl.getPlayers();
+        var players :Array = _gameCtrl.seating.getPlayerIds();
 
         // create a label for each player
         for each (var playerId :int in players) {
@@ -160,7 +160,7 @@ public class PlayersDisplay extends Sprite
      */
     protected function displayCurrentTurn () :void
     {
-        var idx :int = _gameCtrl.isInPlay() ? _gameCtrl.getPlayerPosition(_gameCtrl.getTurnHolder()) : -1;
+        var idx :int = _gameCtrl.isInPlay() ? _gameCtrl.seating.getPlayerPosition(_gameCtrl.getTurnHolder()) : -1;
         for (var ii :int = 0; ii < _playerLabels.length; ii++) {
             var label :TextField = (_playerLabels[ii] as TextField);
             label.backgroundColor = getBackground(ii == idx);

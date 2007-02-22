@@ -65,7 +65,7 @@ import flash.display.DisplayObject;
  *
  * TODO: lots of documentation.
  */
-public class EZGameControl extends EventDispatcher
+public class EZGameControl extends BaseControl
 {
     /**
      * Create an EZGameControl object using some display object currently
@@ -83,15 +83,9 @@ public class EZGameControl extends EventDispatcher
 
         // set up our focusing click handler
         disp.root.addEventListener(MouseEvent.CLICK, handleRootClick);
-    }
 
-    /**
-     * Are we connected and running inside the EZGame environment, or
-     * has someone just loaded up this swf by itself?
-     */
-    public function isConnected () :Boolean
-    {
-        return (_gameData != null);
+        // TODO: this should only be available if the game uses it
+        _seating = new SeatingControl(this);
     }
 
     // documentation inherited
@@ -108,6 +102,7 @@ public class EZGameControl extends EventDispatcher
             if (hasEventListener(type)) { // ensure it was added
                 callEZCode("alterKeyEvents_v1", type, true);
             }
+            break;
         }
     }
 
@@ -123,23 +118,54 @@ public class EZGameControl extends EventDispatcher
             if (!hasEventListener(type)) { // once it's no longer needed
                 callEZCode("alterKeyEvents_v1", type, false);
             }
+            break;
         }
     }
 
     /**
-     * Data accessor.
+     * Are we connected and running inside the EZGame environment, or
+     * has someone just loaded up this swf by itself?
      */
-    public function get data () :Object
+    public function isConnected () :Boolean
     {
-        return _gameData;
+        return (_gameData != null);
     }
+
+    /**
+     * Get the CollectionsControl, which contains methods for utilizing
+     * the server to dispatch private information.
+     */
+    public function get collections () :CollectionsControl
+    {
+        if (_collections == null) {
+            _collections = new CollectionsControl(this);
+        }
+        return _collections;
+    }
+
+    /**
+     * Get the SeatingControl, which contains methods for checking
+     * and assigning player seating positions.
+     */
+    public function get seating () :SeatingControl
+    {
+        return _seating;
+    }
+
+//    /**
+//     * Data accessor.
+//     */
+//    public function get data () :Object
+//    {
+//        return _gameData;
+//    }
 
     /**
      * Get a property from data.
      */
     public function get (propName :String, index :int = -1) :Object
     {
-        var value :Object = data[propName];
+        var value :Object = _gameData[propName];
         if (index >= 0) {
             if (value is Array) {
                 return (value as Array)[index];
@@ -301,82 +327,6 @@ public class EZGameControl extends EventDispatcher
     }
 
     /**
-     * Set the specified collection to contain the specified values,
-     * clearing any previous values.
-     */
-    public function setCollection (collName :String, values :Array) :void
-    {
-        populateCollection(collName, values, true);
-    }
-
-    /**
-     * Add to an existing collection. If it doesn't exist, it will
-     * be created. The new values will be inserted randomly into the
-     * collection.
-     */
-    public function addToCollection (collName :String, values :Array) :void
-    {
-        populateCollection(collName, values, false);
-    }
-
-    /**
-     * Pick (do not remove) the specified number of elements from a collection,
-     * and distribute them to a specific player or set them as a property
-     * in the game data.
-     *
-     * @param collName the collection name.
-     * @param count the number of elements to pick
-     * @param msgOrPropName the name of the message or property
-     *        that will contain the picked elements.
-     * @param playerId if 0 (or unset), the picked elements should be
-     *        set on the gameObject as a property for all to see.
-     *        If a playerId is specified, only that player will receive
-     *        the elements as a message.
-     */
-    // TODO: a way to specify exclusive picks vs. duplicate-OK picks?
-    public function pickFromCollection (
-        collName :String, count :int, msgOrPropName :String,
-        playerId :int = 0) :void
-    {
-        getFromCollection(collName, count, msgOrPropName, playerId,
-            false, null);
-    }
-
-    /**
-     * Deal (remove) the specified number of elements from a collection,
-     * and distribute them to a specific player or set them as a property
-     * in the game data.
-     *
-     * @param collName the collection name.
-     * @param count the number of elements to pick
-     * @param msgOrPropName the name of the message or property
-     *        that will contain the picked elements.
-     * @param playerId if 0 (or unset), the picked elements should be
-     *        set on the gameObject as a property for all to see.
-     *        If a playerId is specified, only that player will receive
-     *        the elements as a message.
-     */
-    // TODO: figure out the method signature of the callback
-    public function dealFromCollection (
-        collName :String, count :int, msgOrPropName :String,
-        callback :Function = null, playerId :int = 0) :void
-    {
-        getFromCollection(collName, count, msgOrPropName, playerId,
-            true, callback);
-    }
-
-    /**
-     * Merge the specified collection into the other collection.
-     * The source collection will be destroyed. The elements from
-     * The source collection will be shuffled and appended to the end
-     * of the destination collection.
-     */
-    public function mergeCollection (srcColl :String, intoColl :String) :void
-    {
-        callEZCode("mergeCollection_v1", srcColl, intoColl);
-    }
-
-    /**
      * Send a "message" to other clients subscribed to the game.
      * These is similar to setting a property, except that the
      * value will not be saved- it will merely end up coming out
@@ -444,25 +394,6 @@ public class EZGameControl extends EventDispatcher
     public function getOccupantName (playerId :int) :String
     {
         return String(callEZCode("getOccupantName_v1", playerId));
-    }
-
-    // TODO: NEW: Table control
-    /**
-     * Get the player's position, or -1 if not a player.
-     */
-    public function getPlayerPosition (playerId :int) :int
-    {
-        return int(callEZCode("getPlayerPosition_v1", playerId));
-    }
-
-    // TODO: NEW: Table control
-    /**
-     * Get all the players at the table, in their seated position.
-     * Absent players will be represented by a 0.
-     */
-    public function getPlayers () :Array /* of playerId (int) */
-    {
-        return (callEZCode("getPlayers_v1") as Array);
     }
 
     // TODO: NEW
@@ -540,38 +471,6 @@ public class EZGameControl extends EventDispatcher
 
         // goddamn var-args complications in actionscript
         callEZCode.apply(null, args);
-    }
-
-    /**
-     * Your own events may not be dispatched here.
-     */
-    override public function dispatchEvent (event :Event) :Boolean
-    {
-        // Ideally we want to not be an IEventDispatcher so that people
-        // won't try to do this on us, but if we do that, then some other
-        // object will be the target during dispatch, and that's confusing.
-        // It's really nice to be able to 
-        throw new IllegalOperationError();
-    }
-
-    /**
-     * Helper method for setCollection and addToCollection.
-     */
-    protected function populateCollection (
-        collName :String, values :Array, clearExisting :Boolean) :void
-    {
-        callEZCode("populateCollection_v1", collName, values, clearExisting);
-    }
-
-    /**
-     * Helper method for pickFromCollection and dealFromCollection.
-     */
-    protected function getFromCollection (
-        collName :String, count :int, msgOrPropName :String, playerId :int,
-        consume :Boolean, callback :Function) :void
-    {
-        callEZCode("getFromCollection_v2", collName, count, msgOrPropName,
-            playerId, consume, callback);
     }
 
     /**
@@ -658,7 +557,7 @@ public class EZGameControl extends EventDispatcher
     /**
      * Call a method across the security boundary.
      */
-    protected function callEZCode (name :String, ... args) :*
+    internal function callEZCode (name :String, ... args) :*
     {
         if (_funcs != null) {
             try {
@@ -686,24 +585,15 @@ public class EZGameControl extends EventDispatcher
         callEZCode("focusContainer_v1");
     }
 
-    /**
-     * Secret function to dispatch property changed events.
-     */
-    internal function dispatch (event :Event) :void
-    {
-        try {
-            super.dispatchEvent(event);
-        } catch (err :Error) {
-            trace("Error dispatching event to user game.");
-            trace(err.getStackTrace());
-        }
-    }
-
     /** Contains the data properties shared by all players in the game. */
     protected var _gameData :Object;
 
     /** Contains functions exposed to us from the EZGame host. */
     protected var _funcs :Object;
+
+    /** Sub-controls. */
+    protected var _collections :CollectionsControl;
+    protected var _seating :SeatingControl;
 }
 }
 
