@@ -165,6 +165,10 @@ public class EZGameControl extends BaseControl
      */
     public function get (propName :String, index :int = -1) :Object
     {
+        if (_gameData == null) {
+            return null;
+        }
+
         var value :Object = _gameData[propName];
         if (index >= 0) {
             if (value is Array) {
