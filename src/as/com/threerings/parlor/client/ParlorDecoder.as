@@ -1,9 +1,9 @@
 //
-// $Id: ParlorDecoder.java 4145 2006-05-24 01:24:24Z ray $
+// $Id$
 //
-// Narya library - tools for developing networked games
-// Copyright (C) 2002-2006 Three Rings Design, Inc., All Rights Reserved
-// http://www.threerings.net/code/narya/
+// Vilya library - tools for developing networked games
+// Copyright (C) 2002-2007 Three Rings Design, Inc., All Rights Reserved
+// http://www.threerings.net/code/vilya/
 //
 // This library is free software; you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as published

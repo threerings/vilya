@@ -1,9 +1,9 @@
 //
-// $Id: Location.java 3726 2005-10-11 19:17:43Z ray $
+// $Id$
 //
-// Narya library - tools for developing networked games
-// Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved
-// http://www.threerings.net/code/narya/
+// Vilya library - tools for developing networked games
+// Copyright (C) 2002-2007 Three Rings Design, Inc., All Rights Reserved
+// http://www.threerings.net/code/vilya/
 //
 // This library is free software; you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as published

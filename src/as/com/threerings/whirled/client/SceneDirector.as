@@ -1,9 +1,9 @@
 //
-// $Id: SceneDirector.java 4088 2006-05-04 00:39:46Z mjohnson $
+// $Id$
 //
-// Narya library - tools for developing networked games
-// Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved
-// http://www.threerings.net/code/narya/
+// Vilya library - tools for developing networked games
+// Copyright (C) 2002-2007 Three Rings Design, Inc., All Rights Reserved
+// http://www.threerings.net/code/vilya/
 //
 // This library is free software; you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as published
