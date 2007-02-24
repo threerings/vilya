@@ -165,9 +165,7 @@ public class EZGameControl extends BaseControl
      */
     public function get (propName :String, index :int = -1) :Object
     {
-        if (_gameData == null) {
-            return null;
-        }
+        checkIsConnected();
 
         var value :Object = _gameData[propName];
         if (index >= 0) {
@@ -572,6 +570,10 @@ public class EZGameControl extends BaseControl
             } catch (err :Error) {
                 trace("Unable to call ez code: " + err);
             }
+
+        } else {
+            // if _funcs is null, this will almost certainly throw an error..
+            checkIsConnected();
         }
     }
 
@@ -583,6 +585,18 @@ public class EZGameControl extends BaseControl
         // var args
         args.unshift(name);
         callEZCode.apply(this, args);
+    }
+
+    /**
+     * Throw an error if we're not connected.
+     */
+    protected function checkIsConnected () :void
+    {
+        if (!isConnected()) {
+            throw new IllegalOperationError("The game is not connected " +
+                "to The Whirled, please check isConnected(). If false, your " +
+                "game is being viewed standalone and should adjust.");
+        }
     }
 
     /**
