@@ -605,7 +605,7 @@ public class EZGameControl extends BaseControl
     {
         // var args
         args.unshift(name);
-        callEZCode.apply(this, args);
+        return callEZCode.apply(this, args);
     }
 
     /**
