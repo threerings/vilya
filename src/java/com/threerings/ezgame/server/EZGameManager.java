@@ -336,7 +336,14 @@ public class EZGameManager extends GameManager
         }
         // we only start looking up the cookie if nobody else already is
         if (!_cookieLookups.contains(playerId)) {
-            gcm.getCookie(getPersistentGameId(), getPlayerByOid(playerId),
+            BodyObject body = getOccupantByOid(playerId);
+            if (body == null) {
+                log.fine("getCookie() called with invalid occupantId " +
+                    "[occupantId=" + playerId + "].");
+                throw new InvocationException(INTERNAL_ERROR);
+            }
+
+            gcm.getCookie(getPersistentGameId(), body,
                 new ResultListener<byte[]>() {
                     public void requestCompleted (byte[] result) {
                         // Result may be null: that's ok, it means
@@ -483,11 +490,6 @@ public class EZGameManager extends GameManager
      */
     protected BodyObject getPlayerByOid (int oid)
     {
-        // verify that they're in the room
-        if (!_gameObj.occupants.contains(oid)) {
-            return null;
-        }
-
         // verify that they're a player
         switch (getGameType()) {
         case GameConfig.PARTY:
@@ -501,6 +503,17 @@ public class EZGameManager extends GameManager
             break;
         }
 
+        return getOccupantByOid(oid);
+    }
+
+    /**
+     * Get the specified occupant body by Oid.
+     */
+    protected BodyObject getOccupantByOid (int oid)
+    {
+        if (!_gameObj.occupants.contains(oid)) {
+            return null;
+        }
         // return the body
         return (BodyObject) CrowdServer.omgr.getObject(oid);
     }
