@@ -195,6 +195,7 @@ public class GameControlBackend
         o["getTurnHolder_v1"] = getTurnHolder_v1;
         o["getOccupantName_v1"] = getOccupantName_v1;
         o["getPlayers_v1"] = getPlayers_v1;
+        o["getPlayerPosition_v1"] = getPlayerPosition_v1;
     }
 
     /**
