@@ -89,7 +89,7 @@ public class EZGamePanel extends Canvas
      */
     protected function createBackend () :GameControlBackend
     {
-        return new GameControlBackend(_ctx, _ezObj);
+        return new GameControlBackend(_ctx, _ezObj, _ctrl);
     }
     
     protected var _ctx :CrowdContext;

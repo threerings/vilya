@@ -26,6 +26,7 @@ import flash.events.Event;
 import com.threerings.util.Name;
 
 import com.threerings.crowd.client.PlaceView;
+import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.util.CrowdContext;
@@ -50,6 +51,15 @@ public class EZGameController extends GameController
         addDelegate(_turnDelegate = new TurnGameControllerDelegate(this));
     }
 
+    /**
+     * This is called by the GameControlBackend once it has initialized
+     * and made contact with usercode.
+     */
+    public function userCodeIsConnected () :void
+    {
+        playerReady();
+    }
+
     override public function willEnterPlace (plobj :PlaceObject) :void
     {
         _ezObj = (plobj as EZGameObject);
@@ -68,6 +78,22 @@ public class EZGameController extends GameController
     public function turnDidChange (turnHolder :Name) :void
     {
         _panel.backend.turnDidChange();
+    }
+
+    override protected function playerReady () :void
+    {
+        // we require the user to be connected, and we redundantly only
+        // do this if the user is in the players array
+        if (_panel.backend.isConnected()) {
+            var bobj :BodyObject =
+                (_ctx.getClient().getClientObject() as BodyObject);
+            if (_gobj.getPlayerIndex(bobj.getVisibleName()) != -1) {
+                super.playerReady();
+            }
+
+        } else {
+            log.debug("Waiting to call playerReady, userCode not yet connected.");
+        }
     }
 
     override protected function gameDidStart () :void

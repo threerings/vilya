@@ -89,10 +89,11 @@ public class GameControlBackend
     public var log :Log = Log.getLog(this);
 
     public function GameControlBackend (
-        ctx :CrowdContext, ezObj :EZGameObject)
+        ctx :CrowdContext, ezObj :EZGameObject, ctrl :EZGameController)
     {
         _ctx = ctx;
         _ezObj = ezObj;
+        _ctrl = ctrl;
         _gameData = new GameData(setProperty_v1, _ezObj.getUserProps());
 
         _ezObj.addListener(this);
@@ -102,6 +103,14 @@ public class GameControlBackend
     public function setSharedEvents (disp :IEventDispatcher) :void
     {
         disp.addEventListener("ezgameQuery", handleEZQuery);
+    }
+
+    /**
+     * Are we connected to the usercode on the front-end?
+     */
+    public function isConnected () :Boolean
+    {
+        return (_userFuncs != null);
     }
 
     public function setContainer (container :GameContainer) :void
@@ -120,6 +129,9 @@ public class GameControlBackend
         setUserCodeProperties(evt.userProps);
         evt.ezProps = new Object();
         populateProperties(evt.ezProps);
+
+        // ok, we're now hooked-up with the game code
+        _ctrl.userCodeIsConnected();
     }
 
     protected function setUserCodeProperties (o :Object) :void
@@ -812,6 +824,9 @@ public class GameControlBackend
     protected var _container :GameContainer;
 
     protected var _ezObj :EZGameObject;
+
+    /** Handles trusted clientside control. */
+    protected var _ctrl :EZGameController;
 
     protected var _userFuncs :Object;
 
