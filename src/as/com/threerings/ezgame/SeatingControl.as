@@ -37,6 +37,15 @@ public class SeatingControl extends SubControl
     }
 
     /**
+     * A convenient function to get our own player position,
+     * or -1 if we're not a player.
+     */
+    public function getMyPosition () :int
+    {
+        return int(_ctrl.callEZCodeFriend("getMyPosition_v1"));
+    }
+
+    /**
      * Get all the players at the table, in their seated position.
      * Absent players will be represented by a 0.
      */

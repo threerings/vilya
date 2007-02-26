@@ -196,6 +196,7 @@ public class GameControlBackend
         o["getOccupantName_v1"] = getOccupantName_v1;
         o["getPlayers_v1"] = getPlayers_v1;
         o["getPlayerPosition_v1"] = getPlayerPosition_v1;
+        o["getMyPosition_v1"] = getMyPosition_v1;
     }
 
     /**
@@ -324,6 +325,13 @@ public class GameControlBackend
             return -1;
         }
         return _ezObj.getPlayerIndex(occInfo.username);
+    }
+
+    // TODO: table only
+    public function getMyPosition_v1 () :int
+    {
+        return _ezObj.getPlayerIndex(
+            (_ctx.getClient().getClientObject() as BodyObject).getVisibleName());
     }
 
     // TODO: table only
