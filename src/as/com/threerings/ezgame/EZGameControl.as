@@ -435,9 +435,9 @@ public class EZGameControl extends BaseControl
      * first time this is requested per game instance it will be retrieved
      * from the database. After that, it will be returned from memory.
      */
-    public function getUserCookie (playerId :int, callback :Function) :void
+    public function getUserCookie (occuapntId :int, callback :Function) :void
     {
-        callEZCode("getUserCookie_v1", playerId, callback);
+        callEZCode("getUserCookie_v2", occuapntId, callback);
     }
 
     /**
