@@ -412,7 +412,7 @@ public class EZGameControl extends BaseControl
      * Get the display name of the specified occupant.
      * Two players may have the same name: always use playerId to
      * purposes of identification and comparison. The name is for display
-     * only.
+     * only. Will be null is the specified playerId is not in the game.
      */
     public function getOccupantName (playerId :int) :String
     {

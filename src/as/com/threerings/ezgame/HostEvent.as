@@ -32,13 +32,22 @@ public class HostEvent extends EZEvent
     /** Indicates that the current host changed. */
     public static const CHANGED :String = "Host Changed";
 
-    /** Indicates that the host used to be unknown, but it became claimed
-        by one of the clients. */
-    public static const CLAIMED :String = "Host Claimed";
-
-    public function HostEvent (type :String, ezgame :EZGameControl)
+    public function HostEvent (
+        type :String, ezgame :EZGameControl, previousHost :Number, newHost :Number)
     {
         super (type, ezgame);
+        _previous = previousHost;
+        _new = newHost;
+    }
+
+    public function get previousHost () :Number
+    {
+        return _previous;
+    }
+
+    public function get newHost () :Number
+    {
+        return _new;
     }
 
     override public function toString () :String
@@ -48,7 +57,14 @@ public class HostEvent extends EZEvent
 
     override public function clone () :Event
     {
-        return new HostEvent (type, _ezgame);
+        return new HostEvent (type, _ezgame, _previous, _new);
     }
+
+    /** Id of the previous host (possibly null). */
+    protected var _previous :Number;
+
+    /** Id of the new host. */
+    protected var _new :Number;
+    
 }
 }

@@ -85,24 +85,27 @@ public class HostCoordinator extends EventDispatcher
         if (_control.isConnected()) {
             // Try set host role if it's not already claimed (i.e. null)
             debugLog("Trying to claim host role.");
-            debugLog("Current status: " + status);
+            debugLog("Current host: " + getHostId());
             tryReplaceHost(null);
         }
     }
 
     /**
      * Retrieves current host coordination status, as one of the STATUS_* constants.
+     * If the current host is not known, or had abandoned the game, the client will silently
+     * try to claim the host role while returning this status property.
      *
      * Note: do not save the value of this property. Hosting status can change at any moment: when
      * the current host quits the game, any client can suddenly become the new host.
      */
     public function get status () : String
     {
-        var hostId : Number = getHostId();
+        var hostId : Number = getHostId(true);
+        
         if (hostId == _control.getMyId()) {
             return STATUS_HOST;
         }
-        if (hostId > 0) {
+        if (hostId != 0) {
             return STATUS_NOT_HOST;
         }
         return STATUS_UNKNOWN;
@@ -126,7 +129,6 @@ public class HostCoordinator extends EventDispatcher
         debugLog("Current host: " + getHostId());
 
         if (getHostId() == event.occupantId) { // Elvis has left the building
-            debugLog("Removing the old host...");
             // Clear the old host value, and put myself in their place.  Only the first client will
             // succeed in doing this.
             tryReplaceHost (event.occupantId);
@@ -137,35 +139,49 @@ public class HostCoordinator extends EventDispatcher
     public function propertyChanged (event : PropertyChangedEvent) : void
     {
         if (event.name == HOST_NAME) {
-            debugLog("Host variable changed to: " + event.newValue);
-
-            // if the host was not known before, dispatch the claimed event
-            if (event.oldValue == null && event.newValue != null) {
-                this.dispatchEvent(new HostEvent(HostEvent.CLAIMED, _control));
-            }
-
-            // always dispatch the changed event
-            this.dispatchEvent(new HostEvent(HostEvent.CHANGED, _control));
+            debugLog("Host variable changed from " + event.oldValue + " to " + event.newValue);
+            this.dispatchEvent(
+                new HostEvent(
+                    HostEvent.CHANGED, _control, Number(event.oldValue), Number(event.newValue)));
         }
     }
 
     // IMPLEMENTATION DETAILS
 
-    /** Get the current host ID (will be 0 if there is no authoritative host) */
-    protected function getHostId () : Number
+    /**
+     * Retrieves and returns current host's playerId. If the current host is unknown or
+     * no longer in the game, returns 0.
+     *
+     * If the claimIfAvailable flag is set, and the host role is available (either because
+     * no previous host has been recorded, or the currently known host had abandoned the game),
+     * the current client will try to claim the host role. 
+     */
+    protected function getHostId (claimIfAvailable : Boolean = false) : Number
     {
-        var hostvalue : Object = _control.get(HOST_NAME);
-        if (hostvalue != null && hostvalue is Number) {
-            return hostvalue as Number;
+        var host : Object = _control.get(HOST_NAME);
+        
+        if (host == null ||                                   // no host was recorded, or
+            _control.getOccupantName (Number(host)) == null)  // host has left the game
+        {
+            if (claimIfAvailable) {
+                tryReplaceHost (host);
+            }
+            return 0;
+            
+        } else {
+            // otherwise, the host is present and known
+            return Number(host);
         }
-        return 0;
     }
 
-    /** Helper function: tries to set the host variable to the client's id, if the current value is
+    /**
+     * Helper function: tries to set the host variable to the client's id, if the current value is
      * equal to /hostId/. If the value of null for hostId has the meaning of "set me as host only
-     * if the role has not been claimed yet". */
+     * if the role has not been claimed yet".
+     */
     protected function tryReplaceHost (hostId : Object) : void
     {
+        debugLog("Removing old host with id " + hostId);
         _control.testAndSet (HOST_NAME, _control.getMyId (), hostId);
         debugHostStatus ();
     }
@@ -181,12 +197,12 @@ public class HostCoordinator extends EventDispatcher
     /** Debug only */
     protected function debugHostStatus () : void
     {
-        debugLog((status == STATUS_HOST ? "I am" : "I'm not") +
+        debugLog((getHostId() == _control.getMyId() ? "I am" : "I'm not") +
                  " the host (id " + getHostId() + ", mine is " + _control.getMyId() + ")");
     }
 
     /** Magic key that stores current authoritative host */
-    protected var HOST_NAME : String = "HOST_COORDINATOR_AUTHORITATIVE_HOST";
+    protected var HOST_NAME : String = "_host_name";
 
     /** Controller storage */
     protected var _control : EZGameControl = null;
