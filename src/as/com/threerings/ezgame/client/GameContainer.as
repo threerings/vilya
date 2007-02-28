@@ -35,7 +35,7 @@ import mx.managers.IFocusManagerComponent;
 
 import mx.skins.ProgrammaticSkin;
 
-import com.threerings.util.MediaContainer;
+import com.threerings.flash.MediaContainer;
 
 // TODO: there are focus issues in here that need dealing with.
 //

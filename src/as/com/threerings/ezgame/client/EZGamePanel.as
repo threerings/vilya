@@ -34,9 +34,7 @@ import mx.containers.Canvas;
 import mx.core.Container;
 import mx.core.IChildList;
 
-import mx.utils.DisplayUtil;
-
-import com.threerings.util.MediaContainer;
+import com.threerings.flash.MediaContainer;
 
 import com.threerings.crowd.client.PlaceView;
 import com.threerings.crowd.data.PlaceObject;
