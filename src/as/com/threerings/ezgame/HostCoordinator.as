@@ -158,6 +158,10 @@ public class HostCoordinator extends EventDispatcher
      */
     protected function getHostId (claimIfAvailable : Boolean = false) : Number
     {
+        if (! _control.isConnected()) {
+            return 0;
+        }
+        
         var host : Object = _control.get(HOST_NAME);
         
         if (host == null ||                                   // no host was recorded, or
@@ -167,7 +171,6 @@ public class HostCoordinator extends EventDispatcher
                 tryReplaceHost (host);
             }
             return 0;
-            
         } else {
             // otherwise, the host is present and known
             return Number(host);
@@ -181,9 +184,11 @@ public class HostCoordinator extends EventDispatcher
      */
     protected function tryReplaceHost (hostId : Object) : void
     {
-        debugLog("Removing old host with id " + hostId);
-        _control.testAndSet (HOST_NAME, _control.getMyId (), hostId);
-        debugHostStatus ();
+        if (_control.isConnected()) {
+            debugLog("Removing old host with id " + hostId);
+            _control.testAndSet (HOST_NAME, _control.getMyId (), hostId);
+            debugHostStatus ();
+        }
     }
 
     /** Debug only */
