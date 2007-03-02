@@ -173,14 +173,6 @@ public class EZGameControl extends BaseControl
         return _seating;
     }
 
-//    /**
-//     * Data accessor.
-//     */
-//    public function get data () :Object
-//    {
-//        return _gameData;
-//    }
-
     /**
      * Get a property from data.
      */

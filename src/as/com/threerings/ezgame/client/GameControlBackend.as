@@ -94,7 +94,7 @@ public class GameControlBackend
         _ctx = ctx;
         _ezObj = ezObj;
         _ctrl = ctrl;
-        _gameData = new GameData(setProperty_v1, _ezObj.getUserProps());
+        _gameData = _ezObj.getUserProps();
 
         _ezObj.addListener(this);
         _ctx.getClient().getClientObject().addListener(_userListener);
@@ -843,7 +843,7 @@ public class GameControlBackend
      * dispatch events to the user's game. */
     protected var _ezDispatcher :Function;
 
-    protected var _gameData :GameData;
+    protected var _gameData :Object;
 
     /** playerIndex -> callback functions waiting for the cookie. */
     protected var _cookieCallbacks :Dictionary;
