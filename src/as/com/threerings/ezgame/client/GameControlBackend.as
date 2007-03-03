@@ -640,11 +640,11 @@ public class GameControlBackend
                 // kosher!
                 return;
             }
-            var clazz :Class = ClassUtil.getClass(value);
-            if (clazz == ByteArray) {
+            if (value is ByteArray) {
                 return; // kosher
             }
-            var clazzparentname :String = getQualifiedSuperclassName (clazz);
+            var clazz :Class = ClassUtil.getClass(value);
+            var clazzparentname :String = getQualifiedSuperclassName(clazz);
             var rootclass :Boolean = (clazzparentname == null);
             if (! rootclass) {
                 throw new ArgumentError(
