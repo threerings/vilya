@@ -54,6 +54,19 @@ public class SeatingControl extends SubControl
         return (_ctrl.callEZCodeFriend("getPlayers_v1") as Array);
     }
 
+    /**
+     * Get the names of the seated players, omitting any watchers.
+     */
+    public function getPlayerNames () :Array /* of String */
+    {
+        return getPlayerIds().map(
+            function (playerId :int, o2:*, o3:*) :String
+            {
+                return _ctrl.getOccupantName(playerId);
+            }
+        );
+    }
+
     // TODO: methods for allowing a player to pick a seat
 }
 }
