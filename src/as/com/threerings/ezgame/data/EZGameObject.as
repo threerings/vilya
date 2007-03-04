@@ -51,6 +51,9 @@ public class EZGameObject extends GameObject
     public static const TICKER :String = "Utick";
 
     // AUTO-GENERATED: FIELDS START
+    /** The field name of the <code>controllerOid</code> field. */
+    public static const CONTROLLER_OID :String = "controllerOid";
+
     /** The field name of the <code>turnHolder</code> field. */
     public static const TURN_HOLDER :String = "turnHolder";
 
@@ -60,6 +63,10 @@ public class EZGameObject extends GameObject
     /** The field name of the <code>ezGameService</code> field. */
     public static const EZ_GAME_SERVICE :String = "ezGameService";
     // AUTO-GENERATED: FIELDS END
+
+    /** The client that is in control of this game. The first client to enter will be assigned
+     * control and control will subsequently be reassigned if that client disconnects or leaves. */
+    public var controllerOid :int;
 
     /** The current turn holder. */
     public var turnHolder :Name;
@@ -96,30 +103,11 @@ public class EZGameObject extends GameObject
         return players;
     }
 
-//    // AUTO-GENERATED: METHODS START
-//    /**
-//     * Requests that the <code>turnHolder</code> field be set to the
-//     * specified value. The local value will be updated immediately and an
-//     * event will be propagated through the system to notify all listeners
-//     * that the attribute did change. Proxied copies of this object (on
-//     * clients) will apply the value change when they received the
-//     * attribute changed notification.
-//     */
-//    public function setTurnHolder (value :Name) :void
-//    {
-//        var ovalue :Name = this.turnHolder;
-//        requestAttributeChange(
-//            TURN_HOLDER, value, ovalue);
-//        this.turnHolder = value;
-//    }
-//    // AUTO-GENERATED: METHODS END
-
     /**
      * Called by a PropertySetEvent to enact a property change.
      * @return the old value
      */
-    public function applyPropertySet (
-        propName :String, value :Object, index :int) :Object
+    public function applyPropertySet (propName :String, value :Object, index :int) :Object
     {
         var oldValue :Object = _props[propName];
         if (index >= 0) {
@@ -143,20 +131,6 @@ public class EZGameObject extends GameObject
         return oldValue;
     }
 
-//    override public function writeObject (out :ObjectOutputStream) :void
-//    {
-//        super.writeObject(out);
-//
-//        out.writeObject(turnHolder);
-//        out.writeObject(ezGameService);
-//
-//        out.writeInt(_props.length);
-//        for (var key :String in _props) {
-//            out.writeUTF(key);
-//            out.writeObject(EZObjectMarshaller.encode(_props[key]));
-//        }
-//    }
-
     override public function readObject (ins :ObjectInputStream) :void
     {
         super.readObject(ins);
@@ -178,6 +152,7 @@ public class EZGameObject extends GameObject
      */
     protected function readDefaultFields (ins :ObjectInputStream) :void
     {
+        controllerOid = ins.readInt();
         turnHolder = (ins.readObject() as Name);
         userCookies = (ins.readObject() as DSet);
         ezGameService = (ins.readObject() as EZGameMarshaller);

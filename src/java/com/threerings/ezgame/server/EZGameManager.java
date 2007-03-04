@@ -47,6 +47,7 @@ import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.server.InvocationException;
 
 import com.threerings.crowd.data.BodyObject;
+import com.threerings.crowd.data.OccupantInfo;
 import com.threerings.crowd.data.PlaceObject;
 
 import com.threerings.crowd.server.CrowdServer;
@@ -92,9 +93,8 @@ public class EZGameManager extends GameManager
     }
 
     // from EZGameProvider
-    public void endTurn (
-        ClientObject caller, int nextPlayerId,
-        InvocationService.InvocationListener listener)
+    public void endTurn (ClientObject caller, int nextPlayerId,
+                         InvocationService.InvocationListener listener)
         throws InvocationException
     {
         validateStateModification(caller);
@@ -111,9 +111,8 @@ public class EZGameManager extends GameManager
     }
 
     // from EZGameProvider
-    public void endGame (
-        ClientObject caller, int[] winnerOids,
-        InvocationService.InvocationListener listener)
+    public void endGame (ClientObject caller, int[] winnerOids,
+                         InvocationService.InvocationListener listener)
         throws InvocationException
     {
         if (!_gameObj.isInPlay()) {
@@ -126,27 +125,23 @@ public class EZGameManager extends GameManager
     }
 
     // from EZGameProvider
-    public void sendMessage (
-        ClientObject caller, String msg, Object data, int playerId,
-        InvocationService.InvocationListener listener)
+    public void sendMessage (ClientObject caller, String msg, Object data, int playerId,
+                             InvocationService.InvocationListener listener)
         throws InvocationException
     {
         validateUser(caller);
 
         if (playerId == 0) {
-            _gameObj.postMessage(EZGameObject.USER_MESSAGE,
-                new Object[] { msg, data });
-
+            _gameObj.postMessage(EZGameObject.USER_MESSAGE, new Object[] { msg, data });
         } else {
             sendPrivateMessage(playerId, msg, data);
         }
     }
 
     // from EZGameProvider
-    public void setProperty (
-        ClientObject caller, String propName, Object data, int index,
-        boolean testAndSet, Object testValue,
-        InvocationService.InvocationListener listener)
+    public void setProperty (ClientObject caller, String propName, Object data, int index,
+                             boolean testAndSet, Object testValue,
+                             InvocationService.InvocationListener listener)
         throws InvocationException
     {
         validateUser(caller);
@@ -157,9 +152,8 @@ public class EZGameManager extends GameManager
     }
 
     // from EZGameProvider
-    public void getDictionaryLetterSet (
-        ClientObject caller, String locale, int count, 
-        InvocationService.ResultListener listener)
+    public void getDictionaryLetterSet (ClientObject caller, String locale, int count, 
+                                        InvocationService.ResultListener listener)
         throws InvocationException
     {
         DictionaryManager dictionary = getDictionaryManager ();
@@ -167,9 +161,8 @@ public class EZGameManager extends GameManager
     }
     
     // from EZGameProvider
-    public void checkDictionaryWord (
-        ClientObject caller, String locale, String word, 
-        InvocationService.ResultListener listener)
+    public void checkDictionaryWord (ClientObject caller, String locale, String word, 
+                                     InvocationService.ResultListener listener)
         throws InvocationException
     {
         DictionaryManager dictionary = getDictionaryManager ();
@@ -191,9 +184,9 @@ public class EZGameManager extends GameManager
     }
 
     // from EZGameProvider
-    public void addToCollection (
-        ClientObject caller, String collName, byte[][] data,
-        boolean clearExisting, InvocationService.InvocationListener listener)
+    public void addToCollection (ClientObject caller, String collName, byte[][] data,
+                                 boolean clearExisting,
+                                 InvocationService.InvocationListener listener)
         throws InvocationException
     {
         validateUser(caller);
@@ -201,8 +194,7 @@ public class EZGameManager extends GameManager
             _collections = new HashMap<String, ArrayList<byte[]>>();
         }
 
-        // figure out if we're adding to an existing collection
-        // or creating a new one
+        // figure out if we're adding to an existing collection or creating a new one
         ArrayList<byte[]> list = null;
         if (!clearExisting) {
             list = _collections.get(collName);
@@ -216,10 +208,9 @@ public class EZGameManager extends GameManager
     }
 
     // from EZGameProvider
-    public void getFromCollection (
-        ClientObject caller, String collName, boolean consume, int count,
-        String msgOrPropName, int playerId,
-        InvocationService.ConfirmListener listener)
+    public void getFromCollection (ClientObject caller, String collName, boolean consume, int count,
+                                   String msgOrPropName, int playerId,
+                                   InvocationService.ConfirmListener listener)
         throws InvocationException
     {
         validateUser(caller);
@@ -243,12 +234,10 @@ public class EZGameManager extends GameManager
 
                 if (playerId == 0) {
                     setProperty(msgOrPropName, result, -1);
-                    
                 } else {
                     sendPrivateMessage(playerId, msgOrPropName, result);
                 }
-                // SUCCESS!
-                listener.requestProcessed();
+                listener.requestProcessed(); // SUCCESS!
                 return;
             }
         }
@@ -258,15 +247,14 @@ public class EZGameManager extends GameManager
     }
     
     // from EZGameProvider
-    public void mergeCollection (
-        ClientObject caller, String srcColl, String intoColl,
-        InvocationService.InvocationListener listener)
+    public void mergeCollection (ClientObject caller, String srcColl, String intoColl,
+                                 InvocationService.InvocationListener listener)
         throws InvocationException
     {
         validateUser(caller);
 
-        // non-existent collections are treated as empty, so if the
-        // source doesn't exist, we silently accept it
+        // non-existent collections are treated as empty, so if the source doesn't exist, we
+        // silently accept it
         if (_collections != null) {
             ArrayList<byte[]> src = _collections.remove(srcColl);
             if (src != null) {
@@ -281,9 +269,8 @@ public class EZGameManager extends GameManager
     }
 
     // from EZGameProvider
-    public void setTicker (
-        ClientObject caller, String tickerName, int msOfDelay,
-        InvocationService.InvocationListener listener)
+    public void setTicker (ClientObject caller, String tickerName, int msOfDelay,
+                           InvocationService.InvocationListener listener)
         throws InvocationException
     {
         validateUser(caller);
@@ -292,11 +279,11 @@ public class EZGameManager extends GameManager
         if (msOfDelay >= MIN_TICKER_DELAY) {
             if (_tickers != null) {
                 t = _tickers.get(tickerName);
-
             } else {
                 _tickers = new HashMap<String, Ticker>();
                 t = null;
             }
+
             if (t == null) {
                 if (_tickers.size() >= MAX_TICKERS) {
                     throw new InvocationException(ACCESS_DENIED);
@@ -320,9 +307,8 @@ public class EZGameManager extends GameManager
     }
 
     // from EZGameProvider
-    public void getCookie (
-        ClientObject caller, final int playerId,
-        InvocationService.InvocationListener listener)
+    public void getCookie (ClientObject caller, final int playerId,
+                           InvocationService.InvocationListener listener)
         throws InvocationException
     {
         GameCookieManager gcm = getCookieManager();
@@ -338,31 +324,25 @@ public class EZGameManager extends GameManager
         if (!_cookieLookups.contains(playerId)) {
             BodyObject body = getOccupantByOid(playerId);
             if (body == null) {
-                log.fine("getCookie() called with invalid occupantId " +
-                    "[occupantId=" + playerId + "].");
+                log.fine("getCookie() called with invalid occupant [occupantId=" + playerId + "].");
                 throw new InvocationException(INTERNAL_ERROR);
             }
 
-            gcm.getCookie(getPersistentGameId(), body,
-                new ResultListener<byte[]>() {
-                    public void requestCompleted (byte[] result) {
-                        // Result may be null: that's ok, it means
-                        // we've looked up the user's nonexistant cookie.
-                        // Only set the cookie if the playerIndex is
-                        // still in the lookup set, otherwise they left!
-                        if (_cookieLookups.remove(playerId) &&
-                                _gameObj.isActive()) {
-                            _gameObj.addToUserCookies(
-                                new UserCookie(playerId, result));
-                        }
+            gcm.getCookie(getPersistentGameId(), body, new ResultListener<byte[]>() {
+                public void requestCompleted (byte[] result) {
+                    // Result may be null: that's ok, it means we've looked up the user's
+                    // nonexistant cookie.  Only set the cookie if the playerIndex is still in the
+                    // lookup set, otherwise they left!
+                    if (_cookieLookups.remove(playerId) && _gameObj.isActive()) {
+                        _gameObj.addToUserCookies(new UserCookie(playerId, result));
                     }
+                }
 
-                    public void requestFailed (Exception cause) {
-                        log.warning("Unable to retrieve cookie " +
-                            "[cause=" + cause + "].");
-                        requestCompleted(null);
-                    }
-                });
+                public void requestFailed (Exception cause) {
+                    log.warning("Unable to retrieve cookie [cause=" + cause + "].");
+                    requestCompleted(null);
+                }
+            });
 
             // indicate that we're looking up a cookie
             _cookieLookups.add(playerId);
@@ -370,9 +350,8 @@ public class EZGameManager extends GameManager
     }
 
     // from EZGameProvider
-    public void setCookie (
-        ClientObject caller, byte[] value,
-        InvocationService.InvocationListener listener)
+    public void setCookie (ClientObject caller, byte[] value,
+                           InvocationService.InvocationListener listener)
         throws InvocationException
     {
         validateUser(caller);
@@ -408,8 +387,8 @@ public class EZGameManager extends GameManager
     }
 
     /**
-     * Helper method to send a private message to the specified player oid
-     * (must already be verified).
+     * Helper method to send a private message to the specified player oid (must already be
+     * verified).
      */
     protected void sendPrivateMessage (
         int playerId, String msg, Object data)
@@ -421,21 +400,19 @@ public class EZGameManager extends GameManager
             throw new InvocationException("m.player_not_around");
         }
 
-        target.postMessage(
-            EZGameObject.USER_MESSAGE + ":" + _gameObj.getOid(),
-            new Object[] { msg, data });
+        target.postMessage(EZGameObject.USER_MESSAGE + ":" + _gameObj.getOid(),
+                           new Object[] { msg, data });
     }
 
     /**
      * Helper method to post a property set event.
      */
-    protected void setProperty (
-        String propName, Object value, int index)
+    protected void setProperty (String propName, Object value, int index)
     {
         // apply the property set immediately
         Object oldValue = _gameObj.applyPropertySet(propName, value, index);
-        _gameObj.postEvent(new PropertySetEvent(
-            _gameObj.getOid(), propName, value, index, oldValue));
+        _gameObj.postEvent(
+            new PropertySetEvent(_gameObj.getOid(), propName, value, index, oldValue));
     }
 
     /**
@@ -470,8 +447,7 @@ public class EZGameManager extends GameManager
     }
 
     /**
-     * Validate that the specified listener has access to make a
-     * change.
+     * Validate that the specified listener has access to make a change.
      */
     protected void validateStateModification (ClientObject caller)
         throws InvocationException
@@ -479,8 +455,7 @@ public class EZGameManager extends GameManager
         validateUser(caller);
 
         Name holder = _gameObj.turnHolder;
-        if (holder != null &&
-                !holder.equals(((BodyObject) caller).getVisibleName())) {
+        if (holder != null && !holder.equals(((BodyObject) caller).getVisibleName())) {
             throw new InvocationException(InvocationCodes.ACCESS_DENIED);
         }
     }
@@ -539,6 +514,44 @@ public class EZGameManager extends GameManager
         }
     }
 
+    @Override // from PlaceManager
+    protected void bodyEntered (int bodyOid)
+    {
+        super.bodyEntered(bodyOid);
+
+        // if we have no controller, then our new friend gets control
+        if (_gameObj.controllerOid == 0) {
+            _gameObj.setControllerOid(bodyOid);
+        }
+    }
+
+    @Override // from PlaceManager
+    protected void bodyUpdated (OccupantInfo info)
+    {
+        super.bodyUpdated(info);
+
+        // if the controller just disconnected, reassign control
+        if (info.status == OccupantInfo.DISCONNECTED && info.bodyOid == _gameObj.controllerOid) {
+            _gameObj.setControllerOid(getControllerOid());
+
+        // if everyone in the room was disconnected and this client just reconnected, it becomes
+        // the new controller
+        } else if (_gameObj.controllerOid == 0) {
+            _gameObj.setControllerOid(info.bodyOid);
+        }
+    }
+
+    @Override // from PlaceManager
+    protected void bodyLeft (int bodyOid)
+    {
+        super.bodyLeft(bodyOid);
+
+        // if this player was the controller, reassign control
+        if (bodyOid == _gameObj.controllerOid) {
+            _gameObj.setControllerOid(getControllerOid());
+        }
+    }
+
     @Override
     protected void didShutdown ()
     {
@@ -562,8 +575,7 @@ public class EZGameManager extends GameManager
         super.playerGameDidEnd(pidx);
 
         // kill any of their cookies
-        if (_gameObj.userCookies != null &&
-                _gameObj.userCookies.containsKey(pidx)) {
+        if (_gameObj.userCookies != null && _gameObj.userCookies.containsKey(pidx)) {
             _gameObj.removeFromUserCookies(pidx);
         }
         // halt the loading of their cookie, if in progress
@@ -600,6 +612,20 @@ public class EZGameManager extends GameManager
     }
 
     /**
+     * Returns the oid of a player to whom to assign control of the game or zero if no players
+     * qualify for control.
+     */
+    protected int getControllerOid ()
+    {
+        for (OccupantInfo info : _gameObj.occupantInfo) {
+            if (info.status != OccupantInfo.DISCONNECTED) {
+                return info.bodyOid;
+            }
+        }
+        return 0;
+    }
+
+    /**
      * A timer that fires message events to a game.
      */
     protected static class Ticker
@@ -610,8 +636,7 @@ public class EZGameManager extends GameManager
         public Ticker (String name, EZGameObject gameObj)
         {
             _name = name;
-            // once we are constructed, we want to avoid calling
-            // methods on dobjs.
+            // once we are constructed, we want to avoid calling methods on dobjs.
             _oid = gameObj.getOid();
             _omgr = gameObj.getManager();
         }
@@ -627,20 +652,17 @@ public class EZGameManager extends GameManager
             _interval.cancel();
         }
 
-        /** The interval that does our work. Note well that this is
-         * not a 'safe' interval that operates using a RunQueue.
-         * This interval instead does something that we happen to know
-         * is safe for any thread: posting an event to the dobj manager.
-         * If we were using a RunQueue it would be the same event queue
-         * and we would be posted there, wait our turn, and then do the same
-         * thing: post this event. We just expedite the process.
+        /**
+         * The interval that does our work. Note well that this is not a 'safe' interval that
+         * operates using a RunQueue.  This interval instead does something that we happen to know
+         * is safe for any thread: posting an event to the dobj manager.  If we were using a
+         * RunQueue it would be the same event queue and we would be posted there, wait our turn,
+         * and then do the same thing: post this event. We just expedite the process.
          */
         protected Interval _interval = new Interval() {
-            public void expired ()
-            {
+            public void expired () {
                 _omgr.postEvent(
-                    new MessageEvent(_oid, EZGameObject.TICKER,
-                        new Object[] { _name, _value++ }));
+                    new MessageEvent(_oid, EZGameObject.TICKER, new Object[] { _name, _value++ }));
             }
         };
 

@@ -25,6 +25,8 @@ import flash.events.Event;
 
 import com.threerings.util.Name;
 
+import com.threerings.presents.dobj.AttributeChangedEvent;
+
 import com.threerings.crowd.client.PlaceView;
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceConfig;
@@ -44,22 +46,21 @@ import com.threerings.ezgame.data.EZGameObject;
 public class EZGameController extends GameController
     implements TurnGameController
 {
-    /**
-     */
     public function EZGameController ()
     {
         addDelegate(_turnDelegate = new TurnGameControllerDelegate(this));
     }
 
     /**
-     * This is called by the GameControlBackend once it has initialized
-     * and made contact with usercode.
+     * This is called by the GameControlBackend once it has initialized and made contact with
+     * usercode.
      */
     public function userCodeIsConnected () :void
     {
         playerReady();
     }
 
+    // from PlaceController
     override public function willEnterPlace (plobj :PlaceObject) :void
     {
         _ezObj = (plobj as EZGameObject);
@@ -67,6 +68,7 @@ public class EZGameController extends GameController
         super.willEnterPlace(plobj);
     }
 
+    // from PlaceController
     override public function didLeavePlace (plobj :PlaceObject) :void
     {
         super.didLeavePlace(plobj);
@@ -80,13 +82,24 @@ public class EZGameController extends GameController
         _panel.backend.turnDidChange();
     }
 
+    // from GameController
+    override public function attributeChanged (event :AttributeChangedEvent) :void
+    {
+        var name :String = event.getName();
+        if (EZGameObject.CONTROLLER_OID == name) {
+            _panel.backend.controlDidChange();
+        } else {
+            super.attributeChanged(event);
+        }
+    }
+
+    // from GameController
     override protected function playerReady () :void
     {
-        // we require the user to be connected, and we redundantly only
-        // do this if the user is in the players array
+        // we require the user to be connected, and we redundantly only do this if the user is in
+        // the players array
         if (_panel.backend.isConnected()) {
-            var bobj :BodyObject =
-                (_ctx.getClient().getClientObject() as BodyObject);
+            var bobj :BodyObject = (_ctx.getClient().getClientObject() as BodyObject);
             if (_gobj.getPlayerIndex(bobj.getVisibleName()) != -1) {
                 super.playerReady();
             }
@@ -96,36 +109,28 @@ public class EZGameController extends GameController
         }
     }
 
+    // from GameController
     override protected function gameDidStart () :void
     {
         super.gameDidStart();
-
         _panel.backend.gameDidStart();
     }
 
+    // from GameController
     override protected function gameDidEnd () :void
     {
         super.gameDidEnd();
-
         _panel.backend.gameDidEnd();
     }
 
+    // from PlaceController
     override protected function createPlaceView (ctx :CrowdContext) :PlaceView
     {
-        return new EZGamePanel(ctx, this);
-    }
-
-    override protected function didInit () :void
-    {
-        super.didInit();
-        // retain a casted reference to our panel
-        _panel = (_view as EZGamePanel);
+        return _panel = new EZGamePanel(ctx, this);
     }
 
     protected var _ezObj :EZGameObject;
-
     protected var _turnDelegate :TurnGameControllerDelegate;
-
     protected var _panel :EZGamePanel;
 }
 }

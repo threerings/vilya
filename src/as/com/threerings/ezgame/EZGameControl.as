@@ -45,6 +45,13 @@ import flash.display.DisplayObject;
 [Event(name="keyUp", type="flash.events.KeyboardEvent")]
 
 /**
+ * Dispatched when the controller changes for the game.
+ *
+ * @eventType com.threerings.ezgame.StateChangedEvent.CONTROL_CHANGED
+ */
+[Event(name="ControlChanged", type="com.threerings.ezgame.StateChangedEvent")]
+
+/**
  * Dispatched when the game starts, usually after all players are present.
  *
  * @eventType com.threerings.ezgame.StateChangedEvent.GAME_STARTED
@@ -56,7 +63,7 @@ import flash.display.DisplayObject;
  *
  * @eventType com.threerings.ezgame.StateChangedEvent.TURN_CHANGED
  */
-[Event(name="GameStarted", type="com.threerings.ezgame.StateChangedEvent")]
+[Event(name="TurnChanged", type="com.threerings.ezgame.StateChangedEvent")]
 
 /**
  * Dispatched when the game ends.
@@ -73,8 +80,7 @@ import flash.display.DisplayObject;
 [Event(name="PropChanged", type="com.threerings.ezgame.PropertyChangedEvent")]
 
 /**
- * Dispatched when a message arrives with information that is not part
- * of the shared game state.
+ * Dispatched when a message arrives with information that is not part of the shared game state.
  *
  * @eventType com.threerings.ezgame.MessageReceivedEvent.TYPE
  */
@@ -89,8 +95,7 @@ import flash.display.DisplayObject;
 public class EZGameControl extends BaseControl
 {
     /**
-     * Create an EZGameControl object using some display object currently
-     * on the hierarchy.
+     * Create an EZGameControl object using some display object currently on the hierarchy.
      */
     public function EZGameControl (disp :DisplayObject)
     {
@@ -114,8 +119,7 @@ public class EZGameControl extends BaseControl
         type :String, listener :Function, useCapture :Boolean = false,
         priority :int = 0, useWeakReference :Boolean = false) :void
     {
-        super.addEventListener(type, listener, useCapture, priority,
-            useWeakReference);
+        super.addEventListener(type, listener, useCapture, priority, useWeakReference);
 
         switch (type) {
         case KeyboardEvent.KEY_UP:
@@ -144,8 +148,8 @@ public class EZGameControl extends BaseControl
     }
 
     /**
-     * Are we connected and running inside the EZGame environment, or
-     * has someone just loaded up this swf by itself?
+     * Are we connected and running inside the EZGame environment, or has someone just loaded up
+     * this swf by itself?
      */
     public function isConnected () :Boolean
     {
@@ -153,8 +157,8 @@ public class EZGameControl extends BaseControl
     }
 
     /**
-     * Get the CollectionsControl, which contains methods for utilizing
-     * the server to dispatch private information.
+     * Get the CollectionsControl, which contains methods for utilizing the server to dispatch
+     * private information.
      */
     public function get collections () :CollectionsControl
     {
@@ -165,8 +169,8 @@ public class EZGameControl extends BaseControl
     }
 
     /**
-     * Get the SeatingControl, which contains methods for checking
-     * and assigning player seating positions.
+     * Get the SeatingControl, which contains methods for checking and assigning player seating
+     * positions.
      */
     public function get seating () :SeatingControl
     {
@@ -186,8 +190,7 @@ public class EZGameControl extends BaseControl
                 return (value as Array)[index];
 
             } else {
-                throw new ArgumentError("Property " + propName +
-                    " is not an array.");
+                throw new ArgumentError("Property " + propName + " is not an array.");
             }
         }
         return value;
@@ -202,13 +205,12 @@ public class EZGameControl extends BaseControl
     }
 
     /**
-     * Set a property, but have this client immediately set the value so that
-     * it can be re-read. The property change event will still arrive and
-     * will be your clue as to when the other clients will see the newly
-     * set value. Be careful with this method, as it can allow data
-     * inconsistency: two clients may see different values for a property
-     * if one of them recently set it immediately, and the resultant
-     * PropertyChangedEvent's oldValue also may not be consistent.
+     * Set a property, but have this client immediately set the value so that it can be
+     * re-read. The property change event will still arrive and will be your clue as to when the
+     * other clients will see the newly set value. Be careful with this method, as it can allow
+     * data inconsistency: two clients may see different values for a property if one of them
+     * recently set it immediately, and the resultant PropertyChangedEvent's oldValue also may not
+     * be consistent.
      */
     public function setImmediate (propName :String, value :Object, index :int = -1) :void
     {
@@ -216,18 +218,17 @@ public class EZGameControl extends BaseControl
     }
 
     /**
-     * Set a property that will be distributed, but only if it's equal
-     * to the specified test value.
+     * Set a property that will be distributed, but only if it's equal to the specified test value.
      *
-     * Please note that, unlike in the standard set() function, the property
-     * will not be updated right away, but will require a request to the server
-     * and a response back. For this reason, there may be a considerable delay
-     * between calling testAndSet, and seeing the result of the update.
+     * <p> Please note that, unlike in the standard set() function, the property will not be
+     * updated right away, but will require a request to the server and a response back. For this
+     * reason, there may be a considerable delay between calling testAndSet, and seeing the result
+     * of the update.
      *
-     * The operation is 'atomic', in the sense that testing and setting take place
-     * during the same server event. In comparison, a separate 'get' followed by
-     * a 'set' operation would involve two events with two network round-trips,
-     * and no guarantee that the value won't change between the events.
+     * <p> The operation is 'atomic', in the sense that testing and setting take place during the
+     * same server event. In comparison, a separate 'get' followed by a 'set' operation would
+     * involve two events with two network round-trips, and no guarantee that the value won't
+     * change between the events.
      */
     public function testAndSet (
         propName :String, newValue :Object, testValue :Object, index :int = -1) :void
@@ -236,41 +237,31 @@ public class EZGameControl extends BaseControl
     }
 
     /**
-     * Register an object to receive whatever events it should receive,
-     * based on which event listeners it implements.
+     * Register an object to receive whatever events it should receive, based on which event
+     * listeners it implements.
      */
     public function registerListener (obj :Object) :void
     {
         if (obj is MessageReceivedListener) {
             var mrl :MessageReceivedListener = (obj as MessageReceivedListener);
-            addEventListener(
-                MessageReceivedEvent.TYPE, mrl.messageReceived,
-                false, 0, true);
+            addEventListener(MessageReceivedEvent.TYPE, mrl.messageReceived, false, 0, true);
         }
         if (obj is PropertyChangedListener) {
             var pcl :PropertyChangedListener = (obj as PropertyChangedListener);
-            addEventListener(
-                PropertyChangedEvent.TYPE, pcl.propertyChanged,
-                false, 0, true);
+            addEventListener(PropertyChangedEvent.TYPE, pcl.propertyChanged, false, 0, true);
         }
         if (obj is StateChangedListener) {
             var scl :StateChangedListener = (obj as StateChangedListener);
-            addEventListener(
-                StateChangedEvent.GAME_STARTED, scl.stateChanged,
-                false, 0, true);
-            addEventListener(
-                StateChangedEvent.TURN_CHANGED, scl.stateChanged,
-                false, 0, true);
-            addEventListener(
-                StateChangedEvent.GAME_ENDED, scl.stateChanged,
-                false, 0, true);
+            addEventListener(StateChangedEvent.CONTROL_CHANGED, scl.stateChanged, false, 0, true);
+            addEventListener(StateChangedEvent.GAME_STARTED, scl.stateChanged, false, 0, true);
+            addEventListener(StateChangedEvent.TURN_CHANGED, scl.stateChanged, false, 0, true);
+            addEventListener(StateChangedEvent.GAME_ENDED, scl.stateChanged, false, 0, true);
         }
         if (obj is OccupantChangedListener) {
             var ocl :OccupantChangedListener = (obj as OccupantChangedListener);
             addEventListener(OccupantChangedEvent.OCCUPANT_ENTERED, ocl.occupantEntered,
-                false, 0, true);
-            addEventListener(OccupantChangedEvent.OCCUPANT_LEFT, ocl.occupantLeft,
-                false, 0, true);
+                             false, 0, true);
+            addEventListener(OccupantChangedEvent.OCCUPANT_LEFT, ocl.occupantLeft, false, 0, true);
         }
     }
 
@@ -306,61 +297,54 @@ public class EZGameControl extends BaseControl
     }
 
     /**
-     * Requests a set of random letters from the dictionary service.
-     * The letters will arrive in a separate message with the specified key,
-     * as an array of strings.
+     * Requests a set of random letters from the dictionary service.  The letters will arrive in a
+     * separate message with the specified key, as an array of strings.
      *
      * @param locale RFC 3066 string that represents language settings
      * @param count the number of letters to be produced
      * @param callback the function that will process the results, of the form:
-     *          function (letters :Array) :void
-     *        where letters is an array of strings containing letters
-     *        for the given language settings (potentially empty).
+     * <pre>function (letters :Array) :void</pre>
+     * where letters is an array of strings containing letters for the given language settings
+     * (potentially empty).
      */
-    public function getDictionaryLetterSet (
-        locale :String, count :int, callback :Function) :void
+    public function getDictionaryLetterSet (locale :String, count :int, callback :Function) :void
     {
         callEZCode("getDictionaryLetterSet_v1", locale, count, callback);
     }
 
     /**
-     * Requests a set of random letters from the dictionary service.
-     * The letters will arrive in a separate message with the specified key,
-     * as an array of strings.
+     * Requests a set of random letters from the dictionary service.  The letters will arrive in a
+     * separate message with the specified key, as an array of strings.
      *
      * @param RFC 3066 string that represents language settings
      * @param word the string contains the word to be checked
      * @param callback the function that will process the results, of the form:
-     *          function (word :String, result :Boolean) :void
-     *        where word is a copy of the word that was requested, and result
-     *        specifies whether the word is valid given language settings
+     * <pre>function (word :String, result :Boolean) :void</pre>
+     * where word is a copy of the word that was requested, and result specifies whether the word
+     * is valid given language settings
      */
-    public function checkDictionaryWord (
-        locale :String, word :String, callback :Function) :void
+    public function checkDictionaryWord (locale :String, word :String, callback :Function) :void
     {
         callEZCode("checkDictionaryWord_v1", locale, word, callback);
     }
 
     /**
-     * Send a "message" to other clients subscribed to the game.
-     * These is similar to setting a property, except that the
-     * value will not be saved- it will merely end up coming out
-     * as a MessageReceivedEvent.
+     * Send a "message" to other clients subscribed to the game.  These is similar to setting a
+     * property, except that the value will not be saved- it will merely end up coming out as a
+     * MessageReceivedEvent.
      *
-     * @param playerId if 0 (or unset), sends to all players, otherwise
-     * the message will be private to just one player
+     * @param playerId if 0 (or unset), sends to all players, otherwise the message will be private
+     * to just one player
      */
-    public function sendMessage (
-        messageName :String, value :Object, playerId :int = 0) :void
+    public function sendMessage (messageName :String, value :Object, playerId :int = 0) :void
     {
         callEZCode("sendMessage_v2", messageName, value, playerId);
     }
 
     /**
-     * Start the ticker with the specified name. It will deliver
-     * messages to the game object at the specified delay,
-     * the value of each message being a single integer, starting with 0
-     * and increasing by one with each messsage.
+     * Start the ticker with the specified name. It will deliver messages to the game object at the
+     * specified delay, the value of each message being a single integer, starting with 0 and
+     * increasing by one with each messsage.
      */
     public function startTicker (tickerName :String, msOfDelay :int) :void
     {
@@ -376,8 +360,7 @@ public class EZGameControl extends BaseControl
     }
 
     /**
-     * Send a message that will be heard by everyone in the game room,
-     * even observers.
+     * Send a message that will be heard by everyone in the game room, even observers.
      */
     public function sendChat (msg :String) :void
     {
@@ -385,25 +368,25 @@ public class EZGameControl extends BaseControl
     }
 
     /**
-     * Display the specified message immediately locally: not sent
-     * to any other players or observers in the game room.
+     * Display the specified message immediately locally: not sent to any other players or
+     * observers in the game room.
      */
     public function localChat (msg :String) :void
     {
         callEZCode("localChat_v1", msg);
     }
 
-    // TODO: NEW
+    /**
+     * Returns the player ids of all occupants in the game room.
+     */
     public function getOccupants () :Array /* of playerId */
     {
         return (callEZCode("getOccupants_v1") as Array);
     }
 
-    // TODO: NEW
     /**
-     * Get the display name of the specified occupant.
-     * Two players may have the same name: always use playerId to
-     * purposes of identification and comparison. The name is for display
+     * Get the display name of the specified occupant.  Two players may have the same name: always
+     * use playerId to purposes of identification and comparison. The name is for display
      * only. Will be null is the specified playerId is not in the game.
      */
     public function getOccupantName (playerId :int) :String
@@ -411,21 +394,42 @@ public class EZGameControl extends BaseControl
         return String(callEZCode("getOccupantName_v1", playerId));
     }
 
-    // TODO: NEW
+    /**
+     * Returns this client's player id.
+     */
     public function getMyId () :int
     {
         return int(callEZCode("getMyId_v1"));
     }
 
+    /**
+     * Returns true if we are in control of this game. False if another client is in control.
+     */
+    public function amInControl () :Boolean
+    {
+        return getControllerId() == getMyId();
+    }
+
+    /**
+     * Returns the player id of the client that is in control of this game.
+     */
+    public function getControllerId () :int
+    {
+        return int(callEZCode("getControllerId_v1"));
+    }
+
+    /**
+     * Returns the player id of the current turn holder.
+     */
     public function getTurnHolder () :int
     {
         return int(callEZCode("getTurnHolder_v1"));
     }
 
     /**
-     * Get the user-specific game data for the specified user. The
-     * first time this is requested per game instance it will be retrieved
-     * from the database. After that, it will be returned from memory.
+     * Get the user-specific game data for the specified user. The first time this is requested per
+     * game instance it will be retrieved from the database. After that, it will be returned from
+     * memory.
      */
     public function getUserCookie (occupantId :int, callback :Function) :void
     {
@@ -433,18 +437,14 @@ public class EZGameControl extends BaseControl
     }
 
     /**
-     * Store persistent data that can later be retrieved by an instance
-     * of this game. The maximum size of this data is 4096 bytes AFTER
-     * AMF3 encoding.
+     * Store persistent data that can later be retrieved by an instance of this game. The maximum
+     * size of this data is 4096 bytes AFTER AMF3 encoding.  Note: there is no playerId parameter
+     * because a cookie may only be stored for the current player.
      *
-     * Note: there is no playerIndex parameter because a cookie may only
-     * be stored for the current player.
-     *
-     * @return false if the cookie could not be encoded to 4096 bytes
-     * or less; true if the cookie is going to try to be saved. There is
-     * no guarantee it will be saved and no way to find out if it failed,
-     * but if it fails it will be because the shit hit the fan so hard that
-     * there's nothing you can do anyway.
+     * @return false if the cookie could not be encoded to 4096 bytes or less; true if the cookie
+     * is going to try to be saved. There is no guarantee it will be saved and no way to find out
+     * if it failed, but if it fails it will be because the shit hit the fan so hard that there's
+     * nothing you can do anyway.
      */
     public function setUserCookie (cookie :Object) :Boolean
     {
@@ -468,8 +468,8 @@ public class EZGameControl extends BaseControl
     }
 
     /**
-     * End the current turn. If no next player id is specified,
-     * then the next player after the current one is used.
+     * End the current turn. If no next player id is specified, then the next player after the
+     * current one is used.
      */
     public function endTurn (nextPlayerId :int = 0) :void
     {
@@ -489,12 +489,13 @@ public class EZGameControl extends BaseControl
     }
 
     /**
-     * Populate any properties or functions we want to expose to
-     * the other side of the ezgame security boundary.
+     * Populate any properties or functions we want to expose to the other side of the ezgame
+     * security boundary.
      */
     protected function populateProperties (o :Object) :void
     {
         o["propertyWasSet_v1"] = propertyWasSet_v1;
+        o["controlDidChange_v1"] = controlDidChange_v1;
         o["turnDidChange_v1"] = turnDidChange_v1;
         o["messageReceived_v1"] = messageReceived_v1;
         o["gameDidStart_v1"] = gameDidStart_v1;
@@ -511,6 +512,14 @@ public class EZGameControl extends BaseControl
     {
         dispatch(
             new PropertyChangedEvent(this, name, newValue, oldValue, index));
+    }
+
+    /**
+     * Private method to post a StateChangedEvent.
+     */
+    private function controlDidChange_v1 () :void
+    {
+        dispatch(new StateChangedEvent(StateChangedEvent.CONTROL_CHANGED, this));
     }
 
     /**
@@ -551,14 +560,13 @@ public class EZGameControl extends BaseControl
     private function occupantChanged_v1 (occupantId :int, player :Boolean, enter :Boolean) :void
     {
         dispatch(new OccupantChangedEvent(
-            enter ? OccupantChangedEvent.OCCUPANT_ENTERED
-                  : OccupantChangedEvent.OCCUPANT_LEFT, 
-            this, occupantId, player));
+                     enter ? OccupantChangedEvent.OCCUPANT_ENTERED :
+                     OccupantChangedEvent.OCCUPANT_LEFT, this, occupantId, player));
     }
 
     /**
-     * Sets the properties we received from the EZ game framework
-     * on the other side of the security boundary.
+     * Sets the properties we received from the EZ game framework on the other side of the security
+     * boundary.
      */
     protected function setEZProps (o :Object) :void
     {
@@ -606,9 +614,9 @@ public class EZGameControl extends BaseControl
     protected function checkIsConnected () :void
     {
         if (!isConnected()) {
-            throw new IllegalOperationError("The game is not connected " +
-                "to The Whirled, please check isConnected(). If false, your " +
-                "game is being viewed standalone and should adjust.");
+            throw new IllegalOperationError(
+                "The game is not connected to The Whirled, please check isConnected(). " +
+                "If false, your game is being viewed standalone and should adjust.");
         }
     }
 

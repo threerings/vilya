@@ -189,6 +189,7 @@ public class GameControlBackend
         o["sendMessage_v2"] = sendMessage_v2;
         o["getOccupants_v1"] = getOccupants_v1;
         o["getMyId_v1"] = getMyId_v1;
+        o["getControllerId_v1"] = getControllerId_v1;
         o["getUserCookie_v2"] = getUserCookie_v2;
         o["endTurn_v2"] = endTurn_v2;
         o["endGame_v2"] = endGame_v2;
@@ -314,6 +315,11 @@ public class GameControlBackend
     public function getMyId_v1 () :int
     {
         return _ctx.getClient().getClientObject().getOid();
+    }
+
+    public function getControllerId_v1 () :int
+    {
+        return _ezObj.controllerOid;
     }
 
     // TODO: table games only
@@ -657,6 +663,14 @@ public class GameControlBackend
         for each (var arrValue :Object in (value as Array)) {
             validateValue(arrValue);
         }
+    }
+
+    /**
+     * Called by the EZGameController when the controller changes.
+     */
+    public function controlDidChange () :void
+    {
+        callUserCode("controlDidChange_v1");
     }
 
     /**

@@ -34,6 +34,9 @@ public class StateChangedEvent extends EZEvent
     /** Indicates that the game has transitioned to a ended state. */
     public static const GAME_ENDED :String = "GameEnded";
 
+    /** Indicates that a new controller has been assigned. */
+    public static const CONTROL_CHANGED :String = "ControlChanged";
+
     /** Indicates that the turn has changed. */
     // TODO: move to own event?
     public static const TURN_CHANGED :String = "TurnChanged";

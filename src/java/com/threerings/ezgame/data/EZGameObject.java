@@ -58,6 +58,9 @@ public class EZGameObject extends GameObject
     public static final String TICKER = "Utick";
 
     // AUTO-GENERATED: FIELDS START
+    /** The field name of the <code>controllerOid</code> field. */
+    public static final String CONTROLLER_OID = "controllerOid";
+
     /** The field name of the <code>turnHolder</code> field. */
     public static final String TURN_HOLDER = "turnHolder";
 
@@ -67,6 +70,10 @@ public class EZGameObject extends GameObject
     /** The field name of the <code>ezGameService</code> field. */
     public static final String EZ_GAME_SERVICE = "ezGameService";
     // AUTO-GENERATED: FIELDS END
+
+    /** The client that is in control of this game. The first client to enter will be assigned
+     * control and control will subsequently be reassigned if that client disconnects or leaves. */
+    public int controllerOid;
 
     /** The current turn holder. */
     public Name turnHolder;
@@ -223,6 +230,22 @@ public class EZGameObject extends GameObject
         
 
     // AUTO-GENERATED: METHODS START
+    /**
+     * Requests that the <code>controllerOid</code> field be set to the
+     * specified value. The local value will be updated immediately and an
+     * event will be propagated through the system to notify all listeners
+     * that the attribute did change. Proxied copies of this object (on
+     * clients) will apply the value change when they received the
+     * attribute changed notification.
+     */
+    public void setControllerOid (int value)
+    {
+        int ovalue = this.controllerOid;
+        requestAttributeChange(
+            CONTROLLER_OID, Integer.valueOf(value), Integer.valueOf(ovalue));
+        this.controllerOid = value;
+    }
+
     /**
      * Requests that the <code>turnHolder</code> field be set to the
      * specified value. The local value will be updated immediately and an
