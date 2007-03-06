@@ -585,9 +585,7 @@ public class EZGameControl extends BaseControl
                     return func.apply(null, args);
                 }
             } catch (err :Error) {
-                trace("Unable to call ez code: " + err);
-                trace(err.getStackTrace());
-                //Log.testing(err.getStackTrace());
+                throw new Error("Unable to call host code: " + err.message);
             }
 
         } else {
