@@ -318,11 +318,8 @@ public class TableManager
     protected int createGame (final Table table)
         throws InvocationException
     {
-        // fill the players array into the game config
-        table.config.players = table.getPlayers();
-
         try {
-            PlaceManager pmgr = CrowdServer.plreg.createPlace(table.config);
+            PlaceManager pmgr = CrowdServer.plreg.createPlace(createConfig(table));
             GameObject gobj = (GameObject) pmgr.getPlaceObject();
             gameCreated(table, gobj);
             return gobj.getOid();
@@ -332,6 +329,18 @@ public class TableManager
                         "[config=" + table.config + "]: " + t);
             throw new InvocationException(INTERNAL_ERROR);
         }
+    }
+
+    /**
+     * This method should validate that the (client provided) configuration in the supplied {@link
+     * Table} object is valid and fill in any extra information that is the purview of the server.
+     */
+    protected GameConfig createConfig (Table table)
+    {
+        // fill the players array into the game config
+        table.config.players = table.getPlayers();
+        // we just trust the rest by default, yay!
+        return table.config;
     }
 
     /**
