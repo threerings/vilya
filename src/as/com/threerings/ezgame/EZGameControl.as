@@ -479,13 +479,9 @@ public class EZGameControl extends BaseControl
     /**
      * End the game. The specified player ids are winners!
      */
-    public function endGame (... winnerIds) :void
+    public function endGame (winnerIds :Array) :void
     {
-        var args :Array = winnerIds;
-        args.unshift("endGame_v2");
-
-        // goddamn var-args complications in actionscript
-        callEZCode.apply(null, args);
+        callEZCode("endGame_v2", winnerIds);
     }
 
     /**
@@ -590,6 +586,8 @@ public class EZGameControl extends BaseControl
                 }
             } catch (err :Error) {
                 trace("Unable to call ez code: " + err);
+                trace(err.getStackTrace());
+                //Log.testing(err.getStackTrace());
             }
 
         } else {
