@@ -63,7 +63,7 @@ public class EZGamePanel extends Canvas
         _ezObj = (plobj as EZGameObject);
         backend = createBackend();
 
-        _gameView = new GameContainer(cfg.configData); // TODO?
+        _gameView = new GameContainer(cfg.gameMedia);
         _gameView.percentWidth = 100;
         _gameView.percentHeight = 100;
         backend.setSharedEvents(

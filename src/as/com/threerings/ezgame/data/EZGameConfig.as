@@ -40,18 +40,18 @@ import com.threerings.ezgame.client.EZGameController;
 public class EZGameConfig extends GameConfig
     implements Hashable
 {
-    // TODO: this will eventually contain various XML configuration bits,
-    // or we'll expand this to contain other information.
-    // For now, the configData is either a classname or url.
-    public var configData :String;
-
-    // TODO: this is separate right now, but may eventually be extracted
-    // from configData? Do not read this value, use getGameType()
-    public var gameType :int = SEATED_GAME;
+    /** The name of the game. */
+    public var name :String;
 
     /** If non-zero, a game id used to persistently identify the game.
      * This could be thought of as a new-style rating id. */
     public var persistentGameId:int;
+
+    /** The media for the game. In flash, this is the URL to the SWF file. */
+    public var gameMedia :String;
+
+    /** The game type. */
+    public var gameType :int = SEATED_GAME;
 
     public function EZGameConfig ()
     {
@@ -75,7 +75,7 @@ public class EZGameConfig extends GameConfig
 
     override public function getGameName () :String
     {
-        return MessageBundle.taint(configData);
+        return MessageBundle.taint(name);
     }
 
     // from PlaceConfig
@@ -92,7 +92,7 @@ public class EZGameConfig extends GameConfig
 
     override public function hashCode () :int
     {
-        return super.hashCode(); // TODO: incorporate configData?
+        return super.hashCode() ^ persistentGameId;
     }
 
     override public function equals (other :Object) :Boolean
@@ -102,7 +102,8 @@ public class EZGameConfig extends GameConfig
         }
 
         var that :EZGameConfig = (other as EZGameConfig);
-        return (this.configData === that.configData);
+        return (this.persistentGameId == that.persistentGameId) &&
+            (this.gameMedia === that.gameMedia);
     }
 
     // from interface Streamable
@@ -110,9 +111,10 @@ public class EZGameConfig extends GameConfig
     {
         super.readObject(ins);
 
-        configData = (ins.readField(String) as String);
-        gameType = ins.readByte();
+        name = (ins.readField(String) as String)
         persistentGameId = ins.readInt();
+        gameMedia = (ins.readField(String) as String);
+        gameType = ins.readByte();
     }
 
     // from interface Streamable
@@ -120,9 +122,10 @@ public class EZGameConfig extends GameConfig
     {
         super.writeObject(out);
 
-        out.writeField(configData);
-        out.writeByte(gameType);
+        out.writeField(name);
         out.writeInt(persistentGameId);
+        out.writeField(gameMedia);
+        out.writeByte(gameType);
     }
 }
 }

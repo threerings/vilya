@@ -58,8 +58,7 @@ public class EZGamePanel extends JPanel
 
         EZGameConfig cfg = (EZGameConfig) ctrl.getPlaceConfig();
         try {
-            // TODO
-            _gameView = (Component) Class.forName(cfg.configData).newInstance();
+            _gameView = (Component) Class.forName(cfg.gameMedia).newInstance();
             add(_gameView);
         } catch (RuntimeException re) {
             throw re;

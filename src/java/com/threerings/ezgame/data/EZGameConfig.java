@@ -35,18 +35,19 @@ import com.threerings.ezgame.client.EZGameController;
  */
 public class EZGameConfig extends GameConfig
 {
-    // TODO: this will eventually contain various XML configuration bits,
-    // or we'll expand this to contain other information.
-    // For now, the configData is either a classname or url.
-    public String configData;
-
-    // TODO: this is separate right now, but may eventually be extracted
-    // from configData? Do not read this value, use getGameType()
-    public byte gameType = SEATED_GAME;
+    /** The name of the game. */
+    public String name;
 
     /** If non-zero, a game id used to persistently identify the game.
      * This could be thought of as a new-style rating id. */
     public int persistentGameId;
+
+    /** The media for the game. In flash this is the URL to the SWF file.
+     * In Java, this will be a class name, or maybe a Jar. TODO? */
+    public String gameMedia;
+
+    /** The game type. */
+    public byte gameType = SEATED_GAME;
 
     @Override
     public byte getGameType ()
@@ -70,7 +71,7 @@ public class EZGameConfig extends GameConfig
     @Override
     public String getGameName ()
     {
-        return MessageBundle.taint(configData);
+        return MessageBundle.taint(name);
     }
 
     @Override // from PlaceConfig
@@ -93,12 +94,13 @@ public class EZGameConfig extends GameConfig
         }
 
         EZGameConfig that = (EZGameConfig) other;
-        return this.configData.equals(that.configData);
+        return this.persistentGameId == that.persistentGameId &&
+            this.gameMedia.equals(that.gameMedia);
     }
 
     @Override
     public int hashCode ()
     {
-        return super.hashCode(); // TODO: incorp configData?
+        return super.hashCode() ^ persistentGameId;
     }
 }
