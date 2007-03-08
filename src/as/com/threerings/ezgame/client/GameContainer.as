@@ -44,13 +44,16 @@ import com.threerings.flash.MediaContainer;
 // 
 public class GameContainer extends VBox
 {
+    public var keyGrabber :TextField = new TextField();
+
     public function GameContainer (url :String)
     {
-        rawChildren.addChild(_keyGrabber = new TextField());
-        _keyGrabber.selectable = false;
+        keyGrabber.selectable = false;
+        rawChildren.addChild(keyGrabber);
+
         rawChildren.addChild(_game = new MediaContainer(url));
 
-        tabEnabled = true; // turned off by Container
+//        tabEnabled = true; // turned off by Container
 //        focusRect = true; // we need the focus rect
     }
 
@@ -62,8 +65,8 @@ public class GameContainer extends VBox
     override public function setActualSize (w :Number, h :Number) :void
     {
         super.setActualSize(w, h);
-        _keyGrabber.width = w;
-        _keyGrabber.height = h;
+        keyGrabber.width = w;
+        keyGrabber.height = h;
     }
 
 //    override public function setFocus () :void
