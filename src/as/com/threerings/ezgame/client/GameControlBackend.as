@@ -521,9 +521,9 @@ public class GameControlBackend
         keyEventType :String, add :Boolean) :void
     {
         if (add) {
-            _container.keyGrabber.addEventListener(keyEventType, handleKeyEvent);
+            _container.addEventListener(keyEventType, handleKeyEvent);
         } else {
-            _container.keyGrabber.removeEventListener(keyEventType, handleKeyEvent);
+            _container.removeEventListener(keyEventType, handleKeyEvent);
         }
     }
 
