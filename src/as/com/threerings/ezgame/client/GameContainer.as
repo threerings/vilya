@@ -25,15 +25,13 @@ import flash.display.DisplayObject;
 
 import flash.geom.Rectangle;
 
+import flash.text.TextField;
+
 import mx.core.mx_internal;
 import mx.core.IFlexDisplayObject;
 import mx.core.IInvalidating;
 
 import mx.containers.VBox;
-
-import mx.managers.IFocusManagerComponent;
-
-import mx.skins.ProgrammaticSkin;
 
 import com.threerings.flash.MediaContainer;
 
@@ -45,10 +43,11 @@ import com.threerings.flash.MediaContainer;
 //    damn thing doesn't seem to grip onto the focus.
 // 
 public class GameContainer extends VBox
-    implements IFocusManagerComponent
 {
     public function GameContainer (url :String)
     {
+        rawChildren.addChild(_keyGrabber = new TextField());
+        _keyGrabber.selectable = false;
         rawChildren.addChild(_game = new MediaContainer(url));
 
         tabEnabled = true; // turned off by Container
@@ -58,6 +57,13 @@ public class GameContainer extends VBox
     public function getMediaContainer () :MediaContainer
     {
         return _game;
+    }
+
+    override public function setActualSize (w :Number, h :Number) :void
+    {
+        super.setActualSize(w, h);
+        _keyGrabber.width = w;
+        _keyGrabber.height = h;
     }
 
 //    override public function setFocus () :void
@@ -71,27 +77,29 @@ public class GameContainer extends VBox
 //        }
 //    }
 
-    override protected function adjustFocusRect (obj :DisplayObject = null) :void
-    {
-        super.adjustFocusRect(obj);
-
-        // TODO: this is probably all wrong
-        var focusObj :IFlexDisplayObject =
-            IFlexDisplayObject(mx_internal::getFocusObject());
-        if (focusObj) {
-            var r :Rectangle = transform.pixelBounds;
-            focusObj.setActualSize(r.width - 2, r.height - 2);
-            focusObj.move(0, 0);
-
-            if (focusObj is IInvalidating) {
-                IInvalidating(focusObj).validateNow();
-
-            } else if (focusObj is ProgrammaticSkin) {
-                ProgrammaticSkin(focusObj).validateNow();
-            }
-        }
-    }
+//    override protected function adjustFocusRect (obj :DisplayObject = null) :void
+//    {
+//        super.adjustFocusRect(obj);
+//
+//        // TODO: this is probably all wrong
+//        var focusObj :IFlexDisplayObject =
+//            IFlexDisplayObject(mx_internal::getFocusObject());
+//        if (focusObj) {
+//            var r :Rectangle = transform.pixelBounds;
+//            focusObj.setActualSize(r.width - 2, r.height - 2);
+//            focusObj.move(0, 0);
+//
+//            if (focusObj is IInvalidating) {
+//                IInvalidating(focusObj).validateNow();
+//
+//            } else if (focusObj is ProgrammaticSkin) {
+//                ProgrammaticSkin(focusObj).validateNow();
+//            }
+//        }
+//    }
 
     protected var _game :MediaContainer;
+
+    protected var _keyGrabber :TextField;
 }
 }
