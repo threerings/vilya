@@ -132,7 +132,7 @@ public class EZGameManager extends GameManager
         validateUser(caller);
 
         if (playerId == 0) {
-            _gameObj.postMessage(EZGameObject.USER_MESSAGE, new Object[] { msg, data });
+            _gameObj.postMessage(EZGameObject.USER_MESSAGE, msg, data);
         } else {
             sendPrivateMessage(playerId, msg, data);
         }
