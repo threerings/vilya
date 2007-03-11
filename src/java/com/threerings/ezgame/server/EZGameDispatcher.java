@@ -77,6 +77,13 @@ public class EZGameDispatcher extends InvocationDispatcher
             );
             return;
 
+        case EZGameMarshaller.END_ROUND:
+            ((EZGameProvider)provider).endRound(
+                source,
+                ((Integer)args[0]).intValue(), (InvocationService.InvocationListener)args[1]
+            );
+            return;
+
         case EZGameMarshaller.END_TURN:
             ((EZGameProvider)provider).endTurn(
                 source,

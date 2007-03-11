@@ -59,11 +59,25 @@ import flash.display.DisplayObject;
 [Event(name="GameStarted", type="com.threerings.ezgame.StateChangedEvent")]
 
 /**
+ * Dispatched when a round starts.
+ *
+ * @eventType com.threerings.ezgame.StateChangedEvent.ROUND_STARTED
+ */
+[Event(name="RoundStarted", type="com.threerings.ezgame.StateChangedEvent")]
+
+/**
  * Dispatched when the turn changes in a turn-based game.
  *
  * @eventType com.threerings.ezgame.StateChangedEvent.TURN_CHANGED
  */
 [Event(name="TurnChanged", type="com.threerings.ezgame.StateChangedEvent")]
+
+/**
+ * Dispatched when a round ends.
+ *
+ * @eventType com.threerings.ezgame.StateChangedEvent.ROUND_ENDED
+ */
+[Event(name="RoundEnded", type="com.threerings.ezgame.StateChangedEvent")]
 
 /**
  * Dispatched when the game ends.
@@ -254,7 +268,9 @@ public class EZGameControl extends BaseControl
             var scl :StateChangedListener = (obj as StateChangedListener);
             addEventListener(StateChangedEvent.CONTROL_CHANGED, scl.stateChanged, false, 0, true);
             addEventListener(StateChangedEvent.GAME_STARTED, scl.stateChanged, false, 0, true);
+            addEventListener(StateChangedEvent.ROUND_STARTED, scl.stateChanged, false, 0, true);
             addEventListener(StateChangedEvent.TURN_CHANGED, scl.stateChanged, false, 0, true);
+            addEventListener(StateChangedEvent.ROUND_ENDED, scl.stateChanged, false, 0, true);
             addEventListener(StateChangedEvent.GAME_ENDED, scl.stateChanged, false, 0, true);
         }
         if (obj is OccupantChangedListener) {
@@ -282,12 +298,11 @@ public class EZGameControl extends BaseControl
         }
         if (obj is StateChangedListener) {
             var scl :StateChangedListener = (obj as StateChangedListener);
-            removeEventListener(
-                StateChangedEvent.GAME_STARTED, scl.stateChanged);
-            removeEventListener(
-                StateChangedEvent.TURN_CHANGED, scl.stateChanged);
-            removeEventListener(
-                StateChangedEvent.GAME_ENDED, scl.stateChanged);
+            removeEventListener(StateChangedEvent.GAME_STARTED, scl.stateChanged);
+            removeEventListener(StateChangedEvent.ROUND_STARTED, scl.stateChanged);
+            removeEventListener(StateChangedEvent.TURN_CHANGED, scl.stateChanged);
+            removeEventListener(StateChangedEvent.ROUND_ENDED, scl.stateChanged);
+            removeEventListener(StateChangedEvent.GAME_ENDED, scl.stateChanged);
         }
         if (obj is OccupantChangedListener) {
             var ocl :OccupantChangedListener = (obj as OccupantChangedListener);
@@ -427,6 +442,15 @@ public class EZGameControl extends BaseControl
     }
 
     /**
+     * Returns the current round number. Rounds start at 1 and increase if the game calls {@link
+     * #endRound} with a next round timeout.
+     */
+    public function getRound () :int
+    {
+        return int(callEZCode("getRound_v1"));
+    }
+
+    /**
      * Get the user-specific game data for the specified user. The first time this is requested per
      * game instance it will be retrieved from the database. After that, it will be returned from
      * memory.
@@ -477,6 +501,15 @@ public class EZGameControl extends BaseControl
     }
 
     /**
+     * Ends the current round. If nextRoundDelay is greater than zero, the next round will be
+     * started in the specified number of seconds.
+     */
+    public function endRound (nextRoundDelay :int = -1) :void
+    {
+        callEZCode("endRound_v1", nextRoundDelay);
+    }
+
+    /**
      * End the game. The specified player ids are winners!
      */
     public function endGame (winnerIds :Array) :void
@@ -494,8 +527,8 @@ public class EZGameControl extends BaseControl
         o["controlDidChange_v1"] = controlDidChange_v1;
         o["turnDidChange_v1"] = turnDidChange_v1;
         o["messageReceived_v1"] = messageReceived_v1;
-        o["gameDidStart_v1"] = gameDidStart_v1;
-        o["gameDidEnd_v1"] = gameDidEnd_v1;
+        o["gameStateChanged_v1"] = gameStateChanged_v1;
+        o["roundStateChanged_v1"] = roundStateChanged_v1;
         o["dispatchEvent_v1"] = dispatch;
         o["occupantChanged_v1"] = occupantChanged_v1;
     }
@@ -506,8 +539,7 @@ public class EZGameControl extends BaseControl
     private function propertyWasSet_v1 (
         name :String, newValue :Object, oldValue :Object, index :int) :void
     {
-        dispatch(
-            new PropertyChangedEvent(this, name, newValue, oldValue, index));
+        dispatch(new PropertyChangedEvent(this, name, newValue, oldValue, index));
     }
 
     /**
@@ -537,17 +569,19 @@ public class EZGameControl extends BaseControl
     /**
      * Private method to post a StateChangedEvent.
      */
-    private function gameDidStart_v1 () :void
+    private function gameStateChanged_v1 (started :Boolean) :void
     {
-        dispatch(new StateChangedEvent(StateChangedEvent.GAME_STARTED, this));
+        dispatch(new StateChangedEvent(started ? StateChangedEvent.GAME_STARTED :
+                                       StateChangedEvent.GAME_ENDED, this));
     }
 
     /**
      * Private method to post a StateChangedEvent.
      */
-    private function gameDidEnd_v1 () :void
+    private function roundStateChanged_v1 (started :Boolean) :void
     {
-        dispatch(new StateChangedEvent(StateChangedEvent.GAME_ENDED, this));
+        dispatch(new StateChangedEvent(started ? StateChangedEvent.ROUND_STARTED :
+                                       StateChangedEvent.ROUND_ENDED, this));
     }
 
     /**

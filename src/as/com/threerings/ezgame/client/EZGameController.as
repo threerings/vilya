@@ -34,6 +34,7 @@ import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.util.CrowdContext;
 
 import com.threerings.parlor.game.client.GameController;
+import com.threerings.parlor.game.data.GameObject;
 
 import com.threerings.parlor.turn.client.TurnGameController;
 import com.threerings.parlor.turn.client.TurnGameControllerDelegate;
@@ -88,6 +89,12 @@ public class EZGameController extends GameController
         var name :String = event.getName();
         if (EZGameObject.CONTROLLER_OID == name) {
             _panel.backend.controlDidChange();
+        } else if (GameObject.ROUND_ID == name) {
+            if ((event.getValue() as int) > 0) {
+                _panel.backend.roundStateChanged(true);
+            } else {
+                _panel.backend.roundStateChanged(false);
+            }
         } else {
             super.attributeChanged(event);
         }
@@ -113,14 +120,14 @@ public class EZGameController extends GameController
     override protected function gameDidStart () :void
     {
         super.gameDidStart();
-        _panel.backend.gameDidStart();
+        _panel.backend.gameStateChanged(true);
     }
 
     // from GameController
     override protected function gameDidEnd () :void
     {
         super.gameDidEnd();
-        _panel.backend.gameDidEnd();
+        _panel.backend.gameStateChanged(false);
     }
 
     // from PlaceController

@@ -111,6 +111,33 @@ public class EZGameManager extends GameManager
     }
 
     // from EZGameProvider
+    public void endRound (ClientObject caller, int nextRoundDelay,
+                          InvocationService.InvocationListener listener)
+        throws InvocationException
+    {
+        validateStateModification(caller, false);
+
+        // let the game know that it is doing something stupid
+        if (_gameObj.roundId < 0) {
+            throw new InvocationException("m.round_already_ended");
+        }
+
+        // while we are between rounds, our round id is the negation of the round that just ended
+        _gameObj.setRoundId(-_gameObj.roundId);
+
+        // queue up the start of the next round if requested
+        if (nextRoundDelay > 0) {
+            new Interval(CrowdServer.omgr) {
+                public void expired () {
+                    if (_gameObj.isInPlay()) {
+                        _gameObj.setRoundId(-_gameObj.roundId + 1);
+                    }
+                }
+            }.schedule(nextRoundDelay * 1000L);
+        }
+    }
+
+    // from EZGameProvider
     public void endGame (ClientObject caller, int[] winnerOids,
                          InvocationService.InvocationListener listener)
         throws InvocationException

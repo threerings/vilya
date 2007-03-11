@@ -52,6 +52,12 @@ public interface EZGameProvider extends InvocationProvider
         throws InvocationException;
 
     /**
+     * Handles a {@link EZGameService#endRound} request.
+     */
+    public void endRound (ClientObject caller, int arg1, InvocationService.InvocationListener arg2)
+        throws InvocationException;
+
+    /**
      * Handles a {@link EZGameService#endTurn} request.
      */
     public void endTurn (ClientObject caller, int arg1, InvocationService.InvocationListener arg2)

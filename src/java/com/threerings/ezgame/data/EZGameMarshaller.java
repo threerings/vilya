@@ -76,8 +76,21 @@ public class EZGameMarshaller extends InvocationMarshaller
         });
     }
 
+    /** The method id used to dispatch {@link #endRound} requests. */
+    public static final int END_ROUND = 4;
+
+    // from interface EZGameService
+    public void endRound (Client arg1, int arg2, InvocationService.InvocationListener arg3)
+    {
+        ListenerMarshaller listener3 = new ListenerMarshaller();
+        listener3.listener = arg3;
+        sendRequest(arg1, END_ROUND, new Object[] {
+            Integer.valueOf(arg2), listener3
+        });
+    }
+
     /** The method id used to dispatch {@link #endTurn} requests. */
-    public static final int END_TURN = 4;
+    public static final int END_TURN = 5;
 
     // from interface EZGameService
     public void endTurn (Client arg1, int arg2, InvocationService.InvocationListener arg3)
@@ -90,7 +103,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #getCookie} requests. */
-    public static final int GET_COOKIE = 5;
+    public static final int GET_COOKIE = 6;
 
     // from interface EZGameService
     public void getCookie (Client arg1, int arg2, InvocationService.InvocationListener arg3)
@@ -103,7 +116,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #getDictionaryLetterSet} requests. */
-    public static final int GET_DICTIONARY_LETTER_SET = 6;
+    public static final int GET_DICTIONARY_LETTER_SET = 7;
 
     // from interface EZGameService
     public void getDictionaryLetterSet (Client arg1, String arg2, int arg3, InvocationService.ResultListener arg4)
@@ -116,7 +129,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #getFromCollection} requests. */
-    public static final int GET_FROM_COLLECTION = 7;
+    public static final int GET_FROM_COLLECTION = 8;
 
     // from interface EZGameService
     public void getFromCollection (Client arg1, String arg2, boolean arg3, int arg4, String arg5, int arg6, InvocationService.ConfirmListener arg7)
@@ -129,7 +142,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #mergeCollection} requests. */
-    public static final int MERGE_COLLECTION = 8;
+    public static final int MERGE_COLLECTION = 9;
 
     // from interface EZGameService
     public void mergeCollection (Client arg1, String arg2, String arg3, InvocationService.InvocationListener arg4)
@@ -142,7 +155,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #sendMessage} requests. */
-    public static final int SEND_MESSAGE = 9;
+    public static final int SEND_MESSAGE = 10;
 
     // from interface EZGameService
     public void sendMessage (Client arg1, String arg2, Object arg3, int arg4, InvocationService.InvocationListener arg5)
@@ -155,7 +168,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #setCookie} requests. */
-    public static final int SET_COOKIE = 10;
+    public static final int SET_COOKIE = 11;
 
     // from interface EZGameService
     public void setCookie (Client arg1, byte[] arg2, InvocationService.InvocationListener arg3)
@@ -168,7 +181,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #setProperty} requests. */
-    public static final int SET_PROPERTY = 11;
+    public static final int SET_PROPERTY = 12;
 
     // from interface EZGameService
     public void setProperty (Client arg1, String arg2, Object arg3, int arg4, boolean arg5, Object arg6, InvocationService.InvocationListener arg7)
@@ -181,7 +194,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #setTicker} requests. */
-    public static final int SET_TICKER = 12;
+    public static final int SET_TICKER = 13;
 
     // from interface EZGameService
     public void setTicker (Client arg1, String arg2, int arg3, InvocationService.InvocationListener arg4)

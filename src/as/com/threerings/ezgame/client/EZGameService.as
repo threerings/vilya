@@ -46,6 +46,9 @@ public interface EZGameService extends InvocationService
     function endGame (arg1 :Client, arg2 :Array, arg3 :InvocationService_InvocationListener) :void;
 
     // from Java interface EZGameService
+    function endRound (arg1 :Client, arg2 :int, arg3 :InvocationService_InvocationListener) :void;
+
+    // from Java interface EZGameService
     function endTurn (arg1 :Client, arg2 :int, arg3 :InvocationService_InvocationListener) :void;
 
     // from Java interface EZGameService

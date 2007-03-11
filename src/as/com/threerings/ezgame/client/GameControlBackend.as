@@ -192,8 +192,10 @@ public class GameControlBackend
         o["getControllerId_v1"] = getControllerId_v1;
         o["getUserCookie_v2"] = getUserCookie_v2;
         o["endTurn_v2"] = endTurn_v2;
+        o["endRound_v1"] = endRound_v1;
         o["endGame_v2"] = endGame_v2;
         o["getTurnHolder_v1"] = getTurnHolder_v1;
+        o["getRound_v1"] = getRound_v1;
         o["getOccupantName_v1"] = getOccupantName_v1;
         o["getPlayers_v1"] = getPlayers_v1;
         o["getPlayerPosition_v1"] = getPlayerPosition_v1;
@@ -347,6 +349,11 @@ public class GameControlBackend
         return (occInfo == null) ? 0 : occInfo.bodyOid;
     }
 
+    public function getRound_v1 () :int
+    {
+        return _ezObj.roundId;
+    }
+
     public function getUserCookie_v2 (
         playerId :int, callback :Function) :void
     {
@@ -401,8 +408,14 @@ public class GameControlBackend
 
     public function endTurn_v2 (nextPlayerId :int) :void
     {
-        _ezObj.ezGameService.endTurn(_ctx.getClient(), nextPlayerId,
-            createLoggingConfirmListener("endTurn"));
+        _ezObj.ezGameService.endTurn(
+            _ctx.getClient(), nextPlayerId, createLoggingConfirmListener("endTurn"));
+    }
+
+    public function endRound_v1 (nextRoundDelay :int) :void
+    {
+        _ezObj.ezGameService.endRound(
+            _ctx.getClient(), nextRoundDelay, createLoggingConfirmListener("endRound"));
     }
 
     public function endGame_v2 (... winnerIds) :void
@@ -411,12 +424,11 @@ public class GameControlBackend
         while (winnerIds.length > 0) {
             winners.push(int(winnerIds.shift()));
         }
-        _ezObj.ezGameService.endGame(_ctx.getClient(), winners,
-            createLoggingConfirmListener("endGame"));
+        _ezObj.ezGameService.endGame(
+            _ctx.getClient(), winners, createLoggingConfirmListener("endGame"));
     }
 
-    public function getDictionaryLetterSet_v1 (
-        locale :String, count :int, callback :Function) :void
+    public function getDictionaryLetterSet_v1 (locale :String, count :int, callback :Function) :void
     {
         var listener :InvocationService_ResultListener;
         if (callback != null) {
@@ -682,19 +694,25 @@ public class GameControlBackend
     }
 
     /**
-     * Called by the EZGameController when the game starts.
+     * Called by the EZGameController when the game starts or ends.
      */
-    public function gameDidStart () :void
+    public function gameStateChanged (started :Boolean) :void
     {
-        callUserCode("gameDidStart_v1");
+        if (started && _userFuncs["gameDidStart_v1"] != null) {
+            callUserCode("gameDidStart_v1"); // backwards compatibility
+        } else if (!started && _userFuncs["gameDidEnd_v1"] != null) {
+            callUserCode("gameDidEnd_v1"); // backwards compatibility
+        } else {
+            callUserCode("gameStateChanged_v1", started); // new hotness
+        }
     }
 
     /**
-     * Called by the EZGameController when the game ends.
+     * Called by the EZGameController when a round starts or ends.
      */
-    public function gameDidEnd () :void
+    public function roundStateChanged (started :Boolean) :void
     {
-        callUserCode("gameDidEnd_v1");
+        callUserCode("roundStateChanged_v1", started);
     }
 
     // from SetListener

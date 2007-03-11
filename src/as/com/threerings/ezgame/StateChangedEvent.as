@@ -34,6 +34,13 @@ public class StateChangedEvent extends EZEvent
     /** Indicates that the game has transitioned to a ended state. */
     public static const GAME_ENDED :String = "GameEnded";
 
+    /** Indicates that a round has started. Games that do not require multiple rounds can ignore
+     * this event. */
+    public static const ROUND_STARTED :String = "RoundStarted";
+
+    /** Indicates that the current round has ended. */
+    public static const ROUND_ENDED :String = "RoundEnded";
+
     /** Indicates that a new controller has been assigned. */
     public static const CONTROL_CHANGED :String = "ControlChanged";
 
