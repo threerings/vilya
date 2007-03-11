@@ -787,7 +787,6 @@ public class GameControlBackend
 
         } else if (EZGameObject.TICKER == name) {
             var targs :Array = event.getArgs();
-            trace("Got " + targs + " :" + targs[0] + "/" + targs[1]);
             callUserCode("messageReceived_v1", (targs[0] as String), (targs[1] as int));
         }
     }
