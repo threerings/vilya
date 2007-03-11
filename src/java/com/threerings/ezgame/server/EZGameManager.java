@@ -97,7 +97,7 @@ public class EZGameManager extends GameManager
                          InvocationService.InvocationListener listener)
         throws InvocationException
     {
-        validateStateModification(caller);
+        validateStateModification(caller, true);
 
         Name nextTurnHolder = null;
         if (nextPlayerId != 0) {
@@ -118,7 +118,7 @@ public class EZGameManager extends GameManager
         if (!_gameObj.isInPlay()) {
             throw new InvocationException("e.already_ended");
         }
-        validateStateModification(caller);
+        validateStateModification(caller, false);
 
         _winnerIds = winnerOids;
         endGame();
@@ -449,14 +449,16 @@ public class EZGameManager extends GameManager
     /**
      * Validate that the specified listener has access to make a change.
      */
-    protected void validateStateModification (ClientObject caller)
+    protected void validateStateModification (ClientObject caller, boolean requireHoldsTurn)
         throws InvocationException
     {
         validateUser(caller);
 
-        Name holder = _gameObj.turnHolder;
-        if (holder != null && !holder.equals(((BodyObject) caller).getVisibleName())) {
-            throw new InvocationException(InvocationCodes.ACCESS_DENIED);
+        if (requireHoldsTurn) {
+            Name holder = _gameObj.turnHolder;
+            if (holder != null && !holder.equals(((BodyObject) caller).getVisibleName())) {
+                throw new InvocationException(InvocationCodes.ACCESS_DENIED);
+            }
         }
     }
 
