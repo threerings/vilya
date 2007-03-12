@@ -504,7 +504,7 @@ public class EZGameControl extends BaseControl
      * Ends the current round. If nextRoundDelay is greater than zero, the next round will be
      * started in the specified number of seconds.
      */
-    public function endRound (nextRoundDelay :int = -1) :void
+    public function endRound (nextRoundDelay :int = 0) :void
     {
         callEZCode("endRound_v1", nextRoundDelay);
     }
