@@ -21,8 +21,6 @@
 
 package com.threerings.parlor.client {
 
-import mx.binding.utils.BindingUtils;
-
 import mx.containers.Grid;
 
 import mx.controls.CheckBox;
@@ -30,6 +28,7 @@ import mx.controls.HSlider;
 import mx.controls.Label;
 
 import com.threerings.flex.GridUtil;
+import com.threerings.flex.LabeledSlider;
 
 import com.threerings.parlor.data.TableConfig;
 import com.threerings.parlor.util.ParlorContext;
@@ -68,7 +67,6 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
             _playerSlider.maximum = maxPlayers;
             _playerSlider.liveDragging = true;
             _playerSlider.snapInterval = 1;
-            _playerSlider.showDataTip = false;
 
         } else {
             _config.desiredPlayerCount = desiredPlayers;
@@ -93,14 +91,7 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
             var playerLabel :Label = new Label();
             playerLabel.text = "Players:";
 
-            var countLabel :Label = new Label();
-            BindingUtils.bindProperty(countLabel, "text",
-                _playerSlider, "value");
-
-            var grid :Grid = new Grid();
-            GridUtil.addRow(grid, countLabel, _playerSlider);
-
-            gconf.addControl(playerLabel, grid);
+            gconf.addControl(playerLabel, new LabeledSlider(_playerSlider));
         }
 
         if (_privateCheck != null) {
