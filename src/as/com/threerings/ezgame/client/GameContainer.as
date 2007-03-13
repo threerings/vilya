@@ -35,6 +35,8 @@ import mx.managers.IFocusManagerComponent;
 
 import mx.skins.ProgrammaticSkin;
 
+import com.threerings.crowd.chat.client.ChatCantStealFocus;
+
 import com.threerings.flash.MediaContainer;
 
 // TODO: there are focus issues in here that need dealing with.
@@ -45,7 +47,7 @@ import com.threerings.flash.MediaContainer;
 //    damn thing doesn't seem to grip onto the focus.
 // 
 public class GameContainer extends VBox
-    implements IFocusManagerComponent
+    implements ChatCantStealFocus, IFocusManagerComponent
 {
     public function GameContainer (url :String)
     {
