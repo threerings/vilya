@@ -171,6 +171,14 @@ public class EZGameControl extends BaseControl
     }
 
     /**
+     * Get any game-specific configurations that were set up in the lobby.
+     */
+    public function getConfig () :Object
+    {
+        return _gameConfig;
+    }
+
+    /**
      * Get the CollectionsControl, which contains methods for utilizing the server to dispatch
      * private information.
      */
@@ -603,6 +611,10 @@ public class EZGameControl extends BaseControl
     {
         // get our gamedata
         _gameData = o.gameData;
+        _gameConfig = o.gameConfig;
+        if (_gameConfig == null) {
+            _gameConfig = {};
+        }
 
         // and functions
         _funcs = o;
@@ -669,6 +681,9 @@ public class EZGameControl extends BaseControl
 
     /** Contains the data properties shared by all players in the game. */
     protected var _gameData :Object;
+
+    /** Contains any custom game configuration data. */
+    protected var _gameConfig :Object;
 
     /** Contains functions exposed to us from the EZGame host. */
     protected var _funcs :Object;

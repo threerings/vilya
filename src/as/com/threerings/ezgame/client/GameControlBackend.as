@@ -73,6 +73,7 @@ import com.threerings.crowd.util.CrowdContext;
 
 import com.threerings.parlor.game.data.GameObject;
 
+import com.threerings.ezgame.data.EZGameConfig;
 import com.threerings.ezgame.data.EZGameObject;
 import com.threerings.ezgame.data.PropertySetEvent;
 import com.threerings.ezgame.data.PropertySetListener;
@@ -167,6 +168,7 @@ public class GameControlBackend
 
         // straight data
         o["gameData"] = _gameData;
+        o["gameConfig"] = (_ctrl.getPlaceConfig() as EZGameConfig).customConfig;
 
         // functions
         o["setProperty_v1"] = setProperty_v1;

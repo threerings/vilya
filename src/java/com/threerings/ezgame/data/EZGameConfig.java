@@ -49,6 +49,10 @@ public class EZGameConfig extends GameConfig
     /** The game type. */
     public byte gameType = SEATED_GAME;
 
+    /** Custom configuration for the game. May only be interpretable on the
+     * client. */
+    public Object customConfig;
+
     @Override
     public byte getGameType ()
     {

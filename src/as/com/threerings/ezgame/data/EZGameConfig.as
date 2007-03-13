@@ -33,6 +33,7 @@ import com.threerings.parlor.game.client.GameConfigurator;
 import com.threerings.parlor.game.data.GameConfig;
 
 import com.threerings.ezgame.client.EZGameController;
+import com.threerings.ezgame.util.EZObjectMarshaller;
 
 /**
  * A game config for a simple multiplayer ez game.
@@ -52,6 +53,9 @@ public class EZGameConfig extends GameConfig
 
     /** The game type. */
     public var gameType :int = SEATED_GAME;
+
+    /** Any custom configuration options. */
+    public var customConfig :Object;
 
     public function EZGameConfig ()
     {
@@ -115,6 +119,8 @@ public class EZGameConfig extends GameConfig
         persistentGameId = ins.readInt();
         gameMedia = (ins.readField(String) as String);
         gameType = ins.readByte();
+
+        customConfig = EZObjectMarshaller.decode(ins.readObject());
     }
 
     // from interface Streamable
@@ -126,6 +132,8 @@ public class EZGameConfig extends GameConfig
         out.writeInt(persistentGameId);
         out.writeField(gameMedia);
         out.writeByte(gameType);
+
+        out.writeObject(EZObjectMarshaller.encode(customConfig, false));
     }
 }
 }
