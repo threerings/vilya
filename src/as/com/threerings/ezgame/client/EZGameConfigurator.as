@@ -29,6 +29,8 @@ import mx.controls.Label;
 
 import com.threerings.util.StringUtil;
 
+import com.threerings.flex.LabeledSlider;
+
 import com.threerings.parlor.game.client.FlexGameConfigurator;
 
 import com.threerings.ezgame.data.EZGameConfig;
@@ -109,7 +111,7 @@ public class EZGameConfigurator extends FlexGameConfigurator
         slider.liveDragging = true;
         slider.snapInterval = 1;
 
-        addXMLControl(spec.@ident, slider);
+        addXMLControl(spec.@ident, new LabeledSlider(slider));
     }
 
     /**
@@ -173,8 +175,8 @@ public class EZGameConfigurator extends FlexGameConfigurator
             for (var ii :int = 0; ii < _customConfigs.length; ii += 2) {
                 var ident :String = String(_customConfigs[ii]);
                 var control :UIComponent = (_customConfigs[ii + 1] as UIComponent);
-                if (control is HSlider) {
-                    options[ident] = (control as HSlider).value;
+                if (control is LabeledSlider) {
+                    options[ident] = (control as LabeledSlider).slider.value;
 
                 } else if (control is CheckBox) {
                     options[ident] = (control as CheckBox).selected;
