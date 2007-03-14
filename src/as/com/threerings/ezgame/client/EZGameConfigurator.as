@@ -79,13 +79,17 @@ public class EZGameConfigurator extends FlexGameConfigurator
     /**
      * Add a control that came from parsing our custom option XML.
      */
-    protected function addXMLControl (ident :String, control :UIComponent) :void
+    protected function addXMLControl (spec :XML, control :UIComponent) :void
     {
-        var name :String = ident.replace("_", " ");
-        var lbl :Label = new Label();
-        lbl.text = name + ":";
-        addControl(lbl, control);
+        var ident :String = String(spec.@ident);
+        var tip :String = StringUtil.trim(String(spec.text()));
 
+        var lbl :Label = new Label();
+        lbl.text = ident + ":";
+        lbl.toolTip = tip;
+        control.toolTip = tip;
+
+        addControl(lbl, control);
         _customConfigs.push(ident, control);
     }
 
@@ -111,7 +115,7 @@ public class EZGameConfigurator extends FlexGameConfigurator
         slider.liveDragging = true;
         slider.snapInterval = 1;
 
-        addXMLControl(spec.@ident, new LabeledSlider(slider));
+        addXMLControl(spec, new LabeledSlider(slider));
     }
 
     /**
@@ -141,7 +145,7 @@ public class EZGameConfigurator extends FlexGameConfigurator
         box.dataProvider = choices;
         box.selectedIndex = startDex;
 
-        addXMLControl(spec.@ident, box);
+        addXMLControl(spec, box);
     }
 
     /**
@@ -161,7 +165,7 @@ public class EZGameConfigurator extends FlexGameConfigurator
         var box :CheckBox = new CheckBox();
         box.selected = ("true" == startStr);
 
-        addXMLControl(spec.@ident, box);
+        addXMLControl(spec, box);
     }
 
     override protected function flushGameConfig () :void
