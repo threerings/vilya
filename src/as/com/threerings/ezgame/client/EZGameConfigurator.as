@@ -82,10 +82,14 @@ public class EZGameConfigurator extends FlexGameConfigurator
     protected function addXMLControl (spec :XML, control :UIComponent) :void
     {
         var ident :String = String(spec.@ident);
-        var tip :String = StringUtil.trim(String(spec.text()));
+        var name :String = String(spec.@name);
+        var tip :String = String(spec.@tip);
+        if (StringUtil.isBlank(name)) {
+            name = ident;
+        }
 
         var lbl :Label = new Label();
-        lbl.text = ident + ":";
+        lbl.text = name + ":";
         lbl.toolTip = tip;
         control.toolTip = tip;
 
