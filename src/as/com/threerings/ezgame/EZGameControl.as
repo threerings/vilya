@@ -451,7 +451,8 @@ public class EZGameControl extends BaseControl
 
     /**
      * Returns the current round number. Rounds start at 1 and increase if the game calls {@link
-     * #endRound} with a next round timeout.
+     * #endRound} with a next round timeout. Between rounds, it returns a negative number,
+     * corresponding to the negation of the round that just ended.
      */
     public function getRound () :int
     {
