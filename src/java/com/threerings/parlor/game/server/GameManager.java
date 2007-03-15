@@ -876,9 +876,8 @@ public class GameManager extends PlaceManager
      */
     protected void playersAllHere ()
     {
-        // start up the game if we're not a party game and if we haven't
-        // already done so
-        if (needsNoShowTimer() && _gameobj.state == GameObject.PRE_GAME) {
+        // if we're a seated game and we haven't already started, start.
+        if ((getGameType() == GameConfig.SEATED_GAME) && (_gameobj.state == GameObject.PRE_GAME)) {
             startGame();
         }
     }
