@@ -41,8 +41,7 @@ import com.threerings.ezgame.data.EZGameConfig;
 public class EZGameConfigurator extends FlexGameConfigurator
 {
     /**
-     * Set a String of configData, which is hopefully XML formatted with
-     * some game configuration options.
+     * Set XML game configuration options.
      */
     public function setXMLConfig (config :XML) :void
     {
