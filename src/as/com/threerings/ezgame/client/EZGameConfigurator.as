@@ -44,11 +44,10 @@ public class EZGameConfigurator extends FlexGameConfigurator
      * Set a String of configData, which is hopefully XML formatted with
      * some game configuration options.
      */
-    public function setXMLConfig (configData :String) :void
+    public function setXMLConfig (config :XML) :void
     {
         var log :Log = Log.getLog(this);
 
-        var config :XML = XML(configData);
         for each (var param :XML in config..params.children()) {
             if (StringUtil.isBlank(param.@ident)) {
                 log.warning("Bad configuration option: no 'ident' in " +
