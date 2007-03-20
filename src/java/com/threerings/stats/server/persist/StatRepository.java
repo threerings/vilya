@@ -41,18 +41,6 @@ import static com.threerings.stats.Log.log;
 public class StatRepository extends SimpleRepository
     implements Stat.AuxDataSource
 {
-    /** Used by {@link #processStats}. */
-    public interface Processor
-    {
-        /**
-         * Called on every stat matching the criterion supplied to {@link #processStats}.
-         * <em>Note:</em> do not retain a reference to the supplied {@link Stat} instance as its
-         * contents will be overwritten prior to each call to process.
-         */
-        public void process (int playerId, String accountName, String handle,
-                             Date created, int sessionMinutes, Stat stat);
-    }
-
     /**
      * The database identifier used when establishing a database connection. This value being
      * <code>statdb</code>.
@@ -177,42 +165,6 @@ public class StatRepository extends SimpleRepository
     {
         int ocode = _stringToCode.get(type).remove(value);
         _codeToString.get(type).remove(ocode);
-    }
-
-    /**
-     * Invokes the supplied processor on every stat in the database of the specified type.
-     *
-     * <p><em>Note:</em> the stats database will inevitable be extremely large (one row for every
-     * paying player and one for non-payers less than six months old; millions of rows if the game
-     * is at all successful). Don't call this method willy nilly and the summarized results should
-     * be cached for at least 12 hours. (Stats don't change that frequently in the aggregate.)
-     */
-    public void processStats (final Processor processor, Stat.Type type)
-        throws PersistenceException
-    {
-        final Stat stat = type.newStat();
-        final String query = "select STATS.PLAYER_ID, ACCOUNT_NAME, HANDLE, CREATED, " +
-            "SESSION_MINUTES, STAT_DATA from STATS, PLAYERS " +
-            "where PLAYERS.PLAYER_ID = STATS.PLAYER_ID and STAT_CODE = " + type.code();
-        execute(new Operation<Object>() {
-            public Object invoke (Connection conn, DatabaseLiaison liaison)
-                throws SQLException, PersistenceException
-            {
-                Statement stmt = conn.createStatement();
-                try {
-                    ResultSet rs = stmt.executeQuery(query);
-                    while (rs.next()) {
-                        if (decodeStat(stat, (byte[])rs.getObject(6)) != null) {
-                            processor.process(rs.getInt(1), rs.getString(2), rs.getString(3),
-                                              rs.getDate(4), rs.getInt(5), stat);
-                        }
-                    }
-                } finally {
-                    JDBCUtil.close(stmt);
-                }
-                return null;
-            }
-        });
     }
 
     /**
