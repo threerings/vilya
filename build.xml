@@ -204,6 +204,10 @@
       <fileset dir="${classes.dir}" includes="com/threerings/stage/**"/>
       <fileset dir="${classes.dir}" includes="rsrc/**/stage/**"/>
     </jar>
+    <jar destfile="${deploy.dir}/${app.name}-stats.jar">
+      <fileset dir="${classes.dir}" includes="com/threerings/stats/**"/>
+      <fileset dir="${classes.dir}" includes="rsrc/**/stats/**"/>
+    </jar>
     <jar destfile="${deploy.dir}/${app.name}-whirled.jar">
       <fileset dir="${classes.dir}" includes="com/threerings/whirled/**"/>
       <fileset dir="${classes.dir}" includes="rsrc/**/whirled/**"/>
@@ -238,6 +242,7 @@
     <weave inputjar="${inpre}-parlor.jar" outputjar="${outpre}-parlor.jar"/>
     <weave inputjar="${inpre}-puzzle.jar" outputjar="${outpre}-puzzle.jar"/>
     <weave inputjar="${inpre}-stage.jar" outputjar="${outpre}-stage.jar"/>
+    <weave inputjar="${inpre}-stats.jar" outputjar="${outpre}-stats.jar"/>
     <weave inputjar="${inpre}-whirled.jar" outputjar="${outpre}-whirled.jar"/>
 
     <!-- now weave again with the verifier to check for unweavable 1.5isms -->
@@ -245,6 +250,7 @@
     <antcall target="vweave"><param name="which" value="parlor"/></antcall>
     <antcall target="vweave"><param name="which" value="puzzle"/></antcall>
     <antcall target="vweave"><param name="which" value="stage"/></antcall>
+    <antcall target="vweave"><param name="which" value="stats"/></antcall>
     <antcall target="vweave"><param name="which" value="whirled"/></antcall>
   </target>
 
