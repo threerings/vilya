@@ -53,7 +53,11 @@ public class MaxIntStat extends IntStat
         throws IOException, ClassNotFoundException
     {
         super.unpersistFrom(in, aux);
-        _maxValue = in.readInt();
+        try {
+            _maxValue = in.readInt();
+        } catch (EOFException eofe) {
+            // hack to deal with old style IntStat converted to MaxIntStat
+        }
     }
 
     /** The largest value ever accumulated to this stat. */
