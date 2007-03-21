@@ -24,34 +24,43 @@ package com.threerings.parlor.data {
 import com.threerings.presents.dobj.DSet;
 
 /**
- * This interface must be implemented by the place object used by a lobby
- * that wishes to make use of the table services.
+ * This interface must be implemented by the place object used by a lobby that wishes to make use
+ * of the table services.
  */
 public interface TableLobbyObject
 {
     /**
-     * Returns a reference to the distributed set instance that will be
-     * holding the tables.
+     * Returns a reference to the distributed set instance that will be holding the tables.
      */
     function getTables () :DSet;
 
     /**
-     * Adds the supplied table instance to the tables set (using the
-     * appropriate distributed object mechanisms).
+     * Adds the supplied table instance to the tables set (using the appropriate distributed object
+     * mechanisms).
      */
     function addToTables (table :Table) :void;
 
     /**
-     * Updates the value of the specified table instance in the tables
-     * distributed set (using the appropriate distributed object
-     * mechanisms).
+     * Updates the value of the specified table instance in the tables distributed set (using the
+     * appropriate distributed object mechanisms).
      */
     function updateTables (table :Table) :void;
 
     /**
-     * Removes the table instance that matches the specified key from the
-     * tables set (using the appropriate distributed object mechanisms).
+     * Removes the table instance that matches the specified key from the tables set (using the
+     * appropriate distributed object mechanisms).
      */
     function removeFromTables (key :Object) :void;
+
+    /**
+     * Returns a reference to the table service configured in this object.
+     */
+    function getTableService () :TableMarshaller;
+
+    /**
+     * Configures the table service that clients should use to communicate table requests back to
+     * the table manager handling these tables.
+     */
+    function setTableService (service :TableMarshaller) :void;
 }
 }
