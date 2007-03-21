@@ -24,14 +24,18 @@ package com.threerings.parlor.server;
 import com.samskivert.util.HashIntMap;
 import com.threerings.util.Name;
 
+import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.presents.server.InvocationManager;
 
 import com.threerings.crowd.data.BodyObject;
+import com.threerings.crowd.server.CrowdServer;
 import com.threerings.crowd.server.PlaceRegistry;
 
 import com.threerings.parlor.Log;
+import com.threerings.parlor.client.ParlorService;
 import com.threerings.parlor.data.ParlorCodes;
+import com.threerings.parlor.data.TableConfig;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.game.server.GameManager;
 
@@ -42,11 +46,8 @@ import com.threerings.parlor.game.server.GameManager;
  * game.
  */
 public class ParlorManager
-    implements ParlorCodes
+    implements ParlorCodes, ParlorProvider
 {
-    /** Provides the server-side implementation of the parlor services. */
-    public ParlorProvider parprov;
-
     /**
      * Initializes the parlor manager. This should be called by the server that is making use of
      * the parlor services on the single instance of parlor manager that it has created.
@@ -58,11 +59,76 @@ public class ParlorManager
     public void init (InvocationManager invmgr, PlaceRegistry plreg)
     {
         // create and register our invocation provider
-        parprov = new ParlorProvider(this);
-        invmgr.registerDispatcher(new ParlorDispatcher(parprov), PARLOR_GROUP);
+        invmgr.registerDispatcher(new ParlorDispatcher(this), PARLOR_GROUP);
 
         // keep this for later
         _plreg = plreg;
+    }
+
+    // from interface ParlorProvider
+    public void invite (ClientObject caller, Name invitee, GameConfig config,
+                        ParlorService.InviteListener listener)
+        throws InvocationException
+    {
+//         Log.info("Handling invite request [source=" + source + ", invitee=" + invitee +
+//                  ", config=" + config + "].");
+
+        BodyObject source = (BodyObject)caller;
+        String rsp = null;
+
+        // ensure that the invitee is online at present
+        BodyObject target = CrowdServer.lookupBody(invitee);
+        if (target == null) {
+            throw new InvocationException(INVITEE_NOT_ONLINE);
+        }
+
+        int inviteId = invite(source, target, config);
+        listener.inviteReceived(inviteId);
+    }
+
+    // from interface ParlorProvider
+    public void respond (ClientObject caller, int inviteId, int code, Object arg,
+                         ParlorService.InvocationListener listener)
+    {
+        // pass this on to the parlor manager
+        respondToInvite((BodyObject)caller, inviteId, code, arg);
+    }
+
+    // from interface ParlorProvider
+    public void cancel (ClientObject caller, int inviteId,
+                        ParlorService.InvocationListener listener)
+    {
+        cancelInvite((BodyObject)caller, inviteId);
+    }
+
+    // from interface ParlorProvider
+    public void startSolitaire (ClientObject caller, GameConfig config,
+                                ParlorService.ConfirmListener listener)
+        throws InvocationException
+    {
+        BodyObject user = (BodyObject)caller;
+
+        Log.debug("Processing start solitaire [caller=" + user.who() + ", config=" + config + "].");
+
+        try {
+            // just this fellow will be playing
+            if (config.players == null || config.players.length == 0) {
+                config.players = new Name[] { user.getVisibleName() };
+            }
+
+            // create the game manager and begin its initialization process
+            CrowdServer.plreg.createPlace(config);
+
+            // the game manager will notify the player that their game is
+            // "ready", but tell the caller that we processed their request
+            listener.requestProcessed();
+
+        } catch (InstantiationException ie) {
+            Log.warning("Error instantiating game manager " +
+                        "[for=" + caller.who() + ", config=" + config + "].");
+            Log.logStackTrace(ie);
+            throw new InvocationException(INTERNAL_ERROR);
+        }
     }
 
     /**
@@ -79,8 +145,7 @@ public class ParlorManager
      * some reason (like the invited player has requested not to be disturbed). The explanation
      * will be provided in the message data of the exception.
      */
-    public int invite (BodyObject inviter, BodyObject invitee,
-                       GameConfig config)
+    public int invite (BodyObject inviter, BodyObject invitee, GameConfig config)
         throws InvocationException
     {
 //          Log.info("Received invitation request [inviter=" + inviter +

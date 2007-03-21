@@ -53,4 +53,15 @@ public interface TableLobbyObject
      * tables set (using the appropriate distributed object mechanisms).
      */
     public void removeFromTables (Comparable key);
+
+    /**
+     * Returns a reference to the table service configured in this object.
+     */
+    public TableMarshaller getTableService ();
+
+    /**
+     * Configures the table service that clients should use to communicate table requests back to
+     * the table manager handling these tables.
+     */
+    public void setTableService (TableMarshaller service);
 }

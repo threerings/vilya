@@ -26,7 +26,6 @@ import com.threerings.util.*; // for Float, Integer, etc.
 
 import com.threerings.parlor.client.ParlorService;
 import com.threerings.parlor.client.ParlorService_InviteListener;
-import com.threerings.parlor.data.TableConfig;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;

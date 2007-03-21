@@ -61,7 +61,6 @@
       <fileset dir="src/java" includes="**/*Service.java"
         excludes="**/InvocationService.java"/>
       <providerless service="SimulatorService"/>
-      <providerless service="ParlorService"/>
       <providerless service="SpotService"/>
       <providerless service="ZoneService"/>
       <providerless service="SceneService"/>

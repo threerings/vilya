@@ -27,8 +27,7 @@ import com.threerings.parlor.server.TableManagerProvider;
 import com.threerings.micasa.lobby.LobbyManager;
 
 /**
- * Extends lobby manager only to ensure that a table lobby object is used
- * for table lobbies.
+ * Extends lobby manager only to ensure that a table lobby object is used for table lobbies.
  */
 public class TableLobbyManager
     extends LobbyManager implements TableManagerProvider
@@ -37,10 +36,8 @@ public class TableLobbyManager
     protected void didStartup ()
     {
         super.didStartup();
-
-        // now that we have our place object, we can create our table
-        // manager
-        _tmgr = new TableManager(this);
+        // now that we have our place object, we can create our table manager
+        _tmgr = new TableManager(getPlaceObject());
     }
 
     // documentation inherited

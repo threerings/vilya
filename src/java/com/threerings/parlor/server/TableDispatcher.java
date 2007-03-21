@@ -21,8 +21,9 @@
 
 package com.threerings.parlor.server;
 
-import com.threerings.parlor.client.ParlorService;
-import com.threerings.parlor.data.ParlorMarshaller;
+import com.threerings.parlor.client.TableService;
+import com.threerings.parlor.data.TableConfig;
+import com.threerings.parlor.data.TableMarshaller;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
@@ -30,18 +31,17 @@ import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
-import com.threerings.util.Name;
 
 /**
- * Dispatches requests to the {@link ParlorProvider}.
+ * Dispatches requests to the {@link TableProvider}.
  */
-public class ParlorDispatcher extends InvocationDispatcher
+public class TableDispatcher extends InvocationDispatcher
 {
     /**
      * Creates a dispatcher that may be registered to dispatch invocation
      * service requests for the specified provider.
      */
-    public ParlorDispatcher (ParlorProvider provider)
+    public TableDispatcher (TableProvider provider)
     {
         this.provider = provider;
     }
@@ -49,7 +49,7 @@ public class ParlorDispatcher extends InvocationDispatcher
     // from InvocationDispatcher
     public InvocationMarshaller createMarshaller ()
     {
-        return new ParlorMarshaller();
+        return new TableMarshaller();
     }
 
     @SuppressWarnings("unchecked") // from InvocationDispatcher
@@ -58,31 +58,31 @@ public class ParlorDispatcher extends InvocationDispatcher
         throws InvocationException
     {
         switch (methodId) {
-        case ParlorMarshaller.CANCEL:
-            ((ParlorProvider)provider).cancel(
+        case TableMarshaller.CREATE_TABLE:
+            ((TableProvider)provider).createTable(
+                source,
+                (TableConfig)args[0], (GameConfig)args[1], (InvocationService.ResultListener)args[2]
+            );
+            return;
+
+        case TableMarshaller.JOIN_TABLE:
+            ((TableProvider)provider).joinTable(
+                source,
+                ((Integer)args[0]).intValue(), ((Integer)args[1]).intValue(), (InvocationService.InvocationListener)args[2]
+            );
+            return;
+
+        case TableMarshaller.LEAVE_TABLE:
+            ((TableProvider)provider).leaveTable(
                 source,
                 ((Integer)args[0]).intValue(), (InvocationService.InvocationListener)args[1]
             );
             return;
 
-        case ParlorMarshaller.INVITE:
-            ((ParlorProvider)provider).invite(
+        case TableMarshaller.START_TABLE_NOW:
+            ((TableProvider)provider).startTableNow(
                 source,
-                (Name)args[0], (GameConfig)args[1], (ParlorService.InviteListener)args[2]
-            );
-            return;
-
-        case ParlorMarshaller.RESPOND:
-            ((ParlorProvider)provider).respond(
-                source,
-                ((Integer)args[0]).intValue(), ((Integer)args[1]).intValue(), (Object)args[2], (InvocationService.InvocationListener)args[3]
-            );
-            return;
-
-        case ParlorMarshaller.START_SOLITAIRE:
-            ((ParlorProvider)provider).startSolitaire(
-                source,
-                (GameConfig)args[0], (InvocationService.ConfirmListener)args[1]
+                ((Integer)args[0]).intValue(), (InvocationService.InvocationListener)args[1]
             );
             return;
 

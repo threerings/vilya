@@ -44,39 +44,32 @@ import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.util.ParlorContext;
 
 /**
- * As tables are created and managed within the scope of a place (a
- * lobby), we want to fold the table management functionality into the
- * standard hierarchy of place controllers that deal with place-related
- * functionality on the client. Thus, instead of forcing places that
- * expect to have tables to extend a <code>TableLobbyController</code> or
- * something similar, we instead provide the table director which can be
- * instantiated by the place controller (or specific table related views)
- * to handle the table matchmaking services.
+ * As tables are created and managed within the scope of a place (a lobby), we want to fold the
+ * table management functionality into the standard hierarchy of place controllers that deal with
+ * place-related functionality on the client. Thus, instead of forcing places that expect to have
+ * tables to extend a <code>TableLobbyController</code> or something similar, we instead provide
+ * the table director which can be instantiated by the place controller (or specific table related
+ * views) to handle the table matchmaking services.
  *
- * <p> Entites that do so, will need to implement the {@link
- * TableObserver} interface so that the table director can notify them
- * when table related things happen.
+ * <p> Entites that do so, will need to implement the {@link TableObserver} interface so that the
+ * table director can notify them when table related things happen.
  *
- * <p> The table services expect that the place object being used as a
- * lobby in which the table matchmaking takes place implements the {@link
- * TableLobbyObject} interface.
+ * <p> The table services expect that the place object being used as a lobby in which the table
+ * matchmaking takes place implements the {@link TableLobbyObject} interface.
  */
 public class TableDirector extends BasicDirector
-    implements SetListener, ParlorService.TableListener
+    implements SetListener, TableService.ResultListener
 {
     /**
-     * Creates a new table director to manage tables with the specified
-     * observer which will receive callbacks when interesting table
-     * related things happen.
+     * Creates a new table director to manage tables with the specified observer which will receive
+     * callbacks when interesting table related things happen.
      *
      * @param ctx the parlor context in use by the client.
-     * @param tableField the field name of the distributed set that
-     * contains the tables we will be managing.
-     * @param observer the entity that will receive callbacks when things
-     * happen to the tables.
+     * @param tableField the field name of the distributed set that contains the tables we will be
+     * managing.
+     * @param observer the entity that will receive callbacks when things happen to the tables.
      */
-    public TableDirector (
-        ParlorContext ctx, String tableField, TableObserver observer)
+    public TableDirector (ParlorContext ctx, String tableField, TableObserver observer)
     {
         super(ctx);
 
@@ -87,39 +80,33 @@ public class TableDirector extends BasicDirector
     }
 
     /**
-     * This must be called by the entity that uses the table director when
-     * the using entity prepares to enter and display a place. It is
-     * assumed that the client is already subscribed to the provided place
-     * object.
+     * This must be called by the entity that uses the table director when the using entity
+     * prepares to enter and display a place. It is assumed that the client is already subscribed
+     * to the provided place object.
      */
     public void willEnterPlace (PlaceObject place)
     {
         // the place should be a TableLobbyObject
-        _tlobj = (TableLobbyObject) place;
-        _lobby = place;
-
+        _tlobj = (TableLobbyObject)place;
         // add ourselves as a listener to the place object
         place.addListener(this);
     }
 
     /**
-     * This must be called by the entity that uses the table director when
-     * the using entity has left and is done displaying a place.
+     * This must be called by the entity that uses the table director when the using entity has
+     * left and is done displaying a place.
      */
     public void didLeavePlace (PlaceObject place)
     {
         // remove our listenership
         place.removeListener(this);
-
-        // clear out our lobby reference
-        _lobby = null;
+        // clear out our reference
         _tlobj = null;
     }
 
     /**
-     * Requests that the specified observer be added to the list of
-     * observers that are notified when this client sits down at or stands
-     * up from a table.
+     * Requests that the specified observer be added to the list of observers that are notified
+     * when this client sits down at or stands up from a table.
      */
     public void addSeatednessObserver (SeatednessObserver observer)
     {
@@ -127,9 +114,8 @@ public class TableDirector extends BasicDirector
     }
 
     /**
-     * Requests that the specified observer be removed from to the list of
-     * observers that are notified when this client sits down at or stands
-     * up from a table.
+     * Requests that the specified observer be removed from to the list of observers that are
+     * notified when this client sits down at or stands up from a table.
      */
     public void removeSeatednessObserver (SeatednessObserver observer)
     {
@@ -137,8 +123,7 @@ public class TableDirector extends BasicDirector
     }
 
     /**
-     * Returns true if this client is currently seated at a table, false
-     * if they are not.
+     * Returns true if this client is currently seated at a table, false if they are not.
      */
     public boolean isSeated ()
     {
@@ -146,106 +131,91 @@ public class TableDirector extends BasicDirector
     }
 
     /**
-     * Sends a request to create a table with the specified game
-     * configuration. This user will become the owner of this table and
-     * will be added to the first position in the table. The response will
-     * be communicated via the {@link TableObserver} interface.
+     * Sends a request to create a table with the specified game configuration. This user will
+     * become the owner of this table and will be added to the first position in the table. The
+     * response will be communicated via the {@link TableObserver} interface.
      */
     public void createTable (TableConfig tableConfig, GameConfig config)
     {
         // if we're already in a table, refuse the request
         if (_ourTable != null) {
-            Log.warning("Ignoring request to create table as we're " +
-                        "already in a table [table=" + _ourTable + "].");
+            Log.warning("Ignoring request to create table as we're already in a table " +
+                        "[table=" + _ourTable + "].");
             return;
         }
 
         // make sure we're currently in a place
-        if (_lobby == null) {
-            Log.warning("Requested to create a table but we're not " +
-                        "currently in a place [config=" + config + "].");
+        if (_tlobj == null) {
+            Log.warning("Requested to create a table but we're not currently in a place " +
+                        "[config=" + config + "].");
             return;
         }
 
         // go ahead and issue the create request
-        _pservice.createTable(_ctx.getClient(), _lobby.getOid(), tableConfig,
-            config, this);
+        _tlobj.getTableService().createTable(_ctx.getClient(), tableConfig, config, this);
     }
 
     /**
-     * Sends a request to join the specified table at the specified
-     * position. The response will be communicated via the {@link
-     * TableObserver} interface.
+     * Sends a request to join the specified table at the specified position. The response will be
+     * communicated via the {@link TableObserver} interface.
      */
     public void joinTable (int tableId, int position)
     {
         // if we're already in a table, refuse the request
         if (_ourTable != null) {
-            Log.warning("Ignoring request to join table as we're " +
-                        "already in a table [table=" + _ourTable + "].");
+            Log.warning("Ignoring request to join table as we're already in a table " +
+                        "[table=" + _ourTable + "].");
             return;
         }
 
         // make sure we're currently in a place
-        if (_lobby == null) {
-            Log.warning("Requested to join a table but we're not " +
-                        "currently in a place [tableId=" + tableId + "].");
+        if (_tlobj == null) {
+            Log.warning("Requested to join a table but we're not currently in a place " +
+                        "[tableId=" + tableId + "].");
             return;
         }
 
         // issue the join request
-        _pservice.joinTable(_ctx.getClient(), _lobby.getOid(), tableId,
-                            position, this);
+        _tlobj.getTableService().joinTable(_ctx.getClient(), tableId, position, this);
     }
 
     /**
-     * Sends a request to leave the specified table at which we are
-     * presumably seated. The response will be communicated via the {@link
-     * TableObserver} interface.
+     * Sends a request to leave the specified table at which we are presumably seated. The response
+     * will be communicated via the {@link TableObserver} interface.
      */
     public void leaveTable (int tableId)
     {
         // make sure we're currently in a place
-        if (_lobby == null) {
-            Log.warning("Requested to leave a table but we're not " +
-                        "currently in a place [tableId=" + tableId + "].");
+        if (_tlobj == null) {
+            Log.warning("Requested to leave a table but we're not currently in a place " +
+                        "[tableId=" + tableId + "].");
             return;
         }
 
         // issue the leave request
-        _pservice.leaveTable(_ctx.getClient(), _lobby.getOid(), tableId, this);
+        _tlobj.getTableService().leaveTable(_ctx.getClient(), tableId, this);
     }
 
     /**
-     * Sends a request to have the specified table start now, even if
-     * all the seats have not yet been filled.
+     * Sends a request to have the specified table start now, even if all the seats have not yet
+     * been filled.
      */
     public void startTableNow (int tableId)
     {
-        if (_lobby == null) {
-            Log.warning("Requested to start a table but we're not " +
-                        "currently in a place [tableId=" + tableId + "].");
+        if (_tlobj == null) {
+            Log.warning("Requested to start a table but we're not currently in a place " +
+                        "[tableId=" + tableId + "].");
             return;
         }
 
-        _pservice.startTableNow(_ctx.getClient(), _lobby.getOid(),
-            tableId, this);
+        _tlobj.getTableService().startTableNow(_ctx.getClient(), tableId, this);
     }
 
     // documentation inherited
     public void clientDidLogoff (Client client)
     {
         super.clientDidLogoff(client);
-        _pservice = null;
-        _lobby = null;
         _ourTable = null;
-    }
-
-    // documentation inherited
-    protected void fetchServices (Client client)
-    {
-        // get a handle on our parlor services
-        _pservice = (ParlorService)client.requireService(ParlorService.class);
     }
 
     // documentation inherited
@@ -253,10 +223,8 @@ public class TableDirector extends BasicDirector
     {
         if (event.getName().equals(_tableField)) {
             Table table = (Table)event.getEntry();
-
             // check to see if we just joined a table
             checkSeatedness(table);
-
             // now let the observer know what's up
             _observer.tableAdded(table);
         }
@@ -267,10 +235,8 @@ public class TableDirector extends BasicDirector
     {
         if (event.getName().equals(_tableField)) {
             Table table = (Table)event.getEntry();
-
             // check to see if we just joined or left a table
             checkSeatedness(table);
-
             // now let the observer know what's up
             _observer.tableUpdated(table);
         }
@@ -281,43 +247,42 @@ public class TableDirector extends BasicDirector
     {
         if (event.getName().equals(_tableField)) {
             int tableId = ((Integer) event.getKey()).intValue();
-
             // check to see if our table just disappeared
             if (_ourTable != null && tableId == _ourTable.tableId) {
                 _ourTable = null;
                 notifySeatedness(false);
             }
-
             // now let the observer know what's up
             _observer.tableRemoved(tableId);
         }
     }
 
-    // documentation inherited from interface
-    public void tableCreated (int tableId)
+    // from interface TableService.ResultListener
+    public void requestProcessed (Object result)
     {
-        if (_lobby == null) {
+        int tableId = (Integer)result;
+        if (_tlobj == null) {
             // we've left, it's none of our concern anymore
             Log.info("Table created, but no lobby. [tableId=" + tableId + "].");
             return;
         }
 
-        // All this to check to see if we created a party game (and should now enter).
         Table table = (Table) _tlobj.getTables().get(tableId);
         if (table == null) {
             Log.warning("Table created, but where is it? [tableId=" + tableId + "]");
             return;
         }
+
+        // All this to check to see if we created a party game (and should now enter).
         if (table.gameOid != -1 && table.occupants.length == 0) {
-            // let's boogie!
-            _ctx.getParlorDirector().gameIsReady(table.gameOid);
+            _ctx.getParlorDirector().gameIsReady(table.gameOid); // let's boogie!
         }
     }
 
     // documentation inherited from interface
     public void requestFailed (String reason)
     {
-        Log.warning("Table creation failed [reason=" + reason + "].");
+        Log.warning("Table action failed [reason=" + reason + "].");
     }
 
     /**
@@ -328,9 +293,8 @@ public class TableDirector extends BasicDirector
     {
         Table oldTable = _ourTable;
 
-        // if this is the same table as our table, clear out our table
-        // reference and allow it to be added back if we are still in the
-        // table
+        // if this is the same table as our table, clear out our table reference and allow it to be
+        // added back if we are still in the table
         if (table.equals(_ourTable)) {
             _ourTable = null;
         }
@@ -355,25 +319,18 @@ public class TableDirector extends BasicDirector
      */
     protected void notifySeatedness (final boolean isSeated)
     {
-        _seatedObservers.apply(
-            new ObserverList.ObserverOp<SeatednessObserver>() {
-                public boolean apply (SeatednessObserver so) {
-                    so.seatednessDidChange(isSeated);
-                    return true;
-                }
-            });
+        _seatedObservers.apply(new ObserverList.ObserverOp<SeatednessObserver>() {
+            public boolean apply (SeatednessObserver so) {
+                so.seatednessDidChange(isSeated);
+                return true;
+            }
+        });
     }
 
     /** A context by which we can access necessary client services. */
     protected ParlorContext _ctx;
 
-    /** Parlor server-side services. */
-    protected ParlorService _pservice;
-
-    /** The place object in which we're currently managing tables. */
-    protected PlaceObject _lobby;
-
-    /** The place object, cast as a TableLobbyObject. */
+    /** Our TableLobbyObject. */
     protected TableLobbyObject _tlobj;
 
     /** The field name of the distributed set that contains our tables. */
@@ -385,8 +342,7 @@ public class TableDirector extends BasicDirector
     /** The table of which we are a member if any. */
     protected Table _ourTable;
 
-    /** An array of entities that want to hear about when we stand up or
-     * sit down. */
+    /** An array of entities that want to hear about when we stand up or sit down. */
     protected ObserverList<SeatednessObserver> _seatedObservers =
         new ObserverList<SeatednessObserver>(ObserverList.FAST_UNSAFE_NOTIFY);
 }

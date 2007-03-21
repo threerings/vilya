@@ -24,10 +24,7 @@ package com.threerings.parlor.client {
 import flash.utils.ByteArray;
 import com.threerings.parlor.client.ParlorService;
 import com.threerings.parlor.client.ParlorService_InviteListener;
-import com.threerings.parlor.client.ParlorService_TableListener;
 import com.threerings.parlor.data.ParlorMarshaller_InviteMarshaller;
-import com.threerings.parlor.data.ParlorMarshaller_TableMarshaller;
-import com.threerings.parlor.data.TableConfig;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
@@ -45,24 +42,12 @@ public interface ParlorService extends InvocationService
     function cancel (arg1 :Client, arg2 :int, arg3 :InvocationService_InvocationListener) :void;
 
     // from Java interface ParlorService
-    function createTable (arg1 :Client, arg2 :int, arg3 :TableConfig, arg4 :GameConfig, arg5 :ParlorService_TableListener) :void;
-
-    // from Java interface ParlorService
     function invite (arg1 :Client, arg2 :Name, arg3 :GameConfig, arg4 :ParlorService_InviteListener) :void;
-
-    // from Java interface ParlorService
-    function joinTable (arg1 :Client, arg2 :int, arg3 :int, arg4 :int, arg5 :InvocationService_InvocationListener) :void;
-
-    // from Java interface ParlorService
-    function leaveTable (arg1 :Client, arg2 :int, arg3 :int, arg4 :InvocationService_InvocationListener) :void;
 
     // from Java interface ParlorService
     function respond (arg1 :Client, arg2 :int, arg3 :int, arg4 :Object, arg5 :InvocationService_InvocationListener) :void;
 
     // from Java interface ParlorService
     function startSolitaire (arg1 :Client, arg2 :GameConfig, arg3 :InvocationService_ConfirmListener) :void;
-
-    // from Java interface ParlorService
-    function startTableNow (arg1 :Client, arg2 :int, arg3 :int, arg4 :InvocationService_InvocationListener) :void;
 }
 }

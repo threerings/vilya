@@ -21,41 +21,41 @@
 
 package com.threerings.parlor.server;
 
-import com.threerings.parlor.client.ParlorService;
+import com.threerings.parlor.client.TableService;
+import com.threerings.parlor.data.TableConfig;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.presents.server.InvocationProvider;
-import com.threerings.util.Name;
 
 /**
- * Defines the server-side of the {@link ParlorService}.
+ * Defines the server-side of the {@link TableService}.
  */
-public interface ParlorProvider extends InvocationProvider
+public interface TableProvider extends InvocationProvider
 {
     /**
-     * Handles a {@link ParlorService#cancel} request.
+     * Handles a {@link TableService#createTable} request.
      */
-    public void cancel (ClientObject caller, int arg1, InvocationService.InvocationListener arg2)
+    public void createTable (ClientObject caller, TableConfig arg1, GameConfig arg2, InvocationService.ResultListener arg3)
         throws InvocationException;
 
     /**
-     * Handles a {@link ParlorService#invite} request.
+     * Handles a {@link TableService#joinTable} request.
      */
-    public void invite (ClientObject caller, Name arg1, GameConfig arg2, ParlorService.InviteListener arg3)
+    public void joinTable (ClientObject caller, int arg1, int arg2, InvocationService.InvocationListener arg3)
         throws InvocationException;
 
     /**
-     * Handles a {@link ParlorService#respond} request.
+     * Handles a {@link TableService#leaveTable} request.
      */
-    public void respond (ClientObject caller, int arg1, int arg2, Object arg3, InvocationService.InvocationListener arg4)
+    public void leaveTable (ClientObject caller, int arg1, InvocationService.InvocationListener arg2)
         throws InvocationException;
 
     /**
-     * Handles a {@link ParlorService#startSolitaire} request.
+     * Handles a {@link TableService#startTableNow} request.
      */
-    public void startSolitaire (ClientObject caller, GameConfig arg1, InvocationService.ConfirmListener arg2)
+    public void startTableNow (ClientObject caller, int arg1, InvocationService.InvocationListener arg2)
         throws InvocationException;
 }

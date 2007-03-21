@@ -26,16 +26,13 @@ import com.threerings.util.Name;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 
-import com.threerings.parlor.data.TableConfig;
-
 import com.threerings.parlor.game.data.GameConfig;
 
 /**
- * Provides an interface to the various parlor invocation services.
- * Presently these services are limited to the various matchmaking
- * mechanisms. It is unlikely that client code will want to make direct
- * use of this class, instead they would make use of the programmatic
- * interface provided by the {@link ParlorDirector}.
+ * Provides an interface to the various parlor invocation services.  Presently these services are
+ * limited to the various matchmaking mechanisms. It is unlikely that client code will want to make
+ * direct use of this class, instead they would make use of the programmatic interface provided by
+ * the {@link ParlorDirector}.
  */
 public interface ParlorService extends InvocationService
 {
@@ -51,124 +48,49 @@ public interface ParlorService extends InvocationService
     }
 
     /**
-     * You probably don't want to call this directly, but want to generate
-     * your invitation request via {@link ParlorDirector#invite}. Requests
-     * that an invitation be delivered to the named user, requesting that
-     * they join the inviting user in a game, the details of which are
+     * You probably don't want to call this directly, but want to generate your invitation request
+     * via {@link ParlorDirector#invite}. Requests that an invitation be delivered to the named
+     * user, requesting that they join the inviting user in a game, the details of which are
      * specified in the supplied game config object.
      *
      * @param client a connected, operational client instance.
      * @param invitee the username of the user to be invited.
-     * @param config a game config object detailing the type and
-     * configuration of the game to be created.
+     * @param config a game config object detailing the type and configuration of the game to be
+     * created.
      * @param listener will receive and process the response.
      */
     public void invite (Client client, Name invitee, GameConfig config,
                         InviteListener listener);
 
     /**
-     * You probably don't want to call this directly, but want to call one
-     * of {@link Invitation#accept}, {@link Invitation#refuse}, or {@link
-     * Invitation#counter}. Requests that an invitation response be
-     * delivered with the specified parameters.
+     * You probably don't want to call this directly, but want to call one of {@link
+     * Invitation#accept}, {@link Invitation#refuse}, or {@link Invitation#counter}. Requests that
+     * an invitation response be delivered with the specified parameters.
      *
      * @param client a connected, operational client instance.
-     * @param inviteId the unique id previously assigned by the server to
-     * this invitation.
-     * @param code the response code to use in responding to the
-     * invitation.
-     * @param arg the argument associated with the response (a string
-     * message from the player explaining why the response was refused in
-     * the case of an invitation refusal or an updated game configuration
-     * object in the case of a counter-invitation, or null in the case of
-     * an accepted invitation).
+     * @param inviteId the unique id previously assigned by the server to this invitation.
+     * @param code the response code to use in responding to the invitation.
+     * @param arg the argument associated with the response (a string message from the player
+     * explaining why the response was refused in the case of an invitation refusal or an updated
+     * game configuration object in the case of a counter-invitation, or null in the case of an
+     * accepted invitation).
      * @param listener will receive and process the response.
      */
     public void respond (Client client, int inviteId, int code, Object arg,
                          InvocationListener listener);
 
     /**
-     * You probably don't want to call this directly, but want to call
-     * {@link Invitation#cancel}. Requests that an outstanding
-     * invitation be cancelled.
+     * You probably don't want to call this directly, but want to call {@link
+     * Invitation#cancel}. Requests that an outstanding invitation be cancelled.
      *
      * @param client a connected, operational client instance.
-     * @param inviteId the unique id previously assigned by the server to
-     * this invitation.
+     * @param inviteId the unique id previously assigned by the server to this invitation.
      * @param listener will receive and process the response.
      */
-    public void cancel (Client client, int inviteId,
-                        InvocationListener listener);
+    public void cancel (Client client, int inviteId, InvocationListener listener);
 
     /**
-     * Used to communicate responses to {@link #createTable}, {@link
-     * #joinTable}, and {@link #leaveTable} requests.
+     * Requests to start a single player game with the specified game configuration.
      */
-    public static interface TableListener extends InvocationListener
-    {
-        public void tableCreated (int tableId);
-    }
-
-    /**
-     * You probably don't want to call this directly, but want to call
-     * {@link TableDirector#createTable}. Requests that a new table be
-     * created.
-     *
-     * @param client a connected, operational client instance.
-     * @param lobbyOid the oid of the lobby that will contain the newly
-     * created table.
-     * @param tableConfig the table configuration parameters.
-     * @param config the game config for the game to be matchmade by the
-     * table.
-     * @param listener will receive and process the response.
-     */
-    public void createTable (Client client, int lobbyOid,
-            TableConfig tableConfig, GameConfig config, TableListener listener);
-
-    /**
-     * You probably don't want to call this directly, but want to call
-     * {@link TableDirector#joinTable}. Requests that the current user
-     * be added to the specified table at the specified position.
-     *
-     * @param client a connected, operational client instance.
-     * @param lobbyOid the oid of the lobby that contains the table.
-     * @param tableId the unique id of the table to which this user wishes
-     * to be added.
-     * @param position the position at the table to which this user desires
-     * to be added.
-     * @param listener will receive and process the response.
-     */
-    public void joinTable (Client client, int lobbyOid, int tableId,
-                           int position, InvocationListener listener);
-
-    /**
-     * You probably don't want to call this directly, but want to call
-     * {@link TableDirector#leaveTable}. Requests that the current user be
-     * removed from the specified table.
-     *
-     * @param client a connected, operational client instance.
-     * @param lobbyOid the oid of the lobby that contains the table.
-     * @param tableId the unique id of the table from which this user
-     * wishes to be removed.
-     * @param listener will receive and process the response.
-     */
-    public void leaveTable (Client client, int lobbyOid, int tableId,
-                            InvocationListener listener);
-
-    /**
-     * You probably don't want to call this directly, but want to call
-     * {@link TableDirector#startTableNow}. Requests that the specified
-     * table be started now, even if all seats are not occupied. This
-     * will always fail if called by any other player than that seated
-     * in position 0 (usually the creator).
-     */
-    public void startTableNow (Client client, int lobbyOid, int tableId,
-                               InvocationListener listener);
-
-    /**
-     * Requests to start a single player game with the specified game
-     * configuration.
-     */
-    public void startSolitaire (Client client, GameConfig config,
-                                ConfirmListener listener);
+    public void startSolitaire (Client client, GameConfig config, ConfirmListener listener);
 }

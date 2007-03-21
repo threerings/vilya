@@ -24,23 +24,21 @@ package com.threerings.parlor.client {
 import flash.utils.ByteArray;
 import com.threerings.util.*; // for Float, Integer, etc.
 
-import com.threerings.parlor.client.ParlorService;
-import com.threerings.parlor.client.ParlorService_InviteListener;
-import com.threerings.parlor.data.ParlorMarshaller_InviteMarshaller;
+import com.threerings.parlor.client.TableService;
+import com.threerings.parlor.client.TableService_TableListener;
+import com.threerings.parlor.data.TableConfig;
+import com.threerings.parlor.data.TableMarshaller_TableMarshaller;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.presents.client.Client;
-import com.threerings.presents.client.InvocationService_ConfirmListener;
 import com.threerings.presents.client.InvocationService_InvocationListener;
-import com.threerings.presents.data.InvocationMarshaller_ConfirmMarshaller;
-import com.threerings.util.Name;
 
 /**
- * An ActionScript version of the Java ParlorService_InviteListener interface.
+ * An ActionScript version of the Java TableService_TableListener interface.
  */
-public interface ParlorService_InviteListener
+public interface TableService_TableListener
     extends InvocationService_InvocationListener
 {
-    // from Java ParlorService_InviteListener
-    function inviteReceived (arg1 :int) :void
+    // from Java TableService_TableListener
+    function tableCreated (arg1 :int) :void
 }
 }

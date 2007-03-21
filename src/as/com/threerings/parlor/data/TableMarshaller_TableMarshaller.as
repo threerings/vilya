@@ -19,28 +19,41 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-package com.threerings.parlor.client {
+package com.threerings.parlor.data {
 
 import flash.utils.ByteArray;
 import com.threerings.util.*; // for Float, Integer, etc.
 
-import com.threerings.parlor.client.ParlorService;
-import com.threerings.parlor.client.ParlorService_InviteListener;
-import com.threerings.parlor.data.ParlorMarshaller_InviteMarshaller;
+import com.threerings.parlor.client.TableService;
+import com.threerings.parlor.client.TableService_TableListener;
+import com.threerings.parlor.data.TableConfig;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.presents.client.Client;
-import com.threerings.presents.client.InvocationService_ConfirmListener;
-import com.threerings.presents.client.InvocationService_InvocationListener;
-import com.threerings.presents.data.InvocationMarshaller_ConfirmMarshaller;
-import com.threerings.util.Name;
+import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.data.InvocationMarshaller_ListenerMarshaller;
 
 /**
- * An ActionScript version of the Java ParlorService_InviteListener interface.
+ * Marshalls instances of the TableService_TableMarshaller interface.
  */
-public interface ParlorService_InviteListener
-    extends InvocationService_InvocationListener
+public class TableMarshaller_TableMarshaller
+    extends InvocationMarshaller_ListenerMarshaller
 {
-    // from Java ParlorService_InviteListener
-    function inviteReceived (arg1 :int) :void
+    /** The method id used to dispatch {@link #tableCreated} responses. */
+    public static const TABLE_CREATED :int = 1;
+
+    // from InvocationMarshaller_ListenerMarshaller
+    override public function dispatchResponse (methodId :int, args :Array) :void
+    {
+        switch (methodId) {
+        case TABLE_CREATED:
+            (listener as TableService_TableListener).tableCreated(
+                (args[0] as int));
+            return;
+
+        default:
+            super.dispatchResponse(methodId, args);
+            return;
+        }
+    }
 }
 }

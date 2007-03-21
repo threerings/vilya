@@ -21,44 +21,57 @@
 
 package com.threerings.micasa.lobby.table;
 
-import com.threerings.presents.dobj.DSet;
 import com.threerings.parlor.data.Table;
+import com.threerings.parlor.data.TableMarshaller;
+import com.threerings.presents.dobj.DSet;
+
 import com.threerings.micasa.lobby.LobbyObject;
 
-public class TableLobbyObject
-    extends LobbyObject
+public class TableLobbyObject extends LobbyObject
     implements com.threerings.parlor.data.TableLobbyObject
 {
     // AUTO-GENERATED: FIELDS START
     /** The field name of the <code>tableSet</code> field. */
     public static final String TABLE_SET = "tableSet";
+
+    /** The field name of the <code>tableService</code> field. */
+    public static final String TABLE_SERVICE = "tableService";
     // AUTO-GENERATED: FIELDS END
 
     /** A set containing all of the tables being managed by this lobby. */
     public DSet tableSet = new DSet();
 
-    // documentation inherited
+    /** Handles our table services. */
+    public TableMarshaller tableService;
+
+    // from interface TableLobbyObject
     public DSet getTables ()
     {
         return tableSet;
     }
 
-    // documentation inherited from interface
+    // from interface TableLobbyObject
     public void addToTables (Table table)
     {
         addToTableSet(table);
     }
 
-    // documentation inherited from interface
+    // from interface TableLobbyObject
     public void updateTables (Table table)
     {
         updateTableSet(table);
     }
 
-    // documentation inherited from interface
+    // from interface TableLobbyObject
     public void removeFromTables (Comparable key)
     {
         removeFromTableSet(key);
+    }
+
+    // from interface TableLobbyObject
+    public TableMarshaller getTableService ()
+    {
+        return tableService;
     }
 
     // AUTO-GENERATED: METHODS START
@@ -108,6 +121,22 @@ public class TableLobbyObject
         @SuppressWarnings("unchecked") DSet clone =
             (value == null) ? null : value.typedClone();
         this.tableSet = clone;
+    }
+
+    /**
+     * Requests that the <code>tableService</code> field be set to the
+     * specified value. The local value will be updated immediately and an
+     * event will be propagated through the system to notify all listeners
+     * that the attribute did change. Proxied copies of this object (on
+     * clients) will apply the value change when they received the
+     * attribute changed notification.
+     */
+    public void setTableService (TableMarshaller value)
+    {
+        TableMarshaller ovalue = this.tableService;
+        requestAttributeChange(
+            TABLE_SERVICE, value, ovalue);
+        this.tableService = value;
     }
     // AUTO-GENERATED: METHODS END
 }

@@ -22,25 +22,30 @@
 package com.threerings.parlor.client {
 
 import flash.utils.ByteArray;
-import com.threerings.util.*; // for Float, Integer, etc.
-
-import com.threerings.parlor.client.ParlorService;
-import com.threerings.parlor.client.ParlorService_InviteListener;
-import com.threerings.parlor.data.ParlorMarshaller_InviteMarshaller;
+import com.threerings.parlor.client.TableService;
+import com.threerings.parlor.data.TableConfig;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.presents.client.Client;
-import com.threerings.presents.client.InvocationService_ConfirmListener;
+import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.client.InvocationService_InvocationListener;
-import com.threerings.presents.data.InvocationMarshaller_ConfirmMarshaller;
-import com.threerings.util.Name;
+import com.threerings.presents.client.InvocationService_ResultListener;
+import com.threerings.presents.data.InvocationMarshaller_ResultMarshaller;
 
 /**
- * An ActionScript version of the Java ParlorService_InviteListener interface.
+ * An ActionScript version of the Java TableService interface.
  */
-public interface ParlorService_InviteListener
-    extends InvocationService_InvocationListener
+public interface TableService extends InvocationService
 {
-    // from Java ParlorService_InviteListener
-    function inviteReceived (arg1 :int) :void
+    // from Java interface TableService
+    function createTable (arg1 :Client, arg2 :TableConfig, arg3 :GameConfig, arg4 :InvocationService_ResultListener) :void;
+
+    // from Java interface TableService
+    function joinTable (arg1 :Client, arg2 :int, arg3 :int, arg4 :InvocationService_InvocationListener) :void;
+
+    // from Java interface TableService
+    function leaveTable (arg1 :Client, arg2 :int, arg3 :InvocationService_InvocationListener) :void;
+
+    // from Java interface TableService
+    function startTableNow (arg1 :Client, arg2 :int, arg3 :InvocationService_InvocationListener) :void;
 }
 }
