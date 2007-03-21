@@ -66,11 +66,15 @@ import com.threerings.crowd.util.CrowdContext;
 
 import com.threerings.micasa.Log;
 
-public class ChatPanel
-    extends JPanel
+public class ChatPanel extends JPanel
     implements ActionListener, ChatDisplay, OccupantObserver, PlaceView
 {
     public ChatPanel (CrowdContext ctx)
+    {
+        this(ctx, false);
+    }
+
+    public ChatPanel (CrowdContext ctx, boolean cuddleHintLabel)
     {
         // keep this around for later
         _ctx = ctx;
@@ -94,11 +98,17 @@ public class ChatPanel
         createStyles(_text);
 
         // add a label for the text entry stuff
-        add(new JLabel("Type here to chat:"), GroupLayout.FIXED);
+        JLabel hint = new JLabel("Type here to chat:");
+        if (!cuddleHintLabel) {
+            add(hint, GroupLayout.FIXED);
+        }
 
         // create a horizontal group for the text entry bar
         gl = new HGroupLayout(GroupLayout.STRETCH);
         JPanel epanel = new JPanel(gl);
+        if (cuddleHintLabel) {
+            epanel.add(hint, GroupLayout.FIXED);
+        }
         epanel.add(_entry = new JTextField());
         _entry.setActionCommand("send");
         _entry.addActionListener(this);
