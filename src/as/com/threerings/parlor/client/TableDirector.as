@@ -28,7 +28,9 @@ import com.threerings.util.Util;
 import com.threerings.presents.client.BasicDirector;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.ClientEvent;
+import com.threerings.presents.client.InvocationService_ResultListener;
 
+import com.threerings.presents.dobj.DObject;
 import com.threerings.presents.dobj.EntryAddedEvent;
 import com.threerings.presents.dobj.EntryRemovedEvent;
 import com.threerings.presents.dobj.EntryUpdatedEvent;
@@ -58,7 +60,7 @@ import com.threerings.parlor.util.ParlorContext;
  * matchmaking takes place implements the {@link TableLobbyObject} interface.
  */
 public class TableDirector extends BasicDirector
-    implements SetListener, ParlorService_TableListener
+    implements SetListener, InvocationService_ResultListener
 {
     protected static const log :Log = Log.getLog(TableDirector);
 
@@ -83,29 +85,27 @@ public class TableDirector extends BasicDirector
 
     /**
      * This must be called by the entity that uses the table director when the using entity
-     * prepares to enter and display a place. It is assumed that the client is already subscribed
-     * to the provided place object.
+     * prepares to enter and display a "place".
      */
-    public function willEnterPlace (place :PlaceObject) :void
+    public function setTableObject (tlobj :DObject) :void
     {
-        // the place should be a TableLobbyObject
-        _tlobj = TableLobbyObject(place);
-
-        // add ourselves as a listener to the place object
-        place.addListener(this);
+        // the distributed object should be a TableLobbyObject
+        _tlobj = TableLobbyObject(tlobj);
+        // listen for table set updates
+        tlobj.addListener(this);
     }
 
     /**
      * This must be called by the entity that uses the table director when the using entity has
-     * left and is done displaying a place.
+     * left and is done displaying the "place".
      */
-    public function didLeavePlace (place :PlaceObject) :void
+    public function clearTableObject () :void
     {
-        // remove our listenership
-        place.removeListener(this);
-
-        // clear out our reference
-        _tlobj = null;
+        // remove our listenership and clear out
+        if (_tlobj != null) {
+            (_tlobj as DObject).removeListener(this);
+            _tlobj = null;
+        }
     }
 
     /**

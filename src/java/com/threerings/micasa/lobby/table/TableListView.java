@@ -149,7 +149,7 @@ public class TableListView extends JPanel
     public void willEnterPlace (PlaceObject place)
     {
         // pass the good word on to our table director
-        _tdtr.willEnterPlace(place);
+        _tdtr.setTableObject(place);
 
         // iterate over the tables already active in this lobby and put
         // them in their respective lists
@@ -164,7 +164,7 @@ public class TableListView extends JPanel
     public void didLeavePlace (PlaceObject place)
     {
         // pass the good word on to our table director
-        _tdtr.didLeavePlace(place);
+        _tdtr.clearTableObject();
 
         // clear out our table lists
         _matchList.removeAll();

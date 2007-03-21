@@ -28,13 +28,13 @@ import com.samskivert.util.ObserverList;
 import com.threerings.presents.client.BasicDirector;
 import com.threerings.presents.client.Client;
 
+import com.threerings.presents.dobj.DObject;
 import com.threerings.presents.dobj.EntryAddedEvent;
 import com.threerings.presents.dobj.EntryRemovedEvent;
 import com.threerings.presents.dobj.EntryUpdatedEvent;
 import com.threerings.presents.dobj.SetListener;
 
 import com.threerings.crowd.data.BodyObject;
-import com.threerings.crowd.data.PlaceObject;
 
 import com.threerings.parlor.Log;
 import com.threerings.parlor.data.Table;
@@ -81,27 +81,27 @@ public class TableDirector extends BasicDirector
 
     /**
      * This must be called by the entity that uses the table director when the using entity
-     * prepares to enter and display a place. It is assumed that the client is already subscribed
-     * to the provided place object.
+     * prepares to enter and display a place.
      */
-    public void willEnterPlace (PlaceObject place)
+    public void setTableObject (DObject tlobj)
     {
         // the place should be a TableLobbyObject
-        _tlobj = (TableLobbyObject)place;
-        // add ourselves as a listener to the place object
-        place.addListener(this);
+        _tlobj = (TableLobbyObject)tlobj;
+        // listen for table set changes
+        tlobj.addListener(this);
     }
 
     /**
      * This must be called by the entity that uses the table director when the using entity has
-     * left and is done displaying a place.
+     * left and is done dealing with tables.
      */
-    public void didLeavePlace (PlaceObject place)
+    public void clearTableObject ()
     {
-        // remove our listenership
-        place.removeListener(this);
-        // clear out our reference
-        _tlobj = null;
+        // remove our listenership and clear out
+        if (_tlobj != null) {
+            ((DObject)_tlobj).removeListener(this);
+            _tlobj = null;
+        }
     }
 
     /**
@@ -279,7 +279,7 @@ public class TableDirector extends BasicDirector
         }
     }
 
-    // documentation inherited from interface
+    // from interface TableService.ResultListener
     public void requestFailed (String reason)
     {
         Log.warning("Table action failed [reason=" + reason + "].");
