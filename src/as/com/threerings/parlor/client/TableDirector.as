@@ -135,6 +135,14 @@ public class TableDirector extends BasicDirector
     }
 
     /**
+     * Returns the table this client is currently seated at, or null.
+     */
+     public function getSeatedTable () :Table
+     {
+         return _ourTable;
+     }
+
+    /**
      * Sends a request to create a table with the specified game configuration. This user will
      * become the owner of this table and will be added to the first position in the table. The
      * response will be communicated via the {@link TableObserver} interface.
