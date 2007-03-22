@@ -23,14 +23,12 @@ package com.threerings.micasa.lobby.table;
 
 import com.threerings.crowd.data.PlaceObject;
 import com.threerings.parlor.server.TableManager;
-import com.threerings.parlor.server.TableManagerProvider;
 import com.threerings.micasa.lobby.LobbyManager;
 
 /**
  * Extends lobby manager only to ensure that a table lobby object is used for table lobbies.
  */
-public class TableLobbyManager
-    extends LobbyManager implements TableManagerProvider
+public class TableLobbyManager extends LobbyManager
 {
     // documentation inherited
     protected void didStartup ()
@@ -44,12 +42,6 @@ public class TableLobbyManager
     protected PlaceObject createPlaceObject ()
     {
         return new TableLobbyObject();
-    }
-
-    // documentation inherited
-    public TableManager getTableManager ()
-    {
-        return _tmgr;
     }
 
     /** A reference to our table manager. */

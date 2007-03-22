@@ -57,10 +57,7 @@ import com.threerings.parlor.game.server.GameManager;
 
 /**
  * A table manager can be used by a place manager (or other entity) to take care of the management
- * of a table matchmaking service in the place managed by the place manager (or on some other
- * distributed object). The place manager need instantiate a table manager and implement the {@link
- * TableManagerProvider} interface to provide access to the table manager for the associated
- * invocation services.
+ * of a table matchmaking service on a particular distributed object.
  */
 public class TableManager
     implements ParlorCodes, OidListListener, TableProvider
