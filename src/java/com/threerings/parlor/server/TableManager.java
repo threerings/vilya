@@ -82,6 +82,18 @@ public class TableManager
     }
 
     /**
+     * This must be called when the table manager is no longer needed.
+     */
+    public void shutdown ()
+    {
+        CrowdServer.invmgr.clearDispatcher(_tlobj.getTableService());
+        _tlobj.setTableService(null);
+        if (_dobj instanceof PlaceObject) {
+            _dobj.removeListener(this);
+        }
+    }
+
+    /**
      * Set the subclass of Table that this instance should generate.
      */
     public void setTableClass (Class<? extends Table> tableClass)

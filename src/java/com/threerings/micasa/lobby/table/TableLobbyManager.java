@@ -39,6 +39,14 @@ public class TableLobbyManager extends LobbyManager
     }
 
     // documentation inherited
+    protected void didShutdown ()
+    {
+        super.didShutdown();
+        // clean up our table manager
+        _tmgr.shutdown();
+    }
+
+    // documentation inherited
     protected PlaceObject createPlaceObject ()
     {
         return new TableLobbyObject();
