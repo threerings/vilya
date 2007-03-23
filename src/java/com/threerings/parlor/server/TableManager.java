@@ -361,6 +361,11 @@ public class TableManager
      */
     protected void unmapTable (int gameOid)
     {
+        // if we've been shutdown, then we've got nothing to worry about
+        if (_tlobj == null) {
+            return;
+        }
+
         Table table = _goidMap.get(gameOid);
         if (table != null) {
             purgeTable(table);
@@ -374,6 +379,11 @@ public class TableManager
      */
     protected void updateOccupants (int gameOid)
     {
+        // if we've been shutdown, then we've got nothing to worry about
+        if (_tlobj == null) {
+            return;
+        }
+
         Table table = _goidMap.get(gameOid);
         if (table == null) {
             Log.warning("Unable to find table for running game [gameOid=" + gameOid + "].");
