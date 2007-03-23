@@ -83,7 +83,7 @@ public class ParlorDirector extends BasicDirector
      */
     public function addGameReadyObserver (observer :GameReadyObserver) :void
     {
-        _grobs.add(observer);
+        _grobs.push(observer);
     }
 
     /**
