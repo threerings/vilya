@@ -94,6 +94,15 @@ public class StatRepository extends SimpleRepository
     }
 
     /**
+     * Deletes all stats associated with the specified player.
+     */
+    public void deleteStats (int playerId)
+        throws PersistenceException
+    {
+        update("delete from STATS where PLAYER_ID = " + playerId);
+    }
+
+    /**
      * Writes out any of the stats in the supplied array that have been modified since they were
      * first loaded. Exceptions that occur while writing the stats will be caught and logged.
      */
