@@ -71,10 +71,10 @@ public class ChatPanel extends JPanel
 {
     public ChatPanel (CrowdContext ctx)
     {
-        this(ctx, false);
+        this(ctx, true);
     }
 
-    public ChatPanel (CrowdContext ctx, boolean cuddleHintLabel)
+    public ChatPanel (CrowdContext ctx, boolean showHintLabel)
     {
         // keep this around for later
         _ctx = ctx;
@@ -98,23 +98,19 @@ public class ChatPanel extends JPanel
         createStyles(_text);
 
         // add a label for the text entry stuff
-        JLabel hint = new JLabel("Type here to chat:");
-        if (!cuddleHintLabel) {
-            add(hint, GroupLayout.FIXED);
+        if (showHintLabel) {
+            add(new JLabel("Type here to chat:"), GroupLayout.FIXED);
         }
 
         // create a horizontal group for the text entry bar
-        gl = new HGroupLayout(GroupLayout.STRETCH);
+        gl = new HGroupLayout(GroupLayout.STRETCH, GroupLayout.STRETCH, 5, GroupLayout.LEFT);
         JPanel epanel = new JPanel(gl);
-        if (cuddleHintLabel) {
-            epanel.add(hint, GroupLayout.FIXED);
-        }
         epanel.add(_entry = new JTextField());
         _entry.setActionCommand("send");
         _entry.addActionListener(this);
         _entry.setEnabled(false);
 
-        _send = new JButton("Send");
+        _send = new JButton("Chat!");
         _send.setEnabled(false);
         _send.addActionListener(this);
         _send.setActionCommand("send");
