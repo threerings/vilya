@@ -86,11 +86,15 @@ public class TableManager
      */
     public void shutdown ()
     {
-        CrowdServer.invmgr.clearDispatcher(_tlobj.getTableService());
-        _tlobj.setTableService(null);
+        if (_tlobj != null) {
+            CrowdServer.invmgr.clearDispatcher(_tlobj.getTableService());
+            _tlobj.setTableService(null);
+        }
         if (_dobj instanceof PlaceObject) {
             _dobj.removeListener(this);
         }
+        _tlobj = null;
+        _dobj = null;
     }
 
     /**
