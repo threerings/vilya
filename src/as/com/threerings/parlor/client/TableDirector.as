@@ -73,14 +73,13 @@ public class TableDirector extends BasicDirector
      * managing.
      * @param observer the entity that will receive callbacks when things happen to the tables.
      */
-    public function TableDirector (ctx :ParlorContext, tableField :String, observer :TableObserver)
+    public function TableDirector (ctx :ParlorContext, tableField :String)
     {
         super(ctx);
 
         // keep track of this stuff
         _pctx = ctx;
         _tableField = tableField;
-        _observer = observer;
     }
 
     /**
@@ -106,6 +105,24 @@ public class TableDirector extends BasicDirector
             (_tlobj as DObject).removeListener(this);
             _tlobj = null;
         }
+    }
+
+    /**
+     * Requests that the specified observer be added to the list of observers that are notified
+     * of table updates
+     */
+    public function addTableObserver (observer :TableObserver) :void
+    {
+        _tableObservers.add(observer);
+    }
+
+    /**
+     * Requests that the specified observer be removed from to the list of observers that are
+     * notified of table updates
+     */
+    public function removeTableObserver (observer :TableObserver) :void
+    {
+        _tableObservers.remove(observer);
     }
 
     /**
@@ -243,8 +260,10 @@ public class TableDirector extends BasicDirector
             var table :Table = (event.getEntry() as Table);
             // check to see if we just joined a table
             checkSeatedness(table);
-            // now let the observer know what's up
-            _observer.tableAdded(table);
+            // now let the observers know what's up
+            _tableObservers.apply(function (to :TableObserver) :void {
+                to.tableAdded(table);
+            });
         }
     }
 
@@ -255,8 +274,10 @@ public class TableDirector extends BasicDirector
             var table :Table = (event.getEntry() as Table);
             // check to see if we just joined or left a table
             checkSeatedness(table);
-            // now let the observer know what's up
-            _observer.tableUpdated(table);
+            // now let the observers know what's up
+            _tableObservers.apply(function (to :TableObserver) :void {
+                to.tableUpdated(table);
+            });
         }
     }
 
@@ -271,7 +292,9 @@ public class TableDirector extends BasicDirector
                 notifySeatedness(false);
             }
             // now let the observer know what's up
-            _observer.tableRemoved(tableId);
+            _tableObservers.apply(function (to :TableObserver) :void {
+                to.tableRemoved(tableId);
+            });
         }
     }
 
@@ -351,11 +374,11 @@ public class TableDirector extends BasicDirector
     /** The field name of the distributed set that contains our tables. */
     protected var _tableField :String;
 
-    /** The entity that we talk to when table stuff happens. */
-    protected var _observer :TableObserver;
-
     /** The table of which we are a member if any. */
     protected var _ourTable :Table;
+
+    /** An array of entities that want to hear about table updates. */
+    protected var _tableObservers :ObserverList = new ObserverList();
 
     /** An array of entities that want to hear about when we stand up or sit down. */
     protected var _seatedObservers :ObserverList = new ObserverList();
