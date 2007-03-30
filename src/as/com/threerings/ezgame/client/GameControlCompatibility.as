@@ -89,6 +89,7 @@ public class GameControlCompatibility
 
     public function getPlayerCount_v1 () :int
     {
+        _backend.validateConnected();
         if (_ezObj.players.length == 0) {
             // party game
             return _ezObj.occupants.size();
@@ -100,6 +101,7 @@ public class GameControlCompatibility
 
     public function getPlayerNames_v1 () :Array
     {
+        _backend.validateConnected();
         var names :Array = [];
         if (_ezObj.players.length == 0) {
             // party game, count all occupants
@@ -119,6 +121,7 @@ public class GameControlCompatibility
 
     public function getMyIndex_v1 () :int
     {
+        _backend.validateConnected();
         if (_ezObj.players.length == 0) {
             // TODO: this shouldn't be based off of the String form of the name.
             var array :Array = getPlayerNames_v1();
@@ -131,11 +134,13 @@ public class GameControlCompatibility
 
     public function getTurnHolderIndex_v1 () :int
     {
+        _backend.validateConnected();
         return _ezObj.getPlayerIndex(_ezObj.turnHolder);
     }
 
     public function getWinnerIndexes_v1 () :Array /* of int */
     {
+        _backend.validateConnected();
         var arr :Array = new Array();
         if (_ezObj.winners != null) {
             for (var ii :int = 0; ii < _ezObj.winners.length; ii++) {

@@ -123,6 +123,8 @@ public class GameControlBackend
     {
         _ezObj.removeListener(this);
         _ctx.getClient().getClientObject().removeListener(_userListener);
+
+        _userFuncs = null; // disconnect
     }
 
     protected function handleEZQuery (evt :Object) :void
@@ -216,6 +218,7 @@ public class GameControlBackend
     public function setProperty_v1 (
         propName :String, value :Object, index :int, immediate :Boolean = true) :void
     {
+        validateConnected();
         validatePropertyChange(propName, value, index);
 
         var encoded :Object = EZObjectMarshaller.encode(value, (index == -1));
@@ -230,6 +233,7 @@ public class GameControlBackend
     public function testAndSetProperty_v1 (
         propName :String, value :Object, testValue :Object, index :int) :void
     {
+        validateConnected();
         validatePropertyChange(propName, value, index);
 
         var encodedValue :Object = EZObjectMarshaller.encode(value, (index == -1));
@@ -243,6 +247,7 @@ public class GameControlBackend
     public function mergeCollection_v1 (
         srcColl :String, intoColl :String) :void
     {
+        validateConnected();
         validateName(srcColl);
         validateName(intoColl);
         _ezObj.ezGameService.mergeCollection(_ctx.getClient(),
@@ -252,6 +257,7 @@ public class GameControlBackend
     public function sendMessage_v2 (
         messageName :String, value :Object, playerId :int) :void
     {
+        validateConnected();
         validateName(messageName);
         validateValue(value);
 
@@ -263,6 +269,7 @@ public class GameControlBackend
 
     public function setTicker_v1 (tickerName :String, msOfDelay :int) :void
     {
+        validateConnected();
         validateName(tickerName);
         _ezObj.ezGameService.setTicker(_ctx.getClient(),
             tickerName, msOfDelay, createLoggingConfirmListener("setTicker"));
@@ -270,6 +277,7 @@ public class GameControlBackend
 
     public function sendChat_v1 (msg :String) :void
     {
+        validateConnected();
         validateChat(msg);
         // Post a message to the game object, the controller
         // will listen and call localChat().
@@ -278,6 +286,7 @@ public class GameControlBackend
 
     public function localChat_v1 (msg :String) :void
     {
+        validateConnected();
         validateChat(msg);
         // The sendChat() messages will end up being routed
         // through this method on each client.
@@ -287,6 +296,7 @@ public class GameControlBackend
 
     public function getOccupants_v1 () :Array
     {
+        validateConnected();
         var occs :Array = [];
         for (var ii :int = _ezObj.occupants.size() - 1; ii >= 0; ii--) {
             occs.push(_ezObj.occupants.get(ii));
@@ -297,6 +307,7 @@ public class GameControlBackend
 
     public function getPlayers_v1 () :Array
     {
+        validateConnected();
         if (_ezObj.players.length == 0) {
             // party game
             return getOccupants_v1();
@@ -311,6 +322,7 @@ public class GameControlBackend
 
     public function getOccupantName_v1 (playerId :int) :String
     {
+        validateConnected();
         var occInfo :OccupantInfo =
             (_ezObj.occupantInfo.get(playerId) as OccupantInfo);
         return (occInfo == null) ? null : occInfo.username.toString();
@@ -318,17 +330,20 @@ public class GameControlBackend
 
     public function getMyId_v1 () :int
     {
+        validateConnected();
         return _ctx.getClient().getClientObject().getOid();
     }
 
     public function getControllerId_v1 () :int
     {
+        validateConnected();
         return _ezObj.controllerOid;
     }
 
     // TODO: table games only
     public function getPlayerPosition_v1 (playerId :int) :int
     {
+        validateConnected();
         var occInfo :OccupantInfo =
             (_ezObj.occupantInfo.get(playerId) as OccupantInfo);
         if (occInfo == null) {
@@ -340,6 +355,7 @@ public class GameControlBackend
     // TODO: table only
     public function getMyPosition_v1 () :int
     {
+        validateConnected();
         return _ezObj.getPlayerIndex(
             (_ctx.getClient().getClientObject() as BodyObject).getVisibleName());
     }
@@ -347,18 +363,21 @@ public class GameControlBackend
     // TODO: table only
     public function getTurnHolder_v1 () :int
     {
+        validateConnected();
         var occInfo :OccupantInfo = _ezObj.getOccupantInfo(_ezObj.turnHolder);
         return (occInfo == null) ? 0 : occInfo.bodyOid;
     }
 
     public function getRound_v1 () :int
     {
+        validateConnected();
         return _ezObj.roundId;
     }
 
     public function getUserCookie_v2 (
         playerId :int, callback :Function) :void
     {
+        validateConnected();
         // see if that cookie is already published
         if (_ezObj.userCookies != null) {
             var uc :UserCookie =
@@ -386,6 +405,7 @@ public class GameControlBackend
 
     public function setUserCookie_v1 (cookie :Object) :Boolean
     {
+        validateConnected();
         var ba :ByteArray =
             (EZObjectMarshaller.encode(cookie, false) as ByteArray);
         if (ba.length > MAX_USER_COOKIE) {
@@ -400,28 +420,33 @@ public class GameControlBackend
 
     public function isMyTurn_v1 () :Boolean
     {
+        validateConnected();
         return getUsername().equals(_ezObj.turnHolder);
     }
 
     public function isInPlay_v1 () :Boolean
     {
+        validateConnected();
         return _ezObj.isInPlay();
     }
 
     public function endTurn_v2 (nextPlayerId :int) :void
     {
+        validateConnected();
         _ezObj.ezGameService.endTurn(
             _ctx.getClient(), nextPlayerId, createLoggingConfirmListener("endTurn"));
     }
 
     public function endRound_v1 (nextRoundDelay :int) :void
     {
+        validateConnected();
         _ezObj.ezGameService.endRound(
             _ctx.getClient(), nextRoundDelay, createLoggingConfirmListener("endRound"));
     }
 
     public function endGame_v2 (... winnerIds) :void
     {
+        validateConnected();
         var winners :TypedArray = TypedArray.create(int);
         while (winnerIds.length > 0) {
             winners.push(int(winnerIds.shift()));
@@ -432,6 +457,7 @@ public class GameControlBackend
 
     public function getDictionaryLetterSet_v1 (locale :String, count :int, callback :Function) :void
     {
+        validateConnected();
         var listener :InvocationService_ResultListener;
         if (callback != null) {
             var failure :Function = function (cause :String = null) :void {
@@ -455,6 +481,7 @@ public class GameControlBackend
     public function checkDictionaryWord_v1 (
         locale :String, word :String, callback :Function) :void
     {
+        validateConnected();
         var listener :InvocationService_ResultListener;
         if (callback != null) {
             var failure :Function = function (cause :String = null) :void {
@@ -482,6 +509,7 @@ public class GameControlBackend
     public function populateCollection_v1 (
         collName :String, values :Array, clearExisting :Boolean) :void
     {
+        validateConnected();
         validateName(collName);
         if (values == null) {
             throw new ArgumentError("Collection values may not be null.");
@@ -503,6 +531,7 @@ public class GameControlBackend
         collName :String, count :int, msgOrPropName :String, playerId :int,
         consume :Boolean, callback :Function) :void
     {
+        validateConnected();
         validateName(collName);
         validateName(msgOrPropName);
         if (count < 1) {
@@ -534,6 +563,7 @@ public class GameControlBackend
     public function alterKeyEvents_v1 (
         keyEventType :String, add :Boolean) :void
     {
+        validateConnected();
         if (add) {
             _container.addEventListener(keyEventType, handleKeyEvent);
         } else {
@@ -543,6 +573,7 @@ public class GameControlBackend
 
     public function focusContainer_v1 () :void
     {
+        validateConnected();
         _container.setFocus();
     }
 
@@ -587,6 +618,16 @@ public class GameControlBackend
             Log.getLog(this).warning("Service failure " +
                 "[service=" + service + ", cause=" + cause + "].");
         });
+    }
+
+    /**
+     * Validate that we're not shutdown.
+     */
+    public function validateConnected () :void
+    {
+        if (_userFuncs == null) {
+            throw new Error("Not connected.");
+        }
     }
 
     /**
