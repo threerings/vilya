@@ -34,9 +34,15 @@ import com.threerings.presents.dobj.DSet_Entry;
 /**
  * Contains information on clusters.
  */
-public class Cluster extends Rectangle
-    implements DSet_Entry, Streamable /*, Hashable */
+public class Cluster
+    implements DSet_Entry, Streamable, Hashable
 {
+    /** The bounding rectangle of this cluster. */
+    public var x :int;
+    public var y :int;
+    public var width :int;
+    public var height :int;
+
     /** A unique identifier for this cluster (also the distributed object
      * id of the cluster chat object). */
     public var clusterOid :int;
@@ -46,18 +52,25 @@ public class Cluster extends Rectangle
         // nothing needed
     }
 
-    // documentation inherited
+    // from Hashable
     public function hashCode () :int
     {
         return clusterOid;
     }
 
+    // from Hashable
+    public function equals (o :Object) :Boolean
+    {
+        return (o is Cluster) && ((o as Cluster).clusterOid == this.clusterOid);
+    }
+
     /**
      * Generates a string representation of this instance.
      */
-    override public function toString () :String
+    public function toString () :String
     {
-        return super.toString() + ", clusterOid=" + clusterOid;
+        return "x=" + x + ", y=" + y + ", width=" + width + ", height=" + height +
+            ", clusterOid=" + clusterOid;
     }
 
     // documentation inherited from interface DSet_Entry
@@ -69,16 +82,23 @@ public class Cluster extends Rectangle
     // documentation inherited from interface Streamable
     public function readObject (ins :ObjectInputStream) :void
     {
+        x = ins.readInt();
+        y = ins.readInt();
+        width = ins.readInt();
+        height = ins.readInt();
+
         clusterOid = ins.readInt();
     }
 
     // documentation inherited from interface Streamable
     public function writeObject (out :ObjectOutputStream) :void
     {
+        out.writeInt(x);
+        out.writeInt(y);
+        out.writeInt(width);
+        out.writeInt(height);
+
         out.writeInt(clusterOid);
     }
-
-    /** Used for {@link #getKey}. */
-    protected var _key :int;
 }
 }
