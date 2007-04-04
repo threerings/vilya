@@ -286,7 +286,6 @@ public class GameControlBackend
 
     public function localChat_v1 (msg :String) :void
     {
-        validateConnected();
         validateChat(msg);
         // The sendChat() messages will end up being routed
         // through this method on each client.
