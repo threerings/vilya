@@ -82,6 +82,10 @@ public class PlayersDisplay extends Sprite
             maxWidth = label.textWidth + TEXTWIDTH_ADD;
         }
 
+        if (!_gameCtrl.isConnected()) {
+            return; // nothing to do
+        }
+
         var players :Array = _gameCtrl.seating.getPlayerIds();
 
         // create a label for each player
@@ -128,7 +132,7 @@ public class PlayersDisplay extends Sprite
 
     protected function createHeader () :TextField
     {
-        var label :TextField = createHeader();
+        var label :TextField = new TextField();
 // damn stylesheet doesn't seem to actually -work-
 //        var style :StyleSheet = new StyleSheet();
 //        style.fontWeight = "bold";
