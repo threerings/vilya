@@ -612,9 +612,8 @@ public class EZGameControl extends BaseControl
     {
         // get our gamedata
         _gameData = o.gameData;
-        _gameConfig = o.gameConfig;
-        if (_gameConfig == null) {
-            _gameConfig = {};
+        if (o.gameConfig != null) {
+            _gameConfig = o.gameConfig;
         }
 
         // and functions
@@ -684,7 +683,7 @@ public class EZGameControl extends BaseControl
     protected var _gameData :Object;
 
     /** Contains any custom game configuration data. */
-    protected var _gameConfig :Object;
+    protected var _gameConfig :Object = {};
 
     /** Contains functions exposed to us from the EZGame host. */
     protected var _funcs :Object;
