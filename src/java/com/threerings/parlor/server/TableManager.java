@@ -60,7 +60,7 @@ import com.threerings.parlor.game.server.GameManager;
  * of a table matchmaking service on a particular distributed object.
  */
 public class TableManager
-    implements ParlorCodes, OidListListener, TableProvider
+    implements ParlorCodes, TableProvider
 {
     /**
      * Creates a table manager that will manage tables in the supplied distributed object (which
@@ -77,7 +77,7 @@ public class TableManager
         // if our table is in a "place" add ourselves as a listener so that we can tell if a user
         // leaves the place without leaving their table
         if (_dobj instanceof PlaceObject) {
-            _dobj.addListener(this);
+            _dobj.addListener(_leaveListener);
         }
     }
 
@@ -91,7 +91,7 @@ public class TableManager
             _tlobj.setTableService(null);
         }
         if (_dobj instanceof PlaceObject) {
-            _dobj.removeListener(this);
+            _dobj.removeListener(_leaveListener);
         }
         _tlobj = null;
         _dobj = null;
@@ -277,9 +277,15 @@ public class TableManager
     protected void notePlayerAdded (Table table, int playerOid)
     {
         _boidMap.put(playerOid, table);
-
-        // TODO: if we're not in a place, listen to the player's BodyObject for object death so
-        // that we remove them from their table if they logoff
+        // if we're in a place, we're done
+        if (_dobj instanceof PlaceObject) {
+            return;
+        }
+        // if not, listen to their BodyObject for death so that we remove them if they logoff
+        BodyObject body = (BodyObject)PresentsServer.omgr.getObject(playerOid);
+        if (body != null) {
+            body.addListener(_deathListener);
+        }
     }
 
     /**
@@ -288,7 +294,12 @@ public class TableManager
     protected boolean notePlayerRemoved (Table table, int playerOid)
     {
         boolean removed = (_boidMap.remove(playerOid) != null);
-        // TODO: remove our BodyObject death listener
+        if (!(_dobj instanceof PlaceObject)) {
+            BodyObject body = (BodyObject)PresentsServer.omgr.getObject(playerOid);
+            if (body != null) {
+                body.removeListener(_deathListener);
+            }
+        }
         return removed;
     }
 
@@ -403,22 +414,13 @@ public class TableManager
         _tlobj.updateTables(table);
     }
 
-    // documentation inherited
-    public void objectAdded (ObjectAddedEvent event)
+    /**
+     * Called when a body is known to have left either the room that contains our tables or logged
+     * off of the server.
+     */
+    protected void bodyLeft (int bodyOid)
     {
-        // nothing doing
-    }
-
-    // documentation inherited
-    public void objectRemoved (ObjectRemovedEvent event)
-    {
-        // if an occupant departed, see if they are in a pending table
-        if (!event.getName().equals(PlaceObject.OCCUPANTS)) {
-            return;
-        }
-
         // look up the table to which this occupant is mapped
-        int bodyOid = event.getOid();
         Table pender = _boidMap.remove(bodyOid);
         if (pender == null) {
             return;
@@ -439,6 +441,27 @@ public class TableManager
             _tlobj.updateTables(pender);
         }
     }
+
+    /** Listens for players leaving the place that contains our tables. */
+    protected OidListListener _leaveListener = new OidListListener() {
+        public void objectAdded (ObjectAddedEvent event) {
+            // nothing doing
+        }
+        public void objectRemoved (ObjectRemovedEvent event) {
+            // if an occupant departed, see if they are in a pending table
+            if (event.getName().equals(PlaceObject.OCCUPANTS)) {
+                bodyLeft(event.getOid());
+            }
+        }
+    };
+
+    /** Listens for the death of body objects that are in tables. This is used when we are not
+     * managing tables in a place but rather across the whole server. */
+    protected ObjectDeathListener _deathListener = new ObjectDeathListener() {
+        public void objectDestroyed (ObjectDestroyedEvent event) {
+            bodyLeft(event.getTargetOid());
+        }
+    };
 
     /** A reference to the distributed object in which we're managing tables. */
     protected DObject _dobj;
