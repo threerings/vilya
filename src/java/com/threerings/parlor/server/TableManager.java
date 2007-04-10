@@ -354,8 +354,8 @@ public class TableManager
 
         if (table.bodyOids != null) {
             // clear the occupant to table mappings as this game is underway
-            for (int i = 0; i < table.bodyOids.length; i++) {
-                _boidMap.remove(table.bodyOids[i]);
+            for (int ii = 0; ii < table.bodyOids.length; ii++) {
+                notePlayerRemoved(table, table.bodyOids[ii]);
             }
         }
 
