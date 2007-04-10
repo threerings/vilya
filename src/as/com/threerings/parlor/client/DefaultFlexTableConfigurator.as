@@ -48,7 +48,8 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
      */
     public function DefaultFlexTableConfigurator (
             desiredPlayers :int, minPlayers :int = -1, maxPlayers :int = -1,
-            allowPrivate :Boolean = false)
+            allowPrivate :Boolean = false, playersXlate :String = "Players: ", 
+            privateXlate :String = "Private: ")
     {
         if (minPlayers < 0) {
             minPlayers = desiredPlayers;
@@ -76,6 +77,9 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
         if (allowPrivate) {
             _privateCheck = new CheckBox();
         }
+
+        _playersXlate = playersXlate;
+        _privateXlate = privateXlate;
     }
 
     // documentation inherited
@@ -87,17 +91,17 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
             (_gameConfigurator as FlexGameConfigurator);
 
         if (_playerSlider != null) {
-            // TODO: proper translation
             var playerLabel :Label = new Label();
-            playerLabel.text = "Players:";
+            playerLabel.text = _playersXlate;
+            playerLabel.styleName = "lobbyLabel";
 
             gconf.addControl(playerLabel, new LabeledSlider(_playerSlider));
         }
 
         if (_privateCheck != null) {
-            // TODO: proper translation
             var privateLabel :Label = new Label();
-            privateLabel.text = "Private:";
+            privateLabel.text = _privateXlate;
+            privateLabel.styleName = "lobbyLabel";
             gconf.addControl(privateLabel, _privateCheck);
         }
     }
@@ -127,5 +131,9 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
     /** A checkbox to allow the table creator to specify if the table is
      * private. */
     protected var _privateCheck :CheckBox;
+
+    /** Translation strings passed in by the caller */
+    protected var _playersXlate :String;
+    protected var _privateXlate :String;
 }
 }
