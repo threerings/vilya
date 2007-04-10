@@ -260,7 +260,9 @@ public class TableManager
         // clear out all matching entries in the boid map
         if (table.bodyOids != null) {
             for (int ii = 0; ii < table.bodyOids.length; ii++) {
-                notePlayerRemoved(table, table.bodyOids[ii]);
+                if (table.bodyOids[ii] > 0) {
+                    notePlayerRemoved(table, table.bodyOids[ii]);
+                }
             }
         }
 
@@ -355,7 +357,9 @@ public class TableManager
         if (table.bodyOids != null) {
             // clear the occupant to table mappings as this game is underway
             for (int ii = 0; ii < table.bodyOids.length; ii++) {
-                notePlayerRemoved(table, table.bodyOids[ii]);
+                if (table.bodyOids[ii] > 0) {
+                    notePlayerRemoved(table, table.bodyOids[ii]);
+                }
             }
         }
 
