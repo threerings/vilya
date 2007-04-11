@@ -156,7 +156,7 @@ public class EditorApp implements Runnable
     {
         _msgmgr = new MessageManager("rsrc.i18n");
         _imgr = new ImageManager(_rmgr, _frame);
-	_tilemgr = new MisoTileManager(_rmgr, _imgr);
+	_tilemgr = new EditorTileManager(_rmgr, _imgr);
 
         try {
             _tsrepo = new BundledTileSetRepository(_rmgr, _imgr, "tilesets");
@@ -172,7 +172,7 @@ public class EditorApp implements Runnable
         _colpos = ColorPository.loadColorPository(_rmgr);
         _kbdmgr = new KeyboardManager();
         _keydisp = new KeyDispatcher(_frame);
-        
+
         _ctx = new EditorContextImpl();
 
     	// initialize the frame with the now-prepared context
@@ -306,7 +306,7 @@ public class EditorApp implements Runnable
             return _msgmgr;
         }
 
-        public KeyboardManager getKeyboardManager() {
+        public KeyboardManager getKeyboardManager () {
             return _kbdmgr;
         }
 
@@ -317,7 +317,7 @@ public class EditorApp implements Runnable
         public KeyDispatcher getKeyDispatcher () {
             return _keydisp;
         }
-        
+
         public String xlate (String message) {
             return xlate("stage.editor", message);
         }

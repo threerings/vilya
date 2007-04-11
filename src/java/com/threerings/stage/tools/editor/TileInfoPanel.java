@@ -60,6 +60,7 @@ import com.samskivert.util.StringUtil;
 
 import com.threerings.media.SafeScrollPane;
 
+import com.threerings.media.tile.TileManager;
 import com.threerings.media.tile.TileSet;
 import com.threerings.media.tile.TileSetRepository;
 
@@ -84,6 +85,7 @@ public class TileInfoPanel extends JSplitPane
         registerKeyListener(ctx);
 
         _model = model;
+        _ctx = ctx;
 
         // we're going to sort all of the available tilesets into those
         // which are applicable to each layer
@@ -321,6 +323,11 @@ public class TileInfoPanel extends JSplitPane
             }
         }
 
+        TileManager tileMgr = _ctx.getTileManager();
+        if (tileMgr instanceof EditorTileManager) {
+            ((EditorTileManager)tileMgr).clearTestTileSets();
+        }
+
         // insert the new test tiles
         Iterator iter = tests.keys();
         while (iter.hasNext()) {
@@ -333,7 +340,11 @@ public class TileInfoPanel extends JSplitPane
             if (lidx != -1) {
                 // make up a negative number to refer to this temporary tileset
                 _layerSets[lidx].add(
-                    new TileSetRecord(lidx, tsid.intValue(), set));
+                    new TileSetRecord(lidx, tsid, set));
+            }
+
+            if (tileMgr instanceof EditorTileManager) {
+                ((EditorTileManager)tileMgr).addTestTileSet(tsid, set);
             }
         }
 
@@ -719,6 +730,9 @@ public class TileInfoPanel extends JSplitPane
 
     /** The editor model. */
     protected EditorModel _model;
+
+    /** Our editor client context. */
+    protected EditorContext _ctx;
 
     /** The tile table data model. */
     protected TileTableModel _tablemodel;
