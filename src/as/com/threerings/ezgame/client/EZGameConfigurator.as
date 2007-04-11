@@ -89,8 +89,8 @@ public class EZGameConfigurator extends FlexGameConfigurator
         var lbl :Label = new Label();
         lbl.text = name + ":";
         lbl.styleName = "lobbyLabel";
-        lbl.toolTip = tip;
-        control.toolTip = tip;
+        lbl.toolTip = tip == "" ? name : tip;
+        control.toolTip = tip == "" ? name : tip;
 
         addControl(lbl, control);
         _customConfigs.push(ident, control);

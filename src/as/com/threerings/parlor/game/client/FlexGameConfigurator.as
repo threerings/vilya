@@ -24,9 +24,8 @@ package com.threerings.parlor.game.client {
 import mx.core.Container;
 import mx.core.UIComponent;
 
-import mx.containers.Grid;
-import mx.containers.GridItem;
-import mx.containers.GridRow;
+import mx.containers.HBox;
+import mx.containers.Tile;
 
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.util.ParlorContext;
@@ -48,7 +47,10 @@ public /*abstract*/ class FlexGameConfigurator extends GameConfigurator
      */
     public function getContainer () :Container
     {
-        return _grid;
+        // mimic the style of the seats grid for consistency
+        _tile.width = 375;
+        _tile.styleName = "seatsGrid";
+        return _tile;
     }
 
     /**
@@ -61,18 +63,17 @@ public /*abstract*/ class FlexGameConfigurator extends GameConfigurator
     public function addControl (
             label :UIComponent, control :UIComponent) :void
     {
-        var row :GridRow = new GridRow();
-        var labelItem :GridItem = new GridItem();
-        var controlItem :GridItem = new GridItem();
-
-        labelItem.addChild(label);
-        controlItem.addChild(control);
-        row.addChild(labelItem);
-        row.addChild(controlItem);
-        _grid.addChild(row);
+        var item :HBox = new HBox();
+        item.width = 175;
+        item.setStyle("horizontalGap", 5);
+        label.width = 70;
+        item.addChild(label);
+        control.width = 100;
+        item.addChild(control);
+        _tile.addChild(item);
     }
 
     /** The grid on which the config options are placed. */
-    protected var _grid :Grid = new Grid();
+    protected var _tile :Tile = new Tile();
 }
 }
