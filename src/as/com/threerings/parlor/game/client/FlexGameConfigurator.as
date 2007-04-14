@@ -48,7 +48,7 @@ public /*abstract*/ class FlexGameConfigurator extends GameConfigurator
     public function getContainer () :Container
     {
         // mimic the style of the seats grid for consistency
-        _tile.width = 375;
+        _tile.width = 475;
         _tile.styleName = "seatsGrid";
         return _tile;
     }
@@ -64,11 +64,11 @@ public /*abstract*/ class FlexGameConfigurator extends GameConfigurator
             label :UIComponent, control :UIComponent) :void
     {
         var item :HBox = new HBox();
-        item.width = 175;
+        item.width = 225;
         item.setStyle("horizontalGap", 5);
-        label.width = 70;
+        label.width = 95;
         item.addChild(label);
-        control.width = 100;
+        control.width = 125;
         item.addChild(control);
         _tile.addChild(item);
     }
