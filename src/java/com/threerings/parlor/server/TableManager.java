@@ -29,6 +29,9 @@ import com.samskivert.util.StringUtil;
 import com.threerings.util.Name;
 
 import com.threerings.presents.data.ClientObject;
+import com.threerings.presents.dobj.AttributeChangeListener;
+import com.threerings.presents.dobj.AttributeChangedEvent;
+import com.threerings.presents.dobj.ChangeListener;
 import com.threerings.presents.dobj.DObject;
 import com.threerings.presents.dobj.NamedEvent;
 import com.threerings.presents.dobj.ObjectAddedEvent;
@@ -40,6 +43,7 @@ import com.threerings.presents.server.InvocationException;
 import com.threerings.presents.server.PresentsServer;
 
 import com.threerings.crowd.data.BodyObject;
+import com.threerings.crowd.data.OccupantInfo;
 import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.server.CrowdServer;
 import com.threerings.crowd.server.PlaceManager;
@@ -77,7 +81,7 @@ public class TableManager
         // if our table is in a "place" add ourselves as a listener so that we can tell if a user
         // leaves the place without leaving their table
         if (_dobj instanceof PlaceObject) {
-            _dobj.addListener(_leaveListener);
+            _dobj.addListener(_placeListener);
         }
     }
 
@@ -91,7 +95,7 @@ public class TableManager
             _tlobj.setTableService(null);
         }
         if (_dobj instanceof PlaceObject) {
-            _dobj.removeListener(_leaveListener);
+            _dobj.removeListener(_placeListener);
         }
         _tlobj = null;
         _dobj = null;
@@ -144,7 +148,7 @@ public class TableManager
             }
 
             // make a mapping from the creator to this table
-            notePlayerAdded(table, creator.getOid());
+            notePlayerAdded(table, creator);
         }
 
         // stick the table into the table lobby object
@@ -186,7 +190,7 @@ public class TableManager
             createGame(table);
         } else {
             // make a mapping from this occupant to this table
-            notePlayerAdded(table, joiner.getOid());
+            notePlayerAdded(table, joiner);
         }
 
         // update the table in the lobby
@@ -215,7 +219,7 @@ public class TableManager
         }
 
         // remove the mapping from this user to the table
-        if (!notePlayerRemoved(table, leaver.getOid())) {
+        if (null == notePlayerRemoved(leaver.getOid(), leaver)) {
             Log.warning("No body to table mapping to clear? [leaver=" + leaver +
                         ", table=" + table + "].");
         }
@@ -260,8 +264,8 @@ public class TableManager
         // clear out all matching entries in the boid map
         if (table.bodyOids != null) {
             for (int ii = 0; ii < table.bodyOids.length; ii++) {
-                if (table.bodyOids[ii] > 0) {
-                    notePlayerRemoved(table, table.bodyOids[ii]);
+                if (table.bodyOids[ii] != 0) {
+                    notePlayerRemoved(table.bodyOids[ii]);
                 }
             }
         }
@@ -276,33 +280,30 @@ public class TableManager
     /**
      * Called when a player is added to a table to set up our mappings.
      */
-    protected void notePlayerAdded (Table table, int playerOid)
+    protected void notePlayerAdded (Table table, BodyObject body)
     {
-        _boidMap.put(playerOid, table);
-        // if we're in a place, we're done
-        if (_dobj instanceof PlaceObject) {
-            return;
-        }
-        // if not, listen to their BodyObject for death so that we remove them if they logoff
-        BodyObject body = (BodyObject)PresentsServer.omgr.getObject(playerOid);
-        if (body != null) {
-            body.addListener(_deathListener);
-        }
+        _boidMap.put(body.getOid(), table);
+        body.addListener(_userListener);
+    }
+
+    /**
+     * Called when a player leaves the room and we're not sure if the user is still online.
+     */
+    final protected Table notePlayerRemoved (int playerOid)
+    {
+        return notePlayerRemoved(playerOid, (BodyObject) PresentsServer.omgr.getObject(playerOid));
     }
 
     /**
      * Called when a player leaves a table to clear our mappings.
+     * @param body will be non-null if the user is still online.
      */
-    protected boolean notePlayerRemoved (Table table, int playerOid)
+    protected Table notePlayerRemoved (int playerOid, BodyObject body)
     {
-        boolean removed = (_boidMap.remove(playerOid) != null);
-        if (!(_dobj instanceof PlaceObject)) {
-            BodyObject body = (BodyObject)PresentsServer.omgr.getObject(playerOid);
-            if (body != null) {
-                body.removeListener(_deathListener);
-            }
+        if (body != null) {
+            body.removeListener(_userListener);
         }
-        return removed;
+        return _boidMap.remove(playerOid);
     }
 
     /**
@@ -357,8 +358,8 @@ public class TableManager
         if (table.bodyOids != null) {
             // clear the occupant to table mappings as this game is underway
             for (int ii = 0; ii < table.bodyOids.length; ii++) {
-                if (table.bodyOids[ii] > 0) {
-                    notePlayerRemoved(table, table.bodyOids[ii]);
+                if (table.bodyOids[ii] != 0) {
+                    notePlayerRemoved(table.bodyOids[ii]);
                 }
             }
         }
@@ -425,7 +426,7 @@ public class TableManager
     protected void bodyLeft (int bodyOid)
     {
         // look up the table to which this occupant is mapped
-        Table pender = _boidMap.remove(bodyOid);
+        Table pender = notePlayerRemoved(bodyOid);
         if (pender == null) {
             return;
         }
@@ -445,45 +446,6 @@ public class TableManager
             _tlobj.updateTables(pender);
         }
     }
-
-    /** Listens for players leaving the place that contains our tables. */
-    protected OidListListener _leaveListener = new OidListListener() {
-        public void objectAdded (ObjectAddedEvent event) {
-            // nothing doing
-        }
-        public void objectRemoved (ObjectRemovedEvent event) {
-            // if an occupant departed, see if they are in a pending table
-            if (event.getName().equals(PlaceObject.OCCUPANTS)) {
-                bodyLeft(event.getOid());
-            }
-        }
-    };
-
-    /** Listens for the death of body objects that are in tables. This is used when we are not
-     * managing tables in a place but rather across the whole server. */
-    protected ObjectDeathListener _deathListener = new ObjectDeathListener() {
-        public void objectDestroyed (ObjectDestroyedEvent event) {
-            bodyLeft(event.getTargetOid());
-        }
-    };
-
-    /** A reference to the distributed object in which we're managing tables. */
-    protected DObject _dobj;
-
-    /** A reference to our distributed object casted to a table lobby object. */
-    protected TableLobbyObject _tlobj;
-
-    /** The class of table we instantiate. */
-    protected Class<? extends Table> _tableClass = Table.class;
-
-    /** The table of pending tables. */
-    protected HashIntMap<Table> _tables = new HashIntMap<Table>();
-
-    /** A mapping from body oid to table. */
-    protected HashIntMap<Table> _boidMap = new HashIntMap<Table>();
-
-    /** Once a game starts, a mapping from gameOid to table. */
-    protected HashIntMap<Table> _goidMap = new HashIntMap<Table>();
 
     /** Listens to all games and updates the table objects as necessary. */
     protected class GameListener
@@ -512,6 +474,62 @@ public class TableManager
         }
     } // END: class GameDeathListener
 
+    /** Listens to all users who have joined a table, takes care of removing them
+     * as necessary. */
+    protected class UserListener
+        implements AttributeChangeListener, ObjectDeathListener
+    {
+        // from AttributeChangeListener
+        public void attributeChanged (AttributeChangedEvent event) {
+            // Remove folks from tables when they disconnect
+            if (BodyObject.STATUS.equals(event.getName())) {
+                if (event.getByteValue() == OccupantInfo.DISCONNECTED) {
+                    bodyLeft(event.getTargetOid());
+                }
+            }
+        }
+
+        // from ObjectDeathListener
+        public void objectDestroyed (ObjectDestroyedEvent event) {
+            // Remove folks from tables when they die
+            bodyLeft(event.getTargetOid());
+        }
+    } // END: class UserListener
+
+    /** A reference to the distributed object in which we're managing tables. */
+    protected DObject _dobj;
+
+    /** A reference to our distributed object casted to a table lobby object. */
+    protected TableLobbyObject _tlobj;
+
+    /** The class of table we instantiate. */
+    protected Class<? extends Table> _tableClass = Table.class;
+
+    /** The table of pending tables. */
+    protected HashIntMap<Table> _tables = new HashIntMap<Table>();
+
+    /** A mapping from body oid to table. */
+    protected HashIntMap<Table> _boidMap = new HashIntMap<Table>();
+
+    /** Once a game starts, a mapping from gameOid to table. */
+    protected HashIntMap<Table> _goidMap = new HashIntMap<Table>();
+
     /** A listener that prunes tables after the game dies. */
-    protected GameListener _gameListener = new GameListener();
+    protected ChangeListener _gameListener = new GameListener();
+
+    /** A listener that removes users from tables when they're no longer able to play. */
+    protected ChangeListener _userListener = new UserListener();
+
+    /** Listens for players leaving the place that contains our tables. */
+    protected ChangeListener _placeListener = new OidListListener() {
+        public void objectAdded (ObjectAddedEvent event) {
+            // nothing doing
+        }
+        public void objectRemoved (ObjectRemovedEvent event) {
+            // if an occupant departed, see if they are in a pending table
+            if (event.getName().equals(PlaceObject.OCCUPANTS)) {
+                bodyLeft(event.getOid());
+            }
+        }
+    };
 }
