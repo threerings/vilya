@@ -1084,9 +1084,16 @@ public class GameManager extends PlaceManager
      */
     protected void announcePlayerGameOver (int pidx)
     {
-        String message = MessageBundle.tcompose(
-            "m.player_game_over", getPlayerName(pidx));
-        systemMessage(GAME_MESSAGE_BUNDLE, message);
+        systemMessage(GAME_MESSAGE_BUNDLE, 
+            MessageBundle.tcompose(getPlayerGameOverMessage(pidx), getPlayerName(pidx)));
+    }
+
+    /**
+     * Gets the untranslated string to show when a player's game has ended.
+     */
+    protected String getPlayerGameOverMessage (int pidx)
+    {
+        return "m.player_game_over";
     }
 
     /**
