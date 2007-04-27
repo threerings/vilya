@@ -103,7 +103,7 @@ import flash.display.DisplayObject;
 /**
  * Dispatched when a user chats.
  *
- * @eventType com.whirled.UserChatEvent.TYPE
+ * @eventType com.threerings.ezgame.UserChatEvent.TYPE
  */
 [Event(name="UserChat", type="com.threerings.ezgame.UserChatEvent")]
 
