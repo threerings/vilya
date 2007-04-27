@@ -100,6 +100,13 @@ import flash.display.DisplayObject;
  */
 [Event(name="msgReceived", type="com.threerings.ezgame.MessageReceivedEvent")]
 
+/**
+ * Dispatched when a user chats.
+ *
+ * @eventType com.whirled.UserChatEvent.TYPE
+ */
+[Event(name="UserChat", type="com.threerings.ezgame.UserChatEvent")]
+
 
 /**
  * The single point of control for each client in your multiplayer EZGame.
@@ -541,6 +548,7 @@ public class EZGameControl extends BaseControl
         o["roundStateChanged_v1"] = roundStateChanged_v1;
         o["dispatchEvent_v1"] = dispatch;
         o["occupantChanged_v1"] = occupantChanged_v1;
+        o["userChat_v1"] = userChat_v1;
     }
 
     /**
@@ -602,6 +610,14 @@ public class EZGameControl extends BaseControl
         dispatch(new OccupantChangedEvent(
                      enter ? OccupantChangedEvent.OCCUPANT_ENTERED :
                      OccupantChangedEvent.OCCUPANT_LEFT, this, occupantId, player));
+    }
+
+    /**
+     * Private method to post a UserChatEvent.
+     */
+    private function userChat_v1 (speaker :int, message :String) :void
+    {
+        dispatch(new UserChatEvent(this, speaker, message));
     }
 
     /**

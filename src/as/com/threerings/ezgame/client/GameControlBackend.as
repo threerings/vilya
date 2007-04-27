@@ -66,6 +66,11 @@ import com.threerings.presents.dobj.ObjectRemovedEvent;
 import com.threerings.presents.dobj.OidListListener;
 import com.threerings.presents.dobj.SetListener;
 
+import com.threerings.crowd.chat.client.ChatDisplay;
+import com.threerings.crowd.chat.data.ChatCodes;
+import com.threerings.crowd.chat.data.ChatMessage;
+import com.threerings.crowd.chat.data.UserMessage;
+
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.OccupantInfo;
 import com.threerings.crowd.data.PlaceObject;
@@ -85,7 +90,7 @@ import com.threerings.ezgame.util.EZObjectMarshaller;
  */
 public class GameControlBackend
     implements MessageListener, SetListener, ElementUpdateListener,
-               PropertySetListener
+               PropertySetListener, ChatDisplay
 {
     public var log :Log = Log.getLog(this);
 
@@ -99,6 +104,7 @@ public class GameControlBackend
 
         _ezObj.addListener(this);
         _ctx.getClient().getClientObject().addListener(_userListener);
+        _ctx.getChatDirector().addChatDisplay(this);
     }
 
     public function setSharedEvents (disp :IEventDispatcher) :void
@@ -830,6 +836,23 @@ public class GameControlBackend
     {
         callUserCode("propertyWasSet_v1", event.getName(), event.getValue(),
             event.getOldValue(), event.getIndex());
+    }
+
+    // from ChatDisplay
+    public function clear () :void
+    {
+    }
+
+    // from ChatDisplay
+    public function displayMessage (msg :ChatMessage, alreadyDisplayed :Boolean) :Boolean
+    {
+        if (msg is UserMessage && msg.localtype == ChatCodes.PLACE_CHAT_TYPE) {
+            var info :OccupantInfo = _ezObj.getOccupantInfo((msg as UserMessage).speaker);
+            if (info != null) {
+                callUserCode("userChat_v1", info.bodyOid, msg.message);
+            }
+        }
+        return true;
     }
 
     public function messageReceived (event :MessageEvent) :void
