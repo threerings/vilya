@@ -25,10 +25,10 @@ import javax.swing.JPanel;
 
 import com.threerings.util.Name;
 
+import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.game.data.GameObject;
 
 import com.threerings.puzzle.data.BoardSummary;
-import com.threerings.puzzle.data.PuzzleConfig;
 import com.threerings.puzzle.data.PuzzleObject;
 
 /**
@@ -53,7 +53,7 @@ public class PlayerStatusView extends JPanel
     /**
      * Initializes the player status view with the puzzle config.
      */
-    public void init (PuzzleConfig config)
+    public void init (GameConfig config)
     {
         // nothing for now
     }

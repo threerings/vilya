@@ -53,7 +53,6 @@ import com.threerings.parlor.game.data.GameObject;
 import com.threerings.puzzle.Log;
 import com.threerings.puzzle.data.Board;
 import com.threerings.puzzle.data.PuzzleCodes;
-import com.threerings.puzzle.data.PuzzleConfig;
 import com.threerings.puzzle.data.PuzzleObject;
 import com.threerings.puzzle.util.PuzzleContext;
 
@@ -96,8 +95,7 @@ public abstract class PuzzleController extends GameController
         _pctx = (PuzzleContext)_ctx;
 
         // initialize the puzzle panel
-        _puzconfig = (PuzzleConfig)_config;
-        _panel.init(_puzconfig);
+        _panel.init(_config);
 
         // initialize the board view
         _pview = _panel.getBoardView();
@@ -916,9 +914,6 @@ public abstract class PuzzleController extends GameController
 
     /** The puzzle panel. */
     protected PuzzlePanel _panel;
-
-    /** The puzzle config. */
-    protected PuzzleConfig _puzconfig;
 
     /** A reference to our puzzle game object. */
     protected PuzzleObject _puzobj;

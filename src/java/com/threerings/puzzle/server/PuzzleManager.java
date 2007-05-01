@@ -46,7 +46,6 @@ import com.threerings.puzzle.Log;
 import com.threerings.puzzle.data.Board;
 import com.threerings.puzzle.data.BoardSummary;
 import com.threerings.puzzle.data.PuzzleCodes;
-import com.threerings.puzzle.data.PuzzleConfig;
 import com.threerings.puzzle.data.PuzzleGameMarshaller;
 import com.threerings.puzzle.data.PuzzleObject;
 
@@ -167,15 +166,6 @@ public abstract class PuzzleManager extends GameManager
     protected boolean summarizeAIBoard ()
     {
         return false;
-    }
-
-    // documentation inherited
-    protected void didInit ()
-    {
-        super.didInit();
-
-        // save off a casted reference to our puzzle config
-        _puzconfig = (PuzzleConfig)_config;
     }
 
     // documentation inherited
@@ -608,9 +598,6 @@ public abstract class PuzzleManager extends GameManager
     {
         // nothing for now
     }
-
-    /** A casted reference to our puzzle config object. */
-    protected PuzzleConfig _puzconfig;
 
     /** A casted reference to our puzzle game object. */
     protected PuzzleObject _puzobj;

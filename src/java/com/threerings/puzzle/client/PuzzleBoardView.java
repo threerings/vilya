@@ -43,12 +43,12 @@ import com.threerings.media.animation.AnimationArranger;
 import com.threerings.media.image.Mirage;
 import com.threerings.media.sprite.Sprite;
 
+import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.media.ScoreAnimation;
 
 import com.threerings.puzzle.Log;
 import com.threerings.puzzle.data.Board;
 import com.threerings.puzzle.data.PuzzleCodes;
-import com.threerings.puzzle.data.PuzzleConfig;
 import com.threerings.puzzle.util.PuzzleContext;
 
 /**
@@ -70,7 +70,7 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
     /**
      * Initializes the board with the board dimensions.
      */
-    public void init (PuzzleConfig config)
+    public void init (GameConfig config)
     {
         // save off our bounds
         Dimension bounds = getPreferredSize();

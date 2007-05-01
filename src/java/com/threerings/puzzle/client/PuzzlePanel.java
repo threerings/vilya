@@ -34,11 +34,11 @@ import com.threerings.util.KeyTranslator;
 import com.threerings.crowd.client.PlaceView;
 import com.threerings.crowd.data.PlaceObject;
 
+import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.util.RobotPlayer;
 
 import com.threerings.puzzle.Log;
 import com.threerings.puzzle.data.PuzzleCodes;
-import com.threerings.puzzle.data.PuzzleConfig;
 import com.threerings.puzzle.data.PuzzleGameCodes;
 import com.threerings.puzzle.util.PuzzleContext;
 
@@ -151,7 +151,7 @@ public abstract class PuzzlePanel extends JPanel
      * Initializes the puzzle panel with the puzzle config of the puzzle
      * whose user interface is being displayed by the panel
      */
-    public void init (PuzzleConfig config)
+    public void init (GameConfig config)
     {
         _config = config;
         _bview.init(config);
@@ -291,8 +291,8 @@ public abstract class PuzzlePanel extends JPanel
     /** The board overlay panel displayed as requested. */
     protected JPanel _opanel;
 
-    /** The puzzle config. */
-    protected PuzzleConfig _config;
+    /** The game config. */
+    protected GameConfig _config;
 
     /** The robot player. */
     protected RobotPlayer _robot;

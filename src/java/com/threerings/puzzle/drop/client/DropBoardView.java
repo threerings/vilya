@@ -37,12 +37,12 @@ import com.threerings.media.sprite.Sprite;
 import com.threerings.media.util.LinePath;
 import com.threerings.media.util.Path;
 
+import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.media.ScoreAnimation;
 
 import com.threerings.puzzle.Log;
 import com.threerings.puzzle.client.PuzzleBoardView;
 import com.threerings.puzzle.data.Board;
-import com.threerings.puzzle.data.PuzzleConfig;
 import com.threerings.puzzle.util.PuzzleContext;
 
 import com.threerings.puzzle.drop.data.DropBoard;
@@ -80,7 +80,7 @@ public abstract class DropBoardView extends PuzzleBoardView
     /**
      * Initializes the board with the board dimensions.
      */
-    public void init (PuzzleConfig config)
+    public void init (GameConfig config)
     {
         DropConfig dconfig = (DropConfig)config;
 
