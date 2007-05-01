@@ -1,9 +1,9 @@
 //
-// $Id: TestConfig.java 3099 2004-08-27 02:21:06Z mdb $
+// $Id$
 //
-// Narya library - tools for developing networked games
-// Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved
-// http://www.threerings.net/code/narya/
+// Vilya library - tools for developing networked games
+// Copyright (C) 2002-2007 Three Rings Design, Inc., All Rights Reserved
+// http://www.threerings.net/code/vilya/
 //
 // This library is free software; you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as published
@@ -19,21 +19,27 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-package com.threerings.whirled;
+package com.threerings.ezgame.data;
 
-import com.threerings.crowd.client.PlaceController;
-import com.threerings.crowd.data.PlaceConfig;
-import com.threerings.whirled.server.SceneManager;
+import com.threerings.util.ActionScript;
 
-public class TestConfig extends PlaceConfig
+/**
+ * Models a parameter that allows the toggling of a single value.
+ */
+public class ToggleParameter extends Parameter
 {
-    public PlaceController createController ()
+    /** The starting state for this parameter. */
+    public boolean start;
+
+    @Override @ActionScript(omit=true) // documentation inherited
+    public String getLabel ()
     {
-        return new TestController();
+        return "m.toggle_" + ident;
     }
 
-    public String getManagerClassName ()
+    @Override // documentation inherited
+    public Object getDefaultValue ()
     {
-        return SceneManager.class.getName();
+        return start;
     }
 }

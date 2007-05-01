@@ -58,9 +58,8 @@ import com.threerings.parlor.game.server.GameManager;
 
 import com.threerings.parlor.turn.server.TurnGameManager;
 
-import com.threerings.ezgame.data.EZGameConfig;
-import com.threerings.ezgame.data.EZGameObject;
 import com.threerings.ezgame.data.EZGameMarshaller;
+import com.threerings.ezgame.data.EZGameObject;
 import com.threerings.ezgame.data.PropertySetEvent;
 import com.threerings.ezgame.data.UserCookie;
 
@@ -355,7 +354,7 @@ public class EZGameManager extends GameManager
                 throw new InvocationException(INTERNAL_ERROR);
             }
 
-            gcm.getCookie(getPersistentGameId(), body, new ResultListener<byte[]>() {
+            gcm.getCookie(_gameconfig.getGameId(), body, new ResultListener<byte[]>() {
                 public void requestCompleted (byte[] result) {
                     // Result may be null: that's ok, it means we've looked up the user's
                     // nonexistant cookie.  Only set the cookie if the playerIndex is still in the
@@ -391,7 +390,7 @@ public class EZGameManager extends GameManager
             _gameObj.addToUserCookies(cookie);
         }
 
-        gcm.setCookie(getPersistentGameId(), caller, value);
+        gcm.setCookie(_gameconfig.getGameId(), caller, value);
     }
 
     /**
@@ -443,25 +442,12 @@ public class EZGameManager extends GameManager
     }
 
     /**
-     * Get the game id of this ezgame, as set in the config.
-     */
-    protected int getPersistentGameId ()
-        throws InvocationException
-    {
-        int id = ((EZGameConfig) _config).persistentGameId;
-        if (id == 0) {
-            throw new InvocationException("Persistent game id not set.");
-        }
-        return id;
-    }
-
-    /**
      * Validate that the specified user has access to do things in the game.
      */
     protected void validateUser (ClientObject caller)
         throws InvocationException
     {
-        switch (getGameType()) {
+        switch (getMatchType()) {
         case GameConfig.PARTY:
             return; // always validate.
 
@@ -495,7 +481,7 @@ public class EZGameManager extends GameManager
     protected BodyObject getPlayerByOid (int oid)
     {
         // verify that they're a player
-        switch (getGameType()) {
+        switch (getMatchType()) {
         case GameConfig.PARTY:
             // all occupants are players in a party game
             break;

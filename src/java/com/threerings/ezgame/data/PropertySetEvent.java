@@ -27,6 +27,7 @@ import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 import com.threerings.io.Streamable;
 import com.threerings.io.Streamer;
+import com.threerings.util.ActionScript;
  
 import com.threerings.presents.dobj.DObject;
 import com.threerings.presents.dobj.NamedEvent;
@@ -34,8 +35,7 @@ import com.threerings.presents.dobj.NamedEvent;
 import com.threerings.ezgame.util.EZObjectMarshaller;
 
 /**
- * Represents a property change on the actionscript object we
- * use in EZGameObject.
+ * Represents a property change on the actionscript object we use in EZGameObject.
  */
 public class PropertySetEvent extends NamedEvent
 {
@@ -47,17 +47,16 @@ public class PropertySetEvent extends NamedEvent
     /**
      * Create a PropertySetEvent.
      */
-    public PropertySetEvent (
-        int targetOid, String propName, Object value, int index, Object oldValue)
+    public PropertySetEvent (int targetOid, String propName, Object value, int index, Object ovalue)
     {
         super(targetOid, propName);
         _data = value;
         _index = index;
-        _oldValue = oldValue;
+        _oldValue = ovalue;
     }
 
     /**
-     * Get the value that was set for the property.
+     * Returns the value that was set for the property.
      */
     public Object getValue ()
     {
@@ -65,7 +64,7 @@ public class PropertySetEvent extends NamedEvent
     }
 
     /**
-     * Get the old value.
+     * Returns the old value.
      */
     public Object getOldValue ()
     {
@@ -73,7 +72,7 @@ public class PropertySetEvent extends NamedEvent
     }
 
     /**
-     * Get the index, or -1 if not applicable.
+     * Returns the index, or -1 if not applicable.
      */
     public int getIndex ()
     {
@@ -102,7 +101,7 @@ public class PropertySetEvent extends NamedEvent
         }
     }
 
-    @Override
+    @Override @ActionScript(name="toStringBuf")
     protected void toString (StringBuilder buf)
     {
         buf.append("PropertySetEvent ");

@@ -96,7 +96,7 @@
   <!-- build the java class files -->
   <target name="compile" depends="prepare">
     <javac srcdir="${src.dir}" destdir="${classes.dir}"
-      debug="on" optimize="off" deprecation="off">
+      debug="on" optimize="off" deprecation="on">
       <classpath refid="classpath"/>
       <exclude name="com/threerings/**/tools/xml/**" unless="build.xml"/>
     </javac>

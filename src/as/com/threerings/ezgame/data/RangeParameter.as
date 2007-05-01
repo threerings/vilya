@@ -21,49 +21,49 @@
 
 package com.threerings.ezgame.data {
 
-import flash.utils.ByteArray;
-
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 
-import com.threerings.presents.dobj.DSet_Entry;
-
 /**
- * Represents a user's game-specific cookie data.
+ * Models a parameter that can contain an integer value in a specified range.
  */
-public class UserCookie
-    implements DSet_Entry
+public class RangeParameter extends Parameter
 {
-    /** The id of the player that has this cookie. */
-    public var playerId :int;
+    /** The minimum value of this parameter. */
+    public var minimum :int;
 
-    /** The cookie value. */
-    public var cookie :ByteArray;
+    /** The maximum value of this parameter. */
+    public var maximum :int;
 
-    public function UserCookie (playerId :int = 0, cookie :ByteArray = null)
+    /** The starting value for this parameter. */
+    public var start :int;
+
+    public function RangeParameter ()
     {
-        this.playerId = playerId;
-        this.cookie = cookie;
     }
 
-    // from DSet_Entry
-    public function getKey () :Object
+    // documentation inherited
+    override public function getDefaultValue () :Object
     {
-        return playerId;
+        return start;
     }
 
-    // from superinterface Streamable
-    public function readObject (ins :ObjectInputStream) :void
+    // from interface Streamable
+    override public function readObject (ins :ObjectInputStream) :void
     {
-        playerId = ins.readInt();
-        cookie = (ins.readField(ByteArray) as ByteArray);
+        super.readObject(ins);
+        minimum = ins.readInt();
+        maximum = ins.readInt();
+        start = ins.readInt();
     }
 
-    // from superinterface Streamable
-    public function writeObject (out :ObjectOutputStream) :void
+    // from interface Streamable
+    override public function writeObject (out :ObjectOutputStream) :void
     {
-        out.writeInt(playerId);
-        out.writeField(cookie);
+        super.writeObject(out);
+        out.writeInt(minimum);
+        out.writeInt(maximum);
+        out.writeInt(start);
     }
 }
 }

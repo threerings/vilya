@@ -21,49 +21,39 @@
 
 package com.threerings.ezgame.data {
 
-import flash.utils.ByteArray;
-
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 
-import com.threerings.presents.dobj.DSet_Entry;
-
 /**
- * Represents a user's game-specific cookie data.
+ * Models a parameter that allows the toggling of a single value.
  */
-public class UserCookie
-    implements DSet_Entry
+public class ToggleParameter extends Parameter
 {
-    /** The id of the player that has this cookie. */
-    public var playerId :int;
+    /** The starting state for this parameter. */
+    public var start :Boolean;
 
-    /** The cookie value. */
-    public var cookie :ByteArray;
-
-    public function UserCookie (playerId :int = 0, cookie :ByteArray = null)
+    public function ToggleParameter ()
     {
-        this.playerId = playerId;
-        this.cookie = cookie;
     }
 
-    // from DSet_Entry
-    public function getKey () :Object
+    // documentation inherited
+    override public function getDefaultValue () :Object
     {
-        return playerId;
+        return start;
     }
 
-    // from superinterface Streamable
-    public function readObject (ins :ObjectInputStream) :void
+    // from interface Streamable
+    override public function readObject (ins :ObjectInputStream) :void
     {
-        playerId = ins.readInt();
-        cookie = (ins.readField(ByteArray) as ByteArray);
+        super.readObject(ins);
+        start = ins.readBoolean();
     }
 
-    // from superinterface Streamable
-    public function writeObject (out :ObjectOutputStream) :void
+    // from interface Streamable
+    override public function writeObject (out :ObjectOutputStream) :void
     {
-        out.writeInt(playerId);
-        out.writeField(cookie);
+        super.writeObject(out);
+        out.writeBoolean(start);
     }
 }
 }

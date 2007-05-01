@@ -1,9 +1,9 @@
 //
-// $Id: TestConfig.java 3099 2004-08-27 02:21:06Z mdb $
+// $Id$
 //
-// Narya library - tools for developing networked games
-// Copyright (C) 2002-2004 Three Rings Design, Inc., All Rights Reserved
-// http://www.threerings.net/code/narya/
+// Vilya library - tools for developing networked games
+// Copyright (C) 2002-2007 Three Rings Design, Inc., All Rights Reserved
+// http://www.threerings.net/code/vilya/
 //
 // This library is free software; you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as published
@@ -19,21 +19,17 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-package com.threerings.whirled;
+package com.threerings.ezgame.util;
 
-import com.threerings.crowd.client.PlaceController;
-import com.threerings.crowd.data.PlaceConfig;
-import com.threerings.whirled.server.SceneManager;
+import com.threerings.util.MessageManager;
 
-public class TestConfig extends PlaceConfig
+import com.threerings.parlor.util.ParlorContext;
+
+/**
+ * Extends the Parlor context with bits needed by the EZ game framework.
+ */
+public interface EZGameContext extends ParlorContext
 {
-    public PlaceController createController ()
-    {
-        return new TestController();
-    }
-
-    public String getManagerClassName ()
-    {
-        return SceneManager.class.getName();
-    }
+    /** Returns a message manager that can be used to translate strings. */
+    public MessageManager getMessageManager ();
 }

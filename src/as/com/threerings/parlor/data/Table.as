@@ -40,8 +40,7 @@ import com.threerings.parlor.data.ParlorCodes;
 import com.threerings.parlor.game.data.GameConfig;
 
 /**
- * This class represents a table that is being used to matchmake a game by
- * the Parlor services.
+ * This class represents a table that is being used to matchmake a game by the Parlor services.
  */
 public class Table
     implements DSet_Entry, Hashable
@@ -49,28 +48,25 @@ public class Table
     /** The unique identifier for this table. */
     public var tableId :int;
 
-    /** The object id of the lobby object with which this table is
-     * associated. */
+    /** The object id of the lobby object with which this table is associated. */
     public var lobbyOid :int;
 
-    /** The oid of the game that was created from this table or -1 if the
-     * table is still in matchmaking mode. */
+    /** The oid of the game that was created from this table or -1 if the table is still in
+     * matchmaking mode. */
     public var gameOid :int = -1;
 
-    /** An array of the usernames of the occupants of this table (some
-     * slots may not be filled), or null if a party game. */
+    /** An array of the usernames of the occupants of this table (some slots may not be filled), or
+     * null if a party game. */
     public var occupants :TypedArray;
 
-    /** The body oids of the occupants of this table, or null if a party game.
-     * (This is not propagated to remote instances.) */
-    public /*transient*/ var bodyOids :TypedArray;
+    /** The body oids of the occupants of this table, or null if a party game.  (This is not
+     * propagated to remote instances.) */
+    public var bodyOids :TypedArray;
 
-    /** For a running game, the total number of players. For FFA party games,
-     * this is everyone. */
+    /** For a running game, the total number of players. For FFA party games, this is everyone. */
     public var playerCount :int;
 
-    /** For a running game, the total number of watchers. For FFA party games,
-     * this is always 0. */
+    /** For a running game, the total number of watchers. For FFA party games, this is always 0. */
     public var watcherCount :int;
 
     /** The game config for the game that is being matchmade. */
@@ -82,6 +78,25 @@ public class Table
     /** Suitable for unserialization. */
     public function Table ()
     {
+    }
+
+    /**
+     * Once a table is ready to play (see {@link #mayBeStarted} and {@link #shouldBeStarted}), the
+     * players array can be fetched using this method. It will return an array containing the
+     * usernames of all of the players in the game, sized properly and with each player in the
+     * appropriate position.
+     */
+    public function getPlayers () :Array
+    {
+        // create and populate the players array
+        var players :Array = new Array();
+        for (var ii :int = 0; ii < occupants.length; ii++) {
+            if (occupants[ii] != null) {
+                players.push(occupants[ii]);
+            }
+        }
+
+        return players;
     }
 
     /**
@@ -101,28 +116,8 @@ public class Table
     }
 
     /**
-     * Once a table is ready to play (see {@link #mayBeStarted} and {@link
-     * #shouldBeStarted}), the players array can be fetched using this
-     * method. It will return an array containing the usernames of all of
-     * the players in the game, sized properly and with each player in the
-     * appropriate position.
-     */
-    public function getPlayers () :Array
-    {
-        // create and populate the players array
-        var players :Array = new Array();
-        for (var ii :int = 0; ii < occupants.length; ii++) {
-            if (occupants[ii] != null) {
-                players.push(occupants[ii]);
-            }
-        }
-
-        return players;
-    }
-
-    /**
-     * For a team game, get the team member indices of the compressed
-     * players array returned by getPlayers().
+     * For a team game, get the team member indices of the compressed players array returned by
+     * getPlayers().
      */
     public function getTeamMemberIndices () :TypedArray /* of Array of int */
     {
@@ -150,98 +145,13 @@ public class Table
         return newTeams;
     }
 
-//    /**
-//     * Requests to seat the specified user at the specified position in
-//     * this table.
-//     *
-//     * @param position the position in which to seat the user.
-//     * @param occupant the occupant to set.
-//     *
-//     * @return null if the user was successfully seated, a string error
-//     * code explaining the failure if the user was not able to be seated
-//     * at that position.
-//     */
-//    public function setOccupant (position :int, occupant :BodyObject) :String
-//    {
-//        // make sure the requested position is a valid one
-//        if (position >= tconfig.desiredPlayerCount || position < 0) {
-//            return ParlorCodes.INVALID_TABLE_POSITION;
-//        }
-//
-//        // make sure the requested position is not already occupied
-//        if (occupants[position] != null) {
-//            return ParlorCodes.TABLE_POSITION_OCCUPIED;
-//        }
-//
-//        // otherwise all is well, stick 'em in
-//        setOccupantPos(position, occupant);
-//        return null;
-//    }
-//
-//    /**
-//     * This method is used for party games, it does no bounds checking
-//     * or verification of the player's ability to join, if you are unsure
-//     * you should call 'setOccupant'.
-//     */
-//    public function setOccupantPos (position :int, occupant :BodyObject) :void
-//    {
-//        occupants[position] = occupant.getVisibleName();
-//        bodyOids[position] = occupant.getOid();
-//    }
-//
-//    /**
-//     * Requests that the specified user be removed from their seat at this
-//     * table.
-//     *
-//     * @return true if the user was seated at the table and has now been
-//     * removed, false if the user was never seated at the table in the
-//     * first place.
-//     */
-//    public function clearOccupant (username :Name) :Boolean
-//    {
-//        var dex :int = ArrayUtil.indexOf(occupants, username);
-//        if (dex != -1) {
-//            clearOccupantPos(dex);
-//            return true;
-//        }
-//        return false;
-//    }
-//
-//    /**
-//     * Requests that the user identified by the specified body object id
-//     * be removed from their seat at this table.
-//     *
-//     * @return true if the user was seated at the table and has now been
-//     * removed, false if the user was never seated at the table in the
-//     * first place.
-//     */
-//    public function clearOccupantByOid (bodyOid :int) :Boolean
-//    {
-//        var dex :int = ArrayUtil.indexOf(bodyOids, bodyOid);
-//        if (dex != -1) {
-//            clearOccupantPos(dex);
-//            return true;
-//        }
-//        return false;
-//    }
-//
-//    /**
-//     * Called to clear an occupant at the specified position.
-//     * Only call this method if you know what you're doing.
-//     */
-//    public function clearOccupantPos (position :int) :void
-//    {
-//        occupants[position] = null;
-//        bodyOids[position] = 0;
-//    }
-
     /**
-     * Returns true if this table has a sufficient number of occupants
-     * that the game can be started.
+     * Returns true if this table has a sufficient number of occupants that the game can be
+     * started.
      */
     public function mayBeStarted () :Boolean
     {
-        switch (config.getGameType()) {
+        switch (config.getMatchType()) {
         case GameConfig.SEATED_CONTINUOUS:
         case GameConfig.PARTY:
             return true;
@@ -270,25 +180,23 @@ public class Table
         }
     }
 
-//    /**
-//     * Returns true if sufficient seats are occupied that the game should
-//     * be automatically started.
-//     */
-//    public function shouldBeStarted () :Boolean
-//    {
-//        switch (config.getGameType()) {
-//        case GameConfig.SEATED_CONTINUOUS:
-//        case GameConfig.PARTY:
-//            return true;
-//
-//        default:
-//            return (tconfig.desiredPlayerCount <= getOccupiedCount());
-//        }
-//    }
+    /**
+     * Returns true if sufficient seats are occupied that the game should be automatically started.
+     */
+    public function shouldBeStarted () :Boolean
+    {
+        switch (config.getMatchType()) {
+        case GameConfig.SEATED_CONTINUOUS:
+        case GameConfig.PARTY:
+            return true;
+
+        default:
+            return (tconfig.desiredPlayerCount <= getOccupiedCount());
+        }
+    }
 
     /**
-     * Returns true if this table is in play, false if it is still being
-     * matchmade.
+     * Returns true if this table is in play, false if it is still being matchmade.
      */
     public function inPlay () :Boolean
     {
@@ -304,8 +212,7 @@ public class Table
     // from Hashable
     public function equals (other :Object) :Boolean
     {
-        return (other is Table) &&
-            (tableId == (other as Table).tableId);
+        return (other is Table) && (tableId == (other as Table).tableId);
     }
 
     /**
@@ -327,19 +234,6 @@ public class Table
         return tableId;
     }
 
-//    /**
-//     * Returns true if there is no one sitting at this table.
-//     */
-//    public function isEmpty () :Boolean
-//    {
-//        for (var ii :int = 0; ii < bodyOids.length; ii++) {
-//            if ((bodyOids[ii] as int) !== 0) {
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
-
     // from Streamable
     public function readObject (ins :ObjectInputStream) :void
     {
@@ -356,13 +250,14 @@ public class Table
     // from Streamable
     public function writeObject (out :ObjectOutputStream) :void
     {
-        throw new Error();
-//        out.writeInt(tableId);
-//        out.writeInt(lobbyOid);
-//        out.writeInt(gameOid);
-//        out.writeObject(occupants);
-//        out.writeObject(config);
-//        out.writeObject(tconfig);
+        out.writeInt(tableId);
+        out.writeInt(lobbyOid);
+        out.writeInt(gameOid);
+        out.writeObject(occupants);
+        out.writeShort(playerCount);
+        out.writeShort(watcherCount);
+        out.writeObject(config);
+        out.writeObject(tconfig);
     }
 
     /**
@@ -373,7 +268,7 @@ public class Table
         buf.append("tableId=").append(tableId);
         buf.append(", lobbyOid=").append(lobbyOid);
         buf.append(", gameOid=").append(gameOid);
-        buf.append(", occupants=").append(occupants.join());
+        buf.append(", occupants=").append(occupants == null ? "<null?>" : occupants.join());
         buf.append(", config=").append(config);
     }
 

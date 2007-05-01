@@ -40,24 +40,21 @@ import com.threerings.parlor.game.data.GameObject;
 import com.threerings.parlor.util.ParlorContext;
 
 /**
- * The game controller manages the flow and control of a game on the
- * client side. This class serves as the root of a hierarchy of controller
- * classes that aim to provide functionality shared between various
- * similar games. The base controller provides functionality for starting
- * and ending the game and for calculating ratings adjustements when a
- * game ends normally. It also handles the basic house keeping like
- * subscription to the game object and dispatch of commands and
- * distributed object events.
+ * The game controller manages the flow and control of a game on the client side. This class serves
+ * as the root of a hierarchy of controller classes that aim to provide functionality shared
+ * between various similar games. The base controller provides functionality for starting and
+ * ending the game and for calculating ratings adjustements when a game ends normally. It also
+ * handles the basic house keeping like subscription to the game object and dispatch of commands
+ * and distributed object events.
  */
 public abstract class GameController extends PlaceController
     implements AttributeChangeListener
 {
     /**
-     * Initializes this game controller with the game configuration that
-     * was established during the match making process. Derived classes
-     * may want to override this method to initialize themselves with
-     * game-specific configuration parameters but they should be sure to
-     * call <code>super.init</code> in such cases.
+     * Initializes this game controller with the game configuration that was established during the
+     * match making process. Derived classes may want to override this method to initialize
+     * themselves with game-specific configuration parameters but they should be sure to call
+     * <code>super.init</code> in such cases.
      *
      * @param ctx the client context.
      * @param config the configuration of the game we are intended to
@@ -65,9 +62,8 @@ public abstract class GameController extends PlaceController
      */
     public void init (CrowdContext ctx, PlaceConfig config)
     {
-        // cast our references before we call super.init() so that when
-        // super.init() calls createPlaceView(), we have our casted
-        // references already in place
+        // cast our references before we call super.init() so that when super.init() calls
+        // createPlaceView(), we have our casted references already in place
         _ctx = (ParlorContext)ctx;
         _config = (GameConfig)config;
 
@@ -75,9 +71,8 @@ public abstract class GameController extends PlaceController
     }
 
     /**
-     * Adds this controller as a listener to the game object (thus derived
-     * classes need not do so) and lets the game manager know that we are
-     * now ready to go.
+     * Adds this controller as a listener to the game object (thus derived classes need not do so)
+     * and lets the game manager know that we are now ready to go.
      */
     public void willEnterPlace (PlaceObject plobj)
     {
@@ -86,27 +81,24 @@ public abstract class GameController extends PlaceController
         // obtain a casted reference
         _gobj = (GameObject)plobj;
 
-        // if this place object is not our current location we'll need to
-        // add it as an auxiliary chat source
+        // if this place object is not our current location we'll need to add it as an auxiliary
+        // chat source
         BodyObject bobj = (BodyObject)_ctx.getClient().getClientObject();
         if (bobj.location != plobj.getOid()) {
-            _ctx.getChatDirector().addAuxiliarySource(
-                _gobj, GameCodes.GAME_CHAT_TYPE);
+            _ctx.getChatDirector().addAuxiliarySource(_gobj, GameCodes.GAME_CHAT_TYPE);
         }
 
         // and add ourselves as a listener
         _gobj.addListener(this);
 
-        // we don't want to claim to be finished until any derived classes
-        // that overrode this method have executed, so we'll queue up a
-        // runnable here that will let the game manager know that we're
-        // ready on the next pass through the distributed event loop
+        // we don't want to claim to be finished until any derived classes that overrode this
+        // method have executed, so we'll queue up a runnable here that will let the game manager
+        // know that we're ready on the next pass through the distributed event loop
         Log.info("Entering game " + _gobj.which() + ".");
         if (_gobj.getPlayerIndex(bobj.getVisibleName()) != -1) {
             _ctx.getClient().getRunQueue().postRunnable(new Runnable() {
                 public void run () {
-                    // finally let the game manager know that we're ready
-                    // to roll
+                    // finally let the game manager know that we're ready to roll
                     playerReady();
                 }
             });
@@ -114,8 +106,7 @@ public abstract class GameController extends PlaceController
     }
 
     /**
-     * Removes our listener registration from the game object and cleans
-     * house.
+     * Removes our listener registration from the game object and cleans house.
      */
     public void didLeavePlace (PlaceObject plobj)
     {
@@ -131,9 +122,9 @@ public abstract class GameController extends PlaceController
     /**
      * Convenience method to determine the type of game.
      */
-    public byte getGameType ()
+    public int getMatchType ()
     {
-        return _config.getGameType();
+        return _config.getMatchType();
     }
 
     /**
@@ -141,15 +132,13 @@ public abstract class GameController extends PlaceController
      */
     public boolean isGameOver ()
     {
-        boolean gameOver = (_gobj == null) ||
-            (_gobj.state != GameObject.IN_PLAY);
+        boolean gameOver = (_gobj == null) || (_gobj.state != GameObject.IN_PLAY);
         return (_gameOver || gameOver);
     }
 
     /**
-     * Sets the client game over override. This is used in situations
-     * where we determine that the game is over before the server has
-     * informed us of such.
+     * Sets the client game over override. This is used in situations where we determine that the
+     * game is over before the server has informed us of such.
      */
     public void setGameOver (boolean gameOver)
     {
@@ -157,13 +146,11 @@ public abstract class GameController extends PlaceController
     }
 
     /**
-     * Calls {@link #gameWillReset}, ends the current game (locally, it
-     * does not tell the server to end the game), and waits to receive a
-     * reset notification (which is simply an event setting the game state
-     * to <code>IN_PLAY</code> even though it's already set to
-     * <code>IN_PLAY</code>) from the server which will start up a new
-     * game.  Derived classes should override {@link #gameWillReset} to
-     * perform any game-specific animations.
+     * Calls {@link #gameWillReset}, ends the current game (locally, it does not tell the server to
+     * end the game), and waits to receive a reset notification (which is simply an event setting
+     * the game state to <code>IN_PLAY</code> even though it's already set to <code>IN_PLAY</code>)
+     * from the server which will start up a new game.  Derived classes should override {@link
+     * #gameWillReset} to perform any game-specific animations.
      */
     public void resetGame ()
     {
@@ -183,9 +170,8 @@ public abstract class GameController extends PlaceController
     }
 
     /**
-     * Handles basic game controller action events. Derived classes should
-     * be sure to call <code>super.handleAction</code> for events they
-     * don't specifically handle.
+     * Handles basic game controller action events. Derived classes should be sure to call
+     * <code>super.handleAction</code> for events they don't specifically handle.
      */
     public boolean handleAction (ActionEvent action)
     {
@@ -197,8 +183,7 @@ public abstract class GameController extends PlaceController
      */
     public void systemMessage (String bundle, String msg)
     {
-        _ctx.getChatDirector().displayInfo(
-            bundle, msg, GameCodes.GAME_CHAT_TYPE);
+        _ctx.getChatDirector().displayInfo(bundle, msg, GameCodes.GAME_CHAT_TYPE);
     }
 
     // documentation inherited
@@ -208,16 +193,16 @@ public abstract class GameController extends PlaceController
         if (event.getName().equals(GameObject.STATE)) {
             int newState = event.getIntValue();
             if (!stateDidChange(newState)) {
-                Log.warning("Game transitioned to unknown state " +
-                            "[gobj=" + _gobj + ", state=" + newState + "].");
+                Log.warning("Game transitioned to unknown state [gobj=" + _gobj +
+                            ", state=" + newState + "].");
             }
         }
     }
 
     /**
-     * Derived classes can override this method if they add additional game
-     * states and should handle transitions to those states, returning true to
-     * indicate they were handled and calling super for the normal game states.
+     * Derived classes can override this method if they add additional game states and should
+     * handle transitions to those states, returning true to indicate they were handled and calling
+     * super for the normal game states.
      */
     protected boolean stateDidChange (int state)
     {
@@ -236,8 +221,8 @@ public abstract class GameController extends PlaceController
     }
 
     /**
-     * Called after we've entered the game and everything has initialized
-     * to notify the server that we, as a player, are ready to play.
+     * Called after we've entered the game and everything has initialized to notify the server that
+     * we, as a player, are ready to play.
      */
     protected void playerReady ()
     {
@@ -246,9 +231,8 @@ public abstract class GameController extends PlaceController
     }
 
     /**
-     * Called when the game transitions to the <code>IN_PLAY</code>
-     * state. This happens when all of the players have arrived and the
-     * server starts the game.
+     * Called when the game transitions to the <code>IN_PLAY</code> state. This happens when all of
+     * the players have arrived and the server starts the game.
      */
     protected void gameDidStart ()
     {
@@ -269,9 +253,8 @@ public abstract class GameController extends PlaceController
     }
 
     /**
-     * Called when the game transitions to the <code>GAME_OVER</code>
-     * state. This happens when the game reaches some end condition by
-     * normal means (is not cancelled or aborted).
+     * Called when the game transitions to the <code>GAME_OVER</code> state. This happens when the
+     * game reaches some end condition by normal means (is not cancelled or aborted).
      */
     protected void gameDidEnd ()
     {
@@ -297,9 +280,8 @@ public abstract class GameController extends PlaceController
     }
 
     /**
-     * Called to give derived classes a chance to display animations, send
-     * a final packet, or do any other business they care to do when the
-     * game is about to reset.
+     * Called to give derived classes a chance to display animations, send a final packet, or do
+     * any other business they care to do when the game is about to reset.
      */
     protected void gameWillReset ()
     {
@@ -317,12 +299,10 @@ public abstract class GameController extends PlaceController
     /** Our game configuration information. */
     protected GameConfig _config;
 
-    /** A reference to the game object for the game that we're
-     * controlling. */
+    /** A reference to the game object for the game that we're controlling. */
     protected GameObject _gobj;
 
-    /** A local flag overriding the game over state for situations where
-     * the client knows the game is over before the server has
-     * transitioned the game object accordingly. */
+    /** A local flag overriding the game over state for situations where the client knows the game
+     * is over before the server has transitioned the game object accordingly. */
     protected boolean _gameOver;
 }

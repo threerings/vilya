@@ -37,48 +37,43 @@ import com.threerings.parlor.client.TableConfigurator;
 import com.threerings.parlor.game.client.GameConfigurator;
 
 /**
- * The game config class encapsulates the configuration information for a
- * particular type of game. The hierarchy of game config objects mimics the
- * hierarchy of game managers and controllers. Both the game manager and game
- * controller are provided with the game config object when the game is
- * created.
+ * The game config class encapsulates the configuration information for a particular type of
+ * game. The hierarchy of game config objects mimics the hierarchy of game managers and
+ * controllers. Both the game manager and game controller are provided with the game config object
+ * when the game is created.
  *
- * <p> The game config object is also the mechanism used to instantiate the
- * appropriate game manager and controller. Every game must have an associated
- * game config derived class that overrides {@link #createController} and
- * {@link #getManagerClassName}, returning the appropriate game controller and
- * manager class for that game. Thus the entire chain of events that causes a
- * particular game to be created is the construction of the appropriate game
- * config instance which is provided to the server as part of an invitation or
- * via some other matchmaking mechanism.
+ * <p> The game config object is also the mechanism used to instantiate the appropriate game
+ * manager and controller. Every game must have an associated game config derived class that
+ * overrides {@link #createController} and {@link #getManagerClassName}, returning the appropriate
+ * game controller and manager class for that game. Thus the entire chain of events that causes a
+ * particular game to be created is the construction of the appropriate game config instance which
+ * is provided to the server as part of an invitation or via some other matchmaking mechanism.
  */
 public /*abstract*/ class GameConfig extends PlaceConfig
     implements Cloneable, Hashable
 {
-    /** Game type constant: a game that is started with a list of players,
-     * and those are the only players that may play. */
+    /** Game type constant: a game that is started with a list of players, and those are the only
+     * players that may play. */
     public static const SEATED_GAME :int = 0;
 
-    /** Game type constant: a game that starts immediately, but only has
-     * a certain number of player slots. Users enter the game room, and
-     * then choose where to sit. */
+    /** Game type constant: a game that starts immediately, but only has a certain number of player
+     * slots. Users enter the game room, and then choose where to sit. */
     public static const SEATED_CONTINUOUS :int = 1;
 
-    /** Game type constant: a game that starts immediately, and every
-     * user that enters is a player. */
+    /** Game type constant: a game that starts immediately, and every user that enters is a
+     * player. */
     public static const PARTY :int = 2;
 
-    /** The usernames of the players involved in this game, or an empty
-     * array if such information is not needed by this particular game. */
+    /** The usernames of the players involved in this game, or an empty array if such information
+     * is not needed by this particular game. */
     public var players :TypedArray = TypedArray.create(Name);
 
     /** Indicates whether or not this game is rated. */
     public var rated :Boolean = true;
 
-    /** Configurations for AIs to be used in this game. Slots with real
-     * players should be null and slots with AIs should contain
-     * configuration for those AIs. A null array indicates no use of AIs
-     * at all. */
+    /** Configurations for AIs to be used in this game. Slots with real players should be null and
+     * slots with AIs should contain configuration for those AIs. A null array indicates no use of
+     * AIs at all. */
     public var ais :TypedArray = TypedArray.create(GameAI);
 
     public function GameConfig ()
@@ -87,27 +82,31 @@ public /*abstract*/ class GameConfig extends PlaceConfig
     }
 
     /**
-     * Get the type of game.
+     * Returns a numeric identifier for this game class. This may be used to track persisent
+     * information on a per-game basis.
      */
-    public function getGameType () :int
+    public function getGameId () :int
     {
-        return SEATED_GAME;
+        throw new Error("abstract");
     }
 
-    /**
-     * Returns the message bundle identifier for the bundle that should be
-     * used to translate the translatable strings used to describe the
-     * game config parameters.
-     */
-    public /*abstract*/ function getBundleName () :String
+    public function getGameIdent () :String
     {
         throw new Error("abstract");
     }
 
     /**
-     * Creates a configurator that can be used to create a user interface
-     * for configuring this instance prior to starting the game. If no
-     * configuration is necessary, this method should return null.
+     * Get the type of game.
+     */
+    public function getMatchType () :int
+    {
+        return SEATED_GAME;
+    }
+
+    /**
+     * Creates a configurator that can be used to create a user interface for configuring this
+     * instance prior to starting the game. If no configuration is necessary, this method should
+     * return null.
      */
     public /*abstract*/ function createConfigurator () :GameConfigurator
     {
@@ -115,8 +114,8 @@ public /*abstract*/ class GameConfig extends PlaceConfig
     }
 
     /**
-     * Creates a table configurator for initializing 'table' properties
-     * of the game. The default implementation returns null.
+     * Creates a table configurator for initializing 'table' properties of the game. The default
+     * implementation returns null.
      */
     public function createTableConfigurator () :TableConfigurator
     {
@@ -124,34 +123,13 @@ public /*abstract*/ class GameConfig extends PlaceConfig
     }
 
     /**
-     * Returns a translatable label describing this game.
-     */
-    public function getGameName () :String
-    {
-        // the whole getRatingTypeId(), getGameName(), getBundleName()
-        // business should be cleaned up. we should have getGameIdent()
-        // and everything should have a default implementation using that
-        return "m." + getBundleName();
-    }
-
-    /**
-     * Returns the game rating type, if the system uses such things.
-     */
-    public function getRatingTypeId () :int
-    {
-        return -1;
-    }
-
-    /**
-     * Computes a hashcode for this game config object that supports our
-     * {@link #equals} implementation. Objects that are equal should have
-     * the same hashcode.
+     * Computes a hashcode for this game config object that supports our {@link #equals}
+     * implementation. Objects that are equal should have the same hashcode.
      */
     public function hashCode () :int
     {
         // look ma, it's so sophisticated!
-        return StringUtil.hashCode(ClassUtil.getClassName(this)) +
-            (rated ? 1 : 0);
+        return StringUtil.hashCode(ClassUtil.getClassName(this)) + (rated ? 1 : 0);
     }
 
     // from Cloneable
@@ -161,30 +139,27 @@ public /*abstract*/ class GameConfig extends PlaceConfig
         copy.players = this.players;
         copy.rated = this.rated;
         copy.ais = this.ais;
-
         return copy;
     }
 
     /**
-     * Returns true if this game config object is equal to the supplied
-     * object (meaning it is also a game config object and its
-     * configuration settings are the same as ours).
+     * Returns true if this game config object is equal to the supplied object (meaning it is also
+     * a game config object and its configuration settings are the same as ours).
      */
     public function equals (other :Object) :Boolean
     {
         // make sure they're of the same class
         if (ClassUtil.isSameClass(other, this)) {
             var that :GameConfig = GameConfig(other);
-            return this.rated == that.rated;
-
+            return this.getGameId() == that.getGameId() && this.rated == that.rated;
         } else {
             return false;
         }
     }
 
     /**
-     * Returns an Array of strings that describe the configuration of this
-     * game. Default implementation returns an empty array.
+     * Returns an Array of strings that describe the configuration of this game. Default
+     * implementation returns an empty array.
      */
     public function getDescription () :Array
     {

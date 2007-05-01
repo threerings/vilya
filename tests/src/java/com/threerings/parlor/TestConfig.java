@@ -21,6 +21,7 @@
 
 package com.threerings.parlor;
 
+import com.threerings.crowd.client.PlaceController;
 import com.threerings.parlor.game.client.GameConfigurator;
 import com.threerings.parlor.game.data.GameConfig;
 
@@ -29,19 +30,24 @@ public class TestConfig extends GameConfig
     /** The foozle parameter. */
     public int foozle;
 
+    public int getGameId ()
+    {
+        return 0;
+    }
+
+    public String getGameIdent ()
+    {
+        return "test";
+    }
+
     public GameConfigurator createConfigurator ()
     {
         return null;
     }
 
-    public Class getControllerClass ()
+    public PlaceController createController ()
     {
-        return TestController.class;
-    }
-
-    public String getBundleName ()
-    {
-        return "test";
+        return new TestController();
     }
 
     public String getManagerClassName ()

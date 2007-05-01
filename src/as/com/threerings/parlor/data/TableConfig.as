@@ -27,24 +27,21 @@ import com.threerings.io.SimpleStreamableObject;
 import com.threerings.io.TypedArray;
 
 /**
- * Table configuration parameters for a game that is to be matchmade
- * using the table services.
+ * Table configuration parameters for a game that is to be matchmade using the table services.
  */
 public class TableConfig extends SimpleStreamableObject
 {
-    /** The total number of players that are desired for the table.
-     * For team games, this should be set to the total number of players 
-     * overall, as teams may be unequal. */
+    /** The total number of players that are desired for the table. For team games, this should be
+     * set to the total number of players overall, as teams may be unequal. */
     public var desiredPlayerCount :int;
 
-    /** The minimum number of players needed overall (or per-team if a
-     * team-based game) for the game to start at the creator's discretion. */
+    /** The minimum number of players needed overall (or per-team if a team-based game) for the
+     * game to start at the creator's discretion. */
     public var minimumPlayerCount :int;
 
-    /** If non-null, indicates that this is a team-based game and contains
-     * the team assignments for each player. For example, a game with
-     * three players in two teams- players 0 and 2 versus player 1- would
-     * have { {0, 2}, {1} }; */
+    /** If non-null, indicates that this is a team-based game and contains the team assignments for
+     * each player. For example, a game with three players in two teams- players 0 and 2 versus
+     * player 1- would have { {0, 2}, {1} }; */
     public var teamMemberIndices :TypedArray;
 
     /** Whether the table is "private". */

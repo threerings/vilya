@@ -38,7 +38,6 @@ import com.threerings.crowd.client.PlaceView;
 import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.util.CrowdContext;
 
-import com.threerings.ezgame.data.EZGameConfig;
 import com.threerings.ezgame.data.EZGameObject;
 
 import com.threerings.ezgame.Game;
@@ -56,16 +55,17 @@ public class EZGamePanel extends JPanel
         // add a listener so that we hear about all new children
         addContainerListener(this);
 
-        EZGameConfig cfg = (EZGameConfig) ctrl.getPlaceConfig();
-        try {
-            _gameView = (Component) Class.forName(cfg.gameMedia).newInstance();
-            add(_gameView);
-        } catch (RuntimeException re) {
-            throw re;
+// TODO: sort out if and how EZ games will create their views
+//         EZGameConfig cfg = (EZGameConfig) ctrl.getPlaceConfig();
+//         try {
+//             _gameView = (Component) Class.forName(cfg.gameMedia).newInstance();
+//             add(_gameView);
+//         } catch (RuntimeException re) {
+//             throw re;
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+//         } catch (Exception e) {
+//             throw new RuntimeException(e);
+//         }
 
         // TODO: Add a standard chat display?
         //addChild(new ChatDisplayBox(ctx));

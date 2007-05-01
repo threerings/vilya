@@ -21,49 +21,45 @@
 
 package com.threerings.ezgame.data {
 
-import flash.utils.ByteArray;
-
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
-
-import com.threerings.presents.dobj.DSet_Entry;
+import com.threerings.io.TypedArray;
 
 /**
- * Represents a user's game-specific cookie data.
+ * Models a parameter that allows the selection of one of a list of choices (specified as strings).
  */
-public class UserCookie
-    implements DSet_Entry
+public class ChoiceParameter extends Parameter
 {
-    /** The id of the player that has this cookie. */
-    public var playerId :int;
+    /** The set of choices available for this parameter. */
+    public var choices :TypedArray;
 
-    /** The cookie value. */
-    public var cookie :ByteArray;
+    /** The starting selection. */
+    public var start :String;
 
-    public function UserCookie (playerId :int = 0, cookie :ByteArray = null)
+    public function ChoiceParameter ()
     {
-        this.playerId = playerId;
-        this.cookie = cookie;
     }
 
-    // from DSet_Entry
-    public function getKey () :Object
+    // documentation inherited
+    override public function getDefaultValue () :Object
     {
-        return playerId;
+        return start;
     }
 
-    // from superinterface Streamable
-    public function readObject (ins :ObjectInputStream) :void
+    // from interface Streamable
+    override public function readObject (ins :ObjectInputStream) :void
     {
-        playerId = ins.readInt();
-        cookie = (ins.readField(ByteArray) as ByteArray);
+        super.readObject(ins);
+        choices = (ins.readObject() as TypedArray);
+        start = (ins.readField(String) as String);
     }
 
-    // from superinterface Streamable
-    public function writeObject (out :ObjectOutputStream) :void
+    // from interface Streamable
+    override public function writeObject (out :ObjectOutputStream) :void
     {
-        out.writeInt(playerId);
-        out.writeField(cookie);
+        super.writeObject(out);
+        out.writeObject(choices);
+        out.writeField(start);
     }
 }
 }

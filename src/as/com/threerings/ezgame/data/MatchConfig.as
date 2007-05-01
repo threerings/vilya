@@ -19,28 +19,32 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-package com.threerings.parlor.data;
+package com.threerings.ezgame.data {
 
 import com.threerings.io.SimpleStreamableObject;
 
+import com.threerings.parlor.game.data.GameConfig;
+
 /**
- * Table configuration parameters for a game that is to be matchmade using the table services.
+ * Used to configure the match-making interface for a game. Particular match-making mechanisms
+ * extend this class and specify their own special configuration parameters.
  */
-public class TableConfig extends SimpleStreamableObject
+public /*abstract*/ class MatchConfig extends SimpleStreamableObject
 {
-    /** The total number of players that are desired for the table. For team games, this should be
-     * set to the total number of players overall, as teams may be unequal. */
-    public int desiredPlayerCount;
+    public function MatchConfig ()
+    {
+    }
 
-    /** The minimum number of players needed overall (or per-team if a team-based game) for the
-     * game to start at the creator's discretion. */
-    public int minimumPlayerCount;
+    /** Returns the matchmaking type to use for this game, e.g. {@link GameConfig.SEATED_GAME}. */
+    public function getMatchType () :int
+    {
+        throw new Error("Abstract");
+    }
 
-    /** If non-null, indicates that this is a team-based game and contains the team assignments for
-     * each player. For example, a game with three players in two teams- players 0 and 2 versus
-     * player 1- would have { {0, 2}, {1} }; */
-    public int[][] teamMemberIndices;
-
-    /** Whether the table is "private". */
-    public boolean privateTable;
+    /** Returns the minimum number of players needed to play this game. */
+    public function getMinimumPlayers () :int
+    {
+        throw new Error("Abstract");
+    }
+}
 }

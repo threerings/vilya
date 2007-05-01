@@ -31,14 +31,12 @@ import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.util.ParlorContext;
 
 /**
- * Provides the base from which interfaces can be built to configure games
- * prior to starting them. Derived classes would extend the base
- * configurator adding interface elements and wiring them up properly to
- * allow the user to configure an instance of their game.
+ * Provides the base from which interfaces can be built to configure games prior to starting them.
+ * Derived classes would extend the base configurator adding interface elements and wiring them up
+ * properly to allow the user to configure an instance of their game.
  *
- * <p> Clients that use the game configurator will want to instantiate one
- * based on the class returned from the {@link GameConfig} and then
- * initialize it with a call to {@link #init}.
+ * <p> Clients that use the game configurator will want to instantiate one based on the class
+ * returned from the {@link GameConfig} and then initialize it with a call to {@link #init}.
  */
 public /*abstract*/ class FlexGameConfigurator extends GameConfigurator
 {
@@ -54,14 +52,12 @@ public /*abstract*/ class FlexGameConfigurator extends GameConfigurator
     }
 
     /**
-     * Add a control to the interface. This should be the standard way
-     * that configurator controls are added, but note also that external
-     * entities may add their own controls that are related to the game,
-     * but do not directly alter the game config, so that all the controls
-     * are added in a uniform manner and are well aligned.
+     * Add a control to the interface. This should be the standard way that configurator controls
+     * are added, but note also that external entities may add their own controls that are related
+     * to the game, but do not directly alter the game config, so that all the controls are added
+     * in a uniform manner and are well aligned.
      */
-    public function addControl (
-            label :UIComponent, control :UIComponent) :void
+    public function addControl (label :UIComponent, control :UIComponent) :void
     {
         var item :HBox = new HBox();
         item.width = 225;

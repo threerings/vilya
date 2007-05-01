@@ -25,20 +25,18 @@ import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.util.ParlorContext;
 
 /**
- * Provides the base from which interfaces can be built to configure games
- * prior to starting them. Derived classes would extend the base
- * configurator adding interface elements and wiring them up properly to
- * allow the user to configure an instance of their game.
+ * Provides the base from which interfaces can be built to configure games prior to starting
+ * them. Derived classes would extend the base configurator adding interface elements and wiring
+ * them up properly to allow the user to configure an instance of their game.
  *
- * <p> Clients that use the game configurator will want to instantiate one
- * based on the class returned from the {@link GameConfig} and then
- * initialize it with a call to {@link #init}.
+ * <p> Clients that use the game configurator will want to instantiate one based on the class
+ * returned from the {@link GameConfig} and then initialize it with a call to {@link #init}.
  */
 public /*abstract*/ class GameConfigurator
 {
     /**
-     * Initializes this game configurator, creates its user interface
-     * elements and prepares it for display.
+     * Initializes this game configurator, creates its user interface elements and prepares it for
+     * display.
      */
     public function init (ctx :ParlorContext) :void
     {
@@ -57,8 +55,8 @@ public /*abstract*/ class GameConfigurator
     }
 
     /**
-     * Provides this configurator with its configuration. It should set up
-     * all of its user interface elements to reflect the configuration.
+     * Provides this configurator with its configuration. It should set up all of its user
+     * interface elements to reflect the configuration.
      */
     public function setGameConfig (config :GameConfig) :void
     {
@@ -68,8 +66,8 @@ public /*abstract*/ class GameConfigurator
     }
 
     /**
-     * Derived classes will likely want to override this method and
-     * configure their user interface elements accordingly.
+     * Derived classes will likely want to override this method and configure their user interface
+     * elements accordingly.
      */
     protected function gotGameConfig () :void
     {
@@ -86,10 +84,9 @@ public /*abstract*/ class GameConfigurator
     }
 
     /**
-     * Derived classes will want to override this method, flushing values
-     * from the user interface to the game config object so that it is
-     * properly configured prior to being returned to the {@link
-     * #getGameConfig} caller.
+     * Derived classes will want to override this method, flushing values from the user interface
+     * to the game config object so that it is properly configured prior to being returned to the
+     * {@link #getGameConfig} caller.
      */
     protected function flushGameConfig () :void
     {

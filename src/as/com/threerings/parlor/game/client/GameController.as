@@ -294,9 +294,9 @@ public /*abstract*/ class GameController extends PlaceController
     /**
      * Convenience method to determine the type of game.
      */
-    protected function getGameType () :int
+    protected function getMatchType () :int
     {
-        return _gconfig.getGameType();
+        return _gconfig.getMatchType();
     }
 
     /** A reference to the active parlor context. */

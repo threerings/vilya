@@ -23,6 +23,7 @@ package com.threerings.ezgame.data {
 
 import com.threerings.util.Hashable;
 import com.threerings.util.MessageBundle;
+import com.threerings.util.StreamableHashMap;
 
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
@@ -39,53 +40,45 @@ import com.threerings.ezgame.util.EZObjectMarshaller;
  * A game config for a simple multiplayer ez game.
  */
 public class EZGameConfig extends GameConfig
-    implements Hashable
 {
-    /** The name of the game. */
-    public var name :String;
+    /** Our configuration parameters. These will be seeded with the defaults from the game
+     * definition and then configured by the player in the lobby. */
+    public var params :StreamableHashMap = new StreamableHashMap();
 
-    /** If non-zero, a game id used to persistently identify the game.
-     * This could be thought of as a new-style rating id. */
-    public var persistentGameId:int;
-
-    /** The media for the game. In flash, this is the URL to the SWF file. */
-    public var gameMedia :String;
-
-    /** The game type. */
-    public var gameType :int = SEATED_GAME;
-
-    /** Any custom configuration options. */
-    public var customConfig :Object;
-
-    public function EZGameConfig ()
+    public function EZGameConfig (gameId :int = 0, gameDef :GameDefinition = null)
     {
-        // nothing needed
+        _gameId = gameId;
+        _gameDef = gameDef;
     }
 
-    override public function getGameType () :int
+    /** Returns the game definition associated with this config instance. */
+    public function getGameDefinition () :GameDefinition
     {
-        return gameType;
+        return _gameDef;
     }
 
-    // from abstract GameConfig
-    override public function getBundleName () :String
+    // from GameConfig
+    override public function getGameId () :int
     {
-        return "general";
+        return _gameId;
     }
 
-    // TODO
-    //override public function createConfigurator () :GameConfigurator
-
-
-    override public function getGameName () :String
+    // from GameConfig
+    override public function getGameIdent () :String
     {
-        return MessageBundle.taint(name);
+        return _gameDef.ident;
     }
 
-    // from PlaceConfig
-    override public function createController () :PlaceController
+    // from GameConfig
+    override public function getMatchType () :int
     {
-        return new EZGameController();
+        return _gameDef.match.getMatchType();
+    }
+
+    // from GameConfig
+    override public function createConfigurator () :GameConfigurator
+    {
+        return null;
     }
 
     // from abstract PlaceConfig
@@ -94,46 +87,40 @@ public class EZGameConfig extends GameConfig
         throw new Error("Not implemented.");
     }
 
-    override public function hashCode () :int
-    {
-        return super.hashCode() ^ persistentGameId;
-    }
-
-    override public function equals (other :Object) :Boolean
-    {
-        if (!super.equals(other)) {
-            return false;
-        }
-
-        var that :EZGameConfig = (other as EZGameConfig);
-        return (this.persistentGameId == that.persistentGameId) &&
-            (this.gameMedia === that.gameMedia);
-    }
-
     // from interface Streamable
     override public function readObject (ins :ObjectInputStream) :void
     {
         super.readObject(ins);
-
-        name = (ins.readField(String) as String)
-        persistentGameId = ins.readInt();
-        gameMedia = (ins.readField(String) as String);
-        gameType = ins.readByte();
-
-        customConfig = EZObjectMarshaller.decode(ins.readObject());
+        params = (ins.readObject() as StreamableHashMap);
+        _gameId = ins.readInt();
+        _gameDef = (ins.readObject() as GameDefinition);
     }
 
     // from interface Streamable
     override public function writeObject (out :ObjectOutputStream) :void
     {
         super.writeObject(out);
-
-        out.writeField(name);
-        out.writeInt(persistentGameId);
-        out.writeField(gameMedia);
-        out.writeByte(gameType);
-
-        out.writeObject(EZObjectMarshaller.encode(customConfig, false));
+        out.writeObject(params);
+        out.writeInt(_gameId);
+        out.writeObject(_gameDef);
     }
+
+    /** Returns true if this is a party game, false otherwise. */
+    public function isPartyGame () :Boolean
+    {
+        return getMatchType() == PARTY;
+    }
+
+    // from PlaceConfig
+    override public function createController () :PlaceController
+    {
+        return new EZGameController();
+    }
+
+    /** Our game's unique id. */
+    protected var _gameId :int;
+
+    /** Our game definition. */
+    protected var _gameDef :GameDefinition;
 }
 }

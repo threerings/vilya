@@ -53,8 +53,7 @@ public class PropertySetEvent extends NamedEvent
     override public function applyToObject (target :DObject) :Boolean
     {
         // since we're in actionscript, we're always on the client
-        _oldValue =
-            EZGameObject(target).applyPropertySet(_name, _data, _index);
+        _oldValue = EZGameObject(target).applyPropertySet(_name, _data, _index);
         return true;
     }
 
@@ -63,7 +62,7 @@ public class PropertySetEvent extends NamedEvent
      */
     public function getValue () :Object
     {
-        return _data;
+        return EZObjectMarshaller.decode(_data);
     }
 
     /**
@@ -87,7 +86,7 @@ public class PropertySetEvent extends NamedEvent
     {
         super.readObject(ins);
         _index = ins.readInt();
-        _data = EZObjectMarshaller.decode(ins.readObject());
+        _data = (ins.readObject() as Object);
     }
 
     // from interface Streamable

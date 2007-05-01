@@ -21,90 +21,80 @@
 
 package com.threerings.ezgame.data;
 
-import com.threerings.util.MessageBundle;
-
-import com.threerings.crowd.client.PlaceController;
+import com.threerings.util.StreamableHashMap;
 
 import com.threerings.parlor.game.client.GameConfigurator;
 import com.threerings.parlor.game.data.GameConfig;
 
-import com.threerings.ezgame.client.EZGameController;
+import com.threerings.ezgame.client.EZGameConfigurator;
 
 /**
  * A game config for a simple multiplayer game.
  */
 public class EZGameConfig extends GameConfig
 {
-    /** The name of the game. */
-    public String name;
+    /** Our configuration parameters. These will be seeded with the defaults from the game
+     * definition and then configured by the player in the lobby. */
+    public StreamableHashMap<String,Object> params = new StreamableHashMap<String,Object>();
 
-    /** If non-zero, a game id used to persistently identify the game.
-     * This could be thought of as a new-style rating id. */
-    public int persistentGameId;
-
-    /** The media for the game. In flash this is the URL to the SWF file.
-     * In Java, this will be a class name, or maybe a Jar. TODO? */
-    public String gameMedia;
-
-    /** The game type. */
-    public byte gameType = SEATED_GAME;
-
-    /** Custom configuration for the game. May only be interpretable on the
-     * client. */
-    public Object customConfig;
-
-    @Override
-    public byte getGameType ()
+    /** A zero argument constructor used when unserializing. */
+    public EZGameConfig ()
     {
-        return gameType;
     }
 
-    // from abstract GameConfig
-    public String getBundleName ()
+    /** Constructs a game config based on the supplied game definition. */
+    public EZGameConfig (int gameId, GameDefinition gameDef)
     {
-        return "general";
+        _gameId = gameId;
+        _gameDef = gameDef;
+
+        // set the default values for our parameters
+        for (int ii = 0; ii < gameDef.params.length; ii++) {
+            params.put(gameDef.params[ii].ident, gameDef.params[ii].getDefaultValue());
+        }
     }
 
-    // from abstract GameConfig
+    /**
+     * Returns the non-changing metadata that defines this game.
+     */
+    public GameDefinition getGameDefinition ()
+    {
+        return _gameDef;
+    }
+
+    @Override // from GameConfig
+    public int getGameId ()
+    {
+        return _gameId;
+    }
+
+    @Override // from GameConfig
+    public String getGameIdent ()
+    {
+        return _gameDef.ident;
+    }
+
+    @Override // from GameConfig
+    public int getMatchType ()
+    {
+        return _gameDef.match.getMatchType();
+    }
+
+    @Override // from GameConfig
     public GameConfigurator createConfigurator ()
     {
-        // TODO
-        return null;
+        return new EZGameConfigurator();
     }
 
-    @Override
-    public String getGameName ()
-    {
-        return MessageBundle.taint(name);
-    }
-
-    @Override // from PlaceConfig
-    public PlaceController createController ()
-    {
-        return new EZGameController();
-    }
-
-    // from abstract PlaceConfig
+    @Override // from GameConfig
     public String getManagerClassName ()
     {
-        return "com.threerings.ezgame.server.EZGameManager";
+        return _gameDef.manager;
     }
 
-    @Override
-    public boolean equals (Object other)
-    {
-        if (!super.equals(other)) {
-            return false;
-        }
+    /** Our game's unique id. */
+    protected int _gameId;
 
-        EZGameConfig that = (EZGameConfig) other;
-        return this.persistentGameId == that.persistentGameId &&
-            this.gameMedia.equals(that.gameMedia);
-    }
-
-    @Override
-    public int hashCode ()
-    {
-        return super.hashCode() ^ persistentGameId;
-    }
+    /** Our game definition. */
+    protected GameDefinition _gameDef;
 }

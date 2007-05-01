@@ -47,6 +47,7 @@ import com.threerings.util.Iterator;
 import com.threerings.util.MessageBundle;
 import com.threerings.util.Name;
 import com.threerings.util.StringUtil;
+import com.threerings.util.Wrapped;
 
 import com.threerings.presents.client.ConfirmAdapter;
 import com.threerings.presents.client.ResultWrapper;
@@ -176,7 +177,14 @@ public class GameControlBackend
 
         // straight data
         o["gameData"] = _gameData;
-        o["gameConfig"] = (_ctrl.getPlaceConfig() as EZGameConfig).customConfig;
+
+        // convert our game config from a HashMap to a Dictionary
+        var gameConfig :Object = {};
+        var cfg :EZGameConfig = (_ctrl.getPlaceConfig() as EZGameConfig);
+        cfg.params.forEach(function (key :Object, value :Object) :void {
+            gameConfig[key] = (value is Wrapped) ? Wrapped(value).unwrap() : value;
+        });
+        o["gameConfig"] = gameConfig;
 
         // functions
         o["setProperty_v1"] = setProperty_v1;
@@ -388,7 +396,7 @@ public class GameControlBackend
             var uc :UserCookie =
                 (_ezObj.userCookies.get(playerId) as UserCookie);
             if (uc != null) {
-                callback(uc.cookie);
+                callback(EZObjectMarshaller.decode(uc.cookie));
                 return;
             }
         }
@@ -901,7 +909,7 @@ public class GameControlBackend
                 delete _cookieCallbacks[cookie.playerId];
                 for each (var fn :Function in arr) {
                     try {
-                        fn(cookie.cookie);
+                        fn(EZObjectMarshaller.decode(cookie.cookie));
                     } catch (err :Error) {
                         // cope
                     }

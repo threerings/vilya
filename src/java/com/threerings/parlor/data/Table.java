@@ -36,8 +36,7 @@ import com.threerings.parlor.data.ParlorCodes;
 import com.threerings.parlor.game.data.GameConfig;
 
 /**
- * This class represents a table that is being used to matchmake a game by
- * the Parlor services.
+ * This class represents a table that is being used to matchmake a game by the Parlor services.
  */
 public class Table
     implements DSet.Entry, ParlorCodes
@@ -45,28 +44,25 @@ public class Table
     /** The unique identifier for this table. */
     public int tableId;
 
-    /** The object id of the lobby object with which this table is
-     * associated. */
+    /** The object id of the lobby object with which this table is associated. */
     public int lobbyOid;
 
-    /** The oid of the game that was created from this table or -1 if the
-     * table is still in matchmaking mode. */
+    /** The oid of the game that was created from this table or -1 if the table is still in
+     * matchmaking mode. */
     public int gameOid = -1;
 
-    /** An array of the usernames of the occupants of this table (some
-     * slots may not be filled), or null if a party game. */
+    /** An array of the usernames of the occupants of this table (some slots may not be filled), or
+     * null if a party game. */
     public Name[] occupants;
 
-    /** The body oids of the occupants of this table, or null if a party game.
-     * (This is not propagated to remote instances.) */
+    /** The body oids of the occupants of this table, or null if a party game.  (This is not
+     * propagated to remote instances.) */
     public transient int[] bodyOids;
 
-    /** For a running game, the total number of players. For FFA party games,
-     * this is everyone. */
+    /** For a running game, the total number of players. For FFA party games, this is everyone. */
     public short playerCount;
 
-    /** For a running game, the total number of watchers. For FFA party games,
-     * this is always 0. */
+    /** For a running game, the total number of watchers. For FFA party games, this is always 0. */
     public short watcherCount;
 
     /** The game config for the game that is being matchmade. */
@@ -83,15 +79,13 @@ public class Table
     }
 
     /**
-     * Initializes a new table instance, and assigns it the next monotonically
-     * increasing table id.
+     * Initializes a new table instance, and assigns it the next monotonically increasing table id.
      *
-     * @param lobbyOid the object id of the lobby in which this table is
-     * to live.
+     * @param lobbyOid the object id of the lobby in which this table is to live.
      * @param tconfig the table configuration for this table.
-     * @param config the configuration of the game being matchmade by this
-     * table.
+     * @param config the configuration of the game being matchmade by this table.
      */
+    @ActionScript(omit=true)
     public void init (int lobbyOid, TableConfig tconfig, GameConfig config)
     {
         // assign a unique table id
@@ -105,7 +99,7 @@ public class Table
         this.config = config;
 
         // make room for the maximum number of players
-        if (config.getGameType() != GameConfig.PARTY) {
+        if (config.getMatchType() != GameConfig.PARTY) {
             occupants = new Name[tconfig.desiredPlayerCount];
             bodyOids = new int[occupants.length];
 
@@ -121,6 +115,7 @@ public class Table
     /**
      * Returns true if there is no one sitting at this table.
      */
+    @ActionScript(omit=true)
     public boolean isEmpty ()
     {
         for (int i = 0; i < bodyOids.length; i++) {
@@ -148,21 +143,20 @@ public class Table
     }
 
     /**
-     * Once a table is ready to play (see {@link #mayBeStarted} and {@link
-     * #shouldBeStarted}), the players array can be fetched using this
-     * method. It will return an array containing the usernames of all of
-     * the players in the game, sized properly and with each player in the
+     * Once a table is ready to play (see {@link #mayBeStarted} and {@link #shouldBeStarted}), the
+     * players array can be fetched using this method. It will return an array containing the
+     * usernames of all of the players in the game, sized properly and with each player in the
      * appropriate position.
      */
     public Name[] getPlayers ()
     {
         // seated party games need a spot for every seat
-        if (GameConfig.SEATED_CONTINUOUS == config.getGameType()) {
+        if (GameConfig.SEATED_CONTINUOUS == config.getMatchType()) {
             return new Name[tconfig.desiredPlayerCount];
         }
 
-        // FFA party games have 0-length players array, and non-party
-        // games will have the players who are ready-to-go for the game start.
+        // FFA party games have 0-length players array, and non-party games will have the players
+        // who are ready-to-go for the game start.
         Name[] players = new Name[getOccupiedCount()];
         if (occupants != null) {
             for (int ii = 0, dex = 0; ii < occupants.length; ii++) {
@@ -176,8 +170,8 @@ public class Table
     }
 
     /**
-     * For a team game, get the team member indices of the compressed
-     * players array returned by getPlayers().
+     * For a team game, get the team member indices of the compressed players array returned by
+     * getPlayers().
      */
     public int[][] getTeamMemberIndices ()
     {
@@ -205,16 +199,15 @@ public class Table
     }
 
     /**
-     * Requests to seat the specified user at the specified position in
-     * this table.
+     * Requests to seat the specified user at the specified position in this table.
      *
      * @param position the position in which to seat the user.
      * @param occupant the occupant to set.
      *
-     * @return null if the user was successfully seated, a string error
-     * code explaining the failure if the user was not able to be seated
-     * at that position.
+     * @return null if the user was successfully seated, a string error code explaining the failure
+     * if the user was not able to be seated at that position.
      */
+    @ActionScript(omit=true)
     public String setOccupant (int position, BodyObject occupant)
     {
         // make sure the requested position is a valid one
@@ -233,10 +226,10 @@ public class Table
     }
 
     /**
-     * This method is used for party games, it does no bounds checking
-     * or verification of the player's ability to join, if you are unsure
-     * you should call 'setOccupant'.
+     * This method is used for party games, it does no bounds checking or verification of the
+     * player's ability to join, if you are unsure you should call 'setOccupant'.
      */
+    @ActionScript(omit=true)
     public void setOccupantPos (int position, BodyObject occupant)
     {
         occupants[position] = occupant.getVisibleName();
@@ -244,13 +237,12 @@ public class Table
     }
 
     /**
-     * Requests that the specified user be removed from their seat at this
-     * table.
+     * Requests that the specified user be removed from their seat at this table.
      *
-     * @return true if the user was seated at the table and has now been
-     * removed, false if the user was never seated at the table in the
-     * first place.
+     * @return true if the user was seated at the table and has now been removed, false if the user
+     * was never seated at the table in the first place.
      */
+    @ActionScript(omit=true)
     public boolean clearOccupant (Name username)
     {
         if (occupants != null) {
@@ -265,13 +257,13 @@ public class Table
     }
 
     /**
-     * Requests that the user identified by the specified body object id
-     * be removed from their seat at this table.
+     * Requests that the user identified by the specified body object id be removed from their seat
+     * at this table.
      *
-     * @return true if the user was seated at the table and has now been
-     * removed, false if the user was never seated at the table in the
-     * first place.
+     * @return true if the user was seated at the table and has now been removed, false if the user
+     * was never seated at the table in the first place.
      */
+    @ActionScript(omit=true)
     public boolean clearOccupantByOid (int bodyOid)
     {
         if (bodyOids != null) {
@@ -286,9 +278,10 @@ public class Table
     }
 
     /**
-     * Called to clear an occupant at the specified position.
-     * Only call this method if you know what you're doing.
+     * Called to clear an occupant at the specified position.  Only call this method if you know
+     * what you're doing.
      */
+    @ActionScript(omit=true)
     public void clearOccupantPos (int position)
     {
         occupants[position] = null;
@@ -296,12 +289,12 @@ public class Table
     }
 
     /**
-     * Returns true if this table has a sufficient number of occupants
-     * that the game can be started.
+     * Returns true if this table has a sufficient number of occupants that the game can be
+     * started.
      */
     public boolean mayBeStarted ()
     {
-        switch (config.getGameType()) {
+        switch (config.getMatchType()) {
         case GameConfig.SEATED_CONTINUOUS:
         case GameConfig.PARTY:
             return true;
@@ -330,12 +323,11 @@ public class Table
     }
 
     /**
-     * Returns true if sufficient seats are occupied that the game should
-     * be automatically started.
+     * Returns true if sufficient seats are occupied that the game should be automatically started.
      */
     public boolean shouldBeStarted ()
     {
-        switch (config.getGameType()) {
+        switch (config.getMatchType()) {
         case GameConfig.SEATED_CONTINUOUS:
         case GameConfig.PARTY:
             return true;
@@ -346,8 +338,7 @@ public class Table
     }
 
     /**
-     * Returns true if this table is in play, false if it is still being
-     * matchmade.
+     * Returns true if this table is in play, false if it is still being matchmade.
      */
     public boolean inPlay ()
     {
@@ -363,8 +354,7 @@ public class Table
     // documentation inherited
     public boolean equals (Object other)
     {
-        return (other instanceof Table) &&
-            (tableId == ((Table) other).tableId);
+        return (other instanceof Table) && (tableId == ((Table) other).tableId);
     }
 
     // documentation inherited
