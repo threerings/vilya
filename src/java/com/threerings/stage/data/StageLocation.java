@@ -93,15 +93,6 @@ public class StageLocation extends SimpleStreamableObject
      */
     public boolean equals (Object other)
     {
-        // TEMP
-        if (other instanceof com.threerings.whirled.spot.data.SceneLocation) {
-            com.threerings.stage.Log.warning(
-                "Illegal compare of SceneLocation and Location!!!");
-            Thread.dumpStack(); // this will help us find logic errors,
-            // as a SceneLocation and a Location shouldn't be compared..
-        }
-        // END: temp
-
         if (other instanceof StageLocation) {
             StageLocation that = (StageLocation) other;
             return (this.x == that.x) && (this.y == that.y);

@@ -66,15 +66,6 @@ public class SceneLocation extends SimpleStreamableObject
     // documentation inherited
     public boolean equals (Object other)
     {
-        // TEMP
-        if (other instanceof Location) {
-            com.threerings.whirled.spot.Log.warning(
-                "Illegal compare of SceneLocation and Location!!!");
-            Thread.dumpStack(); // this will help us find logic errors,
-            // as a SceneLocation and a Location shouldn't be compared
-        }
-        // END: temp
-
         return (other instanceof SceneLocation) &&
             this.loc.equals(((SceneLocation) other).loc);
     }
