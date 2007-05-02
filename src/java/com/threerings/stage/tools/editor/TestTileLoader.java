@@ -173,7 +173,7 @@ public class TestTileLoader implements TileSetIDBroker
     }
 
     /** The value of the next fakeID we'll hand out. */
-    protected int _fakeID = -1;
+    protected int _fakeID = Short.MAX_VALUE;
 
     /** A mapping of pathname -> tileset id. */
     protected HashMap _idmap = new HashMap();
