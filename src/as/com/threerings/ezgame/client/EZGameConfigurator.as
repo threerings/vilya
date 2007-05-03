@@ -103,7 +103,6 @@ public class EZGameConfigurator extends FlexGameConfigurator
                 var ident :String = String(_customConfigs[ii]);
                 var control :UIComponent = (_customConfigs[ii + 1] as UIComponent);
                 if (control is LabeledSlider) {
-                    //params.put(ident, new Integer((control as LabeledSlider).slider.value));
                     params.put(ident, (control as LabeledSlider).slider.value);
 
                 } else if (control is CheckBox) {
