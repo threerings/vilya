@@ -30,6 +30,7 @@ import mx.controls.Label;
 import com.threerings.util.Integer;
 import com.threerings.util.StreamableHashMap;
 import com.threerings.util.StringUtil;
+import com.threerings.util.langBoolean;
 
 import com.threerings.flex.LabeledSlider;
 
@@ -108,7 +109,8 @@ public class EZGameConfigurator extends FlexGameConfigurator
                     params.put(ident, new Integer((control as LabeledSlider).slider.value));
 
                 } else if (control is CheckBox) {
-                    params.put(ident, (control as CheckBox).selected);
+                    // ditto above
+                    params.put(ident, new langBoolean((control as CheckBox).selected));
 
                 } else if (control is ComboBox) {
                     params.put(ident, (control as ComboBox).value);
