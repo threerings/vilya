@@ -27,6 +27,8 @@ import com.threerings.media.tile.NoSuchTileSetException;
 import com.threerings.media.tile.TileSet;
 import com.threerings.media.image.ImageManager;
 
+import com.threerings.miso.tile.FringeConfiguration;
+import com.threerings.miso.tile.BaseTileSet;
 import com.threerings.miso.tile.MisoTileManager;
 import com.threerings.resource.ResourceManager;
 
@@ -59,6 +61,15 @@ public class EditorTileManager extends MisoTileManager
     public void addTestTileSet (int id, TileSet set)
     {
         _testSets.put(id, set);
+
+        // Some minor insanity - we don't know whether we want to fringe test tiles or not, but
+        //  it seems safest to not fringe test base tiles, so set their priority to highest.
+        if (set instanceof BaseTileSet) {
+            FringeConfiguration.FringeRecord fringeRec = new FringeConfiguration.FringeRecord();
+            fringeRec.base_tsid = id;
+            fringeRec.priority = 1000;
+            getAutoFringer().getFringeConf().addFringeRecord(fringeRec);
+        }
     }
 
     /**
