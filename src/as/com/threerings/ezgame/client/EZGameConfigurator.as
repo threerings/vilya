@@ -103,7 +103,9 @@ public class EZGameConfigurator extends FlexGameConfigurator
                 var ident :String = String(_customConfigs[ii]);
                 var control :UIComponent = (_customConfigs[ii + 1] as UIComponent);
                 if (control is LabeledSlider) {
-                    params.put(ident, (control as LabeledSlider).slider.value);
+                    // this is wrapped in our own Integer class so that it can play in a friendly 
+                    // way with Java that deserializes this StreamableHashMap
+                    params.put(ident, new Integer((control as LabeledSlider).slider.value));
 
                 } else if (control is CheckBox) {
                     params.put(ident, (control as CheckBox).selected);
