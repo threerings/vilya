@@ -87,6 +87,17 @@
     </receiver>
   </target>
 
+  <!-- adds readField and writeField methods to Stremable classes -->
+  <target name="procstream">
+    <taskdef name="instream" classpathref="classpath"
+             classname="com.threerings.presents.tools.InstrumentStreamableTask"/>
+    <!-- now instrument the associated files -->
+    <instream outdir="${classes.dir}">
+      <path refid="classpath"/>
+      <fileset dir="${classes.dir}" includes="**/data/*.class"/>
+    </instream>
+  </target>
+
   <!-- generates ActionScript versions of our Streamable classes -->
   <target name="genascript">
     <taskdef name="genscript" classpathref="classpath"
@@ -190,7 +201,7 @@
   <target name="all" depends="clean,prepare,compile,javadoc,tests,dist"/>
 
   <!-- builds our distribution files (war and jar) -->
-  <target name="dist" depends="prepare,compile,tests">
+  <target name="dist" depends="prepare,compile,procstream,tests">
     <!-- build our various jar files -->
     <jar destfile="${deploy.dir}/${app.name}-parlor.jar">
       <fileset dir="${classes.dir}" includes="rsrc/i18n/game/**"/>
