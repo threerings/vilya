@@ -62,7 +62,7 @@ public class PropertySetEvent extends NamedEvent
      */
     public function getValue () :Object
     {
-        return EZObjectMarshaller.decode(_data);
+        return _data;
     }
 
     /**
@@ -86,7 +86,7 @@ public class PropertySetEvent extends NamedEvent
     {
         super.readObject(ins);
         _index = ins.readInt();
-        _data = (ins.readObject() as Object);
+        _data = EZObjectMarshaller.decode(ins.readObject());
     }
 
     // from interface Streamable
