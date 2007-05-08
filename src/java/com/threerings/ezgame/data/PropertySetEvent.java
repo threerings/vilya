@@ -37,6 +37,7 @@ import com.threerings.ezgame.util.EZObjectMarshaller;
 /**
  * Represents a property change on the actionscript object we use in EZGameObject.
  */
+@ActionScript(omit=true)
 public class PropertySetEvent extends NamedEvent
 {
     /** Suitable for unserialization. */
