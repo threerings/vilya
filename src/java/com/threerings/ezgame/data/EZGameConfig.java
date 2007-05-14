@@ -23,6 +23,8 @@ package com.threerings.ezgame.data;
 
 import com.threerings.util.StreamableHashMap;
 
+import com.threerings.crowd.client.PlaceController;
+
 import com.threerings.parlor.game.client.GameConfigurator;
 import com.threerings.parlor.game.data.GameConfig;
 
@@ -86,7 +88,17 @@ public class EZGameConfig extends GameConfig
         return new EZGameConfigurator();
     }
 
-    @Override // from GameConfig
+    @Override // from PlaceConfig
+    public PlaceController createController ()
+    {
+        try {
+            return (PlaceController) Class.forName(getGameDefinition().controller).newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override // from PlaceConfig
     public String getManagerClassName ()
     {
         return _gameDef.manager;
