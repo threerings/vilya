@@ -24,6 +24,7 @@ package com.threerings.parlor.card.client;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 
+import com.threerings.media.AbstractMedia;
 import com.threerings.media.image.Mirage;
 import com.threerings.media.sprite.FadableImageSprite;
 import com.threerings.media.util.Path;
@@ -34,7 +35,6 @@ import com.threerings.parlor.card.data.Card;
  * A sprite representing a playing card.
  */
 public class CardSprite extends FadableImageSprite
-    implements Comparable
 {
     /**
      * Creates a new upward-facing card sprite.
@@ -206,12 +206,11 @@ public class CardSprite extends FadableImageSprite
     /**
      * Compares this to another card sprite based on their cards.
      */
-    public int compareTo (Object other)
+    protected int naturalCompareTo (AbstractMedia other)
     {
         CardSprite cs = (CardSprite)other;
         if (_card == null || cs._card == null) {
             return 0;
-
         } else {
             return _card.compareTo(cs._card);
         }
