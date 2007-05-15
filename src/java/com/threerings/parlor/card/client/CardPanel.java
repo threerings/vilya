@@ -28,6 +28,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 
 import javax.swing.event.MouseInputAdapter;
@@ -53,21 +54,21 @@ import com.threerings.parlor.card.data.Deck;
 import com.threerings.parlor.card.data.Hand;
 
 /**
- * Extends VirtualMediaPanel to provide services specific to rendering
- * and manipulating playing cards.
+ * Extends VirtualMediaPanel to provide services specific to rendering and manipulating playing
+ * cards.
  */
 public abstract class CardPanel extends VirtualMediaPanel
     implements CardCodes
 {
     /** The selection mode in which cards are not selectable. */
     public static final int NONE = 0;
-    
+
     /** The selection mode in which the user can select a single card. */
     public static final int SINGLE = 1;
-    
+
     /** The selection mode in which the user can select multiple cards. */
     public static final int MULTIPLE = 2;
-    
+
     /**
      * A listener for card selection/deselection.
      */
@@ -77,13 +78,13 @@ public abstract class CardPanel extends VirtualMediaPanel
          * Called when a card has been selected.
          */
         public void cardSpriteSelected (CardSprite sprite);
-        
+
         /**
          * Called when a card has been deselected.
          */
         public void cardSpriteDeselected (CardSprite sprite);
     }
-    
+
     /**
      * Constructor.
      *
@@ -92,42 +93,41 @@ public abstract class CardPanel extends VirtualMediaPanel
     public CardPanel (FrameManager frameManager)
     {
         super(frameManager);
-        
+
         // add a listener for mouse events
         CardListener cl = new CardListener();
         addMouseListener(cl);
         addMouseMotionListener(cl);
     }
-    
+
     /**
      * Returns the full-sized image for the back of a playing card.
      */
     public abstract Mirage getCardBackImage ();
-    
+
     /**
      * Returns the full-sized image for the front of the specified card.
      */
     public abstract Mirage getCardImage (Card card);
-    
+
     /**
      * Returns the small-sized image for the back of a playing card.
      */
     public abstract Mirage getMicroCardBackImage ();
-    
+
     /**
      * Returns the small-sized image for the front of the specified card.
      */
     public abstract Mirage getMicroCardImage (Card card);
-    
+
     /**
-     * Sets the location of the hand (the location of the center of the hand's
-     * upper edge).
+     * Sets the location of the hand (the location of the center of the hand's upper edge).
      */
     public void setHandLocation (int x, int y)
     {
         _handLocation.setLocation(x, y);
     }
-    
+
     /**
      * Sets the horizontal spacing between cards in the hand.
      */
@@ -135,16 +135,15 @@ public abstract class CardPanel extends VirtualMediaPanel
     {
         _handSpacing = spacing;
     }
-    
+
     /**
-     * Sets the vertical distance to offset cards that are selectable or
-     * playable.
+     * Sets the vertical distance to offset cards that are selectable or playable.
      */
     public void setSelectableCardOffset (int offset)
     {
         _selectableCardOffset = offset;
     }
-    
+
     /**
      * Sets the vertical distance to offset cards that are selected.
      */
@@ -152,53 +151,52 @@ public abstract class CardPanel extends VirtualMediaPanel
     {
         _selectedCardOffset = offset;
     }
-    
+
     /**
-     * Sets the selection mode for the hand (NONE, PLAY_SINGLE, SINGLE,
-     * or MULTIPLE).  Changing the selection mode does not change the
-     * current selection.
+     * Sets the selection mode for the hand (NONE, PLAY_SINGLE, SINGLE, or MULTIPLE).  Changing the
+     * selection mode does not change the current selection.
      */
     public void setHandSelectionMode (int mode)
     {
         _handSelectionMode = mode;
-        
+
         // update the offsets of all cards in the hand
         updateHandOffsets();
     }
-    
+
     /**
-     * Sets the selection predicate that determines which cards from the hand
-     * may be selected (if null, all cards may be selected).  Changing the
-     * predicate does not change the current selection.
+     * Sets the selection predicate that determines which cards from the hand may be selected (if
+     * null, all cards may be selected).  Changing the predicate does not change the current
+     * selection.
      */
     public void setHandSelectionPredicate (Predicate<CardSprite> pred)
     {
         _handSelectionPredicate = pred;
-        
+
         // update the offsets of all cards in the hand
         updateHandOffsets();
     }
-    
+
     /**
-     * Returns the currently selected hand sprite (null if no sprites are
-     * selected, the first sprite if multiple sprites are selected).
+     * Returns the currently selected hand sprite (null if no sprites are selected, the first
+     * sprite if multiple sprites are selected).
      */
     public CardSprite getSelectedHandSprite ()
     {
         return _selectedHandSprites.size() == 0 ?
             null : _selectedHandSprites.get(0);
     }
-    
+
     /**
-     * Returns an array containing the currently selected hand sprites
-     * (returns an empty array if no sprites are selected).
+     * Returns an array containing the currently selected hand sprites (returns an empty array if
+     * no sprites are selected).
      */
     public CardSprite[] getSelectedHandSprites ()
     {
         return _selectedHandSprites.toArray(
             new CardSprite[_selectedHandSprites.size()]);
     }
-    
+
     /**
      * Programmatically selects a sprite in the hand.
      */
@@ -208,20 +206,19 @@ public abstract class CardPanel extends VirtualMediaPanel
         if (_selectedHandSprites.contains(sprite)) {
             return;
         }
-        
-        // if in single card mode and there's another card selected,
-        // deselect it
+
+        // if in single card mode and there's another card selected, deselect it
         if (_handSelectionMode == SINGLE) {
             CardSprite oldSprite = getSelectedHandSprite();
             if (oldSprite != null) {
                 deselectHandSprite(oldSprite);
             }
         }
-        
+
         // add to list and update offset
         _selectedHandSprites.add(sprite);
         sprite.setLocation(sprite.getX(), getHandY(sprite));
-        
+
         // notify the observers
         ObserverList.ObserverOp<CardSelectionObserver> op =
             new ObserverList.ObserverOp<CardSelectionObserver>() {
@@ -232,7 +229,7 @@ public abstract class CardPanel extends VirtualMediaPanel
         };
         _handSelectionObservers.apply(op);
     }
-    
+
     /**
      * Programmatically deselects a sprite in the hand.
      */
@@ -242,11 +239,11 @@ public abstract class CardPanel extends VirtualMediaPanel
         if (!_selectedHandSprites.contains(sprite)) {
             return;
         }
-        
+
         // remove from list and update offset
         _selectedHandSprites.remove(sprite);
         sprite.setLocation(sprite.getX(), getHandY(sprite));
-        
+
         // notify the observers
         ObserverList.ObserverOp<CardSelectionObserver> op =
             new ObserverList.ObserverOp<CardSelectionObserver>() {
@@ -257,7 +254,7 @@ public abstract class CardPanel extends VirtualMediaPanel
         };
         _handSelectionObservers.apply(op);
     }
-    
+
     /**
      * Clears any existing hand sprite selection.
      */
@@ -268,16 +265,16 @@ public abstract class CardPanel extends VirtualMediaPanel
             deselectHandSprite(sprites[i]);
         }
     }
-    
+
     /**
-     * Adds an object to the list of observers to notify when cards in the
-     * hand are selected/deselected.
+     * Adds an object to the list of observers to notify when cards in the hand are
+     * selected/deselected.
      */
     public void addHandSelectionObserver (CardSelectionObserver obs)
     {
         _handSelectionObservers.add(obs);
     }
-    
+
     /**
      * Removes an object from the hand selection observer list.
      */
@@ -285,31 +282,30 @@ public abstract class CardPanel extends VirtualMediaPanel
     {
         _handSelectionObservers.remove(obs);
     }
-    
+
     /**
      * Fades a hand of cards in.
      *
      * @param hand the hand of cards
-     * @param fadeDuration the amount of time to spend fading in
-     * the entire hand
+     * @param fadeDuration the amount of time to spend fading in the entire hand
      */
     public void setHand (Hand hand, long fadeDuration)
     {
         // make sure no cards are hanging around
         clearHand();
-        
+
         // create the sprites
         int size = hand.size();
         for (int i = 0; i < size; i++) {
             CardSprite cs = new CardSprite(this, (Card)hand.get(i));
             _handSprites.add(cs);
         }
-        
+
         // sort them
         if (shouldSortHand()) {
-            QuickSort.sort(_handSprites);
+            QuickSort.sort(_handSprites, CARD_COMP);
         }
-        
+
         // fade them in at proper locations and layers
         long cardDuration = fadeDuration / size;
         for (int i = 0; i < size; i++) {
@@ -320,17 +316,16 @@ public abstract class CardPanel extends VirtualMediaPanel
             addSprite(cs);
             cs.fadeIn(i * cardDuration, cardDuration);
         }
-        
+
         // make sure we have the right card sprite active
         updateActiveCardSprite();
     }
-    
+
     /**
      * Fades a hand of cards in face-down.
      *
      * @param size the size of the hand
-     * @param fadeDuration the amount of time to spend fading in
-     * each card
+     * @param fadeDuration the amount of time to spend fading in each card
      */
     public void setHand (int size, long fadeDuration)
     {
@@ -341,7 +336,7 @@ public abstract class CardPanel extends VirtualMediaPanel
         }
         setHand(hand, fadeDuration);
     }
-    
+
     /**
      * Shows a hand that was previous set face-down.
      *
@@ -353,7 +348,7 @@ public abstract class CardPanel extends VirtualMediaPanel
         if (shouldSortHand()) {
             QuickSort.sort(hand);
         }
-        
+
         // set the sprites
         int len = Math.min(_handSprites.size(), hand.size());
         for (int i = 0; i < len; i++) {
@@ -361,16 +356,16 @@ public abstract class CardPanel extends VirtualMediaPanel
             cs.setCard((Card)hand.get(i));
         }
     }
-    
+
     /**
-     * Returns the first sprite in the hand that corresponds to the
-     * specified card, or null if the card is not in the hand.
+     * Returns the first sprite in the hand that corresponds to the specified card, or null if the
+     * card is not in the hand.
      */
     public CardSprite getHandSprite (Card card)
     {
         return getCardSprite(_handSprites, card);
     }
-    
+
     /**
      * Clears all cards from the hand.
      */
@@ -379,7 +374,7 @@ public abstract class CardPanel extends VirtualMediaPanel
         clearHandSelection();
         clearSprites(_handSprites);
     }
-    
+
     /**
      * Clears all cards from the board.
      */
@@ -387,50 +382,46 @@ public abstract class CardPanel extends VirtualMediaPanel
     {
         clearSprites(_boardSprites);
     }
-    
+
     /**
-     * Flies a set of cards from the hand into the ether.  Clears any selected
-     * cards.
+     * Flies a set of cards from the hand into the ether.  Clears any selected cards.
      *
      * @param cards the card sprites to remove from the hand
      * @param dest the point to fly the cards to
      * @param flightDuration the duration of the cards' flight
-     * @param fadePortion the amount of time to spend fading out
-     * as a proportion of the flight duration
+     * @param fadePortion the amount of time to spend fading out as a proportion of the flight
+     * duration
      */
-    public void flyFromHand (CardSprite[] cards, Point dest,
-        long flightDuration, float fadePortion)
+    public void flyFromHand (CardSprite[] cards, Point dest, long flightDuration, float fadePortion)
     {
-        // fly each sprite over, removing it from the hand immediately and
-        // from the board when it finishes its path
+        // fly each sprite over, removing it from the hand immediately and from the board when it
+        // finishes its path
         for (int i = 0; i < cards.length; i++) {
             removeFromHand(cards[i]);
             LinePath flight = new LinePath(dest, flightDuration);
             cards[i].addSpriteObserver(_pathEndRemover);
             cards[i].moveAndFadeOut(flight, flightDuration, fadePortion);
         }
-        
+
         // adjust the hand to cover the hole
         adjustHand(flightDuration, false);
     }
-    
+
     /**
-     * Flies a set of cards from the ether into the hand.  Clears any selected
-     * cards.  The cards will first fly to the selected card offset, pause for
-     * the specified duration, and then drop into the hand.
+     * Flies a set of cards from the ether into the hand.  Clears any selected cards.  The cards
+     * will first fly to the selected card offset, pause for the specified duration, and then drop
+     * into the hand.
      *
      * @param cards the cards to add to the hand
      * @param src the point to fly the cards from
      * @param flightDuration the duration of the cards' flight
-     * @param pauseDuration the duration of the pause before dropping into the
-     * hand
-     * @param dropDuration the duration of the cards' drop into the
-     * hand
-     * @param fadePortion the amount of time to spend fading in
-     * as a proportion of the flight duration
+     * @param pauseDuration the duration of the pause before dropping into the hand
+     * @param dropDuration the duration of the cards' drop into the hand
+     * @param fadePortion the amount of time to spend fading in as a proportion of the flight
+     * duration
      */
-    public void flyIntoHand (Card[] cards, Point src, long flightDuration,
-        long pauseDuration, long dropDuration, float fadePortion)
+    public void flyIntoHand (Card[] cards, Point src, long flightDuration, long pauseDuration,
+                             long dropDuration, float fadePortion)
     {
         // first create the sprites and add them to the list
         CardSprite[] sprites = new CardSprite[cards.length];
@@ -438,10 +429,10 @@ public abstract class CardPanel extends VirtualMediaPanel
             sprites[i] = new CardSprite(this, cards[i]);
             _handSprites.add(sprites[i]);
         }
-        
+
         // settle the hand
         adjustHand(flightDuration, true);
-        
+
         // then set the layers and fly the cards in
         int size = _handSprites.size();
         for (int i = 0; i < sprites.length; i++) {
@@ -450,7 +441,7 @@ public abstract class CardPanel extends VirtualMediaPanel
             sprites[i].setRenderOrder(idx);
             sprites[i].addSpriteObserver(_handSpriteObserver);
             addSprite(sprites[i]);
-            
+
             // create a path sequence containing flight, pause, and drop
             ArrayList<Path> paths = new ArrayList<Path>();
             Point hp2 = new Point(getHandX(size, idx), _handLocation.y),
@@ -459,10 +450,10 @@ public abstract class CardPanel extends VirtualMediaPanel
             paths.add(new LinePath(hp1, pauseDuration));
             paths.add(new LinePath(hp2, dropDuration));
             sprites[i].moveAndFadeIn(new PathSequence(paths), flightDuration +
-                pauseDuration + dropDuration, fadePortion);
+                                     pauseDuration + dropDuration, fadePortion);
         }
     }
-    
+
     /**
      * Flies a set of cards from the ether into the ether.
      *
@@ -471,11 +462,11 @@ public abstract class CardPanel extends VirtualMediaPanel
      * @param dest the point to fly the cards to
      * @param flightDuration the duration of the cards' flight
      * @param cardDelay the amount of time to wait between cards
-     * @param fadePortion the amount of time to spend fading in and out
-     * as a proportion of the flight duration
+     * @param fadePortion the amount of time to spend fading in and out as a proportion of the
+     * flight duration
      */
-    public void flyAcross (Card[] cards, Point src, Point dest,
-        long flightDuration, long cardDelay, float fadePortion)
+    public void flyAcross (Card[] cards, Point src, Point dest, long flightDuration,
+                           long cardDelay, float fadePortion)
     {
         for (int i = 0; i < cards.length; i++) {
             // add on top of all board sprites
@@ -483,7 +474,7 @@ public abstract class CardPanel extends VirtualMediaPanel
             cs.setRenderOrder(getHighestBoardLayer() + 1 + i);
             cs.setLocation(src.x, src.y);
             addSprite(cs);
-            
+
             // prepend an initial delay to all cards after the first
             Path path;
             long pathDuration;
@@ -493,7 +484,7 @@ public abstract class CardPanel extends VirtualMediaPanel
                 LinePath delay = new LinePath(src, delayDuration);
                 path = new PathSequence(delay, flight);
                 pathDuration = delayDuration + flightDuration;
-                
+
             } else {
                 path = flight;
                 pathDuration = flightDuration;
@@ -502,7 +493,7 @@ public abstract class CardPanel extends VirtualMediaPanel
             cs.moveAndFadeInAndOut(path, pathDuration, fadePortion);
         }
     }
-    
+
     /**
      * Flies a set of cards from the ether into the ether face-down.
      *
@@ -511,17 +502,17 @@ public abstract class CardPanel extends VirtualMediaPanel
      * @param dest the point to fly the cards to
      * @param flightDuration the duration of the cards' flight
      * @param cardDelay the amount of time to wait between cards
-     * @param fadePortion the amount of time to spend fading in and out
-     * as a proportion of the flight duration
+     * @param fadePortion the amount of time to spend fading in and out as a proportion of the
+     * flight duration
      */
-    public void flyAcross (int number, Point src, Point dest,
-        long flightDuration, long cardDelay, float fadePortion)
+    public void flyAcross (int number, Point src, Point dest, long flightDuration,
+                           long cardDelay, float fadePortion)
     {
         // use null values to signify unknown cards
         flyAcross(new Card[number], src, dest, flightDuration,
             cardDelay, fadePortion);
     }
-    
+
     /**
      * Flies a card from the hand onto the board.  Clears any cards selected.
      *
@@ -529,24 +520,23 @@ public abstract class CardPanel extends VirtualMediaPanel
      * @param dest the point to fly the card to
      * @param flightDuration the duration of the card's flight
      */
-    public void flyFromHandToBoard (CardSprite card, Point dest,
-        long flightDuration)
+    public void flyFromHandToBoard (CardSprite card, Point dest, long flightDuration)
     {
         // fly it over
         LinePath flight = new LinePath(dest, flightDuration);
         card.move(flight);
-        
+
         // lower the board so that the card from hand is on top
         lowerBoardSprites(card.getRenderOrder() - 1);
-        
+
         // move from one list to the other
         removeFromHand(card);
         _boardSprites.add(card);
-        
+
         // adjust the hand to cover the hole
         adjustHand(flightDuration, false);
     }
-    
+
     /**
      * Flies a card from the ether onto the board.
      *
@@ -554,11 +544,11 @@ public abstract class CardPanel extends VirtualMediaPanel
      * @param src the point to fly the card from
      * @param dest the point to fly the card to
      * @param flightDuration the duration of the card's flight
-     * @param fadePortion the amount of time to spend fading in as a
-     * proportion of the flight duration
+     * @param fadePortion the amount of time to spend fading in as a proportion of the flight
+     * duration
      */
-    public void flyToBoard (Card card, Point src, Point dest,
-        long flightDuration, float fadePortion)
+    public void flyToBoard (Card card, Point src, Point dest, long flightDuration,
+                            float fadePortion)
     {
         // add it on top of the existing cards
         CardSprite cs = new CardSprite(this, card);
@@ -566,12 +556,12 @@ public abstract class CardPanel extends VirtualMediaPanel
         cs.setLocation(src.x, src.y);
         addSprite(cs);
         _boardSprites.add(cs);
-        
+
         // and fly it over
         LinePath flight = new LinePath(dest, flightDuration);
         cs.moveAndFadeIn(flight, flightDuration, fadePortion);
     }
-    
+
     /**
      * Adds a card to the board immediately.
      *
@@ -586,18 +576,18 @@ public abstract class CardPanel extends VirtualMediaPanel
         addSprite(cs);
         _boardSprites.add(cs);
     }
-    
+
     /**
      * Flies a set of cards from the board into the ether.
      *
      * @param cards the cards to remove from the board
      * @param dest the point to fly the cards to
      * @param flightDuration the duration of the cards' flight
-     * @param fadePortion the amount of time to spend fading out as a
-     * proportion of the flight duration
+     * @param fadePortion the amount of time to spend fading out as a proportion of the flight
+     * duration
      */
-    public void flyFromBoard (CardSprite[] cards, Point dest,
-        long flightDuration, float fadePortion)
+    public void flyFromBoard (CardSprite[] cards, Point dest, long flightDuration,
+                              float fadePortion)
     {
         for (int i = 0; i < cards.length; i++) {
             LinePath flight = new LinePath(dest, flightDuration);
@@ -607,27 +597,18 @@ public abstract class CardPanel extends VirtualMediaPanel
         }
     }
 
-    // documentation inherited
-    protected void paintBehind (Graphics2D gfx, Rectangle dirtyRect)
-    {
-        gfx.setColor(DEFAULT_BACKGROUND);
-        gfx.fill(dirtyRect);
-        super.paintBehind(gfx, dirtyRect);
-    }
-
     /**
-     * Flies a set of cards from the board into the ether through an
-     * intermediate point.
+     * Flies a set of cards from the board into the ether through an intermediate point.
      *
      * @param cards the cards to remove from the board
      * @param dest1 the first point to fly the cards to
      * @param dest2 the final destination of the cards
      * @param flightDuration the duration of the cards' flight
-     * @param fadePortion the amount of time to spend fading out as a
-     * proportion of the flight duration
+     * @param fadePortion the amount of time to spend fading out as a proportion of the flight
+     * duration
      */
-    public void flyFromBoard (CardSprite[] cards, Point dest1, Point dest2,
-        long flightDuration, float fadePortion)
+    public void flyFromBoard (CardSprite[] cards, Point dest1, Point dest2, long flightDuration,
+                              float fadePortion)
     {
         for (int i = 0; i < cards.length; i++) {
             PathSequence flight = new PathSequence(
@@ -638,10 +619,10 @@ public abstract class CardPanel extends VirtualMediaPanel
             _boardSprites.remove(cards[i]);
         }
     }
-    
+
     /**
-     * Returns the first card sprite in the specified list that represents
-     * the specified card, or null if there is no such sprite in the list.
+     * Returns the first card sprite in the specified list that represents the specified card, or
+     * null if there is no such sprite in the list.
      */
     protected CardSprite getCardSprite (ArrayList list, Card card)
     {
@@ -653,10 +634,10 @@ public abstract class CardPanel extends VirtualMediaPanel
         }
         return null;
     }
-    
+
     /**
-     * Returns whether the user's hand should be sorted when displayed.  By
-     *  default, hands are sorted.
+     * Returns whether the user's hand should be sorted when displayed.  By default, hands are
+     * sorted.
      */
     protected boolean shouldSortHand ()
     {
@@ -664,24 +645,23 @@ public abstract class CardPanel extends VirtualMediaPanel
     }
 
     /**
-     * Expands or collapses the hand to accommodate new cards or cover the
-     * space left by removed cards.  Skips unmanaged sprites.  Clears out
-     * any selected cards.
+     * Expands or collapses the hand to accommodate new cards or cover the space left by removed
+     * cards.  Skips unmanaged sprites.  Clears out any selected cards.
      *
-     * @param adjustDuration the amount of time to spend settling the cards
-     * into their new locations
+     * @param adjustDuration the amount of time to spend settling the cards into their new
+     * locations
      * @param updateLayers whether or not to update the layers of the cards
      */
     protected void adjustHand (long adjustDuration, boolean updateLayers)
     {
         // clear out selected cards
         clearHandSelection();
-        
+
         // Sort the hand
         if (shouldSortHand()) {
-            QuickSort.sort(_handSprites);
+            QuickSort.sort(_handSprites, CARD_COMP);
         }
-        
+
         // Move each card to its proper position (and, optionally, layer)
         int size = _handSprites.size();
         for (int i = 0; i < size; i++) {
@@ -692,12 +672,12 @@ public abstract class CardPanel extends VirtualMediaPanel
             if (updateLayers) {
                 cs.setRenderOrder(i);
             }
-            LinePath adjust = new LinePath(new Point(getHandX(size, i),
-                _handLocation.y), adjustDuration);
+            LinePath adjust = new LinePath(
+                new Point(getHandX(size, i), _handLocation.y), adjustDuration);
             cs.move(adjust);
         }
     }
-    
+
     /**
      * Removes a card from the hand.
      */
@@ -706,16 +686,16 @@ public abstract class CardPanel extends VirtualMediaPanel
         _selectedHandSprites.remove(card);
         _handSprites.remove(card);
     }
-    
+
     /**
-     * Updates the offsets of all the cards in the hand.  If there is only
-     * one selectable card, that card will always be raised slightly.
+     * Updates the offsets of all the cards in the hand.  If there is only one selectable card,
+     * that card will always be raised slightly.
      */
     protected void updateHandOffsets ()
     {
         // make active card sprite is up-to-date
         updateActiveCardSprite();
-        
+
         int size = _handSprites.size();
         for (int i = 0; i < size; i++) {
             CardSprite cs = _handSprites.get(i);
@@ -724,10 +704,10 @@ public abstract class CardPanel extends VirtualMediaPanel
             }
         }
     }
-    
+
     /**
-     * Given the location and spacing of the hand, returns the x location of
-     * the card at the specified index within a hand of the specified size.
+     * Given the location and spacing of the hand, returns the x location of the card at the
+     * specified index within a hand of the specified size.
      */
     protected int getHandX (int size, int idx)
     {
@@ -735,44 +715,42 @@ public abstract class CardPanel extends VirtualMediaPanel
         if (_cardWidth == 0) {
             _cardWidth = getCardBackImage().getWidth();
         }
-        // first compute the width of the entire hand, then use that to
-        // determine the centered location
+        // first compute the width of the entire hand, then use that to determine the centered
+        // location
         int width = (size - 1) * _handSpacing + _cardWidth;
         return (_handLocation.x - width/2) + idx * _handSpacing;
     }
-    
+
     /**
-     * Determines the y location of the specified card sprite, given its
-     * selection state.
+     * Determines the y location of the specified card sprite, given its selection state.
      */
     protected int getHandY (CardSprite sprite)
     {
         if (_selectedHandSprites.contains(sprite)) {
             return _handLocation.y - _selectedCardOffset;
-            
+
         } else if (isSelectable(sprite) &&
-            (sprite == _activeCardSprite || isOnlySelectable(sprite))) {
+                   (sprite == _activeCardSprite || isOnlySelectable(sprite))) {
             return _handLocation.y - _selectableCardOffset;
-            
+
         } else {
             return _handLocation.y;
         }
     }
-    
+
     /**
-     * Given the current selection mode and predicate, determines if the
-     * specified sprite is selectable.
+     * Given the current selection mode and predicate, determines if the specified sprite is
+     * selectable.
      */
     protected boolean isSelectable (CardSprite sprite)
     {
         return _handSelectionMode != NONE &&
-            (_handSelectionPredicate == null ||
-                _handSelectionPredicate.isMatch(sprite));
+            (_handSelectionPredicate == null || _handSelectionPredicate.isMatch(sprite));
     }
-    
+
     /**
-     * Determines whether the specified sprite is the only selectable sprite
-     * in the hand according to the selection predicate.
+     * Determines whether the specified sprite is the only selectable sprite in the hand according
+     * to the selection predicate.
      */
     protected boolean isOnlySelectable (CardSprite sprite)
     {
@@ -780,9 +758,8 @@ public abstract class CardPanel extends VirtualMediaPanel
         if (_handSelectionPredicate == null) {
             return _handSprites.size() == 1 && _handSprites.contains(sprite);
         }
-        
-        // otherwise, look for a sprite that fits the predicate and isn't the
-        // parameter
+
+        // otherwise, look for a sprite that fits the predicate and isn't the parameter
         for (CardSprite cs : _handSprites) {
             if (cs != sprite && _handSelectionPredicate.isMatch(cs)) {
                 return false;
@@ -790,10 +767,9 @@ public abstract class CardPanel extends VirtualMediaPanel
         }
         return true;
     }
-    
+
     /**
-     * Lowers all board sprites so that they are rendered at or below the
-     * specified layer.
+     * Lowers all board sprites so that they are rendered at or below the specified layer.
      */
     protected void lowerBoardSprites (int layer)
     {
@@ -802,7 +778,7 @@ public abstract class CardPanel extends VirtualMediaPanel
         if (highest <= layer) {
             return;
         }
-        
+
         // lower them just enough
         int size = _boardSprites.size(), adjustment = layer - highest;
         for (int i = 0; i < size; i++) {
@@ -810,21 +786,21 @@ public abstract class CardPanel extends VirtualMediaPanel
             cs.setRenderOrder(cs.getRenderOrder() + adjustment);
         }
     }
-    
+
     /**
      * Returns the highest render order of any sprite on the board.
      */
     protected int getHighestBoardLayer ()
     {
-        // must be at least zero, because that's the lowest number we can push
-        // the sprites down to (the layer of the first card in the hand)
+        // must be at least zero, because that's the lowest number we can push the sprites down to
+        // (the layer of the first card in the hand)
         int size = _boardSprites.size(), highest = 0;
         for (int i = 0; i < size; i++) {
             highest = Math.max(highest, _boardSprites.get(i).getRenderOrder());
         }
         return highest;
     }
-    
+
     /**
      * Clears an array of sprites from the specified list and from the panel.
      */
@@ -835,10 +811,9 @@ public abstract class CardPanel extends VirtualMediaPanel
             it.remove();
         }
     }
-    
+
     /**
-     * Updates the active card sprite based on the location of the mouse
-     * pointer.
+     * Updates the active card sprite based on the location of the mouse pointer.
      */
     protected void updateActiveCardSprite ()
     {
@@ -846,86 +821,34 @@ public abstract class CardPanel extends VirtualMediaPanel
         if (_mouseEvent == null) {
             return;
         }
-        
+
         Sprite newHighestHit = _spritemgr.getHighestHitSprite(
             _mouseEvent.getX(), _mouseEvent.getY());
-        
+
         CardSprite newActiveCardSprite =
-            (newHighestHit instanceof CardSprite ? 
-                (CardSprite)newHighestHit : null);
-        
+            (newHighestHit instanceof CardSprite ? (CardSprite)newHighestHit : null);
+
         if (_activeCardSprite != newActiveCardSprite) {
-            if (_activeCardSprite != null &&
-                isManaged(_activeCardSprite)) {
+            if (_activeCardSprite != null && isManaged(_activeCardSprite)) {
                 _activeCardSprite.queueNotification(
-                    new CardSpriteExitedOp(_activeCardSprite,
-                        _mouseEvent)
-                );
+                    new CardSpriteExitedOp(_activeCardSprite, _mouseEvent));
             }
             _activeCardSprite = newActiveCardSprite;
             if (_activeCardSprite != null) {
                 _activeCardSprite.queueNotification(
-                    new CardSpriteEnteredOp(_activeCardSprite,
-                        _mouseEvent)
-                );
+                    new CardSpriteEnteredOp(_activeCardSprite, _mouseEvent));
             }
         }
     }
-    
-    /** The width of the playing cards. */
-    protected int _cardWidth;
-    
-    /** The last motion/entrance/exit event received from the mouse. */
-    protected MouseEvent _mouseEvent;
-    
-    /** The currently active card sprite (the one that the mouse is over). */
-    protected CardSprite _activeCardSprite;
-    
-    /** The sprites for cards within the hand. */
-    protected ArrayList<CardSprite> _handSprites = new ArrayList<CardSprite>();
-    
-    /** The sprites for cards within the hand that have been selected. */
-    protected ArrayList<CardSprite> _selectedHandSprites =
-        new ArrayList<CardSprite>();
 
-    /** The current selection mode for the hand. */
-    protected int _handSelectionMode;
-    
-    /** The predicate that determines which cards are selectable (if null, all
-     * cards are selectable). */
-    protected Predicate<CardSprite> _handSelectionPredicate;
-    
-    /** Observers of hand card selection/deselection. */
-    protected ObserverList<CardSelectionObserver> _handSelectionObservers =
-        new ObserverList<CardSelectionObserver>(
-                ObserverList.FAST_UNSAFE_NOTIFY);
-    
-    /** The location of the center of the hand's upper edge. */
-    protected Point _handLocation = new Point();
-    
-    /** The horizontal distance between cards in the hand. */
-    protected int _handSpacing;
-    
-    /** The vertical distance to offset cards that are selectable. */
-    protected int _selectableCardOffset;
-    
-    /** The vertical distance to offset cards that are selected. */
-    protected int _selectedCardOffset;
-    
-    /** The sprites for cards on the board. */
-    protected ArrayList<CardSprite> _boardSprites = new ArrayList<CardSprite>();
-    
-    /** The hand sprite observer instance. */
-    protected HandSpriteObserver _handSpriteObserver =
-        new HandSpriteObserver();
-        
-    /** A path observer that removes the sprite at the end of its path. */
-    protected PathAdapter _pathEndRemover = new PathAdapter() {
-        public void pathCompleted (Sprite sprite, Path path, long when) {
-            removeSprite(sprite);
-        }
-    };
-    
+    // documentation inherited
+    protected void paintBehind (Graphics2D gfx, Rectangle dirtyRect)
+    {
+        gfx.setColor(DEFAULT_BACKGROUND);
+        gfx.fill(dirtyRect);
+        super.paintBehind(gfx, dirtyRect);
+    }
+
     /** Listens for interactions with cards in hand. */
     protected class HandSpriteObserver extends PathAdapter
         implements CardSpriteObserver
@@ -935,32 +858,32 @@ public abstract class CardPanel extends VirtualMediaPanel
             updateActiveCardSprite();
             maybeUpdateOffset((CardSprite)sprite);
         }
-        
+
         public void cardSpriteClicked (CardSprite sprite, MouseEvent me)
         {
             // select, deselect, or play card in hand
             if (_selectedHandSprites.contains(sprite) &&
                 _handSelectionMode != NONE) {
                 deselectHandSprite(sprite);
-                
+
             } else if (_handSprites.contains(sprite) && isSelectable(sprite)) {
                 selectHandSprite(sprite);
             }
         }
-        
+
         public void cardSpriteEntered (CardSprite sprite, MouseEvent me)
         {
             maybeUpdateOffset(sprite);
         }
-        
+
         public void cardSpriteExited (CardSprite sprite, MouseEvent me)
         {
             maybeUpdateOffset(sprite);
         }
-        
+
         public void cardSpriteDragged (CardSprite sprite, MouseEvent me)
         {}
-        
+
         protected void maybeUpdateOffset (CardSprite sprite)
         {
             // update the offset if it's in the hand and isn't moving
@@ -969,7 +892,7 @@ public abstract class CardPanel extends VirtualMediaPanel
             }
         }
     };
-    
+
     /** Listens for mouse interactions with cards. */
     protected class CardListener extends MouseInputAdapter
     {
@@ -978,22 +901,22 @@ public abstract class CardPanel extends VirtualMediaPanel
             if (_activeCardSprite != null &&
                 isManaged(_activeCardSprite)) {
                 _handleX = _activeCardSprite.getX() - me.getX();
-                _handleY = _activeCardSprite.getY() - me.getY();        
+                _handleY = _activeCardSprite.getY() - me.getY();
                 _hasBeenDragged = false;
             }
         }
-        
+
         public void mouseReleased (MouseEvent me)
         {
             if (_activeCardSprite != null &&
-                isManaged(_activeCardSprite) && 
+                isManaged(_activeCardSprite) &&
                 _hasBeenDragged) {
                 _activeCardSprite.queueNotification(
                     new CardSpriteDraggedOp(_activeCardSprite, me)
                 );
             }
         }
-        
+
         public void mouseClicked (MouseEvent me)
         {
             if (_activeCardSprite != null &&
@@ -1003,47 +926,47 @@ public abstract class CardPanel extends VirtualMediaPanel
                 );
             }
         }
-        
+
         public void mouseMoved (MouseEvent me)
         {
             _mouseEvent = me;
-            
+
             updateActiveCardSprite();
         }
-        
+
         public void mouseDragged (MouseEvent me)
         {
             _mouseEvent = me;
-            
+
             if (_activeCardSprite != null &&
                 isManaged(_activeCardSprite) &&
                 _activeCardSprite.isDraggable()) {
                 _activeCardSprite.setLocation(
                     me.getX() + _handleX,
                     me.getY() + _handleY
-                ); 
+                );
                 _hasBeenDragged = true;
-                
+
             } else {
                 updateActiveCardSprite();
             }
         }
-        
+
         public void mouseEntered (MouseEvent me)
         {
             _mouseEvent = me;
         }
-        
+
         public void mouseExited (MouseEvent me)
         {
             _mouseEvent = me;
         }
-        
+
         protected int _handleX, _handleY;
         protected boolean _hasBeenDragged;
     }
-    
-    /** Calls CardSpriteObserver.cardSpriteClicked. */ 
+
+    /** Calls CardSpriteObserver.cardSpriteClicked. */
     protected static class CardSpriteClickedOp implements
         ObserverList.ObserverOp
     {
@@ -1052,7 +975,7 @@ public abstract class CardPanel extends VirtualMediaPanel
             _sprite = sprite;
             _me = me;
         }
-        
+
         public boolean apply (Object observer)
         {
             if (observer instanceof CardSpriteObserver) {
@@ -1061,12 +984,12 @@ public abstract class CardPanel extends VirtualMediaPanel
             }
             return true;
         }
-        
+
         protected CardSprite _sprite;
         protected MouseEvent _me;
     }
-    
-    /** Calls CardSpriteObserver.cardSpriteEntered. */ 
+
+    /** Calls CardSpriteObserver.cardSpriteEntered. */
     protected static class CardSpriteEnteredOp implements
         ObserverList.ObserverOp
     {
@@ -1075,7 +998,7 @@ public abstract class CardPanel extends VirtualMediaPanel
             _sprite = sprite;
             _me = me;
         }
-        
+
         public boolean apply (Object observer)
         {
             if (observer instanceof CardSpriteObserver) {
@@ -1084,12 +1007,12 @@ public abstract class CardPanel extends VirtualMediaPanel
             }
             return true;
         }
-        
+
         protected CardSprite _sprite;
         protected MouseEvent _me;
     }
-    
-    /** Calls CardSpriteObserver.cardSpriteExited. */ 
+
+    /** Calls CardSpriteObserver.cardSpriteExited. */
     protected static class CardSpriteExitedOp implements
         ObserverList.ObserverOp
     {
@@ -1098,7 +1021,7 @@ public abstract class CardPanel extends VirtualMediaPanel
             _sprite = sprite;
             _me = me;
         }
-        
+
         public boolean apply (Object observer)
         {
             if (observer instanceof CardSpriteObserver) {
@@ -1106,11 +1029,11 @@ public abstract class CardPanel extends VirtualMediaPanel
             }
             return true;
         }
-        
+
         protected CardSprite _sprite;
         protected MouseEvent _me;
     }
-    
+
     /** Calls CardSpriteObserver.cardSpriteDragged. */
     protected static class CardSpriteDraggedOp implements
         ObserverList.ObserverOp
@@ -1120,7 +1043,7 @@ public abstract class CardPanel extends VirtualMediaPanel
             _sprite = sprite;
             _me = me;
         }
-        
+
         public boolean apply (Object observer)
         {
             if (observer instanceof CardSpriteObserver) {
@@ -1129,11 +1052,75 @@ public abstract class CardPanel extends VirtualMediaPanel
             }
             return true;
         }
-        
+
         protected CardSprite _sprite;
         protected MouseEvent _me;
     }
 
+    /** The width of the playing cards. */
+    protected int _cardWidth;
+
+    /** The last motion/entrance/exit event received from the mouse. */
+    protected MouseEvent _mouseEvent;
+
+    /** The currently active card sprite (the one that the mouse is over). */
+    protected CardSprite _activeCardSprite;
+
+    /** The sprites for cards within the hand. */
+    protected ArrayList<CardSprite> _handSprites = new ArrayList<CardSprite>();
+
+    /** The sprites for cards within the hand that have been selected. */
+    protected ArrayList<CardSprite> _selectedHandSprites =
+        new ArrayList<CardSprite>();
+
+    /** The current selection mode for the hand. */
+    protected int _handSelectionMode;
+
+    /** The predicate that determines which cards are selectable (if null, all
+     * cards are selectable). */
+    protected Predicate<CardSprite> _handSelectionPredicate;
+
+    /** Observers of hand card selection/deselection. */
+    protected ObserverList<CardSelectionObserver> _handSelectionObservers =
+        new ObserverList<CardSelectionObserver>(
+                ObserverList.FAST_UNSAFE_NOTIFY);
+
+    /** The location of the center of the hand's upper edge. */
+    protected Point _handLocation = new Point();
+
+    /** The horizontal distance between cards in the hand. */
+    protected int _handSpacing;
+
+    /** The vertical distance to offset cards that are selectable. */
+    protected int _selectableCardOffset;
+
+    /** The vertical distance to offset cards that are selected. */
+    protected int _selectedCardOffset;
+
+    /** The sprites for cards on the board. */
+    protected ArrayList<CardSprite> _boardSprites = new ArrayList<CardSprite>();
+
+    /** The hand sprite observer instance. */
+    protected HandSpriteObserver _handSpriteObserver = new HandSpriteObserver();
+
+    /** A path observer that removes the sprite at the end of its path. */
+    protected PathAdapter _pathEndRemover = new PathAdapter() {
+        public void pathCompleted (Sprite sprite, Path path, long when) {
+            removeSprite(sprite);
+        }
+    };
+
+    /** Compares two card sprites based on their underlying card. */
+    protected static final Comparator<CardSprite> CARD_COMP = new Comparator<CardSprite>() {
+        public int compare (CardSprite cs1, CardSprite cs2) {
+            if (cs1._card == null || cs2._card == null) {
+                return 0;
+            } else {
+                return cs1._card.compareTo(cs2._card);
+            }
+        }
+    };
+
     /** A nice default green card table background color. */
-    protected static Color DEFAULT_BACKGROUND = new Color(0x326D36);
+    protected static final Color DEFAULT_BACKGROUND = new Color(0x326D36);
 }

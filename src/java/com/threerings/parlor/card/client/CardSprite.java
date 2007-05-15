@@ -204,19 +204,6 @@ public class CardSprite extends FadableImageSprite
     }
 
     /**
-     * Compares this to another card sprite based on their cards.
-     */
-    protected int naturalCompareTo (AbstractMedia other)
-    {
-        CardSprite cs = (CardSprite)other;
-        if (_card == null || cs._card == null) {
-            return 0;
-        } else {
-            return _card.compareTo(cs._card);
-        }
-    }
-
-    /**
      * Updates the mirage according to the current state.
      */
     protected void updateMirage ()
