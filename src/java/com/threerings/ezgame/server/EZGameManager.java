@@ -182,8 +182,7 @@ public class EZGameManager extends GameManager
                                         InvocationService.ResultListener listener)
         throws InvocationException
     {
-        DictionaryManager dictionary = getDictionaryManager ();
-        dictionary.getLetterSet (locale, count, listener);
+        getDictionaryManager().getLetterSet(locale, count, listener);
     }
     
     // from EZGameProvider
@@ -191,17 +190,17 @@ public class EZGameManager extends GameManager
                                      InvocationService.ResultListener listener)
         throws InvocationException
     {
-        DictionaryManager dictionary = getDictionaryManager ();
-        dictionary.checkWord (locale, word, listener);
+        getDictionaryManager().checkWord(locale, word, listener);
     }  
 
     /**
-     * Find the dictionary manager
+     * Returns the dictionary manager if it has been properly initialized. Throws an INTERNAL_ERROR
+     * exception if it has not.
      */
     protected DictionaryManager getDictionaryManager ()
         throws InvocationException
     {
-        DictionaryManager dictionary = DictionaryManager.getInstance ();
+        DictionaryManager dictionary = DictionaryManager.getInstance();
         if (dictionary == null) {
             log.warning("DictionaryManager not initialized.");
             throw new InvocationException(INTERNAL_ERROR);

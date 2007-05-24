@@ -46,35 +46,135 @@ import static com.threerings.ezgame.server.Log.log;
 /**
  * Manages loading and querying word dictionaries in multiple languages.
  *
- * NOTE: the service supports lazy loading of language files, but does not
- * _unload_ them from memory, leading to increasing memory usage.
+ * NOTE: the service supports lazy loading of language files, but does not _unload_ them from
+ * memory, leading to increasing memory usage.
  *
- * NOTE: the dictionary service has not yet been tested with language
- * files written in non-default character encodings.
+ * NOTE: the dictionary service has not yet been tested with language files written in non-default
+ * character encodings.
  */
 public class DictionaryManager
 {
     /**
-     * Helper class, encapsulates a sorted array of word hashes,
-     * which can be used to look up the existence of a word.
+     * Creates the singleton instance of the dictionary service.
      */
-    private class Dictionary
+    public static void init (File dictionaryRoot)
+    {
+        _singleton = new DictionaryManager(dictionaryRoot);
+    }
+
+    /**
+     * Get an instance of the dictionary service.
+     */
+    public static DictionaryManager getInstance ()
+    {
+        return _singleton;
+    }
+
+    /**
+     * Returns true if the language is known to be supported by the dictionary service (would it be
+     * better to return a whole list of supported languages instead?)
+     */
+    public void isLanguageSupported (final String locale,
+                                     final InvocationService.ResultListener listener)
+    {
+        // TODO: once we have file paths set up, change this to match
+        // against dictionary files
+        listener.requestProcessed(locale.toLowerCase().startsWith("en"));
+    }
+
+    /**
+     * Retrieves a set of letters from a language definition file, and returns a random sampling of
+     * /count/ elements.
+     */
+    public void getLetterSet (final String locale, final int count,
+                              final InvocationService.ResultListener listener)
+    {
+        CrowdServer.invoker.postUnit(new Invoker.Unit("DictionaryManager.getLetterSet") {
+            public boolean invoke () {
+                Dictionary dict = getDictionary(locale);
+                char[] chars = dict.randomLetters(count);
+                StringBuilder sb = new StringBuilder();
+                for (char c : chars) {
+                    sb.append(c);
+                    sb.append(',');
+                }
+                sb.deleteCharAt(sb.length() - 1);
+                _set = sb.toString();
+                return true;
+            }
+            public void handleResult () {
+                listener.requestProcessed(_set);
+            }
+            protected String _set;
+        });
+    }
+
+    /**
+     * Checks if the specified word exists in the given language
+     */
+    public void checkWord (final String locale, final String word,
+                           final InvocationService.ResultListener listener)
+    {
+        CrowdServer.invoker.postUnit(new Invoker.Unit("DictionaryManager.checkWord") {
+            public boolean invoke () {
+                Dictionary dict = getDictionary(locale);
+                _result = (dict != null && dict.contains(word));
+                return true;
+            }
+            public void handleResult () {
+                listener.requestProcessed(_result);
+            }
+            protected boolean _result;
+        });
+    }
+
+    /**
+     * Protected constructor.
+     */
+    protected DictionaryManager (File dictionaryRoot)
+    {
+        _dictionaryRoot = dictionaryRoot;
+    }
+
+    /**
+     * Retrieves the dictionary object for a given locale.  Forces the dictionary file to be
+     * loaded, if it hasn't already.
+     */
+    protected Dictionary getDictionary (String locale)
+    {
+        locale = locale.toLowerCase();
+        if (!_dictionaries.containsKey(locale)) {
+            try {
+                // Make a file name
+                String filename = locale + ".wordlist";
+                File file = new File(_dictionaryRoot, filename);
+                _dictionaries.put(locale, new Dictionary(file));
+            } catch (Exception e) {
+                log.log(Level.WARNING, "Failed to load language file", e);
+            }
+        }
+
+        return _dictionaries.get(locale);
+    }
+
+    /**
+     * Helper class, encapsulates a sorted array of word hashes, which can be used to look up the
+     * existence of a word.
+     */
+    protected class Dictionary
     {
         /**
-         * Constructor, loads up the word list and initializes storage.
-         * This naive version assumes language files are simple list of words,
-         * with one word per line.
+         * Constructor, loads up the word list and initializes storage.  This naive version assumes
+         * language files are simple list of words, with one word per line.
          */
         public Dictionary (File wordfile)
         {
-            try
-            {
+            try {
                 CountHashMap <Character> letters = new CountHashMap <Character>();
-                
-                if (wordfile.exists() && wordfile.isFile() && wordfile.canRead())
-                {
+
+                if (wordfile.exists() && wordfile.isFile() && wordfile.canRead()) {
                     // Read it line by line
-                    BufferedReader reader = new BufferedReader (new FileReader (wordfile));
+                    BufferedReader reader = new BufferedReader(new FileReader(wordfile));
                     String line = null;
                     while ((line = reader.readLine()) != null) {
                         String word = line.toLowerCase();
@@ -88,23 +188,20 @@ public class DictionaryManager
                         }
                     }
 
-                    initializeLetterCounts (letters);
+                    initializeLetterCounts(letters);
 
-                    log.log (Level.INFO,
-                             "Loaded dictionary file " + wordfile.getName () +
-                             " with " + _words.size () + " entries, " +
-                             _letters.length + " letters.");
-                                                          
+                    log.log(Level.INFO,
+                            "Loaded dictionary file " + wordfile.getName() +
+                             " with " + _words.size() + " entries, " +
+                            _letters.length + " letters.");
+
                 }
-                else
-                {
-                    log.log (Level.WARNING,
-                             "Could not access dictionary file " + wordfile.getAbsolutePath ());
+                else {
+                    log.log(Level.WARNING,
+                            "Could not access dictionary file " + wordfile.getAbsolutePath());
                 }
-            }
-            catch (Exception ex)
-            {
-                log.log (Level.WARNING, "Failed to load dictionary file", ex);
+            } catch (Exception ex) {
+                log.log(Level.WARNING, "Failed to load dictionary file", ex);
                 _words.clear();  // dump everything
                 _letters = new char[] { };
                 _counts = new float[] { };
@@ -121,10 +218,9 @@ public class DictionaryManager
         public char[] randomLetters (int count)
         {
             char[] results = new char[count];
-            for (int i = 0; i < count; i++)
-            {
+            for (int i = 0; i < count; i++) {
                 // find random index and get its letter
-                int index = RandomUtil.getWeightedIndex (_counts);
+                int index = RandomUtil.getWeightedIndex(_counts);
                 results[i] = _letters[index];
             }
 
@@ -132,15 +228,15 @@ public class DictionaryManager
         }
 
 
-        // PRIVATE HELPERS
+        // PROTECTED HELPERS
 
-        /** Given a CountHashMap of letters, initializes the internal
-            letter and count arrays, used by RandomUtil. */
+        /** Given a CountHashMap of letters, initializes the internal letter and count arrays, used
+         * by RandomUtil. */
         protected void initializeLetterCounts (CountHashMap <Character> letters)
         {
-            Set<Character> keys = letters.keySet ();
+            Set<Character> keys = letters.keySet();
             int keycount = keys.size();
-            int total = letters.getTotalCount ();
+            int total = letters.getTotalCount();
             if (total == 0) { return; } // Something went wrong, abort.
 
             // Initialize storage
@@ -152,13 +248,9 @@ public class DictionaryManager
             {
                 keycount--;
                 _letters[keycount] = (char) key;
-                _counts[keycount] = ((float) letters.getCount (key)) / total; // normalize
+                _counts[keycount] = ((float) letters.getCount(key)) / total; // normalize
             }
         }
-                
-                
-
-        // PRIVATE STORAGE
 
         /** The words. */
         protected HashSet<String> _words = new HashSet<String>();
@@ -170,137 +262,12 @@ public class DictionaryManager
         protected float[] _counts = new float[] { };
     }
 
-
-    /**
-     * Creates the singleton instance of the dictionary service.
-     */
-    public static void init (File dictionaryRoot)
-    {
-        _singleton = new DictionaryManager (dictionaryRoot);
-    }
-
-    /**
-     * Get an instance of the dictionary service.
-     */
-    public static DictionaryManager getInstance ()
-    {
-        return _singleton;
-    }
-
-    /**
-     * Protected constructor.
-     */
-    protected DictionaryManager (File dictionaryRoot) 
-    {
-        _dictionaryRoot = dictionaryRoot;
-    }
-
-    /**
-     * Returns true if the language is known to be supported by the
-     * dictionary service (would it be better to return a whole list
-     * of supported languages instead?)
-     */
-    public void isLanguageSupported (
-        final String locale, final InvocationService.ResultListener listener)
-    {
-        // TODO: once we have file paths set up, change this to match
-        // against dictionary files
-        listener.requestProcessed (locale.toLowerCase().startsWith("en"));
-    }
-
-    /**
-     * Retrieves a set of letters from a language definition file,
-     * and returns a random sampling of /count/ elements.
-     */
-    public void getLetterSet (
-        final String locale, final int count, final InvocationService.ResultListener listener)
-    {
-        // Create a new unit of work
-        Invoker.Unit work = new Invoker.Unit ("DictionaryManager.getLetterSet") {
-            public boolean invoke ()
-            {
-                Dictionary dict = getDictionary (locale);
-                char[] chars = dict.randomLetters (count);
-                StringBuilder sb = new StringBuilder ();
-                for (char c : chars)
-                {
-                    sb.append (c);
-                    sb.append (',');
-                }
-                sb.deleteCharAt (sb.length() - 1);
-                
-                listener.requestProcessed (sb.toString());
-            
-                return true;
-            }
-        };
-
-        // Do the work!
-        CrowdServer.invoker.postUnit (work);    
-    }
-    
-    /**
-     * Checks if the specified word exists in the given language
-     */
-    public void checkWord (
-        final String locale, final String word, final InvocationService.ResultListener listener)
-    {
-        // Create a new unit of work
-        Invoker.Unit work = new Invoker.Unit ("DictionaryManager.checkWord") {
-            public boolean invoke ()
-            {
-                Dictionary dict = getDictionary (locale);
-                boolean result = (dict != null && dict.contains (word));
-                listener.requestProcessed (result);
-
-                return true;
-            }
-        };
-
-        // ...and off we go.
-        CrowdServer.invoker.postUnit (work);    
-    }
-
-    
-    /**
-     * Retrieves the dictionary object for a given locale.
-     * Forces the dictionary file to be loaded, if it hasn't already.
-     */
-    private Dictionary getDictionary (String locale)
-    {
-        locale = locale.toLowerCase ();
-        if (! _dictionaries.containsKey (locale))
-        {
-            try
-            {
-                // Make a file name
-                String filename = locale + ".wordlist";
-                File file = new File (_dictionaryRoot, filename);
-                _dictionaries.put (locale, new Dictionary (file));
-            }
-            catch (Exception e)
-            {
-                log.log (Level.WARNING, "Failed to load language file", e);
-            }
-        }
-
-        return _dictionaries.get (locale);
-    }
-
-
-
-
-    // PRIVATE VARIABLES
-
-    /** Singleton instance pointer */
-    private static DictionaryManager _singleton;
-
     /** Root directory where we find dictionary files */
-    private File _dictionaryRoot;
+    protected File _dictionaryRoot;
 
     /** Map from locale name to Dictionary object */
-    private HashMap <String, Dictionary> _dictionaries = new HashMap <String, Dictionary> ();
+    protected HashMap <String, Dictionary> _dictionaries = new HashMap <String, Dictionary>();
 
- 
-
+    /** Singleton instance pointer */
+    protected static DictionaryManager _singleton;
 }
