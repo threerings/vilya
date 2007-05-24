@@ -29,8 +29,9 @@ import com.threerings.crowd.server.CrowdServer;
 import com.threerings.presents.client.InvocationService;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 
 import java.util.HashMap;
@@ -56,10 +57,13 @@ public class DictionaryManager
 {
     /**
      * Creates the singleton instance of the dictionary service.
+     *
+     * @param prefix used to locate dictionary files in the classpath. A dictionary for "en_US" for
+     * example, would be searched for as "prefix/en_US.wordlist".
      */
-    public static void init (File dictionaryRoot)
+    public static void init (String prefix)
     {
-        _singleton = new DictionaryManager(dictionaryRoot);
+        _singleton = new DictionaryManager(prefix);
     }
 
     /**
@@ -131,9 +135,9 @@ public class DictionaryManager
     /**
      * Protected constructor.
      */
-    protected DictionaryManager (File dictionaryRoot)
+    protected DictionaryManager (String prefix)
     {
-        _dictionaryRoot = dictionaryRoot;
+        _prefix = prefix;
     }
 
     /**
@@ -144,16 +148,14 @@ public class DictionaryManager
     {
         locale = locale.toLowerCase();
         if (!_dictionaries.containsKey(locale)) {
+            String path = _prefix + "/" + locale + ".wordlist";
             try {
-                // Make a file name
-                String filename = locale + ".wordlist";
-                File file = new File(_dictionaryRoot, filename);
-                _dictionaries.put(locale, new Dictionary(file));
+                InputStream in = getClass().getClassLoader().getResourceAsStream(path);
+                _dictionaries.put(locale, new Dictionary(locale, in));
             } catch (Exception e) {
-                log.log(Level.WARNING, "Failed to load language file", e);
+                log.log(Level.WARNING, "Failed to load dictionary [path=" + path + "].", e);
             }
         }
-
         return _dictionaries.get(locale);
     }
 
@@ -167,45 +169,33 @@ public class DictionaryManager
          * Constructor, loads up the word list and initializes storage.  This naive version assumes
          * language files are simple list of words, with one word per line.
          */
-        public Dictionary (File wordfile)
+        public Dictionary (String locale, InputStream words)
+            throws IOException
         {
-            try {
-                CountHashMap <Character> letters = new CountHashMap <Character>();
+            CountHashMap <Character> letters = new CountHashMap <Character>();
 
-                if (wordfile.exists() && wordfile.isFile() && wordfile.canRead()) {
-                    // Read it line by line
-                    BufferedReader reader = new BufferedReader(new FileReader(wordfile));
-                    String line = null;
-                    while ((line = reader.readLine()) != null) {
-                        String word = line.toLowerCase();
-                        // Add the word to the dictionary
-                        _words.add(word);
-
-                        // count characters
-                        for (int ii = word.length() - 1; ii >= 0; ii--) {
-                            char ch = word.charAt(ii);
-                            letters.incrementCount(ch, 1);
-                        }
+            if (words != null) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(words));
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    String word = line.toLowerCase();
+                    // add the word to the dictionary
+                    _words.add(word);
+                    // then count characters
+                    for (int ii = word.length() - 1; ii >= 0; ii--) {
+                        char ch = word.charAt(ii);
+                        letters.incrementCount(ch, 1);
                     }
-
-                    initializeLetterCounts(letters);
-
-                    log.log(Level.INFO,
-                            "Loaded dictionary file " + wordfile.getName() +
-                             " with " + _words.size() + " entries, " +
-                            _letters.length + " letters.");
-
                 }
-                else {
-                    log.log(Level.WARNING,
-                            "Could not access dictionary file " + wordfile.getAbsolutePath());
-                }
-            } catch (Exception ex) {
-                log.log(Level.WARNING, "Failed to load dictionary file", ex);
-                _words.clear();  // dump everything
-                _letters = new char[] { };
-                _counts = new float[] { };
+
+            } else {
+                log.warning("Missing dictionary file [locale=" + locale + "].");
             }
+
+            initializeLetterCounts(letters);
+
+            log.fine("Loaded dictionary [locale=" + locale + ", words=" + _words.size() +
+                     ", letters=" + letters + "].");
         }
 
         /** Checks if the specified word exists in the word list */
@@ -262,12 +252,12 @@ public class DictionaryManager
         protected float[] _counts = new float[] { };
     }
 
-    /** Root directory where we find dictionary files */
-    protected File _dictionaryRoot;
+    /** Used to locate dictionaries in the classpath. */
+    protected String _prefix;
 
-    /** Map from locale name to Dictionary object */
+    /** Map from locale name to Dictionary object. */
     protected HashMap <String, Dictionary> _dictionaries = new HashMap <String, Dictionary>();
 
-    /** Singleton instance pointer */
+    /** Singleton instance pointer. */
     protected static DictionaryManager _singleton;
 }
