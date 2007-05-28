@@ -104,5 +104,17 @@ public /*abstract*/ class GameDefinition
         out.writeObject(match);
         out.writeObject(params);
     }
+
+    /** This function is required to ensure that the compiler includes certain classes. */
+    public function fuckingCompiler () :void
+    {
+        var c :Class;
+        // Parameter derivations
+        c = RangeParameter;
+        c = ToggleParameter;
+        c = ChoiceParameter;
+        // MatchConfig derivations
+        c = TableMatchConfig;
+    }
 }
 }
