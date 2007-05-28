@@ -38,6 +38,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
+import java.util.zip.GZIPInputStream;
 
 import com.samskivert.util.CountHashMap;
 import com.samskivert.util.RandomUtil;
@@ -59,7 +60,7 @@ public class DictionaryManager
      * Creates the singleton instance of the dictionary service.
      *
      * @param prefix used to locate dictionary files in the classpath. A dictionary for "en_US" for
-     * example, would be searched for as "prefix/en_US.wordlist".
+     * example, would be searched for as "prefix/en_US.wordlist.gz".
      */
     public static void init (String prefix)
     {
@@ -148,10 +149,10 @@ public class DictionaryManager
     {
         locale = locale.toLowerCase();
         if (!_dictionaries.containsKey(locale)) {
-            String path = _prefix + "/" + locale + ".wordlist";
+            String path = _prefix + "/" + locale + ".wordlist.gz";
             try {
                 InputStream in = getClass().getClassLoader().getResourceAsStream(path);
-                _dictionaries.put(locale, new Dictionary(locale, in));
+                _dictionaries.put(locale, new Dictionary(locale, new GZIPInputStream(in)));
             } catch (Exception e) {
                 log.log(Level.WARNING, "Failed to load dictionary [path=" + path + "].", e);
             }
