@@ -266,6 +266,18 @@ public class EZGameControl extends BaseControl
     }
 
     /**
+     * Get the names of all currently-set properties.
+     */
+    public function getProperyNames () :Array
+    {
+        var props :Array = [];
+        for (var s :String in _gameData) {
+            props.push(s);
+        }
+        return props;
+    }
+
+    /**
      * Register an object to receive whatever events it should receive, based on which event
      * listeners it implements.
      */
