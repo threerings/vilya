@@ -268,7 +268,7 @@ public class EZGameControl extends BaseControl
     /**
      * Get the names of all currently-set properties that begin with the specified prefix.
      */
-    public function getProperyNames (prefix :String = "") :Array
+    public function getPropertyNames (prefix :String = "") :Array
     {
         var props :Array = [];
         for (var s :String in _gameData) {
