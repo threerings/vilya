@@ -28,8 +28,6 @@ import flash.system.ApplicationDomain;
 import flash.utils.ByteArray;
 import flash.utils.Endian;
 
-import com.threerings.util.StringUtil;
-
 import com.threerings.io.TypedArray;
 
 /**
