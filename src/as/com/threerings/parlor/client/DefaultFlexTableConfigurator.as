@@ -48,8 +48,8 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
      */
     public function DefaultFlexTableConfigurator (
             desiredPlayers :int, minPlayers :int = -1, maxPlayers :int = -1,
-            allowPrivate :Boolean = false, playersXlate :String = "Players: ", 
-            privateXlate :String = "Private: ")
+            allowWatchable :Boolean = true, playersXlate :String = "Players: ", 
+            watchableXlate :String = "Private: ")
     {
         if (minPlayers < 0) {
             minPlayers = desiredPlayers;
@@ -74,12 +74,14 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
         }
 
         // create up the checkbox for private games, if applicable
-        if (allowPrivate) {
-            _privateCheck = new CheckBox();
+        if (allowWatchable) {
+            _watchableCheck = new CheckBox();
+            // default to watchable, if the game allows it.
+            _watchableCheck.selected = true;
         }
 
         _playersXlate = playersXlate;
-        _privateXlate = privateXlate;
+        _watchableXlate = watchableXlate;
     }
 
     // documentation inherited
@@ -98,18 +100,18 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
             gconf.addControl(playerLabel, new LabeledSlider(_playerSlider));
         }
 
-        if (_privateCheck != null) {
-            var privateLabel :Label = new Label();
-            privateLabel.text = _privateXlate;
-            privateLabel.styleName = "lobbyLabel";
-            gconf.addControl(privateLabel, _privateCheck);
+        if (_watchableCheck != null) {
+            var watchableLabel :Label = new Label();
+            watchableLabel.text = _watchableXlate;
+            watchableLabel.styleName = "lobbyLabel";
+            gconf.addControl(watchableLabel, _watchableCheck);
         }
     }
 
     // documentation inherited
     override public function isEmpty () :Boolean
     {
-        return (_playerSlider == null) && (_privateCheck == null);
+        return (_playerSlider == null) && (_watchableCheck == null);
     }
 
     // documentation inherited
@@ -120,8 +122,8 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
         if (_playerSlider != null) {
             _config.desiredPlayerCount = _playerSlider.value;
         }
-        if (_privateCheck != null) {
-            _config.privateTable = _privateCheck.selected;
+        if (_watchableCheck != null) {
+            _config.privateTable = !_watchableCheck.selected;
         }
     }
 
@@ -130,10 +132,10 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
 
     /** A checkbox to allow the table creator to specify if the table is
      * private. */
-    protected var _privateCheck :CheckBox;
+    protected var _watchableCheck :CheckBox;
 
     /** Translation strings passed in by the caller */
     protected var _playersXlate :String;
-    protected var _privateXlate :String;
+    protected var _watchableXlate :String;
 }
 }
