@@ -176,7 +176,7 @@ public class SceneProvider
         _locprov.leaveOccupiedPlace((BodyObject)source);
 
         // and clear out their scene information
-        source.setSceneId(-1);
+        source.setSceneId(0);
     }
 
     /** The location provider we use to handle low-level location stuff. */
