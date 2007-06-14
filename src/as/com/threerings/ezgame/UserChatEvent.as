@@ -1,5 +1,5 @@
 //
-// $Id: UserChatEvent.as 271 2007-04-07 00:25:58Z dhoover $
+// $Id$
 //
 // Vilya library - tools for developing networked games
 // Copyright (C) 2002-2007 Three Rings Design, Inc., All Rights Reserved
