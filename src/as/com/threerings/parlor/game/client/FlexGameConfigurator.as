@@ -45,9 +45,6 @@ public /*abstract*/ class FlexGameConfigurator extends GameConfigurator
      */
     public function getContainer () :Container
     {
-        // mimic the style of the seats grid for consistency
-        _tile.width = 475;
-        _tile.styleName = "seatsGrid";
         return _tile;
     }
 
