@@ -25,8 +25,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import java.sql.SQLException;
-
 import java.util.HashMap;
 
 import com.samskivert.io.PersistenceException;
@@ -39,19 +37,16 @@ import com.threerings.io.ObjectOutputStream;
 import com.threerings.whirled.data.SceneUpdate;
 
 /**
- * A utility class to assist the management of scene updates by a
- * SceneRepository.
+ * A utility class to assist the management of scene updates by a SceneRepository.
  */
 public class SceneUpdateMarshaller
 {
     /**
-     * Create a SceneUpdateMarshaller that understands the update types
-     * specified.
+     * Create a SceneUpdateMarshaller that understands the update types specified.
      *
-     * Note: Once a type is registered and in use by some SceneRepository
-     * that type id can never be used again. If you need to remove an update
-     * type, it should be replaced with null in the class list to reserve
-     * the old type id that it represented.
+     * Note: Once a type is registered and in use by some SceneRepository that type id can never be
+     * used again. If you need to remove an update type, it should be replaced with null in the
+     * class list to reserve the old type id that it represented.
      */
     public SceneUpdateMarshaller (Class ... typesClasses)
     {
@@ -61,8 +56,7 @@ public class SceneUpdateMarshaller
     }
 
     /**
-     * Returns the type code that is assigned to the specified SceneUpdate
-     * instance, or -1.
+     * Returns the type code that is assigned to the specified SceneUpdate instance, or -1.
      */
     public int getUpdateType (SceneUpdate update)
     {
@@ -70,8 +64,7 @@ public class SceneUpdateMarshaller
     }
 
     /**
-     * Returns the type code that is assigned to the specified SceneUpdate
-     * class, or -1.
+     * Returns the type code that is assigned to the specified SceneUpdate class, or -1.
      */
     public int getUpdateType (Class typeClass)
     {
@@ -80,8 +73,7 @@ public class SceneUpdateMarshaller
     }
 
     /**
-     * Returns the update class associated with the specified type code,
-     * or null.
+     * Returns the update class associated with the specified type code, or null.
      */
     public Class getUpdateClass (int type)
     {
@@ -97,21 +89,17 @@ public class SceneUpdateMarshaller
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             update.persistTo(new ObjectOutputStream(out));
-
         } catch (IOException ioe) {
-            String errmsg = "Error serializing update " + update;
-            throw new PersistenceException(errmsg, ioe);
+            throw new PersistenceException("Error serializing update " + update, ioe);
         }
         return out.toByteArray();
     }
 
     /**
-     * Instantiates the appropriate update class and decodes the update from
-     * the data.
+     * Instantiates the appropriate update class and decodes the update from the data.
      */
-    public SceneUpdate decodeUpdate (
-            int sceneId, int sceneVersion, int updateType, byte[] data)
-        throws PersistenceException, SQLException
+    public SceneUpdate decodeUpdate (int sceneId, int sceneVersion, int updateType, byte[] data)
+        throws PersistenceException
     {
         String errmsg = null;
         Exception error = null;
@@ -119,9 +107,8 @@ public class SceneUpdateMarshaller
         try {
             Class updateClass = getUpdateClass(updateType);
             if (updateClass == null) {
-                errmsg = "No class registered for update type [sceneId=" +
-                    sceneId + ", sceneVersion=" + sceneVersion +
-                    ", updateType=" + updateType + "].";
+                errmsg = "No class registered for update type [sceneId=" + sceneId +
+                    ", sceneVersion=" + sceneVersion + ", updateType=" + updateType + "].";
                 throw new PersistenceException(errmsg);
             }
 
@@ -151,21 +138,19 @@ public class SceneUpdateMarshaller
         }
 
         errmsg += " [sceneId=" + sceneId + ", sceneVersion=" + sceneVersion +
-            "updateType=" + updateType + "].";
+            ", updateType=" + updateType + "].";
         throw new PersistenceException(errmsg, error);
     }
 
     /**
-     * Registers the update class with the update factory. This should be
-     * called below in the canonical list of update registrations.
+     * Registers the update class with the update factory. This should be called below in the
+     * canonical list of update registrations.
      */
     protected void registerUpdateClass (Class typeClass)
     {
-        // ensure that callers can't fuck up the reciprocal nature
-        // of our two maps.
+        // ensure that callers can't fuck up the reciprocal nature of our two maps.
         if (_classToType.containsKey(typeClass)) {
-            throw new IllegalArgumentException(
-                "Class already registered: " + typeClass);
+            throw new IllegalArgumentException("Class already registered: " + typeClass);
         }
 
         // always reserve the type Id
@@ -182,8 +167,7 @@ public class SceneUpdateMarshaller
     protected HashIntMap<Class> _typeToClass = new HashIntMap<Class>();
 
     /** The table mapping update classes to types. */
-    protected HashMap<Class,Integer> _classToType =
-        new HashMap<Class,Integer>();
+    protected HashMap<Class,Integer> _classToType = new HashMap<Class,Integer>();
 
     /** A counter used in assigning update types to classes. */
     protected int _nextType = 0;
