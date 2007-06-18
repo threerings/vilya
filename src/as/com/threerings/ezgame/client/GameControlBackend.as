@@ -218,6 +218,9 @@ public class GameControlBackend
         o["getPlayers_v1"] = getPlayers_v1;
         o["getPlayerPosition_v1"] = getPlayerPosition_v1;
         o["getMyPosition_v1"] = getMyPosition_v1;
+
+        o["startTransaction"] = startTransaction_v1;
+        o["commitTransaction"] = commitTransaction_v1;
     }
 
     /**
@@ -588,6 +591,23 @@ public class GameControlBackend
     {
         validateConnected();
         _container.setFocus();
+    }
+
+    /**
+     * Start a dobj transaction on the game object.
+     */
+    public function startTransaction_v1 () :void
+    {
+        validateConnected();
+        _ezObj.startTransaction();
+    }
+
+    /**
+     * Commit a dobj transaction on the game object.
+     */
+    public function commitTransaction_v1 () :void
+    {
+        _ezObj.commitTransaction();
     }
 
     /**

@@ -266,6 +266,29 @@ public class EZGameControl extends BaseControl
     }
 
     /**
+     * Execute the specified function as a batch of commands that will be sent to the server
+     * together. This is no different from executing the commands outside of a batch, but
+     * may result in better use of the network and should be used if setting a number of things
+     * at once.
+     *
+     * Example:
+     * _ctrl.doBatch(function () :void {
+     *     _ctrl.set("board", new Array());
+     *     _ctrl.set("scores", new Array());
+     *     _ctrl.set("captures", 0);
+     * });
+     */
+    public function doBatch (fn :Function) :void
+    {
+        callEZCode("startTransaction");
+        try {
+            fn();
+        } finally {
+            callEZCode("commitTransaction");
+        }
+    }
+
+    /**
      * Get the names of all currently-set properties that begin with the specified prefix.
      */
     public function getPropertyNames (prefix :String = "") :Array
