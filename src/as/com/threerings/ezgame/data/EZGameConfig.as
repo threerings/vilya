@@ -21,6 +21,7 @@
 
 package com.threerings.ezgame.data {
 
+import com.threerings.util.ClassUtil;
 import com.threerings.util.Hashable;
 import com.threerings.util.MessageBundle;
 import com.threerings.util.StreamableHashMap;
@@ -113,6 +114,20 @@ public class EZGameConfig extends GameConfig
 
     // from PlaceConfig
     override public function createController () :PlaceController
+    {
+        var controller :String = getGameDefinition().controller;
+        if (controller == null) {
+            return createDefaultController();
+        }
+        var c :Class = ClassUtil.getClassByName(controller);
+        return (new c() as PlaceController);
+    }
+
+    /**
+     * Creates the controller to be used if the game definition does not specify a custom
+     * controller.
+     */
+    protected function createDefaultController () :PlaceController
     {
         return new EZGameController();
     }
