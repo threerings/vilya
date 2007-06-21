@@ -42,19 +42,19 @@ public abstract class CardGameController extends GameController
     // Documentation inherited.
     public void willEnterPlace (PlaceObject plobj)
     {
-        super.willEnterPlace(plobj);
-
         if (_ctx.getClient().getClientObject().receivers.containsKey(
                 CardGameDecoder.RECEIVER_CODE)) {
             Log.warning("Yuh oh, we already have a card game receiver " +
                 "registered and are trying for another...!");
             Thread.dumpStack();
         }
-        
+
         _ctx.getClient().getInvocationDirector().registerReceiver(
             new CardGameDecoder(this));
+
+        super.willEnterPlace(plobj);
     }
-    
+
     // Documentation inherited.
     public void didLeavePlace (PlaceObject plobj)
     {
@@ -63,7 +63,7 @@ public abstract class CardGameController extends GameController
         _ctx.getClient().getInvocationDirector().unregisterReceiver(
             CardGameDecoder.RECEIVER_CODE);
     }
-    
+
     // Documentation inherited.
     public void turnDidChange (Name turnHolder)
     {}
@@ -77,7 +77,7 @@ public abstract class CardGameController extends GameController
             receivedHand(hand);
         }
     }
-    
+
     /**
      * Called when the server deals the client a new hand of cards.  Default
      * implementation does nothing.
@@ -86,7 +86,7 @@ public abstract class CardGameController extends GameController
      */
     public void receivedHand (Hand hand)
     {}
-    
+
     /**
      * Dispatched to the client when it has received a set of cards
      * from another player.  Default implementation does nothing.
@@ -96,7 +96,7 @@ public abstract class CardGameController extends GameController
      */
     public void receivedCardsFromPlayer (int plidx, Card[] cards)
     {}
-    
+
     /**
      * Dispatched to the client when the server has forced it to send
      * a set of cards to another player.  Default implementation does
@@ -107,7 +107,7 @@ public abstract class CardGameController extends GameController
      */
     public void sentCardsToPlayer (int plidx, Card[] cards)
     {}
-    
+
     /**
      * Dispatched to the client when a set of cards is transferred between
      * two other players in the game.  Default implementation does nothing.
