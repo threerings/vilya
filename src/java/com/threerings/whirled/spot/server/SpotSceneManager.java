@@ -206,14 +206,18 @@ public class SpotSceneManager extends SceneManager
 
         // create a scene location for them located on the entrance portal but facing the opposite
         // direction
-        _ssobj.addToOccupantLocs(computeEnteringLocation(body, entry));
+        _ssobj.addToOccupantLocs(computeEnteringLocation(body, from, entry));
     }
 
     /**
      * Called when the supplied body is entering our scene via the specified portal. The default
      * location is the one associated with the portal, but derived classes may wish to adjust this.
+     *
+     * @param from the portal the body followed to get to this scene (or null).
+     * @param entry the portal referenced by the from portal's targetPortalId or the scene's
+     * default entrance if the from portal did not exist or had no target portal.
      */
-    protected SceneLocation computeEnteringLocation (BodyObject body, Portal entry)
+    protected SceneLocation computeEnteringLocation (BodyObject body, Portal from, Portal entry)
     {
         return new SceneLocation(entry.getOppLocation(), body.getOid());
     }
