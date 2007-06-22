@@ -55,11 +55,10 @@ public class SpotProvider
     implements SpotCodes, InvocationProvider
 {
     /**
-     * Creates a spot provider that can be registered with the invocation
-     * manager to handle spot services.
+     * Creates a spot provider that can be registered with the invocation manager to handle spot
+     * services.
      */
-    public SpotProvider (RootDObjectManager omgr, PlaceRegistry plreg,
-                         SceneRegistry screg)
+    public SpotProvider (RootDObjectManager omgr, PlaceRegistry plreg, SceneRegistry screg)
     {
         // we'll need these later
         _plreg = plreg;
@@ -77,9 +76,9 @@ public class SpotProvider
         // le sanity check
         int cSceneId = getCallerSceneId(caller);
         if (cSceneId != sceneId) {
-            Log.info("Ignoring stale traverse portal request " +
-                     "[caller=" + caller.who() + ", oSceneId=" + sceneId +
-                     ", portalId=" + portalId + ", cSceneId=" + cSceneId + "].");
+            Log.info("Ignoring stale traverse portal request [caller=" + caller.who() +
+                     ", oSceneId=" + sceneId + ", portalId=" + portalId +
+                     ", cSceneId=" + cSceneId + "].");
             InvocationMarshaller.setNoResponse(listener);
             return;
         }
@@ -91,8 +90,7 @@ public class SpotProvider
         final SceneMoveListener flistener = listener;
 
         // obtain the source scene
-        final SpotSceneManager srcmgr = (SpotSceneManager)
-            _screg.getSceneManager(sceneId);
+        final SpotSceneManager srcmgr = (SpotSceneManager)_screg.getSceneManager(sceneId);
         if (srcmgr == null) {
             Log.warning("Traverse portal missing source scene " +
                         "[user=" + fsource.who() + ", sceneId=" + sceneId +
@@ -112,60 +110,52 @@ public class SpotProvider
 
         // make sure this portal has valid info
         if (fdest == null || !fdest.isValid()) {
-            Log.warning("Traverse portal with invalid portal " +
-                        "[user=" + fsource.who() + ", scene=" + srcmgr.where() +
-                        ", pid=" + portalId + ", portal=" + fdest +
-                        ", portals=" + StringUtil.toString(rss.getPortals()) +
-                        "].");
+            Log.warning("Traverse portal with invalid portal [user=" + fsource.who() +
+                        ", scene=" + srcmgr.where() + ", pid=" + portalId + ", portal=" + fdest +
+                        ", portals=" + StringUtil.toString(rss.getPortals()) + "].");
             throw new InvocationException(NO_SUCH_PORTAL);
         }
 
         // resolve their destination scene
-        SceneRegistry.ResolutionListener rl =
-            new SceneRegistry.ResolutionListener() {
-                public void sceneWasResolved (SceneManager scmgr) {
-                    // make sure our caller is still around; under heavy
-                    // load, clients might end their session while the
-                    // scene is resolving
-                    if (!fsource.isActive()) {
-                        Log.info("Abandoning portal traversal, client gone " +
-                                 "[who=" + fsource.who()  +
-                                 ", dest=" + scmgr.where() + "].");
-                        InvocationMarshaller.setNoResponse(flistener);
-                        return;
-                    }
-
-                    // let the source manager know that this guy is
-                    // departing via the specified portal
-                    srcmgr.willTraversePortal(fsource, fdest);
-
-                    SpotSceneManager sscmgr = (SpotSceneManager)scmgr;
-                    finishTraversePortalRequest(
-                        fsource, sscmgr, fsceneVer, fdest, flistener);
+        SceneRegistry.ResolutionListener rl = new SceneRegistry.ResolutionListener() {
+            public void sceneWasResolved (SceneManager scmgr) {
+                // make sure our caller is still around; under heavy load, clients might end their
+                // session while the scene is resolving
+                if (!fsource.isActive()) {
+                    Log.info("Abandoning portal traversal, client gone [who=" + fsource.who()  +
+                             ", dest=" + scmgr.where() + "].");
+                    InvocationMarshaller.setNoResponse(flistener);
+                    return;
                 }
 
-                public void sceneFailedToResolve (
-                    int rsceneId, Exception reason) {
-                    Log.warning("Unable to resolve target scene " +
-                                "[sceneId=" + rsceneId +
-                                ", reason=" + reason + "].");
-                    // pretend like the scene doesn't exist to the client
-                    flistener.requestFailed(NO_SUCH_PLACE);
-                }
-            };
+                // let the source manager know that this guy is departing via the specified portal
+                srcmgr.willTraversePortal(fsource, fdest);
+
+                SpotSceneManager sscmgr = (SpotSceneManager)scmgr;
+                finishTraversePortalRequest(fsource, sscmgr, fsceneVer, fdest, flistener);
+            }
+
+            public void sceneFailedToResolve (
+                int rsceneId, Exception reason) {
+                Log.warning("Unable to resolve target scene [sceneId=" + rsceneId +
+                            ", reason=" + reason + "].");
+                // pretend like the scene doesn't exist to the client
+                flistener.requestFailed(NO_SUCH_PLACE);
+            }
+        };
         _screg.resolveScene(fdest.targetSceneId, rl);
     }
 
     /**
-     * This is called after the scene to which we are moving is guaranteed
-     * to have been loaded into the server.
+     * This is called after the scene to which we are moving is guaranteed to have been loaded into
+     * the server.
      */
     protected void finishTraversePortalRequest (
-        BodyObject source, SpotSceneManager destmgr, int sceneVer,
-        Portal dest, SceneMoveListener listener)
+        BodyObject source, SpotSceneManager destmgr, int sceneVer, Portal dest,
+        SceneMoveListener listener)
     {
         // let the destination scene manager know that we're coming in
-        destmgr.mapEnteringBody(source, dest.targetPortalId);
+        destmgr.mapEnteringBody(source, dest);
 
         try {
             // move to the place object associated with this scene
@@ -189,19 +179,16 @@ public class SpotProvider
         BodyObject source = (BodyObject)caller;
         int cSceneId = getCallerSceneId(caller);
         if (cSceneId != sceneId) {
-            Log.info("Rejecting changeLocation for invalid scene " +
-                     "[user=" + source.who() + ", insid=" + cSceneId +
-                     ", wantsid=" + sceneId + ", loc=" + loc + "].");
+            Log.info("Rejecting changeLocation for invalid scene [user=" + source.who() +
+                     ", insid=" + cSceneId + ", wantsid=" + sceneId + ", loc=" + loc + "].");
             throw new InvocationException(INVALID_LOCATION);
         }
 
         // look up the scene manager for the specified scene
-        SpotSceneManager smgr = (SpotSceneManager)
-            _screg.getSceneManager(sceneId);
+        SpotSceneManager smgr = (SpotSceneManager)_screg.getSceneManager(sceneId);
         if (smgr == null) {
-            Log.warning("User requested to change location from " +
-                        "non-existent scene [user=" + source.who() +
-                        ", sceneId=" + sceneId + ", loc=" + loc +"].");
+            Log.warning("User requested to change location from non-existent scene " +
+                        "[user=" + source.who() + ", sceneId=" + sceneId + ", loc=" + loc +"].");
             throw new InvocationException(INTERNAL_ERROR);
         }
 
@@ -223,12 +210,11 @@ public class SpotProvider
         BodyObject source = (BodyObject)caller;
 
         // look up the scene manager for the specified scene
-        SpotSceneManager smgr = (SpotSceneManager)
-            _screg.getSceneManager(sceneId);
+        SpotSceneManager smgr = (SpotSceneManager)_screg.getSceneManager(sceneId);
         if (smgr == null) {
-            Log.warning("User requested to join cluster from " +
-                        "non-existent scene [user=" + source.who() +
-                        ", sceneId=" + sceneId + ", foid=" + friendOid +"].");
+            Log.warning("User requested to join cluster from non-existent scene " +
+                        "[user=" + source.who() + ", sceneId=" + sceneId +
+                        ", foid=" + friendOid +"].");
             throw new InvocationException(INTERNAL_ERROR);
         }
 
@@ -249,57 +235,50 @@ public class SpotProvider
         BodyObject source = (BodyObject)caller;
         String errmsg = source.checkAccess(ChatCodes.CHAT_ACCESS, null);
         if (errmsg != null) {
-            SpeakProvider.sendFeedback(source,
-                MessageManager.GLOBAL_BUNDLE, errmsg);
-            return;
+            SpeakProvider.sendFeedback(source, MessageManager.GLOBAL_BUNDLE, errmsg);
+        } else {
+            sendClusterChatMessage(getCallerSceneId(caller), source.getOid(),
+                                   source.getVisibleName(), null, message, mode);
         }
-
-        sendClusterChatMessage(getCallerSceneId(caller), source.getOid(),
-                               source.getVisibleName(), null, message, mode);
     }
 
     /**
-     * Sends a cluster chat notification to the specified location in the
-     * specified place object originating with the specified speaker (the
-     * speaker can be a server entity that wishes to fake a "speak"
-     * message, in which case the bundle argument should be non-null and
-     * should contain the id of the bundle to be used to translate the
-     * message text) and with the supplied message content.
+     * Sends a cluster chat notification to the specified location in the specified place object
+     * originating with the specified speaker (the speaker can be a server entity that wishes to
+     * fake a "speak" message, in which case the bundle argument should be non-null and should
+     * contain the id of the bundle to be used to translate the message text) and with the supplied
+     * message content.
      *
      * @param sceneId the scene id in which to deliver the chat message.
-     * @param speakerOid the body object id of the speaker (used to verify
-     * that they are in the cluster in question).
-     * @param speaker the username of the user that generated the message
-     * (or some special speaker name for server messages).
-     * @param bundle the bundle identifier that will be used by the client
-     * to translate the message text (or null if the message originated
-     * from a real live human who wrote it in their native tongue).
+     * @param speakerOid the body object id of the speaker (used to verify that they are in the
+     * cluster in question).
+     * @param speaker the username of the user that generated the message (or some special speaker
+     * name for server messages).
+     * @param bundle the bundle identifier that will be used by the client to translate the message
+     * text (or null if the message originated from a real live human who wrote it in their native
+     * tongue).
      * @param message the text of the chat message.
      */
-    public void sendClusterChatMessage (
-        int sceneId, int speakerOid, Name speaker,
-        String bundle, String message, byte mode)
+    public void sendClusterChatMessage (int sceneId, int speakerOid, Name speaker,
+                                        String bundle, String message, byte mode)
     {
         // look up the scene manager for the specified scene
-        SpotSceneManager smgr = (SpotSceneManager)
-            _screg.getSceneManager(sceneId);
+        SpotSceneManager smgr = (SpotSceneManager)_screg.getSceneManager(sceneId);
         if (smgr == null) {
-            Log.warning("User requested cluster chat in non-existent scene " +
-                        "[user=" + speaker + ", sceneId=" + sceneId +
-                        ", message=" + message + "].");
+            Log.warning("User requested cluster chat in non-existent scene [user=" + speaker +
+                        ", sceneId=" + sceneId + ", message=" + message + "].");
             return;
         }
 
         // pass this request on to the spot scene manager
-        smgr.handleClusterSpeakRequest(
-            speakerOid, speaker, bundle, message, mode);
+        smgr.handleClusterSpeakRequest(speakerOid, speaker, bundle, message, mode);
     }
 
     /**
      * Obtains the scene id occupied by the supplied caller.
      *
-     * @exception InvocationException thrown if the caller does not
-     * implement {@link ScenedBodyObject}.
+     * @exception InvocationException thrown if the caller does not implement {@link
+     * ScenedBodyObject}.
      */
     protected static int getCallerSceneId (ClientObject caller)
         throws InvocationException
@@ -307,8 +286,7 @@ public class SpotProvider
         if (caller instanceof ScenedBodyObject) {
             return ((ScenedBodyObject)caller).getSceneId();
         } else {
-            Log.warning("Can't get scene from non-scened caller " +
-                        caller.who() + ".");
+            Log.warning("Can't get scene from non-scened caller " + caller.who() + ".");
             throw new InvocationException(INTERNAL_ERROR);
         }
     }
