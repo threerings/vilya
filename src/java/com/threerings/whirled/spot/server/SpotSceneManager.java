@@ -190,7 +190,7 @@ public class SpotSceneManager extends SceneManager
     {
         Portal from = _enterers.remove(body.getOid());
         Portal entry;
-        if (from != null && from.targetPortalId != -1) {
+        if (from != null && from.targetPortalId != (short)-1) {
             entry = _sscene.getPortal(from.targetPortalId);
             if (entry == null) {
                 Log.warning("Body mapped at invalid portal [where=" + where() +
