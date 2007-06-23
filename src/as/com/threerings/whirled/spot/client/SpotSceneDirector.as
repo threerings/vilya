@@ -53,8 +53,7 @@ import com.threerings.whirled.spot.data.SpotCodes;
 import com.threerings.whirled.spot.data.SpotScene;
 
 /**
- * Extends the standard scene director with facilities to move between
- * locations within a scene.
+ * Extends the standard scene director with facilities to move between locations within a scene.
  */
 public class SpotSceneDirector extends BasicDirector
     implements Subscriber, AttributeChangeListener
@@ -62,12 +61,11 @@ public class SpotSceneDirector extends BasicDirector
     private static const log :Log = Log.getLog(SpotSceneDirector);
 
     /**
-     * Creates a new spot scene director with the specified context and
-     * which will cooperate with the supplied scene director.
+     * Creates a new spot scene director with the specified context and which will cooperate with
+     * the supplied scene director.
      *
      * @param ctx the active client context.
-     * @param locdir the location director with which we will be
-     * cooperating.
+     * @param locdir the location director with which we will be cooperating.
      * @param scdir the scene director with which we will be cooperating.
      */
     public function SpotSceneDirector (
@@ -79,15 +77,14 @@ public class SpotSceneDirector extends BasicDirector
         _scdir = scdir;
 
         // wire ourselves up to hear about leave place notifications
-        locdir.addLocationObserver(new LocationAdapter(null,
-            function (place :PlaceObject) :void {
-                handleDeparture();
-            }));
+        locdir.addLocationObserver(new LocationAdapter(null, function (place :PlaceObject) :void {
+            handleDeparture();
+        }));
     }
 
     /**
-     * Configures this spot scene director with a chat director, with
-     * which it will coordinate to implement cluster chatting.
+     * Configures this spot scene director with a chat director, with which it will coordinate to
+     * implement cluster chatting.
      */
     public function setChatDirector (chatdir :ChatDirector) :void
     {
@@ -95,8 +92,8 @@ public class SpotSceneDirector extends BasicDirector
     }
 
     /**
-     * Returns our current location unless we have a location change
-     * pending, in which case our pending location is returned.
+     * Returns our current location unless we have a location change pending, in which case our
+     * pending location is returned.
      */
     public function getIntendedLocation () :Location
     {
@@ -104,57 +101,49 @@ public class SpotSceneDirector extends BasicDirector
     }
 
     /**
-     * Requests that this client move to the location specified by the
-     * supplied portal id. A request will be made and when the response is
-     * received, the location observers will be notified of success or
-     * failure.
+     * Requests that this client move to the location specified by the supplied portal id. A
+     * request will be made and when the response is received, the location observers will be
+     * notified of success or failure.
      *
-     * @return true if the request was issued, false if it was rejected by
-     * a location observer or because we have another request outstanding.
+     * @return true if the request was issued, false if it was rejected by a location observer or
+     * because we have another request outstanding.
      */
     public function traversePortal (
-            portalId :int,
-            rl :com.threerings.util.ResultListener = null) :Boolean
+        portalId :int, rl :com.threerings.util.ResultListener = null) :Boolean
     {
         // look up the destination scene and location
         var scene :SpotScene = (_scdir.getScene() as SpotScene);
         if (scene == null) {
-            log.warning("Requested to traverse portal when we have " +
-                "no scene [portalId=" + portalId + "].");
+            log.warning("Requested to traverse portal when we have no scene " +
+                        "[portalId=" + portalId + "].");
             return false;
         }
 
-        // sanity check the server's notion of what scene we're in with
-        // our notion of it
+        // sanity check the server's notion of what scene we're in with our notion of it
         var sceneId :int = _scdir.getScene().getId();
-        var sbobj :ScenedBodyObject = 
-            (_wctx.getClient().getClientObject() as ScenedBodyObject);
+        var sbobj :ScenedBodyObject = (_wctx.getClient().getClientObject() as ScenedBodyObject);
         if (sceneId != sbobj.getSceneId()) {
-            log.warning("Client and server differ in opinion of what scene " +
-                "we're in [sSceneId=" + sbobj.getSceneId() +
-                ", cSceneId=" + sceneId + "].");
+            log.warning("Client and server differ in opinion of what scene we're in " +
+                        "[sSceneId=" + sbobj.getSceneId() + ", cSceneId=" + sceneId + "].");
             return false;
         }
 
         // find the portal they're talking about
         var dest :Portal = scene.getPortal(portalId);
         if (dest == null) {
-            log.warning("Requested to traverse non-existent portal " +
-                "[portalId=" + portalId + ", portals=" + scene.getPortals() +
-                "].");
+            log.warning("Requested to traverse non-existent portal [portalId=" + portalId +
+                        ", portals=" + scene.getPortals() + "].");
             return false;
         }
 
         // prepare to move to this scene (sets up pending data)
         if (!_scdir.prepareMoveTo(dest.targetSceneId, rl)) {
-            log.info("Portal traversal vetoed by scene director " +
-                 "[portalId=" + portalId + "].");
+            log.info("Portal traversal vetoed by scene director [portalId=" + portalId + "].");
             return false;
         }
 
-        // check the version of our cached copy of the scene to which
-        // we're requesting to move; if we were unable to load it, assume
-        // a cached version of zero
+        // check the version of our cached copy of the scene to which we're requesting to move; if
+        // we were unable to load it, assume a cached version of zero
         var sceneVer :int = 0;
         var pendingModel :SceneModel = _scdir.getPendingModel();
         if (pendingModel != null) {
@@ -162,34 +151,29 @@ public class SpotSceneDirector extends BasicDirector
         }
 
         // issue a traversePortal request
-        log.info("Issuing traversePortal(" +
-             sceneId + ", " + dest + ", " + sceneVer + ").");
-        _sservice.traversePortal(
-            _wctx.getClient(), sceneId, portalId, sceneVer, _scdir);
+        log.info("Issuing traversePortal(" + sceneId + ", " + dest + ", " + sceneVer + ").");
+        _sservice.traversePortal(_wctx.getClient(), sceneId, portalId, sceneVer, _scdir);
         return true;
     }
 
     /**
-     * Issues a request to change our location within the scene to the
-     * specified location.
+     * Issues a request to change our location within the scene to the specified location.
      *
      * @param loc the new location to which to move.
-     * @param listener will be notified of success or failure. Most client
-     * entities find out about location changes via changes to the
-     * occupant info data, but the initiator of a location change request
-     * can be notified of its success or failure, primarily so that it can
-     * act in anticipation of a successful location change (like by
-     * starting a sprite moving toward the new location), but backtrack if
-     * it finds out that the location change failed.
+     * @param listener will be notified of success or failure. Most client entities find out about
+     * location changes via changes to the occupant info data, but the initiator of a location
+     * change request can be notified of its success or failure, primarily so that it can act in
+     * anticipation of a successful location change (like by starting a sprite moving toward the
+     * new location), but backtrack if it finds out that the location change failed.
      */
     public function changeLocation (
-            loc :Location, listener :com.threerings.util.ResultListener) :void
+        loc :Location, listener :com.threerings.util.ResultListener) :void
     {
-        // refuse if there's a pending location change or if we're already
-        // at the specified location
+        // refuse if there's a pending location change or if we're already at the specified
+        // location
         if (loc.equivalent(_location)) {
             log.info("Not going to " + loc + "; we're at " + _location +
-                 " and we're headed to " + _pendingLoc + ".");
+                     " and we're headed to " + _pendingLoc + ".");
             if (listener != null) {
                 // This isn't really a failure, it's just a no-op.
                 listener.requestCompleted(_location);
@@ -199,7 +183,7 @@ public class SpotSceneDirector extends BasicDirector
 
         if (_pendingLoc != null) {
             log.info("Not going to " + loc + "; we're at " + _location +
-                " and we're headed to " + _pendingLoc + ".");
+                     " and we're headed to " + _pendingLoc + ".");
             if (listener != null) {
                 // Already moving, best thing to do is ignore it.
                 listener.requestCompleted(_pendingLoc);
@@ -209,8 +193,8 @@ public class SpotSceneDirector extends BasicDirector
 
         var scene :SpotScene = (_scdir.getScene() as SpotScene);
         if (scene == null) {
-            log.warning("Requested to change locations, but we're not " +
-                "currently in any scene [loc=" + loc + "].");
+            log.warning("Requested to change locations, but we're not currently in any scene " +
+                        "[loc=" + loc + "].");
             if (listener != null) {
                 listener.requestFailed(new Error("m.cant_get_there"));
             }
@@ -218,8 +202,7 @@ public class SpotSceneDirector extends BasicDirector
         }
 
         var sceneId :int = _scdir.getScene().getId();
-        log.info("Sending changeLocation request [scid=" + sceneId +
-             ", loc=" + loc + "].");
+        log.info("Sending changeLocation request [scid=" + sceneId + ", loc=" + loc + "].");
 
         _pendingLoc = (loc.clone() as Location);
         var clist :ConfirmAdapter = new ConfirmAdapter(
@@ -240,20 +223,19 @@ public class SpotSceneDirector extends BasicDirector
     }
 
     /**
-     * Issues a request to join the cluster associated with the specified
-     * user (starting one if necessary).
+     * Issues a request to join the cluster associated with the specified user (starting one if
+     * necessary).
      *
-     * @param froid the bodyOid of another user; the calling user will
-     * be made to join the target user's cluster.
+     * @param froid the bodyOid of another user; the calling user will be made to join the target
+     * user's cluster.
      * @param listener will be notified of success or failure.
      */
-    public function joinCluster (
-            froid :int, listener :com.threerings.util.ResultListener) :void
+    public function joinCluster (froid :int, listener :com.threerings.util.ResultListener) :void
     {
         var scene :SpotScene = (_scdir.getScene() as SpotScene);
         if (scene == null) {
-            log.warning("Requested to join cluster, but we're not " +
-                "currently in any scene [froid=" + froid + "].");
+            log.warning("Requested to join cluster, but we're not currently in any scene " +
+                        "[froid=" + froid + "].");
             if (listener != null) {
                 listener.requestFailed(new Error("m.cant_get_there"));
             }
@@ -276,27 +258,27 @@ public class SpotSceneDirector extends BasicDirector
     }
 
     /**
-     * Sends a chat message to the other users in the cluster to which the
-     * location that we currently occupy belongs.
+     * Sends a chat message to the other users in the cluster to which the location that we
+     * currently occupy belongs.
      *
-     * @return true if a cluster speak message was delivered, false if we
-     * are not in a valid cluster and refused to deliver the request.
+     * @return true if a cluster speak message was delivered, false if we are not in a valid
+     * cluster and refused to deliver the request.
      */
     public function requestClusterSpeak (
-            message :String, mode :int = ChatCodes.DEFAULT_MODE) :Boolean
+        message :String, mode :int = ChatCodes.DEFAULT_MODE) :Boolean
     {
         // make sure we're currently in a scene
         var scene :SpotScene = (_scdir.getScene() as SpotScene);
         if (scene == null) {
-            log.warning("Requested to speak to cluster, but we're not " +
-                "currently in any scene [message=" + message + "].");
+            log.warning("Requested to speak to cluster, but we're not currently in any scene " +
+                        "[message=" + message + "].");
             return false;
         }
 
         // make sure we're part of a cluster
         if (_self.getClusterOid() <= 0) {
             log.info("Ignoring cluster speak as we're not in a cluster " +
-                 "[cloid=" + _self.getClusterOid() + "].");
+                     "[cloid=" + _self.getClusterOid() + "].");
             return false;
         }
 
@@ -320,8 +302,7 @@ public class SpotSceneDirector extends BasicDirector
             // it's our new cluster!
             _clobj = object;
             if (_chatdir != null) {
-                _chatdir.addAuxiliarySource(object,
-                    SpotCodes.CLUSTER_CHAT_TYPE);
+                _chatdir.addAuxiliarySource(object, SpotCodes.CLUSTER_CHAT_TYPE);
             }
         }
     }
@@ -329,15 +310,14 @@ public class SpotSceneDirector extends BasicDirector
     // documentation inherited from interface
     public function requestFailed (oid :int, cause :ObjectAccessError) :void
     {
-        log.warning("Unable to subscribe to cluster chat object " +
-            "[oid=" + oid + ", cause=" + cause + "].");
+        log.warning("Unable to subscribe to cluster chat object [oid=" + oid +
+                    ", cause=" + cause + "].");
     }
 
     // documentation inherited from interface
     public function attributeChanged (event :AttributeChangedEvent) :void
     {
-        if (event.getName() == _self.getClusterField() &&
-                event.getValue() != event.getOldValue()) {
+        if (event.getName() == _self.getClusterField() && event.getValue() != event.getOldValue()) {
             maybeUpdateCluster();
         }
     }
@@ -404,14 +384,13 @@ public class SpotSceneDirector extends BasicDirector
     }
 
     /**
-     * Checks to see if our cluster has changed and does the necessary
-     * subscription machinations if necessary.
+     * Checks to see if our cluster has changed and does the necessary subscription machinations if
+     * necessary.
      */
     protected function maybeUpdateCluster () :void
     {
         var cloid :int = _self.getClusterOid();
-        if ((_clobj == null && cloid <= 0) ||
-            (_clobj != null && cloid == _clobj.getOid())) {
+        if ((_clobj == null && cloid <= 0) || (_clobj != null && cloid == _clobj.getOid())) {
             // our cluster didn't change, we can stop now
             return;
         }
@@ -428,15 +407,13 @@ public class SpotSceneDirector extends BasicDirector
     }
 
     /**
-     * Convenience routine to unwire chat for and unsubscribe from our
-     * current cluster, if any.
+     * Convenience routine to unwire chat for and unsubscribe from our current cluster, if any.
      *
      * @param force clear the cluster even if we're still apparently in it.
      */
     protected function clearCluster (force :Boolean) :void
     {
-        if (_clobj != null &&
-                (force || (_clobj.getOid() != _self.getClusterOid()))) {
+        if (_clobj != null && (force || (_clobj.getOid() != _self.getClusterOid()))) {
             if (_chatdir != null) {
                 _chatdir.removeAuxiliarySource(_clobj);
             }
@@ -464,8 +441,7 @@ public class SpotSceneDirector extends BasicDirector
     /** The location we currently occupy. */
     protected var _location :Location;
 
-    /** The location to which we have an outstanding change location
-     * request. */
+    /** The location to which we have an outstanding change location request. */
     protected var _pendingLoc :Location;
 
     /** The cluster chat object for the cluster we currently occupy. */
