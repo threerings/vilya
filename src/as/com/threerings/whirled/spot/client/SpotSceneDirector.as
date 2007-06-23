@@ -39,18 +39,20 @@ import com.threerings.crowd.chat.client.ChatDirector;
 import com.threerings.crowd.chat.data.ChatCodes;
 import com.threerings.crowd.client.LocationAdapter;
 import com.threerings.crowd.client.LocationDirector;
+import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceObject;
 
 import com.threerings.whirled.client.SceneDirector;
 import com.threerings.whirled.data.SceneModel;
-import com.threerings.whirled.data.ScenedBodyObject;
 import com.threerings.whirled.util.WhirledContext;
 
 import com.threerings.whirled.spot.data.ClusteredBodyObject;
 import com.threerings.whirled.spot.data.Location;
 import com.threerings.whirled.spot.data.Portal;
+import com.threerings.whirled.spot.data.SceneLocation;
 import com.threerings.whirled.spot.data.SpotCodes;
 import com.threerings.whirled.spot.data.SpotScene;
+import com.threerings.whirled.spot.data.SpotSceneObject;
 
 /**
  * Extends the standard scene director with facilities to move between locations within a scene.
@@ -77,9 +79,7 @@ public class SpotSceneDirector extends BasicDirector
         _scdir = scdir;
 
         // wire ourselves up to hear about leave place notifications
-        locdir.addLocationObserver(new LocationAdapter(null, function (place :PlaceObject) :void {
-            handleDeparture();
-        }));
+        locdir.addLocationObserver(new LocationAdapter(null, handleSceneChange, null));
     }
 
     /**
@@ -121,10 +121,9 @@ public class SpotSceneDirector extends BasicDirector
 
         // sanity check the server's notion of what scene we're in with our notion of it
         var sceneId :int = _scdir.getScene().getId();
-        var sbobj :ScenedBodyObject = (_wctx.getClient().getClientObject() as ScenedBodyObject);
-        if (sceneId != sbobj.getSceneId()) {
+        if (sceneId != _self.getSceneId()) {
             log.warning("Client and server differ in opinion of what scene we're in " +
-                        "[sSceneId=" + sbobj.getSceneId() + ", cSceneId=" + sceneId + "].");
+                        "[sSceneId=" + _self.getSceneId() + ", cSceneId=" + sceneId + "].");
             return false;
         }
 
@@ -375,12 +374,17 @@ public class SpotSceneDirector extends BasicDirector
     }
 
     /**
-     * Clean up after a few things when we depart from a scene.
+     * Called when we move from one scene to another, or to a non-scene.
      */
-    protected function handleDeparture () :void
+    protected function handleSceneChange (plobj :PlaceObject) :void
     {
-        // clear out our last known location id
-        _location = null;
+        // determine our location in the new scene if we have one
+        var scloc :SceneLocation = null;
+        var ssobj :SpotSceneObject = (plobj as SpotSceneObject);
+        if (ssobj != null) {
+            scloc = ssobj.occupantLocs.get((_self as BodyObject).getOid()) as SceneLocation;
+        }
+        _location = (scloc == null) ? null : scloc.loc;
     }
 
     /**
