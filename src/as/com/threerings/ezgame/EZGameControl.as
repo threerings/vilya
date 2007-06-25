@@ -107,7 +107,6 @@ import flash.display.DisplayObject;
  */
 [Event(name="UserChat", type="com.threerings.ezgame.UserChatEvent")]
 
-
 /**
  * The single point of control for each client in your multiplayer EZGame.
  *
@@ -117,12 +116,17 @@ public class EZGameControl extends BaseControl
 {
     /**
      * Create an EZGameControl object using some display object currently on the hierarchy.
+     *
+     * @param disp the display object that is the game's UI.
+     * @param autoReady if true, the game will automatically be started when initialization is
+     * complete, if false, the game will not start until all clients call {@link #playerReady}.
      */
-    public function EZGameControl (disp :DisplayObject)
+    public function EZGameControl (disp :DisplayObject, autoReady :Boolean)
     {
         var event :DynEvent = new DynEvent();
         event.userProps = new Object();
         populateProperties(event.userProps);
+        event.userProps["autoReady_v1"] = autoReady;
         disp.root.loaderInfo.sharedEvents.dispatchEvent(event);
         if ("ezProps" in event) {
             setEZProps(event.ezProps);
@@ -361,6 +365,16 @@ public class EZGameControl extends BaseControl
             removeEventListener(OccupantChangedEvent.OCCUPANT_ENTERED, ocl.occupantEntered);
             removeEventListener(OccupantChangedEvent.OCCUPANT_LEFT, ocl.occupantLeft);
         }
+    }
+
+    /**
+     * If the game was not configured to auto-start, all clients must call this function to let the
+     * server know that they are ready, at which point the game will be started. Once a game is
+     * over, all clients can call this function again to start a new game.
+     */
+    public function playerReady () :void
+    {
+        callEZCode("playerReady_v1");
     }
 
     /**

@@ -141,15 +141,13 @@ public class GameControlBackend
         populateProperties(evt.ezProps);
 
         // ok, we're now hooked-up with the game code
-        _ctrl.userCodeIsConnected();
+        _ctrl.userCodeIsConnected(evt.userProps["autoReady_v1"]);
     }
 
     protected function setUserCodeProperties (o :Object) :void
     {
         // here we would handle adapting old functions to a new version
-
         _ezDispatcher = (o["dispatchEvent_v1"] as Function);
-
         _userFuncs = o;
     }
 
@@ -187,6 +185,7 @@ public class GameControlBackend
         o["gameConfig"] = gameConfig;
 
         // functions
+        o["playerReady_v1"] = playerReady_v1;
         o["setProperty_v1"] = setProperty_v1;
         o["testAndSetProperty_v1"] = testAndSetProperty_v1;
         o["mergeCollection_v1"] = mergeCollection_v1;
@@ -224,13 +223,20 @@ public class GameControlBackend
     }
 
     /**
-     * Set a property.
+     * Called by the client code when it is ready for the game to be started.
+     */
+    public function playerReady_v1 () :void
+    {
+        _ctrl.playerIsReady();
+    }
+
+    /**
+     * Sets a property.
      *
-     * Note: immediate defaults to true, even though immediate=false is
-     * the general case. We are providing some backwards compatibility
-     * to old versions of setProperty_v1() that assumed immediate and did
-     * not pass a 4th value.
-     * All callers should now specify that value explicitely.
+     * Note: immediate defaults to true, even though immediate=false is the general case. We are
+     * providing some backwards compatibility to old versions of setProperty_v1() that assumed
+     * immediate and did not pass a 4th value.  All callers should now specify that value
+     * explicitly.
      */
     public function setProperty_v1 (
         propName :String, value :Object, index :int, immediate :Boolean = true) :void
