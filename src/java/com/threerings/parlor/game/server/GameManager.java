@@ -832,7 +832,7 @@ public class GameManager extends PlaceManager
     protected void playersAllHere ()
     {
         // if we're a seated game and we haven't already started, start.
-        if ((getMatchType() == GameConfig.SEATED_GAME) && (_gameobj.state == GameObject.PRE_GAME)) {
+        if ((getMatchType() == GameConfig.SEATED_GAME) && !_gameobj.isInPlay()) {
             startGame();
         }
     }
@@ -1109,6 +1109,9 @@ public class GameManager extends PlaceManager
                 ((GameManagerDelegate)delegate).gameDidEnd();
             }
         });
+
+        // clear out player readiness; everyone must report as ready again to restart the game
+        Arrays.fill(_playerOids, 0);
 
         // report the winners and losers if appropriate
         int winnerCount = _gameobj.getWinnerCount();
