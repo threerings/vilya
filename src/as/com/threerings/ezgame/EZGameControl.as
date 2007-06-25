@@ -738,7 +738,7 @@ public class EZGameControl extends BaseControl
     protected function handleRootClick (evt :MouseEvent) :void
     {
         try {
-            if (evt.target.stage.focus != null) {
+            if (evt.target.stage == null || evt.target.stage.focus != null) {
                 return;
             }
         } catch (err :SecurityError) {
