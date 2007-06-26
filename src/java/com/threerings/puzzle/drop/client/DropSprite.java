@@ -72,8 +72,8 @@ public class DropSprite extends Sprite
         _view = view;
         _col = col;
         _row = row;
-	_pieces = pieces;
-	_dist = (dist == 0) ? 1 : dist;
+        _pieces = pieces;
+        _dist = (dist == 0) ? 1 : dist;
         _orient = NORTH;
         _unit = _view.getPieceHeight();
         setRenderOrder(renderOrder);
@@ -86,10 +86,10 @@ public class DropSprite extends Sprite
 
         // size the bounds to fit our pieces
         updateBounds();
-	// set up the piece location
-	setBoardLocation(_row, _col);
-	// calculate vertical render offset based on the number of pieces
-	setRowOffset(-(_pieces.length - 1));
+        // set up the piece location
+        setBoardLocation(_row, _col);
+        // calculate vertical render offset based on the number of pieces
+        setRowOffset(-(_pieces.length - 1));
     }
 
     /**
@@ -97,7 +97,7 @@ public class DropSprite extends Sprite
      */
     public int getDistance ()
     {
-	return _dist;
+        return _dist;
     }
 
     /**
@@ -105,7 +105,7 @@ public class DropSprite extends Sprite
      */
     public int getColumn ()
     {
-	return _col;
+        return _col;
     }
 
     /**
@@ -113,7 +113,7 @@ public class DropSprite extends Sprite
      */
     public int getRow ()
     {
-	return _row;
+        return _row;
     }
 
     /**
@@ -121,7 +121,7 @@ public class DropSprite extends Sprite
      */
     public int[] getPieces ()
     {
-	return _pieces;
+        return _pieces;
     }
 
     /**
@@ -129,7 +129,7 @@ public class DropSprite extends Sprite
      */
     public float getVelocity ()
     {
-	return _vel;
+        return _vel;
     }
 
     /**
@@ -137,9 +137,9 @@ public class DropSprite extends Sprite
      */
     public void setBoardLocation (int row, int col)
     {
-	_row = row;
-	_col = col;
-	updatePosition();
+        _row = row;
+        _col = col;
+        updatePosition();
     }
 
     /**
@@ -147,8 +147,8 @@ public class DropSprite extends Sprite
      */
     public void setColumn (int col)
     {
-	_col = col;
-	updatePosition();
+        _col = col;
+        updatePosition();
     }
 
     /**
@@ -156,8 +156,8 @@ public class DropSprite extends Sprite
      */
     public void setRow (int row)
     {
-	_row = row;
-	updatePosition();
+        _row = row;
+        updatePosition();
     }
 
     /**
@@ -165,9 +165,9 @@ public class DropSprite extends Sprite
      */
     public void setColumnOffset (int count)
     {
-	_offx = count;
+        _offx = count;
         updateRenderOffset();
-	updateRenderOrigin();
+        updateRenderOrigin();
     }
 
     /**
@@ -175,9 +175,9 @@ public class DropSprite extends Sprite
      */
     public void setRowOffset (int count)
     {
-	_offy = count;
+        _offy = count;
         updateRenderOffset();
-	updateRenderOrigin();
+        updateRenderOrigin();
     }
 
     /**
@@ -213,8 +213,8 @@ public class DropSprite extends Sprite
             _rowstamp = now - msecs;
         }
 
-	// update the velocity
-	_vel = velocity;
+        // update the velocity
+        _vel = velocity;
     }
 
     /**
@@ -229,17 +229,17 @@ public class DropSprite extends Sprite
             _dist = 1;
         }
 
-	if (_stopstamp > 0) {
-	    // we're dropping from a stand-still
+        if (_stopstamp > 0) {
+            // we're dropping from a stand-still
             long delta = _view.getTimeStamp() - _stopstamp;
-	    _rowstamp += delta;
+            _rowstamp += delta;
             _stopstamp = 0;
 
-	} else {
+        } else {
             // we're continuing a previous drop, so make use of any
             // previously existing time
             _rowstamp = _endstamp;
-	}
+        }
     }
 
     /**
@@ -307,7 +307,7 @@ public class DropSprite extends Sprite
     // documentation inherited
     public boolean inside (Shape shape)
     {
-	return shape.contains(_bounds);
+        return shape.contains(_bounds);
     }
 
     /**
@@ -324,8 +324,8 @@ public class DropSprite extends Sprite
             return 0.0f;
         }
 
-	long msecs = Math.max(0, timestamp - _rowstamp);
-	float travpix = msecs * _vel;
+        long msecs = Math.max(0, timestamp - _rowstamp);
+        float travpix = msecs * _vel;
         float pctdone = (travpix / _unit);
 
 //         Log.info("getPercentDone [timestamp=" + timestamp +
@@ -333,7 +333,7 @@ public class DropSprite extends Sprite
 //                  ", travpix=" + travpix + ", pctdone=" + pctdone + 
 //                  ", vel=" + _vel + "].");
 
-	return pctdone;
+        return pctdone;
     }
 
     // documentation inherited
@@ -373,7 +373,7 @@ public class DropSprite extends Sprite
     // documentation inherited
     public void tick (long timestamp)
     {
-	super.tick(timestamp);
+        super.tick(timestamp);
 
         // initialize our rowstamp if we haven't done so already
         if (_rowstamp == 0) {
@@ -387,18 +387,18 @@ public class DropSprite extends Sprite
 
         PieceMovedOp pmop = null;
 
-	// figure out how far along the current board coordinate we should be
-	float pctdone = getPercentDone(timestamp);
-	if (pctdone >= 1.0f) {
-	    // note that we've reached the next row
+        // figure out how far along the current board coordinate we should be
+        float pctdone = getPercentDone(timestamp);
+        if (pctdone >= 1.0f) {
+            // note that we've reached the next row
             advancePosition();
 
-	    // update remaining drop distance
-	    _dist--;
+            // update remaining drop distance
+            _dist--;
 
-	    // calculate any remaining time to be used
-	    long used = (long)(_unit / _vel);
-	    _endstamp = _rowstamp + used;
+            // calculate any remaining time to be used
+            long used = (long)(_unit / _vel);
+            _endstamp = _rowstamp + used;
             _rowstamp = _endstamp;
 
             // update our percent done because we've moved down a row
@@ -406,7 +406,7 @@ public class DropSprite extends Sprite
 
             // inform observers that we've reached our destination
             pmop = new PieceMovedOp(this, timestamp, _col, _row);
-	}
+        }
 
         // constrain the sprite's position to the destination row
         pctdone = Math.min(pctdone, 1.0f);
@@ -453,11 +453,11 @@ public class DropSprite extends Sprite
     {
         super.toString(buf);
         buf.append(", orient=").append(DirectionUtil.toShortString(_orient));
-	buf.append(", row=").append(_row);
-	buf.append(", col=").append(_col);
-	buf.append(", offx=").append(_offx);
-	buf.append(", offy=").append(_offy);
-	buf.append(", dist=").append(_dist);
+        buf.append(", row=").append(_row);
+        buf.append(", col=").append(_col);
+        buf.append(", offx=").append(_offx);
+        buf.append(", offy=").append(_offy);
+        buf.append(", dist=").append(_dist);
     }
 
     /**
@@ -467,7 +467,7 @@ public class DropSprite extends Sprite
     {
         _view.getPiecePosition(_col, _row, _srcPos);
         _view.getPiecePosition(_col, _row+1, _destPos);
-	setLocation(_srcPos.x, _srcPos.y);
+        setLocation(_srcPos.x, _srcPos.y);
     }
 
     // documentation inherited

@@ -48,29 +48,29 @@ public class PortalDialog extends JInternalFrame
      */
     public PortalDialog ()
     {
-	super("Edit Portal", true);
+        super("Edit Portal", true);
 
-	// get a handle on the top-level panel
-	JPanel top = (JPanel)getContentPane();
+        // get a handle on the top-level panel
+        JPanel top = (JPanel)getContentPane();
 
-	// set up a layout manager for the panel
-	VGroupLayout gl = new VGroupLayout(VGroupLayout.STRETCH);
-	gl.setOffAxisPolicy(VGroupLayout.STRETCH);
-	top.setLayout(gl);
-	top.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        // set up a layout manager for the panel
+        VGroupLayout gl = new VGroupLayout(VGroupLayout.STRETCH);
+        gl.setOffAxisPolicy(VGroupLayout.STRETCH);
+        top.setLayout(gl);
+        top.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-	// add the dialog instruction text
-	top.add(new JLabel("Enter settings for this portal:"));
+        // add the dialog instruction text
+        top.add(new JLabel("Enter settings for this portal:"));
 
-	// create a panel to contain the portal name info
-	JPanel sub = new JPanel(new HGroupLayout(HGroupLayout.STRETCH));
-	sub.add(new JLabel("Portal name:", SwingConstants.RIGHT));
+        // create a panel to contain the portal name info
+        JPanel sub = new JPanel(new HGroupLayout(HGroupLayout.STRETCH));
+        sub.add(new JLabel("Portal name:", SwingConstants.RIGHT));
 
-	// create and add the portal name text entry field
-	sub.add(_portalText = new JTextField());
+        // create and add the portal name text entry field
+        sub.add(_portalText = new JTextField());
 
-	// add the portal name info to the top-level panel
-	top.add(sub);
+        // add the portal name info to the top-level panel
+        top.add(sub);
 
         // create a check box to allow making this the default
         // entrance portal
@@ -79,14 +79,14 @@ public class PortalDialog extends JInternalFrame
         _entrance.setActionCommand("entrance");
         top.add(_entrance);
 
-	// create a panel to contain the OK/Cancel buttons
-	sub = new JPanel(new HGroupLayout());
-	EditorDialogUtil.addButton(this, sub, "OK", "ok");
+        // create a panel to contain the OK/Cancel buttons
+        sub = new JPanel(new HGroupLayout());
+        EditorDialogUtil.addButton(this, sub, "OK", "ok");
 
-	// add the buttons to the top-level panel
-	top.add(sub);
+        // add the buttons to the top-level panel
+        top.add(sub);
 
-	pack();
+        pack();
     }
 
     /**
@@ -97,26 +97,26 @@ public class PortalDialog extends JInternalFrame
      */
     public void prepare (StageScene scene, EditablePortal port)
     {
-	_port = port;
+        _port = port;
         _scene = scene;
 
-	// if the location is already a portal, fill the text entry field
-	// with the current scene name, else clear it
-	String text = port.name;
-	_portalText.setText(text);
+        // if the location is already a portal, fill the text entry field
+        // with the current scene name, else clear it
+        String text = port.name;
+        _portalText.setText(text);
 
-	// select the text edit field
-	_portalText.setCaretPosition(0);
-	_portalText.moveCaretPosition(text.length());
+        // select the text edit field
+        _portalText.setCaretPosition(0);
+        _portalText.moveCaretPosition(text.length());
 
         // select the default entrance check box appropriately
         Portal entry = _scene.getDefaultEntrance();
         _entrance.setSelected(entry == null ||
                               entry.portalId == _port.portalId);
 
-	// request the keyboard focus so that the destination scene
-	// name can be typed immediately
-	_portalText.requestFocusInWindow();
+        // request the keyboard focus so that the destination scene
+        // name can be typed immediately
+        _portalText.requestFocusInWindow();
     }
 
     /**
@@ -124,17 +124,17 @@ public class PortalDialog extends JInternalFrame
      */
     public void actionPerformed (ActionEvent e)
     {
-	String cmd = e.getActionCommand();
+        String cmd = e.getActionCommand();
 
         if (cmd.equals("entrance")) {
             _entrance.setSelected(_entrance.isSelected());
 
-	} else if (cmd.equals("ok")) {
-	    handleSubmit();
+        } else if (cmd.equals("ok")) {
+            handleSubmit();
 
-	} else {
-	    Log.warning("Unknown action command [cmd=" + cmd + "].");
-	}
+        } else {
+            Log.warning("Unknown action command [cmd=" + cmd + "].");
+        }
     }
 
     /**
@@ -142,7 +142,7 @@ public class PortalDialog extends JInternalFrame
      */
     protected void handleSubmit ()
     {
-	// get the destination scene name
+        // get the destination scene name
         _port.name = _portalText.getText();
 
         // update the scene's default entrance
@@ -160,10 +160,10 @@ public class PortalDialog extends JInternalFrame
     // documentation inherited
     protected void processKeyEvent (KeyEvent e)
     {
-	switch (e.getKeyCode()) {
-	case KeyEvent.VK_ENTER: handleSubmit(); break;
-	case KeyEvent.VK_ESCAPE: setVisible(false); break;
-	}
+        switch (e.getKeyCode()) {
+        case KeyEvent.VK_ENTER: handleSubmit(); break;
+        case KeyEvent.VK_ESCAPE: setVisible(false); break;
+        }
     }
 
     /** The scene. */

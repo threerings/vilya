@@ -58,7 +58,7 @@ public class LogonPanel extends JPanel
         _ctx = ctx;
         _msgs = _ctx.getMessageManager().getBundle("micasa.logon");
 
-	setLayout(new VGroupLayout());
+        setLayout(new VGroupLayout());
 
         // stick the logon components into a panel that will stretch them
         // to a sensible width
@@ -136,16 +136,16 @@ public class LogonPanel extends JPanel
 
     public void actionPerformed (ActionEvent e)
     {
-	String cmd = e.getActionCommand();
-	if (cmd.equals("skipToPassword")) {
+        String cmd = e.getActionCommand();
+        if (cmd.equals("skipToPassword")) {
             _password.requestFocusInWindow();
 
         } else if (cmd.equals("logon")) {
             logon();
 
-	} else {
-	    System.out.println("Unknown action event: " + cmd);
-	}
+        } else {
+            System.out.println("Unknown action event: " + cmd);
+        }
     }
 
     // documentation inherited from interface

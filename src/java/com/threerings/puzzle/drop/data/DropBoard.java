@@ -160,14 +160,14 @@ public class DropBoard extends Board
      */
     public int getDropDistance (int col, int row)
     {
-	int dist = 0;
-	for (int yy = row + 1; yy < _bhei; yy++) {
-	    if (getPiece(col, yy) != PIECE_NONE) {
-		return dist;
-	    }
-	    dist++;
-	}
-	return dist;
+        int dist = 0;
+        for (int yy = row + 1; yy < _bhei; yy++) {
+            if (getPiece(col, yy) != PIECE_NONE) {
+                return dist;
+            }
+            dist++;
+        }
+        return dist;
     }
 
     /**
@@ -591,9 +591,9 @@ public class DropBoard extends Board
             padwid *= 2;
         }
 
-	for (int y = 0; y < _bhei; y++) {
-	    StringBuilder buf = new StringBuilder();
-	    for (int x = 0; x < _bwid; x++) {
+        for (int y = 0; y < _bhei; y++) {
+            StringBuilder buf = new StringBuilder();
+            for (int x = 0; x < _bwid; x++) {
                 int piece = getPiece(x, y);
                 String str = formatPiece(piece);
                 if (dother != null) {
@@ -603,9 +603,9 @@ public class DropBoard extends Board
                     }
                 }
                 buf.append(StringUtils.rightPad(str, padwid));
-	    }
-	    System.err.println(buf.toString());
-	}
+            }
+            System.err.println(buf.toString());
+        }
     }
 
     /** Returns a string representation of this instance. */

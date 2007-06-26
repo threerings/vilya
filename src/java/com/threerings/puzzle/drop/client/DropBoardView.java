@@ -410,7 +410,7 @@ public abstract class DropBoardView extends PuzzleBoardView
      */
     public DropSprite createPieces (int col, int row, int[] pieces, int dist)
     {
-	return new DropSprite(this, col, row, pieces, dist);
+        return new DropSprite(this, col, row, pieces, dist);
     }
 
     /**
@@ -539,9 +539,9 @@ public abstract class DropBoardView extends PuzzleBoardView
     // documentation inherited
     public Dimension getPreferredSize ()
     {
-	int wid = _bwid * _pwid;
+        int wid = _bwid * _pwid;
         int hei = _bhei * _phei;
-	return new Dimension(wid, hei);
+        return new Dimension(wid, hei);
     }
 
     /**

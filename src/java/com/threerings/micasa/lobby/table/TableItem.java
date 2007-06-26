@@ -73,7 +73,7 @@ public class TableItem
         _self = ((BodyObject)ctx.getClient().getClientObject()).getVisibleName();
 
         // now create our user interface
-    	setBorder(BorderFactory.createLineBorder(Color.black));
+            setBorder(BorderFactory.createLineBorder(Color.black));
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 

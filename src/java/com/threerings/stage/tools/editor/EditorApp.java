@@ -104,12 +104,12 @@ public class EditorApp implements Runnable
         JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 
         // create and size the main application frame
-	_frame = createEditorFrame();
+        _frame = createEditorFrame();
 
         // create our frame manager
         _framemgr = FrameManager.newInstance(_frame);
 
-	// create our myriad managers, repositories, etc.
+        // create our myriad managers, repositories, etc.
         _rmgr = new ResourceManager("rsrc");
 
         // build up a simple ui for displaying progress
@@ -156,7 +156,7 @@ public class EditorApp implements Runnable
     {
         _msgmgr = new MessageManager("rsrc.i18n");
         _imgr = new ImageManager(_rmgr, _frame);
-	_tilemgr = new EditorTileManager(_rmgr, _imgr);
+        _tilemgr = new EditorTileManager(_rmgr, _imgr);
 
         try {
             _tsrepo = new BundledTileSetRepository(_rmgr, _imgr, "tilesets");
@@ -175,7 +175,7 @@ public class EditorApp implements Runnable
 
         _ctx = new EditorContextImpl();
 
-    	// initialize the frame with the now-prepared context
+            // initialize the frame with the now-prepared context
         _frame.init(_ctx, target);
 
         // wire up our runtime adjustment editor
@@ -286,9 +286,9 @@ public class EditorApp implements Runnable
      */
     protected class EditorContextImpl implements EditorContext
     {
-	public MisoTileManager getTileManager () {
-	    return _tilemgr;
-	}
+        public MisoTileManager getTileManager () {
+            return _tilemgr;
+        }
 
         public FrameManager getFrameManager () {
             return _framemgr;
@@ -334,13 +334,13 @@ public class EditorApp implements Runnable
             }
         }
 
-	public TileSetRepository getTileSetRepository () {
-	    return _tsrepo;
-	}
+        public TileSetRepository getTileSetRepository () {
+            return _tsrepo;
+        }
 
-	public ColorPository getColorPository () {
-	    return _colpos;
-	}
+        public ColorPository getColorPository () {
+            return _colpos;
+        }
 
         public void enumerateSceneTypes (List types) {
             EditorApp.this.enumerateSceneTypes(types);

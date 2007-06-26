@@ -62,7 +62,7 @@ public class ViewerFrame extends ManagedJFrame
      */
     public ViewerFrame (GraphicsConfiguration gc)
     {
-	super(gc);
+        super(gc);
 
         // set up the frame options
         setTitle("Scene Viewer");
@@ -104,7 +104,7 @@ public class ViewerFrame extends ManagedJFrame
     public void init (StageContext ctx, CharacterManager charmgr)
     {
         _panel = new ViewerScenePanel(ctx, charmgr);
-	getContentPane().add(_panel, BorderLayout.CENTER);
+        getContentPane().add(_panel, BorderLayout.CENTER);
     }
 
     /**

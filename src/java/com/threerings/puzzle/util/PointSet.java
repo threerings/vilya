@@ -41,9 +41,9 @@ public class PointSet
      */
     public PointSet (int rangeX, int rangeY)
     {
-	_rangeX = rangeX;
-	_rangeY = rangeY;
-	_points = new boolean[rangeX][rangeY];
+        _rangeX = rangeX;
+        _rangeY = rangeY;
+        _points = new boolean[rangeX][rangeY];
     }
 
     /**
@@ -57,12 +57,12 @@ public class PointSet
      */
     public boolean add (int x, int y)
     {
-	boolean present = _points[x][y];
-	_points[x][y] = true;
-	if (!present) {
-	    _count++;
-	}
-	return present;
+        boolean present = _points[x][y];
+        _points[x][y] = true;
+        if (!present) {
+            _count++;
+        }
+        return present;
     }
 
     /**
@@ -72,11 +72,11 @@ public class PointSet
      */
     public void addAll (PointSet set)
     {
-	Iterator iter = set.iterator();
-	Point pt;
-	while ((pt = (Point)iter.next()) != null) {
-	    add(pt.x, pt.y);
-	}
+        Iterator iter = set.iterator();
+        Point pt;
+        while ((pt = (Point)iter.next()) != null) {
+            add(pt.x, pt.y);
+        }
     }
 
     /**
@@ -84,17 +84,17 @@ public class PointSet
      */
     public void clear ()
     {
-	if (_count == 0) {
-	    // no need to clear anything
-	    return;
-	}
+        if (_count == 0) {
+            // no need to clear anything
+            return;
+        }
 
-	for (int xx = 0; xx < _rangeX; xx++) {
-	    for (int yy = 0; yy < _rangeY; yy++) {
-		_points[xx][yy] = false;
-	    }
-	}
-	_count = 0;
+        for (int xx = 0; xx < _rangeX; xx++) {
+            for (int yy = 0; yy < _rangeY; yy++) {
+                _points[xx][yy] = false;
+            }
+        }
+        _count = 0;
     }
 
     /**
@@ -107,7 +107,7 @@ public class PointSet
      */
     public boolean contains (int x, int y)
     {
-	return (_points[x][y]);
+        return (_points[x][y]);
     }
 
     /**
@@ -117,7 +117,7 @@ public class PointSet
      */
     public boolean isEmpty ()
     {
-	return (_count == 0);
+        return (_count == 0);
     }
 
     /**
@@ -131,7 +131,7 @@ public class PointSet
      */
     public Iterator iterator ()
     {
-	return new PointIterator();
+        return new PointIterator();
     }
 
     /**
@@ -145,12 +145,12 @@ public class PointSet
      */
     public boolean remove (int x, int y)
     {
-	boolean present = _points[x][y];
-	_points[x][y] = false;
-	if (present) {
-	    _count--;
-	}
-	return present;
+        boolean present = _points[x][y];
+        _points[x][y] = false;
+        if (present) {
+            _count--;
+        }
+        return present;
     }
 
     /**
@@ -160,7 +160,7 @@ public class PointSet
      */
     public int size ()
     {
-	return _count;
+        return _count;
     }
 
     /**
@@ -168,70 +168,70 @@ public class PointSet
      */
     public String toString ()
     {
-	StringBuilder buf = new StringBuilder();
-	buf.append("[");
-	Iterator iter = iterator();
-	Point val;
-	while ((val = (Point)iter.next()) != null) {
-	    buf.append("(").append(val.x);
-	    buf.append(",").append(val.y);
-	    buf.append(")");
+        StringBuilder buf = new StringBuilder();
+        buf.append("[");
+        Iterator iter = iterator();
+        Point val;
+        while ((val = (Point)iter.next()) != null) {
+            buf.append("(").append(val.x);
+            buf.append(",").append(val.y);
+            buf.append(")");
 
-	    if (iter.hasNext()) {
-		buf.append(", ");
-	    }
-	}
-	return buf.append("]").toString();
+            if (iter.hasNext()) {
+                buf.append(", ");
+            }
+        }
+        return buf.append("]").toString();
     }
 
     protected class PointIterator implements Iterator
     {
-	public boolean hasNext ()
-	{
-	    return (_curCount < _count);
-	}
+        public boolean hasNext ()
+        {
+            return (_curCount < _count);
+        }
 
-	public Object next ()
-	{
-	    if (_curCount == _count) {
-		return null;
-	    }
+        public Object next ()
+        {
+            if (_curCount == _count) {
+                return null;
+            }
 
-	    while (!_points[_curX][_curY]) {
-		advance();
-	    }
+            while (!_points[_curX][_curY]) {
+                advance();
+            }
 
-	    _curCount++;
-	    _point.setLocation(_curX, _curY);
+            _curCount++;
+            _point.setLocation(_curX, _curY);
 
-	    if (_curCount < _count) {
-		advance();
-	    }
+            if (_curCount < _count) {
+                advance();
+            }
 
-	    return _point;
-	}
+            return _point;
+        }
 
-	public void remove ()
-	{
-	    throw new UnsupportedOperationException();
-	}
+        public void remove ()
+        {
+            throw new UnsupportedOperationException();
+        }
 
-	protected void advance ()
-	{
-	    if ((++_curX) >= _rangeX) {
-		_curX = 0;
-		_curY++;
-	    }
+        protected void advance ()
+        {
+            if ((++_curX) >= _rangeX) {
+                _curX = 0;
+                _curY++;
+            }
 
-	    if (_curY >= _rangeY) {
-		Log.warning("Advanced past point range.");
-		_curY = 0;
-	    }
-	}
+            if (_curY >= _rangeY) {
+                Log.warning("Advanced past point range.");
+                _curY = 0;
+            }
+        }
 
-	protected int _curCount = 0;
-	protected int _curX = 0, _curY = 0;
-	protected Point _point = new Point();
+        protected int _curCount = 0;
+        protected int _curX = 0, _curY = 0;
+        protected Point _point = new Point();
     }
 
     /** The dimensions of the point array. */

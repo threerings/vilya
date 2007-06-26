@@ -129,7 +129,7 @@ public abstract class DropManagerDelegate extends PuzzleManagerDelegate
      */
     protected boolean dropPieces (DropBoard board)
     {
-	return (_dropper.dropPieces(board, null) > 0);
+        return (_dropper.dropPieces(board, null) > 0);
     }
 
     /**

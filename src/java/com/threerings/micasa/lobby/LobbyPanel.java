@@ -48,7 +48,7 @@ public class LobbyPanel
     public LobbyPanel (MiCasaContext ctx, LobbyConfig config)
     {
         // we want a five pixel border around everything
-    	setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         // create our primary layout which divides the display in two
         // horizontally

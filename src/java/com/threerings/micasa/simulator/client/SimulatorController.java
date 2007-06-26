@@ -65,7 +65,7 @@ public class SimulatorController extends Controller
     // documentation inherited
     public boolean handleAction (ActionEvent action)
     {
-	String cmd = action.getActionCommand();
+        String cmd = action.getActionCommand();
 
         if (cmd.equals(LOGOFF)) {
             // request that we logoff

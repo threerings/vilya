@@ -62,22 +62,22 @@ public class ObjectEditorDialog extends JInternalFrame
         _ctx = ctx;
         _panel = panel;
 
-	// get a handle on the top-level panel
-	JPanel top = (JPanel)getContentPane();
+        // get a handle on the top-level panel
+        JPanel top = (JPanel)getContentPane();
 
-	// set up a layout manager for the panel
-	VGroupLayout gl = new VGroupLayout(
+        // set up a layout manager for the panel
+        VGroupLayout gl = new VGroupLayout(
             VGroupLayout.STRETCH, VGroupLayout.STRETCH, 5, VGroupLayout.CENTER);
-	top.setLayout(gl);
-	top.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        top.setLayout(gl);
+        top.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         // object action editor elements
-	JPanel sub = new JPanel(new HGroupLayout(HGroupLayout.STRETCH));
-	sub.add(new JLabel("Object action command:"), HGroupLayout.FIXED);
-	sub.add(_action = new JTextField());
+        JPanel sub = new JPanel(new HGroupLayout(HGroupLayout.STRETCH));
+        sub.add(new JLabel("Object action command:"), HGroupLayout.FIXED);
+        sub.add(_action = new JTextField());
         _action.addActionListener(this);
         _action.setActionCommand("ok");
-	top.add(sub);
+        top.add(sub);
 
         // create the priority slider
         sub = new JPanel(new HGroupLayout(HGroupLayout.STRETCH));
@@ -95,13 +95,13 @@ public class ObjectEditorDialog extends JInternalFrame
         zations.add(_secondary = new JComboBox(NO_CHOICES));
         top.add(zations);
 
-	// create our OK/Cancel buttons
-	sub = HGroupLayout.makeButtonBox(HGroupLayout.CENTER);
-	EditorDialogUtil.addButton(this, sub, "OK", "ok");
-	EditorDialogUtil.addButton(this, sub, "Cancel", "cancel");
-	top.add(sub);
+        // create our OK/Cancel buttons
+        sub = HGroupLayout.makeButtonBox(HGroupLayout.CENTER);
+        EditorDialogUtil.addButton(this, sub, "OK", "ok");
+        EditorDialogUtil.addButton(this, sub, "Cancel", "cancel");
+        top.add(sub);
 
-	pack();
+        pack();
     }
 
     /**
@@ -112,7 +112,7 @@ public class ObjectEditorDialog extends JInternalFrame
      */
     public void prepare (SceneObject scobj)
     {
-	_scobj = scobj;
+        _scobj = scobj;
 
         // set our title to the name of the tileset and the tile index
         String title;
@@ -152,10 +152,10 @@ public class ObjectEditorDialog extends JInternalFrame
         configureZations(_secondary, szations,
                          _scobj.info.getSecondaryZation());
 
-	// select the text edit field and focus it
-	_action.setCaretPosition(0);
-	_action.moveCaretPosition(atext.length());
-	_action.requestFocusInWindow();
+        // select the text edit field and focus it
+        _action.setCaretPosition(0);
+        _action.moveCaretPosition(atext.length());
+        _action.requestFocusInWindow();
     }
 
     protected Object[] computeZations (String[] zations, int index)
@@ -198,7 +198,7 @@ public class ObjectEditorDialog extends JInternalFrame
     // documentation inherited from interface
     public void actionPerformed (ActionEvent e)
     {
-	String cmd = e.getActionCommand();
+        String cmd = e.getActionCommand();
 
         if (cmd.equals("ok")) {
             _scobj.info.action = _action.getText();

@@ -62,8 +62,8 @@ public class MiCasaFrame
     {
         // remove the old panel
         getContentPane().removeAll();
-	// add the new one
-	getContentPane().add(panel, BorderLayout.CENTER);
+        // add the new one
+        getContentPane().add(panel, BorderLayout.CENTER);
         // swing doesn't properly repaint after adding/removing children
         panel.revalidate();
         repaint();

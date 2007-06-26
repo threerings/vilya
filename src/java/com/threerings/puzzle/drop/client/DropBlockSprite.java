@@ -44,7 +44,7 @@ public class DropBlockSprite extends DropSprite
     public DropBlockSprite (
         DropBoardView view, int col, int row, int orient, int[] pieces)
     {
-	super(view, col, row, pieces, 0);
+        super(view, col, row, pieces, 0);
 
         _orient = orient;
     }
@@ -63,7 +63,7 @@ public class DropBlockSprite extends DropSprite
         DropBoardView view, int col, int row, int orient, int[] pieces,
         int renderOrder)
     {
-	super(view, col, row, pieces, 0, renderOrder);
+        super(view, col, row, pieces, 0, renderOrder);
 
         _orient = orient;
     }
@@ -73,7 +73,7 @@ public class DropBlockSprite extends DropSprite
     {
         super.init();
 
-	setOrientation(_orient);
+        setOrientation(_orient);
     }
 
     /**
@@ -151,18 +151,18 @@ public class DropBlockSprite extends DropSprite
      */
     public void setOrientation (int orient)
     {
-	super.setOrientation(orient);
+        super.setOrientation(orient);
 
-	int edx = 0, edy = 0;
-	if (orient == NORTH) {
-	    edy = -1;
-	} else if (orient == WEST) {
-	    edx = -1;
-	}
+        int edx = 0, edy = 0;
+        if (orient == NORTH) {
+            edy = -1;
+        } else if (orient == WEST) {
+            edx = -1;
+        }
 
         // update the sprite image offset
-	setRowOffset(edy);
-	setColumnOffset(edx);
+        setRowOffset(edy);
+        setColumnOffset(edx);
 
         // update the external piece position and drop block bounds
         updateDropInfo();
@@ -171,9 +171,9 @@ public class DropBlockSprite extends DropSprite
     // documentation inherited
     public void toString (StringBuilder buf)
     {
-	super.toString(buf);
-	buf.append(", erow=").append(_erow);
-	buf.append(", ecol=").append(_ecol);
+        super.toString(buf);
+        buf.append(", erow=").append(_erow);
+        buf.append(", ecol=").append(_ecol);
     }
 
     /**
@@ -231,11 +231,11 @@ public class DropBlockSprite extends DropSprite
      */
     protected int calculateExternalRow ()
     {
-	if (_orient == NORTH) {
-	    return (_row - 1);
-	} else if (_orient == SOUTH) {
-	    return (_row + 1);
-	} else {
+        if (_orient == NORTH) {
+            return (_row - 1);
+        } else if (_orient == SOUTH) {
+            return (_row + 1);
+        } else {
             return _row;
         }
     }
@@ -246,11 +246,11 @@ public class DropBlockSprite extends DropSprite
      */
     protected int calculateExternalColumn ()
     {
-	if (_orient == WEST) {
-	    return (_col - 1);
-	} else if (_orient == EAST) {
-	    return (_col + 1);
-	} else {
+        if (_orient == WEST) {
+            return (_col - 1);
+        } else if (_orient == EAST) {
+            return (_col + 1);
+        } else {
             return _col;
         }
     }

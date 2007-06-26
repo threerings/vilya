@@ -43,33 +43,33 @@ public class PieceDropper
      */
     public static class PieceDropInfo
     {
-	/** The starting row of the bottom piece being dropped. */
-	public int row;
+        /** The starting row of the bottom piece being dropped. */
+        public int row;
 
-	/** The column number. */
-	public int col;
+        /** The column number. */
+        public int col;
 
-	/** The distance to drop the pieces. */
-	public int dist;
+        /** The distance to drop the pieces. */
+        public int dist;
 
-	/** The pieces to be dropped. */
-	public int[] pieces;
+        /** The pieces to be dropped. */
+        public int[] pieces;
 
         /**
          * Constructs a piece drop info object.
          */
-	public PieceDropInfo (int col, int row, int dist)
-	{
-	    this.col = col;
-	    this.row = row;
-	    this.dist = dist;
-	}
+        public PieceDropInfo (int col, int row, int dist)
+        {
+            this.col = col;
+            this.row = row;
+            this.dist = dist;
+        }
 
         /** Returns a string representation of this instance. */
-	public String toString ()
-	{
+        public String toString ()
+        {
             return StringUtil.fieldsToString(this);
-	}
+        }
     }
 
     /**
@@ -100,11 +100,11 @@ public class PieceDropper
     public int dropPieces (DropBoard board, DropObserver drobs)
     {
         int dropped = 0, bhei = board.getHeight(), bwid = board.getWidth();
-	for (int yy = bhei - 1; yy >= 0; yy--) {
-	    for (int xx = 0; xx < bwid; xx++) {
+        for (int yy = bhei - 1; yy >= 0; yy--) {
+            for (int xx = 0; xx < bwid; xx++) {
                 dropped += dropPieces(board, xx, yy, drobs);
-	    }
-	}
+            }
+        }
 
         // if the board wants pieces to be dropped in to fill the gaps, do
         // that now
@@ -133,14 +133,14 @@ public class PieceDropper
     protected int dropPieces (
         DropBoard board, int xx, int yy, DropObserver drobs)
     {
-	// skip empty or fixed pieces
-	int piece = board.getPiece(xx, yy);
+        // skip empty or fixed pieces
+        int piece = board.getPiece(xx, yy);
         if (!_logic.isDroppablePiece(piece)) {
-	    return 0;
-	}
+            return 0;
+        }
 
         int dropped = 0;
-	if (_logic.isConstrainedPiece(piece)) {
+        if (_logic.isConstrainedPiece(piece)) {
             // find out where this constrained block starts and ends
             int start = _logic.getConstrainedEdge(board, xx, yy, LEFT);
             int end = _logic.getConstrainedEdge(board, xx, yy, RIGHT);
@@ -159,27 +159,27 @@ public class PieceDropper
             for (int xpos = start; xpos <= end; xpos++) {
                 dist = Math.min(dist, board.getDropDistance(xpos, yy));
             }
-	    if (dist == 0) {
-		return 0;
-	    }
+            if (dist == 0) {
+                return 0;
+            }
 
-	    // scoot along the bottom edge of the block, noting the drop
-	    // for each column
+            // scoot along the bottom edge of the block, noting the drop
+            // for each column
             for (int xpos = start; xpos <= end; xpos++) {
                 piece = board.getPiece(xpos, yy);
                 drop(board, piece, xpos, yy, yy + dist, drobs);
                 dropped++;
-	    }
+            }
 
-	} else {
-	    // get the distance to drop the pieces
-	    int dist = board.getDropDistance(xx, yy);
-	    if (dist == 0) {
-		return 0;
-	    }
+        } else {
+            // get the distance to drop the pieces
+            int dist = board.getDropDistance(xx, yy);
+            if (dist == 0) {
+                return 0;
+            }
             drop(board, piece, xx, yy, yy + dist, drobs);
             dropped++;
-	}
+        }
 
         return dropped;
     }

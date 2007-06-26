@@ -79,9 +79,9 @@ public class TableListView extends JPanel
         _tdtr.addSeatednessObserver(this);
 
         // set up a layout manager
-	HGroupLayout gl = new HGroupLayout(HGroupLayout.STRETCH);
-	gl.setOffAxisPolicy(HGroupLayout.STRETCH);
-	setLayout(gl);
+        HGroupLayout gl = new HGroupLayout(HGroupLayout.STRETCH);
+        gl.setOffAxisPolicy(HGroupLayout.STRETCH);
+        setLayout(gl);
 
         // we have two lists of tables, one of tables being matchmade...
         VGroupLayout pgl = new VGroupLayout(VGroupLayout.STRETCH);
@@ -93,7 +93,7 @@ public class TableListView extends JPanel
         mgl.setOffAxisPolicy(VGroupLayout.STRETCH);
         mgl.setJustification(VGroupLayout.TOP);
         _matchList = new JPanel(mgl);
-    	_matchList.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            _matchList.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         panel.add(new JScrollPane(_matchList));
 
         // create and initialize the configurator interface
@@ -139,7 +139,7 @@ public class TableListView extends JPanel
         panel.add(new JLabel("Games in progress"), VGroupLayout.FIXED);
 
         _playList = new JPanel(mgl);
-    	_playList.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            _playList.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         panel.add(new JScrollPane(_playList));
 
         add(panel);

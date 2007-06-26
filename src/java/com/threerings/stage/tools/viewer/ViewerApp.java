@@ -86,17 +86,17 @@ public class ViewerApp
         _rmgr = new ResourceManager("rsrc");
         _rmgr.initBundles(null, "config/resource/manager.properties", null);
         _imgr = new ImageManager(_rmgr, _frame);
-	_tilemgr = new MisoTileManager(_rmgr, _imgr);
+        _tilemgr = new MisoTileManager(_rmgr, _imgr);
         _tilemgr.setTileSetRepository(
             new BundledTileSetRepository(_rmgr, _imgr, "tilesets"));
         _colpos = ColorPository.loadColorPository(_rmgr);
         _crepo = new BundledComponentRepository(_rmgr, _imgr, "components");
         _mesgmgr = new MessageManager("rsrc.i18n");
 
-	_frame = new ViewerFrame(gc);
+        _frame = new ViewerFrame(gc);
         _framemgr = FrameManager.newInstance(_frame);
 
-	StageContext ctx = new ContextImpl();
+        StageContext ctx = new ContextImpl();
         _frame.init(ctx, new CharacterManager(_imgr, _crepo));
 
         // grab our argument
@@ -124,9 +124,9 @@ public class ViewerApp
             return _framemgr;
         }
 
-	public MisoTileManager getTileManager () {
-	    return _tilemgr;
-	}
+        public MisoTileManager getTileManager () {
+            return _tilemgr;
+        }
 
         // documentation inherited from interface
         public ResourceManager getResourceManager () {

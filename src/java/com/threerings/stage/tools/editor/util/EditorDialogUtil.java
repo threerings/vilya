@@ -45,12 +45,12 @@ public class EditorDialogUtil
      * @param cmd the action command.
      */
     public static void addButton (ActionListener l, Container container,
-				  String name, String cmd)
+                                  String name, String cmd)
     {
-	JButton button = new JButton(name);
-	button.addActionListener(l);
-	button.setActionCommand(cmd);
-	container.add(button);
+        JButton button = new JButton(name);
+        button.addActionListener(l);
+        button.setActionCommand(cmd);
+        container.add(button);
     }
 
     /**
@@ -63,10 +63,10 @@ public class EditorDialogUtil
      */
     public static JComboBox getOrientationComboBox (ActionListener l)
     {
-	JComboBox box = new JComboBox(DirectionUtil.getDirectionNames());
-	box.addActionListener(l);
-	box.setActionCommand("orient");
-	return box;
+        JComboBox box = new JComboBox(DirectionUtil.getDirectionNames());
+        box.addActionListener(l);
+        box.setActionCommand("orient");
+        return box;
     }
 
     /**
@@ -90,8 +90,8 @@ public class EditorDialogUtil
     {
         center(parent, dialog);
         parent.getLayeredPane().add(dialog, JLayeredPane.POPUP_LAYER);
-	dialog.setVisible(true);
-    }	
+        dialog.setVisible(true);
+    }        
 
     /**
      * Removes the supplied dialog from its parent container, but does not

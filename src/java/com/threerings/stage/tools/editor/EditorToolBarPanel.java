@@ -36,21 +36,21 @@ public class EditorToolBarPanel extends JPanel implements ActionListener
 {
     public EditorToolBarPanel (TileManager tilemgr, EditorModel model)
     {
-	_model = model;
+        _model = model;
 
-	// use of flowlayout positions the toolbar and floats properly
-	setLayout(new FlowLayout(FlowLayout.LEFT));
+        // use of flowlayout positions the toolbar and floats properly
+        setLayout(new FlowLayout(FlowLayout.LEFT));
 
         // get our toolbar icons
         UniformTileSet tbset = tilemgr.loadTileSet(ICONS_PATH, 40, 40);
 
-	// create the toolbar
-	JToolBar toolbar = new JToolBar();
+        // create the toolbar
+        JToolBar toolbar = new JToolBar();
 
-	// add all of the toolbar buttons
-	_buttons = new ArrayList();
-	for (int ii = 0; ii < EditorModel.NUM_ACTIONS; ii++) {
-	    // get the button icon images
+        // add all of the toolbar buttons
+        _buttons = new ArrayList();
+        for (int ii = 0; ii < EditorModel.NUM_ACTIONS; ii++) {
+            // get the button icon images
             Tile tile = tbset.getTile(ii);
             if (tile != null) {
                 String cmd = EditorModel.CMD_ACTIONS[ii];
@@ -66,55 +66,55 @@ public class EditorToolBarPanel extends JPanel implements ActionListener
                 Log.warning("Unable to load toolbar icon " +
                             "[index=" + ii + "].");
             }
-	}
+        }
 
-	// default to the first button
+        // default to the first button
         setSelectedButton((JButton)_buttons.get(0));
 
-	// add the toolbar
-	add(toolbar);
+        // add the toolbar
+        add(toolbar);
     }
 
     protected JButton addButton (JToolBar toolbar, String cmd, String tip,
-				 TileIcon icon)
+                                 TileIcon icon)
     {
-	// create the button and configure accordingly
-	JButton button = new JButton(new DimmedIcon(icon));
+        // create the button and configure accordingly
+        JButton button = new JButton(new DimmedIcon(icon));
         button.setSelectedIcon(icon);
-	button.addActionListener(this);
-	button.setActionCommand("tbar_" + cmd);
-	button.setToolTipText(tip);
+        button.addActionListener(this);
+        button.setActionCommand("tbar_" + cmd);
+        button.setToolTipText(tip);
 
-	// add the button to the toolbar
-	toolbar.add(button);
+        // add the button to the toolbar
+        toolbar.add(button);
 
-	return button;
+        return button;
     }
 
     protected void setSelectedButton (JButton button)
     {
-	for (int ii = 0; ii < _buttons.size(); ii++) {
-	    JButton tb = (JButton)_buttons.get(ii);
-	    tb.setSelected(tb == button);
-	}
+        for (int ii = 0; ii < _buttons.size(); ii++) {
+            JButton tb = (JButton)_buttons.get(ii);
+            tb.setSelected(tb == button);
+        }
     }
 
     public void actionPerformed (ActionEvent e)
     {
-	String cmd = e.getActionCommand();
+        String cmd = e.getActionCommand();
 
-	if (cmd.startsWith("tbar")) {
+        if (cmd.startsWith("tbar")) {
 
-	    // select the chosen mode in the toolbar
-	    setSelectedButton((JButton)e.getSource());
+            // select the chosen mode in the toolbar
+            setSelectedButton((JButton)e.getSource());
 
-	    // update the active mode in the model, stripping the
-	    // "tbar_" prefix from the command string
-	    _model.setActionMode(cmd.substring(5));
+            // update the active mode in the model, stripping the
+            // "tbar_" prefix from the command string
+            _model.setActionMode(cmd.substring(5));
 
-	} else {
-	    Log.warning("Unknown action command [cmd=" + cmd + "].");
-	}
+        } else {
+            Log.warning("Unknown action command [cmd=" + cmd + "].");
+        }
     }
 
     /** The buttons in the tool bar. */

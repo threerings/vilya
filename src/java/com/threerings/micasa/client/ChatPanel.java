@@ -86,8 +86,8 @@ public class ChatPanel extends JPanel
         _ctx.getOccupantDirector().addOccupantObserver(this);
 
         GroupLayout gl = new VGroupLayout(GroupLayout.STRETCH);
-	gl.setOffAxisPolicy(GroupLayout.STRETCH);
-	setLayout(gl);
+        gl.setOffAxisPolicy(GroupLayout.STRETCH);
+        setLayout(gl);
 
         // create our scrolling chat text display
         _text = new JTextPane();
@@ -172,13 +172,13 @@ public class ChatPanel extends JPanel
     // documentation inherited
     public void actionPerformed (ActionEvent e)
     {
-	String cmd = e.getActionCommand();
-	if (cmd.equals("send")) {
+        String cmd = e.getActionCommand();
+        if (cmd.equals("send")) {
             sendText();
 
-	} else {
-	    System.out.println("Unknown action event: " + cmd);
-	}
+        } else {
+            System.out.println("Unknown action event: " + cmd);
+        }
     }
 
     // documentation inherited

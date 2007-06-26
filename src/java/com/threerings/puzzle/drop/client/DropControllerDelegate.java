@@ -274,9 +274,9 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
         } else if (cmd.equals(END_DROP_BLOCK)) {
             handleDropBlock(false);
 
-	} else {
+        } else {
             return super.handleAction(action);
- 	}
+         }
 
         return true;
     }
@@ -322,7 +322,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
             if (checkBlockLanded(source, false, false)) {
                 startBounceTimer(source);
             }
-	}
+        }
 
         return handled;
     }
@@ -355,7 +355,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
             int fcol = col + (pos.x - bb.x);
             // Log.info("Valid move [row=" + frow + ", col=" + col + "].");
             _blocksprite.setBoardLocation(frow, fcol);
-	}
+        }
     }
 
     /**
@@ -386,8 +386,8 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
 //                      ", col=" + info[1] + ", row=" + info[2] +
 //                      ", blocksprite=" + _blocksprite + "].");
 
-	    // update the piece image
-	    _dview.rotateDropBlock(_blocksprite, info[0]);
+            // update the piece image
+            _dview.rotateDropBlock(_blocksprite, info[0]);
 
             // place the block in its newly rotated location
             _blocksprite.setBoardLocation(info[2], info[1]);

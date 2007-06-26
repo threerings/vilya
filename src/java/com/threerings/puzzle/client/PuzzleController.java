@@ -656,9 +656,9 @@ public abstract class PuzzleController extends GameController
         if (cmd.equals(TOGGLE_CHATTING)) {
             setChatting(!isChatting());
 
-	} else {
+        } else {
             return super.handleAction(action);
- 	}
+         }
 
         return true;
     }

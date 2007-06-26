@@ -61,7 +61,7 @@ public class ViewerScenePanel extends StageScenePanel
      */
     public ViewerScenePanel (StageContext ctx, CharacterManager charmgr)
     {
-	super(ctx, new Controller() {
+        super(ctx, new Controller() {
         });
 
         _charmgr = charmgr;
@@ -76,7 +76,7 @@ public class ViewerScenePanel extends StageScenePanel
         _sprite = createSprite(_descUser);
         setFollowsPathable(_sprite, CENTER_ON_PATHABLE);
 
-	PerformanceMonitor.register(this, "paint", 1000);
+        PerformanceMonitor.register(this, "paint", 1000);
     }
 
     // documentation inherited
@@ -158,8 +158,8 @@ public class ViewerScenePanel extends StageScenePanel
     // documentation inherited
     public void paint (Graphics g)
     {
-	super.paint(g);
-	PerformanceMonitor.tick(this, "paint");
+        super.paint(g);
+        PerformanceMonitor.tick(this, "paint");
     }
 
     // documentation inherited
@@ -197,14 +197,14 @@ public class ViewerScenePanel extends StageScenePanel
     {
         // get the path from here to there
         LineSegmentPath path = (LineSegmentPath)getPath(s, x, y, false);
-	if (path == null) {
-	    s.cancelMove();
-	    return false;
-	}
+        if (path == null) {
+            s.cancelMove();
+            return false;
+        }
 
         // start the sprite moving along the path
-	path.setVelocity(100f/1000f);
-	s.move(path);
+        path.setVelocity(100f/1000f);
+        s.move(path);
         return true;
     }
 
