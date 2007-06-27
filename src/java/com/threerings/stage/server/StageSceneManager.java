@@ -215,7 +215,7 @@ public class StageSceneManager extends SpotSceneManager
         listener.requestProcessed();
     }
     
-    // documentation inherited
+    @Override // documentation inherited
     protected void gotSceneData ()
     {
         super.gotSceneData();
@@ -258,7 +258,7 @@ public class StageSceneManager extends SpotSceneManager
         computeFootprints();
     }
 
-    // documentation inherited
+    @Override // documentation inherited
     protected void didStartup ()
     {
         super.didStartup();
@@ -270,20 +270,20 @@ public class StageSceneManager extends SpotSceneManager
         _ssobj.setStageSceneService(service);
     }
 
-    // documentation inherited
+    @Override // documentation inherited
     protected void didShutdown ()
     {
         super.didShutdown();
         StageServer.invmgr.clearDispatcher(_ssobj.stageSceneService);
     }
 
-    // documentation inherited
+    @Override // documentation inherited
     protected PlaceObject createPlaceObject ()
     {
         return new StageSceneObject();
     }
 
-    // documentation inherited
+    @Override // documentation inherited
     protected void bodyLeft (int bodyOid)
     {
         super.bodyLeft(bodyOid);
@@ -292,7 +292,7 @@ public class StageSceneManager extends SpotSceneManager
         _loners.remove(bodyOid);
     }
 
-    // documentation inherited
+    @Override // documentation inherited
     protected void updateLocation (BodyObject source, Location loc)
     {
         super.updateLocation(source, loc);
@@ -401,9 +401,8 @@ public class StageSceneManager extends SpotSceneManager
         return false;
     }
 
-    // documentation inherited
-    protected SceneLocation computeEnteringLocation (
-        BodyObject body, Portal entry)
+    @Override // documentation inherited
+    protected SceneLocation computeEnteringLocation (BodyObject body, Portal from, Portal entry)
     {
         // sanity check
         if (entry == null) {
@@ -479,7 +478,7 @@ public class StageSceneManager extends SpotSceneManager
         return validateLocation(body, loc, false);
     }
 
-    // documentation inherited
+    @Override // documentation inherited
     protected boolean validateLocation (BodyObject source, Location loc)
     {
         // TODO: make sure the user isn't warping to hell and gone (and if
@@ -487,7 +486,7 @@ public class StageSceneManager extends SpotSceneManager
         return validateLocation(source, (StageLocation)loc, true);
     }
 
-    // documentation inherited
+    @Override // documentation inherited
     protected boolean canAddBody (ClusterRecord clrec, BodyObject body)
     {
         // make sure we have a setting for clusters of this size
@@ -662,7 +661,7 @@ public class StageSceneManager extends SpotSceneManager
         return false;
     }
 
-    // documentation inherited
+    @Override // documentation inherited
     protected void bodyAdded (ClusterRecord clrec, BodyObject body)
     {
         super.bodyAdded(clrec, body);
@@ -737,7 +736,7 @@ public class StageSceneManager extends SpotSceneManager
         }
     }
 
-    // documentation inherited
+    @Override // documentation inherited
     protected void bodyRemoved (ClusterRecord clrec, BodyObject body)
     {
         super.bodyRemoved(clrec, body);
@@ -774,7 +773,7 @@ public class StageSceneManager extends SpotSceneManager
         }
     }
 
-    // documentation inherited
+    @Override // documentation inherited
     protected void checkCanCluster (BodyObject initiator, BodyObject target)
         throws InvocationException
     {
