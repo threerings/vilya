@@ -515,21 +515,10 @@ public abstract class PuzzleManager extends GameManager
     /**
      * Called when the puzzle manager receives a progress update. It
      * checks to make sure that the progress update is valid and the
-     * puzzle is still in play and then applies the updates via {@link
-     * #applyProgressEvents}.
+     * puzzle is still in play and then applies the updates via {@link #applyProgressEvents}.
      */
-    public void updateProgressSync (
-        ClientObject caller, int roundId, int[] events, Board[] states)
+    public void updateProgressSync (ClientObject caller, int roundId, int[] events, Board[] states)
     {
-        // determine the caller's player index in the game
-        int pidx = IntListUtil.indexOf(_playerOids, caller.getOid());
-        if (pidx == -1) {
-            Log.warning("Received progress update for non-player?! " +
-                        "[game=" + _puzobj.which() + ", who=" + caller.who() +
-                        ", ploids=" + StringUtil.toString(_playerOids) + "].");
-            return;
-        }
-
         // bail if the progress update isn't for the current round
         if (roundId != _puzobj.roundId) {
             // only warn if this isn't a straggling update from the
@@ -547,10 +536,20 @@ public abstract class PuzzleManager extends GameManager
         if (!_puzobj.isInPlay()) {
             Log.debug("Ignoring straggling events " +
                       "[game=" + _puzobj.which() +
-                      ", user=" + getPlayerName(pidx) +
+                      ", who=" + caller.who() + 
                       ", events=" + StringUtil.toString(events) + "].");
             return;
         }
+
+        // determine the caller's player index in the game
+        int pidx = IntListUtil.indexOf(_playerOids, caller.getOid());
+        if (pidx == -1) {
+            Log.warning("Received progress update for non-player?! " +
+                        "[game=" + _puzobj.which() + ", who=" + caller.who() +
+                        ", ploids=" + StringUtil.toString(_playerOids) + "].");
+            //return;
+        }
+
 
 //         Log.info("Handling progress events [game=" + _puzobj.which() +
 //                  ", pidx=" + pidx + ", roundId=" + roundId +
