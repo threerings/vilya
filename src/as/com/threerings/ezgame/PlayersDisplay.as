@@ -29,16 +29,15 @@ import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
 /**
- * A sample component that displays the players of a game.
- * If the game has a turn holder, the current turn holder will be highlighted.
+ * A sample component that displays the players of a game.  If the game has a turn holder, the
+ * current turn holder will be highlighted.
  *
- * This class demonstrates that the 'Game' interface may be implemented
- * by any DisplayObject that want access to the GameObject, not just the
- * actual DisplayObject that is displaying the game. Here, all we are
- * interested in is the names of the players and the current turn holder.
+ * This class demonstrates that the 'Game' interface may be implemented by any DisplayObject that
+ * want access to the GameObject, not just the actual DisplayObject that is displaying the
+ * game. Here, all we are interested in is the names of the players and the current turn holder.
  *
- * You may use this, with any modifications you desire, in your game. Feel
- * free to copy/modify or extend this class.
+ * You may use this, with any modifications you desire, in your game. Feel free to copy/modify or
+ * extend this class.
  */
 public class PlayersDisplay extends Sprite
     implements StateChangedListener
@@ -112,8 +111,7 @@ public class PlayersDisplay extends Sprite
             _playerLabels.push(label);
         }
 
-        // make all the player labels the same width
-        // (looks nice when highlighted)
+        // make all the player labels the same width (looks nice when highlighted)
         for each (label in _playerLabels) {
             label.autoSize = TextFieldAutoSize.NONE;
             label.width = maxWidth - (label.x - border);
@@ -121,11 +119,7 @@ public class PlayersDisplay extends Sprite
 
         // y has a pad at the end, we want border instead
         y += border - pad;
-
-        // draw a blue rectangle around everything
-        graphics.clear();
-        graphics.lineStyle(1, 0x0000FF);
-        graphics.drawRect(0, 0, maxWidth + (border * 2), y);
+        drawBorder(maxWidth);
 
         displayCurrentTurn();
     }
@@ -164,6 +158,14 @@ public class PlayersDisplay extends Sprite
         return null;
     }
 
+    protected function drawBorder (var maxWidth :int) :void
+    {
+        // draw a blue rectangle around everything
+        graphics.clear();
+        graphics.lineStyle(1, 0x0000FF);
+        graphics.drawRect(0, 0, maxWidth + (border * 2), y);
+    }
+
     protected function getBackground (isTurn :Boolean) :uint
     {
         return isTurn ? 0xFF9999 : 0xFFFFFF;
@@ -180,12 +182,13 @@ public class PlayersDisplay extends Sprite
     }
 
     /**
-     * Re-set the background color for every player label, highlighting
-     * only the player who has the turn.
+     * Re-set the background color for every player label, highlighting only the player who has the
+     * turn.
      */
     protected function displayCurrentTurn () :void
     {
-        var idx :int = _gameCtrl.isInPlay() ? _gameCtrl.seating.getPlayerPosition(_gameCtrl.getTurnHolder()) : -1;
+        var idx :int = _gameCtrl.isInPlay() ?
+            _gameCtrl.seating.getPlayerPosition(_gameCtrl.getTurnHolder()) : -1;
         for (var ii :int = 0; ii < _playerLabels.length; ii++) {
             var label :TextField = (_playerLabels[ii] as TextField);
             label.backgroundColor = getBackground(ii == idx);
