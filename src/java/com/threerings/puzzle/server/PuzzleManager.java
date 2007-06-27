@@ -547,7 +547,7 @@ public abstract class PuzzleManager extends GameManager
             Log.warning("Received progress update for non-player?! " +
                         "[game=" + _puzobj.which() + ", who=" + caller.who() +
                         ", ploids=" + StringUtil.toString(_playerOids) + "].");
-            //return;
+            return;
         }
 
 
