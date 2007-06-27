@@ -158,12 +158,12 @@ public class PlayersDisplay extends Sprite
         return null;
     }
 
-    protected function drawBorder (var maxWidth :int) :void
+    protected function drawBorder (maxWidth :int) :void
     {
         // draw a blue rectangle around everything
         graphics.clear();
         graphics.lineStyle(1, 0x0000FF);
-        graphics.drawRect(0, 0, maxWidth + (border * 2), y);
+        graphics.drawRect(0, 0, maxWidth + (getBorderSpacing() * 2), y);
     }
 
     protected function getBackground (isTurn :Boolean) :uint
