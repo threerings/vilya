@@ -446,12 +446,14 @@ public class EZGameManager extends GameManager
     protected void validateUser (ClientObject caller)
         throws InvocationException
     {
+        BodyObject body = (BodyObject)caller;
+
         switch (getMatchType()) {
         case GameConfig.PARTY:
             return; // always validate.
 
         default:
-            if (getPresentPlayerIndex(caller.getOid()) == -1) {
+            if (getPlayerIndex(body.getVisibleName()) == -1) {
                 throw new InvocationException(InvocationCodes.ACCESS_DENIED);
             }
             return;
