@@ -140,8 +140,12 @@ public class GameControlBackend
         evt.ezProps = new Object();
         populateProperties(evt.ezProps);
 
+        // determine whether to automatically start the game in a backwards compatible way
+        var autoReady :Boolean =
+            ("autoReady_v1" in evt.userProps) ? evt.userProps["autoReady_v1"] : true;
+
         // ok, we're now hooked-up with the game code
-        _ctrl.userCodeIsConnected(evt.userProps["autoReady_v1"]);
+        _ctrl.userCodeIsConnected(autoReady);
     }
 
     protected function setUserCodeProperties (o :Object) :void
