@@ -21,18 +21,16 @@
 
 package com.threerings.ezgame.server;
 
-import com.samskivert.io.PersistenceException;
+import java.util.prefs.Preferences;
 
+import com.samskivert.io.PersistenceException;
 import com.samskivert.jdbc.ConnectionProvider;
 import com.samskivert.jdbc.RepositoryListenerUnit;
-
 import com.samskivert.util.Invoker;
 import com.samskivert.util.ResultListener;
 
 import com.threerings.presents.data.ClientObject;
-
 import com.threerings.crowd.server.CrowdServer;
-
 import com.threerings.ezgame.server.persist.GameCookieRepository;
 
 import static com.threerings.ezgame.server.Log.log;
@@ -47,14 +45,24 @@ public class GameCookieManager
      */
     public interface UserIdentifier
     {
-        /** Return the persistent user id for the specified player,
-         * or 0 if they're not a valid user, or a guest,
-         * or something like that (they'll have no cookies). */
+        /** Return the persistent user id for the specified player, or 0 if they're not a valid
+         * user, or a guest, or something like that (they'll have no cookies). */
         public int getUserId (ClientObject clientObj);
     }
 
     /**
-     * Called to set up game cookie services for the server.
+     * Sets up cookie manager that will store cookie information on the local filesystem using the
+     * Java preferences system. This should only be used during testing and not in a production
+     * system.
+     */
+    public static void init (UserIdentifier ider)
+    {
+        _singleton = new GameCookieManager(ider);
+    }
+
+    /**
+     * Sets up a cookie manager that will store cookie information in a database table accessed via
+     * the supplied connection provider.
      */
     public static void init (ConnectionProvider conprov, UserIdentifier ider)
         throws PersistenceException
@@ -71,55 +79,48 @@ public class GameCookieManager
     }
 
     /**
-     * Protected constructor.
-     */
-    protected GameCookieManager 
-        (ConnectionProvider conprov, UserIdentifier identifier)
-        throws PersistenceException
-    {
-        _repo = new GameCookieRepository(conprov);
-        _identifier = identifier;
-        if (_identifier == null) {
-            throw new IllegalArgumentException(
-                "UserIdentifier must be non-null");
-        }
-    }
-
-    /**
      * Get the specified user's cookie.
      */
-    public void getCookie (
-        final int gameId, ClientObject cliObj, ResultListener<byte[]> rl)
+    public void getCookie (final int gameId, ClientObject cliObj, ResultListener<byte[]> rl)
     {
         final int userId = _identifier.getUserId(cliObj);
         if (userId == 0) {
             rl.requestCompleted(null);
             return;
         }
-        CrowdServer.invoker.postUnit(
-            new RepositoryListenerUnit<byte[]>("getGameCookie", rl) {
-                public byte[] invokePersistResult ()
-                    throws PersistenceException
-                {
-                    return _repo.getCookie(gameId, userId);
-                }
-            });
+
+        // use our local prefs if our repository is not initialized
+        if (_repo == null) {
+            rl.requestCompleted(_prefs.getByteArray(gameId + ":" + userId, (byte[])null));
+            return;
+        }
+
+        CrowdServer.invoker.postUnit(new RepositoryListenerUnit<byte[]>("getGameCookie", rl) {
+            public byte[] invokePersistResult () throws PersistenceException {
+                return _repo.getCookie(gameId, userId);
+            }
+        });
     }
 
     /**
      * Set the specified user's cookie.
      */
-    public void setCookie (
-        final int gameId, ClientObject cliObj, final byte[] cookie)
+    public void setCookie (final int gameId, ClientObject cliObj, final byte[] cookie)
     {
         final int userId = _identifier.getUserId(cliObj);
         if (userId == 0) {
             // fail to save, silently
             return;
         }
+
+        // use our local prefs if our repository is not initialized
+        if (_repo == null) {
+            _prefs.putByteArray(gameId + ":" + userId, cookie);
+            return;
+        }
+
         CrowdServer.invoker.postUnit(new Invoker.Unit("setGameCookie") {
-            public boolean invoke ()
-            {
+            public boolean invoke () {
                 try {
                     _repo.setCookie(gameId, userId, cookie);
                 } catch (PersistenceException pe) {
@@ -130,13 +131,37 @@ public class GameCookieManager
         });
     }
 
-    /** Our repository. */
-    protected GameCookieRepository _repo;
+    /**
+     * Protected constructor.
+     */
+    protected GameCookieManager (UserIdentifier identifier)
+    {
+        _identifier = identifier;
+        if (_identifier == null) {
+            throw new IllegalArgumentException("UserIdentifier must be non-null");
+        }
+        _prefs = Preferences.userRoot().node("gameCookieManager");
+    }
+
+    /**
+     * Protected constructor.
+     */
+    protected GameCookieManager (ConnectionProvider conprov, UserIdentifier identifier)
+        throws PersistenceException
+    {
+        this(identifier);
+        _repo = new GameCookieRepository(conprov);
+    }
 
     /** The entity we ask to identify users. */
     protected UserIdentifier _identifier;
 
+    /** Our database repository, which is used in real operation. */
+    protected GameCookieRepository _repo;
+
+    /** Our local store, which is used when testing. */
+    protected Preferences _prefs;
+
     /** A reference to the single GameCookieManager instantiated. */
     protected static GameCookieManager _singleton;
-
 }
