@@ -29,7 +29,7 @@ import com.samskivert.jdbc.RepositoryListenerUnit;
 import com.samskivert.util.Invoker;
 import com.samskivert.util.ResultListener;
 
-import com.threerings.presents.data.ClientObject;
+import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.server.CrowdServer;
 import com.threerings.ezgame.server.persist.GameCookieRepository;
 
@@ -47,7 +47,7 @@ public class GameCookieManager
     {
         /** Return the persistent user id for the specified player, or 0 if they're not a valid
          * user, or a guest, or something like that (they'll have no cookies). */
-        public int getUserId (ClientObject clientObj);
+        public int getUserId (BodyObject bodyObj);
     }
 
     /**
@@ -81,9 +81,9 @@ public class GameCookieManager
     /**
      * Get the specified user's cookie.
      */
-    public void getCookie (final int gameId, ClientObject cliObj, ResultListener<byte[]> rl)
+    public void getCookie (final int gameId, BodyObject bobj, ResultListener<byte[]> rl)
     {
-        final int userId = _identifier.getUserId(cliObj);
+        final int userId = _identifier.getUserId(bobj);
         if (userId == 0) {
             rl.requestCompleted(null);
             return;
@@ -105,9 +105,9 @@ public class GameCookieManager
     /**
      * Set the specified user's cookie.
      */
-    public void setCookie (final int gameId, ClientObject cliObj, final byte[] cookie)
+    public void setCookie (final int gameId, BodyObject bobj, final byte[] cookie)
     {
-        final int userId = _identifier.getUserId(cliObj);
+        final int userId = _identifier.getUserId(bobj);
         if (userId == 0) {
             // fail to save, silently
             return;

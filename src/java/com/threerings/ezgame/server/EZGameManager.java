@@ -332,46 +332,46 @@ public class EZGameManager extends GameManager
     }
 
     // from EZGameProvider
-    public void getCookie (ClientObject caller, final int playerId,
+    public void getCookie (ClientObject caller, final int playerOid,
                            InvocationService.InvocationListener listener)
         throws InvocationException
     {
         GameCookieManager gcm = getCookieManager();
-        if (_gameObj.userCookies.containsKey(playerId)) {
+        if (_gameObj.userCookies.containsKey(playerOid)) {
             // already loaded: we do nothing
             return;
         }
 
-        if (_cookieLookups == null) {
-            _cookieLookups = new ArrayIntSet();
-        }
         // we only start looking up the cookie if nobody else already is
-        if (!_cookieLookups.contains(playerId)) {
-            BodyObject body = getOccupantByOid(playerId);
-            if (body == null) {
-                log.fine("getCookie() called with invalid occupant [occupantId=" + playerId + "].");
-                throw new InvocationException(INTERNAL_ERROR);
+        if (_cookieLookups.contains(playerOid)) {
+            return;
+        }
+
+        BodyObject body = getOccupantByOid(playerOid);
+        if (body == null) {
+            log.fine("getCookie() called with invalid occupant [occupantId=" + playerOid + "].");
+            throw new InvocationException(INTERNAL_ERROR);
+        }
+
+        // indicate that we're looking up a cookie
+        _cookieLookups.add(playerOid);
+
+        gcm.getCookie(_gameconfig.getGameId(), body, new ResultListener<byte[]>() {
+            public void requestCompleted (byte[] result) {
+                // note that we're done with this lookup
+                _cookieLookups.remove(playerOid);
+                // result may be null: that's ok, it means we've looked up the user's nonexistent
+                // cookie; also only set the cookie if the player is still in the room
+                if (_gameObj.occupants.contains(playerOid) && _gameObj.isActive()) {
+                    _gameObj.addToUserCookies(new UserCookie(playerOid, result));
+                }
             }
 
-            gcm.getCookie(_gameconfig.getGameId(), body, new ResultListener<byte[]>() {
-                public void requestCompleted (byte[] result) {
-                    // Result may be null: that's ok, it means we've looked up the user's
-                    // nonexistant cookie.  Only set the cookie if the playerIndex is still in the
-                    // lookup set, otherwise they left!
-                    if (_cookieLookups.remove(playerId) && _gameObj.isActive()) {
-                        _gameObj.addToUserCookies(new UserCookie(playerId, result));
-                    }
-                }
-
-                public void requestFailed (Exception cause) {
-                    log.warning("Unable to retrieve cookie [cause=" + cause + "].");
-                    requestCompleted(null);
-                }
-            });
-
-            // indicate that we're looking up a cookie
-            _cookieLookups.add(playerId);
-        }
+            public void requestFailed (Exception cause) {
+                log.warning("Unable to retrieve cookie [cause=" + cause + "].");
+                requestCompleted(null);
+            }
+        });
     }
 
     // from EZGameProvider
@@ -389,7 +389,7 @@ public class EZGameManager extends GameManager
             _gameObj.addToUserCookies(cookie);
         }
 
-        gcm.setCookie(_gameconfig.getGameId(), caller, value);
+        gcm.setCookie(_gameconfig.getGameId(), (BodyObject)caller, value);
     }
 
     /**
@@ -415,11 +415,10 @@ public class EZGameManager extends GameManager
      * Helper method to send a private message to the specified player oid (must already be
      * verified).
      */
-    protected void sendPrivateMessage (
-        int playerId, String msg, Object data)
+    protected void sendPrivateMessage (int playerOid, String msg, Object data)
         throws InvocationException
     {
-        BodyObject target = getPlayerByOid(playerId);
+        BodyObject target = getPlayerByOid(playerOid);
         if (target == null) {
             // TODO: this code has no corresponding translation
             throw new InvocationException("m.player_not_around");
@@ -566,6 +565,11 @@ public class EZGameManager extends GameManager
         if (bodyOid == _gameObj.controllerOid) {
             _gameObj.setControllerOid(getControllerOid());
         }
+
+        // nix any of this player's cookies
+        if (_gameObj.userCookies != null && _gameObj.userCookies.containsKey(bodyOid)) {
+            _gameObj.removeFromUserCookies(bodyOid);
+        }
     }
 
     @Override
@@ -583,21 +587,6 @@ public class EZGameManager extends GameManager
         stopTickers();
 
         super.gameDidEnd();
-    }
-
-    @Override
-    protected void playerGameDidEnd (int pidx)
-    {
-        super.playerGameDidEnd(pidx);
-
-        // kill any of their cookies
-        if (_gameObj.userCookies != null && _gameObj.userCookies.containsKey(pidx)) {
-            _gameObj.removeFromUserCookies(pidx);
-        }
-        // halt the loading of their cookie, if in progress
-        if (_cookieLookups != null) {
-            _cookieLookups.remove(pidx);
-        }
     }
 
     @Override
@@ -701,7 +690,7 @@ public class EZGameManager extends GameManager
     protected HashMap<String, Ticker> _tickers;
 
     /** Tracks which cookies are currently being retrieved from the db. */
-    protected ArrayIntSet _cookieLookups;
+    protected ArrayIntSet _cookieLookups = new ArrayIntSet();
 
 //    /** User tokens, lazy-initialized. */
 //    protected HashIntMap<HashSet<String>> _tokens;
