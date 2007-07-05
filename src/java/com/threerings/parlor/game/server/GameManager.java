@@ -68,6 +68,26 @@ public class GameManager extends PlaceManager
     implements ParlorCodes, GameCodes
 {
     /**
+     * An interface for identifying users. A larger system using the Parlor game services can
+     * enable user identification by passing a UserIdentifier to {@link #setUserIdentifier}.
+     */
+    public interface UserIdentifier
+    {
+        /** Returns the persistent user id for the specified player, or 0 if they're not a valid
+         * user, or a guest, or something like that (for whom we'll track no persistent data). */
+        public int getUserId (BodyObject bodyObj);
+    }
+
+    /**
+     * Configures a means by which the Parlor game services can map users to a persistent user id
+     * for things like per-game cookies and ratings.
+     */
+    public static void setUserIdentifier (UserIdentifier userIder)
+    {
+        _userIder = userIder;
+    }
+
+    /**
      * Returns the configuration object for the game being managed by this manager.
      */
     public GameConfig getGameConfig ()
@@ -308,6 +328,14 @@ public class GameManager extends PlaceManager
     public int getPlayerOid (int index)
     {
         return (_playerOids == null) ? -1 : _playerOids[index];
+    }
+
+    /**
+     * Returns the persistent user id for the supplied body.
+     */
+    public int getPlayerPersistentId (BodyObject bobj)
+    {
+        return (bobj == null) ? 0 : _userIder.getUserId(bobj);
     }
 
     /**
@@ -1278,6 +1306,13 @@ public class GameManager extends PlaceManager
 
     /** The interval for the game manager tick. */
     protected static Interval _tickInterval;
+
+    /** Used to map users to persistent integer identifiers. */
+    protected static UserIdentifier _userIder = new UserIdentifier() {
+        public int getUserId (BodyObject bodyObj) {
+            return 0; // by default no one has persistent info
+        }
+    };
 
     /** We give players 30 seconds to turn up in a game; after that, they're considered a no
      * show. */

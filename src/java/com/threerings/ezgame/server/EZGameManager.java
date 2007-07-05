@@ -336,8 +336,7 @@ public class EZGameManager extends GameManager
                            InvocationService.InvocationListener listener)
         throws InvocationException
     {
-        GameCookieManager gcm = getCookieManager();
-        if (_gameObj.userCookies.containsKey(playerOid)) {
+        if (_gameObj.userCookies != null && _gameObj.userCookies.containsKey(playerOid)) {
             // already loaded: we do nothing
             return;
         }
@@ -356,7 +355,8 @@ public class EZGameManager extends GameManager
         // indicate that we're looking up a cookie
         _cookieLookups.add(playerOid);
 
-        gcm.getCookie(_gameconfig.getGameId(), body, new ResultListener<byte[]>() {
+        int ppId = getPlayerPersistentId(body);
+        getCookieManager().getCookie(_gameconfig.getGameId(), ppId, new ResultListener<byte[]>() {
             public void requestCompleted (byte[] result) {
                 // note that we're done with this lookup
                 _cookieLookups.remove(playerOid);
@@ -381,34 +381,17 @@ public class EZGameManager extends GameManager
     {
         validateUser(caller);
 
-        GameCookieManager gcm = getCookieManager();
+        // persist this new cookie
+        getCookieManager().setCookie(
+            _gameconfig.getGameId(), getPlayerPersistentId((BodyObject)caller), value);
+
+        // and update the distributed object
         UserCookie cookie = new UserCookie(caller.getOid(), value);
         if (_gameObj.userCookies.containsKey(cookie.getKey())) {
             _gameObj.updateUserCookies(cookie);
         } else {
             _gameObj.addToUserCookies(cookie);
         }
-
-        gcm.setCookie(_gameconfig.getGameId(), (BodyObject)caller, value);
-    }
-
-    /**
-     * Get the cookie manager, and do a bit of other setup.
-     */
-    protected GameCookieManager getCookieManager ()
-        throws InvocationException
-    {
-        GameCookieManager gcm = GameCookieManager.getInstance();
-        if (gcm == null) {
-            log.warning("GameCookieManager not initialized.");
-            throw new InvocationException(INTERNAL_ERROR);
-        }
-
-        if (_gameObj.userCookies == null) {
-            // lazy-init this
-            _gameObj.setUserCookies(new DSet<UserCookie>());
-        }
-        return gcm;
     }
 
     /**
@@ -631,6 +614,26 @@ public class EZGameManager extends GameManager
     }
 
     /**
+     * Get the cookie manager, and do a bit of other setup.
+     */
+    protected GameCookieManager getCookieManager ()
+    {
+        if (_cookMgr == null) {
+            _cookMgr = createCookieManager();
+            _gameObj.setUserCookies(new DSet<UserCookie>());
+        }
+        return _cookMgr;
+    }
+
+    /**
+     * Creates the cookie manager we'll use to store user cookies.
+     */
+    protected GameCookieManager createCookieManager ()
+    {
+        return new GameCookieManager();
+    }
+
+    /**
      * A timer that fires message events to a game.
      */
     protected static class Ticker
@@ -692,11 +695,11 @@ public class EZGameManager extends GameManager
     /** Tracks which cookies are currently being retrieved from the db. */
     protected ArrayIntSet _cookieLookups = new ArrayIntSet();
 
-//    /** User tokens, lazy-initialized. */
-//    protected HashIntMap<HashSet<String>> _tokens;
-
     /** The array of winner oids, after the user has filled it in. */
     protected int[] _winnerIds;
+
+    /** Handles the storage of our user cookies; lazily initialized. */
+    protected GameCookieManager _cookMgr;
 
     /** The minimum delay a ticker can have. */
     protected static final int MIN_TICKER_DELAY = 50;

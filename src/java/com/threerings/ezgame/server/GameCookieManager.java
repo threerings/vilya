@@ -24,7 +24,6 @@ package com.threerings.ezgame.server;
 import java.util.prefs.Preferences;
 
 import com.samskivert.io.PersistenceException;
-import com.samskivert.jdbc.ConnectionProvider;
 import com.samskivert.jdbc.RepositoryListenerUnit;
 import com.samskivert.util.Invoker;
 import com.samskivert.util.ResultListener;
@@ -41,49 +40,28 @@ import static com.threerings.ezgame.server.Log.log;
 public class GameCookieManager
 {
     /**
-     * An interface for identifying users.
+     * Creates a game cookie manager that stores cookies in Java preferences on the local machine.
+     * This should only be used for developer testing.
      */
-    public interface UserIdentifier
+    public GameCookieManager ()
     {
-        /** Return the persistent user id for the specified player, or 0 if they're not a valid
-         * user, or a guest, or something like that (they'll have no cookies). */
-        public int getUserId (BodyObject bodyObj);
+        _prefs = Preferences.userRoot().node("gameCookieManager");
     }
 
     /**
-     * Sets up cookie manager that will store cookie information on the local filesystem using the
-     * Java preferences system. This should only be used during testing and not in a production
-     * system.
+     * Creates a game cookie manager that stores cookies in the supplied repository.
      */
-    public static void init (UserIdentifier ider)
-    {
-        _singleton = new GameCookieManager(ider);
-    }
-
-    /**
-     * Sets up a cookie manager that will store cookie information in a database table accessed via
-     * the supplied connection provider.
-     */
-    public static void init (ConnectionProvider conprov, UserIdentifier ider)
+    public GameCookieManager (GameCookieRepository repo)
         throws PersistenceException
     {
-        _singleton = new GameCookieManager(conprov, ider);
-    }
-
-    /**
-     * Get an instance of the GameCookieManager.
-     */
-    public static GameCookieManager getInstance ()
-    {
-        return _singleton;
+        _repo = repo;
     }
 
     /**
      * Get the specified user's cookie.
      */
-    public void getCookie (final int gameId, BodyObject bobj, ResultListener<byte[]> rl)
+    public void getCookie (final int gameId, final int userId, ResultListener<byte[]> rl)
     {
-        final int userId = _identifier.getUserId(bobj);
         if (userId == 0) {
             rl.requestCompleted(null);
             return;
@@ -105,9 +83,8 @@ public class GameCookieManager
     /**
      * Set the specified user's cookie.
      */
-    public void setCookie (final int gameId, BodyObject bobj, final byte[] cookie)
+    public void setCookie (final int gameId, final int userId, final byte[] cookie)
     {
-        final int userId = _identifier.getUserId(bobj);
         if (userId == 0) {
             // fail to save, silently
             return;
@@ -131,37 +108,9 @@ public class GameCookieManager
         });
     }
 
-    /**
-     * Protected constructor.
-     */
-    protected GameCookieManager (UserIdentifier identifier)
-    {
-        _identifier = identifier;
-        if (_identifier == null) {
-            throw new IllegalArgumentException("UserIdentifier must be non-null");
-        }
-        _prefs = Preferences.userRoot().node("gameCookieManager");
-    }
-
-    /**
-     * Protected constructor.
-     */
-    protected GameCookieManager (ConnectionProvider conprov, UserIdentifier identifier)
-        throws PersistenceException
-    {
-        this(identifier);
-        _repo = new GameCookieRepository(conprov);
-    }
-
-    /** The entity we ask to identify users. */
-    protected UserIdentifier _identifier;
-
     /** Our database repository, which is used in real operation. */
     protected GameCookieRepository _repo;
 
     /** Our local store, which is used when testing. */
     protected Preferences _prefs;
-
-    /** A reference to the single GameCookieManager instantiated. */
-    protected static GameCookieManager _singleton;
 }
