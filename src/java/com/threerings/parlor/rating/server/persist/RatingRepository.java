@@ -31,30 +31,30 @@ import com.samskivert.jdbc.depot.clause.Where;
 import com.samskivert.jdbc.depot.operator.Logic.*;
 import com.samskivert.jdbc.depot.operator.Conditionals.*;
 
-import com.threerings.util.Name;
-
 /**
  * Handles the persistent storage of per-user per-game ratings.
  */
-public abstract class RatingRepository extends DepotRepository
+public class RatingRepository extends DepotRepository
 {
     /**
-     * Users are indexed by integer. It is the responsibility of the subclasser to implement
-     * an injective mapping of {@link Name} instance to integer here.
+     * Initialize the {@link RatingRepository}.
      */
-    public abstract int mapNameToId (Name player);
+    public RatingRepository(ConnectionProvider conprov)
+    {
+        super(conprov);
+    }
 
     /**
      * Loads the rating for the given player for the given game and returns it as a
      * {@link RatingRecord} object, or null if the player has no previous rating for the game.
      */
-    public RatingRecord getRating (int gameId, Name player)
+    public RatingRecord getRating (int gameId, int playerId)
         throws PersistenceException
     {
         return load(
             RatingRecord.class,
             RatingRecord.GAME_ID, gameId,
-            RatingRecord.PLAYER_ID, mapNameToId(player));
+            RatingRecord.PLAYER_ID, playerId);
     }
 
     /**
@@ -62,44 +62,32 @@ public abstract class RatingRepository extends DepotRepository
      * them as a list of {@link RatingRecord} objects. The size of this list is no less than zero
      * and no greater than the number of given players.
      */
-    public List<RatingRecord> getRatings (int gameId, Name... players)
+    public List<RatingRecord> getRatings (int gameId, Integer... players)
         throws PersistenceException
     {
-        Comparable[] idArr = new Comparable[players.length];
-        for (int ii = 0; ii < idArr.length; ii ++) {
-            idArr[ii] = mapNameToId(players[ii]);
-        }
         return findAll(
             RatingRecord.class,
             new Where(new And(
                 new Equals(RatingRecord.GAME_ID, gameId),
-                new In(RatingRecord.PLAYER_ID, idArr)))); 
+                new In(RatingRecord.PLAYER_ID, players))));
     }
 
     /**
      * Fetch and return all the registered {@link RatingRecord} rows for the given player. 
      */
-    public List<RatingRecord> getRatings (Name player)
+    public List<RatingRecord> getRatings (int playerId)
         throws PersistenceException
     {
-        return findAll(RatingRecord.class, new Where(RatingRecord.PLAYER_ID, mapNameToId(player)));
+        return findAll(RatingRecord.class, new Where(RatingRecord.PLAYER_ID, playerId));
     }
 
     /**
      * Set the rating and experience for a given player and game. This method will either update
      * or create a row.
      */
-    public void setRating (int gameId, Name player, int rating, int experience)
+    public void setRating (int gameId, int playerId, int rating, int experience)
         throws PersistenceException
     {
-        store(new RatingRecord(gameId, mapNameToId(player), rating, experience));
-    }
-
-    /**
-     * Initialize the {@link RatingRepository}.
-     */
-    protected RatingRepository(ConnectionProvider conprov)
-    {
-        super(conprov);
+        store(new RatingRecord(gameId, playerId, rating, experience));
     }
 }

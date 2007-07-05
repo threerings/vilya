@@ -98,9 +98,9 @@ public abstract class RatingManagerDelegate
                 int gameId = _gmgr.getGameConfig().getGameId();
 
                 // enumerate our players
-                Name[] players = new Name[_gmgr.getPlayerCount()];
+                Integer[] players = new Integer[_gmgr.getPlayerCount()];
                 for (int ii = 0; ii < players.length; ii ++) {
-                    players[ii] = _gmgr.getPlayerName(ii);
+                    players[ii] = _gmgr.getPlayerPersistentId(_gmgr.getPlayer(ii));
                 }
                 
                 try {
@@ -116,7 +116,7 @@ public abstract class RatingManagerDelegate
                     // now build the array we keep around until the end of the game
                     _ratings = new Rating[_gmgr.getPlayerCount()];
                     for (int ii = 0; ii < _ratings.length; ii ++) {
-                        RatingRecord record = map.get(_repo.mapNameToId(_gmgr.getPlayerName(ii)));
+                        RatingRecord record = map.get(players[ii]);
                         // if the player had no previous record, initiate them at default values
                         _ratings[ii] = record != null ?
                             new Rating(record.rating, record.experience) : new Rating();
@@ -167,12 +167,19 @@ public abstract class RatingManagerDelegate
             _ratings[ii].experience ++;
             modified = true;
         }
-        
+
+        // bail if nothing changed
         if (!modified) {
             return;
         }
 
-        // finally persist the result if necessary
+        // else enumerate our players
+        final int[] players = new int[_gmgr.getPlayerCount()];
+        for (int ii = 0; ii < players.length; ii ++) {
+            players[ii] = _gmgr.getPlayerPersistentId(_gmgr.getPlayer(ii));
+        }
+
+        // and finally persist the result
         final int gameId = _gmgr.getGameConfig().getGameId();
         CrowdServer.invoker.postUnit(new Invoker.Unit() {
             public boolean invoke () {
@@ -180,9 +187,8 @@ public abstract class RatingManagerDelegate
                     for (int ii = 0; ii < _ratings.length; ii ++) {
                         // for each player, update or create the rating record
                         // TODO: reorganize things so this can be a single db request?
-                        _repo.setRating(
-                            gameId, _gmgr.getPlayerName(ii),
-                            _ratings[ii].rating, _ratings[ii].experience);
+                        _repo.setRating(gameId, players[ii], _ratings[ii].rating,
+                                        _ratings[ii].experience);
                     }
                     return true;
 
@@ -201,23 +207,6 @@ public abstract class RatingManagerDelegate
             }
         });
     }
-
-    /**
-     * Return the minimum time (in seconds) a game must've lasted for it to count towards rating.
-     */
-    protected abstract int minimumRatedDuration ();
-
-    /**
-     * Return a reference to the {@link RatingRepository} instance we should use to persist.
-     */
-    protected abstract RatingRepository getRatingRepository ();
-
-    /**
-     * Optionally store update ratings in memory e.g. in the user object.
-     * 
-     * This method is called on the dobj thread.
-     */
-    protected abstract void updateRatingInMemory (int gameId, Name playerName, Rating rating);
 
     /**
      * Computes a player's updated rating using a modified version of the FIDE/ELO system.
@@ -316,6 +305,24 @@ public abstract class RatingManagerDelegate
             this.experience = experience;
         }
     }
+
+    /**
+     * Return the minimum time (in seconds) a game must've lasted for it to count towards rating.
+     */
+    protected abstract int minimumRatedDuration ();
+
+    /**
+     * Return a reference to the {@link RatingRepository} instance we should use to persist.
+     */
+    protected abstract RatingRepository getRatingRepository ();
+
+    /**
+     * Optionally store update ratings in memory e.g. in the user object.
+     * 
+     * This method is called on the dobj thread.
+     */
+    protected abstract void updateRatingInMemory (int gameId, Name playerName, Rating rating);
+
 
     /** An appropriately casted reference to our GameManager. */
     protected GameManager _gmgr;
