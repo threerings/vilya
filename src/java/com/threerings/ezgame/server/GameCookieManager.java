@@ -52,7 +52,6 @@ public class GameCookieManager
      * Creates a game cookie manager that stores cookies in the supplied repository.
      */
     public GameCookieManager (GameCookieRepository repo)
-        throws PersistenceException
     {
         _repo = repo;
     }
