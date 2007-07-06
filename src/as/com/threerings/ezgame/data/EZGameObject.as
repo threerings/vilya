@@ -26,6 +26,7 @@ import flash.events.Event;
 import flash.utils.ByteArray;
 
 import com.threerings.util.Name;
+import com.threerings.util.ObjectMarshaller;
 
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
@@ -35,8 +36,6 @@ import com.threerings.presents.dobj.DSet;
 
 import com.threerings.parlor.game.data.GameObject;
 import com.threerings.parlor.turn.data.TurnGameObject;
-
-import com.threerings.ezgame.util.EZObjectMarshaller;
 
 public class EZGameObject extends GameObject
     implements TurnGameObject
@@ -142,7 +141,7 @@ public class EZGameObject extends GameObject
         var count :int = ins.readInt();
         while (count-- > 0) {
             var key :String = ins.readUTF();
-            var value :Object = EZObjectMarshaller.decode(ins.readObject());
+            var value :Object = ObjectMarshaller.decode(ins.readObject());
             _props[key] = value;
         }
     }

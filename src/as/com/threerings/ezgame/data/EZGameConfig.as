@@ -35,7 +35,6 @@ import com.threerings.parlor.game.client.GameConfigurator;
 import com.threerings.parlor.game.data.GameConfig;
 
 import com.threerings.ezgame.client.EZGameController;
-import com.threerings.ezgame.util.EZObjectMarshaller;
 
 /**
  * A game config for a simple multiplayer ez game.

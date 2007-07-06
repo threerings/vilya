@@ -28,12 +28,11 @@ import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 import com.threerings.io.Streamer;
 
+import com.threerings.util.ObjectMarshaller;
 import com.threerings.util.StringBuilder;
 
 import com.threerings.presents.dobj.DObject;
 import com.threerings.presents.dobj.NamedEvent;
-
-import com.threerings.ezgame.util.EZObjectMarshaller;
 
 /**
  * Represents a property change on the actionscript object we
@@ -86,7 +85,7 @@ public class PropertySetEvent extends NamedEvent
     {
         super.readObject(ins);
         _index = ins.readInt();
-        _data = EZObjectMarshaller.decode(ins.readObject());
+        _data = ObjectMarshaller.decode(ins.readObject());
     }
 
     // from interface Streamable

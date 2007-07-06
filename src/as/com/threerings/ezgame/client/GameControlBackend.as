@@ -33,10 +33,8 @@ import flash.events.MouseEvent;
 import flash.display.DisplayObject;
 import flash.display.InteractiveObject;
 
-import flash.utils.IExternalizable;
 import flash.utils.ByteArray;
 import flash.utils.Dictionary;
-import flash.utils.getQualifiedSuperclassName;
 
 import com.threerings.io.TypedArray;
 
@@ -46,6 +44,7 @@ import com.threerings.util.Integer;
 import com.threerings.util.Iterator;
 import com.threerings.util.MessageBundle;
 import com.threerings.util.Name;
+import com.threerings.util.ObjectMarshaller;
 import com.threerings.util.StringUtil;
 import com.threerings.util.Wrapped;
 
@@ -84,7 +83,6 @@ import com.threerings.ezgame.data.EZGameObject;
 import com.threerings.ezgame.data.PropertySetEvent;
 import com.threerings.ezgame.data.PropertySetListener;
 import com.threerings.ezgame.data.UserCookie;
-import com.threerings.ezgame.util.EZObjectMarshaller;
 
 /**
  * Manages the backend of the game.
@@ -248,7 +246,7 @@ public class GameControlBackend
         validateConnected();
         validatePropertyChange(propName, value, index);
 
-        var encoded :Object = EZObjectMarshaller.encode(value, (index == -1));
+        var encoded :Object = ObjectMarshaller.encode(value, (index == -1));
         _ezObj.ezGameService.setProperty(
             _ctx.getClient(), propName, encoded, index,
             false, null, createLoggingConfirmListener("setProperty"));
@@ -263,8 +261,8 @@ public class GameControlBackend
         validateConnected();
         validatePropertyChange(propName, value, index);
 
-        var encodedValue :Object = EZObjectMarshaller.encode(value, (index == -1));
-        var encodedTestValue :Object = EZObjectMarshaller.encode(testValue, (index == -1));
+        var encodedValue :Object = ObjectMarshaller.encode(value, (index == -1));
+        var encodedTestValue :Object = ObjectMarshaller.encode(testValue, (index == -1));
         _ezObj.ezGameService.setProperty(
             _ctx.getClient(), propName, encodedValue, index,
             true, encodedTestValue, createLoggingConfirmListener("setProperty"));
@@ -288,7 +286,7 @@ public class GameControlBackend
         validateName(messageName);
         validateValue(value);
 
-        var encoded :Object = EZObjectMarshaller.encode(value, false);
+        var encoded :Object = ObjectMarshaller.encode(value, false);
         _ezObj.ezGameService.sendMessage(_ctx.getClient(),
             messageName, encoded, playerId,
             createLoggingConfirmListener("sendMessage"));
@@ -409,7 +407,7 @@ public class GameControlBackend
             var uc :UserCookie =
                 (_ezObj.userCookies.get(playerId) as UserCookie);
             if (uc != null) {
-                callback(EZObjectMarshaller.decode(uc.cookie));
+                callback(ObjectMarshaller.decode(uc.cookie));
                 return;
             }
         }
@@ -434,7 +432,7 @@ public class GameControlBackend
         validateConnected();
         validateValue(cookie);
         var ba :ByteArray =
-            (EZObjectMarshaller.encode(cookie, false) as ByteArray);
+            (ObjectMarshaller.encode(cookie, false) as ByteArray);
         if (ba.length > MAX_USER_COOKIE) {
             // not saved!
             return false;
@@ -544,7 +542,7 @@ public class GameControlBackend
         validateValue(values);
 
         var encodedValues :TypedArray =
-            (EZObjectMarshaller.encode(values) as TypedArray);
+            (ObjectMarshaller.encode(values, true) as TypedArray);
 
         _ezObj.ezGameService.addToCollection(
             _ctx.getClient(), collName, encodedValues, clearExisting,
@@ -721,47 +719,7 @@ public class GameControlBackend
      */
     protected function validateValue (value :Object) :void
     {
-        if (value == null) {
-            return;
-
-        } else if (value is IExternalizable) {
-            throw new ArgumentError(
-                "IExternalizable is not yet supported");
-
-        } else if (value is Array) {
-            if (ClassUtil.getClassName(value) != "Array") {
-                // We can't allow arrays to be serialized as IExternalizables
-                // because we need to know element values (opaquely) on the
-                // server. Also, we don't allow other types because we wouldn't
-                // create the right class on the other side.
-                throw new ArgumentError(
-                    "Custom array subclasses are not supported");
-            }
-            // then, continue on with the sub-properties check (below)
-
-        } else {
-            var type :String = typeof(value);
-            if (type == "number" || type == "string" || type == "boolean" ) {
-                // kosher!
-                return;
-            }
-            if (value is ByteArray) {
-                return; // kosher
-            }
-            var clazz :Class = ClassUtil.getClass(value);
-            var clazzparentname :String = getQualifiedSuperclassName(clazz);
-            var rootclass :Boolean = (clazzparentname == null);
-            if (! rootclass) {
-                throw new ArgumentError(
-                    "Non-simple properties may not be set.");
-            }
-            // fall through and verify the object's sub-properties
-        }
-
-        // check sub-properties (of arrays and objects)
-        for each (var arrValue :Object in (value as Array)) {
-            validateValue(arrValue);
-        }
+        ObjectMarshaller.validateValue(value);
     }
 
     /**
@@ -900,7 +858,7 @@ public class GameControlBackend
         if (EZGameObject.USER_MESSAGE == name) {
             var args :Array = event.getArgs();
             callUserCode("messageReceived_v1", (args[0] as String),
-                EZObjectMarshaller.decode(args[1]));
+                ObjectMarshaller.decode(args[1]));
 
         } else if (EZGameObject.GAME_CHAT == name) {
             // this is chat send by the game, let's route it like
@@ -925,7 +883,7 @@ public class GameControlBackend
         if (msgName == event.getName()) {
             var args :Array = event.getArgs();
             callUserCode("messageReceived_v1", (args[0] as String),
-                EZObjectMarshaller.decode(args[1]));
+                ObjectMarshaller.decode(args[1]));
         }
     }
 
@@ -940,7 +898,7 @@ public class GameControlBackend
                 delete _cookieCallbacks[cookie.playerId];
                 for each (var fn :Function in arr) {
                     try {
-                        fn(EZObjectMarshaller.decode(cookie.cookie));
+                        fn(ObjectMarshaller.decode(cookie.cookie));
                     } catch (err :Error) {
                         // cope
                     }
