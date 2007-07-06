@@ -28,6 +28,7 @@ import java.util.logging.Level;
 
 import com.samskivert.io.PersistenceException;
 
+import com.samskivert.util.ArrayUtil;
 import com.samskivert.util.HashIntMap;
 import com.samskivert.util.IntMap;
 import com.samskivert.util.Invoker;
@@ -97,15 +98,22 @@ public abstract class RatingManagerDelegate
             public boolean invoke () {
                 int gameId = _gmgr.getGameConfig().getGameId();
 
-                // enumerate our players
-                Integer[] players = new Integer[_gmgr.getPlayerCount()];
-                for (int ii = 0; ii < players.length; ii ++) {
-                    players[ii] = _gmgr.getPlayerPersistentId(_gmgr.getPlayer(ii));
+                // enumerate our non-guest players
+                Integer[] allPlayers = new Integer[_gmgr.getPlayerCount()];
+                Integer[] ratedPlayers = new Integer[allPlayers.length];
+                int jj = 0;
+                for (int ii = 0; ii < allPlayers.length; ii ++) {
+                    allPlayers[ii] = _gmgr.getPlayerPersistentId(_gmgr.getPlayer(ii));
+                    if (allPlayers[ii] != 0) {
+                        // this is a player with a persistent id, a player we can rate
+                        ratedPlayers[jj ++] = allPlayers[ii];
+                    }
                 }
-                
+                ratedPlayers = ArrayUtil.splice(ratedPlayers, jj);
+
                 try {
-                    // fetch their previous ratings for this game
-                    List<RatingRecord> records = _repo.getRatings(gameId, players);
+                    // fetch the previous ratings of our persistent users, for this game
+                    List<RatingRecord> records = _repo.getRatings(gameId, ratedPlayers);
                     
                     // and make it easy to look them up by their id
                     IntMap<RatingRecord> map = new HashIntMap<RatingRecord>();
@@ -114,12 +122,17 @@ public abstract class RatingManagerDelegate
                     }
 
                     // now build the array we keep around until the end of the game
-                    _ratings = new Rating[_gmgr.getPlayerCount()];
+                    _ratings = new Rating[allPlayers.length];
                     for (int ii = 0; ii < _ratings.length; ii ++) {
-                        RatingRecord record = map.get(players[ii]);
+                        if (allPlayers[ii] == 0) {
+                            // for guests we let the slot remain null
+                            continue;
+                        }
+                        RatingRecord record = map.get(allPlayers[ii]);
                         // if the player had no previous record, initiate them at default values
                         _ratings[ii] = record != null ?
-                            new Rating(record.rating, record.experience) : new Rating();
+                            new Rating(allPlayers[ii], record.rating, record.experience) :
+                            new Rating(allPlayers[ii]);
                     }
 
                     return true;
@@ -153,13 +166,13 @@ public abstract class RatingManagerDelegate
         // compute the updated ratings
         int[] nratings = new int[_ratings.length];
         for (int ii = 0; ii < _ratings.length; ii ++) {
-            nratings[ii] = computeRating(ii);
+            nratings[ii] = _ratings[ii] != null ? computeRating(ii) : -1;
         }
 
         // and store them
         boolean modified = false;
         for (int ii = 0; ii < _ratings.length; ii++) {
-            // skip this rating if we weren't able to compute a value
+            // skip this rating if it's a guest slot or we weren't able to compute a value
             if (nratings[ii] < 0) {
                 continue;
             }
@@ -173,22 +186,18 @@ public abstract class RatingManagerDelegate
             return;
         }
 
-        // else enumerate our players
-        final int[] players = new int[_gmgr.getPlayerCount()];
-        for (int ii = 0; ii < players.length; ii ++) {
-            players[ii] = _gmgr.getPlayerPersistentId(_gmgr.getPlayer(ii));
-        }
-
-        // and finally persist the result
+        // else persist the result
         final int gameId = _gmgr.getGameConfig().getGameId();
         CrowdServer.invoker.postUnit(new Invoker.Unit() {
             public boolean invoke () {
                 try {
                     for (int ii = 0; ii < _ratings.length; ii ++) {
-                        // for each player, update or create the rating record
-                        // TODO: reorganize things so this can be a single db request?
-                        _repo.setRating(gameId, players[ii], _ratings[ii].rating,
-                                        _ratings[ii].experience);
+                        if (_ratings[ii] != null) {
+                            // for each rated player, update or create the rating record
+                            // TODO: reorganize things so this can be a single db request?
+                            _repo.setRating(gameId, _ratings[ii].playerId,
+                                            _ratings[ii].rating, _ratings[ii].experience);
+                        }
                     }
                     return true;
 
@@ -202,7 +211,9 @@ public abstract class RatingManagerDelegate
             public void handleResult () {
                 // let subclasses store away the new ratings if they so desire
                 for (int ii = 0; ii < _ratings.length; ii ++) {
-                    updateRatingInMemory(gameId, _gmgr.getPlayerName(ii), _ratings[ii]);
+                    if (_ratings[ii] != null) {
+                        updateRatingInMemory(gameId, _gmgr.getPlayerName(ii), _ratings[ii]);
+                    }
                 }
             }
         });
@@ -228,8 +239,8 @@ public abstract class RatingManagerDelegate
         int opponents = 0;
     
         for (int ii = 0; ii < _ratings.length; ii++) {
-            // we don't care how we did against ourselves...
-            if (pidx == ii) {
+            // we don't care how we did against ourselves, or against guests...
+            if (pidx == ii || _ratings[ii] == null) {
                 continue;
             }
     
@@ -279,18 +290,21 @@ public abstract class RatingManagerDelegate
      */
     protected static class Rating
     {
-        /** A player's rating for a game. */
+        /** The id of the rated player. */
+        public int playerId;
+        
+        /** The player's rating for our game. */
         public int rating;
         
-        /** The number of times a player's played a game. */
+        /** The number of times the player's played our game. */
         public int experience;
 
         /**
          * Sets up a new {@link Rating} object with default values.
          */
-        public Rating ()
+        public Rating (int playerId)
         {
-            super();
+            this.playerId = playerId;
             this.rating = DEFAULT_RATING;
             this.experience = 0;
         }
@@ -298,9 +312,9 @@ public abstract class RatingManagerDelegate
         /**
          * Sets up a new {@link Rating} object with the given values.
          */
-        public Rating (int rating, int experience)
+        public Rating (int playerId, int rating, int experience)
         {
-            super();
+            this.playerId = playerId;
             this.rating = rating;
             this.experience = experience;
         }
