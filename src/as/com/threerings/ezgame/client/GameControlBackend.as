@@ -432,6 +432,7 @@ public class GameControlBackend
     public function setUserCookie_v1 (cookie :Object) :Boolean
     {
         validateConnected();
+        validateValue(cookie);
         var ba :ByteArray =
             (EZObjectMarshaller.encode(cookie, false) as ByteArray);
         if (ba.length > MAX_USER_COOKIE) {
