@@ -21,6 +21,7 @@
 
 package com.threerings.parlor.rating.server.persist;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.samskivert.io.PersistenceException;
@@ -65,6 +66,9 @@ public class RatingRepository extends DepotRepository
     public List<RatingRecord> getRatings (int gameId, Integer... players)
         throws PersistenceException
     {
+        if (players.length == 0) {
+            return Collections.emptyList();
+        }
         return findAll(
             RatingRecord.class,
             new Where(new And(
