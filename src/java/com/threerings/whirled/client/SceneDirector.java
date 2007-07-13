@@ -55,8 +55,8 @@ import com.threerings.whirled.data.SceneUpdate;
  * LocationObserver#locationChangeFailed}.
  */
 public class SceneDirector extends BasicDirector
-    implements SceneCodes, LocationDirector.FailureHandler,
-               SceneReceiver, SceneService.SceneMoveListener
+    implements SceneCodes, LocationDirector.FailureHandler, SceneReceiver,
+               SceneService.SceneMoveListener
 {
     /**
      * Used to recover from a problem after a completed moveTo.
@@ -348,20 +348,8 @@ public class SceneDirector extends BasicDirector
         clearScene();
     }
 
-    // documentation inherited from interface
-    public void forcedMove (int sceneId)
-    {
-        Log.info("Moving at request of server [sceneId=" + sceneId + "].");
-
-        // clear out our old scene and place data
-        didLeaveScene();
-
-        // move to the new scene
-        moveTo(sceneId);
-    }
-
     /**
-     * Sets the moveHandler for use in recoverFailedMove.
+     * Sets the moveHandler for use in {@link #recoverFailedMove}.
      */
     public void setMoveHandler (MoveHandler handler)
     {
@@ -376,9 +364,19 @@ public class SceneDirector extends BasicDirector
         }
     }
 
-    /**
-     * Called when something breaks down in the process of performing a {@link #moveTo} request.
-     */
+    // from interface SceneReceiver
+    public void forcedMove (int sceneId)
+    {
+        Log.info("Moving at request of server [sceneId=" + sceneId + "].");
+
+        // clear out our old scene and place data
+        didLeaveScene();
+
+        // move to the new scene
+        moveTo(sceneId);
+    }
+
+    // from interface LocationDirector.FailureHandler
     public void recoverFailedMove (int placeId)
     {
         // we'll need this momentarily
