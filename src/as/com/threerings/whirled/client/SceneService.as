@@ -22,6 +22,7 @@
 package com.threerings.whirled.client {
 
 import flash.utils.ByteArray;
+import com.threerings.io.TypedArray;
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;

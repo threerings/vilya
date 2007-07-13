@@ -45,15 +45,13 @@ import com.threerings.whirled.util.WhirledContext;
 import com.threerings.whirled.data.SceneUpdate;
 
 /**
- * The scene director is the client's interface to all things scene
- * related. It interfaces with the scene repository to ensure that scene
- * objects are available when the client enters a particular scene. It
- * handles moving from scene to scene (it coordinates with the {@link
- * LocationDirector} in order to do this).
+ * The scene director is the client's interface to all things scene related. It interfaces with the
+ * scene repository to ensure that scene objects are available when the client enters a particular
+ * scene. It handles moving from scene to scene (it coordinates with the {@link LocationDirector}
+ * in order to do this).
  *
- * <p> Note that when the scene director is in use instead of the location
- * director, scene ids instead of place oids will be supplied to {@link
- * LocationObserver#locationMayChange} and {@link
+ * <p> Note that when the scene director is in use instead of the location director, scene ids
+ * instead of place oids will be supplied to {@link LocationObserver#locationMayChange} and {@link
  * LocationObserver#locationChangeFailed}.
  */
 public class SceneDirector extends BasicDirector
@@ -66,8 +64,8 @@ public class SceneDirector extends BasicDirector
     public static interface MoveHandler
     {
         /**
-         * Should instruct the client to move the last known working
-         * location (as well as clean up after the failed moveTo request).
+         * Should instruct the client to move the last known working location (as well as clean up
+         * after the failed moveTo request).
          */
         public void recoverMoveTo (int sceneId);
     }
@@ -76,18 +74,16 @@ public class SceneDirector extends BasicDirector
      * Creates a new scene director with the specified context.
      *
      * @param ctx the active client context.
-     * @param locdir the location director in use on the client, with
-     * which the scene director will coordinate when changing location.
-     * @param screp the entity from which the scene director will load
-     * scene data from the local client scene storage. This may be null
-     * when the SceneDirector is constructed, but it should be
-     * supplied via {@link #setSceneRepository} prior to really using
-     * this director.
-     * @param fact the factory that knows which derivation of {@link
-     * Scene} to create for the current system.
+     * @param locdir the location director in use on the client, with which the scene director will
+     * coordinate when changing location.
+     * @param screp the entity from which the scene director will load scene data from the local
+     * client scene storage. This may be null when the SceneDirector is constructed, but it should
+     * be supplied via {@link #setSceneRepository} prior to really using this director.
+     * @param fact the factory that knows which derivation of {@link Scene} to create for the
+     * current system.
      */
-    public SceneDirector (WhirledContext ctx, LocationDirector locdir,
-                          SceneRepository screp, SceneFactory fact)
+    public SceneDirector (WhirledContext ctx, LocationDirector locdir, SceneRepository screp,
+                          SceneFactory fact)
     {
         super(ctx);
 
@@ -97,13 +93,12 @@ public class SceneDirector extends BasicDirector
         setSceneRepository(screp);
         _fact = fact;
 
-        // set ourselves up as a failure handler with the location
-        // director because we need to do special processing
+        // set ourselves up as a failure handler with the location director because we need to do
+        // special processing
         _locdir.setFailureHandler(this);
 
         // register for scene notifications
-        _ctx.getClient().getInvocationDirector().registerReceiver(
-            new SceneDecoder(this));
+        _ctx.getClient().getInvocationDirector().registerReceiver(new SceneDecoder(this));
     }
 
     /**
@@ -116,8 +111,8 @@ public class SceneDirector extends BasicDirector
     }
 
     /**
-     * Returns the display scene object associated with the scene we
-     * currently occupy or null if we currently occupy no scene.
+     * Returns the display scene object associated with the scene we currently occupy or null if we
+     * currently occupy no scene.
      */
     public Scene getScene ()
     {
@@ -125,13 +120,11 @@ public class SceneDirector extends BasicDirector
     }
 
     /**
-     * Requests that this client move the specified scene. A request will
-     * be made and when the response is received, the location observers
-     * will be notified of success or failure.
+     * Requests that this client move the specified scene. A request will be made and when the
+     * response is received, the location observers will be notified of success or failure.
      *
-     * @return true if the move to request was issued, false if it was
-     * rejected by a location observer or because we have another request
-     * outstanding.
+     * @return true if the move to request was issued, false if it was rejected by a location
+     * observer or because we have another request outstanding.
      */
     public boolean moveTo (int sceneId)
     {
@@ -143,8 +136,7 @@ public class SceneDirector extends BasicDirector
 
         // sanity-check the destination scene id
         if (sceneId == _sceneId) {
-            Log.warning("Refusing request to move to the same scene " +
-                        "[sceneId=" + sceneId + "].");
+            Log.warning("Refusing request to move to the same scene [sceneId=" + sceneId + "].");
             return false;
         }
 
@@ -153,56 +145,41 @@ public class SceneDirector extends BasicDirector
             return false;
         }
 
-        // check the version of our cached copy of the scene to which
-        // we're requesting to move; if we were unable to load it, assume
-        // a cached version of zero
-        int sceneVers = 0;
-        if (_pendingModel != null) {
-            sceneVers = _pendingModel.version;
-        }
-
-        // issue a moveTo request
-        Log.info("Issuing moveTo(" + sceneId + ", " + sceneVers + ").");
-        _sservice.moveTo(_ctx.getClient(), sceneId, sceneVers, this);
+        // do the deed
+        sendMoveRequest();
         return true;
     }
 
     /**
-     * Prepares to move to the requested scene. The location observers are
-     * asked to ratify the move and our pending scene mode is loaded from
-     * the scene repository. This can be called by cooperating directors
-     * that need to coopt the moveTo process.
+     * Prepares to move to the requested scene. The location observers are asked to ratify the move
+     * and our pending scene mode is loaded from the scene repository. This can be called by
+     * cooperating directors that need to coopt the moveTo process.
      */
     public boolean prepareMoveTo (int sceneId, ResultListener rl)
     {
-        // first check to see if our observers are happy with this move
-        // request
+        // first check to see if our observers are happy with this move request
         if (!_locdir.mayMoveTo(sceneId, rl)) {
             return false;
         }
 
-        // we need to call this both to mark that we're issuing a move
-        // request and to check to see if the last issued request should
-        // be considered stale
+        // we need to call this both to mark that we're issuing a move request and to check to see
+        // if the last issued request should be considered stale
         boolean refuse = _locdir.checkRepeatMove();
 
         // complain if we're over-writing a pending request
         if (_pendingSceneId != -1) {
             if (refuse) {
                 Log.warning("Refusing moveTo; We have a request outstanding " +
-                            "[psid=" + _pendingSceneId +
-                            ", nsid=" + sceneId + "].");
+                            "[psid=" + _pendingSceneId + ", nsid=" + sceneId + "].");
                 return false;
-
             } else {
-                Log.warning("Overriding stale moveTo request " +
-                            "[psid=" + _pendingSceneId +
+                Log.warning("Overriding stale moveTo request [psid=" + _pendingSceneId +
                             ", nsid=" + sceneId + "].");
             }
         }
 
-        // load up the pending scene so that we can communicate it's most
-        // recent version to the server
+        // load up the pending scene so that we can communicate it's most recent version to the
+        // server
         _pendingModel = loadSceneModel(sceneId);
 
         // make a note of our pending scene id
@@ -213,27 +190,24 @@ public class SceneDirector extends BasicDirector
     }
 
     /**
-     * Returns the model loaded in preparation for a scene
-     * transition. This is made available only for cooperating directors
-     * which may need to coopt the scene transition process. The pending
-     * model is only valid immediately following a call to {@link
-     * #prepareMoveTo}.
+     * Returns the model loaded in preparation for a scene transition. This is made available only
+     * for cooperating directors which may need to coopt the scene transition process. The pending
+     * model is only valid immediately following a call to {@link #prepareMoveTo}.
      */
     public SceneModel getPendingModel ()
     {
         return _pendingModel;
     }
 
-    // documentation inherited from interface
+    // from interface SceneService.SceneMoveListener
     public void moveSucceeded (int placeId, PlaceConfig config)
     {
-        // our move request was successful, deal with subscribing to our
-        // new place object
+        // our move request was successful, deal with subscribing to our new place object
         _locdir.didMoveTo(placeId, config);
 
-        // since we're committed to moving to the new scene, we'll
-        // parallelize and go ahead and load up the new scene now rather
-        // than wait until subscription to our place object succeeds
+        // since we're committed to moving to the new scene, we'll parallelize and go ahead and
+        // load up the new scene now rather than wait until subscription to our place object
+        // succeeds
 
         // keep track of our previous scene info
         _previousSceneId = _sceneId;
@@ -250,19 +224,16 @@ public class SceneDirector extends BasicDirector
 
         // complain if we didn't find a scene
         if (_model == null) {
-            Log.warning("Aiya! Unable to load scene [sid=" + _sceneId +
-                        ", plid=" + placeId + "].");
+            Log.warning("Aiya! Unable to load scene [sid=" + _sceneId + ", plid=" + placeId + "].");
             return;
         }
 
-        // and finally create a display scene instance with the model and
-        // the place config
+        // and finally create a display scene instance with the model and the place config
         _scene = _fact.createScene(_model, config);
     }
 
-    // documentation inherited from interface
-    public void moveSucceededWithUpdates (
-        int placeId, PlaceConfig config, SceneUpdate[] updates)
+    // from interface SceneService.SceneMoveListener
+    public void moveSucceededWithUpdates (int placeId, PlaceConfig config, SceneUpdate[] updates)
     {
         Log.info("Got updates [placeId=" + placeId + ", config=" + config +
                  ", updates=" + StringUtil.toString(updates) + "].");
@@ -275,8 +246,7 @@ public class SceneDirector extends BasicDirector
                 updates[ii].validate(model);
             } catch (IllegalStateException ise) {
                 Log.warning("Scene update failed validation [model=" + model +
-                            ", update=" + updates[ii] +
-                            ", error=" + ise.getMessage() + "].");
+                            ", update=" + updates[ii] + ", error=" + ise.getMessage() + "].");
                 failure = true;
                 break;
             }
@@ -302,9 +272,8 @@ public class SceneDirector extends BasicDirector
                 Log.logStackTrace(ioe);
             }
 
-            // act as if the scene move failed, though we'll be in a funny
-            // state because the server thinks we've changed scenes, but
-            // the client can try again without its booched scene model
+            // act as if the scene move failed; we'll be in a funny state because the server thinks
+            // we've changed scenes, but the client can try again without its booched scene model
             requestFailed(INTERNAL_ERROR);
             return;
         }
@@ -316,13 +285,11 @@ public class SceneDirector extends BasicDirector
         moveSucceeded(placeId, config);
     }
 
-    // documentation inherited from interface
-    public void moveSucceededWithScene (
-        int placeId, PlaceConfig config, SceneModel model)
+    // from interface SceneService.SceneMoveListener
+    public void moveSucceededWithScene (int placeId, PlaceConfig config, SceneModel model)
     {
-        Log.info("Got updated scene model [placeId=" + placeId +
-                 ", config=" + config + ", scene=" + model.sceneId + "/" +
-                 model.name + "/" + model.version + "].");
+        Log.info("Got updated scene model [placeId=" + placeId + ", config=" + config +
+                 ", scene=" + model.sceneId + "/" + model.name + "/" + model.version + "].");
 
         // update the model in the repository
         persistSceneModel(model);
@@ -334,7 +301,22 @@ public class SceneDirector extends BasicDirector
         moveSucceeded(placeId, config);
     }
 
-    // documentation inherited from interface
+    // from interface SceneService.SceneMoveListener
+    public void moveRequiresServerSwitch (String hostname, int[] ports)
+    {
+        // ship on over to the other server
+        _ctx.getClient().moveToServer(hostname, ports, new SceneService.ConfirmListener() {
+            public void requestProcessed () {
+                // resend our move request now that we're connected to the new server
+                sendMoveRequest();
+            }
+            public void requestFailed (String reason) {
+                SceneDirector.this.requestFailed(reason);
+            }
+        });
+    }
+
+    // from interface SceneService.SceneMoveListener
     public void requestFailed (String reason)
     {
         // clear out our pending request oid
@@ -346,8 +328,7 @@ public class SceneDirector extends BasicDirector
     }
 
     /**
-     * Called by SceneController instances to tell us about an update
-     * to the current scene.
+     * Called by SceneController instances to tell us about an update to the current scene.
      */
     public void updateReceived (SceneUpdate update)
     {
@@ -356,8 +337,7 @@ public class SceneDirector extends BasicDirector
     }
 
     /**
-     * Called to clean up our place and scene state information when we
-     * leave a scene.
+     * Called to clean up our place and scene state information when we leave a scene.
      */
     public void didLeaveScene ()
     {
@@ -386,11 +366,10 @@ public class SceneDirector extends BasicDirector
     public void setMoveHandler (MoveHandler handler)
     {
         if (_moveHandler != null) {
-            Log.warning("Requested to set move handler, but we've " +
-                        "already got one. The conflicting entities will " +
-                        "likely need to perform more sophisticated " +
-                        "coordination to deal with failures. " +
-                        "[old=" + _moveHandler + ", new=" + handler + "].");
+            Log.warning("Requested to set move handler, but we've already got one. The " +
+                        "conflicting entities will likely need to perform more sophisticated " +
+                        "coordination to deal with failures. [old=" + _moveHandler +
+                        ", new=" + handler + "].");
 
         } else {
             _moveHandler = handler;
@@ -398,8 +377,7 @@ public class SceneDirector extends BasicDirector
     }
 
     /**
-     * Called when something breaks down in the process of performing a
-     * <code>moveTo</code> request.
+     * Called when something breaks down in the process of performing a {@link #moveTo} request.
      */
     public void recoverFailedMove (int placeId)
     {
@@ -409,22 +387,35 @@ public class SceneDirector extends BasicDirector
         // clear out our now bogus scene tracking info
         clearScene();
 
-        // if we were previously somewhere (and that somewhere isn't where
-        // we just tried to go), try going back to that happy place
+        // if we were previously somewhere (and that somewhere isn't where we just tried to go),
+        // try going back to that happy place
         if (_previousSceneId != -1 && _previousSceneId != sceneId) {
             // if we have a move handler use that
             if (_moveHandler != null) {
                 _moveHandler.recoverMoveTo(_previousSceneId);
-
             } else {
                 moveTo(_previousSceneId);
             }
         }
     }
 
+    protected void sendMoveRequest ()
+    {
+        // check the version of our cached copy of the scene to which we're requesting to move; if
+        // we were unable to load it, assume a cached version of zero
+        int sceneVers = 0;
+        if (_pendingModel != null) {
+            sceneVers = _pendingModel.version;
+        }
+
+        // issue a moveTo request
+        Log.info("Issuing moveTo(" + _pendingSceneId + ", " + sceneVers + ").");
+        _sservice.moveTo(_ctx.getClient(), _pendingSceneId, sceneVers, this);
+    }
+
     /**
-     * Clears out our current scene information and releases the scene
-     * model for the loaded scene back to the cache.
+     * Clears out our current scene information and releases the scene model for the loaded scene
+     * back to the cache.
      */
     protected void clearScene ()
     {
@@ -437,8 +428,8 @@ public class SceneDirector extends BasicDirector
     }
 
     /**
-     * Loads a scene from the repository. If the scene is cached, it will
-     * be returned from the cache instead.
+     * Loads a scene from the repository. If the scene is cached, it will be returned from the
+     * cache instead.
      */
     protected SceneModel loadSceneModel (int sceneId)
     {
@@ -457,8 +448,7 @@ public class SceneDirector extends BasicDirector
 
             } catch (IOException ioe) {
                 // complain first, then return null
-                Log.warning("Error loading scene [scid=" + sceneId +
-                            ", error=" + ioe + "].");
+                Log.warning("Error loading scene [scid=" + sceneId + ", error=" + ioe + "].");
             }
         }
 
@@ -474,9 +464,8 @@ public class SceneDirector extends BasicDirector
         try {
             _screp.storeSceneModel(model);
         } catch (IOException ioe) {
-            Log.warning("Failed to update repository with updated scene " +
-                "[sceneId=" + model.sceneId + ", nvers=" + model.version +
-                "].");
+            Log.warning("Failed to update repository with updated scene [sceneId=" + model.sceneId +
+                        ", nvers=" + model.version + "].");
             Log.logStackTrace(ioe);
         }
     }
@@ -535,12 +524,11 @@ public class SceneDirector extends BasicDirector
     /** The id of the scene we currently occupy. */
     protected int _sceneId = -1;
 
-    /** Our most recent copy of the scene model for the scene we're about
-     * to enter. */
+    /** Our most recent copy of the scene model for the scene we're about to enter. */
     protected SceneModel _pendingModel;
 
-    /** The id of the scene for which we have an outstanding moveTo
-     * request, or -1 if we have no outstanding request. */
+    /** The id of the scene for which we have an outstanding moveTo request, or -1 if we have no
+     * outstanding request. */
     protected int _pendingSceneId = -1;
 
     /** The id of the scene we previously occupied. */

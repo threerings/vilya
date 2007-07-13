@@ -45,9 +45,22 @@ public class SceneMarshaller extends InvocationMarshaller
     public static class SceneMoveMarshaller extends ListenerMarshaller
         implements SceneMoveListener
     {
+        /** The method id used to dispatch {@link #moveRequiresServerSwitch}
+         * responses. */
+        public static final int MOVE_REQUIRES_SERVER_SWITCH = 1;
+
+        // from interface SceneMoveMarshaller
+        public void moveRequiresServerSwitch (String arg1, int[] arg2)
+        {
+            _invId = null;
+            omgr.postEvent(new InvocationResponseEvent(
+                               callerOid, requestId, MOVE_REQUIRES_SERVER_SWITCH,
+                               new Object[] { arg1, arg2 }));
+        }
+
         /** The method id used to dispatch {@link #moveSucceeded}
          * responses. */
-        public static final int MOVE_SUCCEEDED = 1;
+        public static final int MOVE_SUCCEEDED = 2;
 
         // from interface SceneMoveMarshaller
         public void moveSucceeded (int arg1, PlaceConfig arg2)
@@ -60,7 +73,7 @@ public class SceneMarshaller extends InvocationMarshaller
 
         /** The method id used to dispatch {@link #moveSucceededWithScene}
          * responses. */
-        public static final int MOVE_SUCCEEDED_WITH_SCENE = 2;
+        public static final int MOVE_SUCCEEDED_WITH_SCENE = 3;
 
         // from interface SceneMoveMarshaller
         public void moveSucceededWithScene (int arg1, PlaceConfig arg2, SceneModel arg3)
@@ -73,7 +86,7 @@ public class SceneMarshaller extends InvocationMarshaller
 
         /** The method id used to dispatch {@link #moveSucceededWithUpdates}
          * responses. */
-        public static final int MOVE_SUCCEEDED_WITH_UPDATES = 3;
+        public static final int MOVE_SUCCEEDED_WITH_UPDATES = 4;
 
         // from interface SceneMoveMarshaller
         public void moveSucceededWithUpdates (int arg1, PlaceConfig arg2, SceneUpdate[] arg3)
@@ -88,6 +101,11 @@ public class SceneMarshaller extends InvocationMarshaller
         public void dispatchResponse (int methodId, Object[] args)
         {
             switch (methodId) {
+            case MOVE_REQUIRES_SERVER_SWITCH:
+                ((SceneMoveListener)listener).moveRequiresServerSwitch(
+                    (String)args[0], (int[])args[1]);
+                return;
+
             case MOVE_SUCCEEDED:
                 ((SceneMoveListener)listener).moveSucceeded(
                     ((Integer)args[0]).intValue(), (PlaceConfig)args[1]);

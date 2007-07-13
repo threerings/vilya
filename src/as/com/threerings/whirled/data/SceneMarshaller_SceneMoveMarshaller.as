@@ -23,6 +23,7 @@ package com.threerings.whirled.data {
 
 import flash.utils.ByteArray;
 import com.threerings.util.*; // for Float, Integer, etc.
+import com.threerings.io.TypedArray;
 
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.presents.client.Client;
@@ -38,19 +39,27 @@ import com.threerings.whirled.data.SceneUpdate;
 public class SceneMarshaller_SceneMoveMarshaller
     extends InvocationMarshaller_ListenerMarshaller
 {
+    /** The method id used to dispatch {@link #moveRequiresServerSwitch} responses. */
+    public static const MOVE_REQUIRES_SERVER_SWITCH :int = 1;
+
     /** The method id used to dispatch {@link #moveSucceeded} responses. */
-    public static const MOVE_SUCCEEDED :int = 1;
+    public static const MOVE_SUCCEEDED :int = 2;
 
     /** The method id used to dispatch {@link #moveSucceededWithScene} responses. */
-    public static const MOVE_SUCCEEDED_WITH_SCENE :int = 2;
+    public static const MOVE_SUCCEEDED_WITH_SCENE :int = 3;
 
     /** The method id used to dispatch {@link #moveSucceededWithUpdates} responses. */
-    public static const MOVE_SUCCEEDED_WITH_UPDATES :int = 3;
+    public static const MOVE_SUCCEEDED_WITH_UPDATES :int = 4;
 
     // from InvocationMarshaller_ListenerMarshaller
     override public function dispatchResponse (methodId :int, args :Array) :void
     {
         switch (methodId) {
+        case MOVE_REQUIRES_SERVER_SWITCH:
+            (listener as SceneService_SceneMoveListener).moveRequiresServerSwitch(
+                (args[0] as String), (args[1] as TypedArray /* of int */));
+            return;
+
         case MOVE_SUCCEEDED:
             (listener as SceneService_SceneMoveListener).moveSucceeded(
                 (args[0] as int), (args[1] as PlaceConfig));
@@ -63,7 +72,7 @@ public class SceneMarshaller_SceneMoveMarshaller
 
         case MOVE_SUCCEEDED_WITH_UPDATES:
             (listener as SceneService_SceneMoveListener).moveSucceededWithUpdates(
-                (args[0] as int), (args[1] as PlaceConfig), (args[2] as Array));
+                (args[0] as int), (args[1] as PlaceConfig), (args[2] as TypedArray /* of class com.threerings.whirled.data.SceneUpdate */));
             return;
 
         default:

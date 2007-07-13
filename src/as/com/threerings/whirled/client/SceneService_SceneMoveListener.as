@@ -23,6 +23,7 @@ package com.threerings.whirled.client {
 
 import flash.utils.ByteArray;
 import com.threerings.util.*; // for Float, Integer, etc.
+import com.threerings.io.TypedArray;
 
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.presents.client.Client;
@@ -40,12 +41,15 @@ public interface SceneService_SceneMoveListener
     extends InvocationService_InvocationListener
 {
     // from Java SceneService_SceneMoveListener
+    function moveRequiresServerSwitch (arg1 :String, arg2 :TypedArray /* of int */) :void
+
+    // from Java SceneService_SceneMoveListener
     function moveSucceeded (arg1 :int, arg2 :PlaceConfig) :void
 
     // from Java SceneService_SceneMoveListener
     function moveSucceededWithScene (arg1 :int, arg2 :PlaceConfig, arg3 :SceneModel) :void
 
     // from Java SceneService_SceneMoveListener
-    function moveSucceededWithUpdates (arg1 :int, arg2 :PlaceConfig, arg3 :Array) :void
+    function moveSucceededWithUpdates (arg1 :int, arg2 :PlaceConfig, arg3 :TypedArray /* of class com.threerings.whirled.data.SceneUpdate */) :void
 }
 }

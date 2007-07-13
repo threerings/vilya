@@ -32,6 +32,7 @@ import com.threerings.io.TypedArray;
 import com.threerings.presents.client.BasicDirector;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.ClientEvent;
+import com.threerings.presents.client.ConfirmAdapter;
 import com.threerings.presents.data.InvocationCodes;
 
 import com.threerings.crowd.client.LocationDirector;
@@ -138,16 +139,8 @@ public class SceneDirector extends BasicDirector
             return false;
         }
 
-        // check the version of our cached copy of the scene to which we're requesting to move; if
-        // we were unable to load it, assume a cached version of zero
-        var sceneVers :int = 0;
-        if (_pendingModel != null) {
-            sceneVers = _pendingModel.version;
-        }
-
-        // issue a moveTo request
-        log.info("Issuing moveTo(" + sceneId + ", " + sceneVers + ").");
-        _sservice.moveTo(_wctx.getClient(), sceneId, sceneVers, this);
+        // do the deed
+        sendMoveRequest();
         return true;
     }
 
@@ -201,7 +194,7 @@ public class SceneDirector extends BasicDirector
         return _pendingModel;
     }
 
-    // documentation inherited from interface SceneService_SceneMoveListener
+    // from interface SceneService_SceneMoveListener
     public function moveSucceeded (placeId :int, config :PlaceConfig) :void
     {
         // our move request was successful, deal with subscribing to our new place object
@@ -234,9 +227,9 @@ public class SceneDirector extends BasicDirector
         _scene = _fact.createScene(_model, config);
     }
 
-    // documentation inherited from interface SceneService_SceneMoveListener
+    // from interface SceneService_SceneMoveListener
     public function moveSucceededWithUpdates (
-        placeId :int, config :PlaceConfig, updates :Array) :void
+        placeId :int, config :PlaceConfig, updates :TypedArray) :void
     {
         log.info("Got updates [placeId=" + placeId + ", config=" + config +
                  ", updates=" + updates + "].");
@@ -289,7 +282,7 @@ public class SceneDirector extends BasicDirector
         moveSucceeded(placeId, config);
     }
 
-    // documentation inherited from interface SceneService-SceneMoveListener
+    // from interface SceneService_SceneMoveListener
     public function moveSucceededWithScene (
         placeId :int, config :PlaceConfig, model :SceneModel) :void
     {
@@ -304,6 +297,21 @@ public class SceneDirector extends BasicDirector
 
         // and pass through to the normal move succeeded handler
         moveSucceeded(placeId, config);
+    }
+
+    // from interface SceneService_SceneMoveListener
+    public function moveRequiresServerSwitch (hostname :String, ports :TypedArray) :void
+    {
+        // ship on over to the other server
+        _wctx.getClient().moveToServer(hostname, ports, new ConfirmAdapter(
+            function (reason :String) :void { // failed
+                requestFailed(reason);
+            },
+            function () :void { // succeeded
+                // resend our move request now that we're connected to the new server
+                sendMoveRequest();
+            }
+        ));
     }
 
     // documentation inherited from interface
@@ -389,6 +397,20 @@ public class SceneDirector extends BasicDirector
                 moveTo(_previousSceneId);
             }
         }
+    }
+
+    protected function sendMoveRequest () :void
+    {
+        // check the version of our cached copy of the scene to which we're requesting to move; if
+        // we were unable to load it, assume a cached version of zero
+        var sceneVers :int = 0;
+        if (_pendingModel != null) {
+            sceneVers = _pendingModel.version;
+        }
+
+        // issue a moveTo request
+        log.info("Issuing moveTo(" + _pendingSceneId + ", " + sceneVers + ").");
+        _sservice.moveTo(_wctx.getClient(), _pendingSceneId, sceneVers, this);
     }
 
     /**

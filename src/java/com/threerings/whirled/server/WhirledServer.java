@@ -35,8 +35,8 @@ import com.threerings.whirled.server.persist.SceneRepository;
 import com.threerings.whirled.util.SceneFactory;
 
 /**
- * The whirled server extends the {@link CrowdServer} and provides access
- * to managers and the like that are needed by the Whirled serviecs.
+ * The Whirled server extends the {@link CrowdServer} and provides access to managers and the like
+ * that are needed by the Whirled serviecs.
  */
 public abstract class WhirledServer extends CrowdServer
 {
@@ -66,17 +66,25 @@ public abstract class WhirledServer extends CrowdServer
         _screp = createSceneRepository();
 
         // create our scene registry
-        screg = new SceneRegistry(invmgr, _screp, createSceneFactory(),
-                                  createConfigFactory());
+        screg = createSceneRegistry();
 
         Log.info("Whirled server initialized.");
     }
 
     /**
+     * Creates the scene registry to be used on this server.
+     */
+    protected SceneRegistry createSceneRegistry ()
+        throws Exception
+    {
+        return new SceneRegistry(invmgr, _screp, createSceneFactory(), createConfigFactory());
+    }
+
+    /**
      * Creates the scene repository that will be used by this server.
      *
-     * @exception Exception thrown if any error occurs while instantiating
-     * or initializing the scene repository.
+     * @exception Exception thrown if any error occurs while instantiating or initializing the
+     * scene repository.
      */
     protected abstract SceneRepository createSceneRepository ()
         throws Exception;
@@ -84,18 +92,17 @@ public abstract class WhirledServer extends CrowdServer
     /**
      * Creates the scene factory that will be used by our scene registry.
      *
-     * @exception Exception thrown if any error occurs while instantiating
-     * or initializing the scene repository.
+     * @exception Exception thrown if any error occurs while instantiating or initializing the
+     * scene repository.
      */
     protected abstract SceneFactory createSceneFactory ()
         throws Exception;
 
     /**
-     * Creates the place config factory that will be used our scene
-     * registry.
+     * Creates the place config factory that will be used our scene registry.
      *
-     * @exception Exception thrown if any error occurs while instantiating
-     * or initializing the scene repository.
+     * @exception Exception thrown if any error occurs while instantiating or initializing the
+     * scene repository.
      */
     protected abstract SceneRegistry.ConfigFactory createConfigFactory ()
         throws Exception;
