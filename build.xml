@@ -79,7 +79,6 @@
       <providerless service="SimulatorService"/>
       <providerless service="SpotService"/>
       <providerless service="ZoneService"/>
-      <providerless service="SceneService"/>
     </service>
   </target>
 
