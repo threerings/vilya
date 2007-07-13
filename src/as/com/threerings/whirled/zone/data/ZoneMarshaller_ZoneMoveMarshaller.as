@@ -23,6 +23,7 @@ package com.threerings.whirled.zone.data {
 
 import flash.utils.ByteArray;
 import com.threerings.util.*; // for Float, Integer, etc.
+import com.threerings.io.TypedArray;
 
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.presents.client.Client;
@@ -64,7 +65,7 @@ public class ZoneMarshaller_ZoneMoveMarshaller
 
         case MOVE_SUCCEEDED_WITH_UPDATES:
             (listener as ZoneService_ZoneMoveListener).moveSucceededWithUpdates(
-                (args[0] as int), (args[1] as PlaceConfig), (args[2] as ZoneSummary), (args[3] as Array));
+                (args[0] as int), (args[1] as PlaceConfig), (args[2] as ZoneSummary), (args[3] as TypedArray /* of class com.threerings.whirled.data.SceneUpdate */));
             return;
 
         default:

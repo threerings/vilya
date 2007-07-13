@@ -23,6 +23,7 @@ package com.threerings.ezgame.data {
 
 import flash.utils.ByteArray;
 import com.threerings.util.*; // for Float, Integer, etc.
+import com.threerings.io.TypedArray;
 
 import com.threerings.ezgame.client.EZGameService;
 import com.threerings.presents.client.Client;
@@ -48,7 +49,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     public static const ADD_TO_COLLECTION :int = 1;
 
     // from interface EZGameService
-    public function addToCollection (arg1 :Client, arg2 :String, arg3 :Array, arg4 :Boolean, arg5 :InvocationService_InvocationListener) :void
+    public function addToCollection (arg1 :Client, arg2 :String, arg3 :TypedArray /* of class [B */, arg4 :Boolean, arg5 :InvocationService_InvocationListener) :void
     {
         var listener5 :InvocationMarshaller_ListenerMarshaller = new InvocationMarshaller_ListenerMarshaller();
         listener5.listener = arg5;
@@ -74,7 +75,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     public static const END_GAME :int = 3;
 
     // from interface EZGameService
-    public function endGame (arg1 :Client, arg2 :Array, arg3 :InvocationService_InvocationListener) :void
+    public function endGame (arg1 :Client, arg2 :TypedArray /* of int */, arg3 :InvocationService_InvocationListener) :void
     {
         var listener3 :InvocationMarshaller_ListenerMarshaller = new InvocationMarshaller_ListenerMarshaller();
         listener3.listener = arg3;

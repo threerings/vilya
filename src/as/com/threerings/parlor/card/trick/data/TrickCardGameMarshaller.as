@@ -23,6 +23,7 @@ package com.threerings.parlor.card.trick.data {
 
 import flash.utils.ByteArray;
 import com.threerings.util.*; // for Float, Integer, etc.
+import com.threerings.io.TypedArray;
 
 import com.threerings.parlor.card.data.Card;
 import com.threerings.parlor.card.trick.client.TrickCardGameService;
@@ -66,7 +67,7 @@ public class TrickCardGameMarshaller extends InvocationMarshaller
     public static const SEND_CARDS_TO_PLAYER :int = 3;
 
     // from interface TrickCardGameService
-    public function sendCardsToPlayer (arg1 :Client, arg2 :int, arg3 :Array) :void
+    public function sendCardsToPlayer (arg1 :Client, arg2 :int, arg3 :TypedArray /* of class com.threerings.parlor.card.data.Card */) :void
     {
         sendRequest(arg1, SEND_CARDS_TO_PLAYER, [
             Integer.valueOf(arg2), arg3

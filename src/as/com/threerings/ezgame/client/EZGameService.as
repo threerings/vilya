@@ -22,6 +22,7 @@
 package com.threerings.ezgame.client {
 
 import flash.utils.ByteArray;
+import com.threerings.io.TypedArray;
 import com.threerings.ezgame.client.EZGameService;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
@@ -37,13 +38,13 @@ import com.threerings.presents.data.InvocationMarshaller_ResultMarshaller;
 public interface EZGameService extends InvocationService
 {
     // from Java interface EZGameService
-    function addToCollection (arg1 :Client, arg2 :String, arg3 :Array, arg4 :Boolean, arg5 :InvocationService_InvocationListener) :void;
+    function addToCollection (arg1 :Client, arg2 :String, arg3 :TypedArray /* of class [B */, arg4 :Boolean, arg5 :InvocationService_InvocationListener) :void;
 
     // from Java interface EZGameService
     function checkDictionaryWord (arg1 :Client, arg2 :String, arg3 :String, arg4 :InvocationService_ResultListener) :void;
 
     // from Java interface EZGameService
-    function endGame (arg1 :Client, arg2 :Array, arg3 :InvocationService_InvocationListener) :void;
+    function endGame (arg1 :Client, arg2 :TypedArray /* of int */, arg3 :InvocationService_InvocationListener) :void;
 
     // from Java interface EZGameService
     function endRound (arg1 :Client, arg2 :int, arg3 :InvocationService_InvocationListener) :void;

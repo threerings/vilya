@@ -23,6 +23,7 @@ package com.threerings.whirled.zone.client {
 
 import flash.utils.ByteArray;
 import com.threerings.util.*; // for Float, Integer, etc.
+import com.threerings.io.TypedArray;
 
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.presents.client.Client;
@@ -47,6 +48,6 @@ public interface ZoneService_ZoneMoveListener
     function moveSucceededWithScene (arg1 :int, arg2 :PlaceConfig, arg3 :ZoneSummary, arg4 :SceneModel) :void
 
     // from Java ZoneService_ZoneMoveListener
-    function moveSucceededWithUpdates (arg1 :int, arg2 :PlaceConfig, arg3 :ZoneSummary, arg4 :Array) :void
+    function moveSucceededWithUpdates (arg1 :int, arg2 :PlaceConfig, arg3 :ZoneSummary, arg4 :TypedArray /* of class com.threerings.whirled.data.SceneUpdate */) :void
 }
 }

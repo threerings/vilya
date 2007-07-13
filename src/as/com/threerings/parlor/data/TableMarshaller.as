@@ -23,6 +23,7 @@ package com.threerings.parlor.data {
 
 import flash.utils.ByteArray;
 import com.threerings.util.*; // for Float, Integer, etc.
+import com.threerings.io.TypedArray;
 
 import com.threerings.parlor.client.TableService;
 import com.threerings.parlor.data.TableConfig;
