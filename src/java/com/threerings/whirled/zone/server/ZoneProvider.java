@@ -248,7 +248,7 @@ public class ZoneProvider
     {
         if (source.getZoneId() == zoneId) {
             // handle the case of moving somewhere in the same zone
-            _screg.sceneprov.moveBody((BodyObject) source, sceneId);
+            _screg.moveBody((BodyObject) source, sceneId);
 
         } else {
             // first remove them from their old location
@@ -284,7 +284,7 @@ public class ZoneProvider
         }
 
         // remove them from their occupied scene
-        _screg.sceneprov.leaveOccupiedScene(source);
+        _screg.leaveOccupiedScene(source);
 
         // and clear out their zone information
         source.setZoneId(-1);

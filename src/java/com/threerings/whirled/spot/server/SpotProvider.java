@@ -159,8 +159,7 @@ public class SpotProvider
 
         try {
             // move to the place object associated with this scene
-            _screg.sceneprov.effectSceneMove(
-                source, destmgr, sceneVer, listener);
+            _screg.effectSceneMove(source, destmgr, sceneVer, listener);
         } catch (InvocationException sfe) {
             listener.requestFailed(sfe.getMessage());
             // and let the destination scene manager know that we're no

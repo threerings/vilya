@@ -34,7 +34,6 @@ public class WhirledClient extends CrowdClient
     // documentation inherited from interface
     protected void clearLocation (BodyObject bobj)
     {
-        WhirledServer.screg.sceneprov.leaveOccupiedScene(
-            (ScenedBodyObject)bobj);
+        WhirledServer.screg.leaveOccupiedScene((ScenedBodyObject)bobj);
     }
 }

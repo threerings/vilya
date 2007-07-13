@@ -26,17 +26,24 @@ import java.util.ArrayList;
 import com.samskivert.util.HashIntMap;
 import com.samskivert.util.Invoker;
 
+import com.threerings.presents.data.ClientObject;
+import com.threerings.presents.data.InvocationMarshaller;
+import com.threerings.presents.server.InvocationException;
 import com.threerings.presents.server.InvocationManager;
 
+import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.server.CrowdServer;
 import com.threerings.crowd.server.PlaceManager;
 import com.threerings.crowd.server.PlaceRegistry;
 
 import com.threerings.whirled.Log;
+import com.threerings.whirled.client.SceneService;
 import com.threerings.whirled.data.Scene;
 import com.threerings.whirled.data.SceneCodes;
 import com.threerings.whirled.data.SceneModel;
+import com.threerings.whirled.data.SceneUpdate;
+import com.threerings.whirled.data.ScenedBodyObject;
 import com.threerings.whirled.server.persist.SceneRepository;
 import com.threerings.whirled.util.SceneFactory;
 import com.threerings.whirled.util.UpdateList;
@@ -54,6 +61,7 @@ import com.threerings.whirled.util.UpdateList;
  * <p><em>Note:</em> All access to the scene registry should take place from the dobjmgr thread.
  */
 public class SceneRegistry
+    implements SceneCodes, SceneProvider
 {
     /**
      * Used to create {@link PlaceConfig} instances for scenes.
@@ -66,8 +74,26 @@ public class SceneRegistry
         PlaceConfig createPlaceConfig (SceneModel model);
     }
 
-    /** Used to provide scene-related server-side services. */
-    public SceneProvider sceneprov;
+    /**
+     * Because scenes must be loaded from the scene repository and this must not be done on the
+     * dobjmgr thread, the interface for resolving scenes requires that the entity that wishes for
+     * a scene to be resolved implement this callback interface so that it can be notified when a
+     * scene has been loaded and initialized.
+     */
+    public static interface ResolutionListener
+    {
+        /**
+         * Called when the scene has been successfully resolved. The scene manager instance
+         * provided can be used to obtain a reference to the scene, or the scene distributed
+         * object.
+         */
+        public void sceneWasResolved (SceneManager scmgr);
+
+        /**
+         * Called if some failure occurred in the scene resolution process.
+         */
+        public void sceneFailedToResolve (int sceneId, Exception reason);
+    }
 
     /**
      * Constructs a scene registry, instructing it to load and store scenes using the supplied
@@ -80,9 +106,8 @@ public class SceneRegistry
         _scfact = scfact;
         _confact = confact;
 
-        // create/register a scene provider with the invocation services
-        sceneprov = new SceneProvider(CrowdServer.plreg.locprov, this);
-        invmgr.registerDispatcher(new SceneDispatcher(sceneprov), SceneCodes.WHIRLED_GROUP);
+        // register our scene service
+        invmgr.registerDispatcher(new SceneDispatcher(this), SceneCodes.WHIRLED_GROUP);
     }
 
     /**
@@ -112,27 +137,6 @@ public class SceneRegistry
     {
         SceneManager scmgr = getSceneManager(sceneId);
         return (scmgr == null) ? ("null:" + sceneId) : scmgr.where();
-    }
-
-    /**
-     * Because scenes must be loaded from the scene repository and this must not be done on the
-     * dobjmgr thread, the interface for resolving scenes requires that the entity that wishes for
-     * a scene to be resolved implement this callback interface so that it can be notified when a
-     * scene has been loaded and initialized.
-     */
-    public static interface ResolutionListener
-    {
-        /**
-         * Called when the scene has been successfully resolved. The scene manager instance
-         * provided can be used to obtain a reference to the scene, or the scene distributed
-         * object.
-         */
-        public void sceneWasResolved (SceneManager scmgr);
-
-        /**
-         * Called if some failure occurred in the scene resolution process.
-         */
-        public void sceneFailedToResolve (int sceneId, Exception reason);
     }
 
     /**
@@ -216,11 +220,124 @@ public class SceneRegistry
         }
     }
 
+    // from interface SceneService
+    public void moveTo (ClientObject caller, int sceneId, final int sceneVer,
+                        final SceneService.SceneMoveListener listener)
+    {
+        final BodyObject source = (BodyObject)caller;
+
+        // create a callback object to handle the resolution or failed resolution of the scene
+        SceneRegistry.ResolutionListener rl = null;
+        rl = new SceneRegistry.ResolutionListener() {
+            public void sceneWasResolved (SceneManager scmgr) {
+                // make sure our caller is still around; under heavy load, clients might end their
+                // session while the scene is resolving
+                if (!source.isActive()) {
+                    Log.info("Abandoning scene move, client gone [who=" + source.who()  +
+                             ", dest=" + scmgr.where() + "].");
+                    InvocationMarshaller.setNoResponse(listener);
+                    return;
+                }
+                finishMoveToRequest(source, scmgr, sceneVer, listener);
+            }
+
+            public void sceneFailedToResolve (int rsceneId, Exception reason) {
+                Log.warning("Unable to resolve scene [sceneid=" + rsceneId +
+                            ", reason=" + reason + "].");
+                // pretend like the scene doesn't exist to the client
+                listener.requestFailed(NO_SUCH_PLACE);
+            }
+        };
+
+        // make sure the scene they are headed to is actually loaded into the server
+        resolveScene(sceneId, rl);
+    }
+
+    /**
+     * Moves the supplied body into the supplied (already resolved) scene and informs the supplied
+     * listener if the move is successful.
+     *
+     * @exception InvocationException thrown if a failure occurs attempting to move the user into
+     * the place associated with the scene.
+     */
+    public void effectSceneMove (BodyObject source, SceneManager scmgr,
+                                 int sceneVersion, SceneService.SceneMoveListener listener)
+        throws InvocationException
+    {
+        // move to the place object associated with this scene
+        int ploid = scmgr.getPlaceObject().getOid();
+        PlaceConfig config = CrowdServer.plreg.locprov.moveTo(source, ploid);
+
+        // now that we've finally moved, we can update the user object with the new scene id
+        ((ScenedBodyObject)source).setSceneId(scmgr.getScene().getId());
+
+        // check to see if they need a newer version of the scene data
+        SceneModel model = scmgr.getScene().getSceneModel();
+        if (sceneVersion != model.version) {
+            SceneUpdate[] updates = null;
+            if (sceneVersion < model.version) {
+                // try getting updates to bring the client to the right version
+                updates = scmgr.getUpdates(sceneVersion);
+            }
+            if (updates != null) {
+                listener.moveSucceededWithUpdates(ploid, config, updates);
+            } else {
+                listener.moveSucceededWithScene(ploid, config, model);
+            }
+        } else {
+            listener.moveSucceeded(ploid, config);
+        }
+    }
+
+    /**
+     * Ejects the specified body from their current scene and sends them a request to move to the
+     * specified new scene. This is the scene-equivalent to {@link LocationProvider#moveBody}.
+     */
+    public void moveBody (BodyObject source, int sceneId)
+    {
+        // first remove them from their old place
+        CrowdServer.plreg.locprov.leaveOccupiedPlace(source);
+
+        // then send a forced move notification
+        SceneSender.forcedMove(source, sceneId);
+    }
+
+    /**
+     * Ejects the specified body from their current scene and zone. This is the zone equivalent to
+     * {@link LocationProvider#leaveOccupiedPlace}.
+     */
+    public void leaveOccupiedScene (ScenedBodyObject source)
+    {
+        // remove them from their occupied place
+        CrowdServer.plreg.locprov.leaveOccupiedPlace((BodyObject)source);
+
+        // and clear out their scene information
+        source.setSceneId(0);
+    }
+
+    /**
+     * This is called after the scene to which we are moving is guaranteed to have been loaded into
+     * the server.
+     */
+    protected void finishMoveToRequest (BodyObject source, SceneManager scmgr, int sceneVersion,
+                                        SceneService.SceneMoveListener listener)
+    {
+        try {
+            effectSceneMove(source, scmgr, sceneVersion, listener);
+
+        } catch (InvocationException sfe) {
+            listener.requestFailed(sfe.getMessage());
+
+        } catch (RuntimeException re) {
+            Log.logStackTrace(re);
+            listener.requestFailed(INTERNAL_ERROR);
+        }
+    }
+
     /**
      * Called when the scene resolution has completed successfully.
      */
-    protected void processSuccessfulResolution (
-        SceneModel model, final UpdateList updates)
+    protected void processSuccessfulResolution (SceneModel model, final UpdateList updates)
     {
         // now that the scene is loaded, we can create a scene manager for it. that will be
         // initialized by the place registry and when that is finally complete, then we can let our
