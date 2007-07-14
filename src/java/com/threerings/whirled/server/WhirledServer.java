@@ -62,9 +62,6 @@ public abstract class WhirledServer extends CrowdServer
             }
         });
 
-        // create the scene repository
-        _screp = createSceneRepository();
-
         // create our scene registry
         screg = createSceneRegistry();
 
@@ -74,39 +71,6 @@ public abstract class WhirledServer extends CrowdServer
     /**
      * Creates the scene registry to be used on this server.
      */
-    protected SceneRegistry createSceneRegistry ()
-        throws Exception
-    {
-        return new SceneRegistry(invmgr, _screp, createSceneFactory(), createConfigFactory());
-    }
-
-    /**
-     * Creates the scene repository that will be used by this server.
-     *
-     * @exception Exception thrown if any error occurs while instantiating or initializing the
-     * scene repository.
-     */
-    protected abstract SceneRepository createSceneRepository ()
+    protected abstract SceneRegistry createSceneRegistry ()
         throws Exception;
-
-    /**
-     * Creates the scene factory that will be used by our scene registry.
-     *
-     * @exception Exception thrown if any error occurs while instantiating or initializing the
-     * scene repository.
-     */
-    protected abstract SceneFactory createSceneFactory ()
-        throws Exception;
-
-    /**
-     * Creates the place config factory that will be used our scene registry.
-     *
-     * @exception Exception thrown if any error occurs while instantiating or initializing the
-     * scene repository.
-     */
-    protected abstract SceneRegistry.ConfigFactory createConfigFactory ()
-        throws Exception;
-
-    /** The scene repository in use by this server. */
-    protected SceneRepository _screp;
 }
