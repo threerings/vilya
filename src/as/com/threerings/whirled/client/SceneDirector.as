@@ -161,24 +161,26 @@ public class SceneDirector extends BasicDirector
         var refuse :Boolean = _locdir.checkRepeatMove();
 
         // complain if we're over-writing a pending request
-        if (_pendingSceneId != -1) {
+        if (_pendingData != null) {
             if (refuse) {
                 log.warning("Refusing moveTo; We have a request outstanding " +
-                            "[psid=" + _pendingSceneId + ", nsid=" + sceneId + "].");
+                            "[psid=" + _pendingData.sceneId + ", nsid=" + sceneId + "].");
                 return false;
 
             } else {
-                log.warning("Overriding stale moveTo request [psid=" + _pendingSceneId +
+                log.warning("Overriding stale moveTo request [psid=" + _pendingData.sceneId +
                             ", nsid=" + sceneId + "].");
             }
         }
 
-        // load up the pending scene so that we can communicate it's most recent version to the
-        // server
-        _pendingModel = loadSceneModel(sceneId);
+        // create and initialize a new pending data record
+        _pendingData = createPendingData();
+
+        // load up the cached pending scene so that we can communicate its version to the server
+        _pendingData.model = loadSceneModel(sceneId);
 
         // make a note of our pending scene id
-        _pendingSceneId = sceneId;
+        _pendingData.sceneId = sceneId;
 
         // all systems go
         return true;
@@ -191,7 +193,7 @@ public class SceneDirector extends BasicDirector
      */
     public function getPendingModel () :SceneModel
     {
-        return _pendingModel;
+        return _pendingData == null ? null : _pendingData.model;
     }
 
     // from interface SceneService_SceneMoveListener
@@ -200,10 +202,6 @@ public class SceneDirector extends BasicDirector
         // our move request was successful, deal with subscribing to our new place object
         _locdir.didMoveTo(placeId, config);
 
-        // since we're committed to moving to the new scene, we'll parallelize and go ahead and
-        // load up the new scene now rather than wait until subscription to our place object
-        // succeeds
-
         // keep track of our previous scene info
         _previousSceneId = _sceneId;
 
@@ -211,10 +209,12 @@ public class SceneDirector extends BasicDirector
         clearScene();
 
         // make the pending scene the active scene
-        _sceneId = _pendingSceneId;
-        _pendingSceneId = -1;
+        _sceneId = _pendingData.sceneId;
+        _pendingData = null;
 
-        // load the new scene model
+        // since we're committed to moving to the new scene, we'll parallelize and go ahead and
+        // load up the new scene now rather than wait until subscription to our place object
+        // succeeds
         _model = loadSceneModel(_sceneId);
 
         // complain if we didn't find a scene
@@ -235,7 +235,7 @@ public class SceneDirector extends BasicDirector
                  ", updates=" + updates + "].");
 
         // apply the updates to our cached scene
-        var model :SceneModel = loadSceneModel(_pendingSceneId);
+        var model :SceneModel = loadSceneModel(_pendingData.sceneId);
         var failure :Boolean = false;
         for each (var update :SceneUpdate in updates) {
             try {
@@ -261,10 +261,10 @@ public class SceneDirector extends BasicDirector
         if (failure) {
             // delete the now half-booched scene model from the repository
             try {
-                _screp.deleteSceneModel(_pendingSceneId);
+                _screp.deleteSceneModel(_pendingData.sceneId);
             } catch (ioe :IOError) {
                 log.warning("Failure removing booched scene model " +
-                            "[sceneId=" + _pendingSceneId + "].");
+                            "[sceneId=" + _pendingData.sceneId + "].");
                 log.logStackTrace(ioe);
             }
 
@@ -302,6 +302,11 @@ public class SceneDirector extends BasicDirector
     // from interface SceneService_SceneMoveListener
     public function moveRequiresServerSwitch (hostname :String, ports :TypedArray) :void
     {
+        log.info("Scene switch requires server switch [host=" + hostname +
+                 ", ports=" + ports + "].");
+        // keep track of our current pending data because it will be cleared when we log off of
+        // this server and onto the next one
+        var pendingData :PendingData = _pendingData;
         // ship on over to the other server
         _wctx.getClient().moveToServer(hostname, ports, new ConfirmAdapter(
             function (reason :String) :void { // failed
@@ -309,6 +314,7 @@ public class SceneDirector extends BasicDirector
             },
             function () :void { // succeeded
                 // resend our move request now that we're connected to the new server
+                _pendingData = pendingData;
                 sendMoveRequest();
             }
         ));
@@ -317,9 +323,9 @@ public class SceneDirector extends BasicDirector
     // documentation inherited from interface
     public function requestFailed (reason :String) :void
     {
-        // clear out our pending request oid
-        var sceneId :int = _pendingSceneId;
-        _pendingSceneId = -1;
+        // clear out our pending info
+        var sceneId :int = _pendingData.sceneId;
+        _pendingData = null;
 
         // let our observers know that something has gone horribly awry
         _locdir.failedToMoveTo(sceneId, reason);
@@ -399,18 +405,45 @@ public class SceneDirector extends BasicDirector
         }
     }
 
+    // documentation inherited
+    override public function clientDidLogoff (event :ClientEvent) :void
+    {
+        super.clientDidLogoff(event);
+
+        // clear out our business
+        clearScene();
+        _scache.clear();
+        _pendingData = null;
+        _previousSceneId = -1;
+        _sservice = null;
+    }
+
+    /**
+     * Issues the scene move request using information from the supplied pending data.
+     */
     protected function sendMoveRequest () :void
     {
         // check the version of our cached copy of the scene to which we're requesting to move; if
         // we were unable to load it, assume a cached version of zero
         var sceneVers :int = 0;
-        if (_pendingModel != null) {
-            sceneVers = _pendingModel.version;
+        if (_pendingData.model != null) {
+            sceneVers = _pendingData.model.version;
         }
 
         // issue a moveTo request
-        log.info("Issuing moveTo(" + _pendingSceneId + ", " + sceneVers + ").");
-        _sservice.moveTo(_wctx.getClient(), _pendingSceneId, sceneVers, this);
+        log.info("Issuing moveTo(" + _pendingData.sceneId + ", " + sceneVers + ").");
+        _sservice.moveTo(_wctx.getClient(), _pendingData.sceneId, sceneVers, this);
+    }
+
+    /**
+     * Creates a pending scene move request. Derived classes may wish to extend this data with
+     * additional information to be tracked during movement between scenes. This is encapsulated so
+     * that if a scene move requires a switch to a new server, all necessary data can be properly
+     * tracked during the server switch.
+     */
+    protected function createPendingData () :PendingData
+    {
+        return new PendingData();
     }
 
     /**
@@ -468,20 +501,6 @@ public class SceneDirector extends BasicDirector
         }
     }
 
-    // documentation inherited
-    override public function clientDidLogoff (event :ClientEvent) :void
-    {
-        super.clientDidLogoff(event);
-
-        // clear out our business
-        clearScene();
-        _scache.clear();
-        _pendingSceneId = -1;
-        _pendingModel = null;
-        _previousSceneId = -1;
-        _sservice = null;
-    }
-
     // from BasicDirector
     override protected function registerServices (client :Client) :void
     {
@@ -522,12 +541,9 @@ public class SceneDirector extends BasicDirector
     /** The id of the scene we currently occupy. */
     protected var _sceneId :int = -1;
 
-    /** Our most recent copy of the scene model for the scene we're about to enter. */
-    protected var _pendingModel :SceneModel;
-
-    /** The id of the scene for which we have an outstanding moveTo
-     * request, or -1 if we have no outstanding request. */
-    protected var _pendingSceneId :int = -1;
+    /** Information for the scene for which we have an outstanding moveTo request, or null if we
+     * have no outstanding request. */
+    protected var _pendingData :PendingData;
 
     /** The id of the scene we previously occupied. */
     protected var _previousSceneId :int = -1;
