@@ -39,10 +39,10 @@ import com.threerings.whirled.data.ScenedBodyObject;
  */
 public class SceneMoveHandler extends AbstractSceneMoveHandler
 {
-    public SceneMoveHandler (BodyObject body, int sceneId, int sceneVer,
-                             SceneService.SceneMoveListener listener)
+    public SceneMoveHandler (BodyObject body, int sceneVer, SceneService.SceneMoveListener listener)
     {
-        super(body, sceneId, sceneVer, listener);
+        super(body, listener);
+        _version = sceneVer;
     }
 
     @Override // from AbstractSceneMoveHandler
@@ -73,4 +73,6 @@ public class SceneMoveHandler extends AbstractSceneMoveHandler
             listener.moveSucceeded(ploid, config);
         }
     }
+
+    protected int _version;
 }

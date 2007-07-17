@@ -36,10 +36,10 @@ import com.threerings.whirled.spot.data.Portal;
  */
 public class SpotSceneMoveHandler extends SceneMoveHandler
 {
-    public SpotSceneMoveHandler (SpotSceneManager srcmgr, BodyObject body, int sceneId,
-                                 int sceneVer, Portal dest, SceneService.SceneMoveListener listener)
+    public SpotSceneMoveHandler (SpotSceneManager srcmgr, BodyObject body, int sceneVer,
+                                 Portal dest, SceneService.SceneMoveListener listener)
     {
-        super(body, sceneId, sceneVer, listener);
+        super(body, sceneVer, listener);
         _srcmgr = srcmgr;
         _dest = dest;
     }

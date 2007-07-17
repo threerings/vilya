@@ -40,12 +40,9 @@ import com.threerings.whirled.Log;
 public abstract class AbstractSceneMoveHandler
     implements SceneRegistry.ResolutionListener
 {
-    public AbstractSceneMoveHandler (BodyObject body, int sceneId, int version,
-                                     InvocationService.InvocationListener listener)
+    public AbstractSceneMoveHandler (BodyObject body, InvocationService.InvocationListener listener)
     {
         _body = body;
-        _sceneId = sceneId;
-        _version = version;
         _listener = listener;
     }
 
@@ -84,7 +81,5 @@ public abstract class AbstractSceneMoveHandler
         throws InvocationException;
 
     protected BodyObject _body;
-    protected int _sceneId;
-    protected int _version;
     protected InvocationService.InvocationListener _listener;
 }

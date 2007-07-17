@@ -51,8 +51,10 @@ public class ZoneMoveHandler extends AbstractSceneMoveHandler
     public ZoneMoveHandler (ZoneManager zmgr, BodyObject body, int sceneId, int sceneVer,
                             ZoneService.ZoneMoveListener listener)
     {
-        super(body, sceneId, sceneVer, listener);
+        super(body, listener);
         _zmgr = zmgr;
+        _sceneId = sceneId;
+        _version = sceneVer;
     }
 
     // from interface ZoneManager.ResolutionListener
@@ -113,5 +115,6 @@ public class ZoneMoveHandler extends AbstractSceneMoveHandler
     }
 
     protected ZoneManager _zmgr;
+    protected int _sceneId, _version;
     protected ZoneSummary _summary;
 }

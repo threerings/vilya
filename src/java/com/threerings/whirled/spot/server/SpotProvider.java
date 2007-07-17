@@ -112,8 +112,8 @@ public class SpotProvider
         }
 
         // resolve their destination scene
-        _screg.resolveScene(dest.targetSceneId, new SpotSceneMoveHandler(
-                                srcmgr, body, sceneId, destSceneVer, dest, listener));
+        _screg.resolveScene(dest.targetSceneId,
+                            new SpotSceneMoveHandler(srcmgr, body, destSceneVer, dest, listener));
     }
 
     /**

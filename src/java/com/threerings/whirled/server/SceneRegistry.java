@@ -225,7 +225,7 @@ public class SceneRegistry
                         SceneService.SceneMoveListener listener)
     {
         BodyObject body = (BodyObject)caller;
-        resolveScene(sceneId, new SceneMoveHandler(body, sceneId, sceneVer, listener));
+        resolveScene(sceneId, new SceneMoveHandler(body, sceneVer, listener));
     }
 
     /**
