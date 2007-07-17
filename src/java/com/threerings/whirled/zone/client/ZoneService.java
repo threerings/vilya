@@ -31,37 +31,30 @@ import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.zone.data.ZoneSummary;
 
 /**
- * Defines the client interface to the zone related invocation services
- * (e.g. moving between zones).
+ * The client interface for zone related invocation services (e.g. moving between zones).
  */
 public interface ZoneService extends InvocationService
 {
     /** Used to deliver responses to {@link #moveTo} requests. */
     public static interface ZoneMoveListener extends InvocationListener
     {
-        public void moveSucceeded (
-            int placeId, PlaceConfig config, ZoneSummary summary);
+        public void moveSucceeded (int placeId, PlaceConfig config, ZoneSummary summary);
 
         public void moveSucceededWithUpdates (
-            int placeId, PlaceConfig config, ZoneSummary summary,
-            SceneUpdate[] updates);
+            int placeId, PlaceConfig config, ZoneSummary summary, SceneUpdate[] updates);
 
         public void moveSucceededWithScene (
-            int placeId, PlaceConfig config, ZoneSummary summary,
-            SceneModel model);
+            int placeId, PlaceConfig config, ZoneSummary summary, SceneModel model);
     }
 
     /**
-     * Requests that that this client's body be moved to the specified
-     * scene in the specified zone.
+     * Requests that that this client's body be moved to the specified scene in the specified zone.
      *
      * @param zoneId the zone id to which we want to move.
      * @param sceneId the scene id to which we want to move.
-     * @param version the version number of the scene object that we have
-     * in our local repository.
-     * @param listener the object that will receive the callback when the
-     * request succeeds or fails.
+     * @param version the version number of the scene object that we have in our local repository.
+     * @param listener receives the callback when the request succeeds or fails.
      */
-    public void moveTo (Client client, int zoneId, int sceneId,
-                        int version, ZoneMoveListener listener);
+    public void moveTo (Client client, int zoneId, int sceneId, int version,
+                        ZoneMoveListener listener);
 }

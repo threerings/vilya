@@ -83,89 +83,37 @@ public class SpotProvider
             return;
         }
 
-        // avoid cluttering up the method declaration with final keywords
-        final BodyObject fsource = (BodyObject)caller;
-        final int fportalId = portalId;
-        final int fsceneVer = destSceneVer;
-        final SceneMoveListener flistener = listener;
-
         // obtain the source scene
-        final SpotSceneManager srcmgr = (SpotSceneManager)_screg.getSceneManager(sceneId);
+        BodyObject body = (BodyObject)caller;
+        SpotSceneManager srcmgr = (SpotSceneManager)_screg.getSceneManager(sceneId);
         if (srcmgr == null) {
             Log.warning("Traverse portal missing source scene " +
-                        "[user=" + fsource.who() + ", sceneId=" + sceneId +
+                        "[user=" + body.who() + ", sceneId=" + sceneId +
                         ", portalId=" + portalId + "].");
             throw new InvocationException(INTERNAL_ERROR);
         }
 
         // obtain the destination scene and location id
         SpotScene rss = (SpotScene)srcmgr.getScene();
-        final Portal fdest = rss.getPortal(portalId);
+        Portal dest = rss.getPortal(portalId);
 
         // give the source scene manager a chance to do access control
-        String errmsg = srcmgr.mayTraversePortal(fsource, fdest);
+        String errmsg = srcmgr.mayTraversePortal(body, dest);
         if (errmsg != null) {
             throw new InvocationException(errmsg);
         }
 
         // make sure this portal has valid info
-        if (fdest == null || !fdest.isValid()) {
-            Log.warning("Traverse portal with invalid portal [user=" + fsource.who() +
-                        ", scene=" + srcmgr.where() + ", pid=" + portalId + ", portal=" + fdest +
+        if (dest == null || !dest.isValid()) {
+            Log.warning("Traverse portal with invalid portal [user=" + body.who() +
+                        ", scene=" + srcmgr.where() + ", pid=" + portalId + ", portal=" + dest +
                         ", portals=" + StringUtil.toString(rss.getPortals()) + "].");
             throw new InvocationException(NO_SUCH_PORTAL);
         }
 
         // resolve their destination scene
-        SceneRegistry.ResolutionListener rl = new SceneRegistry.ResolutionListener() {
-            public void sceneWasResolved (SceneManager scmgr) {
-                // make sure our caller is still around; under heavy load, clients might end their
-                // session while the scene is resolving
-                if (!fsource.isActive()) {
-                    Log.info("Abandoning portal traversal, client gone [who=" + fsource.who()  +
-                             ", dest=" + scmgr.where() + "].");
-                    InvocationMarshaller.setNoResponse(flistener);
-                    return;
-                }
-
-                // let the source manager know that this guy is departing via the specified portal
-                srcmgr.willTraversePortal(fsource, fdest);
-
-                SpotSceneManager sscmgr = (SpotSceneManager)scmgr;
-                finishTraversePortalRequest(fsource, sscmgr, fsceneVer, fdest, flistener);
-            }
-
-            public void sceneFailedToResolve (
-                int rsceneId, Exception reason) {
-                Log.warning("Unable to resolve target scene [sceneId=" + rsceneId +
-                            ", reason=" + reason + "].");
-                // pretend like the scene doesn't exist to the client
-                flistener.requestFailed(NO_SUCH_PLACE);
-            }
-        };
-        _screg.resolveScene(fdest.targetSceneId, rl);
-    }
-
-    /**
-     * This is called after the scene to which we are moving is guaranteed to have been loaded into
-     * the server.
-     */
-    protected void finishTraversePortalRequest (
-        BodyObject source, SpotSceneManager destmgr, int sceneVer, Portal dest,
-        SceneMoveListener listener)
-    {
-        // let the destination scene manager know that we're coming in
-        destmgr.mapEnteringBody(source, dest);
-
-        try {
-            // move to the place object associated with this scene
-            _screg.effectSceneMove(source, destmgr, sceneVer, listener);
-        } catch (InvocationException sfe) {
-            listener.requestFailed(sfe.getMessage());
-            // and let the destination scene manager know that we're no
-            // longer coming in
-            destmgr.clearEnteringBody(source);
-        }
+        _screg.resolveScene(dest.targetSceneId, new SpotSceneMoveHandler(
+                                srcmgr, body, sceneId, destSceneVer, dest, listener));
     }
 
     /**

@@ -221,72 +221,11 @@ public class SceneRegistry
     }
 
     // from interface SceneService
-    public void moveTo (ClientObject caller, int sceneId, final int sceneVer,
-                        final SceneService.SceneMoveListener listener)
+    public void moveTo (ClientObject caller, int sceneId, int sceneVer,
+                        SceneService.SceneMoveListener listener)
     {
-        final BodyObject source = (BodyObject)caller;
-
-        // create a callback object to handle the resolution or failed resolution of the scene
-        SceneRegistry.ResolutionListener rl = null;
-        rl = new SceneRegistry.ResolutionListener() {
-            public void sceneWasResolved (SceneManager scmgr) {
-                // make sure our caller is still around; under heavy load, clients might end their
-                // session while the scene is resolving
-                if (!source.isActive()) {
-                    Log.info("Abandoning scene move, client gone [who=" + source.who()  +
-                             ", dest=" + scmgr.where() + "].");
-                    InvocationMarshaller.setNoResponse(listener);
-                    return;
-                }
-                finishMoveToRequest(source, scmgr, sceneVer, listener);
-            }
-
-            public void sceneFailedToResolve (int rsceneId, Exception reason) {
-                Log.warning("Unable to resolve scene [sceneid=" + rsceneId +
-                            ", reason=" + reason + "].");
-                // pretend like the scene doesn't exist to the client
-                listener.requestFailed(NO_SUCH_PLACE);
-            }
-        };
-
-        // make sure the scene they are headed to is actually loaded into the server
-        resolveScene(sceneId, rl);
-    }
-
-    /**
-     * Moves the supplied body into the supplied (already resolved) scene and informs the supplied
-     * listener if the move is successful.
-     *
-     * @exception InvocationException thrown if a failure occurs attempting to move the user into
-     * the place associated with the scene.
-     */
-    public void effectSceneMove (BodyObject source, SceneManager scmgr,
-                                 int sceneVersion, SceneService.SceneMoveListener listener)
-        throws InvocationException
-    {
-        // move to the place object associated with this scene
-        int ploid = scmgr.getPlaceObject().getOid();
-        PlaceConfig config = CrowdServer.plreg.locprov.moveTo(source, ploid);
-
-        // now that we've finally moved, we can update the user object with the new scene id
-        ((ScenedBodyObject)source).setSceneId(scmgr.getScene().getId());
-
-        // check to see if they need a newer version of the scene data
-        SceneModel model = scmgr.getScene().getSceneModel();
-        if (sceneVersion != model.version) {
-            SceneUpdate[] updates = null;
-            if (sceneVersion < model.version) {
-                // try getting updates to bring the client to the right version
-                updates = scmgr.getUpdates(sceneVersion);
-            }
-            if (updates != null) {
-                listener.moveSucceededWithUpdates(ploid, config, updates);
-            } else {
-                listener.moveSucceededWithScene(ploid, config, model);
-            }
-        } else {
-            listener.moveSucceeded(ploid, config);
-        }
+        BodyObject body = (BodyObject)caller;
+        resolveScene(sceneId, new SceneMoveHandler(body, sceneId, sceneVer, listener));
     }
 
     /**
@@ -313,25 +252,6 @@ public class SceneRegistry
 
         // and clear out their scene information
         source.setSceneId(0);
-    }
-
-    /**
-     * This is called after the scene to which we are moving is guaranteed to have been loaded into
-     * the server.
-     */
-    protected void finishMoveToRequest (BodyObject source, SceneManager scmgr, int sceneVersion,
-                                        SceneService.SceneMoveListener listener)
-    {
-        try {
-            effectSceneMove(source, scmgr, sceneVersion, listener);
-
-        } catch (InvocationException sfe) {
-            listener.requestFailed(sfe.getMessage());
-
-        } catch (RuntimeException re) {
-            Log.logStackTrace(re);
-            listener.requestFailed(INTERNAL_ERROR);
-        }
     }
 
     /**
