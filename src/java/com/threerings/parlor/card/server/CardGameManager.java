@@ -32,6 +32,7 @@ import com.threerings.parlor.card.data.CardCodes;
 import com.threerings.parlor.card.data.CardGameObject;
 import com.threerings.parlor.card.data.Deck;
 import com.threerings.parlor.card.data.Hand;
+import com.threerings.parlor.game.data.GameObject;
 import com.threerings.parlor.game.server.GameManager;
 import com.threerings.parlor.turn.server.TurnGameManager;
 
@@ -67,6 +68,16 @@ public class CardGameManager extends GameManager
     public void turnDidEnd ()
     {}
 
+    @Override // documentation inherited
+    protected void gameDidEnd ()
+    {
+        // Copy off our player oids so we have them handy to see if somebody was a player for
+        // rematch purposes.
+        _oldPlayerOids = _playerOids.clone();
+
+        super.gameDidEnd();
+    }
+
     /**
      * This should be called to start a rematched game. It just starts the
      * current game anew, but provides a mechanism for derived classes to
@@ -75,6 +86,8 @@ public class CardGameManager extends GameManager
     public void rematchGame ()
     {
         if (gameWillRematch()) {
+            // Stuff our old oids back in since they're ready.
+            _playerOids = _oldPlayerOids.clone();
             startGame();
         }
     }
@@ -143,17 +156,21 @@ public class CardGameManager extends GameManager
             return hands;
         }
     }
-    
+
     /**
      * Gets the player index of the specified client object, or -1
-     * if the client object does not represent a player.
+     * if the client object does not represent a player. If the game has ended,
+     * looks through the players of the now-ended game.
+     *
      */
     public int getPlayerIndex (ClientObject client)
     {
+        int[] oids = (_gameobj.state == GameObject.GAME_OVER) ? _oldPlayerOids : _playerOids;
         int oid = client.getOid();
-        for (int i=0;i<_playerOids.length;i++) {
-            if (_playerOids[i] == oid) {
-                return i;
+
+        for (int ii=0; ii < oids.length; ii++) {
+            if (oids[ii] == oid) {
+                return ii;
             }
         }
         return -1;
@@ -265,4 +282,7 @@ public class CardGameManager extends GameManager
     
     /** The card game object. */
     protected CardGameObject _cardgameobj;
+
+    /** The oids of the players from our now-ended game. */
+    protected int[] _oldPlayerOids;
 }
