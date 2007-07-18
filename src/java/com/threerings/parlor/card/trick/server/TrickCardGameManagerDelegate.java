@@ -51,8 +51,7 @@ import com.threerings.parlor.card.trick.data.TrickCardGameMarshaller;
 import com.threerings.parlor.card.trick.data.TrickCardGameObject;
 
 /**
- * A card game manager delegate for trick-based card games, such as
- * Spades and Hearts.
+ * A card game manager delegate for trick-based card games, such as Spades and Hearts.
  */
 public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
     implements TrickCardGameProvider
@@ -89,8 +88,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
     {
         super.didShutdown();
         
-        PresentsServer.invmgr.clearDispatcher(
-            _trickCardGame.getTrickCardGameService());
+        PresentsServer.invmgr.clearDispatcher(_trickCardGame.getTrickCardGameService());
     }
     
     // Documentation inherited.
@@ -108,8 +106,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
     }
     
     /**
-     * Called when the game has started.  Default implementation starts the
-     * first hand.
+     * Called when the game has started.  Default implementation starts the first hand.
      */
     public void gameDidStart ()
     {
@@ -129,14 +126,12 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
         _endTrickInterval.cancel();
         
         // make sure trick state is back to between hands
-        if (_trickCardGame.getTrickState() !=
-            TrickCardGameObject.BETWEEN_HANDS) {
+        if (_trickCardGame.getTrickState() != TrickCardGameObject.BETWEEN_HANDS) {
             _trickCardGame.setTrickState(TrickCardGameObject.BETWEEN_HANDS);
         }
         
         // initialize the array of rematch requests
-        _trickCardGame.setRematchRequests(
-            new int[_cardGame.getPlayerCount()]); 
+        _trickCardGame.setRematchRequests(new int[_cardGame.getPlayerCount()]); 
     }
     
     // Documentation inherited.
@@ -213,26 +208,22 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
     /**
      * Processes a request to transfer a group of cards between players.
      * Default implementation verifies that the user's hand contains the
-     * specified cards, then calls {@link #sendCardsToPlayer(int, int,
-     * Card[])}.
+     * specified cards, then calls {@link #sendCardsToPlayer(int, int, Card[])}.
      */
-    public void sendCardsToPlayer (ClientObject client, int toidx,
-        Card[] cards)
+    public void sendCardsToPlayer (ClientObject client, int toidx, Card[] cards)
     {
         // make sure they're actually a player
         int fromidx = _cgmgr.getPlayerIndex(client);
         if (fromidx == -1) {
             Log.warning("Send request from non-player [username=" +
-                ((BodyObject)client).who() + ", cards=" +
-                StringUtil.toString(cards) + "].");
+                ((BodyObject)client).who() + ", cards=" + StringUtil.toString(cards) + "].");
             return;
         }
         
         // make sure they have the cards
         if (!_hands[fromidx].containsAll(cards)) {
             Log.warning("Tried to send cards not held [username=" +
-                ((BodyObject)client).who() + ", cards=" +
-                StringUtil.toString(cards) + "].");
+                ((BodyObject)client).who() + ", cards=" + StringUtil.toString(cards) + "].");
             return;
         }
         
@@ -262,8 +253,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
     public void playCard (ClientObject client, Card card, int handSize)
     {
         // make sure we're playing a trick
-        if (_trickCardGame.getTrickState() !=
-            TrickCardGameObject.PLAYING_TRICK) {
+        if (_trickCardGame.getTrickState() != TrickCardGameObject.PLAYING_TRICK) {
             return; // silently ignore play attempts after timeouts
         }
         
@@ -347,15 +337,12 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
         }
         
         // make sure the player hasn't already requested
-        if (_trickCardGame.getRematchRequests()[pidx] !=
-            TrickCardGameObject.NO_REQUEST) {
-            Log.warning("Repeated rematch request [username=" +
-                ((BodyObject)client).who() + "].");
+        if (_trickCardGame.getRematchRequests()[pidx] != TrickCardGameObject.NO_REQUEST) {
+            Log.warning("Repeated rematch request [username=" + ((BodyObject)client).who() + "].");
             return;
         }
         
-        // if player is first requesting, set to request; else set
-        // to accept
+        // if player is first requesting, set to request; else set to accept
         int req = (getRematchRequestCount() == 0 ?
             TrickCardGameObject.REQUESTS_REMATCH :
             TrickCardGameObject.ACCEPTS_REMATCH);
@@ -368,8 +355,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
     }
     
     /**
-     * Returns the number of players currently requesting or accepting
-     * a rematch.
+     * Returns the number of players currently requesting or accepting a rematch.
      */
     protected int getRematchRequestCount ()
     {
@@ -384,20 +370,17 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
     }
     
     /**
-     * Checks whether the trick is complete--that is, whether each player has
-     * played a card.
+     * Checks whether the trick is complete--that is, whether each player has played a card.
      */
     protected boolean isTrickComplete ()
     {
-        return _trickCardGame.getCardsPlayed().length ==
-            _cardGame.getPlayerCount();
+        return _trickCardGame.getCardsPlayed().length == _cardGame.getPlayerCount();
     }
     
     // Documentation inherited.
     protected void setFirstTurnHolder ()
     {
-        if (_trickCardGame.getTrickState() ==
-                TrickCardGameObject.PLAYING_TRICK) {
+        if (_trickCardGame.getTrickState() == TrickCardGameObject.PLAYING_TRICK) {
             super.setFirstTurnHolder();
             
         } else {
@@ -408,8 +391,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
     // Documentation inherited.
     protected void setNextTurnHolder ()
     {
-        if (_trickCardGame.getTrickState() ==
-                TrickCardGameObject.PLAYING_TRICK &&
+        if (_trickCardGame.getTrickState() == TrickCardGameObject.PLAYING_TRICK &&
             !isTrickComplete()) {
             super.setNextTurnHolder();
             
@@ -424,8 +406,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
      */
     protected void turnTimedOut ()
     {
-        if (_trickCardGame.getTrickState() ==
-            TrickCardGameObject.PLAYING_TRICK) {
+        if (_trickCardGame.getTrickState() == TrickCardGameObject.PLAYING_TRICK) {
             playCard(_turnIdx, pickRandomPlayableCard(_hands[_turnIdx]));
         }
     }
@@ -444,14 +425,12 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
     }
     
     /**
-     * Increases the specified player's turn duration due to avoiding a
-     * time-out.
+     * Increases the specified player's turn duration due to avoiding a time-out.
      */
     protected void increaseTurnDurationScale (int pidx)
     {
         float oldScale = _trickCardGame.getTurnDurationScales()[pidx],
-            newScale = Math.min(oldScale + TURN_DURATION_SCALE_INCREASE,
-                1.0f);
+            newScale = Math.min(oldScale + TURN_DURATION_SCALE_INCREASE, 1.0f);
         if (newScale != oldScale) {
             _trickCardGame.setTurnDurationScalesAt(newScale, pidx);
         }
@@ -480,8 +459,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
     
     /**
      * Notifies the object that a new hand has just started.  Default
-     * implementation prepares the deck, deals the hands, and starts the
-     * first trick.
+     * implementation prepares the deck, deals the hands, and starts the first trick.
      */
     protected void handDidStart ()
     {
@@ -511,8 +489,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
      */
     protected void dealHands ()
     {
-        _hands = _cgmgr.dealHands(_deck, _deck.size() /
-            _cardGame.getPlayerCount());
+        _hands = _cgmgr.dealHands(_deck, _deck.size() / _cardGame.getPlayerCount());
     }
     
     /**
@@ -541,8 +518,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
     
     /**
      * Notifies the object that a new trick has started.  Default
-     * implementation sets the first turn holder and starts the
-     * turn.
+     * implementation sets the first turn holder and starts the turn.
      */
     protected void trickDidStart ()
     {
@@ -614,8 +590,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
     protected boolean _turnTimedOut;
     
     /** The all-purpose turn timeout interval.  */
-    protected Interval _turnTimeoutInterval =
-        new Interval(PresentsServer.omgr) {
+    protected Interval _turnTimeoutInterval = new Interval(PresentsServer.omgr) {
         public void expired () {
             _turnTimedOut = true;
             turnTimedOut();
@@ -629,8 +604,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
         }
     };
     
-    /** Reduce turn duration scales by this amount each time the player times
-     * out. */
+    /** Reduce turn duration scales by this amount each time the player times out. */
     protected static final float TURN_DURATION_SCALE_REDUCTION = 0.25f;
     
     /**
