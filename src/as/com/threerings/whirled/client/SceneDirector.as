@@ -39,15 +39,17 @@ import com.threerings.crowd.client.LocationDirector;
 import com.threerings.crowd.client.LocationDirector_FailureHandler;
 import com.threerings.crowd.client.LocationObserver;
 import com.threerings.crowd.data.PlaceConfig;
+import com.threerings.crowd.data.PlaceObject;
 
 import com.threerings.whirled.client.persist.SceneRepository;
 import com.threerings.whirled.data.Scene;
 import com.threerings.whirled.data.SceneCodes;
 import com.threerings.whirled.data.SceneModel;
+import com.threerings.whirled.data.SceneObject;
+import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.util.NoSuchSceneError;
 import com.threerings.whirled.util.SceneFactory;
 import com.threerings.whirled.util.WhirledContext;
-import com.threerings.whirled.data.SceneUpdate;
 
 /**
  * The scene director is the client's interface to all things scene related. It interfaces with the
@@ -60,7 +62,8 @@ import com.threerings.whirled.data.SceneUpdate;
  * LocationObserver#locationChangeFailed}.
  */
 public class SceneDirector extends BasicDirector
-    implements LocationDirector_FailureHandler, SceneReceiver, SceneService_SceneMoveListener
+    implements LocationDirector_FailureHandler, SceneReceiver, SceneService_SceneMoveListener,
+               LocationObserver
 {
     private static const log :Log = Log.getLog(SceneDirector);
 
@@ -86,6 +89,9 @@ public class SceneDirector extends BasicDirector
         _locdir = locdir;
         setSceneRepository(screp);
         _fact = fact;
+
+        // we need to observe scene moves so that we can clear out if we change to a non-scene
+        _locdir.addLocationObserver(this);
 
         // set ourselves up as a failure handler with the location director because we need to do
         // special processing
@@ -320,7 +326,7 @@ public class SceneDirector extends BasicDirector
         ));
     }
 
-    // documentation inherited from interface
+    // from interface SceneService_SceneMoveListener
     public function requestFailed (reason :String) :void
     {
         // clear out our pending info
@@ -329,6 +335,28 @@ public class SceneDirector extends BasicDirector
 
         // let our observers know that something has gone horribly awry
         _locdir.failedToMoveTo(sceneId, reason);
+    }
+
+    // from interface LocationObserver
+    public function locationMayChange (placeId :int) :Boolean
+    {
+        return true; // fine with us
+    }
+
+    // from interface LocationObserver
+    public function locationDidChange (place :PlaceObject) :void
+    {
+        // if we're no longer in a scene, we need to clear out our scene information
+        if (!(place is SceneObject)) {
+            clearScene();
+        }
+    }
+
+    // from interface LocationObserver
+    public function locationChangeFailed (placeId :int, reason :String) :void
+    {
+        // we don't care about this notification as we're registered as a LocationDirector
+        // FailureHandler so we will later be requested to recover from our failed move
     }
 
     /**
