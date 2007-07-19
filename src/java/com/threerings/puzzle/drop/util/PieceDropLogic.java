@@ -44,8 +44,7 @@ public interface PieceDropLogic
     public boolean isDroppablePiece (int piece);
 
     /**
-     * Returns whether the given piece has constraints upon it that
-     * impact its droppability.
+     * Returns whether the given piece has constraints upon it that impact its droppability.
      */
     public boolean isConstrainedPiece (int piece);
 
@@ -59,16 +58,13 @@ public interface PieceDropLogic
      * @param pre whether the climbability check is being performed
      * before the height is incremented, or after.
      */
-    public boolean isClimbablePiece (
-        boolean allowConst, int piece, boolean pre);
+    public boolean isClimbablePiece (boolean allowConst, int piece, boolean pre);
 
     /**
-     * Returns the x-axis coordinate of the specified edge of the
-     * given constrained piece.
+     * Returns the x-axis coordinate of the specified edge of the given constrained piece.
      * 
-     * <p> TODO: This should go away once the sword and sail games
-     * have standardized on WEST/EAST or BLOCK_LEFT/BLOCK_RIGHT to
-     * reference block edges.
+     * <p> TODO: This should go away once the sword and sail games have standardized on 
+     * WEST/EAST or BLOCK_LEFT/BLOCK_RIGHT to reference block edges.
      *
      * @param board the board to search.
      * @param col the column of the constrained piece.

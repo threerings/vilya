@@ -38,8 +38,7 @@ public class PieceDropper
     implements DropPieceCodes
 {
     /**
-     * A class to hold information detailing the pieces to be dropped
-     * in a particular column.
+     * A class to hold information detailing the pieces to be dropped in a particular column.
      */
     public static class PieceDropInfo
     {
@@ -92,8 +91,7 @@ public class PieceDropper
 
     /**
      * Effects any drops possible on the supplied board (modifying the
-     * board in the progress) and notifying the supplied drop observer of
-     * those drops.
+     * board in the progress) and notifying the supplied drop observer of those drops.
      *
      * @return the number of pieces dropped.
      */
@@ -106,18 +104,32 @@ public class PieceDropper
             }
         }
 
-        // if the board wants pieces to be dropped in to fill the gaps, do
-        // that now
+        // if the board wants pieces to be dropped in to fill the gaps, do that now
         if (_logic.boardAlwaysFilled()) {
-            for (int xx = 0; xx < bwid; xx++) {
-                int dist = board.getDropDistance(xx, -1);
-                for (int ii = 0; ii < dist; ii++) {
-                    int yy = (-1 - ii);
-                    int piece = board.getNextPiece();
-                    if (piece != PIECE_NONE) {
-                        drop(board, piece, xx, yy, yy + dist, drobs);
-                        dropped++;
-                    }
+            dropped += fillBoard(board, drobs);
+        }
+
+        return dropped;
+    }
+
+    /**
+     * Drops new pieces onto the board to fill the gaps.
+     *
+     * @return the number of pieces dropped.
+     */
+    public int fillBoard (DropBoard board, DropObserver drobs)
+    {
+        int dropped = 0;
+        int bwid = board.getWidth();
+
+        for (int xx = 0; xx < bwid; xx++) {
+            int dist = board.getDropDistance(xx, -1);
+            for (int ii = 0; ii < dist; ii++) {
+                int yy = (-1 - ii);
+                int piece = board.getNextPiece();
+                if (piece != PIECE_NONE) {
+                    drop(board, piece, xx, yy, yy + dist, drobs);
+                    dropped++;
                 }
             }
         }
@@ -127,11 +139,9 @@ public class PieceDropper
 
     /**
      * Computes and effects the drop for the specified piece and any
-     * associated attached pieces. The supplied observer is notified of
-     * all drops.
+     * associated attached pieces. The supplied observer is notified of all drops.
      */
-    protected int dropPieces (
-        DropBoard board, int xx, int yy, DropObserver drobs)
+    protected int dropPieces (DropBoard board, int xx, int yy, DropObserver drobs)
     {
         // skip empty or fixed pieces
         int piece = board.getPiece(xx, yy);
@@ -147,8 +157,7 @@ public class PieceDropper
             int bwid = board.getWidth();
             if (start < 0 || end >= bwid) {
                 Log.warning("Board reported bogus constrained edge " +
-                            "[x=" + xx + ", y=" + yy +
-                            ", start=" + start + ", end=" + end + "].");
+                            "[x=" + xx + ", y=" + yy + ", start=" + start + ", end=" + end + "].");
                 board.dump();
                 start = Math.max(start, 0);
                 end = Math.min(end, bwid);

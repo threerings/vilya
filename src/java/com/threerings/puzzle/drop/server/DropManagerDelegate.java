@@ -58,8 +58,7 @@ import com.threerings.puzzle.drop.util.PieceDropper;
  * for checking things like whether the game is over, whether a player is
  * still active in the game, and so forth.
  *
- * <p> Derived classes are likely to want to override {@link
- * #getPieceDropLogic}.
+ * <p> Derived classes are likely to want to override {@link #getPieceDropLogic}.
  */
 public abstract class DropManagerDelegate extends PuzzleManagerDelegate
     implements PuzzleCodes, DropCodes
