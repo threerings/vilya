@@ -106,7 +106,7 @@ public abstract class DropManagerDelegate extends PuzzleManagerDelegate
         // create the piece dropper if appropriate
         PieceDropLogic pdl = getPieceDropLogic();
         if (pdl != null) {
-            _dropper = new PieceDropper(pdl);
+            _dropper = getPieceDropper(pdl);
         }
     }
 
@@ -132,13 +132,21 @@ public abstract class DropManagerDelegate extends PuzzleManagerDelegate
     }
 
     /**
-     * Returns the piece drop logic used to drop any pieces that need
-     * dropping in the board.
+     * Returns the piece drop logic used to drop any pieces that need dropping in the board.
      */
     protected PieceDropLogic getPieceDropLogic ()
     {
         return null;
     }
+
+    /**
+     * Returns the piece dropper used to drop any pieces that need dropping in the board.  
+     */
+    protected PieceDropper getPieceDropper (PieceDropLogic logic)
+    {
+        return new PieceDropper(logic);
+    }
+
 
     /**
      * This method should be called by derived classes whenever the player

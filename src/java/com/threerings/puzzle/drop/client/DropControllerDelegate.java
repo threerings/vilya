@@ -144,7 +144,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
         // create the piece dropper if appropriate
         PieceDropLogic pdl = getPieceDropLogic();
         if (pdl != null) {
-            _dropper = new PieceDropper(pdl);
+            _dropper = getPieceDropper(pdl);
         }
     }
 
@@ -867,7 +867,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     }
 
     /**
-     * Returns the piece dropper used to drop any pieces that need
+     * Returns the piece drop logic used to drop any pieces that need
      * dropping in the board.  Derived classes that intend to make use of
      * {@link #dropPieces} must implement this method and return a
      * reference to their game-specific piece dropper implementation.
@@ -875,6 +875,14 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     protected PieceDropLogic getPieceDropLogic ()
     {
         return null;
+    }
+
+    /**
+     * Returns the piece dropper used to drop any pieces that need dropping in the board.  
+     */
+    protected PieceDropper getPieceDropper (PieceDropLogic logic)
+    {
+        return new PieceDropper(logic);
     }
 
     // documentation inherited
