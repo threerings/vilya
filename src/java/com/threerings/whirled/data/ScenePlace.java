@@ -33,11 +33,19 @@ public class ScenePlace extends Place
     public int sceneId;
 
     /**
+     * Returns the scene id for the supplied place or -1 if the place is null or not a scene place.
+     */
+    public static int getSceneId (Place place)
+    {
+        return (place instanceof ScenePlace) ? ((ScenePlace)place).sceneId : -1;
+    }
+
+    /**
      * Returns the scene id occupied by the supplied body or -1 if the body is not in a scene.
      */
     public static int getSceneId (BodyObject bobj)
     {
-        return (bobj.location instanceof ScenePlace) ? ((ScenePlace)bobj.location).sceneId : -1;
+        return getSceneId(bobj.location);
     }
 
     /** Used when unserializing. */
