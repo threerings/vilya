@@ -19,22 +19,38 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-package com.threerings.whirled.data {
+package com.threerings.whirled.data;
+
+import com.threerings.crowd.data.BodyObject;
+import com.threerings.crowd.data.Place;
 
 /**
- * A system that uses the whirled services must provide a body object
- * extension that implements this interface.
+ * Extends {@link Place} with scene information.
  */
-public interface ScenedBodyObject
+public class ScenePlace extends Place
 {
-    /**
-     * Returns the scene id currently occupied by this body.
-     */
-    function getSceneId () :int;
+    /** The id of the scene occupied by the body. */
+    public int sceneId;
 
-//    /**
-//     * Sets the scene id currently occupied by this body.
-//     */
-//    function setSceneId (sceneId :int) :void;
-}
+    /**
+     * Returns the scene id occupied by the supplied body or -1 if the body is not in a scene.
+     */
+    public static int getSceneId (BodyObject bobj)
+    {
+        return (bobj.location instanceof ScenePlace) ? ((ScenePlace)bobj.location).sceneId : -1;
+    }
+
+    /** Used when unserializing. */
+    public ScenePlace ()
+    {
+    }
+
+    /**
+     * Creates a scene place with the supplied {@link SceneObject} oid and scene id.
+     */
+    public ScenePlace (int sceneOid, int sceneId)
+    {
+        super(sceneOid);
+        this.sceneId = sceneId;
+    }
 }

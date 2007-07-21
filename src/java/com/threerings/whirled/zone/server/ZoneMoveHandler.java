@@ -29,7 +29,6 @@ import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.whirled.client.SceneService;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.SceneUpdate;
-import com.threerings.whirled.data.ScenedBodyObject;
 import com.threerings.whirled.server.AbstractSceneMoveHandler;
 import com.threerings.whirled.server.SceneManager;
 import com.threerings.whirled.server.SceneMoveHandler;
@@ -90,7 +89,6 @@ public class ZoneMoveHandler extends AbstractSceneMoveHandler
         // now that we've moved, we can update the user object with the new scene and zone ids
         _body.startTransaction();
         try {
-            ((ScenedBodyObject)_body).setSceneId(scmgr.getScene().getId());
             ((ZonedBodyObject)_body).setZoneId(_summary.zoneId);
         } finally {
             _body.commitTransaction();

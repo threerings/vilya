@@ -84,7 +84,7 @@ public abstract class GameController extends PlaceController
         // if this place object is not our current location we'll need to add it as an auxiliary
         // chat source
         BodyObject bobj = (BodyObject)_ctx.getClient().getClientObject();
-        if (bobj.location != plobj.getOid()) {
+        if (bobj.location == null || bobj.location.placeOid != plobj.getOid()) {
             _ctx.getChatDirector().addAuxiliarySource(_gobj, GameCodes.GAME_CHAT_TYPE);
         }
 

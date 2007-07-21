@@ -21,13 +21,13 @@
 
 package com.threerings.whirled.zone.data;
 
-import com.threerings.whirled.data.ScenedBodyObject;
+import com.threerings.crowd.data.BodyObject;
 
 /**
- * A system that uses the zone services must provide a body object
- * extension that implements this interface.
+ * A system that uses the zone services must extend {@link BodyObject} and implement this
+ * interface.
  */
-public interface ZonedBodyObject extends ScenedBodyObject
+public interface ZonedBodyObject
 {
     /**
      * Returns the zone id currently occupied by this body.

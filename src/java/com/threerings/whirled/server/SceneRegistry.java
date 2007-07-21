@@ -43,7 +43,6 @@ import com.threerings.whirled.data.Scene;
 import com.threerings.whirled.data.SceneCodes;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.SceneUpdate;
-import com.threerings.whirled.data.ScenedBodyObject;
 import com.threerings.whirled.server.persist.SceneRepository;
 import com.threerings.whirled.util.SceneFactory;
 import com.threerings.whirled.util.UpdateList;
@@ -245,13 +244,10 @@ public class SceneRegistry
      * Ejects the specified body from their current scene and zone. This is the zone equivalent to
      * {@link LocationProvider#leaveOccupiedPlace}.
      */
-    public void leaveOccupiedScene (ScenedBodyObject source)
+    public void leaveOccupiedScene (BodyObject source)
     {
-        // remove them from their occupied place
-        CrowdServer.plreg.locprov.leaveOccupiedPlace((BodyObject)source);
-
-        // and clear out their scene information
-        source.setSceneId(0);
+        // remove them from their occupied place (clears out scene info as well)
+        CrowdServer.plreg.locprov.leaveOccupiedPlace(source);
     }
 
     /**

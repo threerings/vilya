@@ -44,6 +44,7 @@ import com.threerings.crowd.data.PlaceObject;
 
 import com.threerings.whirled.client.SceneDirector;
 import com.threerings.whirled.data.SceneModel;
+import com.threerings.whirled.data.ScenePlace;
 import com.threerings.whirled.util.WhirledContext;
 
 import com.threerings.whirled.spot.data.ClusteredBodyObject;
@@ -121,9 +122,10 @@ public class SpotSceneDirector extends BasicDirector
 
         // sanity check the server's notion of what scene we're in with our notion of it
         var sceneId :int = _scdir.getScene().getId();
-        if (sceneId != _self.getSceneId()) {
+        var clSceneId :int = ScenePlace.getSceneId(_self as BodyObject);
+        if (sceneId != clSceneId) {
             log.warning("Client and server differ in opinion of what scene we're in " +
-                        "[sSceneId=" + _self.getSceneId() + ", cSceneId=" + sceneId + "].");
+                        "[sSceneId=" + clSceneId + ", cSceneId=" + sceneId + "].");
             return false;
         }
 

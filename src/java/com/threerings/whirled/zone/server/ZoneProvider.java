@@ -33,7 +33,6 @@ import com.threerings.crowd.server.LocationProvider;
 
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.SceneUpdate;
-import com.threerings.whirled.data.ScenedBodyObject;
 import com.threerings.whirled.server.SceneManager;
 import com.threerings.whirled.server.SceneRegistry;
 
@@ -150,7 +149,7 @@ public class ZoneProvider
         }
 
         // remove them from their occupied scene
-        _screg.leaveOccupiedScene(source);
+        _screg.leaveOccupiedScene((BodyObject)source);
 
         // and clear out their zone information
         source.setZoneId(-1);

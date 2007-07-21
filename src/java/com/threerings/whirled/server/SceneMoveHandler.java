@@ -32,7 +32,6 @@ import com.threerings.whirled.client.SceneService;
 import com.threerings.whirled.data.SceneCodes;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.SceneUpdate;
-import com.threerings.whirled.data.ScenedBodyObject;
 
 /**
  * Handles a simple scene to scene move.
@@ -49,12 +48,9 @@ public class SceneMoveHandler extends AbstractSceneMoveHandler
     protected void effectSceneMove (SceneManager scmgr)
         throws InvocationException
     {
-        // move to the place object associated with this scene
+        // move to location associated with this scene
         int ploid = scmgr.getPlaceObject().getOid();
         PlaceConfig config = CrowdServer.plreg.locprov.moveTo(_body, ploid);
-
-        // now that we've finally moved, we can update the user object with the new scene id
-        ((ScenedBodyObject)_body).setSceneId(scmgr.getScene().getId());
 
         // check to see if they need a newer version of the scene data
         SceneService.SceneMoveListener listener = (SceneService.SceneMoveListener)_listener;

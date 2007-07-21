@@ -105,9 +105,9 @@ public class ClientController extends Controller
                             ", err=" + nfe + "].");
             }
 
-        } else if (_body.location != -1) {
+        } else if (_body.location != null) {
             // if we were already in a location, go there
-            moveOid = _body.location;
+            moveOid = _body.location.placeOid;
 
         } else {
             // otherwise head to the default lobby to start things off

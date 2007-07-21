@@ -38,11 +38,12 @@ import com.threerings.crowd.chat.client.ChatDirector;
 import com.threerings.crowd.chat.data.ChatCodes;
 import com.threerings.crowd.client.LocationAdapter;
 import com.threerings.crowd.client.LocationDirector;
+import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceObject;
 
 import com.threerings.whirled.client.SceneDirector;
 import com.threerings.whirled.data.SceneModel;
-import com.threerings.whirled.data.ScenedBodyObject;
+import com.threerings.whirled.data.ScenePlace;
 import com.threerings.whirled.util.WhirledContext;
 
 import com.threerings.whirled.spot.Log;
@@ -130,10 +131,10 @@ public class SpotSceneDirector extends BasicDirector
 
         // sanity check the server's notion of what scene we're in with our notion of it
         int sceneId = _scdir.getScene().getId();
-        ScenedBodyObject sbobj = (ScenedBodyObject)_ctx.getClient().getClientObject();
-        if (sceneId != sbobj.getSceneId()) {
+        int clSceneId = ScenePlace.getSceneId((BodyObject)_ctx.getClient().getClientObject());
+        if (sceneId != clSceneId) {
             Log.warning("Client and server differ in opinion of what scene we're in " +
-                        "[sSceneId=" + sbobj.getSceneId() + ", cSceneId=" + sceneId + "].");
+                        "[sSceneId=" + clSceneId + ", cSceneId=" + sceneId + "].");
             return false;
         }
 

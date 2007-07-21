@@ -24,12 +24,14 @@ package com.threerings.whirled.server;
 import com.samskivert.io.PersistenceException;
 import com.samskivert.util.Invoker;
 
+import com.threerings.crowd.data.Place;
+import com.threerings.crowd.server.CrowdServer;
 import com.threerings.crowd.server.PlaceManager;
-import com.threerings.presents.server.PresentsServer;
 
 import com.threerings.whirled.Log;
 import com.threerings.whirled.data.Scene;
 import com.threerings.whirled.data.SceneCodes;
+import com.threerings.whirled.data.ScenePlace;
 import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.server.WhirledServer;
 import com.threerings.whirled.util.UpdateList;
@@ -56,6 +58,12 @@ public class SceneManager extends PlaceManager
     public SceneUpdate[] getUpdates (int fromVersion)
     {
         return _updates.getUpdates(fromVersion);
+    }
+
+    @Override // from PlaceManager
+    public Place getLocation ()
+    {
+        return new ScenePlace(_plobj.getOid(), _scene.getId());
     }
 
     /**
@@ -100,7 +108,7 @@ public class SceneManager extends PlaceManager
 
         // Wait until us and all of our subclasses have completely finished running didStartup
         // prior to registering the scene as being ready.
-        PresentsServer.omgr.postRunnable(new Runnable() {
+        CrowdServer.omgr.postRunnable(new Runnable() {
             public void run () {
                 _screg.sceneManagerDidStart(SceneManager.this);
             }

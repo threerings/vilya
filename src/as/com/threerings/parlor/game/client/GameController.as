@@ -73,9 +73,8 @@ public /*abstract*/ class GameController extends PlaceController
     }
 
     /**
-     * Adds this controller as a listener to the game object (thus derived
-     * classes need not do so) and lets the game manager know that we are
-     * now ready to go.
+     * Adds this controller as a listener to the game object (thus derived classes need not do so)
+     * and lets the game manager know that we are now ready to go.
      */
     override public function willEnterPlace (plobj :PlaceObject) :void
     {
@@ -84,26 +83,22 @@ public /*abstract*/ class GameController extends PlaceController
         // obtain a casted reference
         _gobj = (plobj as GameObject);
 
-        // if this place object is not our current location we'll need to
-        // add it as an auxiliary chat source
-        var bobj :BodyObject = 
-            (_ctx.getClient().getClientObject() as BodyObject);
-        if (bobj.location != plobj.getOid()) {
-            _ctx.getChatDirector().addAuxiliarySource(
-                _gobj, GameCodes.GAME_CHAT_TYPE);
+        // if this place object is not our current location we'll need to add it as an auxiliary
+        // chat source
+        var bobj :BodyObject = (_ctx.getClient().getClientObject() as BodyObject);
+        if (bobj.getPlaceOid() != plobj.getOid()) {
+            _ctx.getChatDirector().addAuxiliarySource(_gobj, GameCodes.GAME_CHAT_TYPE);
         }
 
         // and add ourselves as a listener
         _gobj.addListener(this);
 
-        // we don't want to claim to be finished until any derived classes
-        // that overrode this method have executed, so we'll queue up a
-        // runnable here that will let the game manager know that we're
-        // ready on the next pass through the distributed event loop
+        // we don't want to claim to be finished until any derived classes that overrode this
+        // method have executed, so we'll queue up a runnable here that will let the game manager
+        // know that we're ready on the next pass through the distributed event loop
         log.info("Entering game " + _gobj.which() + ".");
         if (_gobj.getPlayerIndex(bobj.getVisibleName()) != -1) {
-            // finally let the game manager know that we're ready
-            // to roll
+            // finally let the game manager know that we're ready to roll
             _ctx.getClient().callLater(playerReady);
         }
     }

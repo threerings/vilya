@@ -61,23 +61,25 @@ public class SpotSceneManager extends SceneManager
      */
     public static void moveBodyToDefaultPortal (BodyObject body)
     {
-        SpotSceneManager mgr = (SpotSceneManager)CrowdServer.plreg.getPlaceManager(body.location);
-        if (mgr != null) {
-            SpotScene scene = (SpotScene)mgr.getScene();
-            if (scene == null) {
-                Log.warning("No scene in moveBodyToDefaultPortal()? " +
-                            "[who=" + body.who() +
-                            ", where=" + mgr.where() + "].");
-                return;
-            }
-            try {
-                Location eloc = scene.getDefaultEntrance().getLocation();
-                mgr.handleChangeLoc(body, eloc);
-            } catch (InvocationException ie) {
-                Log.warning("Could not move user to default portal " +
-                            "[where=" + mgr.where() + ", who=" + body.who() +
-                            ", error=" + ie + "].");
-            }
+        SpotSceneManager mgr = (SpotSceneManager)
+            CrowdServer.plreg.getPlaceManager(body.getPlaceOid());
+        if (mgr == null) {
+            return;
+        }
+
+        SpotScene scene = (SpotScene)mgr.getScene();
+        if (scene == null) {
+            Log.warning("No scene in moveBodyToDefaultPortal()? [who=" + body.who() +
+                        ", where=" + mgr.where() + "].");
+            return;
+        }
+
+        try {
+            Location eloc = scene.getDefaultEntrance().getLocation();
+            mgr.handleChangeLoc(body, eloc);
+        } catch (InvocationException ie) {
+            Log.warning("Could not move user to default portal [where=" + mgr.where() +
+                        ", who=" + body.who() + ", error=" + ie + "].");
         }
     }
 

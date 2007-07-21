@@ -37,7 +37,7 @@ import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.server.PlaceRegistry;
 
 import com.threerings.whirled.client.SceneService.SceneMoveListener;
-import com.threerings.whirled.data.ScenedBodyObject;
+import com.threerings.whirled.data.ScenePlace;
 import com.threerings.whirled.server.SceneManager;
 import com.threerings.whirled.server.SceneRegistry;
 
@@ -74,7 +74,8 @@ public class SpotProvider
         throws InvocationException
     {
         // le sanity check
-        int cSceneId = getCallerSceneId(caller);
+        BodyObject body = (BodyObject)caller;
+        int cSceneId = ScenePlace.getSceneId(body);
         if (cSceneId != sceneId) {
             Log.info("Ignoring stale traverse portal request [caller=" + caller.who() +
                      ", oSceneId=" + sceneId + ", portalId=" + portalId +
@@ -84,7 +85,6 @@ public class SpotProvider
         }
 
         // obtain the source scene
-        BodyObject body = (BodyObject)caller;
         SpotSceneManager srcmgr = (SpotSceneManager)_screg.getSceneManager(sceneId);
         if (srcmgr == null) {
             Log.warning("Traverse portal missing source scene " +
@@ -124,7 +124,7 @@ public class SpotProvider
         throws InvocationException
     {
         BodyObject source = (BodyObject)caller;
-        int cSceneId = getCallerSceneId(caller);
+        int cSceneId = ScenePlace.getSceneId(source);
         if (cSceneId != sceneId) {
             Log.info("Rejecting changeLocation for invalid scene [user=" + source.who() +
                      ", insid=" + cSceneId + ", wantsid=" + sceneId + ", loc=" + loc + "].");
@@ -153,8 +153,8 @@ public class SpotProvider
                              SpotService.ConfirmListener listener)
         throws InvocationException
     {
-        int sceneId = getCallerSceneId(caller);
         BodyObject source = (BodyObject)caller;
+        int sceneId = ScenePlace.getSceneId(source);
 
         // look up the scene manager for the specified scene
         SpotSceneManager smgr = (SpotSceneManager)_screg.getSceneManager(sceneId);
@@ -184,7 +184,7 @@ public class SpotProvider
         if (errmsg != null) {
             SpeakProvider.sendFeedback(source, MessageManager.GLOBAL_BUNDLE, errmsg);
         } else {
-            sendClusterChatMessage(getCallerSceneId(caller), source.getOid(),
+            sendClusterChatMessage(ScenePlace.getSceneId(source), source.getOid(),
                                    source.getVisibleName(), null, message, mode);
         }
     }
@@ -219,23 +219,6 @@ public class SpotProvider
 
         // pass this request on to the spot scene manager
         smgr.handleClusterSpeakRequest(speakerOid, speaker, bundle, message, mode);
-    }
-
-    /**
-     * Obtains the scene id occupied by the supplied caller.
-     *
-     * @exception InvocationException thrown if the caller does not implement {@link
-     * ScenedBodyObject}.
-     */
-    protected static int getCallerSceneId (ClientObject caller)
-        throws InvocationException
-    {
-        if (caller instanceof ScenedBodyObject) {
-            return ((ScenedBodyObject)caller).getSceneId();
-        } else {
-            Log.warning("Can't get scene from non-scened caller " + caller.who() + ".");
-            throw new InvocationException(INTERNAL_ERROR);
-        }
     }
 
     /** The place registry with which we interoperate. */

@@ -708,7 +708,7 @@ public class GameManager extends PlaceManager
             return; // body object can be null for ai players
         }
 
-        DObject place = CrowdServer.omgr.getObject(user.location);
+        DObject place = CrowdServer.omgr.getObject(user.getPlaceOid());
         if (place != null) {
             place.postMessage(PLAYER_KNOCKED_OUT, new Object[] { new int[] { user.getOid() } });
         }
@@ -1180,7 +1180,7 @@ public class GameManager extends PlaceManager
         for (int ii=0; ii < numPlayers; ii++) {
             BodyObject user = getPlayer(ii);
             if (user != null) {
-                places.add(user.location);
+                places.add(user.getPlaceOid());
                 (_gameobj.isWinner(ii) ? winners : losers).add(user.getOid());
             }
         }

@@ -21,13 +21,13 @@
 
 package com.threerings.whirled.spot.data {
 
-import com.threerings.whirled.data.ScenedBodyObject;
+import com.threerings.crowd.data.BodyObject;
 
 /**
- * Defines some required methods for a {@link ScenedBodyObject} that is to
- * participate in the Whirled Spot system.
+ * Defines some required methods for a {@link BodyObject} that is to participate in the Whirled
+ * Spot system.
  */
-public interface ClusteredBodyObject extends ScenedBodyObject
+public interface ClusteredBodyObject
 {
     /**
      * Returns the field name of the cluster oid distributed object field.
