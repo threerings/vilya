@@ -315,7 +315,7 @@ public class SpotSceneManager extends SceneManager
 
         // make sure we're in the same scene as said user
         BodyObject friend = (BodyObject)tobj;
-        if (friend.location != joiner.location) {
+        if (!friend.location.equals(joiner.location)) {
             Log.info("Refusing cluster join from non-proximate user [joiner=" + joiner.who() +
                      ", jloc=" + joiner.location + ", target=" + friend.who() +
                      ", tloc=" + friend.location + "].");
