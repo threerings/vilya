@@ -860,7 +860,7 @@ public class GameManager extends PlaceManager
     protected void playersAllHere ()
     {
         // if we're a seated game and we haven't already started, start.
-        if ((getMatchType() == GameConfig.SEATED_GAME) && !_gameobj.isInPlay()) {
+        if ((getMatchType() == GameConfig.SEATED_GAME) && _gameobj.state == GameObject.PRE_GAME) {
             startGame();
         }
     }
