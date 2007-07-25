@@ -23,11 +23,13 @@ package com.threerings.parlor.rating.server.persist;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import com.samskivert.io.PersistenceException;
 
 import com.samskivert.jdbc.ConnectionProvider;
 import com.samskivert.jdbc.depot.DepotRepository;
+import com.samskivert.jdbc.depot.PersistentRecord;
 import com.samskivert.jdbc.depot.clause.Where;
 import com.samskivert.jdbc.depot.operator.Conditionals.*;
 import com.samskivert.jdbc.depot.operator.Logic.And;
@@ -90,5 +92,11 @@ public class RatingRepository extends DepotRepository
         throws PersistenceException
     {
         store(new RatingRecord(gameId, playerId, rating, experience));
+    }
+
+    @Override // from DepotRepository
+    protected void getManagedRecords (Set<Class<? extends PersistentRecord>> classes)
+    {
+        classes.add(RatingRecord.class);
     }
 }
