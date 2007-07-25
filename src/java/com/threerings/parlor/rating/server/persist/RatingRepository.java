@@ -29,8 +29,8 @@ import com.samskivert.io.PersistenceException;
 import com.samskivert.jdbc.ConnectionProvider;
 import com.samskivert.jdbc.depot.DepotRepository;
 import com.samskivert.jdbc.depot.clause.Where;
-import com.samskivert.jdbc.depot.operator.Logic.*;
 import com.samskivert.jdbc.depot.operator.Conditionals.*;
+import com.samskivert.jdbc.depot.operator.Logic.And;
 
 /**
  * Handles the persistent storage of per-user per-game ratings.
@@ -52,10 +52,9 @@ public class RatingRepository extends DepotRepository
     public RatingRecord getRating (int gameId, int playerId)
         throws PersistenceException
     {
-        return load(
-            RatingRecord.class,
-            RatingRecord.GAME_ID, gameId,
-            RatingRecord.PLAYER_ID, playerId);
+        return load(RatingRecord.class,
+                    RatingRecord.GAME_ID, gameId,
+                    RatingRecord.PLAYER_ID, playerId);
     }
 
     /**
@@ -69,11 +68,9 @@ public class RatingRepository extends DepotRepository
         if (players.length == 0) {
             return Collections.emptyList();
         }
-        return findAll(
-            RatingRecord.class,
-            new Where(new And(
-                new Equals(RatingRecord.GAME_ID, gameId),
-                new In(RatingRecord.PLAYER_ID, players))));
+        return findAll(RatingRecord.class,
+                       new Where(new And(new Equals(RatingRecord.GAME_ID_C, gameId),
+                                         new In(RatingRecord.PLAYER_ID_C, players))));
     }
 
     /**
@@ -82,7 +79,7 @@ public class RatingRepository extends DepotRepository
     public List<RatingRecord> getRatings (int playerId)
         throws PersistenceException
     {
-        return findAll(RatingRecord.class, new Where(RatingRecord.PLAYER_ID, playerId));
+        return findAll(RatingRecord.class, new Where(RatingRecord.PLAYER_ID_C, playerId));
     }
 
     /**
