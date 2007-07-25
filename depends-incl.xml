@@ -7,7 +7,7 @@
   <target name="check-available">
     <available property="xml-writer.present"
      classname="com.megginson.sax.DataWriter" classpathref="classpath"/>
-    <echo message="Have XML Writer: ${xml-writer.present}"/>
+    <echo level="info" message="Have XML Writer: ${xml-writer.present}"/>
 
     <condition property="build.xml">
       <isset property="xml-writer.present"/>
@@ -15,7 +15,7 @@
 
     <available property="depot.present"
      classname="com.samskivert.jdbc.depot.Query" classpathref="classpath"/>
-    <echo message="Have JDBC Depot: ${depot.present}"/>
+    <echo level="info" message="Have JDBC Depot: ${depot.present}"/>
   </target>
 
 </project>
