@@ -7,10 +7,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -18,13 +14,14 @@ import java.util.logging.Level;
 
 import com.samskivert.io.ByteArrayOutInputStream;
 import com.samskivert.io.PersistenceException;
+import com.samskivert.util.HashIntMap;
+
 import com.samskivert.jdbc.ConnectionProvider;
-import com.samskivert.jdbc.JDBCUtil;
 import com.samskivert.jdbc.depot.CacheInvalidator;
 import com.samskivert.jdbc.depot.DepotRepository;
+import com.samskivert.jdbc.depot.PersistenceContext.CacheEvictionFilter;
 import com.samskivert.jdbc.depot.PersistenceContext;
 import com.samskivert.jdbc.depot.PersistentRecord;
-import com.samskivert.jdbc.depot.PersistenceContext.CacheEvictionFilter;
 import com.samskivert.jdbc.depot.annotation.Computed;
 import com.samskivert.jdbc.depot.annotation.Entity;
 import com.samskivert.jdbc.depot.clause.FieldOverride;
@@ -32,7 +29,6 @@ import com.samskivert.jdbc.depot.clause.FromOverride;
 import com.samskivert.jdbc.depot.clause.QueryClause;
 import com.samskivert.jdbc.depot.clause.Where;
 import com.samskivert.jdbc.depot.expression.FunctionExp;
-import com.samskivert.util.HashIntMap;
 
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
@@ -56,8 +52,7 @@ public class StatRepository extends DepotRepository
     /**
      * Constructs a new statistics repository with the specified connection provider.
      *
-     * @param conprov the connection provider via which we will obtain our
-     * database connection.
+     * @param conprov the connection provider via which we will obtain our database connection.
      */
     public StatRepository (ConnectionProvider conprov)
         throws PersistenceException
@@ -102,16 +97,17 @@ public class StatRepository extends DepotRepository
     {
         CacheInvalidator invalidator = new CacheInvalidator() {
             public void invalidate (PersistenceContext ctx) {
-                ctx.cacheTraverse(StatRecord.class.getName(), new CacheEvictionFilter<StatRecord>() {
-                        public boolean testForEviction (Serializable key, StatRecord record) {
-                            return record != null && record.playerId == playerId;
-                        }
-                    });
+                ctx.cacheTraverse(
+                    StatRecord.class.getName(), new CacheEvictionFilter<StatRecord>() {
+                    public boolean testForEviction (Serializable key, StatRecord record) {
+                        return record != null && record.playerId == playerId;
+                    }
+                });
             }
         };
         deleteAll(StatRecord.class, new Where(StatRecord.PLAYER_ID_C, playerId), invalidator);
     }
-    
+
     /**
      * Writes out any of the stats in the supplied array that have been modified since they were
      * first loaded. Exceptions that occur while writing the stats will be caught and logged.
@@ -243,11 +239,6 @@ public class StatRepository extends DepotRepository
         store(new StatRecord(playerId, stat.getCode(), out.toByteArray()));
     }
 
-    @Computed @Entity
-    protected static class MaxStatCodeRecord extends PersistentRecord {
-        int maxCode;
-    };
-
     /** Helper function for {@link #getStringCode}. */
     protected Integer assignStringCode (final Stat.Type type, final String value)
         throws PersistenceException
@@ -265,7 +256,7 @@ public class StatRepository extends DepotRepository
             // if (ii == 0 && code > 0) {
             //     code = code-1;
             // }
-            
+
             try {
                 insert(new StringCodeRecord(type.code(), value, code));
                 return code;
@@ -273,7 +264,7 @@ public class StatRepository extends DepotRepository
             } catch (PersistenceException pe) {
                 // if this is not a duplicate row exception, something is booched and we
                 // just fail
-                
+
 //                if (!liaison.isDuplicateRowException(sqe)) {
 //                    throw sqe;
 //                }
@@ -298,26 +289,6 @@ public class StatRepository extends DepotRepository
         }
         throw new PersistenceException(
             "Unable to assign code after 10 attempts [type=" + type + ", value=" + value + "]");
-    }
-
-    /** Helper function for {@link #assignStringCode}. */
-    protected void insertStringCode (Connection conn, Stat.Type type, String value, int code)
-        throws SQLException
-    {
-
-        String query = "insert into STRING_CODES (STAT_CODE, VALUE, CODE) values(" + type.code() +
-            ", " + JDBCUtil.escape(value) + ", " + code + ")";
-        Statement stmt = conn.createStatement();
-        try {
-            int mods = stmt.executeUpdate(query);
-            if (mods != 1) {
-                throw new SQLException("Insertion failed to modify one row [type=" + type +
-                                       ", value=" + value + ", code=" + code +
-                                       ", mods=" + mods + "]");
-            }
-        } finally {
-            JDBCUtil.close(stmt);
-        }
     }
 
     /** Helper function used at repository startup. */
@@ -357,6 +328,11 @@ public class StatRepository extends DepotRepository
         classes.add(StatRecord.class);
         classes.add(StringCodeRecord.class);
     }
+
+    @Computed @Entity
+    protected static class MaxStatCodeRecord extends PersistentRecord {
+        int maxCode;
+    };
 
     protected HashMap<Stat.Type,HashMap<String,Integer>> _stringToCode =
         new HashMap<Stat.Type,HashMap<String,Integer>>();
