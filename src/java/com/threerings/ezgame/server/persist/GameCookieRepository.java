@@ -24,7 +24,6 @@ package com.threerings.ezgame.server.persist;
 import java.util.Set;
 
 import com.samskivert.io.PersistenceException;
-import com.samskivert.jdbc.ConnectionProvider;
 import com.samskivert.jdbc.depot.DepotRepository;
 import com.samskivert.jdbc.depot.PersistenceContext;
 import com.samskivert.jdbc.depot.PersistentRecord;
@@ -34,13 +33,10 @@ import com.samskivert.jdbc.depot.PersistentRecord;
  */
 public class GameCookieRepository extends DepotRepository
 {
-    /** The database identifier used when establishing a connection. */
-    public static final String COOKIE_DB_IDENT = "gameCookiedb";
-
-    public GameCookieRepository (ConnectionProvider conprov)
+    public GameCookieRepository (PersistenceContext ctx)
         throws PersistenceException
     {
-        super(new PersistenceContext(COOKIE_DB_IDENT, conprov));
+        super(ctx);
     }
 
     /**
