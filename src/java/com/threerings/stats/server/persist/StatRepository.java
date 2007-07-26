@@ -16,7 +16,6 @@ import com.samskivert.io.ByteArrayOutInputStream;
 import com.samskivert.io.PersistenceException;
 import com.samskivert.util.HashIntMap;
 
-import com.samskivert.jdbc.ConnectionProvider;
 import com.samskivert.jdbc.depot.CacheInvalidator;
 import com.samskivert.jdbc.depot.DepotRepository;
 import com.samskivert.jdbc.depot.PersistenceContext.CacheEvictionFilter;
@@ -43,23 +42,6 @@ import static com.threerings.stats.Log.log;
 public class StatRepository extends DepotRepository
     implements Stat.AuxDataSource
 {
-    /**
-     * The database identifier used when establishing a database connection. This value being
-     * <code>statdb</code>.
-     */
-    public static final String STAT_DB_IDENT = "statdb";
-
-    /**
-     * Constructs a new statistics repository with the specified connection provider.
-     *
-     * @param conprov the connection provider via which we will obtain our database connection.
-     */
-    public StatRepository (ConnectionProvider conprov)
-        throws PersistenceException
-    {
-        this(new PersistenceContext(STAT_DB_IDENT, conprov));
-    }
-
     /**
      * Constructs a new statistics repository with the specified persistence context.
      */
