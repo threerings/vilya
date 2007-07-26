@@ -21,26 +21,18 @@
 
 package com.threerings.ezgame.server.persist;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.Set;
 
 import com.samskivert.io.PersistenceException;
-
 import com.samskivert.jdbc.ConnectionProvider;
-import com.samskivert.jdbc.DatabaseLiaison;
-import com.samskivert.jdbc.JDBCUtil;
-import com.samskivert.jdbc.JORARepository;
-import com.samskivert.jdbc.SimpleRepository;
-import com.samskivert.jdbc.TransitionRepository;
-
+import com.samskivert.jdbc.depot.DepotRepository;
+import com.samskivert.jdbc.depot.PersistenceContext;
+import com.samskivert.jdbc.depot.PersistentRecord;
 
 /**
  * Provides storage services for user cookies used in games.
  */
-public class GameCookieRepository extends SimpleRepository
+public class GameCookieRepository extends DepotRepository
 {
     /** The database identifier used when establishing a connection. */
     public static final String COOKIE_DB_IDENT = "gameCookiedb";
@@ -48,48 +40,18 @@ public class GameCookieRepository extends SimpleRepository
     public GameCookieRepository (ConnectionProvider conprov)
         throws PersistenceException
     {
-        super(conprov, COOKIE_DB_IDENT);
-
-        maintenance("analyze", "GAME_COOKIES");
-    }
-
-    @Override
-    protected void migrateSchema (Connection conn, DatabaseLiaison liaison)
-        throws SQLException, PersistenceException
-    {
-        super.migrateSchema(conn, liaison);
-
-        JDBCUtil.createTableIfMissing(conn, "GAME_COOKIES", new String[] {
-            "GAME_ID integer not null",
-            "USER_ID integer not null",
-            "COOKIE blob not null",
-            "primary key (GAME_ID, USER_ID)" }, "");
+        super(new PersistenceContext(COOKIE_DB_IDENT, conprov));
     }
 
     /**
      * Get the specified game cookie, or null if none.
      */
-    public byte[] getCookie (final int gameId, final int userId)
+    public byte[] getCookie (int gameId, int userId)
         throws PersistenceException
     {
-        return execute(new Operation<byte[]>() {
-            public byte[] invoke (Connection conn, DatabaseLiaison liaison)
-                throws SQLException, PersistenceException
-            {
-                Statement stmt = conn.createStatement();
-                try {
-                    ResultSet rs = stmt.executeQuery("select COOKIE " +
-                        "from GAME_COOKIES where GAME_ID=" + gameId +
-                        " and USER_ID=" + userId);
-                    if (rs.next()) {
-                        return rs.getBytes(1);
-                    }
-                    return null;
-                } finally {
-                    JDBCUtil.close(stmt);
-                }
-            }
-        });
+        GameCookieRecord record = load(
+            GameCookieRecord.class, GameCookieRecord.getKey(gameId, userId));
+        return record != null ? record.cookie : null;
     }
 
     /**
@@ -99,35 +61,16 @@ public class GameCookieRepository extends SimpleRepository
         final int gameId, final int userId, final byte[] cookie)
         throws PersistenceException
     {
-        executeUpdate(new Operation<Void>() {
-            public Void invoke (Connection conn, DatabaseLiaison liaison)
-                throws SQLException, PersistenceException
-            {
-                if (cookie == null) {
-                    Statement stmt = conn.createStatement();
-                    try {
-                        stmt.executeUpdate("delete from GAME_COOKIES" +
-                            " where GAME_ID=" + gameId +
-                            " and USER_ID=" + userId);
-                        return null;
-                    } finally {
-                        JDBCUtil.close(stmt);
-                    }
+        if (cookie != null) {
+            store(new GameCookieRecord(gameId, userId, cookie));
+        } else {
+            delete(GameCookieRecord.class, GameCookieRecord.getKey(gameId, userId));
+        }
+    }
 
-                } else {
-                    PreparedStatement stmt = conn.prepareStatement(
-                        "insert into GAME_COOKIES (GAME_ID, USER_ID, COOKIE) " +
-                        "values (" + gameId + "," + userId + ",?) " +
-                        "on duplicate key update COOKIE=values(COOKIE)");
-                    try {
-                        stmt.setBytes(1, cookie);
-                        stmt.executeUpdate();
-                        return null;
-                    } finally {
-                        JDBCUtil.close(stmt);
-                    }
-                }
-            }
-        });
+    @Override // from DepotRepository
+    protected void getManagedRecords (Set<Class<? extends PersistentRecord>> classes)
+    {
+        classes.add(GameCookieRecord.class);
     }
 }
