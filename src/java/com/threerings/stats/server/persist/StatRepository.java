@@ -5,28 +5,34 @@ package com.threerings.stats.server.persist;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.Serializable;
 
 import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.Set;
 import java.util.logging.Level;
 
 import com.samskivert.io.ByteArrayOutInputStream;
 import com.samskivert.io.PersistenceException;
 import com.samskivert.jdbc.ConnectionProvider;
-import com.samskivert.jdbc.DatabaseLiaison;
 import com.samskivert.jdbc.JDBCUtil;
-import com.samskivert.jdbc.SimpleRepository;
+import com.samskivert.jdbc.depot.CacheInvalidator;
+import com.samskivert.jdbc.depot.DepotRepository;
+import com.samskivert.jdbc.depot.PersistenceContext;
+import com.samskivert.jdbc.depot.PersistentRecord;
+import com.samskivert.jdbc.depot.PersistenceContext.CacheEvictionFilter;
+import com.samskivert.jdbc.depot.annotation.Computed;
+import com.samskivert.jdbc.depot.annotation.Entity;
+import com.samskivert.jdbc.depot.clause.FieldOverride;
+import com.samskivert.jdbc.depot.clause.FromOverride;
+import com.samskivert.jdbc.depot.clause.QueryClause;
+import com.samskivert.jdbc.depot.clause.Where;
+import com.samskivert.jdbc.depot.expression.FunctionExp;
 import com.samskivert.util.HashIntMap;
-import com.samskivert.util.StringUtil;
 
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
@@ -38,7 +44,7 @@ import static com.threerings.stats.Log.log;
 /**
  * Responsible for the persistent storage of per-player statistics.
  */
-public class StatRepository extends SimpleRepository
+public class StatRepository extends DepotRepository
     implements Stat.AuxDataSource
 {
     /**
@@ -56,7 +62,16 @@ public class StatRepository extends SimpleRepository
     public StatRepository (ConnectionProvider conprov)
         throws PersistenceException
     {
-        super(conprov, STAT_DB_IDENT);
+        this(new PersistenceContext(STAT_DB_IDENT, conprov));
+    }
+
+    /**
+     * Constructs a new statistics repository with the specified persistence context.
+     */
+    public StatRepository (PersistenceContext context)
+        throws PersistenceException
+    {
+        super(context);
 
         // load up our string set mappings
         loadStringCodes(null);
@@ -65,43 +80,38 @@ public class StatRepository extends SimpleRepository
     /**
      * Loads the stats associated with the specified player.
      */
-    public ArrayList<Stat> loadStats (final int playerId)
+    public ArrayList<Stat> loadStats (int playerId)
         throws PersistenceException
     {
-        final ArrayList<Stat> stats = new ArrayList<Stat>();
-        final String query = "select STAT_CODE, STAT_DATA from STATS where PLAYER_ID = " + playerId;
-        execute(new Operation<Object>() {
-            public Object invoke (Connection conn, DatabaseLiaison liaison)
-                throws SQLException, PersistenceException
-            {
-                Statement stmt = conn.createStatement();
-                try {
-                    ResultSet rs = stmt.executeQuery(query);
-                    while (rs.next()) {
-                        Stat stat = decodeStat(
-                            rs.getInt(1), (byte[])rs.getObject(2));
-                        if (stat != null) {
-                            stats.add(stat);
-                        }
-                    }
-                } finally {
-                    JDBCUtil.close(stmt);
-                }
-                return null;
+        ArrayList<Stat> stats = new ArrayList<Stat>();
+        Where where = new Where(StatRecord.PLAYER_ID_C, playerId);
+        for (StatRecord record : findAll(StatRecord.class, where)) {
+            Stat stat = decodeStat(record.statCode, record.statData);
+            if (stat != null) {
+                stats.add(stat);
             }
-        });
+        }
         return stats;
     }
 
     /**
      * Deletes all stats associated with the specified player.
      */
-    public void deleteStats (int playerId)
+    public void deleteStats (final int playerId)
         throws PersistenceException
     {
-        update("delete from STATS where PLAYER_ID = " + playerId);
+        CacheInvalidator invalidator = new CacheInvalidator() {
+            public void invalidate (PersistenceContext ctx) {
+                ctx.cacheTraverse(StatRecord.class.getName(), new CacheEvictionFilter<StatRecord>() {
+                        public boolean testForEviction (Serializable key, StatRecord record) {
+                            return record != null && record.playerId == playerId;
+                        }
+                    });
+            }
+        };
+        deleteAll(StatRecord.class, new Where(StatRecord.PLAYER_ID_C, playerId), invalidator);
     }
-
+    
     /**
      * Writes out any of the stats in the supplied array that have been modified since they were
      * first loaded. Exceptions that occur while writing the stats will be caught and logged.
@@ -222,11 +232,7 @@ public class StatRepository extends SimpleRepository
     protected void updateStat (int playerId, final Stat stat)
         throws PersistenceException
     {
-        final String uquery = "update STATS set STAT_DATA = ?" +
-            " where PLAYER_ID = " + playerId + " and STAT_CODE = " + stat.getCode();
-        final String iquery = "insert into STATS (PLAYER_ID, STAT_CODE, " +
-            "STAT_DATA) values (" + playerId + ", " + stat.getCode() + ", ?)";
-        final ByteArrayOutInputStream out = new ByteArrayOutInputStream();
+        ByteArrayOutInputStream out = new ByteArrayOutInputStream();
         try {
             stat.persistTo(new ObjectOutputStream(out), this);
         } catch (IOException ioe) {
@@ -234,111 +240,71 @@ public class StatRepository extends SimpleRepository
             throw new PersistenceException(errmsg, ioe);
         }
 
-        // now update (or insert) the flattened data into the database
-        executeUpdate(new Operation<Object>() {
-            public Object invoke (Connection conn, DatabaseLiaison liaison)
-                throws SQLException, PersistenceException
-            {
-                PreparedStatement stmt = conn.prepareStatement(uquery);
-                try {
-                    stmt.setBinaryStream(1, out.getInputStream(), out.size());
-                    if (stmt.executeUpdate() == 0) {
-                        JDBCUtil.close(stmt);
-                        stmt = conn.prepareStatement(iquery);
-                        stmt.setBinaryStream(1, out.getInputStream(), out.size());
-                        JDBCUtil.checkedUpdate(stmt, 1);
-                    }
-                    return null;
-                } finally {
-                    JDBCUtil.close(stmt);
-                }
-            }
-        });
+        store(new StatRecord(playerId, stat.getCode(), out.toByteArray()));
     }
+
+    @Computed @Entity
+    protected static class MaxStatCodeRecord extends PersistentRecord {
+        int maxCode;
+    };
 
     /** Helper function for {@link #getStringCode}. */
     protected Integer assignStringCode (final Stat.Type type, final String value)
         throws PersistenceException
     {
-        return executeUpdate(new Operation<Integer>() {
-            public Integer invoke (Connection conn, DatabaseLiaison liaison)
-                throws SQLException, PersistenceException
-            {
-                for (int ii = 0; ii < 10; ii++) {
-                    try {
-                        int code = getNextCode(conn, type);
-                        // DEBUG: uncomment this to test code collision
-                        // if (ii == 0 && code > 0) {
-                        //     code = code-1;
-                        // }
-                        insertStringCode(conn, type, value, code);
-                        return code;
+        for (int ii = 0; ii < 10; ii++) {
+            MaxStatCodeRecord maxRecord = load(
+                MaxStatCodeRecord.class,
+                new FromOverride(StringCodeRecord.class),
+                new FieldOverride("maxCode", new FunctionExp("MAX", StringCodeRecord.CODE_C)),
+                new Where(StringCodeRecord.STAT_CODE_C, type.code()));
 
-                    } catch (SQLException sqe) {
-                        // if this is not a duplicate row exception, something is booched and we
-                        // just fail
-                        if (!liaison.isDuplicateRowException(sqe)) {
-                            throw sqe;
-                        }
+            int code = maxRecord != null ? maxRecord.maxCode + 1 : 1;
 
-                        // if it is a duplicate row exception, possibly someone inserted our value
-                        // before we could, in which case we can just look up the new mapping
-                        int code = getCurrentCode(conn, type, value);
-                        if (code != -1) {
-                            log.info("Value collision assigning string code [type=" + type +
-                                     ", value=" + value + "].");
-                            return code;
-                        }
+            // DEBUG: uncomment this to test code collision
+            // if (ii == 0 && code > 0) {
+            //     code = code-1;
+            // }
+            
+            try {
+                insert(new StringCodeRecord(type.code(), value, code));
+                return code;
 
-                        // otherwise someone used the code we were trying to use and we just need
-                        // to loop around and get the next highest code
-                        log.info("Code collision assigning string code [type=" + type +
-                                 ", value=" + value + "].");
-                    }
+            } catch (PersistenceException pe) {
+                // if this is not a duplicate row exception, something is booched and we
+                // just fail
+                
+//                if (!liaison.isDuplicateRowException(sqe)) {
+//                    throw sqe;
+//                }
+
+                // if it is a duplicate row exception, possibly someone inserted our value
+                // before we could, in which case we can just look up the new mapping
+                StringCodeRecord record = load(
+                    StringCodeRecord.class,
+                    new Where(StringCodeRecord.STAT_CODE_C, type.code(),
+                              StringCodeRecord.VALUE_C, value));
+                if (record != null) {
+                    log.info("Value collision assigning string code [type=" + type +
+                        ", value=" + value + "].");
+                    return code;
                 }
-                throw new SQLException("Unable to assign code after 10 attempts " +
-                                       "[type=" + type + ", value=" + value + "]");
+
+                // otherwise someone used the code we were trying to use and we just need
+                // to loop around and get the next highest code
+                log.info("Code collision assigning string code [type=" + type +
+                    ", value=" + value + "].");
             }
-        });
-    }
-
-    /** Helper function for {@link #assignStringCode}. */
-    protected int getNextCode (Connection conn, Stat.Type type)
-        throws SQLException
-    {
-        return getCode(conn, "select MAX(CODE)+1 from STRING_CODES where STAT_CODE = " +
-                       type.code());
-    }
-
-    /** Helper function for {@link #assignStringCode}. */
-    protected int getCurrentCode (Connection conn, Stat.Type type, String value)
-        throws SQLException
-    {
-        return getCode(conn, "select CODE from STRING_CODES where STAT_CODE = " + type.code() +
-                       " and VALUE = " + JDBCUtil.escape(value));
-    }
-
-    /** Helper function for {@link #getNextCode} and {@link #getCurrentCode}. */
-    protected int getCode (Connection conn, String query)
-        throws SQLException
-    {
-        int code = -1;
-        Statement stmt = conn.createStatement();
-        try {
-            ResultSet rs = stmt.executeQuery(query);
-            while (rs.next()) {
-                code = rs.getInt(1);
-            }
-        } finally {
-            JDBCUtil.close(stmt);
         }
-        return code;
+        throw new PersistenceException(
+            "Unable to assign code after 10 attempts [type=" + type + ", value=" + value + "]");
     }
 
     /** Helper function for {@link #assignStringCode}. */
     protected void insertStringCode (Connection conn, Stat.Type type, String value, int code)
         throws SQLException
     {
+
         String query = "insert into STRING_CODES (STAT_CODE, VALUE, CODE) values(" + type.code() +
             ", " + JDBCUtil.escape(value) + ", " + code + ")";
         Statement stmt = conn.createStatement();
@@ -358,24 +324,16 @@ public class StatRepository extends SimpleRepository
     protected void loadStringCodes (Stat.Type type)
         throws PersistenceException
     {
-        final String query = "select STAT_CODE, VALUE, CODE from STRING_CODES " +
-            ((type == null) ? "" : (" where STAT_CODE = " + type.code()));
-        execute(new Operation<Object>() {
-            public Object invoke (Connection conn, DatabaseLiaison liaison)
-                throws SQLException, PersistenceException
-            {
-                Statement stmt = conn.createStatement();
-                try {
-                    ResultSet rs = stmt.executeQuery(query);
-                    while (rs.next()) {
-                        mapStringCode(Stat.getType(rs.getInt(1)), rs.getString(2), rs.getInt(3));
-                    }
-                } finally {
-                    JDBCUtil.close(stmt);
-                }
-                return null;
-            }
-        });
+        QueryClause[] clauses;
+        if (type != null) {
+            clauses = new QueryClause[] { new Where(StringCodeRecord.STAT_CODE_C, type.code()) };
+        } else {
+            clauses = new QueryClause[0];
+        }
+
+        for (StringCodeRecord record : findAll(StringCodeRecord.class, clauses)) {
+            mapStringCode(Stat.getType(record.statCode), record.value, record.code);
+        }
     }
 
     /** Helper function used at repository startup. */
@@ -393,25 +351,11 @@ public class StatRepository extends SimpleRepository
         rmap.put(code, value);
     }
 
-    @Override // documentation inherited
-    protected void migrateSchema (Connection conn, DatabaseLiaison liaison)
-        throws SQLException, PersistenceException
+    @Override // from DepotRepository
+    protected void getManagedRecords (Set<Class<? extends PersistentRecord>> classes)
     {
-        JDBCUtil.createTableIfMissing(conn, "STATS", new String[] {
-            "PLAYER_ID INTEGER NOT NULL",
-            "STAT_CODE INTEGER NOT NULL",
-            "STAT_DATA BLOB NOT NULL",
-            "KEY (PLAYER_ID)",
-            "KEY (STAT_CODE)",
-        }, "");
-
-        JDBCUtil.createTableIfMissing(conn, "STRING_CODES", new String[] {
-            "STAT_CODE INTEGER NOT NULL",
-            "VALUE VARCHAR(255) NOT NULL",
-            "CODE INTEGER NOT NULL",
-            "UNIQUE (STAT_CODE, VALUE)",
-            "UNIQUE (STAT_CODE, CODE)",
-        }, "");
+        classes.add(StatRecord.class);
+        classes.add(StringCodeRecord.class);
     }
 
     protected HashMap<Stat.Type,HashMap<String,Integer>> _stringToCode =
