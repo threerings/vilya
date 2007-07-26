@@ -12,10 +12,6 @@
     <condition property="build.xml">
       <isset property="xml-writer.present"/>
     </condition>
-
-    <available property="depot.present"
-     classname="com.samskivert.jdbc.depot.Query" classpathref="classpath"/>
-    <echo level="info" message="Have JDBC Depot: ${depot.present}"/>
   </target>
 
 </project>

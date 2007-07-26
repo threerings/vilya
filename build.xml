@@ -173,7 +173,6 @@
       <exclude name="com/threerings/**/tools/xml/**" unless="build.xml"/>
       <exclude name="com/threerings/**/tools/editor/**" unless="build.xml"/>
       <exclude name="com/threerings/**/tools/viewer/**" unless="build.xml"/>
-      <exclude name="com/threerings/parlor/rating/server/**" unless="depot.present"/>
       <compilerarg value="-Xlint"/>
       <compilerarg value="-Xlint:-serial"/>
       <compilerarg value="-Xlint:-unchecked"/> <!-- TODO: fix -->
