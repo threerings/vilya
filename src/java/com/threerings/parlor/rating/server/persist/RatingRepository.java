@@ -27,8 +27,8 @@ import java.util.Set;
 
 import com.samskivert.io.PersistenceException;
 
-import com.samskivert.jdbc.ConnectionProvider;
 import com.samskivert.jdbc.depot.DepotRepository;
+import com.samskivert.jdbc.depot.PersistenceContext;
 import com.samskivert.jdbc.depot.PersistentRecord;
 import com.samskivert.jdbc.depot.clause.Where;
 import com.samskivert.jdbc.depot.operator.Conditionals.*;
@@ -42,9 +42,9 @@ public class RatingRepository extends DepotRepository
     /**
      * Initialize the {@link RatingRepository}.
      */
-    public RatingRepository(ConnectionProvider conprov)
+    public RatingRepository (PersistenceContext ctx)
     {
-        super(conprov);
+        super(ctx);
     }
 
     /**
