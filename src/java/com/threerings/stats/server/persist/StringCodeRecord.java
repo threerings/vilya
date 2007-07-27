@@ -70,7 +70,6 @@ public class StringCodeRecord extends PersistentRecord
     @Column(name="VALUE")
     public String value;
     
-    @Id
     @Column(name="CODE")
     public int code;
     
