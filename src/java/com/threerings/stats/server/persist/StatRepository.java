@@ -16,6 +16,7 @@ import com.samskivert.io.ByteArrayOutInputStream;
 import com.samskivert.io.PersistenceException;
 import com.samskivert.util.HashIntMap;
 
+import com.samskivert.jdbc.DuplicateKeyException;
 import com.samskivert.jdbc.depot.CacheInvalidator;
 import com.samskivert.jdbc.depot.DepotRepository;
 import com.samskivert.jdbc.depot.PersistenceContext.CacheEvictionFilter;
@@ -246,9 +247,9 @@ public class StatRepository extends DepotRepository
                 // if this is not a duplicate row exception, something is booched and we
                 // just fail
 
-//                if (!liaison.isDuplicateRowException(sqe)) {
-//                    throw sqe;
-//                }
+                if (!(pe instanceof DuplicateKeyException)) {
+                    throw pe;
+                }
 
                 // if it is a duplicate row exception, possibly someone inserted our value
                 // before we could, in which case we can just look up the new mapping
