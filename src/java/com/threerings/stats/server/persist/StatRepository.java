@@ -254,9 +254,7 @@ public class StatRepository extends DepotRepository
                 // if it is a duplicate row exception, possibly someone inserted our value
                 // before we could, in which case we can just look up the new mapping
                 StringCodeRecord record = load(
-                    StringCodeRecord.class,
-                    new Where(StringCodeRecord.STAT_CODE_C, type.code(),
-                              StringCodeRecord.VALUE_C, value));
+                    StringCodeRecord.class, StringCodeRecord.getKey(type.code(), value));
                 if (record != null) {
                     log.info("Value collision assigning string code [type=" + type +
                         ", value=" + value + "].");
