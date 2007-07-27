@@ -97,12 +97,12 @@ public class StringCodeRecord extends PersistentRecord
      * Create and return a primary {@link Key} to identify a {@link #StringCodeRecord}
      * with the supplied key values.
      */
-    public static Key<StringCodeRecord> getKey (int statCode, String value, int code)
+    public static Key<StringCodeRecord> getKey (int statCode, String value)
     {
         return new Key<StringCodeRecord>(
                 StringCodeRecord.class,
-                new String[] { STAT_CODE, VALUE, CODE },
-                new Comparable[] { statCode, value, code });
+                new String[] { STAT_CODE, VALUE },
+                new Comparable[] { statCode, value });
     }
     // AUTO-GENERATED: METHODS END
 }
