@@ -32,7 +32,7 @@ import com.threerings.presents.dobj.Subscriber;
 import com.threerings.presents.dobj.ObjectAccessException;
 import com.threerings.presents.server.InvocationException;
 
-import com.threerings.crowd.chat.server.SpeakProvider;
+import com.threerings.crowd.chat.server.SpeakUtil;
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.OccupantInfo;
 import com.threerings.crowd.server.CrowdServer;
@@ -393,7 +393,7 @@ public class SpotSceneManager extends SceneManager
             Log.warning("Non-clustered user requested cluster speak [where=" + where() +
                         ", chatter=" + source + " (" + sourceOid + "), msg=" + message + "].");
         } else {
-            SpeakProvider.sendSpeak(clrec.getClusterObject(), source, bundle, message, mode);
+            SpeakUtil.sendSpeak(clrec.getClusterObject(), source, bundle, message, mode);
         }
     }
 

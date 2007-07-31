@@ -39,7 +39,7 @@ import com.threerings.presents.dobj.AttributeChangedEvent;
 import com.threerings.presents.dobj.DObject;
 import com.threerings.presents.dobj.MessageEvent;
 
-import com.threerings.crowd.chat.server.SpeakProvider;
+import com.threerings.crowd.chat.server.SpeakUtil;
 
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceObject;
@@ -391,8 +391,7 @@ public class GameManager extends PlaceManager
      *
      * @param waitForStart if true, the message will not be sent until the game has started.
      */
-    public void systemMessage (
-        String msgbundle, String msg, boolean waitForStart)
+    public void systemMessage (String msgbundle, String msg, boolean waitForStart)
     {
         if (waitForStart && ((_gameobj == null) || (_gameobj.state == GameObject.PRE_GAME))) {
             // queue up the message.
@@ -404,7 +403,7 @@ public class GameManager extends PlaceManager
         }
 
         // otherwise, just deliver the message
-        SpeakProvider.sendInfo(_gameobj, msgbundle, msg);
+        SpeakUtil.sendInfo(_gameobj, msgbundle, msg);
     }
 
     /**
