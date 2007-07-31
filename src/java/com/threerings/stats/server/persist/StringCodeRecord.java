@@ -32,8 +32,8 @@ import com.samskivert.jdbc.depot.expression.ColumnExp;
 
 @Entity(name="STRING_CODES")
 @Table(uniqueConstraints={
-    @UniqueConstraint(columnNames={StringCodeRecord.STAT_CODE, StringCodeRecord.VALUE}),
-    @UniqueConstraint(columnNames={StringCodeRecord.STAT_CODE, StringCodeRecord.CODE})})
+    @UniqueConstraint(fieldNames={StringCodeRecord.STAT_CODE, StringCodeRecord.VALUE}),
+    @UniqueConstraint(fieldNames={StringCodeRecord.STAT_CODE, StringCodeRecord.CODE})})
 public class StringCodeRecord extends PersistentRecord
 {
     // AUTO-GENERATED: FIELDS START
