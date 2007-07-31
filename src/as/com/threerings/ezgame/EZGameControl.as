@@ -458,6 +458,17 @@ public class EZGameControl extends BaseControl
     }
 
     /**
+     * Run the specified text through the user's chat filter. This is not necessary for sendChat,
+     * but may be desirable for other user-entered text.
+     *
+     * @return the filtered text, or null if it was so bad it's gone.
+     */
+    public function filter (text :String) :String
+    {
+        return (callEZCode("filter_v1", text) as String);
+    }
+
+    /**
      * Returns the player ids of all occupants in the game room.
      */
     public function getOccupants () :Array /* of playerId */

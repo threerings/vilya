@@ -219,6 +219,7 @@ public class GameControlBackend
         o["getPlayers_v1"] = getPlayers_v1;
         o["getPlayerPosition_v1"] = getPlayerPosition_v1;
         o["getMyPosition_v1"] = getMyPosition_v1;
+        o["filter_v1"] = filter_v1;
 
         o["startTransaction"] = startTransaction_v1;
         o["commitTransaction"] = commitTransaction_v1;
@@ -316,6 +317,11 @@ public class GameControlBackend
         // through this method on each client.
         // TODO: make this look distinct from other system chat
         _ctx.getChatDirector().displayInfo(null, MessageBundle.taint(msg));
+    }
+
+    public function filter_v1 (text :String) :String
+    {
+        return _ctx.getChatDirector().filter(text, null, true);
     }
 
     public function getOccupants_v1 () :Array
