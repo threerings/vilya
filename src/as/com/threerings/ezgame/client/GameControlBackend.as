@@ -127,6 +127,7 @@ public class GameControlBackend
     public function shutdown () :void
     {
         _ezObj.removeListener(this);
+        _ctx.getChatDirector().removeChatDisplay(this);
         _ctx.getClient().getClientObject().removeListener(_userListener);
 
         _userFuncs = null; // disconnect
