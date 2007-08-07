@@ -54,15 +54,16 @@ public class RatingRepository extends DepotRepository
     public RatingRecord getRating (int gameId, int playerId)
         throws PersistenceException
     {
-        return load(RatingRecord.class,
-                    RatingRecord.GAME_ID, gameId,
-                    RatingRecord.PLAYER_ID, playerId);
+        // INDEX: Full primary key.
+        return load(RatingRecord.class, RatingRecord.getKey(gameId, playerId));
     }
 
     /**
      * Fetch the ratings registered for any of the given players for the given game and return
      * them as a list of {@link RatingRecord} objects. The size of this list is no less than zero
      * and no greater than the number of given players.
+     *
+     * INDEXING: Uses primary key.
      */
     public List<RatingRecord> getRatings (int gameId, Integer... players)
         throws PersistenceException
@@ -70,17 +71,19 @@ public class RatingRepository extends DepotRepository
         if (players.length == 0) {
             return Collections.emptyList();
         }
+        // INDEX: Full primary key.
         return findAll(RatingRecord.class,
                        new Where(new And(new Equals(RatingRecord.GAME_ID_C, gameId),
                                          new In(RatingRecord.PLAYER_ID_C, players))));
     }
 
     /**
-     * Fetch and return all the registered {@link RatingRecord} rows for the given player. 
+     * Fetch and return all the registered {@link RatingRecord} rows for the given player.
      */
     public List<RatingRecord> getRatings (int playerId)
         throws PersistenceException
     {
+        // INDEX: ixPlayerId
         return findAll(RatingRecord.class, new Where(RatingRecord.PLAYER_ID_C, playerId));
     }
 

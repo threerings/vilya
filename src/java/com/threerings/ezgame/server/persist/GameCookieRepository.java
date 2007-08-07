@@ -45,6 +45,7 @@ public class GameCookieRepository extends DepotRepository
     public byte[] getCookie (int gameId, int userId)
         throws PersistenceException
     {
+        // INDEX: Primary key.
         GameCookieRecord record = load(
             GameCookieRecord.class, GameCookieRecord.getKey(gameId, userId));
         return record != null ? record.cookie : null;
@@ -58,8 +59,10 @@ public class GameCookieRepository extends DepotRepository
         throws PersistenceException
     {
         if (cookie != null) {
+            // INDEX: Primary key.
             store(new GameCookieRecord(gameId, userId, cookie));
         } else {
+            // INDEX: Primary key.
             delete(GameCookieRecord.class, GameCookieRecord.getKey(gameId, userId));
         }
     }

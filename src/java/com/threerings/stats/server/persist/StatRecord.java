@@ -65,7 +65,7 @@ public class StatRecord extends PersistentRecord
     @Id
     @Column(name="STAT_CODE")
     public int statCode;
-    
+
     /** The data associated with the stat. */
     @Column(name="STAT_DATA", length=65535)
     public byte[] statData;

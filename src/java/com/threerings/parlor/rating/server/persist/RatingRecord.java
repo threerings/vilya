@@ -25,9 +25,12 @@ import com.samskivert.jdbc.depot.Key;
 import com.samskivert.jdbc.depot.PersistentRecord;
 import com.samskivert.jdbc.depot.annotation.Entity;
 import com.samskivert.jdbc.depot.annotation.Id;
+import com.samskivert.jdbc.depot.annotation.Index;
 import com.samskivert.jdbc.depot.expression.ColumnExp;
 
-@Entity
+@Entity(indices={
+    @Index(name="ixPlayerId", columns={ RatingRecord.PLAYER_ID })
+})
 public class RatingRecord extends PersistentRecord
 {
     // AUTO-GENERATED: FIELDS START
@@ -60,19 +63,19 @@ public class RatingRecord extends PersistentRecord
         new ColumnExp(RatingRecord.class, EXPERIENCE);
     // AUTO-GENERATED: FIELDS END
 
-    public static final int SCHEMA_VERSION = 1;
+    public static final int SCHEMA_VERSION = 2;
 
     /** The identifier of the game we're rating for. */
     @Id
     public int gameId;
 
-    /** The identifier of the player we're rating. */ 
+    /** The identifier of the player we're rating. */
     @Id
     public int playerId;
-    
+
     /** The player's current rating. */
     public int rating;
-    
+
     /** The number of times the player has played this game. */
     public int experience;
 
@@ -83,14 +86,14 @@ public class RatingRecord extends PersistentRecord
     {
         super();
     }
-    
+
     /**
      * A constructor that populates all our fields.
      */
     public RatingRecord (int gameId, int playerId, int rating, int experience)
     {
         super();
-        
+
         this.gameId = gameId;
         this.playerId = playerId;
         this.rating = rating;

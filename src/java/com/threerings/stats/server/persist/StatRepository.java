@@ -55,11 +55,13 @@ public class StatRepository extends DepotRepository
 
     /**
      * Loads the stats associated with the specified player.
+     *
      */
     public ArrayList<Stat> loadStats (int playerId)
         throws PersistenceException
     {
         ArrayList<Stat> stats = new ArrayList<Stat>();
+        // INDEX: Left-most primary key field;
         Where where = new Where(StatRecord.PLAYER_ID_C, playerId);
         for (StatRecord record : findAll(StatRecord.class, where)) {
             Stat stat = decodeStat(record.statCode, record.statData);
@@ -86,6 +88,7 @@ public class StatRepository extends DepotRepository
                 });
             }
         };
+        // INDEX: Primary key.
         deleteAll(StatRecord.class, new Where(StatRecord.PLAYER_ID_C, playerId), invalidator);
     }
 
@@ -225,6 +228,7 @@ public class StatRepository extends DepotRepository
         throws PersistenceException
     {
         for (int ii = 0; ii < 10; ii++) {
+            // INDEX: Left-most primary key field.
             MaxStatCodeRecord maxRecord = load(
                 MaxStatCodeRecord.class,
                 new FromOverride(StringCodeRecord.class),
@@ -253,6 +257,7 @@ public class StatRepository extends DepotRepository
 
                 // if it is a duplicate row exception, possibly someone inserted our value
                 // before we could, in which case we can just look up the new mapping
+                // INDEX: Full primary key.
                 StringCodeRecord record = load(
                     StringCodeRecord.class, StringCodeRecord.getKey(type.code(), value));
                 if (record != null) {
@@ -277,6 +282,7 @@ public class StatRepository extends DepotRepository
     {
         QueryClause[] clauses;
         if (type != null) {
+            // INDEX: Left-most primary key field.
             clauses = new QueryClause[] { new Where(StringCodeRecord.STAT_CODE_C, type.code()) };
         } else {
             clauses = new QueryClause[0];
