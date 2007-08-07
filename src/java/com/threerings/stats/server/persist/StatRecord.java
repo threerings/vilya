@@ -66,11 +66,8 @@ public class StatRecord extends PersistentRecord
     @Column(name="STAT_CODE")
     public int statCode;
     
-    /**
-     * The data associated with the stat. TODO: BLOB will break on PostgreSQL, which in turn
-     * will serve as an excellent TODO reminder that we need to figure out how to deal properly.
-     */
-    @Column(name="STAT_DATA", type="BLOB")
+    /** The data associated with the stat. */
+    @Column(name="STAT_DATA", length=65535)
     public byte[] statData;
 
     /**
