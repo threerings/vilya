@@ -205,6 +205,7 @@ public class TableDirector extends BasicDirector
         }
 
         // issue the join request
+        log.info("Joining table [tid=" + tableId + ", pos=" + position + "].");
         _tlobj.getTableService().joinTable(_pctx.getClient(), tableId, position, this);
     }
 
@@ -324,7 +325,7 @@ public class TableDirector extends BasicDirector
     // documentation inherited from interface
     public function requestFailed (reason :String) :void
     {
-        log.warning("Table creation failed [reason=" + reason + "].");
+        log.warning("Table action failed [reason=" + reason + "].");
     }
 
     /**

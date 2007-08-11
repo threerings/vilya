@@ -64,8 +64,6 @@ public abstract class WhirledServer extends CrowdServer
 
         // create our scene registry
         screg = createSceneRegistry();
-
-        Log.info("Whirled server initialized.");
     }
 
     /**
