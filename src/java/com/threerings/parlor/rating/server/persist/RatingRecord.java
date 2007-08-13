@@ -29,7 +29,7 @@ import com.samskivert.jdbc.depot.annotation.Index;
 import com.samskivert.jdbc.depot.expression.ColumnExp;
 
 @Entity(indices={
-    @Index(name="ixPlayerId", columns={ RatingRecord.PLAYER_ID })
+    @Index(name="ixPlayerId", fields={ RatingRecord.PLAYER_ID })
 })
 public class RatingRecord extends PersistentRecord
 {
