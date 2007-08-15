@@ -79,9 +79,6 @@ public class StatRepository extends DepotRepository
         throws PersistenceException
     {
         CacheInvalidator invalidator = new CacheInvalidator() {
-            public void validateFlushType (Class<?> pClass) {
-                // no need, we know we're good
-            }
             public void invalidate (PersistenceContext ctx) {
                 ctx.cacheTraverse(
                     StatRecord.class.getName(), new CacheEvictionFilter<StatRecord>() {
