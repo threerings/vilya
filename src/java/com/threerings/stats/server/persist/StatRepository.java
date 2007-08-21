@@ -22,7 +22,7 @@ import com.samskivert.jdbc.depot.DepotRepository;
 import com.samskivert.jdbc.depot.PersistenceContext.CacheEvictionFilter;
 import com.samskivert.jdbc.depot.PersistenceContext;
 import com.samskivert.jdbc.depot.PersistentRecord;
-import com.samskivert.jdbc.depot.clause.FieldOverride;
+import com.samskivert.jdbc.depot.clause.FieldDefinition;
 import com.samskivert.jdbc.depot.clause.FromOverride;
 import com.samskivert.jdbc.depot.clause.QueryClause;
 import com.samskivert.jdbc.depot.clause.Where;
@@ -229,8 +229,8 @@ public class StatRepository extends DepotRepository
             MaxStatCodeRecord maxRecord = load(
                 MaxStatCodeRecord.class,
                 new FromOverride(StringCodeRecord.class),
-                new FieldOverride(MaxStatCodeRecord.MAX_CODE,
-                                  new FunctionExp("MAX", StringCodeRecord.CODE_C)),
+                new FieldDefinition(MaxStatCodeRecord.MAX_CODE,
+                                    new FunctionExp("MAX", StringCodeRecord.CODE_C)),
                 new Where(StringCodeRecord.STAT_CODE_C, type.code()));
 
             int code = maxRecord != null ? maxRecord.maxCode + 1 : 1;
