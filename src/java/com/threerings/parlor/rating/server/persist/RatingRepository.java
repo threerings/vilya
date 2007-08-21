@@ -92,6 +92,15 @@ public class RatingRepository extends DepotRepository
         store(new RatingRecord(gameId, playerId, rating, experience));
     }
 
+    /**
+     * Deletes the specified rating record.
+     */
+    public void deleteRating (int gameId, int playerId)
+        throws PersistenceException
+    {
+        delete(RatingRecord.class, RatingRecord.getKey(gameId, playerId));
+    }
+
     @Override // from DepotRepository
     protected void getManagedRecords (Set<Class<? extends PersistentRecord>> classes)
     {
