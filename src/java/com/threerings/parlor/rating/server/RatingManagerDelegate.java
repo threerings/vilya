@@ -27,11 +27,12 @@ import java.util.List;
 import java.util.logging.Level;
 
 import com.samskivert.io.PersistenceException;
+import com.samskivert.jdbc.RepositoryUnit;
 
+import com.samskivert.util.ArrayIntSet;
 import com.samskivert.util.ArrayUtil;
 import com.samskivert.util.HashIntMap;
 import com.samskivert.util.IntMap;
-import com.samskivert.util.Invoker;
 
 import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.server.CrowdServer;
@@ -48,22 +49,15 @@ import com.threerings.util.Name;
 /**
  * Rates players after each game and handles persisting the results.
  */
-public abstract class RatingManagerDelegate
-    extends GameManagerDelegate
+public abstract class RatingManagerDelegate extends GameManagerDelegate
 {
-    /**
-     * The minimum rating value. 
-     */
+    /** The minimum rating value. */
     public static final int MINIMUM_RATING = 1000;
 
-    /**
-     * The default rating value. 
-     */
+    /** The default rating value. */
     public static final int DEFAULT_RATING = 1200;
 
-    /**
-     * The maximum rating value. 
-     */
+    /** The maximum rating value. */
     public static final int MAXIMUM_RATING = 3000;
 
     /**
@@ -73,19 +67,17 @@ public abstract class RatingManagerDelegate
     {
         super(gmgr);
         _gmgr = gmgr;
-        
         _repo = getRatingRepository();
     }
-    
-    @Override
+
+    @Override // from PlaceManagerDelegate
     public void didStartup (PlaceObject plobj)
     {
         super.didStartup(plobj);
-        
         _gobj = (GameObject) plobj;
     }
 
-    @Override
+    @Override // from GameManagerDelegate
     public void gameWillStart ()
     {
         super.gameWillStart();
@@ -93,64 +85,57 @@ public abstract class RatingManagerDelegate
         // note the time at which we started
         _startStamp = (int) (System.currentTimeMillis() / 1000);
 
-        // read ratings from persistent store
-        CrowdServer.invoker.postUnit(new Invoker.Unit() {
-            public boolean invoke () {
-                int gameId = _gmgr.getGameConfig().getGameId();
+        final int gameId = _gmgr.getGameConfig().getGameId();
 
-                // enumerate our non-guest players
-                Integer[] allPlayers = new Integer[_gmgr.getPlayerCount()];
-                Integer[] ratedPlayers = new Integer[allPlayers.length];
-                int jj = 0;
-                for (int ii = 0; ii < allPlayers.length; ii ++) {
-                    allPlayers[ii] = _gmgr.getPlayerPersistentId(_gmgr.getPlayer(ii));
-                    if (allPlayers[ii] != 0) {
-                        // this is a player with a persistent id, a player we can rate
-                        ratedPlayers[jj ++] = allPlayers[ii];
-                    }
-                }
-                ratedPlayers = ArrayUtil.splice(ratedPlayers, jj);
-
-                try {
-                    // fetch the previous ratings of our persistent users, for this game
-                    List<RatingRecord> records = _repo.getRatings(gameId, ratedPlayers);
-                    
-                    // and make it easy to look them up by their id
-                    IntMap<RatingRecord> map = new HashIntMap<RatingRecord>();
-                    for (RatingRecord record : records) {
-                        map.put(record.playerId, record);
-                    }
-
-                    // now build the array we keep around until the end of the game
-                    _ratings = new Rating[allPlayers.length];
-                    for (int ii = 0; ii < _ratings.length; ii ++) {
-                        if (allPlayers[ii] == 0) {
-                            // for guests we let the slot remain null
-                            continue;
-                        }
-                        RatingRecord record = map.get(allPlayers[ii]);
-                        // if the player had no previous record, initiate them at default values
-                        _ratings[ii] = record != null ?
-                            new Rating(allPlayers[ii], record.rating, record.experience) :
-                            new Rating(allPlayers[ii]);
-                    }
-
-                    return true;
-                    
-                } catch (PersistenceException pe) {
-                    log.log(Level.WARNING,
-                        "Failed to load ratings [where=" + where() + ", id=" + gameId + "].", pe);
-                    return false;
-                }
-            };
-
-            public void handleResult () {
-                // nothing to do here?
+        // enumerate our non-guest players
+        final Integer[] allPlayers = new Integer[_gmgr.getPlayerCount()];
+        ArrayIntSet ratedSet = new ArrayIntSet();
+        for (int ii = 0; ii < allPlayers.length; ii ++) {
+            allPlayers[ii] = _gmgr.getPlayerPersistentId(_gmgr.getPlayer(ii));
+            if (allPlayers[ii] != 0) {
+                // this is a player with a persistent id, a player we can rate
+                ratedSet.add(allPlayers[ii]);
             }
+        }
+        final Integer[] ratedPlayers = ratedSet.toArray(new Integer[ratedSet.size()]);
+
+        // read ratings from persistent store
+        CrowdServer.invoker.postUnit(new RepositoryUnit("loadRatings") {
+            public void invokePersist () throws Exception {
+                // fetch the previous ratings of our persistent users and map them by player id
+                IntMap<RatingRecord> map = new HashIntMap<RatingRecord>();
+                for (RatingRecord record : _repo.getRatings(gameId, ratedPlayers)) {
+                    map.put(record.playerId, record);
+                }
+
+                // now build the array we keep around until the end of the game
+                _ratings = new Rating[allPlayers.length];
+                for (int ii = 0; ii < _ratings.length; ii ++) {
+                    if (allPlayers[ii] == 0) {
+                        continue; // for guests we let the slot remain null
+                    }
+                    RatingRecord record = map.get(allPlayers[ii]);
+                    // if the player had no previous record, initiate them at default values
+                    _ratings[ii] = (record == null) ? new Rating(allPlayers[ii]) :
+                        new Rating(allPlayers[ii], record.rating, record.experience);
+                }
+            }
+
+            public void handleSuccess () {
+                // stick our ratings into our manager
+                _ratings = _tratings;
+            }
+
+            public void handleFailure (Exception e) {
+                log.log(Level.WARNING, "Failed to load ratings [where=" + where() +
+                        ", id=" + gameId + "].", e);
+            }
+
+            protected Rating[] _tratings;
         });
     }
-            
-    @Override
+
+    @Override // from GameManagerDelegate
     public void gameDidEnd ()
     {
         super.gameDidEnd();
@@ -188,33 +173,27 @@ public abstract class RatingManagerDelegate
 
         // else persist the result
         final int gameId = _gmgr.getGameConfig().getGameId();
-        CrowdServer.invoker.postUnit(new Invoker.Unit() {
-            public boolean invoke () {
-                try {
-                    for (int ii = 0; ii < _ratings.length; ii ++) {
-                        if (_ratings[ii] != null) {
-                            // for each rated player, update or create the rating record
-                            // TODO: reorganize things so this can be a single db request?
-                            _repo.setRating(gameId, _ratings[ii].playerId,
-                                            _ratings[ii].rating, _ratings[ii].experience);
-                        }
+        CrowdServer.invoker.postUnit(new RepositoryUnit("updateRatings") {
+            public void invokePersist () throws Exception {
+                for (Rating rating : _ratings) {
+                    if (rating != null) {
+                        _repo.setRating(gameId, rating.playerId, rating.rating, rating.experience);
                     }
-                    return true;
-
-                } catch (PersistenceException pe) {
-                    log.log(Level.WARNING,
-                        "Failed to load ratings [where=" + where() + ", id=" + gameId + "].", pe);
-                    return false;
                 }
-            };
+            }
 
-            public void handleResult () {
-                // let subclasses store away the new ratings if they so desire
-                for (int ii = 0; ii < _ratings.length; ii ++) {
+            public void handleSuccess () {
+                for (int ii = 0; ii < _ratings.length; ii++) {
                     if (_ratings[ii] != null) {
+                        // let subclasses publish the new ratings if they so desire
                         updateRatingInMemory(gameId, _gmgr.getPlayerName(ii), _ratings[ii]);
                     }
                 }
+            }
+
+            public void handleFailure (Exception e) {
+                log.log(Level.WARNING, "Failed to update ratings [where=" + where() +
+                        ", id=" + gameId + "].", e);
             }
         });
     }
@@ -237,13 +216,13 @@ public abstract class RatingManagerDelegate
     {
         float totDeltaR = 0; // the total delta rating
         int opponents = 0;
-    
+
         for (int ii = 0; ii < _ratings.length; ii++) {
             // we don't care how we did against ourselves, or against guests...
             if (pidx == ii || _ratings[ii] == null) {
                 continue;
             }
-    
+
             // if we are non-provisional, and the opponent is provisional, we
             // max the opponent out at the default rating to avoid potentially
             // inflating a real rating with one that has a lot of uncertainty
@@ -263,7 +242,7 @@ public abstract class RatingManagerDelegate
             } else {
                 K = 16; // experience >= 20 && rating >= 2400
             }
-            
+
             // calculate W, the win value representing the actual result of the game
             float W = _gobj.isDraw() ? 0.5f : _gobj.isWinner(pidx) ? 1f : 0f;
             // calculate We, the expected win value given the players' respective ratings
@@ -274,7 +253,7 @@ public abstract class RatingManagerDelegate
             totDeltaR += K * (W - We);
             opponents++;
         }
-    
+
         // if we have no valid opponents, we cannot compute a rating;
         if (opponents == 0) {
             return -1;
@@ -283,41 +262,6 @@ public abstract class RatingManagerDelegate
         // return the updated and clamped rating
         int nrat = Math.round(_ratings[pidx].rating + totDeltaR/opponents);
         return MathUtil.bound(MINIMUM_RATING, nrat, MAXIMUM_RATING);
-    }
-
-    /**
-     * Simply encapsulates the rating/experience tuple representing a player's rating for a game.
-     */
-    protected static class Rating
-    {
-        /** The id of the rated player. */
-        public int playerId;
-        
-        /** The player's rating for our game. */
-        public int rating;
-        
-        /** The number of times the player's played our game. */
-        public int experience;
-
-        /**
-         * Sets up a new {@link Rating} object with default values.
-         */
-        public Rating (int playerId)
-        {
-            this.playerId = playerId;
-            this.rating = DEFAULT_RATING;
-            this.experience = 0;
-        }
-        
-        /**
-         * Sets up a new {@link Rating} object with the given values.
-         */
-        public Rating (int playerId, int rating, int experience)
-        {
-            this.playerId = playerId;
-            this.rating = rating;
-            this.experience = experience;
-        }
     }
 
     /**
@@ -332,18 +276,52 @@ public abstract class RatingManagerDelegate
 
     /**
      * Optionally store update ratings in memory e.g. in the user object.
-     * 
+     *
      * This method is called on the dobj thread.
      */
     protected abstract void updateRatingInMemory (int gameId, Name playerName, Rating rating);
 
+    /**
+     * Simply encapsulates the rating/experience tuple representing a player's rating for a game.
+     */
+    protected static class Rating
+    {
+        /** The id of the rated player. */
+        public int playerId;
+
+        /** The player's rating for our game. */
+        public int rating;
+
+        /** The number of times the player's played our game. */
+        public int experience;
+
+        /**
+         * Sets up a new {@link Rating} object with default values.
+         */
+        public Rating (int playerId)
+        {
+            this.playerId = playerId;
+            this.rating = DEFAULT_RATING;
+            this.experience = 0;
+        }
+
+        /**
+         * Sets up a new {@link Rating} object with the given values.
+         */
+        public Rating (int playerId, int rating, int experience)
+        {
+            this.playerId = playerId;
+            this.rating = rating;
+            this.experience = experience;
+        }
+    }
 
     /** An appropriately casted reference to our GameManager. */
     protected GameManager _gmgr;
-    
+
     /** An appropriately casted reference to our GameObject. */
     protected GameObject _gobj;
-    
+
     /** The RatingRepository that holds our data. */
     protected RatingRepository _repo;
 
