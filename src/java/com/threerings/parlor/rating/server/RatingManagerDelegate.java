@@ -87,14 +87,14 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
 
         final int gameId = _gmgr.getGameConfig().getGameId();
 
-        // enumerate our non-guest players
-        final Integer[] allPlayers = new Integer[_gmgr.getPlayerCount()];
+        // enumerate our players
+        final Rating[] ratings = new Rating[_gmgr.getPlayerCount()];
         ArrayIntSet ratedSet = new ArrayIntSet();
-        for (int ii = 0; ii < allPlayers.length; ii ++) {
-            allPlayers[ii] = _gmgr.getPlayerPersistentId(_gmgr.getPlayer(ii));
-            if (allPlayers[ii] != 0) {
+        for (int ii = 0; ii < ratings.length; ii ++) {
+            ratings[ii] = new Rating(_gmgr.getPlayerPersistentId(_gmgr.getPlayer(ii)));
+            if (ratings[ii].playerId != 0) {
                 // this is a player with a persistent id, a player we can rate
-                ratedSet.add(allPlayers[ii]);
+                ratedSet.add(ratings[ii].playerId);
             }
         }
         final Integer[] ratedPlayers = ratedSet.toArray(new Integer[ratedSet.size()]);
@@ -109,29 +109,26 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
                 }
 
                 // now build the array we keep around until the end of the game
-                _tratings = new Rating[allPlayers.length];
-                for (int ii = 0; ii < _tratings.length; ii ++) {
-                    if (allPlayers[ii] == 0) {
+                for (Rating rating : ratings) {
+                    if (rating.playerId == 0) {
                         continue; // for guests we let the slot remain null
                     }
-                    RatingRecord record = map.get(allPlayers[ii]);
-                    // if the player had no previous record, initiate them at default values
-                    _tratings[ii] = (record == null) ? new Rating(allPlayers[ii]) :
-                        new Rating(allPlayers[ii], record.rating, record.experience);
+                    RatingRecord record = map.get(rating.playerId);
+                    if (record != null) {
+                        rating.rating = record.rating;
+                        rating.experience = record.experience;
+                    }
                 }
             }
 
             public void handleSuccess () {
-                // stick our ratings into our manager
-                _ratings = _tratings;
+                _ratings = ratings; // stick our ratings into the manager
             }
 
             public void handleFailure (Exception e) {
                 log.log(Level.WARNING, "Failed to load ratings [where=" + where() +
                         ", id=" + gameId + "].", e);
             }
-
-            protected Rating[] _tratings;
         });
     }
 
@@ -303,16 +300,6 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
             this.playerId = playerId;
             this.rating = DEFAULT_RATING;
             this.experience = 0;
-        }
-
-        /**
-         * Sets up a new {@link Rating} object with the given values.
-         */
-        public Rating (int playerId, int rating, int experience)
-        {
-            this.playerId = playerId;
-            this.rating = rating;
-            this.experience = experience;
         }
     }
 
