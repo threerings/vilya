@@ -758,12 +758,8 @@ public class GameControlBackend
     protected function endGame_v2 (... winnerIds) :void
     {
         validateConnected();
-        var winners :TypedArray = TypedArray.create(int);
-        while (winnerIds.length > 0) {
-            winners.push(int(winnerIds.shift()));
-        }
         _ezObj.ezGameService.endGame(
-            _ctx.getClient(), winners, createLoggingConfirmListener("endGame"));
+            _ctx.getClient(), toTypedIntArray(winnerIds), createLoggingConfirmListener("endGame"));
     }
 
     protected function getDictionaryLetterSet_v1 (
@@ -899,6 +895,18 @@ public class GameControlBackend
     protected function commitTransaction_v1 () :void
     {
         _ezObj.commitTransaction();
+    }
+
+    /**
+     * Converts a Flash array of ints to a TypedArray for delivery over the wire to the server.
+     */
+    protected function toTypedIntArray (array :Array) :TypedArray
+    {
+        var tarray :TypedArray = TypedArray.create(int);
+        while (array.length > 0) {
+            tarray.push(int(array.shift()));
+        }
+        return tarray;
     }
 
     protected var _ctx :CrowdContext;
