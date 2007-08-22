@@ -109,14 +109,14 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
                 }
 
                 // now build the array we keep around until the end of the game
-                _ratings = new Rating[allPlayers.length];
-                for (int ii = 0; ii < _ratings.length; ii ++) {
+                _tratings = new Rating[allPlayers.length];
+                for (int ii = 0; ii < _tratings.length; ii ++) {
                     if (allPlayers[ii] == 0) {
                         continue; // for guests we let the slot remain null
                     }
                     RatingRecord record = map.get(allPlayers[ii]);
                     // if the player had no previous record, initiate them at default values
-                    _ratings[ii] = (record == null) ? new Rating(allPlayers[ii]) :
+                    _tratings[ii] = (record == null) ? new Rating(allPlayers[ii]) :
                         new Rating(allPlayers[ii], record.rating, record.experience);
                 }
             }
