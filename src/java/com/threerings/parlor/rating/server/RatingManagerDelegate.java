@@ -32,7 +32,6 @@ import com.samskivert.jdbc.RepositoryUnit;
 import com.samskivert.util.ArrayIntSet;
 import com.samskivert.util.ArrayUtil;
 import com.samskivert.util.HashIntMap;
-import com.samskivert.util.IntMap;
 
 import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.server.CrowdServer;
@@ -103,7 +102,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
         CrowdServer.invoker.postUnit(new RepositoryUnit("loadRatings") {
             public void invokePersist () throws Exception {
                 // fetch the previous ratings of our persistent users and map them by player id
-                IntMap<RatingRecord> map = new HashIntMap<RatingRecord>();
+                HashIntMap<RatingRecord> map = new HashIntMap<RatingRecord>();
                 for (RatingRecord record : _repo.getRatings(gameId, ratedPlayers)) {
                     map.put(record.playerId, record);
                 }
@@ -141,7 +140,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
         int gameSecs = (int) (System.currentTimeMillis()/1000 - _startStamp);
 
         // update ratings if the game ran long enough, and the persistence code finished reading
-        if (_ratings == null || gameSecs < minimumRatedDuration()) {
+        if (_ratings == null || gameSecs < minimumRatedDuration() || _gobj.getWinnerCount() == 0) {
             return;
         }
 
