@@ -52,7 +52,7 @@ public class BaseControl extends EventDispatcher
     /**
      * Secret function to dispatch property changed events.
      */
-    internal function dispatch (event :Event) :void
+    protected function dispatch (event :Event) :void
     {
         try {
             super.dispatchEvent(event);
