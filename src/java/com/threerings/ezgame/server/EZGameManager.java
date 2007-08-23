@@ -76,6 +76,15 @@ public class EZGameManager extends GameManager
         addDelegate(_turnDelegate = new EZGameTurnDelegate(this));
     }
 
+    /**
+     * Configures the oids of the winners of this game. If a game manager delegate wishes to handle
+     * winner assignment, it should call this method and then call {@link #enddGame}.
+     */
+    public void setWinners (int[] winnerOids)
+    {
+        _winnerOids = winnerOids;
+    }
+
     // from TurnGameManager
     public void turnWillStart ()
     {
@@ -146,7 +155,7 @@ public class EZGameManager extends GameManager
         }
         validateStateModification(caller, false);
 
-        _winnerIds = winnerOids;
+        setWinners(winnerOids);
         endGame();
     }
 
@@ -575,14 +584,14 @@ public class EZGameManager extends GameManager
     @Override
     protected void assignWinners (boolean[] winners)
     {
-        if (_winnerIds != null) {
-            for (int oid : _winnerIds) {
+        if (_winnerOids != null) {
+            for (int oid : _winnerOids) {
                 int index = IntListUtil.indexOf(_playerOids, oid);
                 if (index >= 0 && index < winners.length) {
                     winners[index] = true;
                 }
             }
-            _winnerIds = null;
+            _winnerOids = null;
         }
     }
 
@@ -696,7 +705,7 @@ public class EZGameManager extends GameManager
     protected ArrayIntSet _cookieLookups = new ArrayIntSet();
 
     /** The array of winner oids, after the user has filled it in. */
-    protected int[] _winnerIds;
+    protected int[] _winnerOids;
 
     /** Handles the storage of our user cookies; lazily initialized. */
     protected GameCookieManager _cookMgr;
