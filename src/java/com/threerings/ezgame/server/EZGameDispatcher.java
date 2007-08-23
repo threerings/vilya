@@ -119,6 +119,13 @@ public class EZGameDispatcher extends InvocationDispatcher
             );
             return;
 
+        case EZGameMarshaller.RESTART_GAME_IN:
+            ((EZGameProvider)provider).restartGameIn(
+                source,
+                ((Integer)args[0]).intValue(), (InvocationService.InvocationListener)args[1]
+            );
+            return;
+
         case EZGameMarshaller.SEND_MESSAGE:
             ((EZGameProvider)provider).sendMessage(
                 source,

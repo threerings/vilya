@@ -154,8 +154,21 @@ public class EZGameMarshaller extends InvocationMarshaller
         });
     }
 
+    /** The method id used to dispatch {@link #restartGameIn} requests. */
+    public static final int RESTART_GAME_IN = 10;
+
+    // from interface EZGameService
+    public void restartGameIn (Client arg1, int arg2, InvocationService.InvocationListener arg3)
+    {
+        ListenerMarshaller listener3 = new ListenerMarshaller();
+        listener3.listener = arg3;
+        sendRequest(arg1, RESTART_GAME_IN, new Object[] {
+            Integer.valueOf(arg2), listener3
+        });
+    }
+
     /** The method id used to dispatch {@link #sendMessage} requests. */
-    public static final int SEND_MESSAGE = 10;
+    public static final int SEND_MESSAGE = 11;
 
     // from interface EZGameService
     public void sendMessage (Client arg1, String arg2, Object arg3, int arg4, InvocationService.InvocationListener arg5)
@@ -168,7 +181,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #setCookie} requests. */
-    public static final int SET_COOKIE = 11;
+    public static final int SET_COOKIE = 12;
 
     // from interface EZGameService
     public void setCookie (Client arg1, byte[] arg2, InvocationService.InvocationListener arg3)
@@ -181,7 +194,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #setProperty} requests. */
-    public static final int SET_PROPERTY = 12;
+    public static final int SET_PROPERTY = 13;
 
     // from interface EZGameService
     public void setProperty (Client arg1, String arg2, Object arg3, int arg4, boolean arg5, Object arg6, InvocationService.InvocationListener arg7)
@@ -194,7 +207,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #setTicker} requests. */
-    public static final int SET_TICKER = 13;
+    public static final int SET_TICKER = 14;
 
     // from interface EZGameService
     public void setTicker (Client arg1, String arg2, int arg3, InvocationService.InvocationListener arg4)

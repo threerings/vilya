@@ -65,6 +65,9 @@ public interface EZGameService extends InvocationService
     function mergeCollection (arg1 :Client, arg2 :String, arg3 :String, arg4 :InvocationService_InvocationListener) :void;
 
     // from Java interface EZGameService
+    function restartGameIn (arg1 :Client, arg2 :int, arg3 :InvocationService_InvocationListener) :void;
+
+    // from Java interface EZGameService
     function sendMessage (arg1 :Client, arg2 :String, arg3 :Object, arg4 :int, arg5 :InvocationService_InvocationListener) :void;
 
     // from Java interface EZGameService

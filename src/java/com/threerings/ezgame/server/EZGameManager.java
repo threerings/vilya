@@ -160,6 +160,28 @@ public class EZGameManager extends GameManager
     }
 
     // from EZGameProvider
+    public void restartGameIn (ClientObject caller, int seconds,
+                               InvocationService.InvocationListener listener)
+        throws InvocationException
+    {
+        if (_gameObj.isInPlay()) {
+            throw new InvocationException("e.game_in_play");
+        }
+        validateStateModification(caller, false);
+
+        // queue up the start of the next game
+        if (seconds > 0) {
+            new Interval(CrowdServer.omgr) {
+                public void expired () {
+                    if (_gameObj.isActive() && !_gameObj.isInPlay()) {
+                        startGame();
+                    }
+                }
+            }.schedule(seconds * 1000L);
+        }
+    }
+
+    // from EZGameProvider
     public void sendMessage (ClientObject caller, String msg, Object data, int playerId,
                              InvocationService.InvocationListener listener)
         throws InvocationException

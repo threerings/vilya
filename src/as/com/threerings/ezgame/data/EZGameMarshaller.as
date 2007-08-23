@@ -162,8 +162,21 @@ public class EZGameMarshaller extends InvocationMarshaller
         ]);
     }
 
+    /** The method id used to dispatch {@link #restartGameIn} requests. */
+    public static const RESTART_GAME_IN :int = 10;
+
+    // from interface EZGameService
+    public function restartGameIn (arg1 :Client, arg2 :int, arg3 :InvocationService_InvocationListener) :void
+    {
+        var listener3 :InvocationMarshaller_ListenerMarshaller = new InvocationMarshaller_ListenerMarshaller();
+        listener3.listener = arg3;
+        sendRequest(arg1, RESTART_GAME_IN, [
+            Integer.valueOf(arg2), listener3
+        ]);
+    }
+
     /** The method id used to dispatch {@link #sendMessage} requests. */
-    public static const SEND_MESSAGE :int = 10;
+    public static const SEND_MESSAGE :int = 11;
 
     // from interface EZGameService
     public function sendMessage (arg1 :Client, arg2 :String, arg3 :Object, arg4 :int, arg5 :InvocationService_InvocationListener) :void
@@ -176,7 +189,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #setCookie} requests. */
-    public static const SET_COOKIE :int = 11;
+    public static const SET_COOKIE :int = 12;
 
     // from interface EZGameService
     public function setCookie (arg1 :Client, arg2 :ByteArray, arg3 :InvocationService_InvocationListener) :void
@@ -189,7 +202,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #setProperty} requests. */
-    public static const SET_PROPERTY :int = 12;
+    public static const SET_PROPERTY :int = 13;
 
     // from interface EZGameService
     public function setProperty (arg1 :Client, arg2 :String, arg3 :Object, arg4 :int, arg5 :Boolean, arg6 :Object, arg7 :InvocationService_InvocationListener) :void
@@ -202,7 +215,7 @@ public class EZGameMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #setTicker} requests. */
-    public static const SET_TICKER :int = 13;
+    public static const SET_TICKER :int = 14;
 
     // from interface EZGameService
     public function setTicker (arg1 :Client, arg2 :String, arg3 :int, arg4 :InvocationService_InvocationListener) :void

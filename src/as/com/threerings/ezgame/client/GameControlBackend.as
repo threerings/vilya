@@ -504,6 +504,7 @@ public class GameControlBackend
         o["endTurn_v2"] = endTurn_v2;
         o["endRound_v1"] = endRound_v1;
         o["endGame_v2"] = endGame_v2;
+        o["restartGameIn_v1"] = restartGameIn_v1;
         o["getTurnHolder_v1"] = getTurnHolder_v1;
         o["getRound_v1"] = getRound_v1;
         o["getOccupantName_v1"] = getOccupantName_v1;
@@ -760,6 +761,13 @@ public class GameControlBackend
         validateConnected();
         _ezObj.ezGameService.endGame(
             _ctx.getClient(), toTypedIntArray(winnerIds), createLoggingConfirmListener("endGame"));
+    }
+
+    protected function restartGameIn_v1 (seconds :int) :void
+    {
+        validateConnected();
+        _ezObj.ezGameService.restartGameIn(
+            _ctx.getClient(), seconds, createLoggingConfirmListener("restartGameIn"));
     }
 
     protected function getDictionaryLetterSet_v1 (

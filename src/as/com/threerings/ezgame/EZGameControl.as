@@ -597,6 +597,16 @@ public class EZGameControl extends BaseControl
     }
 
     /**
+     * Requests to start the game again in the specified number of seconds. This should only be
+     * used for party games. Seated table games should have each player report that they are ready
+     * again and the game will automatically start.
+     */
+    public function restartGameIn (seconds :int) :void
+    {
+        callEZCode("restartGameIn_v1", seconds);
+    }
+
+    /**
      * Populate any properties or functions we want to expose to the other side of the ezgame
      * security boundary.
      */

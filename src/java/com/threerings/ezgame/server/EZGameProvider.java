@@ -88,6 +88,12 @@ public interface EZGameProvider extends InvocationProvider
         throws InvocationException;
 
     /**
+     * Handles a {@link EZGameService#restartGameIn} request.
+     */
+    public void restartGameIn (ClientObject caller, int arg1, InvocationService.InvocationListener arg2)
+        throws InvocationException;
+
+    /**
      * Handles a {@link EZGameService#sendMessage} request.
      */
     public void sendMessage (ClientObject caller, String arg1, Object arg2, int arg3, InvocationService.InvocationListener arg4)

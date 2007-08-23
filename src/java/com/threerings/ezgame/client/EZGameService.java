@@ -56,6 +56,13 @@ public interface EZGameService extends InvocationService
     public void endGame (Client client, int[] winnerOids, InvocationListener listener);
 
     /**
+     * Requests to start the game again in the specified number of seconds. This should only be
+     * used for party games. Seated table games should have each player report that they are ready
+     * again and the game will automatically start.
+     */
+    public void restartGameIn (Client client, int seconds, InvocationListener listener);
+
+    /**
      * Request to send a private message to one other player in the game.
      *
      * @param value either a byte[] if setting a non-array property or a property at an array
