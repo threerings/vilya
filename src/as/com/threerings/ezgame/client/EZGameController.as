@@ -59,7 +59,12 @@ public class EZGameController extends GameController
     public function userCodeIsConnected (autoReady :Boolean) :void
     {
         if (autoReady) {
+            // let the game manager know that we're here and we want to start the game now
             playerIsReady();
+        } else {
+            // let the game manager know that we're here even though we don't want the game to
+            // start yet
+            _gobj.manager.invoke("playerInRoom");
         }
     }
 
