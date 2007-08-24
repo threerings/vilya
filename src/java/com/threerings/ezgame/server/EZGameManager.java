@@ -126,19 +126,19 @@ public class EZGameManager extends GameManager
         validateStateModification(caller, false);
 
         // let the game know that it is doing something stupid
-        if (_gameObj.roundId < 0) {
+        if (_ezObj.roundId < 0) {
             throw new InvocationException("m.round_already_ended");
         }
 
         // while we are between rounds, our round id is the negation of the round that just ended
-        _gameObj.setRoundId(-_gameObj.roundId);
+        _ezObj.setRoundId(-_ezObj.roundId);
 
         // queue up the start of the next round if requested
         if (nextRoundDelay > 0) {
             new Interval(CrowdServer.omgr) {
                 public void expired () {
-                    if (_gameObj.isInPlay()) {
-                        _gameObj.setRoundId(-_gameObj.roundId + 1);
+                    if (_ezObj.isInPlay()) {
+                        _ezObj.setRoundId(-_ezObj.roundId + 1);
                     }
                 }
             }.schedule(nextRoundDelay * 1000L);
@@ -150,7 +150,7 @@ public class EZGameManager extends GameManager
                          InvocationService.InvocationListener listener)
         throws InvocationException
     {
-        if (!_gameObj.isInPlay()) {
+        if (!_ezObj.isInPlay()) {
             throw new InvocationException("e.already_ended");
         }
         validateStateModification(caller, false);
@@ -164,7 +164,7 @@ public class EZGameManager extends GameManager
                                InvocationService.InvocationListener listener)
         throws InvocationException
     {
-        if (_gameObj.isInPlay()) {
+        if (_ezObj.isInPlay()) {
             throw new InvocationException("e.game_in_play");
         }
         validateStateModification(caller, false);
@@ -173,7 +173,7 @@ public class EZGameManager extends GameManager
         if (seconds > 0) {
             new Interval(CrowdServer.omgr) {
                 public void expired () {
-                    if (_gameObj.isActive() && !_gameObj.isInPlay()) {
+                    if (_ezObj.isActive() && !_ezObj.isInPlay()) {
                         startGame();
                     }
                 }
@@ -189,7 +189,7 @@ public class EZGameManager extends GameManager
         validateUser(caller);
 
         if (playerId == 0) {
-            _gameObj.postMessage(EZGameObject.USER_MESSAGE, msg, data);
+            _ezObj.postMessage(EZGameObject.USER_MESSAGE, msg, data);
         } else {
             sendPrivateMessage(playerId, msg, data);
         }
@@ -202,7 +202,7 @@ public class EZGameManager extends GameManager
         throws InvocationException
     {
         validateUser(caller);
-        if (testAndSet && !_gameObj.testProperty(propName, index, testValue)) {
+        if (testAndSet && !_ezObj.testProperty(propName, index, testValue)) {
             return; // the test failed: do not set the property
         }
         setProperty(propName, data, index);
@@ -344,7 +344,7 @@ public class EZGameManager extends GameManager
                 if (_tickers.size() >= MAX_TICKERS) {
                     throw new InvocationException(ACCESS_DENIED);
                 }
-                t = new Ticker(tickerName, _gameObj);
+                t = new Ticker(tickerName, _ezObj);
                 _tickers.put(tickerName, t);
             }
             t.start(msOfDelay);
@@ -367,7 +367,7 @@ public class EZGameManager extends GameManager
                            InvocationService.InvocationListener listener)
         throws InvocationException
     {
-        if (_gameObj.userCookies != null && _gameObj.userCookies.containsKey(playerOid)) {
+        if (_ezObj.userCookies != null && _ezObj.userCookies.containsKey(playerOid)) {
             // already loaded: we do nothing
             return;
         }
@@ -393,8 +393,8 @@ public class EZGameManager extends GameManager
                 _cookieLookups.remove(playerOid);
                 // result may be null: that's ok, it means we've looked up the user's nonexistent
                 // cookie; also only set the cookie if the player is still in the room
-                if (_gameObj.occupants.contains(playerOid) && _gameObj.isActive()) {
-                    _gameObj.addToUserCookies(new UserCookie(playerOid, result));
+                if (_ezObj.occupants.contains(playerOid) && _ezObj.isActive()) {
+                    _ezObj.addToUserCookies(new UserCookie(playerOid, result));
                 }
             }
 
@@ -418,10 +418,10 @@ public class EZGameManager extends GameManager
 
         // and update the distributed object
         UserCookie cookie = new UserCookie(caller.getOid(), value);
-        if (_gameObj.userCookies.containsKey(cookie.getKey())) {
-            _gameObj.updateUserCookies(cookie);
+        if (_ezObj.userCookies.containsKey(cookie.getKey())) {
+            _ezObj.updateUserCookies(cookie);
         } else {
-            _gameObj.addToUserCookies(cookie);
+            _ezObj.addToUserCookies(cookie);
         }
     }
 
@@ -438,7 +438,7 @@ public class EZGameManager extends GameManager
             throw new InvocationException("m.player_not_around");
         }
 
-        target.postMessage(EZGameObject.USER_MESSAGE + ":" + _gameObj.getOid(),
+        target.postMessage(EZGameObject.USER_MESSAGE + ":" + _ezObj.getOid(),
                            new Object[] { msg, data });
     }
 
@@ -448,9 +448,9 @@ public class EZGameManager extends GameManager
     protected void setProperty (String propName, Object value, int index)
     {
         // apply the property set immediately
-        Object oldValue = _gameObj.applyPropertySet(propName, value, index);
-        _gameObj.postEvent(
-            new PropertySetEvent(_gameObj.getOid(), propName, value, index, oldValue));
+        Object oldValue = _ezObj.applyPropertySet(propName, value, index);
+        _ezObj.postEvent(
+            new PropertySetEvent(_ezObj.getOid(), propName, value, index, oldValue));
     }
 
     /**
@@ -482,7 +482,7 @@ public class EZGameManager extends GameManager
         validateUser(caller);
 
         if (requireHoldsTurn) {
-            Name holder = _gameObj.turnHolder;
+            Name holder = _ezObj.turnHolder;
             if (holder != null && !holder.equals(((BodyObject) caller).getVisibleName())) {
                 throw new InvocationException(InvocationCodes.ACCESS_DENIED);
             }
@@ -515,7 +515,7 @@ public class EZGameManager extends GameManager
      */
     protected BodyObject getOccupantByOid (int oid)
     {
-        if (!_gameObj.occupants.contains(oid)) {
+        if (!_ezObj.occupants.contains(oid)) {
             return null;
         }
         // return the body
@@ -533,8 +533,8 @@ public class EZGameManager extends GameManager
     {
         super.didStartup();
 
-        _gameObj = (EZGameObject) _plobj;
-        _gameObj.setEzGameService(
+        _ezObj = (EZGameObject) _plobj;
+        _ezObj.setEzGameService(
             (EZGameMarshaller) CrowdServer.invmgr.registerDispatcher(new EZGameDispatcher(this)));
 
         // if we don't need the no-show timer, start.
@@ -549,8 +549,8 @@ public class EZGameManager extends GameManager
         super.bodyEntered(bodyOid);
 
         // if we have no controller, then our new friend gets control
-        if (_gameObj.controllerOid == 0) {
-            _gameObj.setControllerOid(bodyOid);
+        if (_ezObj.controllerOid == 0) {
+            _ezObj.setControllerOid(bodyOid);
         }
     }
 
@@ -560,13 +560,13 @@ public class EZGameManager extends GameManager
         super.bodyUpdated(info);
 
         // if the controller just disconnected, reassign control
-        if (info.status == OccupantInfo.DISCONNECTED && info.bodyOid == _gameObj.controllerOid) {
-            _gameObj.setControllerOid(getControllerOid());
+        if (info.status == OccupantInfo.DISCONNECTED && info.bodyOid == _ezObj.controllerOid) {
+            _ezObj.setControllerOid(getControllerOid());
 
         // if everyone in the room was disconnected and this client just reconnected, it becomes
         // the new controller
-        } else if (_gameObj.controllerOid == 0) {
-            _gameObj.setControllerOid(info.bodyOid);
+        } else if (_ezObj.controllerOid == 0) {
+            _ezObj.setControllerOid(info.bodyOid);
         }
     }
 
@@ -576,20 +576,20 @@ public class EZGameManager extends GameManager
         super.bodyLeft(bodyOid);
 
         // if this player was the controller, reassign control
-        if (bodyOid == _gameObj.controllerOid) {
-            _gameObj.setControllerOid(getControllerOid());
+        if (bodyOid == _ezObj.controllerOid) {
+            _ezObj.setControllerOid(getControllerOid());
         }
 
         // nix any of this player's cookies
-        if (_gameObj.userCookies != null && _gameObj.userCookies.containsKey(bodyOid)) {
-            _gameObj.removeFromUserCookies(bodyOid);
+        if (_ezObj.userCookies != null && _ezObj.userCookies.containsKey(bodyOid)) {
+            _ezObj.removeFromUserCookies(bodyOid);
         }
     }
 
     @Override
     protected void didShutdown ()
     {
-        CrowdServer.invmgr.clearDispatcher(_gameObj.ezGameService);
+        CrowdServer.invmgr.clearDispatcher(_ezObj.ezGameService);
         stopTickers();
 
         super.didShutdown();
@@ -601,6 +601,10 @@ public class EZGameManager extends GameManager
         stopTickers();
 
         super.gameDidEnd();
+
+        // EZ games immediately resest to PRE_GAME after they end so that they can be restarted if
+        // desired by having all players call playerReady() again
+        _ezObj.setState(EZGameObject.PRE_GAME);
     }
 
     @Override
@@ -636,7 +640,7 @@ public class EZGameManager extends GameManager
      */
     protected int getControllerOid ()
     {
-        for (OccupantInfo info : _gameObj.occupantInfo) {
+        for (OccupantInfo info : _ezObj.occupantInfo) {
             if (info.status != OccupantInfo.DISCONNECTED) {
                 return info.bodyOid;
             }
@@ -651,7 +655,7 @@ public class EZGameManager extends GameManager
     {
         if (_cookMgr == null) {
             _cookMgr = createCookieManager();
-            _gameObj.setUserCookies(new DSet<UserCookie>());
+            _ezObj.setUserCookies(new DSet<UserCookie>());
         }
         return _cookMgr;
     }
@@ -712,7 +716,7 @@ public class EZGameManager extends GameManager
     } // End: static class Ticker
 
     /** A nice casted reference to the game object. */
-    protected EZGameObject _gameObj;
+    protected EZGameObject _ezObj;
 
     /** Our turn delegate. */
     protected EZGameTurnDelegate _turnDelegate;
