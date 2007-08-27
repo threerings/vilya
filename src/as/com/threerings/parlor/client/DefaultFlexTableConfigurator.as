@@ -49,8 +49,10 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
     public function DefaultFlexTableConfigurator (
             desiredPlayers :int, minPlayers :int = -1, maxPlayers :int = -1,
             allowWatchable :Boolean = true, playersXlate :String = "Players: ", 
-            watchableXlate :String = "Private: ")
+            watchableXlate :String = "Watchable: ", privateXlate :String = "Private: ")
     {
+        var partyGame :Boolean = minPlayers < 0 && maxPlayers < 0;
+
         if (minPlayers < 0) {
             minPlayers = desiredPlayers;
         }
@@ -74,7 +76,10 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
         }
 
         // create up the checkbox for private games, if applicable
-        if (allowWatchable) {
+        if (partyGame) {
+            _privateCheck = new CheckBox();
+            _privateCheck.selected = false;
+        } else if (allowWatchable) {
             _watchableCheck = new CheckBox();
             // default to watchable, if the game allows it.
             _watchableCheck.selected = true;
@@ -82,6 +87,7 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
 
         _playersXlate = playersXlate;
         _watchableXlate = watchableXlate;
+        _privateXlate = privateXlate;
     }
 
     // documentation inherited
@@ -105,6 +111,11 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
             watchableLabel.text = _watchableXlate;
             watchableLabel.styleName = "lobbyLabel";
             gconf.addControl(watchableLabel, _watchableCheck);
+        } else if (_privateCheck != null) {
+            var privateLabel :Label = new Label();
+            privateLabel.text = _privateXlate;
+            privateLabel.styleName = "lobbyLabel";
+            gconf.addControl(privateLabel, _privateCheck);
         }
     }
 
@@ -122,20 +133,27 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
         if (_playerSlider != null) {
             _config.desiredPlayerCount = _playerSlider.value;
         }
+        // TODO - it is wacky for the TableConfig.privateTable to mean two different things.  
+        // It should be extended to have separate privateTable and watchableTable options.
         if (_watchableCheck != null) {
             _config.privateTable = !_watchableCheck.selected;
+        } else if (_privateCheck != null) {
+            _config.privateTable = _privateCheck.selected;
         }
     }
 
     /** A slider for configuring the number of players at the table. */
     protected var _playerSlider :HSlider;
 
-    /** A checkbox to allow the table creator to specify if the table is
-     * private. */
+    /** A checkbox to allow the table creator to specify if the table is watchable */
     protected var _watchableCheck :CheckBox;
+
+    /** A checkbox to allow the table creator to specifiy if the table is private */
+    protected var _privateCheck :CheckBox;
 
     /** Translation strings passed in by the caller */
     protected var _playersXlate :String;
     protected var _watchableXlate :String;
+    protected var _privateXlate :String;
 }
 }
