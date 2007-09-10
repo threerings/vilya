@@ -56,6 +56,9 @@ public class PercentileRecord extends PersistentRecord
         new ColumnExp(PercentileRecord.class, DATA);
     // AUTO-GENERATED: FIELDS END
 
+    /** Increment this value to reflect changes to this object's schema. */
+    public static final int SCHEMA_VERSION = 1;
+
     /** The id of the game for which we're tracking a percentile distribution. */
     @Id
     public int gameId;
