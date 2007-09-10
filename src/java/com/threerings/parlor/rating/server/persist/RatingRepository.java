@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.samskivert.io.PersistenceException;
+import com.samskivert.util.HashIntMap;
+import com.samskivert.util.IntMap;
 
 import com.samskivert.jdbc.depot.DepotRepository;
 import com.samskivert.jdbc.depot.PersistenceContext;
@@ -33,6 +35,8 @@ import com.samskivert.jdbc.depot.PersistentRecord;
 import com.samskivert.jdbc.depot.clause.Where;
 import com.samskivert.jdbc.depot.operator.Conditionals.*;
 import com.samskivert.jdbc.depot.operator.Logic.And;
+
+import com.threerings.parlor.rating.util.Percentiler;
 
 /**
  * Handles the persistent storage of per-user per-game ratings.
@@ -101,9 +105,51 @@ public class RatingRepository extends DepotRepository
         delete(RatingRecord.class, RatingRecord.getKey(gameId, playerId));
     }
 
+    /**
+     * Loads all percentile distributions associated with the specified game.
+     *
+     * @return a map from type to {@link Percentiler} instance.
+     */
+    public IntMap<Percentiler> loadPercentiles (int gameId)
+        throws PersistenceException
+    {
+        HashIntMap results = new HashIntMap();
+        Where where = new Where(PercentileRecord.GAME_ID_C, gameId);
+        for (PercentileRecord record : findAll(PercentileRecord.class, where)) {
+            results.put(record.type, new Percentiler(record.data));
+        }
+        return results;
+    }
+
+    /**
+     * Loads a particular percentiler for the specified game. null will never be returned, rather a
+     * blank percentiler will be created and returned.
+     */
+    public Percentiler loadPercentile (int gameId, int type)
+        throws PersistenceException
+    {
+        PercentileRecord record =
+            load(PercentileRecord.class, PercentileRecord.getKey(gameId, type));
+        return (record == null) ? new Percentiler() : new Percentiler(record.data);
+    }
+
+    /**
+     * Writes the supplied percentiler's data out to the database.
+     */
+    public void updatePercentile (int gameId, int type, Percentiler tiler)
+        throws PersistenceException
+    {
+        PercentileRecord record = new PercentileRecord();
+        record.gameId = gameId;
+        record.type = type;
+        record.data = tiler.toBytes();
+        store(record);
+    }
+
     @Override // from DepotRepository
     protected void getManagedRecords (Set<Class<? extends PersistentRecord>> classes)
     {
         classes.add(RatingRecord.class);
+        classes.add(PercentileRecord.class);
     }
 }
