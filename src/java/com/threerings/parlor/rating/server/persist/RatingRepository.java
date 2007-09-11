@@ -118,7 +118,7 @@ public class RatingRepository extends DepotRepository
     public IntMap<Percentiler> loadPercentiles (int gameId)
         throws PersistenceException
     {
-        HashIntMap results = new HashIntMap();
+        HashIntMap<Percentiler> results = new HashIntMap<Percentiler>();
         Where where = new Where(PercentileRecord.GAME_ID_C, gameId);
         for (PercentileRecord record : findAll(PercentileRecord.class, where)) {
             results.put(record.type, new Percentiler(record.data));
