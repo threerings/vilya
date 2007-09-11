@@ -23,6 +23,7 @@ package com.threerings.parlor.rating.server.persist;
 
 import com.samskivert.jdbc.depot.Key;
 import com.samskivert.jdbc.depot.PersistentRecord;
+import com.samskivert.jdbc.depot.annotation.Column;
 import com.samskivert.jdbc.depot.annotation.Id;
 import com.samskivert.jdbc.depot.expression.ColumnExp;
 
@@ -57,7 +58,7 @@ public class PercentileRecord extends PersistentRecord
     // AUTO-GENERATED: FIELDS END
 
     /** Increment this value to reflect changes to this object's schema. */
-    public static final int SCHEMA_VERSION = 1;
+    public static final int SCHEMA_VERSION = 2;
 
     /** The id of the game for which we're tracking a percentile distribution. */
     @Id
@@ -68,6 +69,7 @@ public class PercentileRecord extends PersistentRecord
     public int type;
 
     /** The raw percentiler data. */
+    @Column(length=500)
     public byte[] data;
 
     // AUTO-GENERATED: METHODS START

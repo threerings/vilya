@@ -30,6 +30,7 @@ import com.samskivert.util.HashIntMap;
 import com.samskivert.util.IntMap;
 
 import com.samskivert.jdbc.depot.DepotRepository;
+import com.samskivert.jdbc.depot.EntityMigration;
 import com.samskivert.jdbc.depot.PersistenceContext;
 import com.samskivert.jdbc.depot.PersistentRecord;
 import com.samskivert.jdbc.depot.clause.Where;
@@ -49,6 +50,10 @@ public class RatingRepository extends DepotRepository
     public RatingRepository (PersistenceContext ctx)
     {
         super(ctx);
+
+        // TEMP
+        ctx.registerMigration(PercentileRecord.class, new EntityMigration.Retype(2, "data"));
+        // END TEMP
     }
 
     /**
