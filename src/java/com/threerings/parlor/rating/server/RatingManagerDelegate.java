@@ -107,7 +107,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
         // flush this players rating if its modified
         for (Rating rating : _ratings.values()) {
             if (rating.playerOid == bodyOid && rating.modified) {
-                saveRatings(Collections.singleton(rating));
+                saveRatings(Collections.singleton(rating.cloneForSave()));
                 break;
             }
         }
