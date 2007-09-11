@@ -142,6 +142,14 @@ public class Percentiler
     }
 
     /**
+     * Returns the total number of values ever recorded to this percentiler.
+     */
+    public long getRecordedCount ()
+    {
+        return _total;
+    }
+
+    /**
      * Returns true if thsi percentiler has been modified since it was created or since the last
      * call to {@link #clearModified}.
      */
