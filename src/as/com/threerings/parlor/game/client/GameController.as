@@ -198,13 +198,15 @@ public /*abstract*/ class GameController extends PlaceController
     }
 
     /**
-     * Derived classes can override this method if they add additional game
-     * states and should handle transitions to those states, returning true to
-     * indicate they were handled and calling super for the normal game states.
+     * Derived classes can override this method if they add additional game states and should
+     * handle transitions to those states, returning true to indicate they were handled and calling
+     * super for the normal game states.
      */
     protected function stateDidChange (state :int) :Boolean
     {
         switch (state) {
+        case GameObject.PRE_GAME:
+            return true;
         case GameObject.IN_PLAY:
             gameDidStart();
             return true;

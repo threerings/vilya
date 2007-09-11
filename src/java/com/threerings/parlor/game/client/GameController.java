@@ -207,6 +207,8 @@ public abstract class GameController extends PlaceController
     protected boolean stateDidChange (int state)
     {
         switch (state) {
+        case GameObject.PRE_GAME:
+            return true;
         case GameObject.IN_PLAY:
             gameDidStart();
             return true;
