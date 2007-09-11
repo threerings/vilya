@@ -214,7 +214,6 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
             return;
         }
 
-        log.info("Loading " + ratings + "...");
         final int gameId = getGameId();
         CrowdServer.invoker.postUnit(new RepositoryUnit("loadRatings") {
             public void invokePersist () throws Exception {
@@ -255,7 +254,6 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
             return;
         }
 
-        log.info("Saving " + ratings + "...");
         final int gameId = getGameId();
         CrowdServer.invoker.postUnit(new RepositoryUnit("saveRatings") {
             public void invokePersist () throws Exception {
