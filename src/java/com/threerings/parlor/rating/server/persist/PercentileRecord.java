@@ -42,13 +42,6 @@ public class PercentileRecord extends PersistentRecord
     public static final ColumnExp GAME_ID_C =
         new ColumnExp(PercentileRecord.class, GAME_ID);
 
-    /** The column identifier for the {@link #type} field. */
-    public static final String TYPE = "type";
-
-    /** The qualified column identifier for the {@link #type} field. */
-    public static final ColumnExp TYPE_C =
-        new ColumnExp(PercentileRecord.class, TYPE);
-
     /** The column identifier for the {@link #data} field. */
     public static final String DATA = "data";
 
@@ -58,15 +51,11 @@ public class PercentileRecord extends PersistentRecord
     // AUTO-GENERATED: FIELDS END
 
     /** Increment this value to reflect changes to this object's schema. */
-    public static final int SCHEMA_VERSION = 2;
+    public static final int SCHEMA_VERSION = 3;
 
     /** The id of the game for which we're tracking a percentile distribution. */
     @Id
     public int gameId;
-
-    /** The type of percentile distribution (games can maintain multiple distributions). */
-    @Id
-    public int type;
 
     /** The raw percentiler data. */
     @Column(length=500)
@@ -77,12 +66,12 @@ public class PercentileRecord extends PersistentRecord
      * Create and return a primary {@link Key} to identify a {@link #PercentileRecord}
      * with the supplied key values.
      */
-    public static Key<PercentileRecord> getKey (int gameId, int type)
+    public static Key<PercentileRecord> getKey (int gameId)
     {
         return new Key<PercentileRecord>(
                 PercentileRecord.class,
-                new String[] { GAME_ID, TYPE },
-                new Comparable[] { gameId, type });
+                new String[] { GAME_ID },
+                new Comparable[] { gameId });
     }
     // AUTO-GENERATED: METHODS END
 }

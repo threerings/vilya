@@ -53,6 +53,7 @@ public class RatingRepository extends DepotRepository
 
         // TEMP
         ctx.registerMigration(PercentileRecord.class, new EntityMigration.Retype(2, "data"));
+        ctx.registerMigration(PercentileRecord.class, new EntityMigration.Drop(3, "type"));
         // END TEMP
     }
 
@@ -111,42 +112,24 @@ public class RatingRepository extends DepotRepository
     }
 
     /**
-     * Loads all percentile distributions associated with the specified game.
-     *
-     * @return a map from type to {@link Percentiler} instance.
+     * Loads the percentile distribution associated with the specified game. null will never be
+     * returned, rather a blank percentiler will be created and returned.
      */
-    public IntMap<Percentiler> loadPercentiles (int gameId)
+    public Percentiler loadPercentile (int gameId)
         throws PersistenceException
     {
-        HashIntMap<Percentiler> results = new HashIntMap<Percentiler>();
-        Where where = new Where(PercentileRecord.GAME_ID_C, gameId);
-        for (PercentileRecord record : findAll(PercentileRecord.class, where)) {
-            results.put(record.type, new Percentiler(record.data));
-        }
-        return results;
-    }
-
-    /**
-     * Loads a particular percentiler for the specified game. null will never be returned, rather a
-     * blank percentiler will be created and returned.
-     */
-    public Percentiler loadPercentile (int gameId, int type)
-        throws PersistenceException
-    {
-        PercentileRecord record =
-            load(PercentileRecord.class, PercentileRecord.getKey(gameId, type));
+        PercentileRecord record = load(PercentileRecord.class, PercentileRecord.getKey(gameId));
         return (record == null) ? new Percentiler() : new Percentiler(record.data);
     }
 
     /**
      * Writes the supplied percentiler's data out to the database.
      */
-    public void updatePercentile (int gameId, int type, Percentiler tiler)
+    public void updatePercentile (int gameId, Percentiler tiler)
         throws PersistenceException
     {
         PercentileRecord record = new PercentileRecord();
         record.gameId = gameId;
-        record.type = type;
         record.data = tiler.toBytes();
         store(record);
     }

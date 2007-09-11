@@ -215,7 +215,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
         }
 
         log.info("Loading " + ratings + "...");
-        final int gameId = _gmgr.getGameConfig().getGameId();
+        final int gameId = getGameId();
         CrowdServer.invoker.postUnit(new RepositoryUnit("loadRatings") {
             public void invokePersist () throws Exception {
                 // map the records by player id so that we can correlate with the db results
@@ -256,7 +256,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
         }
 
         log.info("Saving " + ratings + "...");
-        final int gameId = _gmgr.getGameConfig().getGameId();
+        final int gameId = getGameId();
         CrowdServer.invoker.postUnit(new RepositoryUnit("saveRatings") {
             public void invokePersist () throws Exception {
                 for (Rating rating : ratings) {
@@ -372,6 +372,14 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
         // return the updated and clamped rating
         int nrat = Math.round(prating.rating + totDeltaR/opponents);
         return MathUtil.bound(MINIMUM_RATING, nrat, MAXIMUM_RATING);
+    }
+
+    /**
+     * Returns the game id to use when reading and writing ratings.
+     */
+    protected int getGameId ()
+    {
+        return _gmgr.getGameConfig().getGameId();
     }
 
     /**
