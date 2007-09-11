@@ -57,7 +57,7 @@ public class Percentiler
         iin.get(_counts);
         in.position((BUCKET_COUNT+1) * INT_SIZE);
         LongBuffer lin = in.asLongBuffer();
-        _total = lin.get();
+        _snapTotal = (_total = lin.get());
 
         // compute our percentiles
         recomputePercentiles();
@@ -112,7 +112,7 @@ public class Percentiler
                     // of this bucket's counts to the two new buckets into
                     // which it falls
                     float fraction = (nval - (oval - delta)) / delta;
-                    int lesser = (int)Math.round(_counts[ii] * fraction);
+                    int lesser = Math.round(_counts[ii] * fraction);
                     counts[ni] += lesser;
                     counts[++ni] += (_counts[ii] - lesser);
                     nval += newdelta;
@@ -139,6 +139,23 @@ public class Percentiler
             // recompute again when we've grown by 5%
             _nextRecomp = (int)(_total/20);
         }
+    }
+
+    /**
+     * Returns true if thsi percentiler has been modified since it was created or since the last
+     * call to {@link #clearModified}.
+     */
+    public boolean isModified ()
+    {
+        return (_total != _snapTotal);
+    }
+
+    /**
+     * Clears this percentiler's "is modified" state.
+     */
+    public void clearModified ()
+    {
+        _snapTotal = _total;
     }
 
     /**
@@ -312,7 +329,7 @@ public class Percentiler
      */
     protected final int toBucketIndex (float value)
     {
-        int idx = Math.min((int)Math.round(value * BUCKET_COUNT / _max), 99);
+        int idx = Math.min(Math.round(value * BUCKET_COUNT / _max), 99);
         if (idx < 0 || idx >= BUCKET_COUNT) {
             Log.warning("'" + value + "' caused bogus bucket index (" +
                         idx + ") to be computed.");
@@ -324,6 +341,9 @@ public class Percentiler
 
     /** The total number of data points seen by this percentiler. */
     protected long _total;
+
+    /** The value of {@link #_total} at creation time or as of a call to {@link #clearModified}. */
+    protected long _snapTotal;
 
     /** The maximum value seen by this percentiler. */
     protected int _max;
