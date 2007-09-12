@@ -28,6 +28,8 @@ import com.samskivert.jdbc.depot.annotation.Id;
 import com.samskivert.jdbc.depot.annotation.Index;
 import com.samskivert.jdbc.depot.expression.ColumnExp;
 
+import com.samskivert.util.StringUtil;
+
 @Entity(indices={
     @Index(name="ixPlayerId", fields={ RatingRecord.PLAYER_ID })
 })
@@ -98,6 +100,12 @@ public class RatingRecord extends PersistentRecord
         this.playerId = playerId;
         this.rating = rating;
         this.experience = experience;
+    }
+
+    @Override // from Object
+    public String toString ()
+    {
+        return StringUtil.fieldsToString(this);
     }
 
     // AUTO-GENERATED: METHODS START
