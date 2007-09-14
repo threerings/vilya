@@ -279,7 +279,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
     /**
      * Computes updated ratings for the players of this game. The default implementation uses the
      * {@link GameObject#winners} field to determine winners and losers and uses a FIDE/ELO
-     * algorithm to comptue updated ratings.
+     * algorithm to compute updated ratings.
      */
     protected void updateRatings ()
     {
@@ -313,7 +313,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
      * final rating adjustment, which is then added to the player's previous rating and bounded to
      * the rating range. <em>Note:</em> provisional players (those with experience of less than 20)
      * will be treated as having, at most, the default rating when used as an opponent in
-     * calculatons for a non-provisional player.
+     * calculations for a non-provisional player.
      *
      * @return the player's updated rating or -1 if none of the opponents could be applicably rated
      * against this player.
@@ -322,7 +322,14 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
     {
         float totDeltaR = 0; // the total delta rating
         int opponents = 0;
+
         Rating prating = _ratings.get(_playerIds[pidx]);
+        if (prating == null) {
+            // be robust
+            log.warning("Computing ratings for unknown player [where=" + where() +
+                        ", pidx=" + pidx + "].");
+            return -1;
+        }
 
         for (int ii = 0; ii < _playerIds.length; ii++) {
             Rating orating = _ratings.get(_playerIds[ii]);
