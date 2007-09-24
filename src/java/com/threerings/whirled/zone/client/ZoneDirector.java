@@ -244,12 +244,19 @@ public class ZoneDirector extends BasicDirector
     // documentation inherited from interface
     public void forcedMove (int zoneId, int sceneId)
     {
-        Log.info("Moving at request of server [zoneId=" + zoneId +
-                 ", sceneId=" + sceneId + "].");
+        // if we're in the middle of a move, we can't abort it or we will screw everything up, so
+        // just finish up what we're doing and assume that the repeated move request was the
+        // spurious one as it would be in the case of lag causing rapid-fire repeat requests
+        if (_scdir.movePending()) {
+            Log.info("Dropping forced move because we have a move pending " +
+                     "[pend=" + _scdir.getPendingModel() + ", rzId=" + zoneId +
+                     ", rsId=" + sceneId + "].");
+            return;
+        }
 
+        Log.info("Moving at request of server [zoneId=" + zoneId + ", sceneId=" + sceneId + "].");
         // clear out our old scene and place data
         _scdir.didLeaveScene();
-
         // move to the new zone and scene
         moveTo(zoneId, sceneId, null);
     }

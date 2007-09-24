@@ -120,6 +120,14 @@ public class SceneDirector extends BasicDirector
     }
 
     /**
+     * Returns true if there is a pending move request.
+     */
+    public boolean movePending ()
+    {
+        return (_pendingSceneId > 0);
+    }
+
+    /**
      * Requests that this client move the specified scene. A request will be made and when the
      * response is received, the location observers will be notified of success or failure.
      *
@@ -167,7 +175,7 @@ public class SceneDirector extends BasicDirector
         boolean refuse = _locdir.checkRepeatMove();
 
         // complain if we're over-writing a pending request
-        if (_pendingSceneId != -1) {
+        if (movePending()) {
             if (refuse) {
                 Log.warning("Refusing moveTo; We have a request outstanding " +
                             "[psid=" + _pendingSceneId + ", nsid=" + sceneId + "].");
@@ -367,11 +375,18 @@ public class SceneDirector extends BasicDirector
     // from interface SceneReceiver
     public void forcedMove (int sceneId)
     {
-        Log.info("Moving at request of server [sceneId=" + sceneId + "].");
+        // if we're in the middle of a move, we can't abort it or we will screw everything up, so
+        // just finish up what we're doing and assume that the repeated move request was the
+        // spurious one as it would be in the case of lag causing rapid-fire repeat requests
+        if (movePending()) {
+            Log.info("Dropping forced move because we have a move pending " +
+                     "[pendId=" + _pendingSceneId + ", reqId=" + sceneId + "].");
+            return;
+        }
 
+        Log.info("Moving at request of server [sceneId=" + sceneId + "].");
         // clear out our old scene and place data
         didLeaveScene();
-
         // move to the new scene
         moveTo(sceneId);
     }
