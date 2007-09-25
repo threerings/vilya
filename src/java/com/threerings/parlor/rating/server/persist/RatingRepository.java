@@ -21,6 +21,9 @@
 
 package com.threerings.parlor.rating.server.persist;
 
+import java.sql.Timestamp;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -33,6 +36,9 @@ import com.samskivert.jdbc.depot.DepotRepository;
 import com.samskivert.jdbc.depot.EntityMigration;
 import com.samskivert.jdbc.depot.PersistenceContext;
 import com.samskivert.jdbc.depot.PersistentRecord;
+import com.samskivert.jdbc.depot.clause.Limit;
+import com.samskivert.jdbc.depot.clause.OrderBy;
+import com.samskivert.jdbc.depot.clause.QueryClause;
 import com.samskivert.jdbc.depot.clause.Where;
 import com.samskivert.jdbc.depot.operator.Conditionals.*;
 import com.samskivert.jdbc.depot.operator.Logic.And;
@@ -84,12 +90,29 @@ public class RatingRepository extends DepotRepository
     }
 
     /**
-     * Fetch and return all the registered {@link RatingRecord} rows for the given player.
+     * Fetch and return all the registered {@link RatingRecord} rows for the given player. Ratings
+     * will be returned in order of most recently to least recently updated.
+     *
+     * @param since ratings last updated more than this number of milliseconds in the past will be
+     * ommitted from the result list. Supplying -1 will return all ratings regardless of age.
+     * @param count the maximum number of ratings to return or -1 for all ratings.
      */
-    public List<RatingRecord> getRatings (int playerId)
+    public List<RatingRecord> getRatings (int playerId, long since, int count)
         throws PersistenceException
     {
-        return findAll(RatingRecord.class, new Where(RatingRecord.PLAYER_ID_C, playerId));
+        ArrayList<QueryClause> clauses = new ArrayList<QueryClause>();
+        if (since > 0L) {
+            Timestamp when = new Timestamp(System.currentTimeMillis() - since);
+            clauses.add(new Where(new And(new Equals(RatingRecord.PLAYER_ID_C, playerId),
+                                          new GreaterThan(RatingRecord.LAST_UPDATED_C, when))));
+        } else {
+            clauses.add(new Where(RatingRecord.PLAYER_ID_C, playerId));
+        }
+        if (count > 0) {
+            clauses.add(new Limit(0, count));
+        }
+        clauses.add(OrderBy.descending(RatingRecord.LAST_UPDATED_C));
+        return findAll(RatingRecord.class, clauses.toArray(new QueryClause[clauses.size()]));
     }
 
     /**

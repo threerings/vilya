@@ -21,8 +21,11 @@
 
 package com.threerings.parlor.rating.server.persist;
 
+import java.sql.Timestamp;
+
 import com.samskivert.jdbc.depot.Key;
 import com.samskivert.jdbc.depot.PersistentRecord;
+import com.samskivert.jdbc.depot.annotation.Column;
 import com.samskivert.jdbc.depot.annotation.Entity;
 import com.samskivert.jdbc.depot.annotation.Id;
 import com.samskivert.jdbc.depot.annotation.Index;
@@ -63,9 +66,16 @@ public class RatingRecord extends PersistentRecord
     /** The qualified column identifier for the {@link #experience} field. */
     public static final ColumnExp EXPERIENCE_C =
         new ColumnExp(RatingRecord.class, EXPERIENCE);
+
+    /** The column identifier for the {@link #lastUpdated} field. */
+    public static final String LAST_UPDATED = "lastUpdated";
+
+    /** The qualified column identifier for the {@link #lastUpdated} field. */
+    public static final ColumnExp LAST_UPDATED_C =
+        new ColumnExp(RatingRecord.class, LAST_UPDATED);
     // AUTO-GENERATED: FIELDS END
 
-    public static final int SCHEMA_VERSION = 2;
+    public static final int SCHEMA_VERSION = 3;
 
     /** The identifier of the game we're rating for. */
     @Id
@@ -80,6 +90,10 @@ public class RatingRecord extends PersistentRecord
 
     /** The number of times the player has played this game. */
     public int experience;
+
+    /** The last time this rating was updated. */
+    @Column(type="TIMESTAMP", defaultValue="CURRENT_TIMESTAMP")
+    public Timestamp lastUpdated;
 
     /**
      * An empty constructor for unmarshalling.
@@ -100,6 +114,7 @@ public class RatingRecord extends PersistentRecord
         this.playerId = playerId;
         this.rating = rating;
         this.experience = experience;
+        this.lastUpdated = new Timestamp(System.currentTimeMillis());
     }
 
     @Override // from Object
