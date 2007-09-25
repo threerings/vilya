@@ -118,6 +118,11 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
     {
         super.gameWillStart();
 
+        // if this game is not rated, stop here
+        if (!_gmgr.getGameConfig().rated) {
+            return;
+        }
+
         // note the time at which we started
         _startStamp = (int) (System.currentTimeMillis() / 1000);
 
@@ -145,6 +150,11 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
     public void gameDidEnd ()
     {
         super.gameDidEnd();
+
+        // if this game is not rated, stop here
+        if (!_gmgr.getGameConfig().rated) {
+            return;
+        }
 
         // don't update ratings if the game did not run long enough
         int gameSecs = (int) (System.currentTimeMillis()/1000 - _startStamp);
