@@ -91,7 +91,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
 
         // if the game is in play and this is a player, load their ratings
         BodyObject occupant = (BodyObject)CrowdServer.omgr.getObject(bodyOid);
-        if (_gobj.isInPlay() && isPlayer(occupant)) {
+        if (shouldRateGame() && _gobj.isInPlay() && isPlayer(occupant)) {
             Rating rating = maybeCreateRating(occupant);
             if (rating != null) {
                 loadRatings(Collections.singleton(rating));
@@ -118,8 +118,8 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
     {
         super.gameWillStart();
 
-        // if this game is not rated, stop here
-        if (!_gmgr.getGameConfig().rated) {
+        // if this game is not to be rated, stop here
+        if (!shouldRateGame()) {
             return;
         }
 
@@ -151,8 +151,8 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
     {
         super.gameDidEnd();
 
-        // if this game is not rated, stop here
-        if (!_gmgr.getGameConfig().rated) {
+        // if this game is not to be rated, stop here
+        if (!shouldRateGame()) {
             return;
         }
 
@@ -395,6 +395,14 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
     protected int getGameId ()
     {
         return _gmgr.getGameConfig().getGameId();
+    }
+
+    /**
+     * Returns true if this game should be rated, false otherwise.
+     */
+    protected boolean shouldRateGame ()
+    {
+        return _gmgr.getGameConfig().rated;
     }
 
     /**
