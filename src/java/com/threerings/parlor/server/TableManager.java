@@ -46,7 +46,6 @@ import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.OccupantInfo;
 import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.server.CrowdServer;
-import com.threerings.crowd.server.PlaceManager;
 
 import com.threerings.parlor.Log;
 import com.threerings.parlor.client.TableService;
@@ -317,9 +316,9 @@ public class TableManager
         throws InvocationException
     {
         try {
-            PlaceManager pmgr = CrowdServer.plreg.createPlace(createConfig(table));
-            GameObject gobj = (GameObject) pmgr.getPlaceObject();
-            gameCreated(table, gobj);
+            GameManager gmgr = (GameManager)CrowdServer.plreg.createPlace(createConfig(table));
+            GameObject gobj = (GameObject)gmgr.getPlaceObject();
+            gameCreated(table, gobj, gmgr);
             return gobj.getOid();
 
         } catch (Throwable t) {
@@ -344,7 +343,7 @@ public class TableManager
      * Called when our game has been created, we take this opportunity to clean up the table and
      * transition it to "in play" mode.
      */
-    protected void gameCreated (Table table, GameObject gameobj)
+    protected void gameCreated (Table table, GameObject gameobj, GameManager gmgr)
     {
         // update the table with the newly created game object
         table.gameOid = gameobj.getOid();
