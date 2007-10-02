@@ -104,6 +104,7 @@ public class TableDirector extends BasicDirector
         if (_tlobj != null) {
             (_tlobj as DObject).removeListener(this);
             _tlobj = null;
+            _ourTable = null;
         }
     }
 
