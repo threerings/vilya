@@ -607,6 +607,9 @@ public class GameManager extends PlaceManager
 
         // make a note of this player's oid
         _playerOids[pidx] = caller.getOid();
+
+        // this player is not necessarily ready to play yet
+        _pendingOids.add(caller.getOid());
     }
 
     /**
@@ -616,6 +619,9 @@ public class GameManager extends PlaceManager
     public void playerReady (BodyObject caller)
     {
         playerInRoom(caller);
+
+        // This player is no longer pending
+        _pendingOids.remove(caller.getOid());
 
         // if everyone is now ready to go, get things underway
         if (allPlayersReady()) {
@@ -644,9 +650,10 @@ public class GameManager extends PlaceManager
      */
     public boolean playerIsReady (int pidx)
     {
-        return (!_gameobj.isOccupiedPlayer(pidx) ||  // unoccupied slot
-                _playerOids[pidx] != 0 ||            // player is ready
-                isAI(pidx));                         // player is AI
+        return (!_gameobj.isOccupiedPlayer(pidx) || // unoccupied slot
+                // player is ready
+                (_playerOids[pidx] != 0 && !_pendingOids.contains(_playerOids[pidx])) || 
+                isAI(pidx));                        // player is AI
     }
 
     /**
@@ -766,6 +773,9 @@ public class GameManager extends PlaceManager
 
         // instantiate a player oid array which we'll fill in later
         _playerOids = new int[getPlayerSlots()];
+
+        // instantiate the pending player list
+        _pendingOids = new ArrayIntSet();
 
         // give delegates a chance to do their thing
         super.didStartup();
@@ -1284,6 +1294,9 @@ public class GameManager extends PlaceManager
 
     /** The oids of our player and AI body objects. */
     protected int[] _playerOids;
+
+    /** The list of players that have arrived in the room, but are not ready to play. */
+    protected ArrayIntSet _pendingOids;
 
     /** If AIs are present, contains their configuration, or null at human player indexes. */
     protected GameAI[] _AIs;
