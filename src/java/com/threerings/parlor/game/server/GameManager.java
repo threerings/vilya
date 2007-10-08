@@ -650,10 +650,10 @@ public class GameManager extends PlaceManager
      */
     public boolean playerIsReady (int pidx)
     {
-        return (!_gameobj.isOccupiedPlayer(pidx) || // unoccupied slot
-                // player is ready
-                (_playerOids[pidx] != 0 && !_pendingOids.contains(_playerOids[pidx])) || 
-                isAI(pidx));                        // player is AI
+        return (!_gameobj.isOccupiedPlayer(pidx) ||            // unoccupied slot
+                (_playerOids[pidx] != 0 &&                     // player is in the room and...
+                 !_pendingOids.contains(_playerOids[pidx])) || // ...has reported ready
+                isAI(pidx));                                   // player is AI
     }
 
     /**
@@ -1154,6 +1154,9 @@ public class GameManager extends PlaceManager
 
         // clear out player readiness; everyone must report as ready again to restart the game
         Arrays.fill(_playerOids, 0);
+        if (_pendingOids != null) {
+            _pendingOids.clear();
+        }
 
         // report the winners and losers if appropriate
         int winnerCount = _gameobj.getWinnerCount();
