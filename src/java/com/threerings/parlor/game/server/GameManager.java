@@ -774,9 +774,6 @@ public class GameManager extends PlaceManager
         // instantiate a player oid array which we'll fill in later
         _playerOids = new int[getPlayerSlots()];
 
-        // instantiate the pending player list
-        _pendingOids = new ArrayIntSet();
-
         // give delegates a chance to do their thing
         super.didStartup();
 
@@ -1154,9 +1151,7 @@ public class GameManager extends PlaceManager
 
         // clear out player readiness; everyone must report as ready again to restart the game
         Arrays.fill(_playerOids, 0);
-        if (_pendingOids != null) {
-            _pendingOids.clear();
-        }
+        _pendingOids.clear();
 
         // report the winners and losers if appropriate
         int winnerCount = _gameobj.getWinnerCount();
@@ -1299,7 +1294,7 @@ public class GameManager extends PlaceManager
     protected int[] _playerOids;
 
     /** The list of players that have arrived in the room, but are not ready to play. */
-    protected ArrayIntSet _pendingOids;
+    protected ArrayIntSet _pendingOids = new ArrayIntSet();
 
     /** If AIs are present, contains their configuration, or null at human player indexes. */
     protected GameAI[] _AIs;
