@@ -595,6 +595,16 @@ public class EZGameManager extends GameManager
         super.didShutdown();
     }
 
+    @Override 
+    protected void gameWillStart ()
+    {
+        // reset the round id to an initial value. note that we don't distribute the initial value,
+        // because the super's version of this function will immediately increment it, and then
+        // distribute the new incremented value.
+        _ezObj.roundId = 0;
+        super.gameWillStart();
+    }
+
     @Override
     protected void gameDidEnd ()
     {
@@ -605,11 +615,6 @@ public class EZGameManager extends GameManager
         // EZ games immediately resest to PRE_GAME after they end so that they can be restarted if
         // desired by having all players call playerReady() again
         _ezObj.setState(EZGameObject.PRE_GAME);
-
-        // untwiddle the round id if we ended the game in between rounds
-        if (_ezObj.roundId < 0) {
-            _ezObj.setRoundId(-_ezObj.roundId);
-        }
     }
 
     @Override
