@@ -537,9 +537,14 @@ public class EZGameManager extends GameManager
         _ezObj.setEzGameService(
             (EZGameMarshaller) CrowdServer.invmgr.registerDispatcher(new EZGameDispatcher(this)));
 
-        // if we don't need the no-show timer, start.
+        // if we don't need the no-show timer, start right away (but allow the manager startup
+        // process to finish before doing so)
         if (!needsNoShowTimer()) {
-            startGame();
+            CrowdServer.omgr.postRunnable(new Runnable() {
+                public void run () {
+                    startGame();
+                }
+            });
         }
     }
 
