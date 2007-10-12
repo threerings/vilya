@@ -108,29 +108,20 @@ public class TableManager
         _tableClass = tableClass;
     }
 
-    // from interface ParlorProvider
-    public void createTable (ClientObject caller, TableConfig tableConfig, GameConfig config,
-                             TableService.ResultListener listener)
+    /**
+     * Creates a table for the specified creator and returns said table.
+     *
+     * @exception InvocationException thrown if the table could not be created for any reason.
+     */
+    public Table createTable (BodyObject creator, TableConfig tableConfig, GameConfig config)
         throws InvocationException
     {
-        BodyObject creator = (BodyObject)caller;
-
-        // if we're managing tables in a place, make sure the creator is an occupant of the place
-        // in which they are requesting to create a table
-        if (_dobj instanceof PlaceObject &&
-            !((PlaceObject)_dobj).occupants.contains(creator.getOid())) {
-            Log.warning("Requested to create a table in a place not occupied by the creator " +
-                        "[creator=" + creator + ", ploid=" + _dobj.getOid() + "].");
-            throw new InvocationException(INTERNAL_ERROR);
-        }
-
         // create a brand spanking new table
         Table table;
         try {
             table = _tableClass.newInstance();
         } catch (Exception e) {
-            Log.warning("Unable to create a new table instance! [tableClass=" + _tableClass +
-                        ", error=" + e + "].");
+            Log.warning("Table.newInstance() failde [class=" + _tableClass + ", e=" + e + "].");
             throw new InvocationException(INTERNAL_ERROR);
         }
         table.init(_dobj.getOid(), tableConfig, config);
@@ -158,10 +149,30 @@ public class TableManager
 
         // if the table has only one seat, start the game immediately
         if (table.shouldBeStarted()) {
-            int oid = createGame(table);
+            createGame(table);
         }
 
-        listener.requestProcessed(table.tableId);
+        return table;
+    }
+
+    // from interface ParlorProvider
+    public void createTable (ClientObject caller, TableConfig tableConfig, GameConfig config,
+                             TableService.ResultListener listener)
+        throws InvocationException
+    {
+        BodyObject creator = (BodyObject)caller;
+
+        // if we're managing tables in a place, make sure the creator is an occupant of the place
+        // in which they are requesting to create a table
+        if (_dobj instanceof PlaceObject &&
+            !((PlaceObject)_dobj).occupants.contains(creator.getOid())) {
+            Log.warning("Requested to create a table in a place not occupied by the creator " +
+                        "[creator=" + creator + ", ploid=" + _dobj.getOid() + "].");
+            throw new InvocationException(INTERNAL_ERROR);
+        }
+
+        // if createTable() returns, we're good to go
+        listener.requestProcessed(createTable(creator, tableConfig, config).tableId);
     }
 
     // from interface ParlorProvider
