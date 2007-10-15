@@ -31,6 +31,7 @@ import java.util.Set;
 import com.samskivert.io.PersistenceException;
 import com.samskivert.util.HashIntMap;
 import com.samskivert.util.IntMap;
+import com.samskivert.util.IntSet;
 
 import com.samskivert.jdbc.depot.DepotRepository;
 import com.samskivert.jdbc.depot.EntityMigration;
@@ -40,6 +41,7 @@ import com.samskivert.jdbc.depot.clause.Limit;
 import com.samskivert.jdbc.depot.clause.OrderBy;
 import com.samskivert.jdbc.depot.clause.QueryClause;
 import com.samskivert.jdbc.depot.clause.Where;
+import com.samskivert.jdbc.depot.expression.SQLExpression;
 import com.samskivert.jdbc.depot.operator.Conditionals.*;
 import com.samskivert.jdbc.depot.operator.Logic.And;
 
@@ -56,11 +58,6 @@ public class RatingRepository extends DepotRepository
     public RatingRepository (PersistenceContext ctx)
     {
         super(ctx);
-
-        // TEMP
-        ctx.registerMigration(PercentileRecord.class, new EntityMigration.Retype(2, "data"));
-        ctx.registerMigration(PercentileRecord.class, new EntityMigration.Drop(3, "type"));
-        // END TEMP
     }
 
     /**
@@ -112,6 +109,30 @@ public class RatingRepository extends DepotRepository
             clauses.add(new Limit(0, count));
         }
         clauses.add(OrderBy.descending(RatingRecord.LAST_UPDATED_C));
+        return findAll(RatingRecord.class, clauses.toArray(new QueryClause[clauses.size()]));
+    }
+
+    /**
+     * Returns the top-ratings for the specified game. Players with equal rating will be sorted
+     * most recently played first.
+     *
+     * @param playerIds an optional list of player ids to which to limit the top-rankings search.
+     */
+    public List<RatingRecord> getTopRatings (int gameId, int limit, IntSet playerIds)
+        throws PersistenceException
+    {
+        ArrayList<QueryClause> clauses = new ArrayList<QueryClause>();
+        if (playerIds == null) {
+            clauses.add(new Where(RatingRecord.GAME_ID_C, gameId));
+        } else {
+            Integer[] pids = playerIds.toArray(new Integer[playerIds.size()]);
+            clauses.add(new Where(new And(new Equals(RatingRecord.GAME_ID_C, gameId),
+                                          new In(RatingRecord.PLAYER_ID_C, pids))));
+        }
+        clauses.add(new Limit(0, limit));
+        clauses.add(new OrderBy(
+                        new SQLExpression[] { RatingRecord.RATING_C, RatingRecord.LAST_UPDATED_C },
+                        new OrderBy.Order[] { OrderBy.Order.DESC, OrderBy.Order.DESC }));
         return findAll(RatingRecord.class, clauses.toArray(new QueryClause[clauses.size()]));
     }
 

@@ -50,6 +50,7 @@ import com.threerings.parlor.game.data.GameObject;
 import com.threerings.parlor.game.server.GameManager;
 import com.threerings.parlor.game.server.GameManagerDelegate;
 
+import com.threerings.parlor.rating.data.RatingCodes;
 import com.threerings.parlor.rating.server.persist.RatingRecord;
 import com.threerings.parlor.rating.server.persist.RatingRepository;
 
@@ -57,16 +58,8 @@ import com.threerings.parlor.rating.server.persist.RatingRepository;
  * Rates players after each game and handles persisting the results.
  */
 public abstract class RatingManagerDelegate extends GameManagerDelegate
+    implements RatingCodes
 {
-    /** The minimum rating value. */
-    public static final int MINIMUM_RATING = 1000;
-
-    /** The default rating value. */
-    public static final int DEFAULT_RATING = 1200;
-
-    /** The maximum rating value. */
-    public static final int MAXIMUM_RATING = 3000;
-
     /**
      * Constructs a rating manager delegate.
      */
