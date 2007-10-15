@@ -178,6 +178,12 @@ public class EZGameManager extends GameManager
                     }
                 }
             }.schedule(seconds * 1000L);
+
+        } else {
+            // start immediately
+            if (_ezObj.isActive()) {
+                startGame();
+            }
         }
     }
 
