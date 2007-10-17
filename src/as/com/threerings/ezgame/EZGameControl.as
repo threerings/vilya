@@ -471,7 +471,7 @@ public class EZGameControl extends BaseControl
     /**
      * Returns the player ids of all occupants in the game room.
      */
-    public function getOccupants () :Array /* of playerId */
+    public function getOccupantIds () :Array /* of playerId */
     {
         return (callEZCode("getOccupants_v1") as Array);
     }
