@@ -889,20 +889,20 @@ public class GameControlBackend
     }
 
     /**
-     * Start a dobj transaction on the game object.
+     * Starts a transaction that will group all game state changes into a single message.
      */
     protected function startTransaction_v1 () :void
     {
         validateConnected();
-        _ezObj.startTransaction();
+        _ctx.getClient().getInvocationDirector().startTransaction();
     }
 
     /**
-     * Commit a dobj transaction on the game object.
+     * Commits a transaction started with {@link #startTransaction_v1}.
      */
     protected function commitTransaction_v1 () :void
     {
-        _ezObj.commitTransaction();
+        _ctx.getClient().getInvocationDirector().commitTransaction();
     }
 
     /**
@@ -919,8 +919,7 @@ public class GameControlBackend
 
     protected var _ctx :CrowdContext;
 
-    protected var _userListener :MessageAdapter =
-        new MessageAdapter(messageReceivedOnUserObject);
+    protected var _userListener :MessageAdapter = new MessageAdapter(messageReceivedOnUserObject);
 
     protected var _container :GameContainer;
 
@@ -931,8 +930,8 @@ public class GameControlBackend
 
     protected var _userFuncs :Object;
 
-    /** The function on the EZGameControl which we can use to directly
-     * dispatch events to the user's game. */
+    /** The function on the EZGameControl which we can use to directly dispatch events to the
+     * user's game. */
     protected var _ezDispatcher :Function;
 
     protected var _gameData :Object;
