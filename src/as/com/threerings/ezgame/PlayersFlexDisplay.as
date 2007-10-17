@@ -53,7 +53,7 @@ public class PlayersFlexDisplay extends VBox
             list = _ctrl.seating.getPlayerIds();
 
         } else {
-            list = _ctrl.getOccupants();
+            list = _ctrl.getOccupantIds();
         }
         for each (var occupantId :int in list) {
             _players.addItem(createRecord(occupantId));
