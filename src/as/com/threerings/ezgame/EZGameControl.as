@@ -613,6 +613,7 @@ public class EZGameControl extends BaseControl
      */
     protected function populateProperties (o :Object) :void
     {
+        o["connectionClosed_v1"] = connectionClosed_v1;
         o["propertyWasSet_v1"] = propertyWasSet_v1;
         o["controlDidChange_v1"] = controlDidChange_v1;
         o["turnDidChange_v1"] = turnDidChange_v1;
@@ -622,6 +623,14 @@ public class EZGameControl extends BaseControl
         o["dispatchEvent_v1"] = dispatch;
         o["occupantChanged_v1"] = occupantChanged_v1;
         o["userChat_v1"] = userChat_v1;
+    }
+
+    /**
+     * Private method called when the backend disconnects from us.
+     */
+    private function connectionClosed_v1 () :void
+    {
+        _gameData = null;
     }
 
     /**

@@ -129,6 +129,7 @@ public class GameControlBackend
         _ctx.getChatDirector().removeChatDisplay(this);
         _ctx.getClient().getClientObject().removeListener(_userListener);
         _userFuncs = null; // disconnect
+        callUserCode("connectionClosed_v1");
     }
 
     /**
