@@ -109,6 +109,10 @@ public class Table
                 // TODO: handle this naming business better
                 occupants[ii] = new Name("AI " + (ii+1));
             }
+
+        } else {
+            occupants = new Name[0];
+            bodyOids = new int[0];
         }
     }
 
