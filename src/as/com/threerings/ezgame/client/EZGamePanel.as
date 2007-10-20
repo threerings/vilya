@@ -64,8 +64,7 @@ public class EZGamePanel extends Canvas
         backend = createBackend();
 
         _gameView = new GameContainer(cfg.getGameDefinition().getMediaPath(cfg.getGameId()));
-        _gameView.percentWidth = 100;
-        _gameView.percentHeight = 100;
+        configureGameView(_gameView);
         backend.setSharedEvents(
             Loader(_gameView.getMediaContainer().getMedia()).contentLoaderInfo.sharedEvents);
         backend.setContainer(_gameView);
@@ -88,12 +87,16 @@ public class EZGamePanel extends Canvas
     {
         return new GameControlBackend(_ctx, _ezObj, _ctrl);
     }
+
+    protected function configureGameView (view :GameContainer) :void
+    {
+        view.percentWidth = 100;
+        view.percentHeight = 100;
+    }
     
     protected var _ctx :CrowdContext;
     protected var _ctrl :EZGameController;
-
     protected var _gameView :GameContainer;
-
     protected var _ezObj :EZGameObject;
 }
 }
