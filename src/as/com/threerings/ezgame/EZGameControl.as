@@ -570,12 +570,13 @@ public class EZGameControl extends BaseControl
     }
 
     /**
-     * End the current turn. If no next player id is specified, then the next player after the
-     * current one is used.
+     * Start the next player's turn. If a playerId is specified, that player's turn will be
+     * next. Otherwise the turn will progress to the next natural turn holder (following
+     * seating order) or be assigned randomly if the game is just starting.
      */
-    public function endTurn (nextPlayerId :int = 0) :void
+    public function startNextTurn (nextPlayerId :int = 0) :void
     {
-        callEZCode("endTurn_v2", nextPlayerId);
+        callEZCode("startNextTurn_v1", nextPlayerId);
     }
 
     /**

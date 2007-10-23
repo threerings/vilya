@@ -502,7 +502,7 @@ public class GameControlBackend
         o["getMyId_v1"] = getMyId_v1;
         o["getControllerId_v1"] = getControllerId_v1;
         o["getUserCookie_v2"] = getUserCookie_v2;
-        o["endTurn_v2"] = endTurn_v2;
+        o["startNextTurn_v1"] = startNextTurn_v1;
         o["endRound_v1"] = endRound_v1;
         o["endGame_v2"] = endGame_v2;
         o["restartGameIn_v1"] = restartGameIn_v1;
@@ -516,6 +516,9 @@ public class GameControlBackend
 
         o["startTransaction"] = startTransaction_v1;
         o["commitTransaction"] = commitTransaction_v1;
+
+        // compatability
+        o["endTurn_v2"] = startNextTurn_v1; // it's the same!
     }
 
     /**
@@ -743,7 +746,7 @@ public class GameControlBackend
         return _ezObj.isInPlay();
     }
 
-    protected function endTurn_v2 (nextPlayerId :int) :void
+    protected function startNextTurn_v1 (nextPlayerId :int) :void
     {
         validateConnected();
         _ezObj.ezGameService.endTurn(
