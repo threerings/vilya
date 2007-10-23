@@ -22,6 +22,7 @@
 package com.threerings.ezgame.server;
 
 import com.samskivert.util.ListUtil;
+import com.samskivert.util.RandomUtil;
 
 import com.threerings.util.Name;
 
@@ -47,6 +48,13 @@ public class EZGameTurnDelegate extends TurnGameManagerDelegate
     }
 
     @Override
+    protected void setFirstTurnHolder ()
+    {
+        // make it nobody's turn
+        _turnIdx = -1;
+    }
+
+    @Override
     protected void setNextTurnHolder ()
     {
         // if the user-supplied value seems to make sense, use it!
@@ -55,11 +63,17 @@ public class EZGameTurnDelegate extends TurnGameManagerDelegate
             Name nextPlayer = _nextPlayer;
             _nextPlayer = null;
 
-            int index = ListUtil.indexOf(_turnGame.getPlayers(), _nextPlayer);
+            int index = ListUtil.indexOf(_turnGame.getPlayers(), nextPlayer);
             if (index != -1) {
                 _turnIdx = index;
                 return;
             }
+
+        } else if (_turnIdx == -1) {
+            // If it's nobody's turn, and the user does not specify a next-turn, randomize.
+            // We set turnIdx to the player we want - 1, so that when it gets inc'd it'll
+            // be right.
+            _turnIdx = RandomUtil.getInt(_turnGame.getPlayers().length) - 1;
         }
 
         // otherwise, do the default behavior
