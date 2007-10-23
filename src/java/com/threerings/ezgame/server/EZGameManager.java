@@ -623,7 +623,7 @@ public class EZGameManager extends GameManager
 
         super.gameDidEnd();
 
-        // EZ games immediately resest to PRE_GAME after they end so that they can be restarted if
+        // EZ games immediately reset to PRE_GAME after they end so that they can be restarted if
         // desired by having all players call playerReady() again
         _ezObj.setState(EZGameObject.PRE_GAME);
     }
