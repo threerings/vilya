@@ -194,18 +194,7 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
      */
     protected void setFirstTurnHolder ()
     {
-        int size = _turnGame.getPlayers().length;
-        if (size > 0) {
-            int firstPick = _turnIdx = RandomUtil.getInt(size);
-            while (!_tgmgr.isActivePlayer(_turnIdx)) {
-                _turnIdx = (_turnIdx + 1) % size;
-                if (_turnIdx == firstPick) {
-                    Log.warning("No players eligible for first turn. Choking. " +
-                                "[game=" + where() + "].");
-                    return;
-                }
-            }
-        }
+        assignTurnRandomly();
     }
 
     /**
@@ -235,6 +224,25 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
                 break;
             }
         } while (!_tgmgr.isActivePlayer(_turnIdx));
+    }
+
+    /**
+     * Convenience function to randomly assign the turn.
+     */
+    protected void assignTurnRandomly ()
+    {
+        int size = _turnGame.getPlayers().length;
+        if (size > 0) {
+            int firstPick = _turnIdx = RandomUtil.getInt(size);
+            while (!_tgmgr.isActivePlayer(_turnIdx)) {
+                _turnIdx = (_turnIdx + 1) % size;
+                if (_turnIdx == firstPick) {
+                    Log.warning("No players eligible for randomly-assigned turn. Choking. " +
+                                "[game=" + where() + "].");
+                    return;
+                }
+            }
+        }
     }
 
     /** The game manager for which we are delegating. */

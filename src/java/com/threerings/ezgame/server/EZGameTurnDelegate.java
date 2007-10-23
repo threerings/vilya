@@ -69,11 +69,12 @@ public class EZGameTurnDelegate extends TurnGameManagerDelegate
                 return;
             }
 
-        } else if (_turnIdx == -1) {
-            // If it's nobody's turn, and the user does not specify a next-turn, randomize.
-            // We set turnIdx to the player we want - 1, so that when it gets inc'd it'll
-            // be right.
-            _turnIdx = RandomUtil.getInt(_turnGame.getPlayers().length) - 1;
+        }
+        
+        // Otherwise, if it's nobody's turn randomly pick a turn holder
+        if (_turnIdx == -1) {
+            assignTurnRandomly();
+            return;
         }
 
         // otherwise, do the default behavior
