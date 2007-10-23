@@ -317,7 +317,7 @@ public class TableDirector extends BasicDirector
         }
 
         // All this to check to see if we created a party game (and should now enter).
-        if (table.gameOid != -1 && (table.occupants == null)) {
+        if (table.gameOid != -1 && (table.occupants.length == 0)) {
             // let's boogie!
             _pctx.getParlorDirector().gameIsReady(table.gameOid);
         }
