@@ -394,7 +394,7 @@ public class EZGameControl extends BaseControl
     }
 
     /**
-     * Requests a check to see if the dictionary for the given locale contains the given word.
+     * Checks to see if the dictionary for the given locale contains the given word.
      *
      * @param RFC 3066 string that represents language settings
      * @param word the string contains the word to be checked
