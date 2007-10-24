@@ -80,6 +80,16 @@ public class EZGamePanel extends Canvas
         backend.shutdown();
     }
 
+    override protected function updateDisplayList (uw :Number, uh :Number) :void
+    {
+        super.updateDisplayList(uw, uh);
+
+// TODO: debugging. Remove.
+        trace("UpdateDisplayList: " + uw + ":" + _gameView.width + ", " +
+            uh + ":" + _gameView.height);
+        backend.sizeChanged();
+    }
+
     /**
      * Creates the backend object that will handle requests from user code.
      */
@@ -93,7 +103,7 @@ public class EZGamePanel extends Canvas
         view.percentWidth = 100;
         view.percentHeight = 100;
     }
-    
+
     protected var _ctx :CrowdContext;
     protected var _ctrl :EZGameController;
     protected var _gameView :GameContainer;

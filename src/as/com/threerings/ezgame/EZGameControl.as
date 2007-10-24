@@ -21,6 +21,8 @@
 
 package com.threerings.ezgame {
 
+import flash.display.DisplayObject;
+
 import flash.errors.IllegalOperationError;
 
 import flash.events.Event;
@@ -28,7 +30,7 @@ import flash.events.EventDispatcher;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 
-import flash.display.DisplayObject;
+import flash.geom.Point;
 
 /**
  * Dispatched when a key is pressed when the game has focus.
@@ -43,6 +45,13 @@ import flash.display.DisplayObject;
  * @eventType flash.events.KeyboardEvent.KEY_UP
  */
 [Event(name="keyUp", type="flash.events.KeyboardEvent")]
+
+/**
+ * Dispatched when the size of the game area changes.
+ *
+ * @eventType com.threerings.ezgame.SizeChangedEvent.TYPE
+ */
+[Event(name="SizeChanged", type="com.threerings.ezgame.SizeChangedEvent")]
 
 /**
  * Dispatched when the controller changes for the game.
@@ -187,6 +196,15 @@ public class EZGameControl extends BaseControl
     public function getConfig () :Object
     {
         return _gameConfig;
+    }
+
+    /**
+     * Get the size of the game area, expressed as a Point
+     * (x = width, y = height).
+     */
+    public function getSize () :Point
+    {
+        return callEZCode("getSize_v1") as Point;
     }
 
     /**
@@ -623,6 +641,7 @@ public class EZGameControl extends BaseControl
         o["dispatchEvent_v1"] = dispatch;
         o["occupantChanged_v1"] = occupantChanged_v1;
         o["userChat_v1"] = userChat_v1;
+        o["sizeChanged_v1"] = sizeChanged_v1;
     }
 
     /**
@@ -700,6 +719,14 @@ public class EZGameControl extends BaseControl
     private function userChat_v1 (speaker :int, message :String) :void
     {
         dispatch(new UserChatEvent(this, speaker, message));
+    }
+
+    /**
+     * Private method to generate a SizeChangedEvent.
+     */
+    private function sizeChanged_v1 (size :Point) :void
+    {
+        dispatch(new SizeChangedEvent(this, size));
     }
 
     /**

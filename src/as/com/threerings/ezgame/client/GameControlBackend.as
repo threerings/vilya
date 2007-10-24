@@ -21,17 +21,18 @@
 
 package com.threerings.ezgame.client {
 
+import flash.display.DisplayObject;
+import flash.display.InteractiveObject;
+
 import flash.errors.IllegalOperationError;
 
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
 import flash.events.KeyboardEvent;
-
 import flash.events.MouseEvent;
 
-import flash.display.DisplayObject;
-import flash.display.InteractiveObject;
+import flash.geom.Point;
 
 import flash.utils.ByteArray;
 import flash.utils.Dictionary;
@@ -189,6 +190,14 @@ public class GameControlBackend
         callUserCode("roundStateChanged_v1", started);
     }
 
+    /**
+     * Called by the EZGamePanel when the size of the game area has changed.
+     */
+    public function sizeChanged () :void
+    {
+        callUserCode("sizeChanged_v1", getSize_v1());
+    }
+
     // from SetListener
     public function entryAdded (event :EntryAddedEvent) :void
     {
@@ -286,6 +295,7 @@ public class GameControlBackend
     // from ChatDisplay
     public function clear () :void
     {
+        // we do nothing
     }
 
     // from ChatDisplay
@@ -516,6 +526,8 @@ public class GameControlBackend
 
         o["startTransaction"] = startTransaction_v1;
         o["commitTransaction"] = commitTransaction_v1;
+
+        o["getSize_v1"] = getSize_v1;
 
         // compatability
         o["endTurn_v2"] = startNextTurn_v1; // it's the same!
@@ -907,6 +919,14 @@ public class GameControlBackend
     protected function commitTransaction_v1 () :void
     {
         _ctx.getClient().getInvocationDirector().commitTransaction();
+    }
+
+    /**
+     * Get the size of the game area.
+     */
+    protected function getSize_v1 () :Point
+    {
+        return new Point(_container.width, _container.height);
     }
 
     /**
