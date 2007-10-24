@@ -915,9 +915,7 @@ public class GameControlBackend
     protected function toTypedIntArray (array :Array) :TypedArray
     {
         var tarray :TypedArray = TypedArray.create(int);
-        while (array.length > 0) {
-            tarray.push(int(array.shift()));
-        }
+        tarray.addAll(array);
         return tarray;
     }
 
