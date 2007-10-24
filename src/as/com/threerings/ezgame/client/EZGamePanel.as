@@ -84,9 +84,6 @@ public class EZGamePanel extends Canvas
     {
         super.updateDisplayList(uw, uh);
 
-// TODO: debugging. Remove.
-        trace("UpdateDisplayList: " + uw + ":" + _gameView.width + ", " +
-            uh + ":" + _gameView.height);
         backend.sizeChanged();
     }
 
