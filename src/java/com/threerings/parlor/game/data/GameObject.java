@@ -311,7 +311,7 @@ public class GameObject extends PlaceObject
         Name[] ovalue = this.players;
         requestAttributeChange(
             PLAYERS, value, ovalue);
-        this.players = (value == null) ? null : (Name[])value.clone();
+        this.players = (value == null) ? null : value.clone();
     }
 
     /**
@@ -344,7 +344,7 @@ public class GameObject extends PlaceObject
         boolean[] ovalue = this.winners;
         requestAttributeChange(
             WINNERS, value, ovalue);
-        this.winners = (value == null) ? null : (boolean[])value.clone();
+        this.winners = (value == null) ? null : value.clone();
     }
 
     /**
@@ -393,7 +393,7 @@ public class GameObject extends PlaceObject
         int[] ovalue = this.playerStatus;
         requestAttributeChange(
             PLAYER_STATUS, value, ovalue);
-        this.playerStatus = (value == null) ? null : (int[])value.clone();
+        this.playerStatus = (value == null) ? null : value.clone();
     }
 
     /**

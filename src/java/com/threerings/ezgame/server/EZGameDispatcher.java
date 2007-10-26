@@ -129,7 +129,7 @@ public class EZGameDispatcher extends InvocationDispatcher
         case EZGameMarshaller.SEND_MESSAGE:
             ((EZGameProvider)provider).sendMessage(
                 source,
-                (String)args[0], (Object)args[1], ((Integer)args[2]).intValue(), (InvocationService.InvocationListener)args[3]
+                (String)args[0], args[1], ((Integer)args[2]).intValue(), (InvocationService.InvocationListener)args[3]
             );
             return;
 
@@ -143,7 +143,7 @@ public class EZGameDispatcher extends InvocationDispatcher
         case EZGameMarshaller.SET_PROPERTY:
             ((EZGameProvider)provider).setProperty(
                 source,
-                (String)args[0], (Object)args[1], ((Integer)args[2]).intValue(), ((Boolean)args[3]).booleanValue(), (Object)args[4], (InvocationService.InvocationListener)args[5]
+                (String)args[0], args[1], ((Integer)args[2]).intValue(), ((Boolean)args[3]).booleanValue(), args[4], (InvocationService.InvocationListener)args[5]
             );
             return;
 

@@ -75,7 +75,7 @@ public class ParlorDispatcher extends InvocationDispatcher
         case ParlorMarshaller.RESPOND:
             ((ParlorProvider)provider).respond(
                 source,
-                ((Integer)args[0]).intValue(), ((Integer)args[1]).intValue(), (Object)args[2], (InvocationService.InvocationListener)args[3]
+                ((Integer)args[0]).intValue(), ((Integer)args[1]).intValue(), args[2], (InvocationService.InvocationListener)args[3]
             );
             return;
 

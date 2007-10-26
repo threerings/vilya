@@ -59,13 +59,13 @@ public class ParlorDecoder extends InvocationDecoder
         this.receiver = receiver;
     }
 
-    // documentation inherited
+    @Override // documentation inherited
     public String getReceiverCode ()
     {
         return RECEIVER_CODE;
     }
 
-    // documentation inherited
+    @Override // documentation inherited
     public void dispatchNotification (int methodId, Object[] args)
     {
         switch (methodId) {
@@ -89,7 +89,7 @@ public class ParlorDecoder extends InvocationDecoder
 
         case RECEIVED_INVITE_RESPONSE:
             ((ParlorReceiver)receiver).receivedInviteResponse(
-                ((Integer)args[0]).intValue(), ((Integer)args[1]).intValue(), (Object)args[2]
+                ((Integer)args[0]).intValue(), ((Integer)args[1]).intValue(), args[2]
             );
             return;
 

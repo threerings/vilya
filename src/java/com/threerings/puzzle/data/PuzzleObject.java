@@ -105,7 +105,7 @@ public class PuzzleObject extends GameObject
         BoardSummary[] ovalue = this.summaries;
         requestAttributeChange(
             SUMMARIES, value, ovalue);
-        this.summaries = (value == null) ? null : (BoardSummary[])value.clone();
+        this.summaries = (value == null) ? null : value.clone();
     }
 
     /**
