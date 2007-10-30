@@ -191,12 +191,12 @@ public class Percentiler
     }
 
     /**
-     * Returns the scores required to obtain a percentile rating from 0 to 100.
+     * Returns the scores required to obtain a percentile rating from 0 to 99.
      */
     public float[] getRequiredScores ()
     {
-        float[] scores = new float[101];
-        for (int ii = 0; ii <= 100; ii++) {
+        float[] scores = new float[100];
+        for (int ii = 0; ii < 100; ii++) {
             scores[ii] = getRequiredScore(ii);
         }
         return scores;
