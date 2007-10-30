@@ -31,8 +31,7 @@ import com.samskivert.util.StringUtil;
 import com.threerings.parlor.Log;
 
 /**
- * Used to keep track of the percentile distribution of positive values
- * (generally puzzle scores).
+ * Used to keep track of the percentile distribution of positive values (generally puzzle scores).
  */
 public class Percentiler
 {
@@ -64,10 +63,9 @@ public class Percentiler
     }
 
     /**
-     * Records a value, updating the histogram but not the percentiles (a
-     * call to {@link #recomputePercentiles} is required for that and is
-     * sufficiently expensive that it shouldn't be done every time a value
-     * is added).
+     * Records a value, updating the histogram but not the percentiles (a call to {@link
+     * #recomputePercentiles} is required for that and is sufficiently expensive that it shouldn't
+     * be done every time a value is added).
      */
     public void recordValue (float value)
     {
@@ -79,21 +77,17 @@ public class Percentiler
      */
     public void recordValue (float value, boolean logNewMax)
     {
-        // if this value is larger than our maximum value, we need to
-        // redistribute our buckets
+        // if this value is larger than our maximum value, we need to redistribute our buckets
         if (value > _max) {
-            // determine what our new maximum should be: twenty percent
-            // again larger than this newly seen maximum and rounded to an
-            // integer value
+            // determine what our new maximum should be: twenty percent again larger than this
+            // newly seen maximum and rounded to an integer value
             int newmax = (int)Math.ceil(value*1.2);
             float newdelta = (float)newmax / BUCKET_COUNT;
 
             if (logNewMax) {
-                Log.info("Resizing [newmax=" + newmax +
-                         ", oldmax=" + _max + "].");
+                Log.info("Resizing [newmax=" + newmax + ", oldmax=" + _max + "].");
                 if (newmax > 2 * _max) {
-                    Log.info("Holy christ! Big newmax [value=" + value +
-                             ", oldmax=" + _max + "].");
+                    Log.info("Holy christ! Big newmax [value=" + value + ", oldmax=" + _max + "].");
                 }
             }
 
@@ -102,15 +96,14 @@ public class Percentiler
             int[] counts = new int[BUCKET_COUNT];
             float oval = delta, nval = newdelta;
             for (int ii = 0, ni = 0; ii < BUCKET_COUNT; ii++, oval += delta) {
-                // if this old bucket is entirely contained within a new
-                // bucket, add all of its counts to the new bucket
+                // if this old bucket is entirely contained within a new bucket, add all of its
+                // counts to the new bucket
                 if (oval <= nval) {
                     counts[ni] += _counts[ii];
 
                 } else {
-                    // otherwise, we need to add the appropriate fraction
-                    // of this bucket's counts to the two new buckets into
-                    // which it falls
+                    // otherwise, we need to add the appropriate fraction of this bucket's counts
+                    // to the two new buckets into which it falls
                     float fraction = (nval - (oval - delta)) / delta;
                     int lesser = Math.round(_counts[ii] * fraction);
                     counts[ni] += lesser;
@@ -167,11 +160,10 @@ public class Percentiler
     }
 
     /**
-     * Returns the percent of all numbers seen that are lower than the
-     * specified value. This value can range from zero to 100 (100 in the
-     * case where this is the highest value ever seen by this
-     * percentiler). This value reflects the percentiles computed as of
-     * the most recent call to {@link #recomputePercentiles}.
+     * Returns the percent of all numbers seen that are lower than the specified value. This value
+     * can range from zero to 100 (100 in the case where this is the highest value ever seen by
+     * this percentiler). This value reflects the percentiles computed as of the most recent call
+     * to {@link #recomputePercentiles}.
      */
     public int getPercentile (float value)
     {
@@ -179,9 +171,8 @@ public class Percentiler
     }
 
     /**
-     * Returns the score necessary to attain the specified percentile.
-     * This value reflects the percentiles computed as of the most recent
-     * call to {@link #recomputePercentiles}.
+     * Returns the score necessary to attain the specified percentile.  This value reflects the
+     * percentiles computed as of the most recent call to {@link #recomputePercentiles}.
      *
      * @param percentile the desired percentile (from 0 to 99 inclusive).
      */
@@ -200,8 +191,28 @@ public class Percentiler
     }
 
     /**
-     * Recomputes the percentile cutoffs based on the values recorded
-     * since the last percentile computation.
+     * Returns the scores required to obtain a percentile rating from 0 to 100.
+     */
+    public float[] getRequiredScores ()
+    {
+        float[] scores = new float[101];
+        for (int ii = 0; ii <= 100; ii++) {
+            scores[ii] = getRequiredScore(ii);
+        }
+        return scores;
+    }
+
+    /**
+     * Returns the counts for each bucket.
+     */
+    public int[] getCounts ()
+    {
+        return _counts.clone();
+    }
+
+    /**
+     * Recomputes the percentile cutoffs based on the values recorded since the last percentile
+     * computation.
      */
     public void recomputePercentiles ()
     {
@@ -214,8 +225,7 @@ public class Percentiler
 
         // compute the reverse mapping (percentile to minimum score)
         for (int ii = 0, pp = 0; ii < BUCKET_COUNT; ii++) {
-            // scan forward to the percentile bucket that maps to this
-            // percentile
+            // scan forward to the percentile bucket that maps to this percentile
             while (_percentile[pp] < ii && pp < (BUCKET_COUNT-1)) {
                 pp++;
             }
@@ -224,8 +234,7 @@ public class Percentiler
     }
 
     /**
-     * Converts this percentiler to a byte array so that it may be stored
-     * into a database.
+     * Converts this percentiler to a byte array so that it may be stored into a database.
      */
     public byte[] toBytes ()
     {
@@ -259,8 +268,7 @@ public class Percentiler
     }
 
     /**
-     * Dumps out our data in a format that can be used to generate a
-     * gnuplot.
+     * Dumps out our data in a format that can be used to generate a gnuplot.
      */
     public void dumpGnuPlot (PrintStream out)
     {
@@ -271,8 +279,7 @@ public class Percentiler
     }
 
     /**
-     * Dumps a text representation of this percentiler to the supplied
-     * print stream.
+     * Dumps a text representation of this percentiler to the supplied print stream.
      */
     public void dump (PrintStream out)
     {
@@ -284,8 +291,7 @@ public class Percentiler
             }
         }
 
-        // figure out how many digits are needed to display the biggest
-        // bucket's size
+        // figure out how many digits are needed to display the biggest bucket's size
         int digits = (int)Math.ceil(Math.log(max) / Math.log(10));
         digits = Math.max(digits, 1);
 
@@ -339,8 +345,7 @@ public class Percentiler
     {
         int idx = Math.min(Math.round(value * BUCKET_COUNT / _max), 99);
         if (idx < 0 || idx >= BUCKET_COUNT) {
-            Log.warning("'" + value + "' caused bogus bucket index (" +
-                        idx + ") to be computed.");
+            Log.warning("'" + value + "' caused bogus bucket index (" + idx + ") to be computed.");
             Thread.dumpStack();
             return 0;
         }
@@ -368,8 +373,8 @@ public class Percentiler
     /** The bucket associated with each percentile. */
     protected byte[] _reverse = new byte[BUCKET_COUNT];
 
-    /** The number of divisions between zero and our maximum value, which
-     * defines the granularity of our histogram. */
+    /** The number of divisions between zero and our maximum value, which defines the granularity
+     * of our histogram. */
     protected static final int BUCKET_COUNT = 100;
 
     /** Number of bytes in an int; makes code clearer. */
