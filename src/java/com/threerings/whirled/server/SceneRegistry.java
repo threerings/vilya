@@ -44,6 +44,7 @@ import com.threerings.whirled.data.SceneCodes;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.server.persist.SceneRepository;
+import com.threerings.whirled.util.NoSuchSceneException;
 import com.threerings.whirled.util.SceneFactory;
 import com.threerings.whirled.util.UpdateList;
 
@@ -285,8 +286,11 @@ public class SceneRegistry
      */
     protected void processFailedResolution (int sceneId, Exception cause)
     {
-        Log.info("Failed to resolve scene [sceneId=" + sceneId + ", cause=" + cause + "].");
-        Log.logStackTrace(cause);
+        // if this is not simply a missing scene, log a warning
+        if (!(cause instanceof NoSuchSceneException)) {
+            Log.info("Failed to resolve scene [sceneId=" + sceneId + ", cause=" + cause + "].");
+            Log.logStackTrace(cause);
+        }
 
         // alas things didn't work out, notify our penders
         ArrayList penders = (ArrayList)_penders.remove(sceneId);
