@@ -145,7 +145,7 @@ public class GameParser
     protected void addParameter (String path, Class pclass)
     {
         _digester.addRule(path, new ObjectCreateRule(pclass));
-        _digester.addRule(path, new SetPropertyFieldsRule());
+        _digester.addRule(path, new SetPropertyFieldsRule(false));
         _digester.addSetNext(path, "add", Object.class.getName());
     }
 
