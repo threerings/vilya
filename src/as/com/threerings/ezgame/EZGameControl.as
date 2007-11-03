@@ -152,7 +152,7 @@ public class EZGameControl extends BaseControl
         // set up our focusing click handler
         disp.root.addEventListener(MouseEvent.CLICK, handleRootClick);
 
-        // set up the unload event to propogate
+        // set up the unload event to propagate
         disp.root.loaderInfo.addEventListener(Event.UNLOAD, dispatch);
 
         // TODO: this should only be available if the game uses it
