@@ -21,6 +21,8 @@
 
 package com.threerings.ezgame.data;
 
+import com.google.common.base.Preconditions;
+
 import com.threerings.util.StreamableHashMap;
 
 import com.threerings.crowd.client.PlaceController;
@@ -47,6 +49,8 @@ public class EZGameConfig extends GameConfig
     /** Constructs a game config based on the supplied game definition. */
     public EZGameConfig (int gameId, GameDefinition gameDef)
     {
+        Preconditions.checkNotNull(gameDef, "Missing GameDefinition");
+
         _gameId = gameId;
         _gameDef = gameDef;
 
