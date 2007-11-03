@@ -96,6 +96,14 @@ import flash.geom.Point;
 [Event(name="GameEnded", type="com.threerings.ezgame.StateChangedEvent")]
 
 /**
+ * Dispatched when the game client is unloaded and you should clean up any Timers or
+ * other bits left hanging.
+ *
+ * @eventType flash.events.Event.UNLOAD
+ */
+[Event(name="unload", type="flash.events.Event")]
+
+/**
  * Dispatched when a property has changed in the shared game state.
  *
  * @eventType com.threerings.ezgame.PropertyChangedEvent.TYPE
@@ -143,6 +151,9 @@ public class EZGameControl extends BaseControl
 
         // set up our focusing click handler
         disp.root.addEventListener(MouseEvent.CLICK, handleRootClick);
+
+        // set up the unload event to propogate
+        disp.root.loaderInfo.addEventListener(Event.UNLOAD, dispatch);
 
         // TODO: this should only be available if the game uses it
         _seating = new SeatingControl(this);
