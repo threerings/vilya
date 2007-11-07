@@ -215,6 +215,11 @@ public class SceneDirector extends BasicDirector
         clearScene();
 
         // make the pending scene the active scene
+        if (_pendingData == null) {
+            log.warning("Aiya! Scene move succeeded but we have no pending data! " +
+                        "[prevId=" + _previousSceneId + "].");
+            return;
+        }
         _sceneId = _pendingData.sceneId;
         _pendingData = null;
 
