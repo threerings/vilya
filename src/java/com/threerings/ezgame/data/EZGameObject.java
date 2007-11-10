@@ -374,7 +374,7 @@ public class EZGameObject extends GameObject
      */
     boolean isOnServer ()
     {
-        return _omgr.isManager(this);
+        return (_omgr != null) && _omgr.isManager(this);
     }
 
     /** The current state of game data.
