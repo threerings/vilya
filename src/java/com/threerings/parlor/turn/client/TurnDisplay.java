@@ -31,8 +31,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Icon;
 
-import com.samskivert.swing.GroupLayout;
-import com.samskivert.swing.VGroupLayout;
 import com.samskivert.swing.util.SwingUtil;
 
 import com.threerings.util.Name;
@@ -47,7 +45,6 @@ import com.threerings.presents.dobj.AttributeChangeListener;
 import com.threerings.presents.dobj.AttributeChangedEvent;
 import com.threerings.presents.dobj.ElementUpdateListener;
 import com.threerings.presents.dobj.ElementUpdatedEvent;
-import com.threerings.presents.dobj.DObject;
 
 /**
  * Automatically display a list of players and turn change information
