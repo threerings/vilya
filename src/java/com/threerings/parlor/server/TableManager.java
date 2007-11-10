@@ -327,7 +327,7 @@ public class TableManager
         throws InvocationException
     {
         try {
-            GameManager gmgr = (GameManager)CrowdServer.plreg.createPlace(createConfig(table));
+            GameManager gmgr = createGameManager(createConfig(table));
             GameObject gobj = (GameObject)gmgr.getPlaceObject();
             gameCreated(table, gobj, gmgr);
             return gobj.getOid();
@@ -348,6 +348,16 @@ public class TableManager
         table.config.players = table.getPlayers();
         // we just trust the rest by default, yay!
         return table.config;
+    }
+
+    /**
+     * Creates a {@link GameManager} using the supplied config. Used by {@link #createGame}, but
+     * extracted into a method to allow customization of this process.
+     */
+    protected GameManager createGameManager (GameConfig config)
+        throws InstantiationException, InvocationException
+    {
+        return (GameManager)CrowdServer.plreg.createPlace(config);
     }
 
     /**
