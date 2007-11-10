@@ -333,7 +333,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
             // play the card by removing it from the hand and adding it
             // to the end of the cards played array
             _hands[pidx].remove(card);
-            PlayerCard[] cards = (PlayerCard[])ArrayUtil.append(
+            PlayerCard[] cards = ArrayUtil.append(
                 _trickCardGame.getCardsPlayed(), new PlayerCard(pidx, card));
             _trickCardGame.setCardsPlayed(cards);
 
@@ -444,7 +444,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
     {
         ArrayList playableCards = new ArrayList();
         for (int i = 0; i < hand.size(); i++) {
-            Card card = (Card)hand.get(i);
+            Card card = hand.get(i);
             if (_trickCardGame.isCardPlayable(hand, card)) {
                 playableCards.add(card);
             }

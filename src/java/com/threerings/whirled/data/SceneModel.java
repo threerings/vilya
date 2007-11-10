@@ -57,7 +57,7 @@ public class SceneModel extends SimpleStreamableObject
      */
     public void addAuxModel (AuxModel auxModel)
     {
-        auxModels = (AuxModel[])ArrayUtil.append(auxModels, auxModel);
+        auxModels = ArrayUtil.append(auxModels, auxModel);
     }
 
     // documentation inherited

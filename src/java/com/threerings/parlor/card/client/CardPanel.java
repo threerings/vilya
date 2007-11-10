@@ -297,7 +297,7 @@ public abstract class CardPanel extends VirtualMediaPanel
         // create the sprites
         int size = hand.size();
         for (int i = 0; i < size; i++) {
-            CardSprite cs = new CardSprite(this, (Card)hand.get(i));
+            CardSprite cs = new CardSprite(this, hand.get(i));
             _handSprites.add(cs);
         }
 
@@ -353,7 +353,7 @@ public abstract class CardPanel extends VirtualMediaPanel
         int len = Math.min(_handSprites.size(), hand.size());
         for (int i = 0; i < len; i++) {
             CardSprite cs = _handSprites.get(i);
-            cs.setCard((Card)hand.get(i));
+            cs.setCard(hand.get(i));
         }
     }
 

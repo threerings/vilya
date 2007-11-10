@@ -51,7 +51,7 @@ public class SpotSceneModel extends SimpleStreamableObject
      */
     public void addPortal (Portal portal)
     {
-        portals = (Portal[])ArrayUtil.append(portals, portal);
+        portals = ArrayUtil.append(portals, portal);
     }
 
     /**
@@ -61,7 +61,7 @@ public class SpotSceneModel extends SimpleStreamableObject
     {
         int pidx = ListUtil.indexOf(portals, portal);
         if (pidx != -1) {
-            portals = (Portal[])ArrayUtil.splice(portals, pidx, 1);
+            portals = ArrayUtil.splice(portals, pidx, 1);
         }
     }
 

@@ -75,7 +75,7 @@ public class Hand extends StreamableArrayList<Card>
     {
         int len = size(), members = 0;
         for (int i = 0; i < len; i++) {
-            if (((Card)get(i)).getSuit() == suit) {
+            if (get(i).getSuit() == suit) {
                 members++;
             }
         }

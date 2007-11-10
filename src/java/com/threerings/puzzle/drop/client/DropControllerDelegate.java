@@ -113,9 +113,8 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
         _ctrl = ctrl;
 
         // obtain the drop logic parameters
-        DropLogic dlogic = (DropLogic)logic;
-        _usedrop = dlogic.useBlockDropping();
-        _userise = dlogic.useBoardRising();
+        _usedrop = logic.useBlockDropping();
+        _userise = logic.useBoardRising();
 
         if (_userise) {
             // prepare for board rising
