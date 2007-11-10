@@ -37,7 +37,6 @@ import com.threerings.parlor.client.ParlorService;
 import com.threerings.parlor.data.ParlorCodes;
 import com.threerings.parlor.data.TableConfig;
 import com.threerings.parlor.game.data.GameConfig;
-import com.threerings.parlor.game.server.GameManager;
 
 /**
  * The parlor manager is responsible for the parlor services in aggregate. This includes
@@ -117,7 +116,7 @@ public class ParlorManager
             }
 
             // create the game manager and begin its initialization process
-            CrowdServer.plreg.createPlace(config);
+            createGameManager(config);
 
             // the game manager will notify the player that their game is
             // "ready", but tell the caller that we processed their request
@@ -254,12 +253,21 @@ public class ParlorManager
 
             // create the game manager and begin it's initialization process; the game manager will
             // take care of notifying the players that the game has been created
-            _plreg.createPlace(invite.config);
+            createGameManager(invite.config);
 
         } catch (Exception e) {
             Log.warning("Unable to create game manager [invite=" + invite + ", error=" + e + "].");
             Log.logStackTrace(e);
         }
+    }
+
+    /**
+     * Called to create our game managers.
+     */
+    protected void createGameManager (GameConfig config)
+        throws InstantiationException, InvocationException
+    {
+        _plreg.createPlace(config);
     }
 
     /**
