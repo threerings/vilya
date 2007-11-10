@@ -85,6 +85,19 @@ public class EZGameManager extends GameManager
         _winnerOids = winnerOids;
     }
 
+    /**
+     * Confirms that the caller can end the game (or restart it). Requires that they are a player
+     * and that the game is not in play.
+     */
+    public void validateCanEndGame (ClientObject caller)
+        throws InvocationException
+    {
+        if (!_ezObj.isInPlay()) {
+            throw new InvocationException("e.already_ended");
+        }
+        validateStateModification(caller, false);
+    }
+
     // from TurnGameManager
     public void turnWillStart ()
     {
@@ -150,11 +163,7 @@ public class EZGameManager extends GameManager
                          InvocationService.InvocationListener listener)
         throws InvocationException
     {
-        if (!_ezObj.isInPlay()) {
-            throw new InvocationException("e.already_ended");
-        }
-        validateStateModification(caller, false);
-
+        validateCanEndGame(caller);
         setWinners(winnerOids);
         endGame();
     }
@@ -164,10 +173,7 @@ public class EZGameManager extends GameManager
                                InvocationService.InvocationListener listener)
         throws InvocationException
     {
-        if (_ezObj.isInPlay()) {
-            throw new InvocationException("e.game_in_play");
-        }
-        validateStateModification(caller, false);
+        validateCanEndGame(caller);
 
         // queue up the start of the next game
         if (seconds > 0) {
@@ -465,17 +471,22 @@ public class EZGameManager extends GameManager
     protected void validateUser (ClientObject caller)
         throws InvocationException
     {
-        BodyObject body = (BodyObject)caller;
+        // the server is always cool
+        if (caller == null) {
+            return;
+        }
 
         switch (getMatchType()) {
         case GameConfig.PARTY:
             return; // always validate.
 
-        default:
+        default: {
+            BodyObject body = (BodyObject)caller;
             if (getPlayerIndex(body.getVisibleName()) == -1) {
                 throw new InvocationException(InvocationCodes.ACCESS_DENIED);
             }
             return;
+        }
         }
     }
 
