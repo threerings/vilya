@@ -73,7 +73,7 @@ public class EZGameManager extends GameManager
 {
     public EZGameManager ()
     {
-        addDelegate(_turnDelegate = new EZGameTurnDelegate(this));
+        addDelegate(_turnDelegate = new EZGameTurnDelegate());
     }
 
     /**

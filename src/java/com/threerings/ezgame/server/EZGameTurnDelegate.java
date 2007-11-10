@@ -33,11 +33,6 @@ import com.threerings.parlor.turn.server.TurnGameManagerDelegate;
  */
 public class EZGameTurnDelegate extends TurnGameManagerDelegate
 {
-    public EZGameTurnDelegate (EZGameManager mgr)
-    {
-        super(mgr);
-    }
-
     /**
      * A form of endTurn where you can specify the next turn holder oid.
      */

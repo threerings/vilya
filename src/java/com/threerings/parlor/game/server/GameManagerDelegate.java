@@ -28,18 +28,19 @@ import com.threerings.crowd.server.PlaceManagerDelegate;
 import com.threerings.parlor.game.data.GameAI;
 
 /**
- * Extends the {@link PlaceManagerDelegate} mechanism with game manager
- * specific methods.
+ * Extends the {@link PlaceManagerDelegate} mechanism with game manager specific methods.
  */
 public class GameManagerDelegate extends PlaceManagerDelegate
 {
-    /**
-     * Provides the delegate with a reference to the game manager for
-     * which it is delegating.
-     */
-    public GameManagerDelegate (GameManager gmgr)
+    public GameManagerDelegate ()
     {
-        super(gmgr);
+    }
+
+    /**
+     * @deprecated use the zero-argument constructor.
+     */
+    @Deprecated public GameManagerDelegate (GameManager gmgr)
+    {
     }
 
     /**
@@ -57,16 +58,15 @@ public class GameManagerDelegate extends PlaceManagerDelegate
     }
 
     /**
-     * Called when a player in the game has been replaced by a call to
-     * {@link GameManager#replacePlayer}.
+     * Called when a player in the game has been replaced by a call to {@link
+     * GameManager#replacePlayer}.
      */
     public void playerWasReplaced (int pidx, Name oldPlayer, Name newPlayer)
     {
     }
 
     /**
-     * Called by the manager when we should do some AI. Only called while
-     * the game is IN_PLAY.
+     * Called by the manager when we should do some AI. Only called while the game is IN_PLAY.
      *
      * @param pidx the player index to fake some gameplay for.
      * @param ai a record indicating the AI's configuration.
@@ -90,17 +90,16 @@ public class GameManagerDelegate extends PlaceManagerDelegate
     }
 
     /**
-     * Called when the game is about to reset, but before any other
-     * clearing out of game data has taken place.  Derived classes should
-     * override this if they need to perform some pre-reset activities.
+     * Called when the game is about to reset, but before any other clearing out of game data has
+     * taken place.  Derived classes should override this if they need to perform some pre-reset
+     * activities.
      */
     public void gameWillReset ()
     {
     }
 
     /**
-     * Called when the specified player has been set as an AI with the
-     * supplied AI configuration.
+     * Called when the specified player has been set as an AI with the supplied AI configuration.
      */
     public void setAI (int pidx, GameAI ai)
     {

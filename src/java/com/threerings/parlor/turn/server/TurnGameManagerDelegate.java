@@ -25,6 +25,7 @@ import com.samskivert.util.RandomUtil;
 import com.threerings.util.Name;
 
 import com.threerings.crowd.data.PlaceObject;
+import com.threerings.crowd.server.PlaceManager;
 
 import com.threerings.parlor.Log;
 import com.threerings.parlor.game.server.GameManager;
@@ -33,31 +34,36 @@ import com.threerings.parlor.game.server.GameManagerDelegate;
 import com.threerings.parlor.turn.data.TurnGameObject;
 
 /**
- * Performs the server-side turn-based game processing for a turn based game.
- * Game managers which wish to make use of the turn services must implement
- * {@link TurnGameManager} and either create an instance of this class, or an
- * instance of a derivation which customizes the behavior, either of which
- * would be passed to {@link GameManager#addDelegate} to be activated.
+ * Performs the server-side turn-based game processing for a turn based game.  Game managers which
+ * wish to make use of the turn services must implement {@link TurnGameManager} and either create
+ * an instance of this class, or an instance of a derivation which customizes the behavior, either
+ * of which would be passed to {@link GameManager#addDelegate} to be activated.
  */
 public class TurnGameManagerDelegate extends GameManagerDelegate
 {
-    /**
-     * Constructs a delegate that will manage the turn game state and call back
-     * to the supplied {@link TurnGameManager} implementation to let it in on
-     * the progression of the game.
-     */
-    public TurnGameManagerDelegate (TurnGameManager tgmgr)
+    public TurnGameManagerDelegate ()
     {
-        super((GameManager)tgmgr);
-        _tgmgr = tgmgr;
     }
 
     /**
-     * Returns the index of the current turn holder as configured in the game
-     * object.
+     * @deprecated use the zero-argument constructor.
+     */
+    @Deprecated public TurnGameManagerDelegate (TurnGameManager tgmgr)
+    {
+    }
+
+    @Override // from PlaceManagerDelegate
+    public void setPlaceManager (PlaceManager plmgr)
+    {
+        super.setPlaceManager(plmgr);
+        _tgmgr = (TurnGameManager)plmgr;
+    }
+
+    /**
+     * Returns the index of the current turn holder as configured in the game object.
      *
-     * @return the index into the players array of the current turn holder or
-     * <code>-1</code> if there is no current turn holder.
+     * @return the index into the players array of the current turn holder or <code>-1</code> if
+     * there is no current turn holder.
      */
     public int getTurnHolderIndex ()
     {
@@ -67,8 +73,7 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
     /** Test if it's the inputted player's turn. */
     public boolean isPlayersTurn (int playerIndex)
     {
-        // Don't accidently match a visitor's id of -1 with the "no one's
-        // turn" state of turn -1.
+        // Don't accidently match a visitor's id of -1 with the "no one's turn" state of turn -1.
         int turnHolder = getTurnHolderIndex();
         if (turnHolder < 0) {
             return false;
@@ -79,22 +84,20 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
     }
 
     /**
-     * Called to start the next turn. It calls {@link
-     * TurnGameManager#turnWillStart} to allow our owning manager to perform
-     * any pre-start turn processing, sets the turn holder that was configured
-     * either when the game started or when finishing up the last turn, and
-     * then calls {@link TurnGameManager#turnDidStart} to allow the manager to
-     * perform any post-start turn processing. This assumes that a valid turn
-     * holder has been assigned. If some pre-game preparation needs to take
-     * place in a non-turn-based manner, this function should not be called
-     * until it is time to start the first turn.
+     * Called to start the next turn. It calls {@link TurnGameManager#turnWillStart} to allow our
+     * owning manager to perform any pre-start turn processing, sets the turn holder that was
+     * configured either when the game started or when finishing up the last turn, and then calls
+     * {@link TurnGameManager#turnDidStart} to allow the manager to perform any post-start turn
+     * processing. This assumes that a valid turn holder has been assigned. If some pre-game
+     * preparation needs to take place in a non-turn-based manner, this function should not be
+     * called until it is time to start the first turn.
      */
     public void startTurn ()
     {
         // sanity check
         if (_turnIdx < 0 || _turnIdx >= _turnGame.getPlayers().length) {
-            Log.warning("startTurn() called with invalid turn index " +
-                        "[game=" + where() + ", turnIdx=" + _turnIdx + "].");
+            Log.warning("startTurn() called with invalid turn index [game=" + where() +
+                        ", turnIdx=" + _turnIdx + "].");
             // abort, abort
             return;
         }
@@ -102,8 +105,8 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
         // get the player name and sanity-check again
         Name name = _tgmgr.getPlayerName(_turnIdx);
         if (name == null) {
-            Log.warning("startTurn() called with invalid player " +
-                        "[game=" + where() + ", turnIdx=" + _turnIdx + "].");
+            Log.warning("startTurn() called with invalid player [game=" + where() +
+                        ", turnIdx=" + _turnIdx + "].");
             return;
         }
 
@@ -118,21 +121,18 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
     }
 
     /**
-     * Called to end the turn. Whatever indication a game manager has that the
-     * turn has ended (probably the submission of a valid move of some sort by
-     * the turn holding player), it should call this function to cause this
-     * turn to end and the next to begin.
+     * Called to end the turn. Whatever indication a game manager has that the turn has ended
+     * (probably the submission of a valid move of some sort by the turn holding player), it should
+     * call this function to cause this turn to end and the next to begin.
      *
-     * <p> If the game is no longer in play (see {@link TurnGame#isInPlay})
-     * after having called {@link TurnGameManager#turnDidEnd} and {@link
-     * #setNextTurnHolder}, then the next turn will not automatically be
-     * started.
+     * <p> If the game is no longer in play (see {@link TurnGame#isInPlay}) after having called
+     * {@link TurnGameManager#turnDidEnd} and {@link #setNextTurnHolder}, then the next turn will
+     * not automatically be started.
      *
-     * <p> If the game is in play, but the next turn should not be started
-     * immediately, the game manager should have {@link #setNextTurnHolder} set
-     * the {@link #_turnIdx} field to <code>-1</code> which will cause us to
-     * not start the next turn. To start things back up again it would set
-     * {@link #_turnIdx} to the next turn holder and call {@link #startTurn}
+     * <p> If the game is in play, but the next turn should not be started immediately, the game
+     * manager should have {@link #setNextTurnHolder} set the {@link #_turnIdx} field to
+     * <code>-1</code> which will cause us to not start the next turn. To start things back up
+     * again it would set {@link #_turnIdx} to the next turn holder and call {@link #startTurn}
      * itself.
      */
     public void endTurn ()
@@ -162,20 +162,20 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
     // documentation inherited
     public void playerWasReplaced (int pidx, Name oplayer, Name nplayer)
     {
-        // we need to update the turn holder if the current turn holder
-        // was the player that was replaced and we need to do so in a way
-        // that doesn't make everyone think that the turn just changed
+        // we need to update the turn holder if the current turn holder was the player that was
+        // replaced and we need to do so in a way that doesn't make everyone think that the turn
+        // just changed
         if (oplayer != null && oplayer.equals(_turnGame.getTurnHolder())) {
-            // small hackery: this will indicate to the client that we are
-            // replacing the turn holder rather than changing the turn
+            // small hackery: this will indicate to the client that we are replacing the turn
+            // holder rather than changing the turn
             _turnGame.setTurnHolder(TurnGameObject.TURN_HOLDER_REPLACED);
             _turnGame.setTurnHolder(nplayer);
         }
     }
 
     /**
-     * This should be called from {@link GameManager#gameDidStart} to let
-     * the turn delegate perform start of game processing.
+     * This should be called from {@link GameManager#gameDidStart} to let the turn delegate perform
+     * start of game processing.
      */
     public void gameDidStart ()
     {
@@ -189,8 +189,8 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
     }
 
     /**
-     * This is called to determine which player will take the first
-     * turn. The default implementation chooses a player at random.
+     * This is called to determine which player will take the first turn. The default
+     * implementation chooses a player at random.
      */
     protected void setFirstTurnHolder ()
     {
@@ -198,10 +198,9 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
     }
 
     /**
-     * This is called to determine which player will next hold the turn.
-     * The default implementation simply rotates through the players in
-     * order, but some games may need to mess with the turn from time to
-     * time. This should update the <code>_turnIdx</code> field, not set
+     * This is called to determine which player will next hold the turn.  The default
+     * implementation simply rotates through the players in order, but some games may need to mess
+     * with the turn from time to time. This should update the <code>_turnIdx</code> field, not set
      * the turn holder field in the game object directly.
      */
     protected void setNextTurnHolder ()
@@ -217,10 +216,10 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
         do {
             _turnIdx = (_turnIdx + 1) % size;
             if (_turnIdx == oturnIdx) {
-                // if we've wrapped all the way around, stop where we are
-                // even if the current player is not active.
-                Log.warning("1 or less active players. Unable to properly " +
-                            "change turn. [game=" + where() + "].");
+                // if we've wrapped all the way around, stop where we are even if the current
+                // player is not active.
+                Log.warning("1 or less active players. Unable to properly change turn. " +
+                            "[game=" + where() + "].");
                 break;
             }
         } while (!_tgmgr.isActivePlayer(_turnIdx));
@@ -251,7 +250,6 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
     /** A reference to our game object. */
     protected TurnGameObject _turnGame;
 
-    /** The player index of the current turn holder or <code>-1</code> if
-     * it's no one's turn. */
+    /** The player index of the current turn holder or <code>-1</code> if it's no one's turn. */
     protected int _turnIdx = -1;
 }

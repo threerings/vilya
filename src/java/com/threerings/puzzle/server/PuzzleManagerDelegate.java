@@ -21,21 +21,31 @@
 
 package com.threerings.puzzle.server;
 
+import com.threerings.crowd.server.PlaceManager;
 import com.threerings.parlor.game.server.GameManagerDelegate;
 
 /**
- * Extends the {@link GameManagerDelegate} mechanism with puzzle manager
- * specific methods (of which there are currently none).
+ * Extends the {@link GameManagerDelegate} mechanism with puzzle manager specific methods (of which
+ * there are currently none).
  */
 public class PuzzleManagerDelegate extends GameManagerDelegate
 {
-    /**
-     * Constructs a puzzle manager delegate.
-     */
-    public PuzzleManagerDelegate (PuzzleManager puzmgr)
+    public PuzzleManagerDelegate ()
     {
-        super(puzmgr);
-        _puzmgr = puzmgr;
+    }
+
+    /**
+     * @deprecated use the zero-argument constructor.
+     */
+    @Deprecated public PuzzleManagerDelegate (PuzzleManager puzmgr)
+    {
+    }
+
+    @Override // from PlaceManagerDelegate
+    public void setPlaceManager (PlaceManager plmgr)
+    {
+        super.setPlaceManager(plmgr);
+        _puzmgr = (PuzzleManager)plmgr;
     }
 
     protected PuzzleManager _puzmgr;

@@ -64,14 +64,19 @@ public abstract class DropManagerDelegate extends PuzzleManagerDelegate
     implements PuzzleCodes, DropCodes
 {
     /**
-     * Provides the delegate with a reference to the manager for which it
-     * is delegating as well as the logic object that it uses to determine
-     * how to manage the drop puzzle.
+     * @deprecated use {@link #DropManagerDelegate(DropLogic)}.
      */
-    public DropManagerDelegate (PuzzleManager puzmgr, DropLogic logic)
+    @Deprecated public DropManagerDelegate (PuzzleManager puzmgr, DropLogic logic)
     {
-        super(puzmgr);
+        this(logic);
+    }
 
+    /**
+     * Creates a drop manager delegate with a logic that it uses to determine how to manage the
+     * drop puzzle.
+     */
+    public DropManagerDelegate (DropLogic logic)
+    {
         // configure the game-specific settings
         _usedrop = logic.useBlockDropping();
         _userise = logic.useBoardRising();

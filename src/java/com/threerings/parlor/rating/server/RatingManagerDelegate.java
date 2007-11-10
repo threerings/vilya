@@ -42,8 +42,10 @@ import com.threerings.util.Name;
 import com.threerings.media.util.MathUtil;
 
 import com.threerings.crowd.data.BodyObject;
+import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.server.CrowdServer;
+import com.threerings.crowd.server.PlaceManager;
 
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.game.data.GameObject;
@@ -60,13 +62,17 @@ import com.threerings.parlor.rating.server.persist.RatingRepository;
 public abstract class RatingManagerDelegate extends GameManagerDelegate
     implements RatingCodes
 {
-    /**
-     * Constructs a rating manager delegate.
-     */
-    public RatingManagerDelegate (GameManager gmgr)
+    @Override // from PlaceManagerDelegate
+    public void setPlaceManager (PlaceManager plmgr)
     {
-        super(gmgr);
-        _gmgr = gmgr;
+        super.setPlaceManager(plmgr);
+        _gmgr = (GameManager)plmgr;
+    }
+
+    @Override // from PlaceManagerDelegate
+    public void didInit (PlaceConfig config)
+    {
+        super.didInit(config);
         _repo = getRatingRepository();
     }
 
