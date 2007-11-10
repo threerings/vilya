@@ -798,11 +798,12 @@ public class GameManager extends PlaceManager
 
         // start up a no-show timer if needed
         if (needsNoShowTimer()) {
-            new Interval(CrowdServer.omgr) {
+            _noShowInterval = new Interval(CrowdServer.omgr) {
                 public void expired () {
                     checkForNoShows();
                 }
-            }.schedule(NOSHOW_DELAY);
+            };
+            _noShowInterval.schedule(NOSHOW_DELAY);
         }
     }
 
@@ -1012,6 +1013,9 @@ public class GameManager extends PlaceManager
      */
     protected void gameDidStart ()
     {
+        // clear out our no-show timer if it's still running
+        _noShowInterval.cancel();
+
         // let our delegates do their business
         applyToDelegates(new DelegateOp() {
             public void apply (PlaceManagerDelegate delegate) {
@@ -1311,6 +1315,9 @@ public class GameManager extends PlaceManager
 
     /** TEMP: debugging the pending rating double release bug. */
     protected RepeatCallTracker _gameEndTracker = new RepeatCallTracker();
+
+    /** The interval used to check for no-shows. */
+    protected Interval _noShowInterval;
 
     /** Whether we have already postponed the start of the game. */
     protected boolean _postponedStart = false;
