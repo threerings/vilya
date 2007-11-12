@@ -91,8 +91,10 @@ public class DictionaryManager
      * Retrieves a set of letters from a language definition file, and returns a random sampling of
      * /count/ elements.
      */
-    public void getLetterSet (final String locale, final int count,
-                              final InvocationService.ResultListener listener)
+    // TODO: honor the dictionary parameter
+    public void getLetterSet (
+        final String locale, final String dictionary, final int count,
+        final InvocationService.ResultListener listener)
     {
         CrowdServer.invoker.postUnit(new Invoker.Unit("DictionaryManager.getLetterSet") {
             public boolean invoke () {
@@ -117,8 +119,10 @@ public class DictionaryManager
     /**
      * Checks if the specified word exists in the given language
      */
-    public void checkWord (final String locale, final String word,
-                           final InvocationService.ResultListener listener)
+    // TODO: honor the dictionary parameter
+    public void checkWord (
+        final String locale, final String dictionary, final String word,
+        final InvocationService.ResultListener listener)
     {
         CrowdServer.invoker.postUnit(new Invoker.Unit("DictionaryManager.checkWord") {
             public boolean invoke () {

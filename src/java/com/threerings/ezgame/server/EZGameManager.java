@@ -221,20 +221,22 @@ public class EZGameManager extends GameManager
     }
 
     // from EZGameProvider
-    public void getDictionaryLetterSet (ClientObject caller, String locale, int count, 
-                                        InvocationService.ResultListener listener)
+    public void getDictionaryLetterSet (
+        ClientObject caller, String locale, String dictionary, int count, 
+        InvocationService.ResultListener listener)
         throws InvocationException
     {
-        getDictionaryManager().getLetterSet(locale, count, listener);
+        getDictionaryManager().getLetterSet(locale, dictionary, count, listener);
     }
     
     // from EZGameProvider
-    public void checkDictionaryWord (ClientObject caller, String locale, String word, 
-                                     InvocationService.ResultListener listener)
+    public void checkDictionaryWord (
+        ClientObject caller, String locale, String dictionary, String word, 
+        InvocationService.ResultListener listener)
         throws InvocationException
     {
-        getDictionaryManager().checkWord(locale, word, listener);
-    }  
+        getDictionaryManager().checkWord(locale, dictionary, word, listener);
+    }
 
     /**
      * Returns the dictionary manager if it has been properly initialized. Throws an INTERNAL_ERROR

@@ -66,7 +66,7 @@ public class EZGameDispatcher extends InvocationDispatcher
         case EZGameMarshaller.CHECK_DICTIONARY_WORD:
             ((EZGameProvider)provider).checkDictionaryWord(
                 source,
-                (String)args[0], (String)args[1], (InvocationService.ResultListener)args[2]
+                (String)args[0], (String)args[1], (String)args[2], (InvocationService.ResultListener)args[3]
             );
             return;
 
@@ -101,7 +101,7 @@ public class EZGameDispatcher extends InvocationDispatcher
         case EZGameMarshaller.GET_DICTIONARY_LETTER_SET:
             ((EZGameProvider)provider).getDictionaryLetterSet(
                 source,
-                (String)args[0], ((Integer)args[1]).intValue(), (InvocationService.ResultListener)args[2]
+                (String)args[0], (String)args[1], ((Integer)args[2]).intValue(), (InvocationService.ResultListener)args[3]
             );
             return;
 

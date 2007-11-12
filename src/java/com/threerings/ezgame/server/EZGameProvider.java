@@ -42,7 +42,7 @@ public interface EZGameProvider extends InvocationProvider
     /**
      * Handles a {@link EZGameService#checkDictionaryWord} request.
      */
-    public void checkDictionaryWord (ClientObject caller, String arg1, String arg2, InvocationService.ResultListener arg3)
+    public void checkDictionaryWord (ClientObject caller, String arg1, String arg2, String arg3, InvocationService.ResultListener arg4)
         throws InvocationException;
 
     /**
@@ -72,7 +72,7 @@ public interface EZGameProvider extends InvocationProvider
     /**
      * Handles a {@link EZGameService#getDictionaryLetterSet} request.
      */
-    public void getDictionaryLetterSet (ClientObject caller, String arg1, int arg2, InvocationService.ResultListener arg3)
+    public void getDictionaryLetterSet (ClientObject caller, String arg1, String arg2, int arg3, InvocationService.ResultListener arg4)
         throws InvocationException;
 
     /**

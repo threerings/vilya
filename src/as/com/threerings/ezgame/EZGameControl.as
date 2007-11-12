@@ -411,30 +411,36 @@ public class EZGameControl extends BaseControl
      * separate message with the specified key, as an array of strings.
      *
      * @param locale RFC 3066 string that represents language settings
+     * @param dictionary the dictionary to use, or null for the default.
+     *                   TODO: document possible parameters.
      * @param count the number of letters to be produced
      * @param callback the function that will process the results, of the form:
      * <pre>function (letters :Array) :void</pre>
      * where letters is an array of strings containing letters for the given language settings
      * (potentially empty).
      */
-    public function getDictionaryLetterSet (locale :String, count :int, callback :Function) :void
+    public function getDictionaryLetterSet (
+        locale :String, dictionary :String, count :int, callback :Function) :void
     {
-        callEZCode("getDictionaryLetterSet_v1", locale, count, callback);
+        callEZCode("getDictionaryLetterSet_v2", locale, dictionary, count, callback);
     }
 
     /**
      * Checks to see if the dictionary for the given locale contains the given word.
      *
      * @param RFC 3066 string that represents language settings
+     * @param dictionary the dictionary to use, or null for the default.
+     *                   TODO: document possible parameters.
      * @param word the string contains the word to be checked
      * @param callback the function that will process the results, of the form:
      * <pre>function (word :String, result :Boolean) :void</pre>
      * where word is a copy of the word that was requested, and result specifies whether the word
      * is valid given language settings
      */
-    public function checkDictionaryWord (locale :String, word :String, callback :Function) :void
+    public function checkDictionaryWord (
+        locale :String, dictionary :String, word :String, callback :Function) :void
     {
-        callEZCode("checkDictionaryWord_v1", locale, word, callback);
+        callEZCode("checkDictionaryWord_v2", locale, dictionary, word, callback);
     }
 
     /**

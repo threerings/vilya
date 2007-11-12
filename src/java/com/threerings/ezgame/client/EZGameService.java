@@ -78,11 +78,12 @@ public interface EZGameService extends InvocationService
      * @param client stores information about the caller
      * @param locale is an RFC 3066 string specifying language settings, for example, "en" or
      * "en-us".
+     * @param dictionary is a String specifier of the dictionary to use, or null for the default.
      * @param count is the number of letters to be returned.
      * @param listener is the callback function
      */
     public void getDictionaryLetterSet (
-        Client client, String locale, int count, ResultListener listener);
+        Client client, String locale, String dictionary, int count, ResultListener listener);
     
     /**
      * Ask the dictionary service whether the specified word is valid with the given
@@ -91,11 +92,12 @@ public interface EZGameService extends InvocationService
      * @param client stores information about the caller
      * @param locale is an RFC 3066 string specifying language settings, for example, "en" or
      * "en-us".
+     * @param dictionary is a String specifier of the dictionary to use, or null for the default.
      * @param word is the word to be checked against the dictionary.
      * @param listener is the callback function
      */
     public void checkDictionaryWord (
-        Client client, String locale, String word, ResultListener listener);
+        Client client, String locale, String dictionary, String word, ResultListener listener);
 
     /**
      * Add to the specified named collection.

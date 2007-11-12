@@ -62,12 +62,12 @@ public class EZGameMarshaller extends InvocationMarshaller
     public static const CHECK_DICTIONARY_WORD :int = 2;
 
     // from interface EZGameService
-    public function checkDictionaryWord (arg1 :Client, arg2 :String, arg3 :String, arg4 :InvocationService_ResultListener) :void
+    public function checkDictionaryWord (arg1 :Client, arg2 :String, arg3 :String, arg4 :String, arg5 :InvocationService_ResultListener) :void
     {
-        var listener4 :InvocationMarshaller_ResultMarshaller = new InvocationMarshaller_ResultMarshaller();
-        listener4.listener = arg4;
+        var listener5 :InvocationMarshaller_ResultMarshaller = new InvocationMarshaller_ResultMarshaller();
+        listener5.listener = arg5;
         sendRequest(arg1, CHECK_DICTIONARY_WORD, [
-            arg2, arg3, listener4
+            arg2, arg3, arg4, listener5
         ]);
     }
 
@@ -127,12 +127,12 @@ public class EZGameMarshaller extends InvocationMarshaller
     public static const GET_DICTIONARY_LETTER_SET :int = 7;
 
     // from interface EZGameService
-    public function getDictionaryLetterSet (arg1 :Client, arg2 :String, arg3 :int, arg4 :InvocationService_ResultListener) :void
+    public function getDictionaryLetterSet (arg1 :Client, arg2 :String, arg3 :String, arg4 :int, arg5 :InvocationService_ResultListener) :void
     {
-        var listener4 :InvocationMarshaller_ResultMarshaller = new InvocationMarshaller_ResultMarshaller();
-        listener4.listener = arg4;
+        var listener5 :InvocationMarshaller_ResultMarshaller = new InvocationMarshaller_ResultMarshaller();
+        listener5.listener = arg5;
         sendRequest(arg1, GET_DICTIONARY_LETTER_SET, [
-            arg2, Integer.valueOf(arg3), listener4
+            arg2, arg3, Integer.valueOf(arg4), listener5
         ]);
     }
 

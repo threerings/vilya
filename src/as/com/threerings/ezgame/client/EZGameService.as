@@ -41,7 +41,7 @@ public interface EZGameService extends InvocationService
     function addToCollection (arg1 :Client, arg2 :String, arg3 :TypedArray /* of class [B */, arg4 :Boolean, arg5 :InvocationService_InvocationListener) :void;
 
     // from Java interface EZGameService
-    function checkDictionaryWord (arg1 :Client, arg2 :String, arg3 :String, arg4 :InvocationService_ResultListener) :void;
+    function checkDictionaryWord (arg1 :Client, arg2 :String, arg3 :String, arg4 :String, arg5 :InvocationService_ResultListener) :void;
 
     // from Java interface EZGameService
     function endGame (arg1 :Client, arg2 :TypedArray /* of int */, arg3 :InvocationService_InvocationListener) :void;
@@ -56,7 +56,7 @@ public interface EZGameService extends InvocationService
     function getCookie (arg1 :Client, arg2 :int, arg3 :InvocationService_InvocationListener) :void;
 
     // from Java interface EZGameService
-    function getDictionaryLetterSet (arg1 :Client, arg2 :String, arg3 :int, arg4 :InvocationService_ResultListener) :void;
+    function getDictionaryLetterSet (arg1 :Client, arg2 :String, arg3 :String, arg4 :int, arg5 :InvocationService_ResultListener) :void;
 
     // from Java interface EZGameService
     function getFromCollection (arg1 :Client, arg2 :String, arg3 :Boolean, arg4 :int, arg5 :String, arg6 :int, arg7 :InvocationService_ConfirmListener) :void;

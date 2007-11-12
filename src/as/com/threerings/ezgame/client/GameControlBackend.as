@@ -499,8 +499,8 @@ public class GameControlBackend
         o["setUserCookie_v1"] = setUserCookie_v1;
         o["isMyTurn_v1"] = isMyTurn_v1;
         o["isInPlay_v1"] = isInPlay_v1;
-        o["getDictionaryLetterSet_v1"] = getDictionaryLetterSet_v1;
-        o["checkDictionaryWord_v1"] = checkDictionaryWord_v1;
+        o["getDictionaryLetterSet_v2"] = getDictionaryLetterSet_v2;
+        o["checkDictionaryWord_v2"] = checkDictionaryWord_v2;
         o["populateCollection_v1"] = populateCollection_v1;
         o["alterKeyEvents_v1"] = alterKeyEvents_v1;
         o["focusContainer_v1"] = focusContainer_v1;
@@ -531,6 +531,8 @@ public class GameControlBackend
 
         // compatability
         o["endTurn_v2"] = startNextTurn_v1; // it's the same!
+        o["getDictionaryLetterSet_v1"] = getDictionaryLetterSet_v1;
+        o["checkDictionaryWord_v1"] = checkDictionaryWord_v1;
     }
 
     /**
@@ -789,6 +791,12 @@ public class GameControlBackend
     protected function getDictionaryLetterSet_v1 (
         locale :String, count :int, callback :Function) :void
     {
+        getDictionaryLetterSet_v2(locale, null, count, callback);
+    }
+
+    protected function getDictionaryLetterSet_v2 (
+        locale :String, dictionary :String, count :int, callback :Function) :void
+    {
         validateConnected();
         var listener :InvocationService_ResultListener;
         if (callback != null) {
@@ -801,17 +809,24 @@ public class GameControlBackend
                 var r : Array = result.split(",");
                 callback (r);
             };
-            listener = new ResultWrapper (failure, success);
+            listener = new ResultWrapper(failure, success);
         } else {
-            listener = createLoggingResultListener ("checkDictionaryWord");
+            listener = createLoggingResultListener("checkDictionaryWord");
         }
 
         // just relay the data over to the server
-        _ezObj.ezGameService.getDictionaryLetterSet(_ctx.getClient(), locale, count, listener);
+        _ezObj.ezGameService.getDictionaryLetterSet(
+            _ctx.getClient(), locale, dictionary, count, listener);
     }
 
     protected function checkDictionaryWord_v1 (
         locale :String, word :String, callback :Function) :void
+    {
+        checkDictionaryWord_v2(locale, null, word, callback);
+    }
+
+    protected function checkDictionaryWord_v2 (
+        locale :String, dictionary :String, word :String, callback :Function) :void
     {
         validateConnected();
         var listener :InvocationService_ResultListener;
@@ -825,14 +840,14 @@ public class GameControlBackend
                 var r : Boolean = Boolean(result);
                 callback (word, r);
             };
-            listener = new ResultWrapper (failure, success);
+            listener = new ResultWrapper(failure, success);
         } else {
-            listener = createLoggingResultListener ("checkDictionaryWord");
+            listener = createLoggingResultListener("checkDictionaryWord");
         }
 
         // just relay the data over to the server
-        _ezObj.ezGameService.checkDictionaryWord(_ctx.getClient(), locale, word, listener);
-
+        _ezObj.ezGameService.checkDictionaryWord(
+            _ctx.getClient(), locale, dictionary, word, listener);
     }
 
     /**

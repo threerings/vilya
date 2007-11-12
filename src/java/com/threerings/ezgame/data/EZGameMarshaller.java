@@ -54,12 +54,12 @@ public class EZGameMarshaller extends InvocationMarshaller
     public static final int CHECK_DICTIONARY_WORD = 2;
 
     // from interface EZGameService
-    public void checkDictionaryWord (Client arg1, String arg2, String arg3, InvocationService.ResultListener arg4)
+    public void checkDictionaryWord (Client arg1, String arg2, String arg3, String arg4, InvocationService.ResultListener arg5)
     {
-        InvocationMarshaller.ResultMarshaller listener4 = new InvocationMarshaller.ResultMarshaller();
-        listener4.listener = arg4;
+        InvocationMarshaller.ResultMarshaller listener5 = new InvocationMarshaller.ResultMarshaller();
+        listener5.listener = arg5;
         sendRequest(arg1, CHECK_DICTIONARY_WORD, new Object[] {
-            arg2, arg3, listener4
+            arg2, arg3, arg4, listener5
         });
     }
 
@@ -119,12 +119,12 @@ public class EZGameMarshaller extends InvocationMarshaller
     public static final int GET_DICTIONARY_LETTER_SET = 7;
 
     // from interface EZGameService
-    public void getDictionaryLetterSet (Client arg1, String arg2, int arg3, InvocationService.ResultListener arg4)
+    public void getDictionaryLetterSet (Client arg1, String arg2, String arg3, int arg4, InvocationService.ResultListener arg5)
     {
-        InvocationMarshaller.ResultMarshaller listener4 = new InvocationMarshaller.ResultMarshaller();
-        listener4.listener = arg4;
+        InvocationMarshaller.ResultMarshaller listener5 = new InvocationMarshaller.ResultMarshaller();
+        listener5.listener = arg5;
         sendRequest(arg1, GET_DICTIONARY_LETTER_SET, new Object[] {
-            arg2, Integer.valueOf(arg3), listener4
+            arg2, arg3, Integer.valueOf(arg4), listener5
         });
     }
 
