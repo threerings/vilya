@@ -1014,7 +1014,9 @@ public class GameManager extends PlaceManager
     protected void gameDidStart ()
     {
         // clear out our no-show timer if it's still running
-        _noShowInterval.cancel();
+        if (_noShowInterval != null) {
+            _noShowInterval.cancel();
+        }
 
         // let our delegates do their business
         applyToDelegates(new DelegateOp() {
