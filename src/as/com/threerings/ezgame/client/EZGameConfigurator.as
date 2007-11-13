@@ -62,18 +62,18 @@ public class EZGameConfigurator extends FlexGameConfigurator
             if (param is RangeParameter) {
                 var range :RangeParameter = (param as RangeParameter);
                 if ((range.maximum - range.minimum) < 16) {
-                    var combo :ComboBox = new ComboBox();
+                    var rcombo :ComboBox = new ComboBox();
                     var values :Array = [];
-                    var startDex :int = 0;
+                    var rstartDex :int = 0;
                     for (var ii :int = range.minimum; ii <= range.maximum; ii++) {
                         if (ii == range.start) {
-                            startDex = ii;
+                            rstartDex = ii;
                         }
                         values.push(ii);
                     }
-                    combo.dataProvider = values;
-                    combo.selectedIndex = startDex;
-                    addLabeledControl(param, combo);
+                    rcombo.dataProvider = values;
+                    rcombo.selectedIndex = rstartDex;
+                    addLabeledControl(param, rcombo);
 
                 } else {
                     var slider :HSlider = new HSlider();

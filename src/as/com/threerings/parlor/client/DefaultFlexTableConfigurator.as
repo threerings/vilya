@@ -132,7 +132,7 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
         super.flushTableConfig();
 
         if (_players != null) {
-            _config.desiredPlayerCount = int(_players.selectedItem);
+            _config.desiredPlayerCount = int(_players.value);
         }
         // TODO - it is wacky for the TableConfig.privateTable to mean two different things.  
         // It should be extended to have separate privateTable and watchableTable options.
