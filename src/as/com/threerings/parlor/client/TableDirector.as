@@ -22,6 +22,7 @@
 package com.threerings.parlor.client {
 
 import com.threerings.util.ArrayUtil;
+import com.threerings.util.Log;
 import com.threerings.util.ObserverList;
 import com.threerings.util.Util;
 

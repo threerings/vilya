@@ -21,6 +21,8 @@
 
 package com.threerings.whirled.data {
 
+import com.threerings.util.Log;
+
 import com.threerings.crowd.data.PlaceConfig;
 
 /**

@@ -28,6 +28,7 @@ import mx.controls.HSlider;
 import mx.controls.Label;
 
 import com.threerings.util.Integer;
+import com.threerings.util.Log;
 import com.threerings.util.StreamableHashMap;
 import com.threerings.util.StringUtil;
 import com.threerings.util.langBoolean;

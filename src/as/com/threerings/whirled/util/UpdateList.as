@@ -21,6 +21,8 @@
 
 package com.threerings.whirled.util {
 
+import com.threerings.util.Log;
+
 import com.threerings.whirled.data.SceneUpdate;
 
 /**

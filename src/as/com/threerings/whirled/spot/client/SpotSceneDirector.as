@@ -21,6 +21,7 @@
 
 package com.threerings.whirled.spot.client {
 
+import com.threerings.util.Log;
 import com.threerings.util.ResultListener;
 
 import com.threerings.presents.client.BasicDirector;

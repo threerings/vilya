@@ -30,6 +30,7 @@ import com.threerings.io.ObjectOutputStream;
 import com.threerings.io.Streamable;
 
 import com.threerings.util.Cloneable;
+import com.threerings.util.Log;
 
 /**
  * Used to encapsulate updates to scenes in such a manner that updates can

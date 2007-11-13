@@ -23,6 +23,7 @@ package com.threerings.parlor.client {
 
 import com.threerings.util.ArrayUtil;
 import com.threerings.util.HashMap;
+import com.threerings.util.Log;
 import com.threerings.util.Name;
 
 import com.threerings.presents.client.BasicDirector;

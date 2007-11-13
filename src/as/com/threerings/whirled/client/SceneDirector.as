@@ -25,6 +25,7 @@ import flash.errors.IOError;
 import flash.errors.IllegalOperationError;
 
 import com.threerings.util.HashMap;
+import com.threerings.util.Log;
 import com.threerings.util.ResultListener;
 
 import com.threerings.io.TypedArray;

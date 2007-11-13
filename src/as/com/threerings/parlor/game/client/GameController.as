@@ -21,6 +21,8 @@
 
 package com.threerings.parlor.game.client {
 
+import com.threerings.util.Log;
+
 import com.threerings.presents.dobj.AttributeChangeListener;
 import com.threerings.presents.dobj.AttributeChangedEvent;
 
