@@ -95,7 +95,7 @@ public class EZGameManager extends GameManager
         if (!_ezObj.isInPlay()) {
             throw new InvocationException("e.already_ended");
         }
-        validateStateModification(caller, false);
+        validateUser(caller);
     }
 
     // from TurnGameManager
@@ -118,7 +118,13 @@ public class EZGameManager extends GameManager
                          InvocationService.InvocationListener listener)
         throws InvocationException
     {
-        validateStateModification(caller, true);
+        validateUser(caller);
+
+        // make sure this player is the turn holder
+        Name holder = _ezObj.turnHolder;
+        if (holder != null && !holder.equals(((BodyObject) caller).getVisibleName())) {
+            throw new InvocationException(InvocationCodes.ACCESS_DENIED);
+        }
 
         Name nextTurnHolder = null;
         if (nextPlayerId != 0) {
@@ -136,7 +142,7 @@ public class EZGameManager extends GameManager
                           InvocationService.InvocationListener listener)
         throws InvocationException
     {
-        validateStateModification(caller, false);
+        validateUser(caller);
 
         // let the game know that it is doing something stupid
         if (_ezObj.roundId < 0) {
@@ -173,7 +179,7 @@ public class EZGameManager extends GameManager
                                InvocationService.InvocationListener listener)
         throws InvocationException
     {
-        validateCanEndGame(caller);
+        validateUser(caller);
 
         // queue up the start of the next game
         if (seconds > 0) {
@@ -489,22 +495,6 @@ public class EZGameManager extends GameManager
             }
             return;
         }
-        }
-    }
-
-    /**
-     * Validate that the specified listener has access to make a change.
-     */
-    protected void validateStateModification (ClientObject caller, boolean requireHoldsTurn)
-        throws InvocationException
-    {
-        validateUser(caller);
-
-        if (requireHoldsTurn) {
-            Name holder = _ezObj.turnHolder;
-            if (holder != null && !holder.equals(((BodyObject) caller).getVisibleName())) {
-                throw new InvocationException(InvocationCodes.ACCESS_DENIED);
-            }
         }
     }
 
