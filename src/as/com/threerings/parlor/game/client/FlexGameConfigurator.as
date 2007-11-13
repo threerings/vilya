@@ -24,8 +24,10 @@ package com.threerings.parlor.game.client {
 import mx.core.Container;
 import mx.core.UIComponent;
 
+import mx.containers.Grid;
+import mx.containers.GridItem;
+import mx.containers.GridRow;
 import mx.containers.HBox;
-import mx.containers.Tile;
 
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.util.ParlorContext;
@@ -41,11 +43,20 @@ import com.threerings.parlor.util.ParlorContext;
 public /*abstract*/ class FlexGameConfigurator extends GameConfigurator
 {
     /**
+     * Configures the number of columns to use when laying out our controls. This must be called
+     * before any calls to {@link #addControl}.
+     */
+    public function setColumns (columns :int) :void
+    {
+        _columns = columns;
+    }
+
+    /**
      * Get the Container that contains the UI elements for this configurator.
      */
     public function getContainer () :Container
     {
-        return _tile;
+        return _grid;
     }
 
     /**
@@ -56,17 +67,31 @@ public /*abstract*/ class FlexGameConfigurator extends GameConfigurator
      */
     public function addControl (label :UIComponent, control :UIComponent) :void
     {
-        var item :HBox = new HBox();
-        item.width = 225;
-        item.setStyle("horizontalGap", 5);
-        label.width = 95;
-        item.addChild(label);
-        control.width = 125;
-        item.addChild(control);
-        _tile.addChild(item);
+        if (_gridRow == null) {
+            _gridRow = new GridRow();
+            _grid.addChild(_gridRow);
+        }
+        _gridRow.addChild(wrapItem(label));
+        _gridRow.addChild(wrapItem(control));
+        if (_gridRow.numChildren == _columns * 2) {
+            _gridRow = null;
+        }
+    }
+
+    protected function wrapItem (component :UIComponent) :GridItem
+    {
+        var item :GridItem = new GridItem();
+        item.addChild(component);
+        return item;
     }
 
     /** The grid on which the config options are placed. */
-    protected var _tile :Tile = new Tile();
+    protected var _grid :Grid = new Grid();
+
+    /** The current row to which we're adding controls. */
+    protected var _gridRow :GridRow;
+
+    /** The number of columns in which to lay out our configuration. */
+    protected var _columns :int = 2;
 }
 }
