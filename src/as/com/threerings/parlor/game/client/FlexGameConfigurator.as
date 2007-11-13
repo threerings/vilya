@@ -25,9 +25,10 @@ import mx.core.Container;
 import mx.core.UIComponent;
 
 import mx.containers.Grid;
-import mx.containers.GridItem;
 import mx.containers.GridRow;
 import mx.containers.HBox;
+
+import com.threerings.flex.GridUtil;
 
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.util.ParlorContext;
@@ -71,18 +72,11 @@ public /*abstract*/ class FlexGameConfigurator extends GameConfigurator
             _gridRow = new GridRow();
             _grid.addChild(_gridRow);
         }
-        _gridRow.addChild(wrapItem(label));
-        _gridRow.addChild(wrapItem(control));
+        GridUtil.addToRow(_gridRow, label);
+        GridUtil.addToRow(_gridRow, control);
         if (_gridRow.numChildren == _columns * 2) {
             _gridRow = null;
         }
-    }
-
-    protected function wrapItem (component :UIComponent) :GridItem
-    {
-        var item :GridItem = new GridItem();
-        item.addChild(component);
-        return item;
     }
 
     /** The grid on which the config options are placed. */
