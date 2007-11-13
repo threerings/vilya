@@ -24,11 +24,10 @@ package com.threerings.parlor.client {
 import mx.containers.Grid;
 
 import mx.controls.CheckBox;
-import mx.controls.HSlider;
+import mx.controls.ComboBox;
 import mx.controls.Label;
 
 import com.threerings.flex.GridUtil;
-import com.threerings.flex.LabeledSlider;
 
 import com.threerings.parlor.data.TableConfig;
 import com.threerings.parlor.util.ParlorContext;
@@ -51,25 +50,28 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
             allowWatchable :Boolean = true, playersXlate :String = "Players: ", 
             watchableXlate :String = "Watchable: ", privateXlate :String = "Private: ")
     {
-        var partyGame :Boolean = minPlayers < 0 && maxPlayers < 0;
-
+        var partyGame :Boolean = (minPlayers < 0) && (maxPlayers < 0);
         if (minPlayers < 0) {
             minPlayers = desiredPlayers;
         }
         if (maxPlayers < 0) {
             maxPlayers = desiredPlayers;
         }
-
         _config.minimumPlayerCount = minPlayers;
 
         // create a slider for players, if applicable
         if (minPlayers != maxPlayers) {
-            _playerSlider = new HSlider();
-            _playerSlider.value = desiredPlayers;
-            _playerSlider.minimum = minPlayers;
-            _playerSlider.maximum = maxPlayers;
-            _playerSlider.liveDragging = true;
-            _playerSlider.snapInterval = 1;
+            _players = new ComboBox();
+            var values :Array = [];
+            var startDex :int = 0;
+            for (var ii :int = minPlayers; ii <= maxPlayers; ii++) {
+                if (ii == desiredPlayers) {
+                    startDex = ii;
+                }
+                values.push(ii);
+            }
+            _players.dataProvider = values;
+            _players.selectedIndex = startDex;
 
         } else {
             _config.desiredPlayerCount = desiredPlayers;
@@ -98,12 +100,11 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
         var gconf :FlexGameConfigurator =
             (_gameConfigurator as FlexGameConfigurator);
 
-        if (_playerSlider != null) {
+        if (_players != null) {
             var playerLabel :Label = new Label();
             playerLabel.text = _playersXlate;
             playerLabel.styleName = "lobbyLabel";
-
-            gconf.addControl(playerLabel, new LabeledSlider(_playerSlider));
+            gconf.addControl(playerLabel, _players);
         }
 
         if (_watchableCheck != null) {
@@ -122,7 +123,7 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
     // documentation inherited
     override public function isEmpty () :Boolean
     {
-        return (_playerSlider == null) && (_watchableCheck == null);
+        return (_players == null) && (_watchableCheck == null);
     }
 
     // documentation inherited
@@ -130,8 +131,8 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
     {
         super.flushTableConfig();
 
-        if (_playerSlider != null) {
-            _config.desiredPlayerCount = _playerSlider.value;
+        if (_players != null) {
+            _config.desiredPlayerCount = int(_players.selectedItem);
         }
         // TODO - it is wacky for the TableConfig.privateTable to mean two different things.  
         // It should be extended to have separate privateTable and watchableTable options.
@@ -142,8 +143,8 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
         }
     }
 
-    /** A slider for configuring the number of players at the table. */
-    protected var _playerSlider :HSlider;
+    /** A component for configuring the number of players at the table. */
+    protected var _players :ComboBox;
 
     /** A checkbox to allow the table creator to specify if the table is watchable */
     protected var _watchableCheck :CheckBox;
