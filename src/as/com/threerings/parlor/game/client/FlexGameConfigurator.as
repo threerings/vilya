@@ -25,8 +25,8 @@ import mx.core.Container;
 import mx.core.UIComponent;
 
 import mx.containers.Grid;
+import mx.containers.GridItem;
 import mx.containers.GridRow;
-import mx.containers.HBox;
 
 import com.threerings.flex.GridUtil;
 
@@ -66,14 +66,22 @@ public /*abstract*/ class FlexGameConfigurator extends GameConfigurator
      * to the game, but do not directly alter the game config, so that all the controls are added
      * in a uniform manner and are well aligned.
      */
-    public function addControl (label :UIComponent, control :UIComponent) :void
+    public function addControl (label :UIComponent, control :UIComponent,
+                                verticalAlign :String = "middle") :void
     {
         if (_gridRow == null) {
             _gridRow = new GridRow();
             _grid.addChild(_gridRow);
         }
-        GridUtil.addToRow(_gridRow, label);
-        GridUtil.addToRow(_gridRow, control);
+
+        var item :GridItem = GridUtil.addToRow(_gridRow, label);
+        item.setStyle("verticalAlign", verticalAlign);
+        if (_gridRow.numChildren > 1) {
+            item.setStyle("paddingLeft", 15);
+        }
+        item = GridUtil.addToRow(_gridRow, control);
+        item.setStyle("verticalAlign", verticalAlign);
+
         if (_gridRow.numChildren == _columns * 2) {
             _gridRow = null;
         }
