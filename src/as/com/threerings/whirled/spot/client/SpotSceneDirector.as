@@ -123,7 +123,8 @@ public class SpotSceneDirector extends BasicDirector
 
         // sanity check the server's notion of what scene we're in with our notion of it
         var sceneId :int = _scdir.getScene().getId();
-        var clSceneId :int = ScenePlace.getSceneId(_self as BodyObject);
+        var clSceneId :int = ScenePlace.getSceneId(
+            _wctx.getClient().getClientObject() as BodyObject);
         if (sceneId != clSceneId) {
             log.warning("Client and server differ in opinion of what scene we're in " +
                         "[sSceneId=" + clSceneId + ", cSceneId=" + sceneId + "].");
@@ -385,7 +386,8 @@ public class SpotSceneDirector extends BasicDirector
         var scloc :SceneLocation = null;
         var ssobj :SpotSceneObject = (plobj as SpotSceneObject);
         if (ssobj != null) {
-            scloc = ssobj.occupantLocs.get((_self as BodyObject).getOid()) as SceneLocation;
+            scloc = ssobj.occupantLocs.get(
+                _wctx.getClient().getClientObject().getOid()) as SceneLocation;
         }
         _location = (scloc == null) ? null : scloc.loc;
     }

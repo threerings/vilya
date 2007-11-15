@@ -378,8 +378,12 @@ public class SpotSceneManager extends SceneManager
      */
     protected ClusterRecord getCluster (int bodyOid)
     {
-        ClusteredBodyObject bobj = (ClusteredBodyObject)CrowdServer.omgr.getObject(bodyOid);
-        return (bobj == null) ? null : _clusters.get(bobj.getClusterOid());
+        BodyObject bobj = (BodyObject)CrowdServer.omgr.getObject(bodyOid);
+        if (bobj instanceof ClusteredBodyObject) {
+            return _clusters.get(((ClusteredBodyObject)bobj).getClusterOid());
+        } else {
+            return null;
+        }
     }
 
     /**
