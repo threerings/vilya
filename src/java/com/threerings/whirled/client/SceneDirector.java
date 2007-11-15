@@ -67,7 +67,7 @@ public class SceneDirector extends BasicDirector
          * Should instruct the client to move the last known working location (as well as clean up
          * after the failed moveTo request).
          */
-        public void recoverMoveTo (int sceneId);
+        public void recoverMoveTo (int previousSceneId);
     }
 
     /**
@@ -327,12 +327,8 @@ public class SceneDirector extends BasicDirector
     // from interface SceneService.SceneMoveListener
     public void requestFailed (String reason)
     {
-        // clear out our pending request oid
-        int sceneId = _pendingSceneId;
-        _pendingSceneId = -1;
-
         // let our observers know that something has gone horribly awry
-        _locdir.failedToMoveTo(sceneId, reason);
+        _locdir.failedToMoveTo(_pendingSceneId, reason);
     }
 
     /**
@@ -394,15 +390,21 @@ public class SceneDirector extends BasicDirector
     // from interface LocationDirector.FailureHandler
     public void recoverFailedMove (int placeId)
     {
+        // if we're currently in a scene, then just stay there
+        if (_sceneId > 0) {
+            return;
+        }
+
         // we'll need this momentarily
-        int sceneId = _sceneId;
+        int justAttemptedSceneId = _pendingSceneId;
+        _pendingSceneId = -1;
 
         // clear out our now bogus scene tracking info
         clearScene();
 
         // if we were previously somewhere (and that somewhere isn't where we just tried to go),
         // try going back to that happy place
-        if (_previousSceneId != -1 && _previousSceneId != sceneId) {
+        if (_previousSceneId != -1 && _previousSceneId != justAttemptedSceneId) {
             // if we have a move handler use that
             if (_moveHandler != null) {
                 _moveHandler.recoverMoveTo(_previousSceneId);

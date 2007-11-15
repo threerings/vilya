@@ -40,23 +40,20 @@ import com.threerings.whirled.zone.data.ZoneSummary;
 import com.threerings.whirled.zone.util.ZoneUtil;
 
 /**
- * The zone director augments the scene services with the notion of zones.
- * Zones are self-contained, connected groups of scenes. The normal scene
- * director services can be used to move from scene to scene, but moving
- * to a new zone requires a special move request which can be accomplished
- * via the zone director. The zone director also makes available the zone
- * summary which provides information on the zone which can be used to
- * generate an overview map or similar.
+ * The zone director augments the scene services with the notion of zones.  Zones are
+ * self-contained, connected groups of scenes. The normal scene director services can be used to
+ * move from scene to scene, but moving to a new zone requires a special move request which can be
+ * accomplished via the zone director. The zone director also makes available the zone summary
+ * which provides information on the zone which can be used to generate an overview map or similar.
  */
 public class ZoneDirector extends BasicDirector
     implements ZoneReceiver, ZoneService.ZoneMoveListener,
                SceneDirector.MoveHandler
 {
     /**
-     * Constructs a zone director with the supplied context, and delegate
-     * scene director (which the zone director will coordinate with when
-     * moving from scene to scene). A zone director is required on the
-     * client side for systems that wish to use the zone services.
+     * Constructs a zone director with the supplied context, and delegate scene director (which the
+     * zone director will coordinate with when moving from scene to scene). A zone director is
+     * required on the client side for systems that wish to use the zone services.
      */
     public ZoneDirector (WhirledContext ctx, SceneDirector scdir)
     {
@@ -71,9 +68,8 @@ public class ZoneDirector extends BasicDirector
     }
 
     /**
-     * Returns the summary for the zone currently occupied by the client
-     * or null if the client does not currently occupy a zone (not a
-     * normal situation).
+     * Returns the summary for the zone currently occupied by the client or null if the client does
+     * not currently occupy a zone (not a normal situation).
      */
     public ZoneSummary getZoneSummary ()
     {
@@ -81,8 +77,8 @@ public class ZoneDirector extends BasicDirector
     }
 
     /**
-     * Adds a zone observer to the list. This observer will subsequently
-     * be notified of effected and failed zone changes.
+     * Adds a zone observer to the list. This observer will subsequently be notified of effected
+     * and failed zone changes.
      */
     public void addZoneObserver (ZoneObserver observer)
     {
@@ -98,9 +94,9 @@ public class ZoneDirector extends BasicDirector
     }
 
     /**
-     * Requests that this client move the specified scene in the specified
-     * zone. A request will be made and when the response is received, the
-     * location observers will be notified of success or failure.
+     * Requests that this client move the specified scene in the specified zone. A request will be
+     * made and when the response is received, the location observers will be notified of success
+     * or failure.
      */
     public boolean moveTo (int zoneId, int sceneId)
     {
@@ -108,9 +104,9 @@ public class ZoneDirector extends BasicDirector
     }
 
     /**
-     * Requests that this client move the specified scene in the specified
-     * zone. A request will be made and when the response is received, the
-     * location observers will be notified of success or failure.
+     * Requests that this client move the specified scene in the specified zone. A request will be
+     * made and when the response is received, the location observers will be notified of success
+     * or failure.
      */
     public boolean moveTo (int zoneId, int sceneId, ResultListener rl)
     {
@@ -121,25 +117,23 @@ public class ZoneDirector extends BasicDirector
             return false;
         }
 
-        // if the requested zone is the same as our current zone, we just
-        // want a regular old moveTo request
+        // if the requested zone is the same as our current zone, we just want a regular old moveTo
+        // request
         if (_summary != null && zoneId == _summary.zoneId) {
             return _scdir.moveTo(sceneId);
         }
 
-        // otherwise, we make a zoned moveTo request; prepare to move to
-        // this scene (sets up pending data)
+        // otherwise, we make a zoned moveTo request; prepare to move to this scene (sets up
+        // pending data)
         if (!_scdir.prepareMoveTo(sceneId, rl)) {
             return false;
         }
 
-        // let our zone observers know that we're attempting to switch
-        // zones
+        // let our zone observers know that we're attempting to switch zones
         notifyObservers(Integer.valueOf(zoneId));
 
-        // check the version of our cached copy of the scene to which
-        // we're requesting to move; if we were unable to load it, assume
-        // a cached version of zero
+        // check the version of our cached copy of the scene to which we're requesting to move; if
+        // we were unable to load it, assume a cached version of zero
         int sceneVers = 0;
         SceneModel pendingModel = _scdir.getPendingModel();
         if (pendingModel != null) {
@@ -170,18 +164,14 @@ public class ZoneDirector extends BasicDirector
         _previousZoneId = -1;
     }
 
-    /**
-     * Called in response to a successful {@link ZoneService#moveTo}
-     * request.
-     */
-    public void moveSucceeded (
-        int placeId, PlaceConfig config, ZoneSummary summary)
+    // from interface ZoneService.ZoneMoveListener
+    public void moveSucceeded (int placeId, PlaceConfig config, ZoneSummary summary)
     {
         if (_summary != null) {
             // keep track of our previous zone info
             _previousZoneId = _summary.zoneId;
         }
-        
+
         // keep track of the summary
         _summary = summary;
 
@@ -192,14 +182,9 @@ public class ZoneDirector extends BasicDirector
         notifyObservers(summary);
     }
 
-    /**
-     * Called in response to a successful {@link ZoneService#moveTo}
-     * request when our cached scene was out of date and the server
-     * determined that we needed some updates.
-     */
+    // from interface ZoneService.ZoneMoveListener
     public void moveSucceededWithUpdates (
-        int placeId, PlaceConfig config, ZoneSummary summary,
-        SceneUpdate[] updates)
+        int placeId, PlaceConfig config, ZoneSummary summary, SceneUpdate[] updates)
     {
         // keep track of the summary
         _summary = summary;
@@ -211,11 +196,7 @@ public class ZoneDirector extends BasicDirector
         notifyObservers(summary);
     }
 
-    /**
-     * Called in response to a successful {@link ZoneService#moveTo}
-     * request when our cached scene was out of date and the server
-     * determined that we needed an updated copy.
-     */
+    // from interface ZoneService.ZoneMoveListener
     public void moveSucceededWithScene (
         int placeId, PlaceConfig config, ZoneSummary summary, SceneModel model)
     {
@@ -229,9 +210,7 @@ public class ZoneDirector extends BasicDirector
         notifyObservers(summary);
     }
 
-    /**
-     * Called in response to a failed zoned <code>moveTo</code> request.
-     */
+    // from interface ZoneService.ZoneMoveListener
     public void requestFailed (String reason)
     {
         // let the scene director cope
@@ -261,29 +240,28 @@ public class ZoneDirector extends BasicDirector
         moveTo(zoneId, sceneId, null);
     }
 
-    /**
-     * Called when something breaks down after successfully completely a
-     * <code>moveTo</code> request.
-     */
-    public void recoverMoveTo (int sceneId)
+    // from SceneDirector.MoveHandler
+    public void recoverMoveTo (int previousSceneId)
     {
-        if (_previousZoneId != -1) {
-            moveTo(_previousZoneId, sceneId);
+        if (_summary != null) {
+            return; // if we're currently somewhere, just stay there
+        }
 
+        // otherwise if we were previously in a zone/scene, try going back there
+        if (_previousZoneId != -1) {
+            moveTo(_previousZoneId, previousSceneId);
         } else {
-            _scdir.moveTo(sceneId);
+            _scdir.moveTo(previousSceneId);
         }
     }
 
     /**
-     * Notifies observers of success or failure, depending on the type of
-     * object provided as data.
+     * Notifies observers of success or failure, depending on the type of object provided as data.
      */
     protected void notifyObservers (Object data)
     {
         // let our observers know that all is well on the western front
-        for (int i = 0; i < _observers.size(); i++) {
-            ZoneObserver obs = (ZoneObserver)_observers.get(i);
+        for (ZoneObserver obs : _observers) {
             try {
                 if (data instanceof Integer) {
                     obs.zoneWillChange(((Integer)data).intValue());
@@ -294,8 +272,8 @@ public class ZoneDirector extends BasicDirector
                 }
 
             } catch (Throwable t) {
-                Log.warning("Zone observer choked during notification " +
-                            "[data=" + data + ", obs=" + obs + "].");
+                Log.warning("Zone observer choked during notification [data=" + data +
+                            ", obs=" + obs + "].");
                 Log.logStackTrace(t);
             }
         }
@@ -310,12 +288,11 @@ public class ZoneDirector extends BasicDirector
     /** Provides access to zone services. */
     protected ZoneService _zservice;
 
-    /** A reference to the zone summary for the currently occupied
-     * zone. */
+    /** A reference to the zone summary for the currently occupied zone. */
     protected ZoneSummary _summary;
 
     /** Our zone observer list. */
-    protected ArrayList _observers = new ArrayList();
+    protected ArrayList<ZoneObserver> _observers = new ArrayList<ZoneObserver>();
 
     /** Our previous zone id. */
     protected int _previousZoneId = -1;
