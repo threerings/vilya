@@ -85,6 +85,22 @@ public class EZGameManager extends GameManager
         _winnerOids = winnerOids;
     }
 
+    @Override
+    public void playerReady (BodyObject caller)
+    {
+        // if we're rematching...
+        if (!_ezObj.isInPlay() && (_ezObj.roundId != 0)) {
+            // report to the other players that this player requested a rematch
+            int pidx = _ezObj.getPlayerIndex(caller.getVisibleName());
+            if (pidx != -1 && _playerOids[pidx] == 0) {
+                systemMessage(GAME_MESSAGE_BUNDLE,
+                    MessageBundle.tcompose("m.requested_rematch", caller.getVisibleName()));
+            }
+        }
+
+        super.playerReady(caller);
+    }
+
     /**
      * Confirms that the caller can end the game (or restart it). Requires that they are a player
      * and that the game is not in play.
