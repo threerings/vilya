@@ -58,6 +58,8 @@ import com.threerings.parlor.game.server.GameManager;
 
 import com.threerings.parlor.turn.server.TurnGameManager;
 
+import com.threerings.util.MessageBundle;
+
 import com.threerings.ezgame.data.EZGameMarshaller;
 import com.threerings.ezgame.data.EZGameObject;
 import com.threerings.ezgame.data.PropertySetEvent;
