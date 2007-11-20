@@ -105,12 +105,6 @@ public class EZGameConfig extends GameConfig
         out.writeObject(_gameDef);
     }
 
-    /** Returns true if this is a party game, false otherwise. */
-    public function isPartyGame () :Boolean
-    {
-        return getMatchType() == PARTY;
-    }
-
     // from PlaceConfig
     override public function createController () :PlaceController
     {
