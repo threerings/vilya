@@ -60,6 +60,7 @@ import com.threerings.parlor.turn.server.TurnGameManager;
 
 import com.threerings.util.MessageBundle;
 
+import com.threerings.ezgame.data.EZGameCodes;
 import com.threerings.ezgame.data.EZGameMarshaller;
 import com.threerings.ezgame.data.EZGameObject;
 import com.threerings.ezgame.data.PropertySetEvent;
@@ -71,7 +72,7 @@ import static com.threerings.ezgame.server.Log.log;
  * A manager for "ez" games.
  */
 public class EZGameManager extends GameManager
-    implements EZGameProvider, TurnGameManager
+    implements EZGameCodes, EZGameProvider, TurnGameManager
 {
     public EZGameManager ()
     {
@@ -95,8 +96,8 @@ public class EZGameManager extends GameManager
             // report to the other players that this player requested a rematch
             int pidx = _ezObj.getPlayerIndex(caller.getVisibleName());
             if (pidx != -1 && _playerOids[pidx] == 0) {
-                systemMessage(GAME_MESSAGE_BUNDLE,
-                    MessageBundle.tcompose("m.requested_rematch", caller.getVisibleName()));
+                systemMessage(EZGAME_MESSAGE_BUNDLE,
+                    MessageBundle.tcompose("m.rematch_requested", caller.getVisibleName()));
             }
         }
 
