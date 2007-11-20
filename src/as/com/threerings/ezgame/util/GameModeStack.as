@@ -1,5 +1,5 @@
 //
-// $Id: SubControl.as 271 2007-04-07 00:25:58Z dhoover $
+// $Id$
 //
 // Vilya library - tools for developing networked games
 // Copyright (C) 2002-2007 Three Rings Design, Inc., All Rights Reserved
@@ -19,7 +19,7 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-package com.threerings.ezgame {
+package com.threerings.ezgame.util {
     
 /**
  * GameModeStack implements a stack of user-specific <i>game modes</i>. Modes can be pushed on to
