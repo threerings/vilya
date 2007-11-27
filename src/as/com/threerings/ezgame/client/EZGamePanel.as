@@ -84,7 +84,9 @@ public class EZGamePanel extends Canvas
     {
         super.updateDisplayList(uw, uh);
 
-        backend.sizeChanged();
+        if (backend != null) {
+            backend.sizeChanged();
+        }
     }
 
     /**
