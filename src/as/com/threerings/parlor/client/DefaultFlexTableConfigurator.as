@@ -27,6 +27,10 @@ import mx.controls.CheckBox;
 import mx.controls.ComboBox;
 import mx.controls.Label;
 
+// TODO: we shouldn't use these here but I don't feel like a major refactor
+import com.threerings.ezgame.data.ToggleParameter;
+import com.threerings.ezgame.data.RangeParameter;
+
 import com.threerings.flex.GridUtil;
 
 import com.threerings.parlor.data.TableConfig;
@@ -42,54 +46,44 @@ import com.threerings.parlor.game.data.GameConfig;
 public class DefaultFlexTableConfigurator extends TableConfigurator
 {
     /**
-     * Create a TableConfigurator that allows for the specified configuration
-     * parameters.
+     * Create a TableConfigurator that allows for the specified configuration parameters.
      */
     public function DefaultFlexTableConfigurator (
-            desiredPlayers :int, minPlayers :int = -1, maxPlayers :int = -1,
-            allowWatchable :Boolean = true, playersXlate :String = "Players: ", 
-            watchableXlate :String = "Watchable: ", privateXlate :String = "Private: ")
+        players :RangeParameter, watchable :ToggleParameter = null, prvate :ToggleParameter = null)
     {
-        var partyGame :Boolean = (minPlayers < 0) && (maxPlayers < 0);
-        if (minPlayers < 0) {
-            minPlayers = desiredPlayers;
-        }
-        if (maxPlayers < 0) {
-            maxPlayers = desiredPlayers;
-        }
-        _config.minimumPlayerCount = minPlayers;
+        _playersParam = players;
+        _watchableParam = watchable;
+        _privateParam = prvate;
+
+        _config.minimumPlayerCount = players.minimum;
 
         // create a slider for players, if applicable
-        if (minPlayers != maxPlayers) {
-            _players = new ComboBox();
+        if (players.minimum != players.maximum) {
+            _playersBox = new ComboBox();
             var values :Array = [];
             var startDex :int = 0;
-            for (var ii :int = minPlayers; ii <= maxPlayers; ii++) {
-                if (ii == desiredPlayers) {
+            for (var ii :int = players.minimum; ii <= players.maximum; ii++) {
+                if (ii == players.start) {
                     startDex = ii;
                 }
                 values.push(ii);
             }
-            _players.dataProvider = values;
-            _players.selectedIndex = startDex;
+            _playersBox.dataProvider = values;
+            _playersBox.selectedIndex = startDex;
 
         } else {
-            _config.desiredPlayerCount = desiredPlayers;
+            _config.desiredPlayerCount = players.start;
         }
 
-        // create up the checkbox for private games, if applicable
-        if (partyGame) {
-            _privateCheck = new CheckBox();
-            _privateCheck.selected = false;
-        } else if (allowWatchable) {
+        if (watchable != null) {
             _watchableCheck = new CheckBox();
-            // default to watchable, if the game allows it.
-            _watchableCheck.selected = true;
+            _watchableCheck.selected = watchable.start;
         }
 
-        _playersXlate = playersXlate;
-        _watchableXlate = watchableXlate;
-        _privateXlate = privateXlate;
+        if (prvate != null) {
+            _privateCheck = new CheckBox();
+            _privateCheck.selected = prvate.start;
+        }
     }
 
     // documentation inherited
@@ -97,24 +91,28 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
     {
         super.createConfigInterface();
 
-        var gconf :FlexGameConfigurator =
-            (_gameConfigurator as FlexGameConfigurator);
+        var gconf :FlexGameConfigurator = (_gameConfigurator as FlexGameConfigurator);
 
-        if (_players != null) {
+        if (_playersBox != null) {
             var playerLabel :Label = new Label();
-            playerLabel.text = _playersXlate;
+            playerLabel.text = _playersParam.name;
+            playerLabel.toolTip = _playersParam.tip;
             playerLabel.styleName = "lobbyLabel";
-            gconf.addControl(playerLabel, _players);
+            gconf.addControl(playerLabel, _playersBox);
         }
 
         if (_watchableCheck != null) {
             var watchableLabel :Label = new Label();
-            watchableLabel.text = _watchableXlate;
+            watchableLabel.text = _watchableParam.name;
+            watchableLabel.toolTip = _watchableParam.tip;
             watchableLabel.styleName = "lobbyLabel";
             gconf.addControl(watchableLabel, _watchableCheck);
-        } else if (_privateCheck != null) {
+        }
+
+        if (_privateCheck != null) {
             var privateLabel :Label = new Label();
-            privateLabel.text = _privateXlate;
+            privateLabel.text = _privateParam.name;
+            privateLabel.toolTip = _privateParam.tip;
             privateLabel.styleName = "lobbyLabel";
             gconf.addControl(privateLabel, _privateCheck);
         }
@@ -123,7 +121,7 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
     // documentation inherited
     override public function isEmpty () :Boolean
     {
-        return (_players == null) && (_watchableCheck == null);
+        return (_playersBox == null) && (_watchableCheck == null) && (_privateCheck == null);
     }
 
     // documentation inherited
@@ -131,20 +129,22 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
     {
         super.flushTableConfig();
 
-        if (_players != null) {
-            _config.desiredPlayerCount = int(_players.value);
+        if (_playersBox != null) {
+            _config.desiredPlayerCount = int(_playersBox.value);
         }
-        // TODO - it is wacky for the TableConfig.privateTable to mean two different things.  
-        // It should be extended to have separate privateTable and watchableTable options.
+
+        // TODO: it is wacky for the TableConfig.privateTable to mean two different things; it
+        // should be extended to have separate privateTable and watchableTable options.
         if (_watchableCheck != null) {
             _config.privateTable = !_watchableCheck.selected;
-        } else if (_privateCheck != null) {
+        }
+        if (_privateCheck != null) {
             _config.privateTable = _privateCheck.selected;
         }
     }
 
     /** A component for configuring the number of players at the table. */
-    protected var _players :ComboBox;
+    protected var _playersBox :ComboBox;
 
     /** A checkbox to allow the table creator to specify if the table is watchable */
     protected var _watchableCheck :CheckBox;
@@ -152,9 +152,9 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
     /** A checkbox to allow the table creator to specifiy if the table is private */
     protected var _privateCheck :CheckBox;
 
-    /** Translation strings passed in by the caller */
-    protected var _playersXlate :String;
-    protected var _watchableXlate :String;
-    protected var _privateXlate :String;
+    /** Configuration passed in by the caller */
+    protected var _playersParam :RangeParameter;
+    protected var _watchableParam :ToggleParameter;
+    protected var _privateParam :ToggleParameter;
 }
 }

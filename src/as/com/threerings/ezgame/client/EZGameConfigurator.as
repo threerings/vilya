@@ -48,10 +48,22 @@ import com.threerings.ezgame.data.ToggleParameter;
  */
 public class EZGameConfigurator extends FlexGameConfigurator
 {
+    public function EZGameConfigurator (ratedParam :ToggleParameter = null)
+    {
+        _ratedParam = ratedParam;
+    }
+
     // from GameConfigurator
     override protected function gotGameConfig () :void
     {
         super.gotGameConfig();
+
+        // add an interface for checking ratedness
+        if (_ratedParam != null) {
+            _ratedCheck = new CheckBox();
+            _ratedCheck.selected = _ratedParam.start;
+            addLabeledControl(_ratedParam, _ratedCheck);
+        }
 
         var params :Array = (_config as EZGameConfig).getGameDefinition().params;
         if (params == null) {
@@ -113,6 +125,11 @@ public class EZGameConfigurator extends FlexGameConfigurator
     {
         super.flushGameConfig();
 
+        // flush ratedness
+        if (_ratedCheck != null) {
+            _config.rated = _ratedCheck.selected;
+        }
+
         // if there were any custom XML configs, flush those as well.
         if (_customConfigs.length > 0) {
             var params :StreamableHashMap = new StreamableHashMap();
@@ -151,7 +168,7 @@ public class EZGameConfigurator extends FlexGameConfigurator
         }
 
         var lbl :Label = new Label();
-        lbl.text = param.name + ":";
+        lbl.text = param.name;
         lbl.styleName = "lobbyLabel";
         lbl.toolTip = param.tip;
         control.toolTip = param.tip;
@@ -159,6 +176,12 @@ public class EZGameConfigurator extends FlexGameConfigurator
         addControl(lbl, control);
         _customConfigs.push(param.ident, control);
     }
+
+    /** The parameter to use for whether the game is rated, or null. */
+    protected var _ratedParam :ToggleParameter;
+
+    /** A toggle indicating whether the game should be rated. */
+    protected var _ratedCheck :CheckBox;
 
     /** Contains pairs of identString, control, identString, control.. */
     protected var _customConfigs :Array = [];
