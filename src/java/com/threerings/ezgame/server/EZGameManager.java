@@ -92,7 +92,7 @@ public class EZGameManager extends GameManager
     public void playerReady (BodyObject caller)
     {
         // if we're rematching...
-        if (!_ezObj.isInPlay() && (_ezObj.roundId != 0)) {
+        if (!_ezObj.isInPlay() && (_ezObj.roundId != 0) && _ezObj.players.length > 1) {
             // report to the other players that this player requested a rematch
             int pidx = _ezObj.getPlayerIndex(caller.getVisibleName());
             if (pidx != -1 && _playerOids[pidx] == 0) {
