@@ -230,7 +230,7 @@ public class TableManager
 
         // remove the mapping from this user to the table
         if (null == notePlayerRemoved(leaver.getOid(), leaver)) {
-            Log.warning("No body to table mapping to clear? [leaver=" + leaver +
+            Log.warning("No body to table mapping to clear? [leaver=" + leaver.who() +
                         ", table=" + table + "].");
         }
 
