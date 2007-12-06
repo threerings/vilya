@@ -165,16 +165,16 @@ public class Table
 
         // FFA party games have 0-length players array, and non-party games will have the players
         // who are ready-to-go for the game start.
-        Name[] players = new Name[getOccupiedCount()];
+        Name[] plist = new Name[getOccupiedCount()];
         if (players != null) {
             for (int ii = 0, dex = 0; ii < players.length; ii++) {
                 if (players[ii] != null) {
-                    players[dex++] = players[ii];
+                    plist[dex++] = players[ii];
                 }
             }
         }
 
-        return players;
+        return plist;
     }
 
     /**
@@ -191,13 +191,13 @@ public class Table
         // compress the team indexes down
         ArrayIntSet set = new ArrayIntSet();
         int[][] newTeams = new int[teams.length][];
-        Name[] players = getPlayers();
+        Name[] plist = getPlayers();
         for (int ii=0; ii < teams.length; ii++) {
             set.clear();
             for (int jj=0; jj < teams[ii].length; jj++) {
-                Name occ = players[teams[ii][jj]];
+                Name occ = plist[teams[ii][jj]];
                 if (occ != null) {
-                    set.add(ListUtil.indexOf(players, occ));
+                    set.add(ListUtil.indexOf(plist, occ));
                 }
             }
             newTeams[ii] = set.toIntArray();
