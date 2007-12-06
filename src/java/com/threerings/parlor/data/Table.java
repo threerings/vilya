@@ -21,6 +21,10 @@
 
 package com.threerings.parlor.data;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import com.samskivert.util.ArrayIntSet;
 import com.samskivert.util.ListUtil;
 import com.samskivert.util.StringUtil;
@@ -31,9 +35,11 @@ import com.threerings.util.Name;
 import com.threerings.presents.dobj.DSet;
 
 import com.threerings.crowd.data.BodyObject;
+import com.threerings.crowd.data.OccupantInfo;
 
 import com.threerings.parlor.data.ParlorCodes;
 import com.threerings.parlor.game.data.GameConfig;
+import com.threerings.parlor.game.data.GameObject;
 
 /**
  * This class represents a table that is being used to matchmake a game by the Parlor services.
@@ -51,19 +57,17 @@ public class Table
      * matchmaking mode. */
     public int gameOid = -1;
 
-    /** An array of the usernames of the occupants of this table (some slots may not be filled), or
+    /** An array of the usernames of the players of this table (some slots may not be filled), or
      * null if a party game. */
-    public Name[] occupants;
+    public Name[] players;
 
-    /** The body oids of the occupants of this table, or null if a party game.  (This is not
+    /** An array of the usernames of the non-player occupants of this game. For FFA party games
+     * this is all of a room's occupants and they are in fact players. */
+    public Name[] watchers = new Name[0];
+
+    /** The body oids of the players of this table, or null if a party game.  (This is not
      * propagated to remote instances.) */
     public transient int[] bodyOids;
-
-    /** For a running game, the total number of players. For FFA party games, this is everyone. */
-    public short playerCount;
-
-    /** For a running game, the total number of watchers. For FFA party games, this is always 0. */
-    public short watcherCount;
 
     /** The game config for the game that is being matchmade. */
     public GameConfig config;
@@ -100,18 +104,18 @@ public class Table
 
         // make room for the maximum number of players
         if (config.getMatchType() != GameConfig.PARTY) {
-            occupants = new Name[tconfig.desiredPlayerCount];
-            bodyOids = new int[occupants.length];
+            players = new Name[tconfig.desiredPlayerCount];
+            bodyOids = new int[players.length];
 
             // fill in information on the AIs
             int acount = (config.ais == null) ? 0 : config.ais.length;
             for (int ii = 0; ii < acount; ii++) {
                 // TODO: handle this naming business better
-                occupants[ii] = new Name("AI " + (ii+1));
+                players[ii] = new Name("AI " + (ii+1));
             }
 
         } else {
-            occupants = new Name[0];
+            players = new Name[0];
             bodyOids = new int[0];
         }
     }
@@ -136,9 +140,9 @@ public class Table
     public int getOccupiedCount ()
     {
         int count = 0;
-        if (occupants != null) {
-            for (int ii = 0; ii < occupants.length; ii++) {
-                if (occupants[ii] != null) {
+        if (players != null) {
+            for (int ii = 0; ii < players.length; ii++) {
+                if (players[ii] != null) {
                     count++;
                 }
             }
@@ -162,10 +166,10 @@ public class Table
         // FFA party games have 0-length players array, and non-party games will have the players
         // who are ready-to-go for the game start.
         Name[] players = new Name[getOccupiedCount()];
-        if (occupants != null) {
-            for (int ii = 0, dex = 0; ii < occupants.length; ii++) {
-                if (occupants[ii] != null) {
-                    players[dex++] = occupants[ii];
+        if (players != null) {
+            for (int ii = 0, dex = 0; ii < players.length; ii++) {
+                if (players[ii] != null) {
+                    players[dex++] = players[ii];
                 }
             }
         }
@@ -175,7 +179,7 @@ public class Table
 
     /**
      * For a team game, get the team member indices of the compressed players array returned by
-     * getPlayers().
+     * {@link #getPlayers}.
      */
     public int[][] getTeamMemberIndices ()
     {
@@ -191,7 +195,7 @@ public class Table
         for (int ii=0; ii < teams.length; ii++) {
             set.clear();
             for (int jj=0; jj < teams[ii].length; jj++) {
-                Name occ = occupants[teams[ii][jj]];
+                Name occ = players[teams[ii][jj]];
                 if (occ != null) {
                     set.add(ListUtil.indexOf(players, occ));
                 }
@@ -206,13 +210,13 @@ public class Table
      * Requests to seat the specified user at the specified position in this table.
      *
      * @param position the position in which to seat the user.
-     * @param occupant the occupant to set.
+     * @param player the player to set.
      *
      * @return null if the user was successfully seated, a string error code explaining the failure
      * if the user was not able to be seated at that position.
      */
     @ActionScript(omit=true)
-    public String setOccupant (int position, BodyObject occupant)
+    public String setPlayer (int position, BodyObject player)
     {
         // make sure the requested position is a valid one
         if (position >= tconfig.desiredPlayerCount || position < 0) {
@@ -220,24 +224,24 @@ public class Table
         }
 
         // make sure the requested position is not already occupied
-        if (occupants[position] != null) {
+        if (players[position] != null) {
             return TABLE_POSITION_OCCUPIED;
         }
 
         // otherwise all is well, stick 'em in
-        setOccupantPos(position, occupant);
+        setPlayerPos(position, player);
         return null;
     }
 
     /**
      * This method is used for party games, it does no bounds checking or verification of the
-     * player's ability to join, if you are unsure you should call 'setOccupant'.
+     * player's ability to join, if you are unsure you should call 'setPlayer'.
      */
     @ActionScript(omit=true)
-    public void setOccupantPos (int position, BodyObject occupant)
+    public void setPlayerPos (int position, BodyObject player)
     {
-        occupants[position] = occupant.getVisibleName();
-        bodyOids[position] = occupant.getOid();
+        players[position] = player.getVisibleName();
+        bodyOids[position] = player.getOid();
     }
 
     /**
@@ -247,12 +251,12 @@ public class Table
      * was never seated at the table in the first place.
      */
     @ActionScript(omit=true)
-    public boolean clearOccupant (Name username)
+    public boolean clearPlayer (Name username)
     {
-        if (occupants != null) {
-            for (int i = 0; i < occupants.length; i++) {
-                if (username.equals(occupants[i])) {
-                    clearOccupantPos(i);
+        if (players != null) {
+            for (int i = 0; i < players.length; i++) {
+                if (username.equals(players[i])) {
+                    clearPlayerPos(i);
                     return true;
                 }
             }
@@ -268,12 +272,12 @@ public class Table
      * was never seated at the table in the first place.
      */
     @ActionScript(omit=true)
-    public boolean clearOccupantByOid (int bodyOid)
+    public boolean clearPlayerByOid (int bodyOid)
     {
         if (bodyOids != null) {
             for (int i = 0; i < bodyOids.length; i++) {
                 if (bodyOid == bodyOids[i]) {
-                    clearOccupantPos(i);
+                    clearPlayerPos(i);
                     return true;
                 }
             }
@@ -282,18 +286,44 @@ public class Table
     }
 
     /**
-     * Called to clear an occupant at the specified position.  Only call this method if you know
-     * what you're doing.
+     * Called to clear a player at the specified position.  Only call this method if you know what
+     * you're doing.
      */
     @ActionScript(omit=true)
-    public void clearOccupantPos (int position)
+    public void clearPlayerPos (int position)
     {
-        occupants[position] = null;
+        players[position] = null;
         bodyOids[position] = 0;
     }
 
     /**
-     * Returns true if this table has a sufficient number of occupants that the game can be
+     * Returns true if this table contains the specified player.
+     */
+    @ActionScript(omit=true)
+    public boolean containsPlayer (Name player)
+    {
+        return (players != null && ListUtil.indexOf(players, player) != -1);
+    }
+
+    /**
+     * Called by the table manager when the game object's players have changed. Regenerates the
+     * {@link #watchers} array.
+     */
+    @ActionScript(omit=true)
+    public void updateOccupants (GameObject gameobj)
+    {
+        List<Name> wlist = Lists.newArrayList();
+        for (OccupantInfo info : gameobj.occupantInfo) {
+            if (containsPlayer(info.username)) { // skip players
+                continue;
+            }
+            wlist.add(info.username);
+        }
+        watchers = wlist.toArray(new Name[wlist.size()]);
+    }
+
+    /**
+     * Returns true if this table has a sufficient number of players that the game can be
      * started.
      */
     public boolean mayBeStarted ()
@@ -314,7 +344,7 @@ public class Table
             for (int ii=0; ii < teams.length; ii++) {
                 int teamCount = 0;
                 for (int jj=0; jj < teams[ii].length; jj++) {
-                    if (occupants[teams[ii][jj]] != null) {
+                    if (players[teams[ii][jj]] != null) {
                         teamCount++;
                     }
                 }
@@ -389,7 +419,7 @@ public class Table
         buf.append("tableId=").append(tableId);
         buf.append(", lobbyOid=").append(lobbyOid);
         buf.append(", gameOid=").append(gameOid);
-        buf.append(", occupants=").append(StringUtil.toString(occupants));
+        buf.append(", players=").append(StringUtil.toString(players));
         buf.append(", config=").append(config);
     }
 

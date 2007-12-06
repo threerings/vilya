@@ -84,7 +84,7 @@ public class TableItem
         add(tlabel, gbc);
 
         // we have one button for every "seat" at the table
-        int bcount = table.occupants.length;
+        int bcount = table.players.length;
 
         // create blank buttons for now and then we'll update everything
         // with the current state when we're done
@@ -148,19 +148,19 @@ public class TableItem
         // now enable and label the buttons accordingly
         int slength = _seats.length;
         for (int i = 0; i < slength; i++) {
-            if (table.occupants[i] == null) {
+            if (table.players[i] == null) {
                 _seats[i].setText(JOIN_LABEL);
                 _seats[i].setEnabled(!isSeated);
                 _seats[i].setActionCommand("join");
 
-            } else if (table.occupants[i].equals(_self) &&
+            } else if (table.players[i].equals(_self) &&
                        !table.inPlay()) {
                 _seats[i].setText(LEAVE_LABEL);
                 _seats[i].setEnabled(true);
                 _seats[i].setActionCommand("leave");
 
             } else {
-                _seats[i].setText(table.occupants[i].toString());
+                _seats[i].setText(table.players[i].toString());
                 _seats[i].setEnabled(false);
             }
         }

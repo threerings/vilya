@@ -55,19 +55,17 @@ public class Table
      * matchmaking mode. */
     public var gameOid :int = -1;
 
-    /** An array of the usernames of the occupants of this table (some slots may not be filled), or
+    /** An array of the usernames of the players of this table (some slots may not be filled), or
      * null if a party game. */
-    public var occupants :TypedArray;
+    public var players :TypedArray;
 
-    /** The body oids of the occupants of this table, or null if a party game.  (This is not
+    /** An array of the usernames of the non-player occupants of this game. For FFA party games
+     * this is all of a room's occupants and they are in fact players. */
+    public var watchers :TypedArray;
+
+    /** The body oids of the players of this table, or null if a party game.  (This is not
      * propagated to remote instances.) */
     public var bodyOids :TypedArray;
-
-    /** For a running game, the total number of players. For FFA party games, this is everyone. */
-    public var playerCount :int;
-
-    /** For a running game, the total number of watchers. For FFA party games, this is always 0. */
-    public var watcherCount :int;
 
     /** The game config for the game that is being matchmade. */
     public var config :GameConfig;
@@ -90,9 +88,9 @@ public class Table
     {
         // create and populate the players array
         var players :Array = new Array();
-        for (var ii :int = 0; ii < occupants.length; ii++) {
-            if (occupants[ii] != null) {
-                players.push(occupants[ii]);
+        for (var ii :int = 0; ii < players.length; ii++) {
+            if (players[ii] != null) {
+                players.push(players[ii]);
             }
         }
 
@@ -105,9 +103,9 @@ public class Table
     public function getOccupiedCount () :int
     {
         var count :int = 0;
-        if (occupants != null) {
-            for (var ii :int = 0; ii < occupants.length; ii++) {
-                if (occupants[ii] != null) {
+        if (players != null) {
+            for (var ii :int = 0; ii < players.length; ii++) {
+                if (players[ii] != null) {
                     count++;
                 }
             }
@@ -133,7 +131,7 @@ public class Table
             var subTeams :Array = (teams[ii] as Array);
             var newSubTeams :TypedArray = TypedArray.create(int);
             for (var jj :int = 0; jj < subTeams.length; jj++) {
-                var occ :Name = (occupants[(subTeams[jj] as int)] as Name);
+                var occ :Name = (players[(subTeams[jj] as int)] as Name);
                 if (occ != null) {
                     newSubTeams.push(ArrayUtil.indexOf(players, occ));
                 }
@@ -146,7 +144,7 @@ public class Table
     }
 
     /**
-     * Returns true if this table has a sufficient number of occupants that the game can be
+     * Returns true if this table has a sufficient number of players that the game can be
      * started.
      */
     public function mayBeStarted () :Boolean
@@ -168,7 +166,7 @@ public class Table
                 var teamCount :int = 0;
                 var members :Array = (teams[ii] as Array);
                 for (var jj :int = 0; jj < members.length; jj++) {
-                    if (occupants[members[jj]] != null) {
+                    if (players[members[jj]] != null) {
                         teamCount++;
                     }
                 }
@@ -240,9 +238,8 @@ public class Table
         tableId = ins.readInt();
         lobbyOid = ins.readInt();
         gameOid = ins.readInt();
-        occupants = (ins.readObject() as TypedArray);
-        playerCount = ins.readShort();
-        watcherCount = ins.readShort();
+        players = (ins.readObject() as TypedArray);
+        watchers = (ins.readObject() as TypedArray);
         config = (ins.readObject() as GameConfig);
         tconfig = (ins.readObject() as TableConfig);
     }
@@ -253,9 +250,8 @@ public class Table
         out.writeInt(tableId);
         out.writeInt(lobbyOid);
         out.writeInt(gameOid);
-        out.writeObject(occupants);
-        out.writeShort(playerCount);
-        out.writeShort(watcherCount);
+        out.writeObject(players);
+        out.writeObject(watchers);
         out.writeObject(config);
         out.writeObject(tconfig);
     }
@@ -268,7 +264,8 @@ public class Table
         buf.append("tableId=").append(tableId);
         buf.append(", lobbyOid=").append(lobbyOid);
         buf.append(", gameOid=").append(gameOid);
-        buf.append(", occupants=").append(occupants == null ? "<null?>" : occupants.join());
+        buf.append(", players=").append(players == null ? "<null?>" : players.join());
+        buf.append(", watchers=").append(watchers == null ? "<null?>" : watchers.join());
         buf.append(", config=").append(config);
     }
 

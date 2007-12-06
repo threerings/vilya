@@ -129,7 +129,7 @@ public class TableManager
         if (table.bodyOids != null && table.bodyOids.length > 0) {
             // stick the creator into the first non-AI position
             int cpos = (config.ais == null) ? 0 : config.ais.length;
-            String error = table.setOccupant(cpos, creator);
+            String error = table.setPlayer(cpos, creator);
             if (error != null) {
                 Log.warning("Unable to add creator to position zero of table!? [table=" + table +
                             ", creator=" + creator + ", error=" + error + "].");
@@ -189,7 +189,7 @@ public class TableManager
         }
 
         // request that the user be added to the table at that position
-        String error = table.setOccupant(position, joiner);
+        String error = table.setPlayer(position, joiner);
         // if that failed, report the error
         if (error != null) {
             throw new InvocationException(error);
@@ -199,7 +199,7 @@ public class TableManager
         if (table.shouldBeStarted()) {
             createGame(table);
         } else {
-            // make a mapping from this occupant to this table
+            // make a mapping from this player to this table
             notePlayerAdded(table, joiner);
         }
 
@@ -224,7 +224,7 @@ public class TableManager
         }
 
         // request that the user be removed from the table
-        if (!table.clearOccupant(leaver.getVisibleName())) {
+        if (!table.clearPlayer(leaver.getVisibleName())) {
             throw new InvocationException(NOT_AT_TABLE);
         }
 
@@ -235,7 +235,7 @@ public class TableManager
         }
 
         // either update or delete the table depending on whether or not we just removed the last
-        // occupant
+        // player
         if (table.isEmpty()) {
             purgeTable(table);
         } else {
@@ -376,7 +376,7 @@ public class TableManager
         gameobj.setIsPrivate(table.tconfig.privateTable);
 
         if (table.bodyOids != null) {
-            // clear the occupant to table mappings as this game is underway
+            // clear the player to table mappings as this game is underway
             for (int ii = 0; ii < table.bodyOids.length; ii++) {
                 if (table.bodyOids[ii] != 0) {
                     notePlayerRemoved(table.bodyOids[ii]);
@@ -411,7 +411,7 @@ public class TableManager
     }
 
     /**
-     * Called when the occupants in a game change: publish new info.
+     * Called when the occupants in a game change: publishes new info.
      */
     protected void updateOccupants (int gameOid)
     {
@@ -426,16 +426,9 @@ public class TableManager
             return;
         }
 
+        // update this table's occupants information and update the table
         GameObject gameObj = (GameObject) PresentsServer.omgr.getObject(gameOid);
-        table.watcherCount = (short) gameObj.occupants.size();
-
-        // TODO: this will become more complicated
-        // As we separate watchers and players
-
-        // TODO: for SEATED_CONTINUOUS, we will probably be showing the
-        // folks in the game...
-
-        // finally, update the table
+        table.updateOccupants(gameObj);
         _tlobj.updateTables(table);
     }
 
@@ -445,21 +438,21 @@ public class TableManager
      */
     protected void bodyLeft (int bodyOid)
     {
-        // look up the table to which this occupant is mapped
+        // look up the table to which this player is mapped
         Table pender = notePlayerRemoved(bodyOid);
         if (pender == null) {
             return;
         }
 
-        // remove this occupant from the table
-        if (!pender.clearOccupantByOid(bodyOid)) {
+        // remove this player from the table
+        if (!pender.clearPlayerByOid(bodyOid)) {
             Log.warning("Attempt to remove body from mapped table failed [table=" + pender +
                         ", bodyOid=" + bodyOid + "].");
             return;
         }
 
         // either update or delete the table depending on whether or not we just removed the last
-        // occupant
+        // player
         if (pender.isEmpty()) {
             purgeTable(pender);
         } else {

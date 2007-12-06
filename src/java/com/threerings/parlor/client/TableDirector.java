@@ -21,7 +21,6 @@
 
 package com.threerings.parlor.client;
 
-import com.samskivert.util.ListUtil;
 import com.samskivert.util.ObjectUtil;
 import com.samskivert.util.ObserverList;
 
@@ -282,7 +281,7 @@ public class TableDirector extends BasicDirector
         }
 
         // All this to check to see if we created a party game (and should now enter).
-        if (table.gameOid != -1 && table.occupants.length == 0) {
+        if (table.gameOid != -1 && table.players.length == 0) {
             _ctx.getParlorDirector().gameIsReady(table.gameOid); // let's boogie!
         }
     }
@@ -309,7 +308,7 @@ public class TableDirector extends BasicDirector
 
         // look for our username in the occupants array
         BodyObject self = (BodyObject)_ctx.getClient().getClientObject();
-        if (ListUtil.contains(table.occupants, self.getVisibleName())) {
+        if (table.containsPlayer(self.getVisibleName())) {
             _ourTable = table;
         }
 

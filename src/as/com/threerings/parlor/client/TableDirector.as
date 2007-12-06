@@ -318,7 +318,7 @@ public class TableDirector extends BasicDirector
         }
 
         // All this to check to see if we created a party game (and should now enter).
-        if (table.gameOid != -1 && (table.occupants.length == 0)) {
+        if (table.gameOid != -1 && (table.players.length == 0)) {
             // let's boogie!
             _pctx.getParlorDirector().gameIsReady(table.gameOid);
         }
@@ -343,9 +343,9 @@ public class TableDirector extends BasicDirector
             _ourTable = null;
         }
 
-        // look for our username in the occupants array
+        // look for our username in the players array
         var self :BodyObject = (_pctx.getClient().getClientObject() as BodyObject);
-        if (ArrayUtil.contains(table.occupants, self.getVisibleName())) {
+        if (ArrayUtil.contains(table.players, self.getVisibleName())) {
             _ourTable = table;
         }
 
