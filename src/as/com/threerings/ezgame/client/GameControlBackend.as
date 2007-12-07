@@ -420,7 +420,8 @@ public class GameControlBackend
                     try {
                         fn(ObjectMarshaller.decode(cookie.cookie));
                     } catch (err :Error) {
-                        // cope
+                        log.warning("Error in user-code: " + err);
+                        log.logStackTrace(err);
                     }
                 }
             }
