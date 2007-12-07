@@ -43,15 +43,6 @@ public class EZGameTurnDelegate extends TurnGameManagerDelegate
     }
 
     @Override
-    public void gameWillReset ()
-    {
-        super.gameWillReset();
-
-        // make it nobody's turn
-        _turnGame.setTurnHolder(null);
-    }
-
-    @Override
     protected void setFirstTurnHolder ()
     {
         // make it nobody's turn

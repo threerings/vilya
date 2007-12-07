@@ -646,6 +646,9 @@ public class EZGameManager extends GameManager
         // because the super's version of this function will immediately increment it, and then
         // distribute the new incremented value.
         _ezObj.roundId = 0;
+        // clear out the turn holder in case we're restarting
+        _ezObj.setTurnHolder(null);
+
         super.gameWillStart();
     }
 
