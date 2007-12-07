@@ -417,8 +417,10 @@ public class GameControlBackend
             if (arr != null) {
                 delete _cookieCallbacks[cookie.playerId];
                 for each (var fn :Function in arr) {
+                    // we want to decode every time, in case usercode mangles the value
+                    var decodedValue :Object = ObjectMarshaller.decode(cookie.cookie);
                     try {
-                        fn(ObjectMarshaller.decode(cookie.cookie));
+                        fn(decodedValue);
                     } catch (err :Error) {
                         log.warning("Error in user-code: " + err);
                         log.logStackTrace(err);
