@@ -62,7 +62,7 @@ public class EZGameController extends GameController
         // if we're not a player, we don't need to report anything to the server
         var bobj :BodyObject = (_ctx.getClient().getClientObject() as BodyObject);
         if (_gconfig.getMatchType() != GameConfig.PARTY &&
-            _gobj.getPlayerIndex(bobj.getVisibleName()) != -1) {
+            _gobj.getPlayerIndex(bobj.getVisibleName()) == -1) {
             return;
         }
 
