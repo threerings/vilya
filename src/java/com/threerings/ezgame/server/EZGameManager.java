@@ -564,16 +564,6 @@ public class EZGameManager extends GameManager
         _ezObj = (EZGameObject) _plobj;
         _ezObj.setEzGameService(
             (EZGameMarshaller) CrowdServer.invmgr.registerDispatcher(new EZGameDispatcher(this)));
-
-        // if we don't need the no-show timer, start right away (but allow the manager startup
-        // process to finish before doing so)
-        if (!needsNoShowTimer()) {
-            CrowdServer.omgr.postRunnable(new Runnable() {
-                public void run () {
-                    startGame();
-                }
-            });
-        }
     }
 
     @Override // from PlaceManager
@@ -616,6 +606,27 @@ public class EZGameManager extends GameManager
         // nix any of this player's cookies
         if (_ezObj.userCookies != null && _ezObj.userCookies.containsKey(bodyOid)) {
             _ezObj.removeFromUserCookies(bodyOid);
+        }
+    }
+
+    @Override // from PlaceManager
+    protected void playersAllHere ()
+    {
+        switch (getMatchType()) {
+        default:
+        case GameConfig.SEATED_GAME:
+            super.playersAllHere();
+            break;
+
+        case GameConfig.PARTY:
+        case GameConfig.SEATED_CONTINUOUS:
+            // the first time the first player calls playerReady() in a party or seated continuous
+            // game, we start the game; after that it's up to the game to restart itself
+            if (!_haveAutoStarted && _gameobj.state == EZGameObject.PRE_GAME) {
+                _haveAutoStarted = true;
+                startGame();
+            }
+            break;
         }
     }
 
@@ -778,6 +789,10 @@ public class EZGameManager extends GameManager
 
     /** Handles the storage of our user cookies; lazily initialized. */
     protected GameCookieManager _cookMgr;
+
+    /** Tracks whether or not we've auto-started a non-seated game. Unfortunately there's no way to
+     * derive this from existing game state. */
+    protected boolean _haveAutoStarted;
 
     /** The minimum delay a ticker can have. */
     protected static final int MIN_TICKER_DELAY = 50;
