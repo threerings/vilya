@@ -540,7 +540,8 @@ public class GameControlBackend
     }
 
     /**
-     * Called by the client code when it is ready for the game to be started.
+     * Called by the client code when it is ready for the game to be started (if called before the
+     * game ever starts) or rematched (if called after the game has ended).
      */
     protected function playerReady_v1 () :void
     {

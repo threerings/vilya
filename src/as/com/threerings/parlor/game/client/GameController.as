@@ -95,14 +95,15 @@ public /*abstract*/ class GameController extends PlaceController
         // and add ourselves as a listener
         _gobj.addListener(this);
 
-        // we don't want to claim to be finished until any derived classes that overrode this
-        // method have executed, so we'll queue up a runnable here that will let the game manager
-        // know that we're ready on the next pass through the distributed event loop
-        log.info("Entering game " + _gobj.which() + ".");
-        if (_gobj.getPlayerIndex(bobj.getVisibleName()) != -1) {
-            // finally let the game manager know that we're ready to roll
+        // potentially let the game manager know that we're ready to roll
+        if (shouldAutoPlayerReady(bobj)) {
+            // we don't want to claim to be finished until any derived classes that overrode this
+            // method have executed, so we'll queue up a runnable here that will let the game
+            // manager know that we're ready on the next pass through the distributed event loop
             _ctx.getClient().callLater(playerReady);
         }
+
+        log.info("Entered game " + _gobj.which() + ".");
     }
 
     /**
@@ -220,6 +221,14 @@ public /*abstract*/ class GameController extends PlaceController
             return true;
         }
         return false;
+    }
+
+    /**
+     * Returns true if we should automatically call playerReady() in willEnterPlace().
+     */
+    protected function shouldAutoPlayerReady (bobj :BodyObject) :Boolean
+    {
+        return (_gobj.getPlayerIndex(bobj.getVisibleName()) != -1);
     }
 
     /**

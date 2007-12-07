@@ -34,6 +34,7 @@ import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.util.CrowdContext;
 
 import com.threerings.parlor.game.client.GameController;
+import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.game.data.GameObject;
 
 import com.threerings.parlor.turn.client.TurnGameController;
@@ -58,6 +59,13 @@ public class EZGameController extends GameController
      */
     public function userCodeIsConnected (autoReady :Boolean) :void
     {
+        // if we're not a player, we don't need to report anything to the server
+        var bobj :BodyObject = (_ctx.getClient().getClientObject() as BodyObject);
+        if (_gconfig.getMatchType() != GameConfig.PARTY &&
+            _gobj.getPlayerIndex(bobj.getVisibleName()) != -1) {
+            return;
+        }
+
         if (autoReady) {
             // let the game manager know that we're here and we want to start the game now
             playerIsReady();
@@ -100,6 +108,14 @@ public class EZGameController extends GameController
     }
 
     // from GameController
+    override protected function shouldAutoPlayerReady (bobj :BodyObject) :Boolean
+    {
+        // we don't want to auto-player ready in willEnterPlace(), we'll do it ourselves after the
+        // client code has connected
+        return false;
+    }
+
+    // from GameController
     override public function attributeChanged (event :AttributeChangedEvent) :void
     {
         var name :String = event.getName();
@@ -113,22 +129,6 @@ public class EZGameController extends GameController
             }
         } else {
             super.attributeChanged(event);
-        }
-    }
-
-    // from GameController
-    override protected function playerReady () :void
-    {
-        // we require the user to be connected, and we redundantly only do this if the user is in
-        // the players array
-        if (_panel.backend.isConnected()) {
-            var bobj :BodyObject = (_ctx.getClient().getClientObject() as BodyObject);
-            if (_gobj.getPlayerIndex(bobj.getVisibleName()) != -1) {
-                super.playerReady();
-            }
-
-        } else {
-            log.debug("Waiting to call playerReady, userCode not yet connected.");
         }
     }
 
