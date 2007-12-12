@@ -457,9 +457,9 @@ public class EZGameControl extends BaseControl
     }
 
     /**
-     * Start the ticker with the specified name. It will deliver messages to the game object at the
-     * specified delay, the value of each message being a single integer, starting with 0 and
-     * increasing by one with each messsage.
+     * Start the ticker with the specified name. The ticker will deliver messages to all connected 
+     * clients at the specified delay. The value of each message is a single integer, 
+     * starting with 0 and increasing by 1 with each messsage.
      */
     public function startTicker (tickerName :String, msOfDelay :int) :void
     {
