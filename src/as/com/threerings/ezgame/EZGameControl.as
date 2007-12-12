@@ -428,7 +428,7 @@ public class EZGameControl extends BaseControl
     /**
      * Checks to see if the dictionary for the given locale contains the given word.
      *
-     * @param RFC 3066 string that represents language settings
+     * @param locale RFC 3066 string that represents language settings
      * @param dictionary the dictionary to use, or null for the default.
      *                   TODO: document possible parameters.
      * @param word the string contains the word to be checked
@@ -448,6 +448,8 @@ public class EZGameControl extends BaseControl
      * property, except that the value will not be saved- it will merely end up coming out as a
      * MessageReceivedEvent.
      *
+     * @param messageName The message to send.
+     * @param value The value to attach to the message.
      * @param playerId if 0 (or unset), sends to all players, otherwise the message will be private
      * to just one player
      */
