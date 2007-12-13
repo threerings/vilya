@@ -195,7 +195,7 @@ public class Table
         for (int ii=0; ii < teams.length; ii++) {
             set.clear();
             for (int jj=0; jj < teams[ii].length; jj++) {
-                Name occ = plist[teams[ii][jj]];
+                Name occ = players[teams[ii][jj]];
                 if (occ != null) {
                     set.add(ListUtil.indexOf(plist, occ));
                 }
