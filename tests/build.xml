@@ -112,6 +112,7 @@
       <batchtest>
         <fileset dir="${src.dir}">
           <include name="**/*Test.java"/>
+          <exclude name="**/xml/**/*Test.java" unless="build.xml"/>
         </fileset>
       </batchtest>
     </junit>
