@@ -28,7 +28,7 @@ import java.nio.LongBuffer;
 
 import com.samskivert.util.StringUtil;
 
-import com.threerings.parlor.Log;
+import static com.threerings.parlor.Log.log;
 
 /**
  * Used to keep track of the percentile distribution of positive values (generally puzzle scores).
@@ -40,8 +40,6 @@ public class Percentiler
      */
     public Percentiler ()
     {
-        _total = 0;
-        _max = 1;
     }
 
     /**
@@ -49,14 +47,26 @@ public class Percentiler
      */
     public Percentiler (byte[] data)
     {
-        // decode the data
         ByteBuffer in = ByteBuffer.wrap(data);
+
+        // read our int data
         IntBuffer iin = in.asIntBuffer();
         _max = iin.get();
         iin.get(_counts);
-        in.position((BUCKET_COUNT+1) * INT_SIZE);
+        in.position(iin.position() * INT_SIZE);
+
+        // read our long data
         LongBuffer lin = in.asLongBuffer();
         _snapTotal = (_total = lin.get());
+        in.position(iin.position() * INT_SIZE + lin.position() * 2 * INT_SIZE);
+
+        // read our min value (which was added afterwards and must do some jockeying to maintain
+        // backwards compatibility)
+        if (in.position() == in.limit()) {
+            _min = 0; // legacy
+        } else {
+            _min = in.asIntBuffer().get();
+        }
 
         // compute our percentiles
         recomputePercentiles();
@@ -77,42 +87,49 @@ public class Percentiler
      */
     public void recordValue (float value, boolean logNewMax)
     {
-        // if this value is larger than our maximum value, we need to redistribute our buckets
-        if (value > _max) {
-            // determine what our new maximum should be: twenty percent again larger than this
-            // newly seen maximum and rounded to an integer value
-            int newmax = (int)Math.ceil(value*1.2);
-            float newdelta = (float)newmax / BUCKET_COUNT;
+        // if this is the first value ever recorded; note our min and max
+        if (_total == 0) {
+            _min = (int)Math.floor(value);
+            _max = Math.max((int)Math.ceil(value), _min+1);
+        }
+
+        // if this value is outside our bounds, we need to redistribute our buckets
+        if (value < _min || value > _max) {
+            // expand by 20% in the direction of either our new minimum or new maximum
+            int newmin = (value < _min) ? (_max - (int)Math.ceil((_max - value) * 1.2f)) : _min;
+            int newmax = (value > _max) ? (_min + (int)Math.ceil((value - _min) * 1.2f)) : _max;
 
             if (logNewMax) {
-                Log.info("Resizing [newmax=" + newmax + ", oldmax=" + _max + "].");
-                if (newmax > 2 * _max) {
-                    Log.info("Holy christ! Big newmax [value=" + value + ", oldmax=" + _max + "].");
-                }
+                log.info("Resizing [total=" + _total + ", new=" + newmin + ":" + newmax +
+                         ", old=" + _min + ":" + _max + "].");
             }
 
             // create a new counts array and map the old array to the new
-            float delta = (float)_max / BUCKET_COUNT;
+            float ndelta = (newmax - newmin) / (float)BUCKET_COUNT;
+            float odelta = (_max - _min) / (float)BUCKET_COUNT;
             int[] counts = new int[BUCKET_COUNT];
-            float oval = delta, nval = newdelta;
-            for (int ii = 0, ni = 0; ii < BUCKET_COUNT; ii++, oval += delta) {
-                // if this old bucket is entirely contained within a new bucket, add all of its
-                // counts to the new bucket
-                if (oval <= nval) {
-                    counts[ni] += _counts[ii];
 
+            for (int ii = 0; ii < BUCKET_COUNT; ii++) {
+                // determine the first new bucket that contains some or all of the old bucket
+                float obot = _min + odelta * ii;
+                int newidx = (int)Math.floor((obot - newmin) / ndelta);
+
+                // compute how much of this bucket (if any) spills over into the next bucket
+                float newoff = (float)Math.IEEEremainder(obot - newmin, ndelta);
+                float nextfrac = (newoff + odelta) - ndelta;
+
+                // now put this bucket's contents into either one or two new buckets
+                if (nextfrac <= 0 || newidx == BUCKET_COUNT-1) {
+                    counts[newidx] += _counts[ii];
                 } else {
-                    // otherwise, we need to add the appropriate fraction of this bucket's counts
-                    // to the two new buckets into which it falls
-                    float fraction = (nval - (oval - delta)) / delta;
-                    int lesser = Math.round(_counts[ii] * fraction);
-                    counts[ni] += lesser;
-                    counts[++ni] += (_counts[ii] - lesser);
-                    nval += newdelta;
+                    int next = Math.round(_counts[ii] * nextfrac / odelta);
+                    counts[newidx] += (_counts[ii] - next);
+                    counts[newidx+1] += next;
                 }
             }
 
             // put the remapped histogram into place
+            _min = newmin;
             _max = newmax;
             _counts = counts;
 
@@ -123,8 +140,6 @@ public class Percentiler
         // increment the bucket associated with this value
         _counts[toBucketIndex(value)]++;
         _total++;
-
-//         Log.info("Recorded [value=" + value + ", total=" + _total + "].");
 
         // see if it's time to recompute
         if (_nextRecomp-- <= 0) {
@@ -179,7 +194,7 @@ public class Percentiler
     public float getRequiredScore (int percentile)
     {
         percentile = Math.max(0, Math.min(99, percentile)); // bound this!
-        return _reverse[percentile] * ((float)_max / BUCKET_COUNT);
+        return _reverse[percentile] * ((float)(_max - _min) / BUCKET_COUNT);
     }
 
     /**
@@ -188,6 +203,14 @@ public class Percentiler
     public int getMaxScore ()
     {
         return _max;
+    }
+
+    /**
+     * Returns the smallest score seen by this percentiler.
+     */
+    public int getMinScore ()
+    {
+        return _min;
     }
 
     /**
@@ -238,14 +261,23 @@ public class Percentiler
      */
     public byte[] toBytes ()
     {
-        byte[] data = new byte[(BUCKET_COUNT+3) * INT_SIZE];
+        byte[] data = new byte[(BUCKET_COUNT+4) * INT_SIZE];
         ByteBuffer out = ByteBuffer.wrap(data);
+
+        // write our int data
         IntBuffer iout = out.asIntBuffer();
         iout.put(_max);
         iout.put(_counts);
-        out.position((BUCKET_COUNT+1) * INT_SIZE);
+        out.position(iout.position() * INT_SIZE);
+
+        // write our long data
         LongBuffer lout = out.asLongBuffer();
         lout.put(_total);
+        out.position(iout.position() * INT_SIZE + lout.position() * 2 * INT_SIZE);
+
+        // write our min value (added later so we can't write it above like we wish we could)
+        out.asIntBuffer().put(_min);
+
         return data;
     }
 
@@ -256,6 +288,7 @@ public class Percentiler
     {
         StringBuilder buf = new StringBuilder();
         buf.append("[total=").append(_total);
+        buf.append(", min=").append(_min);
         buf.append(", max=").append(_max);
         buf.append(", pcts=(");
         for (int ii = 0; ii < 10; ii++) {
@@ -272,9 +305,9 @@ public class Percentiler
      */
     public void dumpGnuPlot (PrintStream out)
     {
-        for (int ii = 0; ii < 100; ii++) {
-            float score = (float)_max*ii/100;
-            out.println(score + " " + _percentile[ii] + " " + _counts[ii]);
+        float delta = (_max - _min) / (float)BUCKET_COUNT;
+        for (int ii = 0; ii < BUCKET_COUNT; ii++) {
+            out.println((_min + ii * delta) + " " + _percentile[ii] + " " + _counts[ii]);
         }
     }
 
@@ -325,7 +358,7 @@ public class Percentiler
 
         // print out a scale along the very bottom
         out.println("");
-        out.println("total: " + _total + " max: " + _max +
+        out.println("total: " + _total + " min: " + _min + " max: " + _max +
                     " delta: " + ((float)_max / BUCKET_COUNT));
     }
 
@@ -343,9 +376,10 @@ public class Percentiler
      */
     protected final int toBucketIndex (float value)
     {
-        int idx = Math.min(Math.round(value * BUCKET_COUNT / _max), 99);
+        int idx = Math.round((value - _min) * BUCKET_COUNT / (_max - _min));
+        idx = Math.min(idx, BUCKET_COUNT-1);
         if (idx < 0 || idx >= BUCKET_COUNT) {
-            Log.warning("'" + value + "' caused bogus bucket index (" + idx + ") to be computed.");
+            log.warning("'" + value + "' caused bogus bucket index (" + idx + ") to be computed.");
             Thread.dumpStack();
             return 0;
         }
@@ -357,6 +391,9 @@ public class Percentiler
 
     /** The value of {@link #_total} at creation time or as of a call to {@link #clearModified}. */
     protected long _snapTotal;
+
+    /** The minimum value seen by this percentiler. */
+    protected int _min;
 
     /** The maximum value seen by this percentiler. */
     protected int _max;
