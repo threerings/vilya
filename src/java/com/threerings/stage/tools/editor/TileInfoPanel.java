@@ -386,7 +386,7 @@ public class TileInfoPanel extends JSplitPane
 
         // now select the previously selected item, or the first...
         if (_selected == null) {
-            _selected = (DefaultMutableTreeNode) root.getFirstLeaf();
+            _selected = root.getFirstLeaf();
         }
         _tsettree.setSelectionPath(new TreePath(_selected.getPath()));
     }

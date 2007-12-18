@@ -48,7 +48,7 @@ public class PortalTool extends MouseInputAdapter
     public void init (EditorScenePanel panel, int centerx, int centery)
     {
         _panel = panel;
-        _scene = (StageScene)_panel.getScene();
+        _scene = _panel.getScene();
 
         // adjust the center screen coordinate so that it is positioned at
         // the closest full coordinate where a portal may be placed

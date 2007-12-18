@@ -128,11 +128,11 @@ public class EditorScrollBox extends ScrollBox
         int horz = _horz.getMaximum() - _horz.getMinimum();
         int vert = _vert.getMaximum() - _vert.getMinimum();
         int height = MAX_HEIGHT;
-        int width = (int) Math.round(horz * (((float) height) / vert));
+        int width = Math.round(horz * (((float) height) / vert));
 
         int maxwidth = getParent().getWidth();
         if (maxwidth > 0 && width > maxwidth) {
-            height = (int) Math.round(height * (((float) maxwidth) / width));
+            height = Math.round(height * (((float) maxwidth) / width));
             width = maxwidth;
         }
 

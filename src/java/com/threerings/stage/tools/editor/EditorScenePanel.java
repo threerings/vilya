@@ -341,7 +341,7 @@ public class EditorScenePanel extends StageScenePanel
         }
 
         // pass location information on to the dialog
-        _dialogPortal.prepare((StageScene)_scene, portal);
+        _dialogPortal.prepare(_scene, portal);
 
         // allow the user to edit the info
         EditorDialogUtil.display(_frame, _dialogPortal);
@@ -965,12 +965,11 @@ public class EditorScenePanel extends StageScenePanel
     {
         if (tile instanceof ObjectTile) {
             // create a temporary scene object for this tile
-            SceneObject nobj = new SceneObject(this, new ObjectInfo(0, x, y),
-                                               (ObjectTile)tile);
+            SceneObject nobj = new SceneObject(this, new ObjectInfo(0, x, y), (ObjectTile)tile);
             // report invalidity if overlaps any existing objects
             int ocount = _vizobjs.size();
             for (int ii = 0; ii < ocount; ii++) {
-                SceneObject scobj = (SceneObject)_vizobjs.get(ii);
+                SceneObject scobj = _vizobjs.get(ii);
                 if (scobj.objectFootprintOverlaps(nobj)) {
                     return false;
                 }
