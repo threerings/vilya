@@ -82,23 +82,20 @@ public class DictionaryManager
     public void isLanguageSupported (final String locale,
                                      final InvocationService.ResultListener listener)
     {
-        // TODO: once we have file paths set up, change this to match
-        // against dictionary files
-        listener.requestProcessed(locale.toLowerCase().startsWith("en"));
+        // TODO: once we have file paths set up, change this to match against dictionary files
+        listener.requestProcessed(locale != null && locale.toLowerCase().startsWith("en"));
     }
 
     /**
      * Retrieves a set of letters from a language definition file, and returns a random sampling of
      * /count/ elements.
      */
-    // TODO: honor the dictionary parameter
-    public void getLetterSet (
-        final String locale, final String dictionary, final int count,
-        final InvocationService.ResultListener listener)
+    public void getLetterSet (final String locale, final String dictionary, final int count,
+                              final InvocationService.ResultListener listener)
     {
         CrowdServer.invoker.postUnit(new Invoker.Unit("DictionaryManager.getLetterSet") {
             public boolean invoke () {
-                Dictionary dict = getDictionary(locale);
+                Dictionary dict = getDictionary(locale, dictionary);
                 char[] chars = dict.randomLetters(count);
                 StringBuilder sb = new StringBuilder();
                 for (char c : chars) {
@@ -119,14 +116,12 @@ public class DictionaryManager
     /**
      * Checks if the specified word exists in the given language
      */
-    // TODO: honor the dictionary parameter
-    public void checkWord (
-        final String locale, final String dictionary, final String word,
-        final InvocationService.ResultListener listener)
+    public void checkWord (final String locale, final String dictionary, final String word,
+                           final InvocationService.ResultListener listener)
     {
         CrowdServer.invoker.postUnit(new Invoker.Unit("DictionaryManager.checkWord") {
             public boolean invoke () {
-                Dictionary dict = getDictionary(locale);
+                Dictionary dict = getDictionary(locale, dictionary);
                 _result = (dict != null && dict.contains(word));
                 return true;
             }
@@ -149,8 +144,13 @@ public class DictionaryManager
      * Retrieves the dictionary object for a given locale.  Forces the dictionary file to be
      * loaded, if it hasn't already.
      */
-    protected Dictionary getDictionary (String locale)
+    protected Dictionary getDictionary (String locale, String dictionary)
     {
+        if (locale == null) {
+            return null;
+        }
+
+        // TODO: honor the dictionary parameter
         locale = locale.toLowerCase();
         if (!_dictionaries.containsKey(locale)) {
             String path = _prefix + "/" + locale + ".wordlist.gz";
