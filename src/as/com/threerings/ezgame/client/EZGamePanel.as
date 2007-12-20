@@ -47,7 +47,7 @@ public class EZGamePanel extends Canvas
     implements PlaceView
 {
     /** The game object backend. */
-    public var backend :GameControlBackend;
+    public var backend :EZGameBackend;
 
     public function EZGamePanel (ctx :CrowdContext, ctrl :EZGameController)
     {
@@ -92,9 +92,9 @@ public class EZGamePanel extends Canvas
     /**
      * Creates the backend object that will handle requests from user code.
      */
-    protected function createBackend () :GameControlBackend
+    protected function createBackend () :EZGameBackend
     {
-        return new GameControlBackend(_ctx, _ezObj, _ctrl);
+        return new EZGameBackend(_ctx, _ezObj, _ctrl);
     }
 
     protected function configureGameView (view :GameContainer) :void

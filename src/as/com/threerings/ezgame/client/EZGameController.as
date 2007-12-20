@@ -54,8 +54,7 @@ public class EZGameController extends GameController
     }
 
     /**
-     * This is called by the GameControlBackend once it has initialized and made contact with
-     * usercode.
+     * This is called by the EZGameBackend once it has initialized and made contact with usercode.
      */
     public function userCodeIsConnected (autoReady :Boolean) :void
     {
@@ -77,8 +76,8 @@ public class EZGameController extends GameController
     }
 
     /**
-     * Called by the GameControlBackend when the game is ready to start. If the game has ended,
-     * this can be called by all clients to start the game anew.
+     * Called by the EZGameBackend when the game is ready to start. If the game has ended, this can
+     * be called by all clients to start the game anew.
      */
     public function playerIsReady () :void
     {

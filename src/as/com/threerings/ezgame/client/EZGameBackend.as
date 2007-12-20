@@ -89,13 +89,12 @@ import com.threerings.ezgame.data.UserCookie;
 /**
  * Manages the backend of the game.
  */
-public class GameControlBackend
+public class EZGameBackend
     implements MessageListener, SetListener, ElementUpdateListener, PropertySetListener, ChatDisplay
 {
     public var log :Log = Log.getLog(this);
 
-    public function GameControlBackend (
-        ctx :CrowdContext, ezObj :EZGameObject, ctrl :EZGameController)
+    public function EZGameBackend (ctx :CrowdContext, ezObj :EZGameObject, ctrl :EZGameController)
     {
         _ctx = ctx;
         _ezObj = ezObj;
