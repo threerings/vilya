@@ -46,9 +46,9 @@ public class SizeChangedEvent extends EZEvent
     /**
      * Constructor.
      */
-    public function SizeChangedEvent (ezgame :EZGameControl, size :Point)
+    public function SizeChangedEvent (gameCtrl :Object, size :Point)
     {
-        super(TYPE, ezgame);
+        super(TYPE, gameCtrl);
         _size = size;
     }
 
@@ -59,7 +59,7 @@ public class SizeChangedEvent extends EZEvent
 
     override public function clone () :Event
     {
-        return new SizeChangedEvent(_ezgame, _size.clone());
+        return new SizeChangedEvent(_gameCtrl, _size.clone());
     }
 
     /** Our implementation details. */

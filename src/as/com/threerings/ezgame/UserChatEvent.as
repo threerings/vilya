@@ -50,9 +50,9 @@ public class UserChatEvent extends EZEvent
     /**
      * Constructor.
      */
-    public function UserChatEvent (ezgame :EZGameControl, speaker :int, message :String)
+    public function UserChatEvent (gameCtrl :Object, speaker :int, message :String)
     {
-        super(TYPE, ezgame);
+        super(TYPE, gameCtrl);
         _speaker = speaker;
         _message = message;
     }
@@ -64,7 +64,7 @@ public class UserChatEvent extends EZEvent
 
     override public function clone () :Event
     {
-        return new UserChatEvent(_ezgame, _speaker, _message);
+        return new UserChatEvent(_gameCtrl, _speaker, _message);
     }
 
     /** Our implementation details. */

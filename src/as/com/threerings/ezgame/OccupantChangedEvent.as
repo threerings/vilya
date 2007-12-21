@@ -41,9 +41,9 @@ public class OccupantChangedEvent extends EZEvent
     }
 
     public function OccupantChangedEvent (
-        type :String, ezgame :EZGameControl, occupantId :int, player :Boolean)
+        type :String, gameCtrl :Object, occupantId :int, player :Boolean)
     {
-        super(type, ezgame);
+        super(type, gameCtrl);
         _occupantId = occupantId;
         _player = player;
     }
@@ -57,7 +57,7 @@ public class OccupantChangedEvent extends EZEvent
 
     override public function clone () :Event
     {
-        return new OccupantChangedEvent(type, _ezgame, _occupantId, _player);
+        return new OccupantChangedEvent(type, _gameCtrl, _occupantId, _player);
     }
 
     protected var _occupantId :int;

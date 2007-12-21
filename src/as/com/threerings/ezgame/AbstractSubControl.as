@@ -1,5 +1,5 @@
 //
-// $Id$
+// $Id: SubControl.as 271 2007-04-07 00:25:58Z dhoover $
 //
 // Vilya library - tools for developing networked games
 // Copyright (C) 2002-2007 Three Rings Design, Inc., All Rights Reserved
@@ -26,18 +26,43 @@ import flash.errors.IllegalOperationError;
 /**
  * Abstract base class. Do not instantiate.
  */
-public class SubControl extends BaseControl
+public class AbstractSubControl extends AbstractControl
 {
-    public function SubControl (ctrl :EZGameControl)
+    public function AbstractSubControl (parent :AbstractControl)
     {
         super();
-        if (ctrl == null || Object(this).constructor == SubControl) {
+        if (parent == null || Object(this).constructor == AbstractSubControl) {
             throw new IllegalOperationError("Abstract");
         }
 
-        _ctrl = ctrl;
+        _parent = parent;
     }
 
-    protected var _ctrl :EZGameControl;
+    override public function isConnected () :Boolean
+    {
+        return _parent.isConnected();
+    }
+
+    override public function doBatch (fn :Function) :void
+    {
+        return _parent.doBatch(fn);
+    }
+
+    override protected function callHostCode (name :String, ... args) :*
+    {
+        return _parent.callHostCodeFriend(name, args);
+    }
+
+    internal function populatePropertiesFriend (o :Object) :void
+    {
+        populateProperties(o);
+    }
+
+    internal function setHostPropsFriend (o :Object) :void
+    {
+        setHostProps(o);
+    }
+
+    protected var _parent :AbstractControl;
 }
 }

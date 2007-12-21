@@ -68,10 +68,10 @@ public class PropertyChangedEvent extends EZEvent
      * Constructor.
      */
     public function PropertyChangedEvent (
-        ezgame :EZGameControl, propName :String, newValue :Object,
+        gameCtrl :Object, propName :String, newValue :Object,
         oldValue :Object, index :int = -1)
     {
-        super(TYPE, ezgame);
+        super(TYPE, gameCtrl);
         _name = propName;
         _newValue = newValue;
         _oldValue = oldValue;
@@ -86,8 +86,7 @@ public class PropertyChangedEvent extends EZEvent
 
     override public function clone () :Event
     {
-        return new PropertyChangedEvent(
-            _ezgame, _name, _newValue, _oldValue, _index);
+        return new PropertyChangedEvent(_gameCtrl, _name, _newValue, _oldValue, _index);
     }
 
     /** Our implementation details. */

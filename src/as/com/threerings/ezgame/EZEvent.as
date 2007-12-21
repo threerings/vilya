@@ -30,19 +30,20 @@ public /*abstract*/ class EZEvent extends Event
 {
     /**
      * Access the game control to which this event applies.
+     * Note: you will need to cast this to the appropriate GameControl type.
      */
-    public function get gameControl () :EZGameControl
+    public function get gameControl () :AbstractGameControl
     {
-        return _ezgame;
+        return _gameCtrl;
     }
 
-    public function EZEvent (type :String, ezgame :EZGameControl)
+    public function EZEvent (type :String, gameCtrl :Object)
     {
         super(type);
-        _ezgame = ezgame;
+        _gameCtrl = gameCtrl as AbstractGameControl;
     }
 
     /** The game control for this event. */
-    protected var _ezgame :EZGameControl;
+    protected var _gameCtrl :AbstractGameControl;
 }
 }

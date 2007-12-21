@@ -22,51 +22,50 @@
 package com.threerings.ezgame {
 
 /**
- * Contains EZ methods related to collections.
+ * Contains 'bags' game services.
  */
-public class CollectionsControl extends SubControl
+public class EZBagsSubControl extends AbstractSubControl
 {
-    public function CollectionsControl (ctrl :EZGameControl)
+    public function EZBagsSubControl (parent :AbstractControl)
     {
-        super(ctrl);
+        super(parent);
     }
 
     /**
-     * Create a collection containing the specified values,
-     * clearing any previous collection with the same name.
+     * Create a bag containing the specified values,
+     * clearing any previous bag with the same name.
      */
-    public function create (collName :String, values :Array) :void
+    public function create (bagName :String, values :Array) :void
     {
-        populate(collName, values, true);
+        populate(bagName, values, true);
     }
 
     /**
-     * Add to an existing collection. If it doesn't exist, it will
-     * be created. The new values will be inserted randomly into the
-     * collection.
+     * Add to an existing bag. If it doesn't exist, it will
+     * be created.
      */
-    public function addTo (collName :String, values :Array) :void
+    public function addTo (bagName :String, values :Array) :void
     {
-        populate(collName, values, false);
+        populate(bagName, values, false);
     }
 
     /**
-     * Merge the specified collection into the other collection.
-     * The source collection will be destroyed. The elements from
-     * The source collection will be shuffled and appended to the end
-     * of the destination collection.
+     * Merge the specified bag into the other bag.
+     * The source bag will be destroyed. The elements from
+     * the source bag will be shuffled and appended to the end
+     * of the destination bag.
      */
-    public function merge (srcColl :String, intoColl :String) :void
+    public function merge (srcBag :String, intoBag :String) :void
     {
-        _ctrl.callEZCodeFriend("mergeCollection_v1", srcColl, intoColl);
+        callHostCode("mergeCollection_v1", srcBag, intoBag);
     }
 
     /**
-     * Pick (do not remove) the specified number of elements from a collection,
+     * Pick (do not remove) the specified number of elements from a bag,
      * and distribute them to a specific player or set them as a property
      * in the game data.
      *
-     * @param collName the collection name.
+     * @param bagName the collection name.
      * @param count the number of elements to pick
      * @param msgOrPropName the name of the message or property
      *        that will contain the picked elements.
@@ -77,18 +76,18 @@ public class CollectionsControl extends SubControl
      */
     // TODO: a way to specify exclusive picks vs. duplicate-OK picks?
     public function pick (
-        collName :String, count :int, msgOrPropName :String,
+        bagName :String, count :int, msgOrPropName :String,
         playerId :int = 0) :void
     {
-        getFrom(collName, count, msgOrPropName, playerId, false, null);
+        getFrom(bagName, count, msgOrPropName, playerId, false, null);
     }
 
     /**
-     * Deal (remove) the specified number of elements from a collection,
+     * Deal (remove) the specified number of elements from a bag,
      * and distribute them to a specific player or set them as a property
      * in the game data.
      *
-     * @param collName the collection name.
+     * @param bagName the collection name.
      * @param count the number of elements to pick
      * @param msgOrPropName the name of the message or property
      *        that will contain the picked elements.
@@ -99,10 +98,10 @@ public class CollectionsControl extends SubControl
      */
     // TODO: figure out the method signature of the callback
     public function deal (
-        collName :String, count :int, msgOrPropName :String,
+        bagName :String, count :int, msgOrPropName :String,
         callback :Function = null, playerId :int = 0) :void
     {
-        getFrom(collName, count, msgOrPropName, playerId, true, callback);
+        getFrom(bagName, count, msgOrPropName, playerId, true, callback);
     }
 
 
@@ -112,19 +111,19 @@ public class CollectionsControl extends SubControl
      * Helper method for create and addTo.
      */
     protected function populate (
-        collName :String, values :Array, clearExisting :Boolean) :void
+        bagName :String, values :Array, clearExisting :Boolean) :void
     {
-        _ctrl.callEZCodeFriend("populateCollection_v1", collName, values, clearExisting);
+        callHostCode("populateCollection_v1", bagName, values, clearExisting);
     }
 
     /**
      * Helper method for pick and deal.
      */
     protected function getFrom (
-        collName :String, count :int, msgOrPropName :String, playerId :int,
+        bagName :String, count :int, msgOrPropName :String, playerId :int,
         consume :Boolean, callback :Function) :void
     {
-        _ctrl.callEZCodeFriend("getFromCollection_v2", collName, count, msgOrPropName,
+        callHostCode("getFromCollection_v2", bagName, count, msgOrPropName,
             playerId, consume, callback);
     }
 }

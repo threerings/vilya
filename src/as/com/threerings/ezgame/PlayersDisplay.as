@@ -40,7 +40,6 @@ import flash.text.TextFieldAutoSize;
  * extend this class.
  */
 public class PlayersDisplay extends Sprite
-    implements StateChangedListener
 {
     /**
      * Set the game control that will be used with this display.
@@ -48,7 +47,9 @@ public class PlayersDisplay extends Sprite
     public function setGameControl (gameCtrl :EZGameControl) :void
     {
         _gameCtrl = gameCtrl;
-        _gameCtrl.registerListener(this);
+        _gameCtrl.game.addEventListener(StateChangedEvent.GAME_STARTED, stateChanged);
+        _gameCtrl.game.addEventListener(StateChangedEvent.GAME_ENDED, stateChanged);
+        _gameCtrl.game.addEventListener(StateChangedEvent.TURN_CHANGED, stateChanged);
 
         configureInterface();
     }
@@ -85,11 +86,11 @@ public class PlayersDisplay extends Sprite
             return; // nothing to do
         }
 
-        var players :Array = _gameCtrl.seating.getPlayerIds();
+        var players :Array = _gameCtrl.game.seating.getPlayerIds();
 
         // create a label for each player
         for each (var playerId :int in players) {
-            var name :String = _gameCtrl.getOccupantName(playerId);
+            var name :String = _gameCtrl.game.getOccupantName(playerId);
             label = createPlayerLabel(playerId, name);
             icon = createPlayerIcon(playerId, name);
             var iconW :int = 0;
@@ -187,8 +188,8 @@ public class PlayersDisplay extends Sprite
      */
     protected function displayCurrentTurn () :void
     {
-        var idx :int = _gameCtrl.isInPlay() ?
-            _gameCtrl.seating.getPlayerPosition(_gameCtrl.getTurnHolder()) : -1;
+        var idx :int = _gameCtrl.game.isInPlay() ?
+            _gameCtrl.game.seating.getPlayerPosition(_gameCtrl.game.getTurnHolder()) : -1;
         for (var ii :int = 0; ii < _playerLabels.length; ii++) {
             var label :TextField = (_playerLabels[ii] as TextField);
             label.backgroundColor = getBackground(ii == idx);

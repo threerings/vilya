@@ -48,9 +48,9 @@ public class StateChangedEvent extends EZEvent
     // TODO: move to own event?
     public static const TURN_CHANGED :String = "TurnChanged";
 
-    public function StateChangedEvent (type :String, ezgame :EZGameControl)
+    public function StateChangedEvent (type :String, gameCtrl :Object)
     {
-        super(type, ezgame);
+        super(type, gameCtrl);
     }
 
     override public function toString () :String
@@ -60,7 +60,7 @@ public class StateChangedEvent extends EZEvent
 
     override public function clone () :Event
     {
-        return new StateChangedEvent(type, _ezgame);
+        return new StateChangedEvent(type, _gameCtrl);
     }
 }
 }

@@ -1,5 +1,5 @@
 //
-// $Id$
+// $Id: SeatingControl.as 271 2007-04-07 00:25:58Z dhoover $
 //
 // Vilya library - tools for developing networked games
 // Copyright (C) 2002-2007 Three Rings Design, Inc., All Rights Reserved
@@ -21,11 +21,17 @@
 
 package com.threerings.ezgame {
 
-public class SeatingControl extends SubControl
+
+/**
+ * Access seating information for a seated game.
+ */
+// TODO: methods for allowing a player to pick a seat in SEATED_CONTINUOUS games.
+public class EZSeatingSubControl extends AbstractSubControl
 {
-    public function SeatingControl (ctrl :EZGameControl)
+    public function EZSeatingSubControl (parent :AbstractControl, game :EZGameSubControl)
     {
-        super(ctrl);
+        super(parent);
+        _game = game;
     }
 
     /**
@@ -33,7 +39,7 @@ public class SeatingControl extends SubControl
      */
     public function getPlayerPosition (playerId :int) :int
     {
-        return int(_ctrl.callEZCodeFriend("getPlayerPosition_v1", playerId));
+        return int(callHostCode("getPlayerPosition_v1", playerId));
     }
 
     /**
@@ -42,7 +48,7 @@ public class SeatingControl extends SubControl
      */
     public function getMyPosition () :int
     {
-        return int(_ctrl.callEZCodeFriend("getMyPosition_v1"));
+        return int(callHostCode("getMyPosition_v1"));
     }
 
     /**
@@ -51,7 +57,7 @@ public class SeatingControl extends SubControl
      */
     public function getPlayerIds () :Array /* of playerId (int) */
     {
-        return (_ctrl.callEZCodeFriend("getPlayers_v1") as Array);
+        return (callHostCode("getPlayers_v1") as Array);
     }
 
     /**
@@ -62,11 +68,12 @@ public class SeatingControl extends SubControl
         return getPlayerIds().map(
             function (playerId :int, o2:*, o3:*) :String
             {
-                return _ctrl.getOccupantName(playerId);
+                return _game.getOccupantName(playerId);
             }
         );
     }
 
-    // TODO: methods for allowing a player to pick a seat
+    /** Our direct parent. */
+    protected var _game :EZGameSubControl;
 }
 }

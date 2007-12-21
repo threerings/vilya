@@ -45,9 +45,9 @@ public class MessageReceivedEvent extends EZEvent
     }
 
     public function MessageReceivedEvent (
-        ezgame :EZGameControl, messageName :String, value :Object)
+        gameCtrl :Object, messageName :String, value :Object)
     {
-        super(TYPE, ezgame);
+        super(TYPE, gameCtrl);
         _name = messageName;
         _value = value;
     }
@@ -60,7 +60,7 @@ public class MessageReceivedEvent extends EZEvent
 
     override public function clone () :Event
     {
-        return new MessageReceivedEvent(_ezgame, _name, _value);
+        return new MessageReceivedEvent(_gameCtrl, _name, _value);
     }
 
     protected var _name :String;

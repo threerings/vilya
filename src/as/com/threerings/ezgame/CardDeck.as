@@ -40,19 +40,19 @@ public class CardDeck
             }
         }
 
-        _gameCtrl.collections.create(_deckName, deck);
+        _gameCtrl.services.bags.create(_deckName, deck);
     }
 
     public function dealToPlayer (
         playerId :int, count :int, msgName :String) :void
     {
         // TODO: support the callback
-        _gameCtrl.collections.deal(_deckName, count, msgName, null, playerId);
+        _gameCtrl.services.bags.deal(_deckName, count, msgName, null, playerId);
     }
 
     public function dealToData (count :int, propName :String) :void
     {
-        _gameCtrl.collections.deal(_deckName, count, propName, null);
+        _gameCtrl.services.bags.deal(_deckName, count, propName, null);
     }
 
     /** The game control. */
