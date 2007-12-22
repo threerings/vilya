@@ -22,7 +22,8 @@
 package com.threerings.ezgame {
 
 /**
- * Provides access to 'player' game services.
+ * Provides access to 'player' game services. Do not instantiate this class directly,
+ * instead access it via GameControl.player.
  */
 public class EZPlayerSubControl extends AbstractSubControl
 {

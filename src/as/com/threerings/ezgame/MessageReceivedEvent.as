@@ -23,6 +23,9 @@ package com.threerings.ezgame {
 
 import flash.events.Event;
 
+/**
+ * Dispatched on the 'net' subcontrol when a message is sent by any client.
+ */
 public class MessageReceivedEvent extends EZEvent
 {
     /** The type of all MessageReceivedEvents. */

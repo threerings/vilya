@@ -41,19 +41,20 @@ import flash.geom.Point;
 [Event(name="unload", type="flash.events.Event")]
 
 /**
- * The single point of control for each client in your multiplayer EZGame.
+ * Abstract base class for GameControl implementations.
  */
 public class AbstractGameControl extends AbstractControl
 {
     /**
-     * Create an EZGameControl object using some display object currently on the hierarchy.
-     *
-     * @param disp the display object that is the game's UI.
      * @param autoReady if true, the game will automatically be started when initialization is
      * complete, if false, the game will not start until all clients call {@link #playerReady}.
      */
     public function AbstractGameControl (disp :DisplayObject, autoReady :Boolean)
     {
+        if (disp == null || Object(this).constructor == AbstractGameControl) {
+            throw new IllegalOperationError("Abstract");
+        }
+
         createSubControls();
 
         var event :DynEvent = new DynEvent();

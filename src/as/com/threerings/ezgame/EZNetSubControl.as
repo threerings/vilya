@@ -36,7 +36,10 @@ package com.threerings.ezgame {
 [Event(name="msgReceived", type="com.threerings.ezgame.MessageReceivedEvent")]
 
 /**
- * Provides access to 'net' game services.
+ * Provides access to 'net' game services. Do not instantiate this class yourself,
+ * access it via GameControl.net.
+ *
+ * The 'net' subcontrol is used to communicate shared state between game clients.
  */
 public class EZNetSubControl extends AbstractSubControl
 {
@@ -46,7 +49,7 @@ public class EZNetSubControl extends AbstractSubControl
     }
 
     /**
-     * Get a property from data.
+     * Get a property value.
      */
     public function get (propName :String, index :int = -1) :Object
     {
@@ -88,15 +91,16 @@ public class EZNetSubControl extends AbstractSubControl
     /**
      * Set a property that will be distributed, but only if it's equal to the specified test value.
      *
-     * <p> Please note that, unlike in the standard set() function, the property will not be
+     * <p> Please note that, unlike in the setImmediate() function, the property will not be
      * updated right away, but will require a request to the server and a response back. For this
      * reason, there may be a considerable delay between calling testAndSet, and seeing the result
      * of the update.
      *
      * <p> The operation is 'atomic', in the sense that testing and setting take place during the
      * same server event. In comparison, a separate 'get' followed by a 'set' operation would
-     * involve two events with two network round-trips, and no guarantee that the value won't
-     * change between the events.
+     * first read the current value as seen on your client and then send a request to overwrite
+     * any value with a new value. By the time the 'set' reaches the server the old value
+     * may no longer be valid. Since that's sketchy, we have this method.
      */
     public function testAndSet (
         propName :String, newValue :Object, testValue :Object, index :int = -1) :void

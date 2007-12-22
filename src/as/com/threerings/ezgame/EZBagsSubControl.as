@@ -22,7 +22,15 @@
 package com.threerings.ezgame {
 
 /**
- * Contains 'bags' game services.
+ * Contains 'bags' game services. Do not instantiate this class yourself, access it
+ * via GameControl.services.bags.
+ *
+ * Bags are secret collections containing non-unique elements that are stored on the server.
+ * They can be used to implement game features where clients can't be trusted to not
+ * sniff their network.
+ * 
+ * For example you could create a bag called "dice" and fill it with [ 1, 2, 3, 4, 5, 6 ].
+ * Now you can roll the die with _ctrl.services.bags.pick("dice", 1, "diceProperty");
  */
 public class EZBagsSubControl extends AbstractSubControl
 {
@@ -41,7 +49,7 @@ public class EZBagsSubControl extends AbstractSubControl
     }
 
     /**
-     * Add to an existing bag. If it doesn't exist, it will
+     * Add values to an existing bag. If it doesn't exist, it will
      * be created.
      */
     public function addTo (bagName :String, values :Array) :void
@@ -50,7 +58,7 @@ public class EZBagsSubControl extends AbstractSubControl
     }
 
     /**
-     * Merge the specified bag into the other bag.
+     * Merge all values from the specified bag into the other bag.
      * The source bag will be destroyed. The elements from
      * the source bag will be shuffled and appended to the end
      * of the destination bag.

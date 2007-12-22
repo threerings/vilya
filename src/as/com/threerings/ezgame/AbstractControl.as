@@ -27,7 +27,7 @@ import flash.events.Event;
 import flash.events.EventDispatcher;
 
 /**
- * The abstract base class for EZ controls.
+ * The abstract base class for Game controls and subcontrols.
  */
 public class AbstractControl extends EventDispatcher
 {
@@ -39,7 +39,7 @@ public class AbstractControl extends EventDispatcher
     }
 
     /**
-     * Are we connected and running inside the EZGame environment, or has someone just
+     * Are we connected and running inside the game environment, or has someone just
      * loaded up our SWF by itself?
      */
     public function isConnected () :Boolean
@@ -55,9 +55,9 @@ public class AbstractControl extends EventDispatcher
      *
      * Example:
      * _ctrl.doBatch(function () :void {
-     *     _ctrl.set("board", new Array());
-     *     _ctrl.set("scores", new Array());
-     *     _ctrl.set("captures", 0);
+     *     _ctrl.net.set("board", new Array());
+     *     _ctrl.net.set("scores", new Array());
+     *     _ctrl.net.set("captures", 0);
      * });
      */
     public function doBatch (fn :Function) :void

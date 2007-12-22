@@ -23,7 +23,8 @@ package com.threerings.ezgame {
 
 
 /**
- * Access seating information for a seated game.
+ * Access seating information for a seated game. Do not instantiate this class directly,
+ * access it via GameControl.game.seating.
  */
 // TODO: methods for allowing a player to pick a seat in SEATED_CONTINUOUS games.
 public class EZSeatingSubControl extends AbstractSubControl
@@ -61,7 +62,7 @@ public class EZSeatingSubControl extends AbstractSubControl
     }
 
     /**
-     * Get the names of the seated players, omitting any watchers.
+     * Get the names of the seated players, in the order of their seated position.
      */
     public function getPlayerNames () :Array /* of String */
     {

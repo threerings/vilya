@@ -26,7 +26,9 @@ import flash.display.DisplayObject;
 /**
  * The single point of control for each client in your multiplayer EZGame.
  *
- * TODO: lots of documentation.
+ * Usage: Usually, in your top-level movieclip/sprite:
+ * _ctrl = new EZGameControl(this);
+ * 
  */
 public class EZGameControl extends AbstractGameControl
 {

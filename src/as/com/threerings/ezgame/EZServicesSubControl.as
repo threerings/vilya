@@ -22,7 +22,8 @@
 package com.threerings.ezgame {
 
 /**
- * Provides access to 'services' game services.
+ * Provides access to 'services' game services. Do not instantiate this class yourself,
+ * access it via GameControl.services.
  */
 public class EZServicesSubControl extends AbstractSubControl
 {
@@ -79,9 +80,10 @@ public class EZServicesSubControl extends AbstractSubControl
     }
 
     /**
-     * Start the ticker with the specified name. The ticker will deliver messages to all connected 
-     * clients at the specified delay. The value of each message is a single integer, 
-     * starting with 0 and increasing by 1 with each messsage.
+     * Start the ticker with the specified name. The ticker will deliver messages
+     * (resulting in a MessageReceivedEvent being dispatched on the 'net' control)
+     * to all connected clients, at the specified delay. The value of each message is
+     * a single integer, starting with 0 and increasing by 1 with each messsage.
      */
     public function startTicker (tickerName :String, msOfDelay :int) :void
     {

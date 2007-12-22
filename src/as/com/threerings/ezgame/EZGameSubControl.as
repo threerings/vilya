@@ -85,7 +85,8 @@ package com.threerings.ezgame {
 [Event(name="UserChat", type="com.threerings.ezgame.UserChatEvent")]
 
 /**
- * Access game-specific controls.
+ * Access game-specific controls. Do not instantiate this class yourself.
+ * Access it via GameControl.game.
  */
 public class EZGameSubControl extends AbstractSubControl
 {
@@ -107,6 +108,8 @@ public class EZGameSubControl extends AbstractSubControl
 
     /**
      * Get any game-specific configurations that were set up in the lobby.
+     *
+     * @return an Object containing config names mapping to their values.
      */
     public function getConfig () :Object
     {
@@ -133,7 +136,7 @@ public class EZGameSubControl extends AbstractSubControl
     }
 
     /**
-     * Returns the player ids of all occupants in the game room.
+     * Returns the player ids of all occupants in the game room: players and watchers.
      */
     public function getOccupantIds () :Array /* of playerId */
     {
@@ -143,7 +146,7 @@ public class EZGameSubControl extends AbstractSubControl
     /**
      * Get the display name of the specified occupant.  Two players may have the same name: always
      * use playerId to purposes of identification and comparison. The name is for display
-     * only. Will be null is the specified playerId is not in the game.
+     * only. Will be null is the specified playerId is not present.
      */
     public function getOccupantName (playerId :int) :String
     {

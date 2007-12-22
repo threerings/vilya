@@ -48,7 +48,8 @@ import flash.events.KeyboardEvent;
 import flash.geom.Point;
 
 /**
- * Access local properties of the game.
+ * Access local properties of the game. Do not instantiate this class yourself,
+ * access it via GameControl.local.
  */
 public class EZLocalSubControl extends AbstractSubControl
 {
@@ -100,7 +101,7 @@ public class EZLocalSubControl extends AbstractSubControl
     }
 
     /**
-     * Display a feedback system chat message for the local player only, no other players
+     * Display a feedback chat message for the local player only, no other players
      * or observers will see it.
      */
     public function feedback (msg :String) :void

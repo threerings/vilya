@@ -23,9 +23,6 @@ package com.threerings.ezgame {
 
 import flash.events.Event;
 
-// TODO: there may not be much point in using the standard flash event
-// architecture. I'm about thiiiiiiis close to not.
-//
 public /*abstract*/ class EZEvent extends Event
 {
     /**
