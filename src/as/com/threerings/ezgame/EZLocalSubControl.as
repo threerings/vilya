@@ -21,6 +21,10 @@
 
 package com.threerings.ezgame {
 
+import flash.events.KeyboardEvent;
+
+import flash.geom.Point;
+
 /**
  * Dispatched when a key is pressed when the game has focus.
  *
@@ -41,11 +45,6 @@ package com.threerings.ezgame {
  * @eventType com.threerings.ezgame.SizeChangedEvent.TYPE
  */
 [Event(name="SizeChanged", type="com.threerings.ezgame.SizeChangedEvent")]
-
-
-import flash.events.KeyboardEvent;
-
-import flash.geom.Point;
 
 /**
  * Access local properties of the game. Do not instantiate this class yourself,
