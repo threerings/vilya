@@ -180,7 +180,7 @@ public class EZGameSubControl extends AbstractSubControl
     /**
      * Returns the player id of the current turn holder, or 0 if it's nobody's turn.
      */
-    public function getTurnHolder () :int
+    public function getTurnHolderId () :int
     {
         return int(callHostCode("getTurnHolder_v1"));
     }

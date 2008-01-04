@@ -189,7 +189,7 @@ public class PlayersDisplay extends Sprite
     protected function displayCurrentTurn () :void
     {
         var idx :int = _gameCtrl.game.isInPlay() ?
-            _gameCtrl.game.seating.getPlayerPosition(_gameCtrl.game.getTurnHolder()) : -1;
+            _gameCtrl.game.seating.getPlayerPosition(_gameCtrl.game.getTurnHolderId()) : -1;
         for (var ii :int = 0; ii < _playerLabels.length; ii++) {
             var label :TextField = (_playerLabels[ii] as TextField);
             label.backgroundColor = getBackground(ii == idx);
