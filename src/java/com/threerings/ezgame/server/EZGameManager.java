@@ -76,7 +76,7 @@ public class EZGameManager extends GameManager
 {
     public EZGameManager ()
     {
-        addDelegate(_turnDelegate = new EZGameTurnDelegate());
+//        addDelegate(_turnDelegate = new EZGameTurnDelegate());
     }
 
     /**
@@ -139,21 +139,21 @@ public class EZGameManager extends GameManager
     {
         validateUser(caller);
 
-        // make sure this player is the turn holder
-        Name holder = _ezObj.turnHolder;
-        if (holder != null && !holder.equals(((BodyObject) caller).getVisibleName())) {
-            throw new InvocationException(InvocationCodes.ACCESS_DENIED);
-        }
+//        // make sure this player is the turn holder
+//        Name holder = _ezObj.turnHolder;
+//        if (holder != null && !holder.equals(((BodyObject) caller).getVisibleName())) {
+//            throw new InvocationException(InvocationCodes.ACCESS_DENIED);
+//        }
 
-        Name nextTurnHolder = null;
-        if (nextPlayerId != 0) {
-            BodyObject target = getPlayerByOid(nextPlayerId);
-            if (target != null) {
-                nextTurnHolder = target.getVisibleName();
-            }
-        }
+//        Name nextTurnHolder = null;
+//        if (nextPlayerId != 0) {
+//            BodyObject target = getPlayerByOid(nextPlayerId);
+//            if (target != null) {
+//                nextTurnHolder = target.getVisibleName();
+//            }
+//        }
 
-        _turnDelegate.endTurn(nextTurnHolder);
+        _turnDelegate.endTurn(nextPlayerId);
     }
 
     // from EZGameProvider
@@ -554,6 +554,26 @@ public class EZGameManager extends GameManager
     protected PlaceObject createPlaceObject ()
     {
         return new EZGameObject();
+    }
+
+    @Override
+    protected void didInit ()
+    {
+        super.didInit();
+
+        // initialize the appropriate turn delegate
+        if (getMatchType() == GameConfig.PARTY) {
+            EZPartyTurnDelegate del = new EZPartyTurnDelegate();
+            _turnDelegate = del;
+            addDelegate(del);
+            del.didInit(_config);
+
+        } else {
+            EZSeatedTurnDelegate del = new EZSeatedTurnDelegate();
+            _turnDelegate = del;
+            addDelegate(del);
+            del.didInit(_config);
+        }
     }
 
     @Override
