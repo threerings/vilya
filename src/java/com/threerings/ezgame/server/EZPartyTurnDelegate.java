@@ -87,6 +87,7 @@ public class EZPartyTurnDelegate extends GameManagerDelegate
 
         // we can forget about any ordering now
         _ordering = null;
+        _currentHolderId = 0;
     }
 
     // from EZGameTurnDelegate
