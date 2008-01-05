@@ -213,8 +213,10 @@ public class EZGameSubControl extends AbstractSubControl
 
     /**
      * Start the next player's turn. If a playerId is specified, that player's turn will be
-     * next. Otherwise the turn will progress to the next natural turn holder (following
-     * seating order) or be assigned randomly if the game is just starting.
+     * next. Otherwise the turn will be assigned randomly the first time, after that following
+     * the "natural" turn order. In a seated game, the natural order follows the seating order.
+     * In a party game, the natural order is to give the turn to the player that has been
+     * around the longest without getting a turn.
      */
     public function startNextTurn (nextPlayerId :int = 0) :void
     {
