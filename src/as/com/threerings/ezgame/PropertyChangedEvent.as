@@ -30,7 +30,7 @@ import flash.events.Event;
 public class PropertyChangedEvent extends EZEvent
 {
     /** The type of a property change event. */
-    public static const TYPE :String = "PropChanged";
+    public static const PROPERTY_CHANGED :String = "PropChanged";
 
     /**
      * Get the name of the property that changed.
@@ -71,7 +71,7 @@ public class PropertyChangedEvent extends EZEvent
         gameCtrl :Object, propName :String, newValue :Object,
         oldValue :Object, index :int = -1)
     {
-        super(TYPE, gameCtrl);
+        super(PROPERTY_CHANGED, gameCtrl);
         _name = propName;
         _newValue = newValue;
         _oldValue = oldValue;

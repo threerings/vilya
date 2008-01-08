@@ -42,7 +42,7 @@ import flash.geom.Point;
 /**
  * Dispatched when the size of the game area changes.
  *
- * @eventType com.threerings.ezgame.SizeChangedEvent.TYPE
+ * @eventType com.threerings.ezgame.SizeChangedEvent.SIZE_CHANGED
  */
 [Event(name="SizeChanged", type="com.threerings.ezgame.SizeChangedEvent")]
 

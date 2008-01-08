@@ -80,7 +80,7 @@ package com.threerings.ezgame {
 /**
  * Dispatched when a user chats.
  *
- * @eventType com.threerings.ezgame.UserChatEvent.TYPE
+ * @eventType com.threerings.ezgame.UserChatEvent.USER_CHAT
  */
 [Event(name="UserChat", type="com.threerings.ezgame.UserChatEvent")]
 

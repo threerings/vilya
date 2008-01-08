@@ -32,7 +32,7 @@ import flash.geom.Point;
 public class SizeChangedEvent extends EZEvent
 {
     /** The type of this event. */
-    public static const TYPE :String = "SizeChanged";
+    public static const SIZE_CHANGED :String = "SizeChanged";
 
     /**
      * Get the size of the game area, expressed as a Point
@@ -48,7 +48,7 @@ public class SizeChangedEvent extends EZEvent
      */
     public function SizeChangedEvent (gameCtrl :Object, size :Point)
     {
-        super(TYPE, gameCtrl);
+        super(SIZE_CHANGED, gameCtrl);
         _size = size;
     }
 

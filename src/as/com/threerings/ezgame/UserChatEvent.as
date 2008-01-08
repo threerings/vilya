@@ -29,7 +29,7 @@ import flash.events.Event;
 public class UserChatEvent extends EZEvent
 {
     /** The type of a property change event. */
-    public static const TYPE :String = "UserChat";
+    public static const USER_CHAT :String = "UserChat";
 
     /**
      * Get the name of the user who spoke.
@@ -52,7 +52,7 @@ public class UserChatEvent extends EZEvent
      */
     public function UserChatEvent (gameCtrl :Object, speaker :int, message :String)
     {
-        super(TYPE, gameCtrl);
+        super(USER_CHAT, gameCtrl);
         _speaker = speaker;
         _message = message;
     }

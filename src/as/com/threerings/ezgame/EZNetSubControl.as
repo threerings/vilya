@@ -24,14 +24,14 @@ package com.threerings.ezgame {
 /**
  * Dispatched when a property has changed in the shared game state.
  *
- * @eventType com.threerings.ezgame.PropertyChangedEvent.TYPE
+ * @eventType com.threerings.ezgame.PropertyChangedEvent.PROPERTY_CHANGED
  */
 [Event(name="PropChanged", type="com.threerings.ezgame.PropertyChangedEvent")]
 
 /**
  * Dispatched when a message arrives with information that is not part of the shared game state.
  *
- * @eventType com.threerings.ezgame.MessageReceivedEvent.TYPE
+ * @eventType com.threerings.ezgame.MessageReceivedEvent.MESSAGE_RECEIVED
  */
 [Event(name="msgReceived", type="com.threerings.ezgame.MessageReceivedEvent")]
 

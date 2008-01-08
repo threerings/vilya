@@ -29,7 +29,7 @@ import flash.events.Event;
 public class MessageReceivedEvent extends EZEvent
 {
     /** The type of all MessageReceivedEvents. */
-    public static const TYPE :String = "msgReceived";
+    public static const MESSAGE_RECEIVED :String = "msgReceived";
 
     /**
      * Access the message name.
@@ -50,7 +50,7 @@ public class MessageReceivedEvent extends EZEvent
     public function MessageReceivedEvent (
         gameCtrl :Object, messageName :String, value :Object)
     {
-        super(TYPE, gameCtrl);
+        super(MESSAGE_RECEIVED, gameCtrl);
         _name = messageName;
         _value = value;
     }
