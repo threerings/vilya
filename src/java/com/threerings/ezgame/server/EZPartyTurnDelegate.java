@@ -110,11 +110,8 @@ public class EZPartyTurnDelegate extends GameManagerDelegate
             return;
         }
 
-        Iterator<Integer> itr = _ordering.iterator();
-        while (itr.hasNext()) {
-            nextPlayerId = itr.next();
-            if (nextPlayerId != _currentHolderId) {
-                setNextTurn(nextPlayerId); // should always work
+        for (int playerId : _ordering) {
+            if ((playerId != _currentHolderId) && setNextTurn(playerId)) {
                 return;
             }
         }
@@ -170,7 +167,7 @@ public class EZPartyTurnDelegate extends GameManagerDelegate
     /** A reference to our game object. */
     protected TurnGameObject _turnGame;
 
-    /** Tracks the turn ordering for occupants. */
+    /** Tracks the turn ordering for occupants. Initialized only if turns are used by the game. */
     protected LinkedHashSet<Integer> _ordering;
 
     /** The oid of the current turn holder. */
