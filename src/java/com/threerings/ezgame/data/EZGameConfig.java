@@ -95,6 +95,10 @@ public class EZGameConfig extends GameConfig
     @Override // from PlaceConfig
     public PlaceController createController ()
     {
+        String ctrl = getGameDefinition().controller;
+        if (ctrl == null) {
+            throw new IllegalStateException("Game definition missing controller [gdef=" + getGameDefinition() + "]");
+        }
         try {
             return (PlaceController) Class.forName(getGameDefinition().controller).newInstance();
         } catch (Exception e) {
