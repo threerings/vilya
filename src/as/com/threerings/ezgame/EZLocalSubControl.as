@@ -57,7 +57,9 @@ public class EZLocalSubControl extends AbstractSubControl
         super(parent);
     }
 
-    // documentation inherited
+    /**
+     * @inheritDoc
+     */
     override public function addEventListener (
         type :String, listener :Function, useCapture :Boolean = false,
         priority :int = 0, useWeakReference :Boolean = false) :void
@@ -74,7 +76,9 @@ public class EZLocalSubControl extends AbstractSubControl
         }
     }
 
-    // documentation inherited
+    /**
+     * @inheritDoc
+     */
     override public function removeEventListener (
         type :String, listener :Function, useCapture :Boolean = false) :void
     {
@@ -119,6 +123,9 @@ public class EZLocalSubControl extends AbstractSubControl
         return (callHostCode("filter_v1", text) as String);
     }
 
+    /**
+     * @private
+     */
     override protected function populateProperties (o :Object) :void
     {
         super.populateProperties(o);

@@ -100,12 +100,16 @@ public class EZServicesSubControl extends AbstractSubControl
 
     /** 
      * Create the 'bags' subcontrol.
+     * @private
      */
     protected function createBagsControl () :EZBagsSubControl
     {
         return new EZBagsSubControl(_parent);
     }
 
+    /**
+     * @private
+     */
     override protected function populateProperties (o :Object) :void
     {
         super.populateProperties(o);
@@ -113,6 +117,9 @@ public class EZServicesSubControl extends AbstractSubControl
         _bagsCtrl.populatePropertiesFriend(o);
     }
 
+    /**
+     * @private
+     */
     override protected function setHostProps (o :Object) :void
     {
         super.setHostProps(o);
@@ -120,7 +127,7 @@ public class EZServicesSubControl extends AbstractSubControl
         _bagsCtrl.setHostPropsFriend(o);
     }
 
-    /** The bags sub-control. */
+    /** The bags sub-control. @private */
     protected var _bagsCtrl :EZBagsSubControl;
 }
 }

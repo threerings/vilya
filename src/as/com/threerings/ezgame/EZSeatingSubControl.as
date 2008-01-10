@@ -74,7 +74,7 @@ public class EZSeatingSubControl extends AbstractSubControl
         );
     }
 
-    /** Our direct parent. */
+    /** Our direct parent. @private */
     protected var _game :EZGameSubControl;
 }
 }

@@ -60,7 +60,10 @@ public class OccupantChangedEvent extends EZEvent
         return new OccupantChangedEvent(type, _gameCtrl, _occupantId, _player);
     }
 
+    /** @private */
     protected var _occupantId :int;
+
+    /** @private */
     protected var _player :Boolean;
 }
 }

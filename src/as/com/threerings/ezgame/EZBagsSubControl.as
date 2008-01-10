@@ -117,6 +117,7 @@ public class EZBagsSubControl extends AbstractSubControl
 
     /**
      * Helper method for create and addTo.
+     * @private
      */
     protected function populate (
         bagName :String, values :Array, clearExisting :Boolean) :void
@@ -126,6 +127,7 @@ public class EZBagsSubControl extends AbstractSubControl
 
     /**
      * Helper method for pick and deal.
+     * @private
      */
     protected function getFrom (
         bagName :String, count :int, msgOrPropName :String, playerId :int,

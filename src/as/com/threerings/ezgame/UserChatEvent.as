@@ -67,8 +67,10 @@ public class UserChatEvent extends EZEvent
         return new UserChatEvent(_gameCtrl, _speaker, _message);
     }
 
-    /** Our implementation details. */
+    /** @private */
     protected var _speaker: int;
+
+    /** @private */
     protected var _message :String;
 }
 }

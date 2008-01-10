@@ -23,6 +23,8 @@ package com.threerings.ezgame {
 
 import flash.events.Event;
 
+/**
+ */
 public /*abstract*/ class EZEvent extends Event
 {
     /**
@@ -40,7 +42,7 @@ public /*abstract*/ class EZEvent extends Event
         _gameCtrl = gameCtrl as AbstractGameControl;
     }
 
-    /** The game control for this event. */
+    /** The game control for this event. @private */
     protected var _gameCtrl :AbstractGameControl;
 }
 }

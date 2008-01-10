@@ -38,31 +38,47 @@ public class AbstractSubControl extends AbstractControl
         _parent = parent;
     }
 
+    /**
+     * @inheritDoc
+     */
     override public function isConnected () :Boolean
     {
         return _parent.isConnected();
     }
 
+    /**
+     * @inheritDoc
+     */
     override public function doBatch (fn :Function) :void
     {
         return _parent.doBatch(fn);
     }
 
+    /**
+     * @private
+     */
     override protected function callHostCode (name :String, ... args) :*
     {
         return _parent.callHostCodeFriend(name, args);
     }
 
+    /**
+     * @private
+     */
     internal function populatePropertiesFriend (o :Object) :void
     {
         populateProperties(o);
     }
 
+    /**
+     * @private
+     */
     internal function setHostPropsFriend (o :Object) :void
     {
         setHostProps(o);
     }
 
+    /** @private */
     protected var _parent :AbstractControl;
 }
 }

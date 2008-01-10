@@ -254,12 +254,16 @@ public class EZGameSubControl extends AbstractSubControl
 
     /**
      * Create the 'seating' subcontrol.
+     * @private
      */
     protected function createSeatingControl () :EZSeatingSubControl
     {
         return new EZSeatingSubControl(_parent, this);
     }
 
+    /**
+     * @private
+     */
     override protected function populateProperties (o :Object) :void
     {
         super.populateProperties(o);
@@ -274,6 +278,9 @@ public class EZGameSubControl extends AbstractSubControl
         _seatingCtrl.populatePropertiesFriend(o);
     }
 
+    /**
+     * @private
+     */
     override protected function setHostProps (o :Object) :void
     {
         super.setHostProps(o);
@@ -335,10 +342,10 @@ public class EZGameSubControl extends AbstractSubControl
         dispatch(new UserChatEvent(_parent, speaker, message));
     }
 
-    /** Contains any custom game configuration data. */
+    /** Contains any custom game configuration data. @private */
     protected var _gameConfig :Object = {};
 
-    /** The seating sub-control. */
+    /** The seating sub-control. @private */
     protected var _seatingCtrl :EZSeatingSubControl;
 }
 }

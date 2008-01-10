@@ -73,6 +73,9 @@ public class AbstractGameControl extends AbstractControl
         disp.root.loaderInfo.addEventListener(Event.UNLOAD, dispatch);
     }
 
+    /**
+     * @inheritDoc
+     */
     override public function isConnected () :Boolean
     {
         return _connected;
@@ -80,6 +83,7 @@ public class AbstractGameControl extends AbstractControl
 
     /**
      * Create any subcontrols used by this game.
+     * @private
      */
     protected function createSubControls () :void
     {
@@ -94,6 +98,7 @@ public class AbstractGameControl extends AbstractControl
 
     /**
      * Create the 'local' subcontrol.
+     * @private
      */
     protected function createLocalControl () :EZLocalSubControl
     {
@@ -102,6 +107,7 @@ public class AbstractGameControl extends AbstractControl
 
     /**
      * Create the 'net' subcontrol.
+     * @private
      */
     protected function createNetControl () :EZNetSubControl
     {
@@ -110,6 +116,7 @@ public class AbstractGameControl extends AbstractControl
 
     /**
      * Create the 'player' subcontrol.
+     * @private
      */
     protected function createPlayerControl () :EZPlayerSubControl
     {
@@ -118,6 +125,7 @@ public class AbstractGameControl extends AbstractControl
 
     /**
      * Create the 'game' subcontrol.
+     * @private
      */
     protected function createGameControl () :EZGameSubControl
     {
@@ -126,6 +134,7 @@ public class AbstractGameControl extends AbstractControl
 
     /**
      * Create the 'services' subcontrol.
+     * @private
      */
     protected function createServicesControl () :EZServicesSubControl
     {
@@ -135,6 +144,7 @@ public class AbstractGameControl extends AbstractControl
     /**
      * Populate any properties or functions we want to expose to the other side of the ezgame
      * security boundary.
+     * @private
      */
     override protected function populateProperties (o :Object) :void
     {
@@ -150,6 +160,7 @@ public class AbstractGameControl extends AbstractControl
     /**
      * Sets the properties we received from the host framework on the other side of the security
      * boundary.
+     * @private
      */
     override protected function setHostProps (o :Object) :void
     {
@@ -166,6 +177,9 @@ public class AbstractGameControl extends AbstractControl
         _funcs = o;
     }
 
+    /**
+     * @private
+     */
     override protected function callHostCode (name :String, ... args) :*
     {
         if (_funcs != null) {
@@ -188,6 +202,7 @@ public class AbstractGameControl extends AbstractControl
 
     /**
      * Internal method that is called whenever the mouse clicks our root.
+     * @private
      */
     protected function handleRootClick (evt :MouseEvent) :void
     {
@@ -211,20 +226,28 @@ public class AbstractGameControl extends AbstractControl
         _connected = false;
     }
 
-    /** Are we connected? */
+    /** Are we connected? @private */
     protected var _connected :Boolean;
 
-    /** Contains functions exposed to us from the EZGame host. */
+    /** Contains functions exposed to us from the EZGame host. @private */
     protected var _funcs :Object;
 
-    /** Holds all our sub-controls. */
+    /** Holds all our sub-controls. @private */
     protected var _subControls :Array = [];
 
-    /** Specific sub-controls. */
+    /** The local sub-control. @private */
     protected var _localCtrl :EZLocalSubControl;
+
+    /** The net sub-control. @private */
     protected var _netCtrl :EZNetSubControl;
+
+    /** The player sub-control. @private */
     protected var _playerCtrl :EZPlayerSubControl;
+
+    /** The game sub-control. @private */
     protected var _gameCtrl :EZGameSubControl;
+
+    /** The services sub-control. @private */
     protected var _servicesCtrl :EZServicesSubControl;
 }
 }

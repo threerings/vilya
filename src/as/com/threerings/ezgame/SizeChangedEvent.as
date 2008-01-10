@@ -62,7 +62,7 @@ public class SizeChangedEvent extends EZEvent
         return new SizeChangedEvent(_gameCtrl, _size.clone());
     }
 
-    /** Our implementation details. */
+    /** Our implementation details. @private */
     protected var _size: Point;
 }
 }

@@ -72,6 +72,7 @@ public class AbstractControl extends EventDispatcher
 
     /**
      * Populate any properties or functions we want to expose to the host code.
+     * @private
      */
     protected function populateProperties (o :Object) :void
     {
@@ -80,6 +81,7 @@ public class AbstractControl extends EventDispatcher
 
     /**
      * Grab any properties needed from our host code.
+     * @private
      */
     protected function setHostProps (o :Object) :void
     {
@@ -88,6 +90,7 @@ public class AbstractControl extends EventDispatcher
 
     /**
      * Your own events may not be dispatched here.
+     * @private
      */
     override public function dispatchEvent (event :Event) :Boolean
     {
@@ -99,6 +102,7 @@ public class AbstractControl extends EventDispatcher
 
     /**
      * Secret function to dispatch property changed events.
+     * @private
      */
     protected function dispatch (event :Event) :void
     {
@@ -112,6 +116,7 @@ public class AbstractControl extends EventDispatcher
 
     /**
      * Call a method exposed by the host code.
+     * @private
      */
     protected function callHostCode (name :String, ... args) :*
     {
@@ -120,6 +125,7 @@ public class AbstractControl extends EventDispatcher
 
     /**
      * Exposed to sub controls.
+     * @private
      */
     internal function callHostCodeFriend (name :String, args :Array) :*
     {
@@ -129,6 +135,7 @@ public class AbstractControl extends EventDispatcher
 
     /**
      * Helper method to throw an error if we're not connected.
+     * @private
      */
     protected function checkIsConnected () :void
     {

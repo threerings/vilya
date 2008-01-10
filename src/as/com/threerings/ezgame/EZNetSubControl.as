@@ -137,6 +137,9 @@ public class EZNetSubControl extends AbstractSubControl
         callHostCode("sendMessage_v2", messageName, value, playerId);
     }
 
+    /**
+     * @private
+     */
     override protected function populateProperties (o :Object) :void
     {
         super.populateProperties(o);
@@ -145,6 +148,9 @@ public class EZNetSubControl extends AbstractSubControl
         o["messageReceived_v1"] = messageReceived_v1;
     }
 
+    /**
+     * @private
+     */
     override protected function setHostProps (o :Object) :void
     {
         super.setHostProps(o);
@@ -169,7 +175,7 @@ public class EZNetSubControl extends AbstractSubControl
         dispatch(new MessageReceivedEvent(_parent, name, value));
     }
 
-    /** Game properties. */
+    /** Game properties. @private */
     protected var _gameData :Object;
 }
 }

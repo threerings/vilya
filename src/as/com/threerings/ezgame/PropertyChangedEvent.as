@@ -89,10 +89,16 @@ public class PropertyChangedEvent extends EZEvent
         return new PropertyChangedEvent(_gameCtrl, _name, _newValue, _oldValue, _index);
     }
 
-    /** Our implementation details. */
+    /** @private */
     protected var _name :String;
+
+    /** @private */
     protected var _newValue :Object;
+
+    /** @private */
     protected var _oldValue :Object;
+
+    /** @private */
     protected var _index :int;
 }
 }
