@@ -25,7 +25,14 @@ import flash.events.Event;
 
 public class OccupantChangedEvent extends EZEvent
 {
+    /**
+     * @eventType OccupantEntered
+     */
     public static const OCCUPANT_ENTERED :String = "OccupantEntered";
+
+    /**
+     * @eventType OccupantLeft
+     */
     public static const OCCUPANT_LEFT :String = "OccupantLeft";
 
     /** The occupantId of the occupant that entered or left. */

@@ -28,7 +28,10 @@ import flash.events.Event;
  */
 public class UserChatEvent extends EZEvent
 {
-    /** The type of a property change event. */
+    /**
+     * The type of a property change event.
+     * @eventType UserChat
+     */
     public static const USER_CHAT :String = "UserChat";
 
     /**

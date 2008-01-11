@@ -28,7 +28,11 @@ import flash.events.Event;
  */
 public class MessageReceivedEvent extends EZEvent
 {
-    /** The type of all MessageReceivedEvents. */
+    /**
+     * The type of all MessageReceivedEvents.
+     *
+     * @eventType msgReceived
+     */
     public static const MESSAGE_RECEIVED :String = "msgReceived";
 
     /**

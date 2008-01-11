@@ -29,7 +29,11 @@ import flash.events.Event;
  */
 public class PropertyChangedEvent extends EZEvent
 {
-    /** The type of a property change event. */
+    /**
+     * The type of a property change event.
+     *
+     * @eventType PropChanged
+     */
     public static const PROPERTY_CHANGED :String = "PropChanged";
 
     /**

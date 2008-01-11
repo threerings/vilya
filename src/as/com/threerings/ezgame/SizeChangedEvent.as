@@ -31,7 +31,11 @@ import flash.geom.Point;
  */
 public class SizeChangedEvent extends EZEvent
 {
-    /** The type of this event. */
+    /**
+     * The type of this event.
+     *
+     * @eventType SizeChanged
+     */
     public static const SIZE_CHANGED :String = "SizeChanged";
 
     /**

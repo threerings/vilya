@@ -28,23 +28,40 @@ import flash.events.Event;
  */
 public class StateChangedEvent extends EZEvent
 {
-    /** Indicates that the game has transitioned to a started state. */
+    /**
+     * Indicates that the game has transitioned to a started state.
+     * @eventType GameStarted
+     */
     public static const GAME_STARTED :String = "GameStarted";
 
-    /** Indicates that the game has transitioned to a ended state. */
+    /**
+     * Indicates that the game has transitioned to a ended state.
+     * @eventType GameEnded
+     */
     public static const GAME_ENDED :String = "GameEnded";
 
-    /** Indicates that a round has started. Games that do not require multiple rounds can ignore
-     * this event. */
+    /**
+     * Indicates that a round has started. Games that do not require multiple rounds can ignore
+     * this event.
+     * @eventType RoundStarted
+     */
     public static const ROUND_STARTED :String = "RoundStarted";
 
-    /** Indicates that the current round has ended. */
+    /**
+     * Indicates that the current round has ended.
+     * @eventType RoundEnded
+     */
     public static const ROUND_ENDED :String = "RoundEnded";
 
-    /** Indicates that a new controller has been assigned. */
+    /**
+     * Indicates that a new controller has been assigned.
+     * @eventType ControlChanged
+     */
     public static const CONTROL_CHANGED :String = "ControlChanged";
 
-    /** Indicates that the turn has changed. */
+    /** Indicates that the turn has changed.
+     * @eventType TurnChanged
+     */
     // TODO: move to own event?
     public static const TURN_CHANGED :String = "TurnChanged";
 
