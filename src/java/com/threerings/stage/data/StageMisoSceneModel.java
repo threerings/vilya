@@ -77,6 +77,6 @@ public class StageMisoSceneModel extends SparseMisoSceneModel
      */
     public Section getSection (int key)
     {
-        return (Section)_sections.get(key);
+        return _sections.get(key);
     }
 }

@@ -183,11 +183,11 @@ public class TurnDisplay extends JPanel
     {
         String name = event.getName();
         if (name.equals(_turnObj.getTurnHolderFieldName())) {
-            JLabel oldLabel = (JLabel) _labels.get((Name) event.getOldValue());
+            JLabel oldLabel = _labels.get(event.getOldValue());
             if (oldLabel != null) {
                 oldLabel.setIcon(null);
             }
-            JLabel newLabel = (JLabel) _labels.get((Name) event.getValue());
+            JLabel newLabel = _labels.get(event.getValue());
             if (newLabel != null) {
                 newLabel.setIcon(_turnIcon);
             }
@@ -213,7 +213,7 @@ public class TurnDisplay extends JPanel
     protected TurnGameObject _turnObj;
 
     /** A mapping of the labels currently associated with each player. */
-    protected HashMap _labels = new HashMap();
+    protected HashMap<Name,JLabel> _labels = new HashMap<Name,JLabel>();
 
     /** The game-specified player icons. */
     protected Icon[] _playerIcons;

@@ -242,7 +242,7 @@ public class DictionaryManager
             for (Character key : keys)
             {
                 keycount--;
-                _letters[keycount] = (char) key;
+                _letters[keycount] = key;
                 _counts[keycount] = ((float) letters.getCount(key)) / total; // normalize
             }
         }

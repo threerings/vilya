@@ -167,7 +167,7 @@ public class PlacementConstraints
         }
         ObjectData[] data = new ObjectData[info.length];
         for (int ii = 0; ii < info.length; ii++) {
-            data[ii] = (ObjectData)_objectData.get(info[ii]);
+            data[ii] = _objectData.get(info[ii]);
             if (data[ii] == null) {
                 Log.warning("Couldn't match object info up to data [info=" +
                         info[ii] + "].");
@@ -570,7 +570,7 @@ public class PlacementConstraints
     
     /** For all objects in the scene, maps {@link ObjectInfo}s to
      * {@link ObjectData}s. */
-    protected HashMap _objectData = new HashMap();
+    protected HashMap<ObjectInfo,ObjectData> _objectData = new HashMap<ObjectInfo,ObjectData>();
 
     /** One rectangle we'll re-use for all constraints ops. */
     protected static final Rectangle _constrainRect = new Rectangle();

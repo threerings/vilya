@@ -111,14 +111,14 @@ public class SceneRegistry
     }
 
     /**
-     * Fetches the scene manager assosciated with the specified scene.
+     * Fetches the scene manager associated with the specified scene.
      *
      * @return the scene manager for the specified scene or null if no scene manager is loaded for
      * that scene.
      */
     public SceneManager getSceneManager (int sceneId)
     {
-        return (SceneManager)_scenemgrs.get(sceneId);
+        return _scenemgrs.get(sceneId);
     }
 
     /**
@@ -151,7 +151,7 @@ public class SceneRegistry
      */
     public void resolveScene (int sceneId, ResolutionListener target)
     {
-        SceneManager mgr = (SceneManager)_scenemgrs.get(sceneId);
+        SceneManager mgr = _scenemgrs.get(sceneId);
         if (mgr != null) {
             // if the scene is already resolved, we're ready to roll
             target.sceneWasResolved(mgr);
@@ -164,7 +164,7 @@ public class SceneRegistry
 
         // otherwise we've got to resolve the scene and call them back later; we can manipulate the
         // penders table with impunity here because we only do so on the dobjmgr thread
-        ArrayList penders = (ArrayList)_penders.get(sceneId);
+        ArrayList<ResolutionListener> penders = _penders.get(sceneId);
 
         // if we're already in the process of resolving this scene, just add these guys to the list
         // to be notified when it finally is resolved
@@ -173,7 +173,7 @@ public class SceneRegistry
 
         } else {
             // otherwise we've got to initiate the resolution process, create the penders list
-            _penders.put(sceneId, penders = new ArrayList());
+            _penders.put(sceneId, penders = new ArrayList<ResolutionListener>());
             penders.add(target);
 
             // i don't like cluttering up method declarations with final keywords...
@@ -272,7 +272,7 @@ public class SceneRegistry
                 }
             });
 
-            // when the scene manager completes its startup procedings, it will call back to the
+            // when the scene manager completes its startup proceedings, it will call back to the
             // scene registry and let us know that we can turn the penders loose
 
         } catch (Exception e) {
@@ -293,10 +293,9 @@ public class SceneRegistry
         }
 
         // alas things didn't work out, notify our penders
-        ArrayList penders = (ArrayList)_penders.remove(sceneId);
+        ArrayList<ResolutionListener> penders = _penders.remove(sceneId);
         if (penders != null) {
-            for (int i = 0; i < penders.size(); i++) {
-                ResolutionListener rl = (ResolutionListener)penders.get(i);
+            for (ResolutionListener rl : penders) {
                 try {
                     rl.sceneFailedToResolve(sceneId, cause);
                 } catch (Exception e) {
@@ -322,10 +321,9 @@ public class SceneRegistry
         }
 
         // now notify any penders
-        ArrayList penders = (ArrayList)_penders.remove(sceneId);
+        ArrayList<ResolutionListener> penders = _penders.remove(sceneId);
         if (penders != null) {
-            for (int i = 0; i < penders.size(); i++) {
-                ResolutionListener rl = (ResolutionListener)penders.get(i);
+            for (ResolutionListener rl : penders) {
                 try {
                     rl.sceneWasResolved(scmgr);
                 } catch (Exception e) {
@@ -361,8 +359,9 @@ public class SceneRegistry
     protected SceneFactory _scfact;
 
     /** A mapping from scene ids to scene managers. */
-    protected HashIntMap _scenemgrs = new HashIntMap();
+    protected HashIntMap<SceneManager> _scenemgrs = new HashIntMap<SceneManager>();
 
     /** The table of pending resolution listeners. */
-    protected HashIntMap _penders = new HashIntMap();
+    protected HashIntMap<ArrayList<ResolutionListener>> _penders = 
+        new HashIntMap<ArrayList<ResolutionListener>>();
 }
