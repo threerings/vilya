@@ -138,7 +138,7 @@ public class SceneRegistry
         SceneManager scmgr = getSceneManager(sceneId);
         return (scmgr == null) ? ("null:" + sceneId) : scmgr.where();
     }
-
+    
     /**
      * Requests that the specified scene be resolved, which means loaded into the server and
      * initialized if the scene is not currently active. The supplied callback instance will be
@@ -164,18 +164,9 @@ public class SceneRegistry
 
         // otherwise we've got to resolve the scene and call them back later; we can manipulate the
         // penders table with impunity here because we only do so on the dobjmgr thread
-        ArrayList<ResolutionListener> penders = _penders.get(sceneId);
-
-        // if we're already in the process of resolving this scene, just add these guys to the list
-        // to be notified when it finally is resolved
-        if (penders != null) {
-            penders.add(target);
-
-        } else {
-            // otherwise we've got to initiate the resolution process, create the penders list
-            _penders.put(sceneId, penders = new ArrayList<ResolutionListener>());
-            penders.add(target);
-
+        
+        // Add this guy to be notified, and if nobody has yet, start resolving the scene
+        if (addResolutionListener(sceneId, target)) {
             // i don't like cluttering up method declarations with final keywords...
             final int fsceneId = sceneId;
 
@@ -250,6 +241,26 @@ public class SceneRegistry
         // remove them from their occupied place (clears out scene info as well)
         CrowdServer.plreg.locprov.leaveOccupiedPlace(source);
     }
+    
+    /**
+     * Adds a callback for when the scene is resolved. Returns true if this is the first such
+     * thing (and thusly, the caller should actually fire off scene resolution) or false if we've
+     * already got a list and have just added this listener to it.
+     */
+    protected boolean addResolutionListener (int sceneId, ResolutionListener rl)
+    {
+        ArrayList<ResolutionListener> penders = _penders.get(sceneId);
+        boolean newList = false;
+        
+        if (penders == null) {
+            _penders.put(sceneId, penders = new ArrayList<ResolutionListener>());
+            newList = true;
+        }
+        
+        penders.add(rl);
+        return newList;
+    }
+
 
     /**
      * Called when the scene resolution has completed successfully.
