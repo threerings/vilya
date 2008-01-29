@@ -25,19 +25,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import com.samskivert.util.HashIntMap;
-import com.threerings.util.Name;
-
-import com.threerings.presents.dobj.DObject;
-import com.threerings.presents.dobj.Subscriber;
-import com.threerings.presents.dobj.ObjectAccessException;
-import com.threerings.presents.server.InvocationException;
-
+import com.threerings.crowd.chat.data.UserMessage;
 import com.threerings.crowd.chat.server.SpeakUtil;
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.OccupantInfo;
 import com.threerings.crowd.server.CrowdServer;
+import com.threerings.presents.dobj.DObject;
+import com.threerings.presents.server.InvocationException;
+import com.threerings.util.Name;
 import com.threerings.whirled.server.SceneManager;
-
 import com.threerings.whirled.spot.Log;
 import com.threerings.whirled.spot.data.Cluster;
 import com.threerings.whirled.spot.data.ClusterObject;
@@ -389,15 +385,25 @@ public class SpotSceneManager extends SceneManager
     /**
      * Called by the {@link SpotProvider} when we receive a cluster speak request.
      */
+    @Deprecated
     protected void handleClusterSpeakRequest (int sourceOid, Name source, String bundle,
                                               String message, byte mode)
+    {
+        handleClusterMessageRequest(sourceOid, new UserMessage(source, bundle, message, mode));
+    }
+    
+    /**
+     * Called by the {@link SpotProvider} when we receive a cluster message request.
+     */
+    protected void handleClusterMessageRequest (int sourceOid, UserMessage message) 
     {
         ClusterRecord clrec = getCluster(sourceOid);
         if (clrec == null) {
             Log.warning("Non-clustered user requested cluster speak [where=" + where() +
-                        ", chatter=" + source + " (" + sourceOid + "), msg=" + message + "].");
+                        ", chatter=" + message.speaker + " (" + sourceOid + "), " +
+                        "msg=" + message + "].");
         } else {
-            SpeakUtil.sendSpeak(clrec.getClusterObject(), source, bundle, message, mode);
+            SpeakUtil.sendMessage(clrec.getClusterObject(), message);
         }
     }
 

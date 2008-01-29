@@ -22,25 +22,21 @@
 package com.threerings.whirled.spot.server;
 
 import com.samskivert.util.StringUtil;
-import com.threerings.util.MessageManager;
-import com.threerings.util.Name;
-
+import com.threerings.crowd.chat.data.ChatCodes;
+import com.threerings.crowd.chat.data.UserMessage;
+import com.threerings.crowd.chat.server.SpeakUtil;
+import com.threerings.crowd.data.BodyObject;
+import com.threerings.crowd.server.PlaceRegistry;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.dobj.RootDObjectManager;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.presents.server.InvocationProvider;
-
-import com.threerings.crowd.chat.data.ChatCodes;
-import com.threerings.crowd.chat.server.SpeakUtil;
-import com.threerings.crowd.data.BodyObject;
-import com.threerings.crowd.server.PlaceRegistry;
-
+import com.threerings.util.MessageManager;
+import com.threerings.util.Name;
 import com.threerings.whirled.client.SceneService.SceneMoveListener;
 import com.threerings.whirled.data.ScenePlace;
-import com.threerings.whirled.server.SceneManager;
 import com.threerings.whirled.server.SceneRegistry;
-
 import com.threerings.whirled.spot.Log;
 import com.threerings.whirled.spot.client.SpotService;
 import com.threerings.whirled.spot.data.Location;
@@ -209,16 +205,32 @@ public class SpotProvider
     public void sendClusterChatMessage (int sceneId, int speakerOid, Name speaker,
                                         String bundle, String message, byte mode)
     {
+        sendClusterChatMessage(sceneId, speakerOid, 
+                               new UserMessage(speaker, bundle, message, mode));
+    }
+    
+    /**
+     * Sends a cluster chat notification to the specified location in the specified place object
+     * originating with the specified speaker.
+     *
+     * @param sceneId the scene id in which to deliver the chat message.
+     * @param speakerOid the body object id of the speaker (used to verify that they are in the
+     * cluster in question).
+     * @param message the message.
+     */
+    public void sendClusterChatMessage (int sceneId, int speakerOid, UserMessage message)
+    {
         // look up the scene manager for the specified scene
         SpotSceneManager smgr = (SpotSceneManager)_screg.getSceneManager(sceneId);
         if (smgr == null) {
-            Log.warning("User requested cluster chat in non-existent scene [user=" + speaker +
-                        ", sceneId=" + sceneId + ", message=" + message + "].");
+            Log.warning("User requested cluster chat in non-existent scene " +
+                        "[user=" + message.speaker + ", sceneId=" + sceneId + 
+                        ", message=" + message + "].");
             return;
         }
 
         // pass this request on to the spot scene manager
-        smgr.handleClusterSpeakRequest(speakerOid, speaker, bundle, message, mode);
+        smgr.handleClusterMessageRequest(speakerOid, message);
     }
 
     /** The place registry with which we interoperate. */
