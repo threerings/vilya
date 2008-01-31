@@ -103,7 +103,7 @@ public class StageScene extends SceneImpl
     /**
      * Iterates over all of the interesting objects in this scene.
      */
-    public Iterator enumerateObjects ()
+    public Iterator<ObjectInfo> enumerateObjects ()
     {
         return _objects.iterator();
     }
@@ -174,7 +174,7 @@ public class StageScene extends SceneImpl
     }
 
     // documentation inherited from interface
-    public Iterator getPortals ()
+    public Iterator<Portal> getPortals ()
     {
         return _sdelegate.getPortals();
     }
@@ -225,5 +225,5 @@ public class StageScene extends SceneImpl
     protected SpotSceneImpl _sdelegate;
 
     /** A list of all interesting scene objects. */
-    protected ArrayList _objects = new ArrayList();
+    protected ArrayList<ObjectInfo> _objects = new ArrayList<ObjectInfo>();
 }
