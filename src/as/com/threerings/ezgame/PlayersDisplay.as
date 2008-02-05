@@ -38,6 +38,8 @@ import flash.text.TextFieldAutoSize;
  *
  * You may use this, with any modifications you desire, in your game. Feel free to copy/modify or
  * extend this class.
+ *
+ * @private
  */
 public class PlayersDisplay extends Sprite
 {
