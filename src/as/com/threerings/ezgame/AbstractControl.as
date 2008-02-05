@@ -28,6 +28,7 @@ import flash.events.EventDispatcher;
 
 /**
  * The abstract base class for Game controls and subcontrols.
+ * @private
  */
 public class AbstractControl extends EventDispatcher
 {
@@ -54,11 +55,13 @@ public class AbstractControl extends EventDispatcher
      * at once.
      *
      * Example:
+     * <code>
      * _ctrl.doBatch(function () :void {
      *     _ctrl.net.set("board", new Array());
      *     _ctrl.net.set("scores", new Array());
      *     _ctrl.net.set("captures", 0);
      * });
+     * </code>
      */
     public function doBatch (fn :Function) :void
     {
@@ -96,7 +99,7 @@ public class AbstractControl extends EventDispatcher
     {
         // Ideally we want to not be an EventDispatcher so that people
         // won't try to do this on us, but if we do that, then some other
-        // object will be the target during dispatch, and that's confusing.
+        // object will be the target during dispatch, and that's weird.
         throw new IllegalOperationError();
     }
 
@@ -109,6 +112,7 @@ public class AbstractControl extends EventDispatcher
         try {
             super.dispatchEvent(event);
         } catch (err :Error) {
+            // AFAIK, this will never happen: dispatchEvent catches and copes with all exceptions.
             trace("Error dispatching event to user game.");
             trace(err.getStackTrace());
         }

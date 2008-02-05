@@ -29,7 +29,7 @@ import flash.geom.Point;
  * Dispatched when the size of the game area changes, for example as a result of the user
  * resizing their browser window.
  */
-public class SizeChangedEvent extends EZEvent
+public class SizeChangedEvent extends Event
 {
     /**
      * The type of this event.
@@ -50,9 +50,9 @@ public class SizeChangedEvent extends EZEvent
     /**
      * Constructor.
      */
-    public function SizeChangedEvent (gameCtrl :Object, size :Point)
+    public function SizeChangedEvent (size :Point)
     {
-        super(SIZE_CHANGED, gameCtrl);
+        super(SIZE_CHANGED);
         _size = size;
     }
 
@@ -63,7 +63,7 @@ public class SizeChangedEvent extends EZEvent
 
     override public function clone () :Event
     {
-        return new SizeChangedEvent(_gameCtrl, _size.clone());
+        return new SizeChangedEvent(_size.clone()); // since _size is mutable
     }
 
     /** Our implementation details. @private */

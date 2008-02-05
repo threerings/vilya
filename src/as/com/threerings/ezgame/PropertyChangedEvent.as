@@ -27,7 +27,7 @@ import flash.events.Event;
  * Property change events are dispatched after the property change was
  * validated on the server.
  */
-public class PropertyChangedEvent extends EZEvent
+public class PropertyChangedEvent extends Event
 {
     /**
      * The type of a property change event.
@@ -46,6 +46,8 @@ public class PropertyChangedEvent extends EZEvent
 
     /**
      * Get the property's new value.
+     * Note: if index is not -1 then this value is merely one element in an array that
+     * may be fully accessed using the 'net' subcontrol.
      */
     public function get newValue () :Object
     {
@@ -72,10 +74,9 @@ public class PropertyChangedEvent extends EZEvent
      * Constructor.
      */
     public function PropertyChangedEvent (
-        gameCtrl :Object, propName :String, newValue :Object,
-        oldValue :Object, index :int = -1)
+        propName :String, newValue :Object, oldValue :Object, index :int = -1)
     {
-        super(PROPERTY_CHANGED, gameCtrl);
+        super(PROPERTY_CHANGED);
         _name = propName;
         _newValue = newValue;
         _oldValue = oldValue;
@@ -90,7 +91,7 @@ public class PropertyChangedEvent extends EZEvent
 
     override public function clone () :Event
     {
-        return new PropertyChangedEvent(_gameCtrl, _name, _newValue, _oldValue, _index);
+        return new PropertyChangedEvent(_name, _newValue, _oldValue, _index);
     }
 
     /** @private */

@@ -25,9 +25,13 @@ import flash.errors.IllegalOperationError;
 
 /**
  * Abstract base class. Do not instantiate.
+ * @private
  */
 public class AbstractSubControl extends AbstractControl
 {
+    /**
+     * @private
+     */
     public function AbstractSubControl (parent :AbstractControl)
     {
         super();

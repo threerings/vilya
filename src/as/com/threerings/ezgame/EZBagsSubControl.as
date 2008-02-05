@@ -34,6 +34,9 @@ package com.threerings.ezgame {
  */
 public class EZBagsSubControl extends AbstractSubControl
 {
+    /**
+     * @private Constructed via EZGameControl.
+     */
     public function EZBagsSubControl (parent :AbstractControl)
     {
         super(parent);

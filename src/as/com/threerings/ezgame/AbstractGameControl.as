@@ -42,6 +42,7 @@ import flash.geom.Point;
 
 /**
  * Abstract base class for GameControl implementations.
+ * @private
  */
 public class AbstractGameControl extends AbstractControl
 {

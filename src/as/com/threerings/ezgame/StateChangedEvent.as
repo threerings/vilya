@@ -26,7 +26,7 @@ import flash.events.Event;
 /**
  * Dispatched when the state of the game has changed.
  */
-public class StateChangedEvent extends EZEvent
+public class StateChangedEvent extends Event
 {
     /**
      * Indicates that the game has transitioned to a started state.
@@ -65,9 +65,9 @@ public class StateChangedEvent extends EZEvent
     // TODO: move to own event?
     public static const TURN_CHANGED :String = "TurnChanged";
 
-    public function StateChangedEvent (type :String, gameCtrl :Object)
+    public function StateChangedEvent (type :String)
     {
-        super(type, gameCtrl);
+        super(type);
     }
 
     override public function toString () :String
@@ -77,7 +77,7 @@ public class StateChangedEvent extends EZEvent
 
     override public function clone () :Event
     {
-        return new StateChangedEvent(type, _gameCtrl);
+        return new StateChangedEvent(type);
     }
 }
 }

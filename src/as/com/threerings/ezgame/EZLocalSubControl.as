@@ -52,6 +52,9 @@ import flash.geom.Point;
  */
 public class EZLocalSubControl extends AbstractSubControl
 {
+    /**
+     * @private Constructed via EZGameControl.
+     */
     public function EZLocalSubControl (parent :AbstractGameControl)
     {
         super(parent);
@@ -130,7 +133,7 @@ public class EZLocalSubControl extends AbstractSubControl
     {
         super.populateProperties(o);
 
-        o["dispatchEvent_v1"] = dispatch; // for re-dispatching key events
+        o["dispatchEvent_v1"] = dispatch; // for re-dispatching keyboard events
         o["sizeChanged_v1"] = sizeChanged_v1;
     }
 
@@ -139,7 +142,7 @@ public class EZLocalSubControl extends AbstractSubControl
      */
     private function sizeChanged_v1 (size :Point) :void
     {
-        dispatch(new SizeChangedEvent(_parent, size));
+        dispatch(new SizeChangedEvent(size));
     }
 }
 }

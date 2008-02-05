@@ -27,6 +27,9 @@ package com.threerings.ezgame {
  */
 public class EZServicesSubControl extends AbstractSubControl
 {
+    /**
+     * @private Constructed via EZGameControl.
+     */
     public function EZServicesSubControl (parent :AbstractGameControl)
     {
         super(parent);

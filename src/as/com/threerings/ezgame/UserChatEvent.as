@@ -26,7 +26,7 @@ import flash.events.Event;
 /**
  * Dispatched when a player speaks.
  */
-public class UserChatEvent extends EZEvent
+public class UserChatEvent extends Event
 {
     /**
      * The type of a property change event.
@@ -50,12 +50,9 @@ public class UserChatEvent extends EZEvent
         return _message;
     }
 
-    /**
-     * Constructor.
-     */
-    public function UserChatEvent (gameCtrl :Object, speaker :int, message :String)
+    public function UserChatEvent (speaker :int, message :String)
     {
-        super(USER_CHAT, gameCtrl);
+        super(USER_CHAT);
         _speaker = speaker;
         _message = message;
     }
@@ -67,7 +64,7 @@ public class UserChatEvent extends EZEvent
 
     override public function clone () :Event
     {
-        return new UserChatEvent(_gameCtrl, _speaker, _message);
+        return new UserChatEvent(_speaker, _message);
     }
 
     /** @private */

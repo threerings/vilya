@@ -90,6 +90,9 @@ package com.threerings.ezgame {
  */
 public class EZGameSubControl extends AbstractSubControl
 {
+    /**
+     * @private Constructed via EZGameControl.
+     */
     public function EZGameSubControl (parent :AbstractGameControl)
     {
         super(parent);
@@ -295,7 +298,7 @@ public class EZGameSubControl extends AbstractSubControl
      */
     private function controlDidChange_v1 () :void
     {
-        dispatch(new StateChangedEvent(StateChangedEvent.CONTROL_CHANGED, _parent));
+        dispatch(new StateChangedEvent(StateChangedEvent.CONTROL_CHANGED));
     }
 
     /**
@@ -303,7 +306,7 @@ public class EZGameSubControl extends AbstractSubControl
      */
     private function turnDidChange_v1 () :void
     {
-        dispatch(new StateChangedEvent(StateChangedEvent.TURN_CHANGED, _parent));
+        dispatch(new StateChangedEvent(StateChangedEvent.TURN_CHANGED));
     }
 
     /**
@@ -311,8 +314,8 @@ public class EZGameSubControl extends AbstractSubControl
      */
     private function gameStateChanged_v1 (started :Boolean) :void
     {
-        dispatch(new StateChangedEvent(started ? StateChangedEvent.GAME_STARTED :
-                                       StateChangedEvent.GAME_ENDED, _parent));
+        dispatch(new StateChangedEvent(started ? StateChangedEvent.GAME_STARTED
+                                               : StateChangedEvent.GAME_ENDED));
     }
 
     /**
@@ -320,8 +323,8 @@ public class EZGameSubControl extends AbstractSubControl
      */
     private function roundStateChanged_v1 (started :Boolean) :void
     {
-        dispatch(new StateChangedEvent(started ? StateChangedEvent.ROUND_STARTED :
-                                       StateChangedEvent.ROUND_ENDED, _parent));
+        dispatch(new StateChangedEvent(started ? StateChangedEvent.ROUND_STARTED
+                                               : StateChangedEvent.ROUND_ENDED));
     }
 
     /**
@@ -330,8 +333,8 @@ public class EZGameSubControl extends AbstractSubControl
     private function occupantChanged_v1 (occupantId :int, player :Boolean, enter :Boolean) :void
     {
         dispatch(new OccupantChangedEvent(
-                     enter ? OccupantChangedEvent.OCCUPANT_ENTERED :
-                     OccupantChangedEvent.OCCUPANT_LEFT, _parent, occupantId, player));
+            enter ? OccupantChangedEvent.OCCUPANT_ENTERED
+                  : OccupantChangedEvent.OCCUPANT_LEFT, occupantId, player));
     }
 
     /**
@@ -339,7 +342,7 @@ public class EZGameSubControl extends AbstractSubControl
      */
     private function userChat_v1 (speaker :int, message :String) :void
     {
-        dispatch(new UserChatEvent(_parent, speaker, message));
+        dispatch(new UserChatEvent(speaker, message));
     }
 
     /** Contains any custom game configuration data. @private */

@@ -26,7 +26,7 @@ import flash.events.Event;
 /**
  * Dispatched on the 'net' subcontrol when a message is sent by any client.
  */
-public class MessageReceivedEvent extends EZEvent
+public class MessageReceivedEvent extends Event
 {
     /**
      * The type of all MessageReceivedEvents.
@@ -51,10 +51,9 @@ public class MessageReceivedEvent extends EZEvent
         return _value;
     }
 
-    public function MessageReceivedEvent (
-        gameCtrl :Object, messageName :String, value :Object)
+    public function MessageReceivedEvent (messageName :String, value :Object)
     {
-        super(MESSAGE_RECEIVED, gameCtrl);
+        super(MESSAGE_RECEIVED);
         _name = messageName;
         _value = value;
     }
@@ -67,10 +66,13 @@ public class MessageReceivedEvent extends EZEvent
 
     override public function clone () :Event
     {
-        return new MessageReceivedEvent(_gameCtrl, _name, _value);
+        return new MessageReceivedEvent(_name, _value);
     }
 
+    /** @private */
     protected var _name :String;
+
+    /** @private */
     protected var _value :Object;
 }
 }

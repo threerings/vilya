@@ -23,7 +23,13 @@ package com.threerings.ezgame {
 
 import flash.events.Event;
 
-public class OccupantChangedEvent extends EZEvent
+/**
+ * Dispatched when an occupant enters or leaves.
+ *
+ * If a watcher becomes a player, you may get an OCCUPANT_LEFT event where player == false,
+ * followed immediately by an OCCUPANT_ENTERED event where player == true.
+ */
+public class OccupantChangedEvent extends Event
 {
     /**
      * @eventType OccupantEntered
@@ -47,10 +53,9 @@ public class OccupantChangedEvent extends EZEvent
         return _player;
     }
 
-    public function OccupantChangedEvent (
-        type :String, gameCtrl :Object, occupantId :int, player :Boolean)
+    public function OccupantChangedEvent (type :String, occupantId :int, player :Boolean)
     {
-        super(type, gameCtrl);
+        super(type);
         _occupantId = occupantId;
         _player = player;
     }
@@ -64,7 +69,7 @@ public class OccupantChangedEvent extends EZEvent
 
     override public function clone () :Event
     {
-        return new OccupantChangedEvent(type, _gameCtrl, _occupantId, _player);
+        return new OccupantChangedEvent(type, _occupantId, _player);
     }
 
     /** @private */

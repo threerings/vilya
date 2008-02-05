@@ -43,6 +43,9 @@ package com.threerings.ezgame {
  */
 public class EZNetSubControl extends AbstractSubControl
 {
+    /**
+     * @private Constructed via EZGameControl.
+     */
     public function EZNetSubControl (parent :AbstractGameControl)
     {
         super(parent);
@@ -164,7 +167,7 @@ public class EZNetSubControl extends AbstractSubControl
     private function propertyWasSet_v1 (
         name :String, newValue :Object, oldValue :Object, index :int) :void
     {
-        dispatch(new PropertyChangedEvent(_parent, name, newValue, oldValue, index));
+        dispatch(new PropertyChangedEvent(name, newValue, oldValue, index));
     }
 
     /**
@@ -172,7 +175,7 @@ public class EZNetSubControl extends AbstractSubControl
      */
     private function messageReceived_v1 (name :String, value :Object) :void
     {
-        dispatch(new MessageReceivedEvent(_parent, name, value));
+        dispatch(new MessageReceivedEvent(name, value));
     }
 
     /** Game properties. @private */

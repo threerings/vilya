@@ -26,6 +26,9 @@ import flash.display.DisplayObject;
 /**
  * The single point of control for each client in your multiplayer EZGame.
  *
+ * <b>If you are creating a game for Whirled, you should use WhirledGameControl.</b>
+ * @see com.whirled.WhirledGameControl
+ * 
  * Usage: Usually, in your top-level movieclip/sprite:
  * _ctrl = new EZGameControl(this);
  * 

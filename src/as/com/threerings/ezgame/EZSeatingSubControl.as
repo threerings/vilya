@@ -29,6 +29,9 @@ package com.threerings.ezgame {
 // TODO: methods for allowing a player to pick a seat in SEATED_CONTINUOUS games.
 public class EZSeatingSubControl extends AbstractSubControl
 {
+    /**
+     * @private Constructed via EZGameControl.
+     */
     public function EZSeatingSubControl (parent :AbstractControl, game :EZGameSubControl)
     {
         super(parent);
