@@ -31,9 +31,9 @@ public class MessageReceivedEvent extends Event
     /**
      * The type of all MessageReceivedEvents.
      *
-     * @eventType msgReceived
+     * @eventType MsgReceived
      */
-    public static const MESSAGE_RECEIVED :String = "msgReceived";
+    public static const MESSAGE_RECEIVED :String = "MsgReceived";
 
     /**
      * Access the message name.
@@ -60,8 +60,7 @@ public class MessageReceivedEvent extends Event
 
     override public function toString () :String
     {
-        return "[MessageReceivedEvent name=" + _name +
-            ", value=" + _value + "]";
+        return "[MessageReceivedEvent name=" + _name + ", value=" + _value + "]";
     }
 
     override public function clone () :Event

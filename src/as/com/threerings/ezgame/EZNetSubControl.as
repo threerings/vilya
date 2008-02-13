@@ -33,7 +33,7 @@ package com.threerings.ezgame {
  *
  * @eventType com.threerings.ezgame.MessageReceivedEvent.MESSAGE_RECEIVED
  */
-[Event(name="msgReceived", type="com.threerings.ezgame.MessageReceivedEvent")]
+[Event(name="MsgReceived", type="com.threerings.ezgame.MessageReceivedEvent")]
 
 /**
  * Provides access to 'net' game services. Do not instantiate this class yourself,
