@@ -27,13 +27,11 @@ import mx.controls.CheckBox;
 import mx.controls.ComboBox;
 import mx.controls.Label;
 
-// TODO: we shouldn't use these here but I don't feel like a major refactor
-import com.threerings.ezgame.data.ToggleParameter;
-import com.threerings.ezgame.data.RangeParameter;
-
 import com.threerings.flex.GridUtil;
 
+import com.threerings.parlor.data.RangeParameter;
 import com.threerings.parlor.data.TableConfig;
+import com.threerings.parlor.data.ToggleParameter;
 import com.threerings.parlor.util.ParlorContext;
 
 import com.threerings.parlor.game.client.FlexGameConfigurator;
