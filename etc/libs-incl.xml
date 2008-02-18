@@ -23,7 +23,7 @@
     <include name="velocity-1.5-dev.jar"/>
     <include name="xml-writer.jar"/>
     <!-- ActionScript dependencies -->
-    <include name="narya.swc"/>
-    <include name="nenya.swc"/>
+    <include name="naryalib.swc"/>
+    <include name="nenyalib.swc"/>
   </fileset>
 </project>
