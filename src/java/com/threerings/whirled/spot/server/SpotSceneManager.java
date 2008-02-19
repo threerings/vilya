@@ -412,7 +412,7 @@ public class SpotSceneManager extends SceneManager
      */
     protected SceneLocation locationForBody (int bodyOid)
     {
-        return (SceneLocation)_ssobj.occupantLocs.get(Integer.valueOf(bodyOid));
+        return _ssobj.occupantLocs.get(Integer.valueOf(bodyOid));
     }
 
     /**

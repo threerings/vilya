@@ -27,11 +27,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import com.samskivert.io.PersistenceException;
 import com.samskivert.util.HashIntMap;
-import com.samskivert.util.Invoker;
-import com.samskivert.util.StringUtil;
-
 import com.threerings.media.util.AStarPathUtil;
 import com.threerings.media.util.MathUtil;
 import com.threerings.miso.data.ObjectInfo;
@@ -356,8 +352,7 @@ public class StageSceneManager extends SpotSceneManager
         }
 
         // if they are already standing on this tile, allow it
-        SceneLocation cloc = (SceneLocation)
-            _ssobj.occupantLocs.get(Integer.valueOf(source.getOid()));
+        SceneLocation cloc = _ssobj.occupantLocs.get(Integer.valueOf(source.getOid()));
         if (cloc != null) {
             StageLocation sloc = (StageLocation) cloc.loc;
             if (MisoUtil.fullToTile(sloc.x) == tx &&
@@ -713,8 +708,7 @@ public class StageSceneManager extends SpotSceneManager
     /** Helper function for {@link #bodyAdded}. */
     protected void positionBody (Cluster cl, int bodyOid, ArrayList locs)
     {
-        SceneLocation sloc = (SceneLocation)
-            _ssobj.occupantLocs.get(Integer.valueOf(bodyOid));
+        SceneLocation sloc = _ssobj.occupantLocs.get(Integer.valueOf(bodyOid));
         if (sloc == null) {
             BodyObject user = (BodyObject)StageServer.omgr.getObject(bodyOid);
             String who = (user == null) ? ("" + bodyOid) : user.who();

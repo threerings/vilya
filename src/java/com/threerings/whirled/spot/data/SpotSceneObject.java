@@ -39,10 +39,10 @@ public class SpotSceneObject extends SceneObject
 
     /** A distributed set containing {@link SceneLocation} records for all
      * occupants of this scene. */
-    public DSet occupantLocs = new DSet();
+    public DSet<SceneLocation> occupantLocs = new DSet<SceneLocation>();
 
     /** Contains information on all {@link Cluster}s in this scene. */
-    public DSet clusters = new DSet();
+    public DSet<Cluster> clusters = new DSet<Cluster>();
 
     // AUTO-GENERATED: METHODS START
     /**
@@ -50,7 +50,7 @@ public class SpotSceneObject extends SceneObject
      * <code>occupantLocs</code> set. The set will not change until the event is
      * actually propagated through the system.
      */
-    public void addToOccupantLocs (DSet.Entry elem)
+    public void addToOccupantLocs (SceneLocation elem)
     {
         requestEntryAdd(OCCUPANT_LOCS, occupantLocs, elem);
     }
@@ -70,7 +70,7 @@ public class SpotSceneObject extends SceneObject
      * <code>occupantLocs</code> set. The set will not change until the event is
      * actually propagated through the system.
      */
-    public void updateOccupantLocs (DSet.Entry elem)
+    public void updateOccupantLocs (SceneLocation elem)
     {
         requestEntryUpdate(OCCUPANT_LOCS, occupantLocs, elem);
     }
@@ -85,10 +85,10 @@ public class SpotSceneObject extends SceneObject
      * change. Proxied copies of this object (on clients) will apply the
      * value change when they received the attribute changed notification.
      */
-    public void setOccupantLocs (DSet value)
+    public void setOccupantLocs (DSet<com.threerings.whirled.spot.data.SceneLocation> value)
     {
         requestAttributeChange(OCCUPANT_LOCS, value, this.occupantLocs);
-        @SuppressWarnings("unchecked") DSet clone =
+        @SuppressWarnings("unchecked") DSet<com.threerings.whirled.spot.data.SceneLocation> clone =
             (value == null) ? null : value.typedClone();
         this.occupantLocs = clone;
     }
@@ -98,7 +98,7 @@ public class SpotSceneObject extends SceneObject
      * <code>clusters</code> set. The set will not change until the event is
      * actually propagated through the system.
      */
-    public void addToClusters (DSet.Entry elem)
+    public void addToClusters (Cluster elem)
     {
         requestEntryAdd(CLUSTERS, clusters, elem);
     }
@@ -118,7 +118,7 @@ public class SpotSceneObject extends SceneObject
      * <code>clusters</code> set. The set will not change until the event is
      * actually propagated through the system.
      */
-    public void updateClusters (DSet.Entry elem)
+    public void updateClusters (Cluster elem)
     {
         requestEntryUpdate(CLUSTERS, clusters, elem);
     }
@@ -133,10 +133,10 @@ public class SpotSceneObject extends SceneObject
      * change. Proxied copies of this object (on clients) will apply the
      * value change when they received the attribute changed notification.
      */
-    public void setClusters (DSet value)
+    public void setClusters (DSet<com.threerings.whirled.spot.data.Cluster> value)
     {
         requestAttributeChange(CLUSTERS, value, this.clusters);
-        @SuppressWarnings("unchecked") DSet clone =
+        @SuppressWarnings("unchecked") DSet<com.threerings.whirled.spot.data.Cluster> clone =
             (value == null) ? null : value.typedClone();
         this.clusters = clone;
     }
