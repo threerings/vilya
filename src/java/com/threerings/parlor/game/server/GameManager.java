@@ -421,7 +421,7 @@ public class GameManager extends PlaceManager
     public boolean startGame ()
     {
         // complain if we're already started
-        if (_gameobj.state == GameObject.IN_PLAY) {
+        if (_gameobj.isInPlay()) {
             log.warning("Requested to start an already in-play game [game=" + where() + "].");
             Thread.dumpStack();
             return false;
