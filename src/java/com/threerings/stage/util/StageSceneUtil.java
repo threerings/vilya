@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 import com.samskivert.util.SortableArrayList;
-import com.samskivert.util.StringUtil;
 import com.threerings.util.DirectionCodes;
 import com.threerings.util.DirectionUtil;
 
@@ -45,7 +44,6 @@ import com.threerings.miso.util.MisoUtil;
 import com.threerings.miso.util.ObjectSet;
 
 import com.threerings.whirled.spot.data.Cluster;
-import com.threerings.whirled.spot.data.Location;
 import com.threerings.whirled.spot.data.SceneLocation;
 
 import com.threerings.stage.Log;
@@ -59,6 +57,13 @@ import com.threerings.stage.data.StageSceneModel;
 public class StageSceneUtil
 {
     /**
+     * Value to pass to {@link #locationForObject(TileManager, ObjectInfo, int)} and
+     * {@link #locationForObject(TileManager, int, int, int, int)}for orientation to indicate it
+     * should use the object's orientation.
+     */
+    public static final int OBJECT_ORIENTATION = -1;
+    
+    /**
      * Returns the scene metrics we use to do our calculations.
      */
     public static MisoSceneMetrics getMetrics ()
@@ -67,40 +72,68 @@ public class StageSceneUtil
     }
 
     /**
-     * Does the necessary jiggery pokery to figure out where the specified
-     * object's associated location is.
+     * Does the necessary jiggery pokery to figure out where the specified object's associated
+     * location is.
      */
-    public static StageLocation locationForObject (
-        TileManager tilemgr, ObjectInfo info)
+    public static StageLocation locationForObject (TileManager tilemgr, ObjectInfo info)
     {
-        return locationForObject(tilemgr, info.tileId, info.x, info.y);
+        return locationForObject(tilemgr, info, -1);
     }
 
     /**
-     * Does the necessary jiggery pokery to figure out where the specified
-     * object's associated location is.
-     *
-     * @param tilemgr a tile manager that can be used to look up the tile
-     * information.
+     * Does the necessary jiggery pokery to figure out where the specified object's associated
+     * location is.
+     * 
+     * @param orient - the orientation to use in the returned location, or
+     * {@link #OBJECT_ORIENTATION} if the object's orientation should be used
+     */
+    public static StageLocation locationForObject (TileManager tilemgr, ObjectInfo info,
+        int orient)
+    {
+        return locationForObject(tilemgr, info.tileId, info.x, info.y, orient);
+    }
+
+    /**
+     * Does the necessary jiggery pokery to figure out where the specified object's associated
+     * location is.
+     * 
+     * @param tilemgr a tile manager that can be used to look up the tile information.
      * @param tileId the fully qualified tile id of the object tile.
      * @param tx the object's x tile coordinate.
      * @param ty the object's y tile coordinate.
      */
-    public static StageLocation locationForObject (
-        TileManager tilemgr, int tileId, int tx, int ty)
+    public static StageLocation locationForObject (TileManager tilemgr, int tileId, int tx, int ty)
+    {
+        return locationForObject(tilemgr, tileId, tx, ty, -1);
+    }
+
+    /**
+     * Does the necessary jiggery pokery to figure out where the specified object's associated
+     * location is.
+     * 
+     * @param tilemgr a tile manager that can be used to look up the tile information.
+     * @param tileId the fully qualified tile id of the object tile.
+     * @param tx the object's x tile coordinate.
+     * @param ty the object's y tile coordinate.
+     * @param orient - the orientation to use in the returned location, or
+     * {@link #OBJECT_ORIENTATION} if the tile's orientation should be used
+     */
+    public static StageLocation locationForObject (TileManager tilemgr, int tileId, int tx,
+        int ty, int orient)
     {
         try {
             int tsid = TileUtil.getTileSetId(tileId);
             int tidx = TileUtil.getTileIndex(tileId);
-            TrimmedObjectTileSet tset = (TrimmedObjectTileSet)
-                tilemgr.getTileSet(tsid);
-            if (tset == null || tset.getSpotOrient(tidx) < 0) {
+            TrimmedObjectTileSet tset = (TrimmedObjectTileSet)tilemgr.getTileSet(tsid);
+            if (tset == null || (orient == OBJECT_ORIENTATION && tset.getSpotOrient(tidx) < 0)) {
                 return null;
             }
+            if (orient == OBJECT_ORIENTATION) {
+                orient = tset.getSpotOrient(tidx);
+            }
 
-            Point opos = MisoUtil.tilePlusFineToFull(
-                _metrics, tx, ty, tset.getXSpot(tidx), tset.getYSpot(tidx),
-                new Point());
+            Point opos = MisoUtil.tilePlusFineToFull(_metrics, tx, ty, tset.getXSpot(tidx),
+                tset.getYSpot(tidx), new Point());
 
 //             Log.info("Computed location [set=" + tset.getName() +
 //                      ", tidx=" + tidx + ", tx=" + tx + ", ty=" + ty +
@@ -108,8 +141,7 @@ public class StageSceneUtil
 //                      ", sy=" + tset.getYSpot(tidx) +
 //                      ", lx=" + opos.x + ", ly=" + opos.y +
 //                      ", fg=" + _metrics.finegran + "].");
-            return new StageLocation(opos.x, opos.y,
-                    (byte)tset.getSpotOrient(tidx));
+            return new StageLocation(opos.x, opos.y, (byte)orient);
 
         } catch (Exception e) {
             Log.warning("Unable to look up object tile for scene object " +
