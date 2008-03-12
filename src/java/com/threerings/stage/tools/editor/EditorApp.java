@@ -28,6 +28,7 @@ import java.awt.EventQueue;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -66,6 +67,7 @@ import com.threerings.miso.tile.MisoTileManager;
 
 import com.threerings.stage.data.StageSceneModel;
 import com.threerings.stage.tools.editor.util.EditorContext;
+import com.threerings.stage.tools.xml.StageSceneWriter;
 
 /**
  * A scene editor application that provides facilities for viewing,
@@ -245,13 +247,14 @@ public class EditorApp implements Runnable
             _frame.setSize(1024, 768);
             SwingUtil.centerWindow(_frame);
             _frame.setVisible(true);
+            SwingUtil.refresh((JComponent)_frame.getContentPane());
         }
         _framemgr.start();
     }
 
     protected EditorFrame createEditorFrame ()
     {
-        return new EditorFrame();
+        return new EditorFrame(new StageSceneWriter());
     }
 
     /**

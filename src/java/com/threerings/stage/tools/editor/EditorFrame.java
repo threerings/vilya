@@ -34,7 +34,6 @@ import java.awt.event.WindowEvent;
 
 import java.io.File;
 
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
@@ -65,8 +64,9 @@ import com.threerings.stage.tools.xml.StageSceneWriter;
 
 public class EditorFrame extends ManagedJFrame
 {
-    public EditorFrame ()
+    public EditorFrame (StageSceneWriter writer)
     {
+        _writer = writer;
         // treat a closing window as a request to quit
         addWindowListener(new WindowAdapter () {
             public void windowClosing (WindowEvent e) {
@@ -87,16 +87,15 @@ public class EditorFrame extends ManagedJFrame
 
         // create the file chooser used for saving and loading scenes
         if (target == null) {
-            target = EditorConfig.config.getValue(
-                "editor.last_dir", System.getProperty("user.dir"));
+            target = EditorConfig.config.getValue("editor.last_dir",
+                System.getProperty("user.dir"));
         }
-        _chooser = (target == null) ?
-            new JFileChooser() : new JFileChooser(target);
+        _chooser = (target == null) ? new JFileChooser() : new JFileChooser(target);
         _chooser.setFileFilter(new FileFilter () {
-            public boolean accept (File f) {
+            @Override public boolean accept (File f) {
                 return (f.isDirectory() || f.getName().endsWith(".xml"));
             }
-            public String getDescription () {
+            @Override public String getDescription () {
                 return "XML Files";
             }
         });
@@ -117,14 +116,12 @@ public class EditorFrame extends ManagedJFrame
         _main = new JPanel(new BorderLayout());
 
         // set up the scene view panel with a default scene
-        _svpanel = new EditorScenePanel(_ctx, this, _model);
+        _svpanel = createScenePanel();
         _main.add(_svpanel, BorderLayout.CENTER);
 
         // create a toolbar for action selection and other options
-        JPanel upper = new JPanel(
-            new HGroupLayout(GroupLayout.NONE, GroupLayout.LEFT));
-        upper.add(new EditorToolBarPanel(_ctx.getTileManager(), _model),
-                  GroupLayout.FIXED);
+        JPanel upper = new JPanel(new HGroupLayout(GroupLayout.NONE, GroupLayout.LEFT));
+        upper.add(new EditorToolBarPanel(_ctx.getTileManager(), _model), GroupLayout.FIXED);
         _sceneInfoPanel = new SceneInfoPanel(_ctx, _model, _svpanel);
         upper.add(_sceneInfoPanel, GroupLayout.FIXED);
         _main.add(upper, BorderLayout.NORTH);
@@ -170,7 +167,20 @@ public class EditorFrame extends ManagedJFrame
         });
 
         // finally set a default scene
-        newScene();
+        String lastFile = EditorConfig.config.getValue("editor.last_file", "");
+        if (lastFile.equals("")) {
+            newScene();
+        } else {
+            openScene(lastFile);
+        }
+    }
+
+    /** 
+     * Creates the EditorScenePanel to use in this frame. 
+     */
+    protected EditorScenePanel createScenePanel ()
+    {
+        return new EditorScenePanel(_ctx, this, _model);
     }
 
     /**
@@ -508,8 +518,8 @@ public class EditorFrame extends ManagedJFrame
                 switch (_chooser.getDialogType()) {
                 case JFileChooser.OPEN_DIALOG:
                     openScene(filescene.getPath());
-                    EditorConfig.config.setValue(
-                        "editor.last_dir", filescene.getParent());
+                    EditorConfig.config.setValue("editor.last_dir", filescene.getParent());
+                    EditorConfig.config.setValue("editor.last_file", filescene.getAbsolutePath());
                     break;
 
                 case JFileChooser.SAVE_DIALOG:
@@ -518,8 +528,7 @@ public class EditorFrame extends ManagedJFrame
                     break;
 
                 default:
-                    Log.warning("Wha? Weird dialog type " +
-                                _chooser.getDialogType() + ".");
+                    Log.warning("Wha? Weird dialog type " + _chooser.getDialogType() + ".");
                     break;
                 }
             }
@@ -574,7 +583,7 @@ public class EditorFrame extends ManagedJFrame
     protected StageSceneParser _parser = new StageSceneParser();
 
     /** We use this to save scenes. */
-    protected StageSceneWriter _writer = new StageSceneWriter();
+    protected StageSceneWriter _writer;
 
     /** The test tileset loader. */
     protected TestTileLoader _testLoader;

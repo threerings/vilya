@@ -51,7 +51,6 @@ import com.samskivert.swing.Controller;
 import com.samskivert.swing.TGraphics2D;
 import com.samskivert.swing.util.SwingUtil;
 import com.samskivert.util.RandomUtil;
-import com.samskivert.util.StringUtil;
 import com.threerings.util.DirectionCodes;
 
 import com.threerings.media.tile.ObjectTile;
@@ -72,7 +71,6 @@ import com.threerings.stage.client.StageScenePanel;
 import com.threerings.stage.data.StageLocation;
 import com.threerings.stage.data.StageMisoSceneModel;
 
-import com.threerings.stage.data.StageScene;
 import com.threerings.stage.tools.editor.util.EditorContext;
 import com.threerings.stage.tools.editor.util.EditorDialogUtil;
 import com.threerings.stage.tools.editor.util.ExtrasPainter;
@@ -609,47 +607,72 @@ public class EditorScenePanel extends StageScenePanel
     }
 
     /**
-     * Sets an object tile at the specified position in the scene (in tile
-     * coordinates).
+     * Sets an object tile at the specified position in the scene (in tile coordinates).
+     * 
+     * @return - the created object or null if an identical object was already in that spot.
      */
-    public void addObject (ObjectTile tile, int fqTileId, int x, int y)
+    public ObjectInfo addObject (ObjectTile tile, int fqTileId, int x, int y)
     {
         Point p = new Point(x, y);
         adjustObjectCoordsAccordingToGrip(p, tile);
+        return addObject(new ObjectInfo(fqTileId, x, y));
+    }
 
-        ObjectInfo oinfo = new ObjectInfo(fqTileId, x, y);
-
+    /**
+     * Adds the given object to the scene.
+     * 
+     * @return the added object or null if an identical object was already in that spot.
+     */
+    public ObjectInfo addObject (ObjectInfo oinfo)
+    {
         // first attempt to add it to the appropriate scene block; this
         // will fail if there's already a copy of the same object at this
         // coordinate
-        if (getBlock(x, y).addObject(oinfo)) {
+        if (getBlock(oinfo.x, oinfo.y).addObject(oinfo)) {
             // create an object info and add it to the scene model
             _model.addObject(oinfo);
             // recompute our visible object set
             recomputeVisible();
+            return oinfo;
         }
+        return null;
     }
 
     /**
      * Deletes the object tile at the specified tile coordinates.
+     * 
+     * @return true - if a matching object was found and deleted.
      */
-    public void deleteObject (SceneObject scobj)
+    public boolean deleteObject (SceneObject scobj)
+    {
+        if (deleteObject(scobj.info)) {
+            // make sure we clear the hover if that's what we're deleting
+            if (_hobject == scobj) {
+                _hobject = null;
+            }
+            return true;
+        }
+        Log.warning("Requested to remove unknown object " + scobj + ".");
+        return false;
+    }
+
+    /**
+     * Delete the given object from the scene.
+     * 
+     * @return true - if a matching object was found and deleted.
+     */
+    public boolean deleteObject (ObjectInfo info)
     {
         // remove it from the scene model
-        if (_model.removeObject(scobj.info)) {
+        if (_model.removeObject(info)) {
             // clear the object out of its block
-            getBlock(scobj.info.x, scobj.info.y).deleteObject(scobj.info);
-        } else {
-            Log.warning("Requested to remove unknown object " + scobj + ".");
-        }
+            getBlock(info.x, info.y).deleteObject(info);
 
-        // recompute our visible object set
-        recomputeVisible();
-
-        // make sure we clear the hover if that's what we're deleting
-        if (_hobject == scobj) {
-            _hobject = null;
+            // recompute our visible object set
+            recomputeVisible();
+            return true;
         }
+        return false;
     }
 
     /**
