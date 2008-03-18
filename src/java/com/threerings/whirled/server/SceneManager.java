@@ -149,8 +149,7 @@ public class SceneManager extends PlaceManager
         WhirledServer.invoker.postUnit(new Invoker.Unit() {
             public boolean invoke () {
                 try {
-                    _screg.getSceneRepository().applyAndRecordUpdate(
-                        _scene.getSceneModel(), update);
+                    _screg.getSceneRepository().applyAndRecordUpdate(_scene.getSceneModel(), update);
                 } catch (PersistenceException pe) {
                     Log.warning("Failed to apply scene update " + update + ".");
                     Log.logStackTrace(pe);

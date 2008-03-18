@@ -33,20 +33,18 @@ import com.threerings.util.ActionScript;
 import com.threerings.whirled.Log;
 
 /**
- * Used to encapsulate updates to scenes in such a manner that updates can
- * be stored persistently and sent to clients to update their own local
- * copies of scenes.
+ * Used to encapsulate updates to scenes in such a manner that updates can be stored persistently
+ * and sent to clients to update their own local copies of scenes.
  */
 public class SceneUpdate
     implements Streamable, Cloneable
 {
     /**
-     * Initializes this scene update such that it will operate on a scene
-     * with the specified target scene and version number.
+     * Initializes this scene update such that it will operate on a scene with the specified target
+     * scene and version number.
      *
      * @param targetId the id of the scene on which we are to operate.
-     * @param targetVersion the version of the scene on which we are to
-     * operate.
+     * @param targetVersion the version of the scene on which we are to operate.
      */
     public void init (int targetId, int targetVersion)
     {
@@ -71,43 +69,48 @@ public class SceneUpdate
     }
 
     /**
-     * Called to ensure that the scene is in the appropriate state prior
-     * to applying the update.
+     * Returns the amount by which this update increments the scene version.
+     */
+    public int getVersionIncrement ()
+    {
+        return 1;
+    }
+
+    /**
+     * Called to ensure that the scene is in the appropriate state prior to applying the update.
      *
-     * @exception IllegalStateException thrown if the update cannot be
-     * applied to the scene because it is not in a valid state
-     * (appropriate previous updates were not applied, it's the wrong kind
-     * of scene, etc.).
+     * @exception IllegalStateException thrown if the update cannot be applied to the scene because
+     * it is not in a valid state (appropriate previous updates were not applied, it's the wrong
+     * kind of scene, etc.).
      */
     public void validate (SceneModel model)
         throws IllegalStateException
     {
         if (model.sceneId != _targetId) {
-            String errmsg = "Wrong target scene, expected id " +
-                _targetId + " got id " + model.sceneId;
+            String errmsg = "Wrong target scene, expected id " + _targetId +
+                " got id " + model.sceneId;
             throw new IllegalStateException(errmsg);
         }
         if (model.version != _targetVersion) {
-            String errmsg = "Target scene not proper version, expected " +
-                _targetVersion + " got " + model.version;
+            String errmsg = "Target scene not proper version, expected " + _targetVersion +
+                " got " + model.version;
             throw new IllegalStateException(errmsg);
         }
     }
 
     /**
-     * Applies this update to the specified scene model. Derived classes
-     * will want to override this method and apply updates of their own,
-     * being sure to call <code>super.apply</code>.
+     * Applies this update to the specified scene model. Derived classes will want to override this
+     * method and apply updates of their own, being sure to call <code>super.apply</code>.
      */
     public void apply (SceneModel model)
     {
         // increment the version; disallowing integer overflow
-        model.version = Math.max(_targetVersion + 1, model.version);
+        model.version = Math.max(_targetVersion + getVersionIncrement(), model.version);
 
         // sanity check for the amazing two billion updates
         if (model.version == _targetVersion) {
-            Log.warning("Egads! This scene has been updated two billion " +
-                        "times [model=" + model + ", update=" + this + "].");
+            Log.warning("Egads! This scene has been updated two billion times [model=" + model +
+                        ", update=" + this + "].");
         }
     }
 
@@ -138,10 +141,9 @@ public class SceneUpdate
     }
 
     /**
-     * Serializes the bare representation of this instance without the scene id
-     * and version fields.  Useful when storing updates in a database where the
-     * scene id and version fields are stored in separate columns and the rest
-     * if the representation is contained in an opaque blob.
+     * Serializes the bare representation of this instance without the scene id and version fields.
+     * Useful when storing updates in a database where the scene id and version fields are stored
+     * in separate columns and the rest if the representation is contained in an opaque blob.
      */
     @ActionScript(omit=true)
     public void persistTo (ObjectOutputStream out)
@@ -156,8 +158,7 @@ public class SceneUpdate
     }
 
     /**
-     * Unserializes this instance from the bare representation created by
-     * {@link #persistTo}.
+     * Unserializes this instance from the bare representation created by {@link #persistTo}.
      */
     @ActionScript(omit=true)
     public void unpersistFrom (ObjectInputStream in)
@@ -182,8 +183,7 @@ public class SceneUpdate
     }
 
     /**
-     * An extensible mechanism for generating a string representation of
-     * this instance.
+     * An extensible mechanism for generating a string representation of this instance.
      */
     @ActionScript(name="toStringBuilder")
     protected void toString (StringBuilder buf)
