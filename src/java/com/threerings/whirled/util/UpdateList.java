@@ -78,7 +78,7 @@ public class UpdateList
                 updates.add(update);
             }
         }
-        return updates.toArray(new SceneUpdate[updates.size()]);
+        return (updates.size() == 0) ? null : updates.toArray(new SceneUpdate[updates.size()]);
     }
 
     /**

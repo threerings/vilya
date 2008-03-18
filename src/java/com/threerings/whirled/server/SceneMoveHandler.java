@@ -60,7 +60,7 @@ public class SceneMoveHandler extends AbstractSceneMoveHandler
             if (_version < model.version) {
                 updates = scmgr.getUpdates(_version);
             }
-            if (updates != null && updates.length > 0) {
+            if (updates != null) {
                 listener.moveSucceededWithUpdates(ploid, config, updates);
             } else {
                 listener.moveSucceededWithScene(ploid, config, model);
