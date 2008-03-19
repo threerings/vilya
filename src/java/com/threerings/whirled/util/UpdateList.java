@@ -72,6 +72,12 @@ public class UpdateList
      */
     public SceneUpdate[] getUpdates (int fromVersion)
     {
+        // If we don't have updates, or our updates start from someplace later than our fromVersion,
+        // we can't give updates from our known ones.
+        if (_updates.size() == 0 || _updates.get(0).getSceneVersion() > fromVersion) {
+            return null;
+        }
+        
         List<SceneUpdate> updates = Lists.newArrayList();
         for (SceneUpdate update : _updates) {
             if (update.getSceneVersion() >= fromVersion) {
