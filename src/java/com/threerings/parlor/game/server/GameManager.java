@@ -667,6 +667,15 @@ public class GameManager extends PlaceManager
     }
 
     /**
+     * Returns the time after which we consider any player that has not yet reported into the game
+     * as a no-show and try to start the game anyway.
+     */
+    protected long getNoShowTime ()
+    {
+        return DEFAULT_NOSHOW_DELAY;
+    }
+
+    /**
      * Derived classes that need their AIs to be ticked periodically should override this method
      * and return true. Many AIs can act entirely in reaction to game state changes and need no
      * periodic ticking which is why ticking is disabled by default.
@@ -803,7 +812,7 @@ public class GameManager extends PlaceManager
                     checkForNoShows();
                 }
             };
-            _noShowInterval.schedule(NOSHOW_DELAY);
+            _noShowInterval.schedule(getNoShowTime());
         }
     }
 
@@ -1337,9 +1346,8 @@ public class GameManager extends PlaceManager
         }
     };
 
-    /** We give players 30 seconds to turn up in a game; after that, they're considered a no
-     * show. */
-    protected static final long NOSHOW_DELAY = 30 * 1000L;
+    /** The default value returned by {@link #getNoShowTime}. */
+    protected static final long DEFAULT_NOSHOW_DELAY = 30 * 1000L;
 
     /** The delay in milliseconds between ticking of all game managers. */
     protected static final long TICK_DELAY = 5L * 1000L;
