@@ -116,6 +116,11 @@ public class TableManager
     public Table createTable (BodyObject creator, TableConfig tableConfig, GameConfig config)
         throws InvocationException
     {
+        // make sure the caller is not already in a table
+        if (_boidMap.containsKey(creator.getOid())) {
+            throw new InvocationException(ALREADY_AT_TABLE);
+        }
+
         // create a brand spanking new table
         Table table;
         try {
@@ -181,6 +186,11 @@ public class TableManager
         throws InvocationException
     {
         BodyObject joiner = (BodyObject)caller;
+
+        // make sure the caller is not already in a table
+        if (_boidMap.containsKey(joiner.getOid())) {
+            throw new InvocationException(ALREADY_AT_TABLE);
+        }
 
         // look the table up
         Table table = _tables.get(tableId);
