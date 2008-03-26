@@ -335,7 +335,7 @@ public class EditorScenePanel extends StageScenePanel
     {
         // create our portal dialog if we haven't yet
         if (_dialogPortal == null) {
-            _dialogPortal = new PortalDialog();
+            _dialogPortal = new PortalDialog(_ctx, this);
         }
 
         // pass location information on to the dialog

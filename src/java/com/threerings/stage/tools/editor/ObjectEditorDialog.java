@@ -12,7 +12,7 @@
 //
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public
@@ -21,20 +21,16 @@
 
 package com.threerings.stage.tools.editor;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Arrays;
 
-import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
-import javax.swing.JInternalFrame;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 
 import com.samskivert.swing.HGroupLayout;
-import com.samskivert.swing.VGroupLayout;
 import com.samskivert.util.StringUtil;
 
 import com.threerings.media.image.ColorPository.ColorRecord;
@@ -48,36 +44,27 @@ import com.threerings.media.tile.TileUtil;
 import com.threerings.miso.client.SceneObject;
 
 import com.threerings.stage.tools.editor.util.EditorContext;
-import com.threerings.stage.tools.editor.util.EditorDialogUtil;
 
 /**
  * Used to edit object attributes.
  */
-public class ObjectEditorDialog extends JInternalFrame
-    implements ActionListener
+public class ObjectEditorDialog extends EditorDialog
 {
     public ObjectEditorDialog (EditorContext ctx, EditorScenePanel panel)
     {
-        super("Edit object attributes", true);
-        _ctx = ctx;
-        _panel = panel;
+        super("Edit object attributes", ctx, panel);
+    }
 
-        // get a handle on the top-level panel
-        JPanel top = (JPanel)getContentPane();
-
-        // set up a layout manager for the panel
-        VGroupLayout gl = new VGroupLayout(
-            VGroupLayout.STRETCH, VGroupLayout.STRETCH, 5, VGroupLayout.CENTER);
-        top.setLayout(gl);
-        top.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
+    @Override
+    public void addComponents (JComponent panel)
+    {
         // object action editor elements
         JPanel sub = new JPanel(new HGroupLayout(HGroupLayout.STRETCH));
         sub.add(new JLabel("Object action command:"), HGroupLayout.FIXED);
         sub.add(_action = new JTextField());
         _action.addActionListener(this);
         _action.setActionCommand("ok");
-        top.add(sub);
+        panel.add(sub);
 
         // create the priority slider
         sub = new JPanel(new HGroupLayout(HGroupLayout.STRETCH));
@@ -86,28 +73,21 @@ public class ObjectEditorDialog extends JInternalFrame
         _priority.setMajorTickSpacing(5);
         _priority.setMinorTickSpacing(1);
         _priority.setPaintTicks(true);
-        top.add(sub);
+        panel.add(sub);
 
         // create colorization selectors
         JPanel zations = HGroupLayout.makeButtonBox(HGroupLayout.LEFT);
         zations.add(new JLabel("Colorizations:"));
         zations.add(_primary = new JComboBox(NO_CHOICES));
         zations.add(_secondary = new JComboBox(NO_CHOICES));
-        top.add(zations);
+        panel.add(zations);
 
-        // create our OK/Cancel buttons
-        sub = HGroupLayout.makeButtonBox(HGroupLayout.CENTER);
-        EditorDialogUtil.addButton(this, sub, "OK", "ok");
-        EditorDialogUtil.addButton(this, sub, "Cancel", "cancel");
-        top.add(sub);
-
-        pack();
     }
 
     /**
-     * Prepare the dialog for display.  This method should be called
-     * before <code>display()</code> is called.
-     *
+     * Prepare the dialog for display. This method should be called before <code>display()</code>
+     * is called.
+     * 
      * @param scobj the object to edit.
      */
     public void prepare (SceneObject scobj)
@@ -125,8 +105,7 @@ public class ObjectEditorDialog extends JInternalFrame
         } catch (NoSuchTileSetException nstse) {
             title = "Error(" + tsid + "): " + tidx;
         }
-        title += " (" + StringUtil.coordsToString(
-            _scobj.info.x, _scobj.info.y) + ")";
+        title += " (" + StringUtil.coordsToString(_scobj.info.x, _scobj.info.y) + ")";
         setTitle(title);
 
         // configure our elements
@@ -135,7 +114,6 @@ public class ObjectEditorDialog extends JInternalFrame
         _priority.setValue(scobj.getPriority());
 
         // if the object supports colorizations, configure those
-        boolean haveZations = false;
         Object[] pzations = null;
         Object[] szations = null;
         if (tset != null) {
@@ -149,8 +127,7 @@ public class ObjectEditorDialog extends JInternalFrame
             }
         }
         configureZations(_primary, pzations, _scobj.info.getPrimaryZation());
-        configureZations(_secondary, szations,
-                         _scobj.info.getSecondaryZation());
+        configureZations(_secondary, szations, _scobj.info.getSecondaryZation());
 
         // select the text edit field and focus it
         _action.setCaretPosition(0);
@@ -168,18 +145,16 @@ public class ObjectEditorDialog extends JInternalFrame
         if (crecs == null) {
             return null;
         }
-        Object[] czations = new Object[crecs.length+1];
+        Object[] czations = new Object[crecs.length + 1];
         czations[0] = new ZationChoice(0, "none");
         for (int ii = 0; ii < crecs.length; ii++) {
-            czations[ii+1] =
-                new ZationChoice(crecs[ii].colorId, crecs[ii].name);
+            czations[ii + 1] = new ZationChoice(crecs[ii].colorId, crecs[ii].name);
         }
         Arrays.sort(czations);
         return czations;
     }
 
-    protected void configureZations (
-        JComboBox combo, Object[] zations, int colorId)
+    protected void configureZations (JComboBox combo, Object[] zations, int colorId)
     {
         int selidx = 0;
         combo.setEnabled(zations != null);
@@ -195,39 +170,32 @@ public class ObjectEditorDialog extends JInternalFrame
         combo.setSelectedIndex(selidx);
     }
 
-    // documentation inherited from interface
-    public void actionPerformed (ActionEvent e)
+    @Override
+    public void accepted ()
     {
-        String cmd = e.getActionCommand();
 
-        if (cmd.equals("ok")) {
-            _scobj.info.action = _action.getText();
-            byte prio = (byte)_priority.getValue();
-            if (prio != _scobj.getPriority()) {
-                _scobj.setPriority(prio);
-            }
-
-            int ozations = _scobj.info.zations;
-            ZationChoice pchoice = (ZationChoice)_primary.getSelectedItem();
-            ZationChoice schoice = (ZationChoice)_secondary.getSelectedItem();
-            _scobj.info.setZations(pchoice.colorId, schoice.colorId);
-            if (ozations != _scobj.info.zations) {
-                _scobj.refreshObjectTile(_panel);
-            }
-
-            _panel.objectEditorDismissed();
-
-        } else if (cmd.equals("cancel")) {
-            // do nothing except hide the dialog
-            _panel.objectEditorDismissed();
-
-        } else {
-            System.err.println("Received unknown action: " + e);
-            return;
+        _scobj.info.action = _action.getText();
+        byte prio = (byte)_priority.getValue();
+        if (prio != _scobj.getPriority()) {
+            _scobj.setPriority(prio);
         }
 
-        // hide the dialog
-        EditorDialogUtil.dismiss(this);
+        int ozations = _scobj.info.zations;
+        ZationChoice pchoice = (ZationChoice)_primary.getSelectedItem();
+        ZationChoice schoice = (ZationChoice)_secondary.getSelectedItem();
+        _scobj.info.setZations(pchoice.colorId, schoice.colorId);
+        if (ozations != _scobj.info.zations) {
+            _scobj.refreshObjectTile(_panel);
+        }
+
+        _panel.objectEditorDismissed();
+    }
+
+    @Override
+    public void cancelled ()
+    {
+        _panel.objectEditorDismissed();
+
     }
 
     /** Used to display colorization choices. */
@@ -237,27 +205,28 @@ public class ObjectEditorDialog extends JInternalFrame
         public short colorId;
         public String name;
 
-        public ZationChoice (int colorId, String name) {
+        public ZationChoice (int colorId, String name)
+        {
             this.colorId = (short)colorId;
             this.name = name;
         }
 
-        public int compareTo (Object other) {
+        public int compareTo (Object other)
+        {
             return colorId - ((ZationChoice)other).colorId;
         }
 
-        public String toString () {
+        public String toString ()
+        {
             return name;
         }
     }
 
-    protected EditorContext _ctx;
-    protected EditorScenePanel _panel;
     protected JTextField _action;
     protected JSlider _priority;
     protected SceneObject _scobj;
     protected JComboBox _primary, _secondary;
 
-    protected static final ZationChoice[] NO_CHOICES = new ZationChoice[] {
-        new ZationChoice(0, "none") };
+    protected static final ZationChoice[] NO_CHOICES = new ZationChoice[] { new ZationChoice(0,
+        "none") };
 }

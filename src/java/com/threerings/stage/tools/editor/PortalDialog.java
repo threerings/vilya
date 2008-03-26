@@ -21,18 +21,22 @@
 
 package com.threerings.stage.tools.editor;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import com.samskivert.swing.HGroupLayout;
-import com.samskivert.swing.VGroupLayout;
-
+import com.threerings.stage.data.StageScene;
+import com.threerings.stage.tools.editor.util.EditorContext;
 import com.threerings.whirled.spot.data.Portal;
 import com.threerings.whirled.spot.tools.EditablePortal;
-
-import com.threerings.stage.data.StageScene;
-import com.threerings.stage.tools.editor.util.EditorDialogUtil;
 
 /**
  * The <code>PortalDialog</code> is used to present the user with a dialog
@@ -40,25 +44,18 @@ import com.threerings.stage.tools.editor.util.EditorDialogUtil;
  * <code>EditablePortal</code>.  The dialog is used both to set up a new
  * portal and to edit an existing portal.
  */
-public class PortalDialog extends JInternalFrame
-    implements ActionListener
+public class PortalDialog extends EditorDialog
 {
     /**
      * Constructs the portal dialog.
      */
-    public PortalDialog ()
+    public PortalDialog (EditorContext ctx, EditorScenePanel panel)
     {
-        super("Edit Portal", true);
-
-        // get a handle on the top-level panel
-        JPanel top = (JPanel)getContentPane();
-
-        // set up a layout manager for the panel
-        VGroupLayout gl = new VGroupLayout(VGroupLayout.STRETCH);
-        gl.setOffAxisPolicy(VGroupLayout.STRETCH);
-        top.setLayout(gl);
-        top.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
+        super("Edit Portal", ctx, panel);
+    }
+    
+    @Override
+    public void addComponents(JComponent top){
         // add the dialog instruction text
         top.add(new JLabel("Enter settings for this portal:"));
 
@@ -78,15 +75,6 @@ public class PortalDialog extends JInternalFrame
         _entrance.addActionListener(this);
         _entrance.setActionCommand("entrance");
         top.add(_entrance);
-
-        // create a panel to contain the OK/Cancel buttons
-        sub = new JPanel(new HGroupLayout());
-        EditorDialogUtil.addButton(this, sub, "OK", "ok");
-
-        // add the buttons to the top-level panel
-        top.add(sub);
-
-        pack();
     }
 
     /**
@@ -122,25 +110,21 @@ public class PortalDialog extends JInternalFrame
     /**
      * Handle action events on the dialog user interface elements.
      */
+    @Override
     public void actionPerformed (ActionEvent e)
     {
-        String cmd = e.getActionCommand();
-
-        if (cmd.equals("entrance")) {
+        if (e.getActionCommand().equals("entrance")) {
             _entrance.setSelected(_entrance.isSelected());
-
-        } else if (cmd.equals("ok")) {
-            handleSubmit();
-
         } else {
-            Log.warning("Unknown action command [cmd=" + cmd + "].");
+            super.actionPerformed(e);
         }
     }
 
     /**
      * Handles the user submitting the dialog via the "OK" button.
      */
-    protected void handleSubmit ()
+    @Override
+    public void accepted ()
     {
         // get the destination scene name
         _port.name = _portalText.getText();
@@ -152,16 +136,13 @@ public class PortalDialog extends JInternalFrame
         } else if (_scene.getDefaultEntrance() == _port) {
             _scene.setDefaultEntrance(null);
         }
-
-        // hide the dialog
-        EditorDialogUtil.dismiss(this);
     }
 
     // documentation inherited
     protected void processKeyEvent (KeyEvent e)
     {
         switch (e.getKeyCode()) {
-        case KeyEvent.VK_ENTER: handleSubmit(); break;
+        case KeyEvent.VK_ENTER: accepted(); break;
         case KeyEvent.VK_ESCAPE: setVisible(false); break;
         }
     }
