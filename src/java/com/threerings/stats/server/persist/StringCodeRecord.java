@@ -26,14 +26,12 @@ import com.samskivert.jdbc.depot.PersistentRecord;
 import com.samskivert.jdbc.depot.annotation.Column;
 import com.samskivert.jdbc.depot.annotation.Entity;
 import com.samskivert.jdbc.depot.annotation.Id;
-import com.samskivert.jdbc.depot.annotation.Table;
 import com.samskivert.jdbc.depot.annotation.UniqueConstraint;
 import com.samskivert.jdbc.depot.expression.ColumnExp;
 
-@Entity(name="STRING_CODES")
-@Table(uniqueConstraints={
-    @UniqueConstraint(fieldNames={StringCodeRecord.STAT_CODE, StringCodeRecord.VALUE}),
-    @UniqueConstraint(fieldNames={StringCodeRecord.STAT_CODE, StringCodeRecord.CODE})})
+@Entity(name="STRING_CODES", uniqueConstraints={
+    @UniqueConstraint(fieldNames={ StringCodeRecord.STAT_CODE, StringCodeRecord.VALUE }),
+    @UniqueConstraint(fieldNames={ StringCodeRecord.STAT_CODE, StringCodeRecord.CODE })})
 public class StringCodeRecord extends PersistentRecord
 {
     // AUTO-GENERATED: FIELDS START
