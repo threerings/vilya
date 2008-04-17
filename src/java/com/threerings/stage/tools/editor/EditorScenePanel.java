@@ -386,7 +386,7 @@ public class EditorScenePanel extends StageScenePanel
         repaint();
     }
 
-    // documentation inherited from interface
+    @Override
     public void mousePressed (MouseEvent event)
     {
         int mx = event.getX(), my = event.getY();
@@ -422,14 +422,14 @@ public class EditorScenePanel extends StageScenePanel
         }
     }
 
-    // documentation inherited
+    @Override
     protected boolean handleMousePressed (Object hobject, MouseEvent event)
     {
         // don't do the standard cluster and location stuff here
         return false;
     }
 
-    // documentation inherited
+    @Override
     public void mouseReleased (MouseEvent e)
     {
         super.mouseReleased(e);
@@ -466,7 +466,7 @@ public class EditorScenePanel extends StageScenePanel
         repaint();
     }
 
-    // documentation inherited
+    @Override
     public void mouseMoved (MouseEvent e)
     {
         super.mouseMoved(e);
@@ -504,7 +504,7 @@ public class EditorScenePanel extends StageScenePanel
         }
     }
 
-    // documentation inherited
+    @Override
     public void mouseDragged (MouseEvent e)
     {
         super.mouseDragged(e);
@@ -512,7 +512,7 @@ public class EditorScenePanel extends StageScenePanel
         mouseMoved(e);
     }
 
-    // documentation inherited
+    @Override
     public void mouseExited (MouseEvent e)
     {
         super.mouseExited(e);
@@ -522,7 +522,7 @@ public class EditorScenePanel extends StageScenePanel
         _hfull.setLocation(Integer.MIN_VALUE, 0);
     }
 
-    // documentation inherited
+    @Override
     public void keyPressed (KeyEvent e)
     {
         if (e.getKeyCode() == KeyEvent.VK_ALT) {
@@ -531,7 +531,7 @@ public class EditorScenePanel extends StageScenePanel
         }
     }
     
-    // documentation inherited
+    @Override
     public void keyReleased (KeyEvent e)
     {
         if (e.getKeyCode() == KeyEvent.VK_ALT) {
@@ -540,13 +540,7 @@ public class EditorScenePanel extends StageScenePanel
         }
     }
 
-    // documentation inherited
-    public void keyTyped (KeyEvent e)
-    {
-        // nothing
-    }
-
-    // documentation inherited
+    @Override
     protected void fireObjectAction (
         ObjectActionHandler handler, SceneObject scobj, ActionEvent event)
     {
@@ -557,6 +551,7 @@ public class EditorScenePanel extends StageScenePanel
      * A place for subclasses to react to the hover object changing.
      * One of the supplied arguments may be null.
      */
+    @Override
     protected void hoverObjectChanged (Object oldHover, Object newHover)
     {
         super.hoverObjectChanged(oldHover, newHover);
@@ -763,20 +758,19 @@ public class EditorScenePanel extends StageScenePanel
         _scene.setDefaultEntrance(port);
     }
 
-    // documentation inherited
+    @Override
     protected void recomputeVisible ()
     {
         super.recomputeVisible();
 
         // see if any of our visible objects overlap and mark them as bad
         // monkeys; we love N^2 algorithms
-        for (Iterator iter = _vizobjs.iterator(); iter.hasNext(); ) {
-            SceneObject scobj = (SceneObject)iter.next();
+        for (SceneObject scobj : _vizobjs) {
             scobj.setWarning(overlaps(scobj));
         }
     }
 
-    // documentation inherited
+    @Override
     protected void warnVisible (SceneBlock block, Rectangle sbounds)
     {
         // nothing doing
@@ -785,8 +779,7 @@ public class EditorScenePanel extends StageScenePanel
     /** Helper function for {@link #recomputeVisible}. */
     protected boolean overlaps (SceneObject tobj)
     {
-        for (Iterator iter = _vizobjs.iterator(); iter.hasNext(); ) {
-            SceneObject scobj = (SceneObject)iter.next();
+        for (SceneObject scobj : _vizobjs) {
             if (scobj != tobj && tobj.objectFootprintOverlaps(scobj) &&
                 tobj.getPriority() == scobj.getPriority()) {
                 return true;
@@ -795,7 +788,6 @@ public class EditorScenePanel extends StageScenePanel
         return false;
     }
 
-    // documentation inherited
     protected void paintHighlights (Graphics2D gfx, Rectangle dirty)
     {
         Polygon hpoly = null;
@@ -835,7 +827,7 @@ public class EditorScenePanel extends StageScenePanel
         }
     }
 
-    // documentation inherited
+    @Override
     protected void paintExtras (Graphics2D gfx, Rectangle dirty)
     {
         super.paintExtras(gfx, dirty);
@@ -851,7 +843,7 @@ public class EditorScenePanel extends StageScenePanel
 
         // and call into any extras painters
         for (int ii = 0; ii < _extras.size(); ii++) {
-            ((ExtrasPainter)_extras.get(ii)).paintExtras(gfx);
+            _extras.get(ii).paintExtras(gfx);
         }
     }
 
@@ -929,8 +921,16 @@ public class EditorScenePanel extends StageScenePanel
      */
     protected void paintPortal (Graphics2D gfx, EditablePortal port)
     {
+        paintLocation(gfx, (StageLocation)port.loc, Color.BLUE,
+            port.equals(_scene.getDefaultEntrance()));
+    }
+    
+    /**
+     * Paint the specified StageLocation
+     */
+    protected void paintLocation(Graphics2D gfx, StageLocation loc, Color color, boolean highlight)
+    {
         // get the portal's center coordinate
-        StageLocation loc = (StageLocation) port.loc;
         Point spos = new Point();
         MisoUtil.fullToScreen(_metrics, loc.x, loc.y, spos);
         int cx = spos.x, cy = spos.y;
@@ -943,7 +943,7 @@ public class EditorScenePanel extends StageScenePanel
         gfx.rotate(rot);
 
         // draw the triangle
-        gfx.setColor(Color.blue);
+        gfx.setColor(color);
         gfx.fill(_locTri);
 
         // outline the triangle in black
@@ -959,7 +959,7 @@ public class EditorScenePanel extends StageScenePanel
         gfx.translate(-cx, -cy);
 
         // highlight the portal if it's the default entrance
-        if (port.equals(_scene.getDefaultEntrance())) {
+        if (highlight) {
             gfx.setColor(Color.cyan);
             gfx.drawRect(spos.x - 5, spos.y - 5, 10, 10);
         }
@@ -1002,7 +1002,7 @@ public class EditorScenePanel extends StageScenePanel
         return true;
     }
 
-    // documentation inherited
+    @Override
     protected boolean skipHitObject (SceneObject scobj)
     {
         return false; // skip nothing
@@ -1089,7 +1089,7 @@ public class EditorScenePanel extends StageScenePanel
         _box = box;
     }
 
-    // documentation inherited
+    @Override
     protected void paint (Graphics2D gfx, Rectangle[] dirty)
     {
         // if we need to refresh the box and we have all the scene data, do it
@@ -1155,7 +1155,7 @@ public class EditorScenePanel extends StageScenePanel
     protected SceneObject _pscobj;
 
     /** A list of things that will do some extra painting for us. */
-    protected ArrayList _extras = new ArrayList();
+    protected ArrayList<ExtrasPainter> _extras = new ArrayList<ExtrasPainter>();
 
     /** The dialog providing portal edit functionality. */
     protected PortalDialog _dialogPortal;
