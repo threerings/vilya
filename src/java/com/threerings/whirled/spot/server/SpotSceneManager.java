@@ -63,18 +63,26 @@ public class SpotSceneManager extends SceneManager
             return;
         }
 
-        SpotScene scene = (SpotScene)mgr.getScene();
+        mgr.moveToDefaultPortal (body);
+    }
+    
+    /**
+     * Move the specified body to the default portal, if possible.
+     */
+    protected void moveToDefaultPortal (BodyObject body)
+    {
+        SpotScene scene = (SpotScene)getScene();
         if (scene == null) {
             Log.warning("No scene in moveBodyToDefaultPortal()? [who=" + body.who() +
-                        ", where=" + mgr.where() + "].");
+                        ", where=" + where() + "].");
             return;
         }
 
         try {
             Location eloc = scene.getDefaultEntrance().getLocation();
-            mgr.handleChangeLoc(body, eloc);
+            handleChangeLoc(body, eloc);
         } catch (InvocationException ie) {
-            Log.warning("Could not move user to default portal [where=" + mgr.where() +
+            Log.warning("Could not move user to default portal [where=" + where() +
                         ", who=" + body.who() + ", error=" + ie + "].");
         }
     }
