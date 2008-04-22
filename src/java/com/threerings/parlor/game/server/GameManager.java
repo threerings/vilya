@@ -964,8 +964,9 @@ public class GameManager extends PlaceManager
      */
     protected void gameWillStart ()
     {
-        // increment the round identifier
-        _gameobj.setRoundId(_gameobj.roundId + 1);
+        // update our round id locally; see gameDidStart() for where we actually broadcast this
+        // change to the clients
+        _gameobj.roundId = _gameobj.roundId + 1;
 
         // let our delegates do their business
         applyToDelegates(new DelegateOp() {
@@ -1026,6 +1027,12 @@ public class GameManager extends PlaceManager
         if (_noShowInterval != null) {
             _noShowInterval.cancel();
         }
+
+        // broadcast the increment of the round identifier (we set this value locally on the server
+        // in gameWillStart so that delegates and pre-game starters can know what the round is, but
+        // we don't want the client to hear the ROUND_ID update until after the STATE change has
+        // been dispatched)
+        _gameobj.setRoundId(_gameobj.roundId);
 
         // let our delegates do their business
         applyToDelegates(new DelegateOp() {
