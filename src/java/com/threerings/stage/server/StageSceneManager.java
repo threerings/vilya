@@ -406,13 +406,19 @@ public class StageSceneManager extends SpotSceneManager
                         ", who=" + body.who() + "].");
             entry = _sscene.getDefaultEntrance();
         }
+        return computeEnteringLocation(body, entry, 1);
+    }
 
+
+    /**
+     * Returns an entering location for body somewhere at least minDistance tiles away from entry.
+     */
+    protected SceneLocation computeEnteringLocation (BodyObject body, Portal entry,
+        int minDistance)
+    {
         MisoSceneMetrics metrics = StageSceneUtil.getMetrics();
-        SceneLocation loc = new SceneLocation(
-            entry.getOppLocation(), body.getOid());
-        StageLocation sloc = (StageLocation) loc.loc;
-        int tx = MisoUtil.fullToTile(sloc.x),
-            ty = MisoUtil.fullToTile(sloc.y);
+        StageLocation sloc = (StageLocation)entry.getOppLocation();
+        int tx = MisoUtil.fullToTile(sloc.x), ty = MisoUtil.fullToTile(sloc.y);
         int oidx = sloc.orient/2;
         int lidx = (oidx+3)%4; // rotate to the left
         int ridx = (oidx+1)%4; // rotate to the right
@@ -425,6 +431,10 @@ public class StageSceneManager extends SpotSceneManager
         for (int fan = 1; fan < MAX_FAN; fan++) {
             tx += PORTAL_DX[oidx];
             ty += PORTAL_DY[oidx];
+            if (fan < minDistance) {
+                // increment until we get to our min distance
+                continue;
+            }
 
             // look in the center column
             if (checkEntry(metrics, body, tx, ty, sloc)) {
@@ -460,8 +470,7 @@ public class StageSceneManager extends SpotSceneManager
         ty = MisoUtil.fullToTile(sloc.y);
         _loners.put(body.getOid(), new Rectangle(tx, ty, 1, 1));
 
-        loc.loc = sloc;
-        return loc;
+        return new SceneLocation(sloc, body.getOid());
     }
 
     /** Helper function for {@link #computeEnteringLocation}. */
@@ -535,9 +544,7 @@ public class StageSceneManager extends SpotSceneManager
 
         // now look to see if we just expanded our cluster over top of any
         // unsuspecting standers by and if so, attempt to subsume them
-        for (Iterator iter = _loners.keySet().iterator();
-             iter.hasNext(); ) {
-            int bodyOid = ((Integer)iter.next()).intValue();
+        for (int bodyOid : _loners.keySet()) {
             // skip ourselves
             if (bodyOid == body.getOid()) {
                 continue;
@@ -545,7 +552,7 @@ public class StageSceneManager extends SpotSceneManager
 
             // do the right thing with a person standing right on the
             // cluster (they're the person we're clustering with)
-            Rectangle trect = (Rectangle)_loners.get(bodyOid);
+            Rectangle trect = _loners.get(bodyOid);
             if (trect.equals(cl)) {
                 continue;
             }
@@ -560,8 +567,7 @@ public class StageSceneManager extends SpotSceneManager
                 }
 
                 // make sure the subsumee exists
-                final BodyObject bobj = (BodyObject)
-                    StageServer.omgr.getObject(bodyOid);
+                final BodyObject bobj = (BodyObject)StageServer.omgr.getObject(bodyOid);
                 if (bobj == null) {
                     Log.warning("Can't subsume disappeared body " +
                                 "[where=" + where() + ", cluster=" + cl +
@@ -827,7 +833,7 @@ public class StageSceneManager extends SpotSceneManager
 
     /** Rectangles containing a "footprint" for the users that aren't in
      * any clusters. */
-    protected HashIntMap _loners = new HashIntMap();
+    protected HashIntMap<Rectangle> _loners = new HashIntMap<Rectangle>();
 
     /** Contains the (tile) coordinates of all of our portals. */
     protected HashSet _plocs = new HashSet();
