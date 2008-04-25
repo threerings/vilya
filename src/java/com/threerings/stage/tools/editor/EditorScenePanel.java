@@ -570,11 +570,13 @@ public class EditorScenePanel extends StageScenePanel
     /**
      * Sets a base tile at the specified position in the scene (in tile
      * coordinates).
+     * 
+     * @return - if the tile was successfully set
      */
-    public void setBaseTile (int fqTileId, int x, int y)
+    public boolean setBaseTile (int fqTileId, int x, int y)
     {
         if (!_model.setBaseTile(fqTileId, x, y)) {
-            return;
+            return false;
         }
         getBlock(x, y).updateBaseTile(fqTileId, x, y);
 
@@ -584,6 +586,7 @@ public class EditorScenePanel extends StageScenePanel
                 getBlock(fx, fy).updateFringe(fx, fy);
             }
         }
+        return true;
     }
 
     /**
