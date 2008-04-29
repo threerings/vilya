@@ -854,15 +854,8 @@ public class GameManager extends PlaceManager
     @Override
     protected void placeBecameEmpty ()
     {
-        // We do not call super.
+        super.placeBecameEmpty();
 
-        // Duplicated from super(): let our delegates do their business
-        applyToDelegates(new DelegateOp() {
-            public void apply (PlaceManagerDelegate delegate) {
-                delegate.placeBecameEmpty();
-            }
-        });
-        
 //         log.info("Game room empty. Going away. [game=" + where() + "].");
 
         // if we're in play then move to game over
@@ -888,6 +881,20 @@ public class GameManager extends PlaceManager
         // if we're a seated game and we haven't already started, start.
         if ((getMatchType() == GameConfig.SEATED_GAME) && _gameobj.state == GameObject.PRE_GAME) {
             startGame();
+        }
+    }
+
+    @Override // from GameManager
+    protected void checkShutdownInterval ()
+    {
+        // PlaceManager will attempt to set up an idle shutdown interval when it is first created
+        // (which as a GameManager we want) and if bodies actually enter the place and then it once
+        // again becomes empty. In the latter case (a game has started and finished and everyone
+        // has now left) we do not want a shutdown interval because we shut ourselves down
+        // immediately in that circumstance. So we only set up a shutdown interval in the pre-game
+        // state.
+        if (_gameobj.state == GameObject.PRE_GAME) {
+            super.checkShutdownInterval();
         }
     }
 
