@@ -23,7 +23,6 @@ package com.threerings.parlor.game.server;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.logging.Level;
 
 import com.samskivert.util.ArrayIntSet;
@@ -34,16 +33,12 @@ import com.samskivert.util.StringUtil;
 import com.samskivert.util.Tuple;
 import com.threerings.util.Name;
 
-import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.dobj.AttributeChangeListener;
 import com.threerings.presents.dobj.AttributeChangedEvent;
 import com.threerings.presents.dobj.DObject;
-import com.threerings.presents.dobj.MessageEvent;
-
 import com.threerings.crowd.chat.server.SpeakUtil;
 
 import com.threerings.crowd.data.BodyObject;
-import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.server.CrowdServer;
 import com.threerings.crowd.server.PlaceManager;
 import com.threerings.crowd.server.PlaceManagerDelegate;
@@ -850,6 +845,14 @@ public class GameManager extends PlaceManager
         // then complete the bodyLeft() processing which may result in a call to placeBecameEmpty()
         // which will shut the game down
         super.bodyLeft(bodyOid);
+    }
+
+    @Override // from PlaceManager
+    protected long idleUnloadPeriod ()
+    {
+        // We shutdown immediately on becoming empty, so there's no need to create a
+        // shutdown interval to keep us in memory longer than we would be otherwise
+        return 0;
     }
 
     /**
