@@ -862,14 +862,17 @@ public class GameManager extends PlaceManager
         if (_gameobj.state != GameObject.PRE_GAME && _gameobj.state != GameObject.GAME_OVER &&
                 _gameobj.state != GameObject.CANCELLED) {
             _gameobj.setState(GameObject.GAME_OVER);
-            // and shutdown directly
-            shutdown();
-
-        // cancel the game; which will shut us down
-        } else if (!cancelGame()) {
-            // or shut down directly if the game is already over
-            shutdown();
+            shutdown(); // and shutdown directly
+            return;
         }
+
+        // otherwise, cancel the game; which will shut us down
+        if (cancelGame()) {
+            return;
+        }
+
+        // if we couldn't cancel (because the game was already over) shutdown directly
+        shutdown();
     }
 
     /**
