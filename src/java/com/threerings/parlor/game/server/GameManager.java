@@ -847,25 +847,27 @@ public class GameManager extends PlaceManager
         super.bodyLeft(bodyOid);
     }
 
-    @Override // from PlaceManager
-    protected long idleUnloadPeriod ()
-    {
-        // We shutdown immediately on becoming empty, so there's no need to create a
-        // shutdown interval to keep us in memory longer than we would be otherwise
-        return 0;
-    }
-
     /**
      * When a game room becomes empty, we cancel the game if it's still in progress and close down
      * the game room.
      */
+    @Override
     protected void placeBecameEmpty ()
     {
+        // We do not call super.
+
+        // Duplicated from super(): let our delegates do their business
+        applyToDelegates(new DelegateOp() {
+            public void apply (PlaceManagerDelegate delegate) {
+                delegate.placeBecameEmpty();
+            }
+        });
+        
 //         log.info("Game room empty. Going away. [game=" + where() + "].");
 
         // if we're in play then move to game over
         if (_gameobj.state != GameObject.PRE_GAME && _gameobj.state != GameObject.GAME_OVER &&
-            _gameobj.state != GameObject.CANCELLED) {
+                _gameobj.state != GameObject.CANCELLED) {
             _gameobj.setState(GameObject.GAME_OVER);
             // and shutdown directly
             shutdown();
