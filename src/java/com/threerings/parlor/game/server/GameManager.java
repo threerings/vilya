@@ -587,16 +587,18 @@ public class GameManager extends PlaceManager
     }
 
     /**
-     * Called by the client when the player has arrived in the game room and has loaded their
+     * Called by the client when an occupant has arrived in the game room and has loaded their
      * bits. Most games will simply call {@link #playerReady} but games that wish to delay their
      * actual start until players take some action must report ASAP with a call to {@link
-     * #playerInRoom} to let the server know that they have arrived and will later be calling
+     * #occupantInRoom} to let the server know that they have arrived and will later be calling
      * {@link #playerReady} when they are ready for the game to actually start.
      */
-    public void playerInRoom (BodyObject caller)
+    public void occupantInRoom (BodyObject caller)
     {
         int pidx = _gameobj.getPlayerIndex(caller.getVisibleName());
         if (pidx == -1) {
+            // in general, we want all occupants to call this, but here in this base class
+            // we only care about players
             return;
         }
 
@@ -613,7 +615,7 @@ public class GameManager extends PlaceManager
      */
     public void playerReady (BodyObject caller)
     {
-        playerInRoom(caller);
+        occupantInRoom(caller);
 
         // This player is no longer pending
         _pendingOids.remove(caller.getOid());
