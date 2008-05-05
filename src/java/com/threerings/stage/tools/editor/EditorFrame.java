@@ -31,6 +31,7 @@ import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
@@ -41,6 +42,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileFilter;
+
+import org.xml.sax.SAXException;
 
 import com.samskivert.swing.GroupLayout;
 import com.samskivert.swing.HGroupLayout;
@@ -163,10 +166,17 @@ public class EditorFrame extends ManagedJFrame
 
         // finally set a default scene
         String lastFile = EditorConfig.config.getValue("editor.last_file", "");
-        if (lastFile.equals("")) {
+        boolean loaded = false;
+        if (!lastFile.equals("")) {
+            try {
+                loaded = loadScene(lastFile);
+            } catch (Exception e) {
+                Log.warning("Unable to load last scene, creating new one [file=" + lastFile + "]");
+                Log.logStackTrace(e);
+            }
+        }
+        if (!loaded) {
             newScene();
-        } else {
-            openScene(lastFile);
         }
     }
 
@@ -312,7 +322,8 @@ public class EditorFrame extends ManagedJFrame
     }
 
     /**
-     * Loads the scene from the specified path.
+     * Loads the scene from the specified path into the editor and displays an error dialog if it
+     * fails.
      */
     public void openScene (String path)
     {
@@ -320,13 +331,8 @@ public class EditorFrame extends ManagedJFrame
 
         // attempt loading and installation of the scene
         try {
-            StageSceneModel model = (StageSceneModel)_parser.parseScene(path);
-            if (model == null) {
+            if (!loadScene(path)) {
                 errmsg = "No scene data found";
-            } else {
-                setScene(new StageScene(model, null));
-                // keep track of the path for later saving
-                setFilePath(path);
             }
 
         } catch (Exception e) {
@@ -339,6 +345,22 @@ public class EditorFrame extends ManagedJFrame
             JOptionPane.showMessageDialog(
                 this, errmsg, "Load error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    /**
+     * Loads the scene from the specified path into the editor and returns true if it succeeds.
+     */
+    protected boolean loadScene (String path)
+        throws IOException, SAXException
+    {
+        StageSceneModel model = (StageSceneModel)_parser.parseScene(path);
+        if (model == null) {
+            return false;
+        }
+        setScene(new StageScene(model, null));
+        // keep track of the path for later saving
+        setFilePath(path);
+        return true;
     }
 
     /**
