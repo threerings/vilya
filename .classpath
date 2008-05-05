@@ -4,7 +4,6 @@
 	<classpathentry kind="src" path="tests/src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/nenya"/>
-	<classpathentry exported="true" kind="var" path="EXT_LIBS_DIR/google-collect.jar"/>
 	<classpathentry exported="true" kind="var" path="EXT_LIBS_DIR/commons-beanutils.jar"/>
 	<classpathentry kind="output" path="tests/dist/classes"/>
 </classpath>
