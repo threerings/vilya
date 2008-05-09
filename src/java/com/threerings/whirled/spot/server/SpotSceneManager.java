@@ -59,31 +59,8 @@ public class SpotSceneManager extends SceneManager
     {
         SpotSceneManager mgr = (SpotSceneManager)
             CrowdServer.plreg.getPlaceManager(body.getPlaceOid());
-        if (mgr == null) {
-            return;
-        }
-
-        mgr.moveToDefaultPortal (body);
-    }
-    
-    /**
-     * Move the specified body to the default portal, if possible.
-     */
-    protected void moveToDefaultPortal (BodyObject body)
-    {
-        SpotScene scene = (SpotScene)getScene();
-        if (scene == null) {
-            Log.warning("No scene in moveBodyToDefaultPortal()? [who=" + body.who() +
-                        ", where=" + where() + "].");
-            return;
-        }
-
-        try {
-            Location eloc = scene.getDefaultEntrance().getLocation();
-            handleChangeLoc(body, eloc);
-        } catch (InvocationException ie) {
-            Log.warning("Could not move user to default portal [where=" + where() +
-                        ", who=" + body.who() + ", error=" + ie + "].");
+        if (mgr != null) {
+            mgr.moveToDefaultPortal(body);
         }
     }
 
@@ -226,6 +203,27 @@ public class SpotSceneManager extends SceneManager
     protected SceneLocation computeEnteringLocation (BodyObject body, Portal from, Portal entry)
     {
         return new SceneLocation(entry.getOppLocation(), body.getOid());
+    }
+    
+    /**
+     * Move the specified body to the default portal, if possible.
+     */
+    protected void moveToDefaultPortal (BodyObject body)
+    {
+        SpotScene scene = (SpotScene)getScene();
+        if (scene == null) {
+            Log.warning("No scene in moveBodyToDefaultPortal()? [who=" + body.who() +
+                        ", where=" + where() + "].");
+            return;
+        }
+
+        try {
+            Location eloc = scene.getDefaultEntrance().getLocation();
+            handleChangeLoc(body, eloc);
+        } catch (InvocationException ie) {
+            Log.warning("Could not move user to default portal [where=" + where() +
+                        ", who=" + body.who() + ", error=" + ie + "].");
+        }
     }
 
     /**
