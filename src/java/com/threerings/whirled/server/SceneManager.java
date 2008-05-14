@@ -67,6 +67,15 @@ public class SceneManager extends PlaceManager
     }
 
     /**
+     * Returns true if this scene stores data in the database, or false if it's instantiated anew
+     * with each server restart
+     */
+    public boolean isPersistent ()
+    {
+        return true;
+    }
+
+    /**
      * Called by the scene registry once the scene manager has been created (and initialized), but
      * before it is started up.
      */
@@ -146,17 +155,20 @@ public class SceneManager extends PlaceManager
         _updates.addUpdate(update);
 
         // and apply and store it in the repository
-        WhirledServer.invoker.postUnit(new Invoker.Unit() {
-            public boolean invoke () {
-                try {
-                    _screg.getSceneRepository().applyAndRecordUpdate(_scene.getSceneModel(), update);
-                } catch (PersistenceException pe) {
-                    Log.warning("Failed to apply scene update " + update + ".");
-                    Log.logStackTrace(pe);
+        if (isPersistent()) {
+            WhirledServer.invoker.postUnit(new Invoker.Unit() {
+                public boolean invoke () {
+                    try {
+                        _screg.getSceneRepository().applyAndRecordUpdate(_scene.getSceneModel(),
+                            update);
+                    } catch (PersistenceException pe) {
+                        Log.warning("Failed to apply scene update " + update + ".");
+                        Log.logStackTrace(pe);
+                    }
+                    return false;
                 }
-                return false;
-            }
-        });
+            });
+        }
 
         // broadcast the update to all occupants of the scene
         _plobj.postMessage(SceneCodes.SCENE_UPDATE, new Object[] { update });
