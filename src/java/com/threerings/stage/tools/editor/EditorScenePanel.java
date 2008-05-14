@@ -578,12 +578,18 @@ public class EditorScenePanel extends StageScenePanel
         if (!_model.setBaseTile(fqTileId, x, y)) {
             return false;
         }
-        getBlock(x, y).updateBaseTile(fqTileId, x, y);
+        SceneBlock block = getBlock(x, y);
+        if (block != null && block.isResolved()) {
+            block.updateBaseTile(fqTileId, x, y);
+        }
 
         // and recompute any surrounding fringe
-        for (int fx = x-1, xn = x+1; fx <= xn; fx++) {
-            for (int fy = y-1, yn = y+1; fy <= yn; fy++) {
-                getBlock(fx, fy).updateFringe(fx, fy);
+        for (int fx = x - 1, xn = x + 1; fx <= xn; fx++) {
+            for (int fy = y - 1, yn = y + 1; fy <= yn; fy++) {
+                block = getBlock(fx, fy);
+                if (block != null && block.isResolved()) {
+                    block.updateFringe(fx, fy);
+                }
             }
         }
         return true;
@@ -626,12 +632,14 @@ public class EditorScenePanel extends StageScenePanel
         // first attempt to add it to the appropriate scene block; this
         // will fail if there's already a copy of the same object at this
         // coordinate
-        if (getBlock(oinfo.x, oinfo.y).addObject(oinfo)) {
+        SceneBlock block = getBlock(oinfo.x, oinfo.y);
+        if (block== null || !block.isResolved() || block.addObject(oinfo)) {
             // create an object info and add it to the scene model
-            _model.addObject(oinfo);
-            // recompute our visible object set
-            recomputeVisible();
-            return oinfo;
+            if (_model.addObject(oinfo)) {
+                // recompute our visible object set
+                recomputeVisible();
+                return oinfo;
+            }
         }
         return null;
     }
@@ -664,7 +672,10 @@ public class EditorScenePanel extends StageScenePanel
         // remove it from the scene model
         if (_model.removeObject(info)) {
             // clear the object out of its block
-            getBlock(info.x, info.y).deleteObject(info);
+            SceneBlock block = getBlock(info.x, info.y);
+            if (block != null && block.isResolved()) {
+                block.deleteObject(info);
+            }
 
             // recompute our visible object set
             recomputeVisible();
