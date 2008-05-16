@@ -21,7 +21,6 @@
 
 package com.threerings.parlor.game.data;
 
-import com.samskivert.util.ListUtil;
 import com.samskivert.util.StringUtil;
 import com.threerings.util.Name;
 
@@ -103,10 +102,13 @@ public class GameObject extends PlaceObject
     /** The unique round identifier for the current round. */
     public int roundId;
 
-    /** If null, indicates that all present players are active, or for
-     * more complex games can be non-null to indicate the current status
-     * of each player in the game. The status value is one of
-     * {@link #PLAYER_LEFT_GAME} or {@link #PLAYER_IN_PLAY}. */
+    /**
+     * If null, indicates that all present players are active, or for more complex games can be
+     * non-null to indicate the current status of each player in the game. The status value is one
+     * of {@link #PLAYER_LEFT_GAME} or {@link #PLAYER_IN_PLAY}.<p>
+     * Subclasses of GameObject may use other means to determine a player's status in the game, so
+     * call {@link #isActivePlayer(int)} to see if a player is still participating in a game.
+     */
     public int[] playerStatus;
 
     /**
