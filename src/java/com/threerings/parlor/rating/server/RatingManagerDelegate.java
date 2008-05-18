@@ -224,7 +224,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
         }
 
         final int gameId = getGameId();
-        CrowdServer.invoker.postUnit(new RepositoryUnit("loadRatings") {
+        CrowdServer.invoker.postUnit(new RepositoryUnit("loadRatings(" + gameId + ")") {
             public void invokePersist () throws Exception {
                 // map the records by player id so that we can correlate with the db results
                 HashIntMap<Rating> map = new HashIntMap<Rating>();
@@ -249,11 +249,6 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
                     _ratings.put(rating.playerId, rating);
                 }
             }
-
-            public void handleFailure (Exception e) {
-                log.log(Level.WARNING, "Failed to load ratings [where=" + where() +
-                        ", id=" + gameId + "].", e);
-            }
         });
     }
 
@@ -264,7 +259,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
         }
 
         final int gameId = getGameId();
-        CrowdServer.invoker.postUnit(new RepositoryUnit("saveRatings") {
+        CrowdServer.invoker.postUnit(new RepositoryUnit("saveRatings(" + gameId + ")") {
             public void invokePersist () throws Exception {
                 for (Rating rating : ratings) {
                     _repo.setRating(gameId, rating.playerId, rating.rating, rating.experience);
@@ -276,11 +271,6 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
                 for (Rating rating : ratings) {
                     updateRatingInMemory(gameId, rating);
                 }
-            }
-
-            public void handleFailure (Exception e) {
-                log.log(Level.WARNING, "Failed to update ratings [where=" + where() +
-                        ", id=" + gameId + "].", e);
             }
         });
     }
