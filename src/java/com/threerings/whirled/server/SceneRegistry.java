@@ -23,8 +23,8 @@ package com.threerings.whirled.server;
 
 import java.util.ArrayList;
 
+import com.samskivert.jdbc.RepositoryUnit;
 import com.samskivert.util.HashIntMap;
-import com.samskivert.util.Invoker;
 
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.data.InvocationMarshaller;
@@ -153,62 +153,32 @@ public class SceneRegistry
     {
         SceneManager mgr = _scenemgrs.get(sceneId);
         if (mgr != null) {
-            // if the scene is already resolved, we're ready to roll
+            // the scene is already resolved, we're ready to roll
             target.sceneWasResolved(mgr);
             return;
         }
 
-        if (Log.debug()) {
-            Log.debug("Resolving scene [id=" + sceneId + "].");
+        // if the scene is already being resolved, we need do no more
+        if (!addResolutionListener(sceneId, target)) {
+            return;
         }
 
-        // otherwise we've got to resolve the scene and call them back later; we can manipulate the
-        // penders table with impunity here because we only do so on the dobjmgr thread
-        
-        // Add this guy to be notified, and if nobody has yet, start resolving the scene
-        if (addResolutionListener(sceneId, target)) {
-            // i don't like cluttering up method declarations with final keywords...
-            final int fsceneId = sceneId;
-
-            if (Log.debug()) {
-                Log.debug("Invoking scene lookup [id=" + sceneId + "].");
+        // otherwise we have to load the scene from the repository
+        final int fsceneId = sceneId;
+        WhirledServer.invoker.postUnit(new RepositoryUnit("resolveScene(" + sceneId + ")") {
+            public void invokePersist () throws Exception {
+                _model = _screp.loadSceneModel(fsceneId);
+                _updates = _screp.loadUpdates(fsceneId);
             }
-
-            // then we queue up an execution unit that'll load the scene and initialize it etc.
-            WhirledServer.invoker.postUnit(new Invoker.Unit() {
-                // this is run on the invoker thread
-                public boolean invoke () {
-                    try {
-                        _model = _screp.loadSceneModel(fsceneId);
-                        _updates = _screp.loadUpdates(fsceneId);
-                    } catch (Exception e) {
-                        _cause = e;
-                    }
-                    return true;
-                }
-
-                // this is run on the dobjmgr thread
-                public void handleResult () {
-                    if (_cause != null) {
-                        processFailedResolution(fsceneId, _cause);
-                    } else if (_model != null) {
-                        processSuccessfulResolution(_model, _updates);
-                    } else {
-                        Log.warning("Scene loading unit finished with neither a scene nor a " +
-                                    "reason for failure!?");
-                    }
-                }
-
-                public String toString () {
-                    return "SceneRegistry.SceneLoader " + (_model == null ? "" : _model.name) +
-                        "(" + fsceneId + ")";
-                }
-
-                protected SceneModel _model;
-                protected UpdateList _updates;
-                protected Exception _cause;
-            });
-        }
+            public void handleSuccess () {
+                processSuccessfulResolution(_model, _updates);
+            }
+            public void handleFailure (Exception error) {
+                processFailedResolution(fsceneId, error);
+            }
+            protected SceneModel _model;
+            protected UpdateList _updates;
+        });
     }
 
     // from interface SceneService

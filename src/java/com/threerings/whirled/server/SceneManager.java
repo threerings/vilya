@@ -21,7 +21,7 @@
 
 package com.threerings.whirled.server;
 
-import com.samskivert.io.PersistenceException;
+import com.samskivert.jdbc.WriteOnlyUnit;
 import com.samskivert.util.Invoker;
 
 import com.threerings.crowd.data.Place;
@@ -156,16 +156,9 @@ public class SceneManager extends PlaceManager
 
         // and apply and store it in the repository
         if (isPersistent()) {
-            WhirledServer.invoker.postUnit(new Invoker.Unit() {
-                public boolean invoke () {
-                    try {
-                        _screg.getSceneRepository().applyAndRecordUpdate(_scene.getSceneModel(),
-                            update);
-                    } catch (PersistenceException pe) {
-                        Log.warning("Failed to apply scene update " + update + ".");
-                        Log.logStackTrace(pe);
-                    }
-                    return false;
+            WhirledServer.invoker.postUnit(new WriteOnlyUnit("recordUpdate(" + update + ")") {
+                public void invokePersist () throws Exception {
+                    _screg.getSceneRepository().applyAndRecordUpdate(_scene.getSceneModel(), update);
                 }
             });
         }
