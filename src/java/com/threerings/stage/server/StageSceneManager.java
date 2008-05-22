@@ -176,11 +176,7 @@ public class StageSceneManager extends SpotSceneManager
                            StageSceneService.ConfirmListener listener)
         throws InvocationException
     {
-        BodyObject user = (BodyObject)caller;
-        String err = user.checkAccess(StageCodes.MODIFY_SCENE_ACCESS, _sscene);
-        if (err != null) {
-            throw new InvocationException(err);
-        }
+        InvocationException.requireAccess(caller, StageCodes.MODIFY_SCENE_ACCESS, _sscene);
 
         if (addObject(info, false, true)) {
             listener.requestProcessed();
@@ -194,11 +190,7 @@ public class StageSceneManager extends SpotSceneManager
                                StageSceneService.ConfirmListener listener)
         throws InvocationException
     {
-        BodyObject user = (BodyObject)caller;
-        String err = user.checkAccess(StageCodes.MODIFY_SCENE_ACCESS, _sscene);
-        if (err != null) {
-            throw new InvocationException(err);
-        }
+        InvocationException.requireAccess(caller, StageCodes.MODIFY_SCENE_ACCESS, _sscene);
         
         // create our scene update which will be stored in the database
         // and used to efficiently update clients

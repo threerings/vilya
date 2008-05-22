@@ -24,6 +24,7 @@ package com.threerings.stage.data;
 import com.threerings.util.MessageBundle;
 
 import com.threerings.presents.data.InvocationCodes;
+import com.threerings.presents.data.Permission;
 
 import com.threerings.crowd.data.BodyObject;
 
@@ -38,13 +39,11 @@ public interface StageCodes extends InvocationCodes
     /** The resource set that contains our tileset bundles. */
     public static final String TILESET_RSRC_SET = "tilesets";
 
-    /** The access control identifier for scene modification privileges.
-     * See {@link BodyObject#checkAccess}. */
-    public static final String MODIFY_SCENE_ACCESS = "stage.modify_scene";
+    /** The access control identifier for scene modification privileges. */
+    public static final Permission MODIFY_SCENE_ACCESS = new Permission();
 
-    /** The access control identifier for potentially damaging scene
-     * modification privileges. See {@link BodyObject#checkAccess}. */
-    public static final String MUTILATE_SCENE_ACCESS = "stage.mutilate_scene";
+    /** The access control identifier for potentially damaging scene modification privileges. */
+    public static final Permission MUTILATE_SCENE_ACCESS = new Permission();
 
     /** An error delivered when adding objects to scenes. */
     public static final String ERR_NO_OVERLAP = MessageBundle.qualify(
