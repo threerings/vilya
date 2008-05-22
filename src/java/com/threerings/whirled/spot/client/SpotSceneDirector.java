@@ -392,7 +392,7 @@ public class SpotSceneDirector extends BasicDirector
     // documentation inherited
     protected void fetchServices (Client client)
     {
-        _sservice = (SpotService)client.requireService(SpotService.class);
+        _sservice = client.requireService(SpotService.class);
     }
 
     /**

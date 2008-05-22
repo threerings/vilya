@@ -100,22 +100,17 @@ public class SimulatorController extends Controller
         GameConfig config = null;
         try {
             // create the game config object
-            config = (GameConfig)
-                Class.forName(_info.gameConfigClass).newInstance();
+            config = (GameConfig)Class.forName(_info.gameConfigClass).newInstance();
 
-            // get the simulator service and use it to request that our
-            // game be created
-            SimulatorService sservice = (SimulatorService)
-                client.requireService(SimulatorService.class);
-            sservice.createGame(
-                client, config, _info.simClass, _info.playerCount);
+            // get the simulator service and use it to request that our game be created
+            SimulatorService sservice = client.requireService(SimulatorService.class);
+            sservice.createGame(client, config, _info.simClass, _info.playerCount);
 
-            // our work here is done, as the location manager will move us
-            // into the game room straightaway
+            // our work here is done, as the location manager will move us into the game room
+            // straightaway
 
         } catch (Exception e) {
-            Log.warning("Failed to instantiate game config " +
-                        "[class=" + _info.gameConfigClass +
+            Log.warning("Failed to instantiate game config [class=" + _info.gameConfigClass +
                         ", error=" + e + "].");
         }
     }

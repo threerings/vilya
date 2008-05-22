@@ -85,8 +85,7 @@ public class LobbySelector extends JPanel
         super.addNotify();
 
         // get a handle on our lobby service instance
-        _lservice = (LobbyService)
-            _ctx.getClient().requireService(LobbyService.class);
+        _lservice = _ctx.getClient().requireService(LobbyService.class);
         // and use them to look up the lobby categories
         _lservice.getCategories(_ctx.getClient(), this);
     }

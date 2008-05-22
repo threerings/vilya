@@ -509,7 +509,7 @@ public class SceneDirector extends BasicDirector
     protected void fetchServices (Client client)
     {
         // get a handle on our scene service
-        _sservice = (SceneService)client.requireService(SceneService.class);
+        _sservice = client.requireService(SceneService.class);
     }
 
     /** Access to general client services. */

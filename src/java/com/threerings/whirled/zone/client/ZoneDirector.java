@@ -150,7 +150,7 @@ public class ZoneDirector extends BasicDirector
     // documentation inherited
     protected void fetchServices (Client client)
     {
-        _zservice = (ZoneService)client.requireService(ZoneService.class);
+        _zservice = client.requireService(ZoneService.class);
     }
 
     // documentation inherited

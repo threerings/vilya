@@ -198,7 +198,7 @@ public class ParlorDirector extends BasicDirector
     protected void fetchServices (Client client)
     {
         // get a handle on our parlor services
-        _pservice = (ParlorService)client.requireService(ParlorService.class);
+        _pservice = client.requireService(ParlorService.class);
     }
 
     /**
