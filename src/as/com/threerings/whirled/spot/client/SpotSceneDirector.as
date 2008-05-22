@@ -53,6 +53,7 @@ import com.threerings.whirled.spot.data.Location;
 import com.threerings.whirled.spot.data.Portal;
 import com.threerings.whirled.spot.data.SceneLocation;
 import com.threerings.whirled.spot.data.SpotCodes;
+import com.threerings.whirled.spot.data.SpotMarshaller;
 import com.threerings.whirled.spot.data.SpotScene;
 import com.threerings.whirled.spot.data.SpotSceneObject;
 
@@ -82,6 +83,9 @@ public class SpotSceneDirector extends BasicDirector
 
         // wire ourselves up to hear about leave place notifications
         locdir.addLocationObserver(new LocationAdapter(null, handleSceneChange, null));
+
+        // ensure that the compiler includes these necessary symbols
+        var c :Class = SpotMarshaller;
     }
 
     /**

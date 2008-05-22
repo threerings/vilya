@@ -45,6 +45,7 @@ import com.threerings.crowd.data.PlaceObject;
 import com.threerings.whirled.client.persist.SceneRepository;
 import com.threerings.whirled.data.Scene;
 import com.threerings.whirled.data.SceneCodes;
+import com.threerings.whirled.data.SceneMarshaller;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.SceneObject;
 import com.threerings.whirled.data.SceneUpdate;
@@ -100,6 +101,9 @@ public class SceneDirector extends BasicDirector
 
         // register for scene notifications
         _wctx.getClient().getInvocationDirector().registerReceiver(new SceneDecoder(this));
+
+        // ensure that the compiler includes these necessary symbols
+        var c :Class = SceneMarshaller;
     }
 
     /**

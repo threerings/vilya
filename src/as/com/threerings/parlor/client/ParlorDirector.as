@@ -33,25 +33,24 @@ import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.client.InvocationService_ConfirmListener;
 
 import com.threerings.parlor.data.ParlorCodes;
+import com.threerings.parlor.data.ParlorMarshaller;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.util.ParlorContext;
 
 /**
- * The parlor director manages the client side of the game configuration
- * and matchmaking processes. It is also the entity that is listening for
- * game start notifications which it then dispatches the client entity
- * that will actually create and display the user interface for the game
- * that started.
+ * The parlor director manages the client side of the game configuration and matchmaking processes.
+ * It is also the entity that is listening for game start notifications which it then dispatches
+ * the client entity that will actually create and display the user interface for the game that
+ * started.
  */
 public class ParlorDirector extends BasicDirector
     implements ParlorReceiver
 {
     /**
-     * Constructs a parlor director and provides it with the parlor
-     * context that it can use to access the client services that it needs
-     * to provide its own services. Only one parlor director should be
-     * active in the client at one time and it should be made available
-     * via the parlor context.
+     * Constructs a parlor director and provides it with the parlor context that it can use to
+     * access the client services that it needs to provide its own services. Only one parlor
+     * director should be active in the client at one time and it should be made available via the
+     * parlor context.
      *
      * @param ctx the parlor context in use by the client.
      */
@@ -60,16 +59,16 @@ public class ParlorDirector extends BasicDirector
         super(ctx);
         _pctx = ctx;
 
-        // register ourselves with the invocation director as a parlor
-        // notification receiver
-        _pctx.getClient().getInvocationDirector().registerReceiver(
-            new ParlorDecoder(this));
+        // register ourselves with the invocation director as a parlor notification receiver
+        _pctx.getClient().getInvocationDirector().registerReceiver(new ParlorDecoder(this));
+
+        // ensure that the compiler includes these necessary symbols
+        var c :Class = ParlorMarshaller;
     }
 
     /**
-     * Sets the invitation handler, which is the entity that will be
-     * notified when we receive incoming invitation notifications and when
-     * invitations have been cancelled.
+     * Sets the invitation handler, which is the entity that will be notified when we receive
+     * incoming invitation notifications and when invitations have been cancelled.
      *
      * @param handler our new invitation handler.
      */
@@ -79,8 +78,8 @@ public class ParlorDirector extends BasicDirector
     }
 
     /**
-     * Adds the specified observer to the list of entities that are
-     * notified when we receive a game ready notification.
+     * Adds the specified observer to the list of entities that are notified when we receive a game
+     * ready notification.
      */
     public function addGameReadyObserver (observer :GameReadyObserver) :void
     {
@@ -88,8 +87,8 @@ public class ParlorDirector extends BasicDirector
     }
 
     /**
-     * Removes the specified observer from the list of entities that are
-     * notified when we receive a game ready notification.
+     * Removes the specified observer from the list of entities that are notified when we receive a
+     * game ready notification.
      */
     public function removeGameReadyObserver (observer :GameReadyObserver) :void
     {
@@ -97,25 +96,20 @@ public class ParlorDirector extends BasicDirector
     }
 
     /**
-     * Requests that the named user be invited to a game described by the
-     * supplied game config.
+     * Requests that the named user be invited to a game described by the supplied game config.
      *
      * @param invitee the user to invite.
-     * @param config the configuration of the game to which the user is
-     * being invited.
-     * @param observer the entity that will be notified if this invitation
-     * is accepted, refused or countered.
+     * @param config the configuration of the game to which the user is being invited.
+     * @param observer the entity that will be notified if this invitation is accepted, refused or
+     * countered.
      *
-     * @return an invitation object that can be used to manage the
-     * outstanding invitation.
+     * @return an invitation object that can be used to manage the outstanding invitation.
      */
     public function invite (
-            invitee :Name, config :GameConfig,
-            observer :InvitationResponseObserver) :Invitation
+        invitee :Name, config :GameConfig, observer :InvitationResponseObserver) :Invitation
     {
         // create the invitation record
-        var invite :Invitation = new Invitation(
-            _pctx, _pservice, invitee, config, observer);
+        var invite :Invitation = new Invitation(_pctx, _pservice, invitee, config, observer);
         // submit the invitation request to the server
         _pservice.invite(_pctx.getClient(), invitee, config, invite);
         // and return the invitation to the caller
@@ -125,10 +119,8 @@ public class ParlorDirector extends BasicDirector
     /**
      * Requests that the specified single player game be started.
      *
-     * @param config the configuration of the single player game to be
-     * started.
-     * @param listener a listener to be informed of failure if the game
-     * cannot be started.
+     * @param config the configuration of the single player game to be started.
+     * @param listener a listener to be informed of failure if the game cannot be started.
      */
     public function startSolitaire (
         config :GameConfig, listener :InvocationService_ConfirmListener) :void
@@ -147,7 +139,7 @@ public class ParlorDirector extends BasicDirector
     // documentation inherited from interface
     public function gameIsReady (gameOid :int) :void
     {
-        Log.getLog(this).info("Handling game ready [goid=" + gameOid + "].");
+        _log.info("Handling game ready [goid=" + gameOid + "].");
 
         // see what our observers have to say about it
         var handled :Boolean = false;
@@ -156,20 +148,18 @@ public class ParlorDirector extends BasicDirector
             handled = grob.receivedGameReady(gameOid) || handled;
         }
 
-        // if none of the observers took matters into their own hands,
-        // then we'll head on over to the game room ourselves
+        // if none of the observers took matters into their own hands, then we'll head on over to
+        // the game room ourselves
         if (!handled) {
             _pctx.getLocationDirector().moveTo(gameOid);
         }
     }
 
     // documentation inherited from interface
-    public function receivedInvite (
-            remoteId :int, inviter :Name, config :GameConfig) :void
+    public function receivedInvite (remoteId :int, inviter :Name, config :GameConfig) :void
     {
         // create an invitation record for this invitation
-        var invite :Invitation = new Invitation(
-            _pctx, _pservice, inviter, config, null);
+        var invite :Invitation = new Invitation(_pctx, _pservice, inviter, config, null);
         invite.inviteId = remoteId;
 
         // put it in the pending invitations table
@@ -180,24 +170,19 @@ public class ParlorDirector extends BasicDirector
             _handler.invitationReceived(invite);
 
         } catch (err :Error) {
-            var log :Log = Log.getLog(this);
-            log.warning("Invitation handler choked on invite " +
-                        "notification " + invite + ".");
-            log.logStackTrace(err);
+            _log.warning("Invitation handler choked on invite notification " + invite + ".");
+            _log.logStackTrace(err);
         }
     }
 
     // documentation inherited from interface
-    public function receivedInviteResponse (
-            remoteId :int, code :int, arg :Object) :void
+    public function receivedInviteResponse (remoteId :int, code :int, arg :Object) :void
     {
         // look up the invitation record for this invitation
         var invite :Invitation = (_pendingInvites.get(remoteId) as Invitation);
         if (invite == null) {
-            Log.getLog(this).warning("Have no record of invitation for " +
-                "which we received a response?! [remoteId=" + remoteId +
-                ", code=" + code + ", arg=" + arg + "].");
-
+            _log.warning("Have no record of invitation for which we received a response?! " +
+                         "[remoteId=" + remoteId + ", code=" + code + ", arg=" + arg + "].");
         } else {
             invite.receivedResponse(code, arg);
         }
@@ -210,8 +195,8 @@ public class ParlorDirector extends BasicDirector
     }
 
     /**
-     * Register a new invitation in our pending invitations table. The
-     * invitation will call this when it knows its invitation id.
+     * Register a new invitation in our pending invitations table. The invitation will call this
+     * when it knows its invitation id.
      */
     public function registerInvitation (invite :Invitation) :void
     {
@@ -219,8 +204,8 @@ public class ParlorDirector extends BasicDirector
     }
 
     /**
-     * Called by an invitation when it knows it is no longer and can be
-     * cleared from the pending invitations table.
+     * Called by an invitation when it knows it is no longer and can be cleared from the pending
+     * invitations table.
      */
     public function clearInvitation (invite :Invitation) :void
     {
@@ -247,16 +232,17 @@ public class ParlorDirector extends BasicDirector
     /** Provides access to parlor server side services. */
     protected var _pservice :ParlorService;
 
-    /** The entity that has registered itself to handle incoming
-     * invitation notifications. */
+    /** The entity that has registered itself to handle incoming invitation notifications. */
     protected var _handler :InvitationHandler;
 
-    /** A table of acknowledged (but not yet accepted or refused)
-     * invitation requests, keyed on invitation id. */
+    /** A table of acknowledged (but not yet accepted or refused) invitation requests, keyed on
+     * invitation id. */
     protected var _pendingInvites :HashMap = new HashMap();
 
-    /** We notify the entities on this list when we get a game ready
-     * notification. */
+    /** We notify the entities on this list when we get a game ready notification. */
     protected var _grobs :Array = new Array();
+
+    /** For great logging. */
+    private var _log :Log = Log.getLog(this);
 }
 }
