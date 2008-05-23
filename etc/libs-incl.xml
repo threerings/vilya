@@ -14,6 +14,8 @@
     <include name="retroweaver-all-1.2.2.jar"/>
     <include name="velocity-1.5-dev.jar"/>
     <include name="xml-writer.jar"/>
+    <include name="flexTasks.jar"/>
+    <include name="asc.jar"/>
     <!-- these might be named lib-SNAPSHOT-0.0.jar or lib.jar -->
     <include name="samskivert*.jar"/>
     <include name="narya-base*.jar"/>
@@ -26,5 +28,9 @@
     <!-- ActionScript dependencies -->
     <include name="naryalib.swc"/>
     <include name="nenyalib.swc"/>
+    <!-- Thane dependencies -->
+    <include name="thane.abc"/>
+    <include name="builtin.abc"/>
+    <include name="narya-abc.abc"/>
   </fileset>
 </project>

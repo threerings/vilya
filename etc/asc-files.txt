@@ -1,0 +1,16 @@
+com/threerings/parlor/data/*.as
+com/threerings/parlor/util/*.as
+com/threerings/parlor/game/data/GameConfig.as
+com/threerings/parlor/game/data/GameAI.as
+com/threerings/parlor/game/client/GameConfigurator.as
+com/threerings/parlor/client/TableService.as
+com/threerings/parlor/client/ParlorService.as
+com/threerings/parlor/client/ParlorService_InviteListener.as
+com/threerings/parlor/client/TableConfigurator.as
+com/threerings/parlor/client/GameReadyObserver.as
+com/threerings/parlor/client/Invitation.as
+com/threerings/parlor/client/InvitationResponseObserver.as
+com/threerings/parlor/client/ParlorDirector.as
+com/threerings/parlor/client/ParlorReceiver.as
+com/threerings/parlor/client/ParlorDecoder.as
+com/threerings/parlor/client/InvitationHandler.as

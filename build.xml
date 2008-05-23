@@ -214,6 +214,36 @@
     <delete file="${deploy.dir}/aslib-config.xml"/>
   </target>
 
+  <!-- checks whether our thane library needs building -->
+  <target name="checkabclib">
+    <condition property="no_build_abclib"><or>
+      <not><available classname="macromedia.asc.embedding.ScriptCompiler"
+                      classpathref="classpath"/></not>
+      <uptodate targetfile="${deploy.dir}/${lib.name}-abc.abc">
+        <srcfiles dir="src/as" includes="**/*.as"/>
+        <srcfiles dir="etc" includes="asc-files.txt"/>
+        <srcfiles dir="${deploy.dir}/lib" includes="*.abc"/>
+      </uptodate>
+    </or></condition>
+  </target>
+
+  <!-- builds our thane library -->
+  <target name="abclib" unless="no_build_abclib" depends="checkabclib">
+    <taskdef name="asc" classname="flex.ant.AscLibTask" classpathref="classpath"/>
+    <dirname property="abs.deploy.dir" file="${deploy.dir}/somefile.txt"/>
+    <asc as3="true" strict="true" classpathref="classpath"
+            outdir="${abs.deploy.dir}" out="${lib.name}-abc">
+      <import dir="${deploy.dir}/lib">
+        <include name="builtin.abc"/>
+        <include name="thane.abc"/>
+        <include name="narya-abc.abc"/>
+      </import>
+      <filespec dir="src/as">
+        <includesfile name="etc/asc-files.txt"/>
+      </filespec>
+    </asc>
+  </target>
+
   <!-- builds the javadoc documentation -->
   <target name="javadoc" depends="prepare">
     <javadoc sourcepath="src/java" packagenames="com.threerings.*"
@@ -256,7 +286,7 @@
   <target name="all" depends="clean,dist,javadoc,dist"/>
 
   <!-- builds our distribution files (war and jar) -->
-  <target name="dist" depends="prepare,compile,tcompile,procstream,aslib">
+  <target name="dist" depends="prepare,compile,tcompile,procstream,aslib,abclib">
     <!-- build our various jar files -->
     <jar destfile="${deploy.dir}/${lib.name}-parlor.jar">
       <fileset dir="${classes.dir}" includes="rsrc/i18n/game/**"/>
