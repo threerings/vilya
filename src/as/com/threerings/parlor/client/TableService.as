@@ -21,16 +21,12 @@
 
 package com.threerings.parlor.client {
 
-import flash.utils.ByteArray;
-import com.threerings.io.TypedArray;
-import com.threerings.parlor.client.TableService;
 import com.threerings.parlor.data.TableConfig;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.client.InvocationService_InvocationListener;
 import com.threerings.presents.client.InvocationService_ResultListener;
-import com.threerings.presents.data.InvocationMarshaller_ResultMarshaller;
 
 /**
  * An ActionScript version of the Java TableService interface.

@@ -21,19 +21,15 @@
 
 package com.threerings.whirled.spot.data {
 
-import flash.utils.ByteArray;
-import com.threerings.util.*; // for Float, Integer, etc.
-import com.threerings.io.TypedArray;
-
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService_ConfirmListener;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.data.InvocationMarshaller_ConfirmMarshaller;
-import com.threerings.presents.data.InvocationMarshaller_ListenerMarshaller;
+import com.threerings.util.Byte;
+import com.threerings.util.Integer;
 import com.threerings.whirled.client.SceneService_SceneMoveListener;
 import com.threerings.whirled.data.SceneMarshaller_SceneMoveMarshaller;
 import com.threerings.whirled.spot.client.SpotService;
-import com.threerings.whirled.spot.data.Location;
 
 /**
  * Provides the implementation of the {@link SpotService} interface

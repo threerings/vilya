@@ -21,15 +21,12 @@
 
 package com.threerings.parlor.card.trick.data {
 
-import flash.utils.ByteArray;
-import com.threerings.util.*; // for Float, Integer, etc.
 import com.threerings.io.TypedArray;
-
 import com.threerings.parlor.card.data.Card;
 import com.threerings.parlor.card.trick.client.TrickCardGameService;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller;
-import com.threerings.presents.data.InvocationMarshaller_ListenerMarshaller;
+import com.threerings.util.Integer;
 
 /**
  * Provides the implementation of the {@link TrickCardGameService} interface

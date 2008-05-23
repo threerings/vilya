@@ -21,18 +21,10 @@
 
 package com.threerings.whirled.zone.client {
 
-import flash.utils.ByteArray;
-import com.threerings.util.*; // for Float, Integer, etc.
-import com.threerings.io.TypedArray;
-
 import com.threerings.crowd.data.PlaceConfig;
-import com.threerings.presents.client.Client;
+import com.threerings.io.TypedArray;
 import com.threerings.presents.client.InvocationService_InvocationListener;
 import com.threerings.whirled.data.SceneModel;
-import com.threerings.whirled.data.SceneUpdate;
-import com.threerings.whirled.zone.client.ZoneService;
-import com.threerings.whirled.zone.client.ZoneService_ZoneMoveListener;
-import com.threerings.whirled.zone.data.ZoneMarshaller_ZoneMoveMarshaller;
 import com.threerings.whirled.zone.data.ZoneSummary;
 
 /**

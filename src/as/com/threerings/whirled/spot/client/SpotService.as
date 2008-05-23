@@ -21,16 +21,10 @@
 
 package com.threerings.whirled.spot.client {
 
-import flash.utils.ByteArray;
-import com.threerings.io.TypedArray;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.client.InvocationService_ConfirmListener;
-import com.threerings.presents.client.InvocationService_InvocationListener;
-import com.threerings.presents.data.InvocationMarshaller_ConfirmMarshaller;
 import com.threerings.whirled.client.SceneService_SceneMoveListener;
-import com.threerings.whirled.data.SceneMarshaller_SceneMoveMarshaller;
-import com.threerings.whirled.spot.client.SpotService;
 import com.threerings.whirled.spot.data.Location;
 
 /**

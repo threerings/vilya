@@ -21,19 +21,7 @@
 
 package com.threerings.parlor.client {
 
-import flash.utils.ByteArray;
-import com.threerings.util.*; // for Float, Integer, etc.
-import com.threerings.io.TypedArray;
-
-import com.threerings.parlor.client.ParlorService;
-import com.threerings.parlor.client.ParlorService_InviteListener;
-import com.threerings.parlor.data.ParlorMarshaller_InviteMarshaller;
-import com.threerings.parlor.game.data.GameConfig;
-import com.threerings.presents.client.Client;
-import com.threerings.presents.client.InvocationService_ConfirmListener;
 import com.threerings.presents.client.InvocationService_InvocationListener;
-import com.threerings.presents.data.InvocationMarshaller_ConfirmMarshaller;
-import com.threerings.util.Name;
 
 /**
  * An ActionScript version of the Java ParlorService_InviteListener interface.

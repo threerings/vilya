@@ -21,18 +21,11 @@
 
 package com.threerings.whirled.zone.data {
 
-import flash.utils.ByteArray;
-import com.threerings.util.*; // for Float, Integer, etc.
-import com.threerings.io.TypedArray;
-
 import com.threerings.crowd.data.PlaceConfig;
-import com.threerings.presents.client.Client;
+import com.threerings.io.TypedArray;
 import com.threerings.presents.data.InvocationMarshaller_ListenerMarshaller;
 import com.threerings.whirled.data.SceneModel;
-import com.threerings.whirled.data.SceneUpdate;
-import com.threerings.whirled.zone.client.ZoneService;
 import com.threerings.whirled.zone.client.ZoneService_ZoneMoveListener;
-import com.threerings.whirled.zone.data.ZoneSummary;
 
 /**
  * Marshalls instances of the ZoneService_ZoneMoveMarshaller interface.

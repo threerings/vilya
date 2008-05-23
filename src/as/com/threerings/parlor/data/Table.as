@@ -36,7 +36,6 @@ import com.threerings.presents.dobj.DSet_Entry;
 
 import com.threerings.crowd.data.BodyObject;
 
-import com.threerings.parlor.data.ParlorCodes;
 import com.threerings.parlor.game.data.GameConfig;
 
 /**

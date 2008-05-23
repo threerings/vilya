@@ -21,13 +21,10 @@
 
 package com.threerings.parlor.card.trick.client {
 
-import flash.utils.ByteArray;
 import com.threerings.io.TypedArray;
 import com.threerings.parlor.card.data.Card;
-import com.threerings.parlor.card.trick.client.TrickCardGameService;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
-import com.threerings.presents.client.InvocationService_InvocationListener;
 
 /**
  * An ActionScript version of the Java TrickCardGameService interface.
