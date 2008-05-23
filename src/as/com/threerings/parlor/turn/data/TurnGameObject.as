@@ -25,8 +25,6 @@ import com.threerings.io.TypedArray;
 
 import com.threerings.util.Name;
 
-import com.threerings.parlor.game.data.GameObject;
-
 /**
  * Games that wish to support turn-based play must implement this
  * interface with their {@link GameObject}.

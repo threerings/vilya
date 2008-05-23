@@ -1,8 +1,9 @@
 com/threerings/parlor/data/*.as
 com/threerings/parlor/util/*.as
-com/threerings/parlor/game/data/GameConfig.as
-com/threerings/parlor/game/data/GameAI.as
+com/threerings/parlor/game/data/*.as
 com/threerings/parlor/game/client/GameConfigurator.as
+com/threerings/parlor/game/client/GameController.as
+com/threerings/parlor/game/client/GameControllerDelegate.as
 com/threerings/parlor/client/TableService.as
 com/threerings/parlor/client/ParlorService.as
 com/threerings/parlor/client/ParlorService_InviteListener.as
@@ -14,3 +15,6 @@ com/threerings/parlor/client/ParlorDirector.as
 com/threerings/parlor/client/ParlorReceiver.as
 com/threerings/parlor/client/ParlorDecoder.as
 com/threerings/parlor/client/InvitationHandler.as
+com/threerings/parlor/turn/data/TurnGameObject.as
+com/threerings/parlor/turn/client/TurnGameController.as
+com/threerings/parlor/turn/client/TurnGameControllerDelegate.as
