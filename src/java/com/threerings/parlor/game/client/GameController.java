@@ -33,11 +33,12 @@ import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.util.CrowdContext;
 
-import com.threerings.parlor.Log;
 import com.threerings.parlor.game.data.GameCodes;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.game.data.GameObject;
 import com.threerings.parlor.util.ParlorContext;
+
+import static com.threerings.parlor.Log.log;
 
 /**
  * The game controller manages the flow and control of a game on the client side. This class serves
@@ -94,7 +95,7 @@ public abstract class GameController extends PlaceController
         // we don't want to claim to be finished until any derived classes that overrode this
         // method have executed, so we'll queue up a runnable here that will let the game manager
         // know that we're ready on the next pass through the distributed event loop
-        Log.info("Entering game " + _gobj.which() + ".");
+        log.info("Entering game " + _gobj.which() + ".");
         if (_gobj.getPlayerIndex(bobj.getVisibleName()) != -1) {
             _ctx.getClient().getRunQueue().postRunnable(new Runnable() {
                 public void run () {
@@ -193,7 +194,7 @@ public abstract class GameController extends PlaceController
         if (event.getName().equals(GameObject.STATE)) {
             int newState = event.getIntValue();
             if (!stateDidChange(newState)) {
-                Log.warning("Game transitioned to unknown state [gobj=" + _gobj +
+                log.warning("Game transitioned to unknown state [gobj=" + _gobj +
                             ", state=" + newState + "].");
             }
         }
@@ -228,7 +229,7 @@ public abstract class GameController extends PlaceController
      */
     protected void playerReady ()
     {
-        Log.info("Reporting ready " + _gobj.which() + ".");
+        log.info("Reporting ready " + _gobj.which() + ".");
         _gobj.manager.invoke("playerReady");
     }
 
@@ -239,7 +240,7 @@ public abstract class GameController extends PlaceController
     protected void gameDidStart ()
     {
         if (_gobj == null) {
-            Log.info("Received gameDidStart() after leaving game room.");
+            log.info("Received gameDidStart() after leaving game room.");
             return;
         }
 

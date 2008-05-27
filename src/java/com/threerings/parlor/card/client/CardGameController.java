@@ -25,12 +25,13 @@ import com.threerings.util.Name;
 
 import com.threerings.crowd.data.PlaceObject;
 
-import com.threerings.parlor.card.Log;
 import com.threerings.parlor.card.data.Card;
 import com.threerings.parlor.card.data.CardCodes;
 import com.threerings.parlor.card.data.Hand;
 import com.threerings.parlor.game.client.GameController;
 import com.threerings.parlor.turn.client.TurnGameController;
+
+import static com.threerings.parlor.card.Log.log;
 
 /**
  * A controller class for card games.  Handles common functions like
@@ -44,7 +45,7 @@ public abstract class CardGameController extends GameController
     {
         if (_ctx.getClient().getClientObject().receivers.containsKey(
                 CardGameDecoder.RECEIVER_CODE)) {
-            Log.warning("Yuh oh, we already have a card game receiver " +
+            log.warning("Yuh oh, we already have a card game receiver " +
                 "registered and are trying for another...!");
             Thread.dumpStack();
         }

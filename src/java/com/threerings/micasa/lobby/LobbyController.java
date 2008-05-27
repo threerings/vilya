@@ -32,8 +32,9 @@ import com.threerings.crowd.util.CrowdContext;
 import com.threerings.parlor.client.*;
 import com.threerings.parlor.game.data.GameConfig;
 
-import com.threerings.micasa.Log;
 import com.threerings.micasa.util.MiCasaContext;
+
+import static com.threerings.micasa.Log.log;
 
 public class LobbyController extends PlaceController
     implements InvitationHandler, InvitationResponseObserver
@@ -71,8 +72,7 @@ public class LobbyController extends PlaceController
                     _ctx.getParlorDirector().invite(
                         new Name(invitee), config, this);
                 } catch (Exception e) {
-                    Log.warning("Error instantiating game config.");
-                    Log.logStackTrace(e);
+                    log.warning("Error instantiating game config.", e);
                 }
             }
 
@@ -84,7 +84,7 @@ public class LobbyController extends PlaceController
     // documentation inherited from interface
     public void invitationReceived (Invitation invite)
     {
-        Log.info("Invitation received [invite=" + invite + "].");
+        log.info("Invitation received [invite=" + invite + "].");
 
         // accept the invitation. we're game...
         invite.accept();
@@ -93,26 +93,26 @@ public class LobbyController extends PlaceController
     // documentation inherited from interface
     public void invitationCancelled (Invitation invite)
     {
-        Log.info("Invitation cancelled " + invite + ".");
+        log.info("Invitation cancelled " + invite + ".");
     }
 
     // documentation inherited from interface
     public void invitationAccepted (Invitation invite)
     {
-        Log.info("Invitation accepted " + invite + ".");
+        log.info("Invitation accepted " + invite + ".");
     }
 
     // documentation inherited from interface
     public void invitationRefused (Invitation invite, String message)
     {
-        Log.info("Invitation refused [invite=" + invite +
+        log.info("Invitation refused [invite=" + invite +
                  ", message=" + message + "].");
     }
 
     // documentation inherited from interface
     public void invitationCountered (Invitation invite, GameConfig config)
     {
-        Log.info("Invitation countered [invite=" + invite +
+        log.info("Invitation countered [invite=" + invite +
                  ", config=" + config + "].");
     }
 

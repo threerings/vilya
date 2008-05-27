@@ -37,7 +37,6 @@ import com.threerings.crowd.server.CrowdServer;
 import com.threerings.crowd.server.PlaceManager;
 import com.threerings.crowd.server.PlaceRegistry;
 
-import com.threerings.whirled.Log;
 import com.threerings.whirled.client.SceneService;
 import com.threerings.whirled.data.Scene;
 import com.threerings.whirled.data.SceneCodes;
@@ -47,6 +46,8 @@ import com.threerings.whirled.server.persist.SceneRepository;
 import com.threerings.whirled.util.NoSuchSceneException;
 import com.threerings.whirled.util.SceneFactory;
 import com.threerings.whirled.util.UpdateList;
+
+import static com.threerings.whirled.Log.log;
 
 /**
  * The scene registry is responsible for the management of all scenes. It handles interaction with
@@ -269,8 +270,7 @@ public class SceneRegistry
     {
         // if this is not simply a missing scene, log a warning
         if (!(cause instanceof NoSuchSceneException)) {
-            Log.info("Failed to resolve scene [sceneId=" + sceneId + ", cause=" + cause + "].");
-            Log.logStackTrace(cause);
+            log.info("Failed to resolve scene [sceneId=" + sceneId + "].", cause);
         }
 
         // alas things didn't work out, notify our penders
@@ -280,8 +280,7 @@ public class SceneRegistry
                 try {
                     rl.sceneFailedToResolve(sceneId, cause);
                 } catch (Exception e) {
-                    Log.warning("Resolution listener choked.");
-                    Log.logStackTrace(e);
+                    log.warning("Resolution listener choked.", e);
                 }
             }
         }
@@ -297,9 +296,7 @@ public class SceneRegistry
         int sceneId = scmgr.getScene().getId();
         _scenemgrs.put(sceneId, scmgr);
 
-        if (Log.debug()) {
-            Log.debug("Registering scene manager [scid=" + sceneId + ", scmgr=" + scmgr + "].");
-        }
+        log.debug("Registering scene manager", "scid", sceneId, "scmgr", scmgr);
 
         // now notify any penders
         ArrayList<ResolutionListener> penders = _penders.remove(sceneId);
@@ -308,8 +305,7 @@ public class SceneRegistry
                 try {
                     rl.sceneWasResolved(scmgr);
                 } catch (Exception e) {
-                    Log.warning("Resolution listener choked.");
-                    Log.logStackTrace(e);
+                    log.warning("Resolution listener choked.", e);
                 }
             }
         }
@@ -321,13 +317,11 @@ public class SceneRegistry
     protected void unmapSceneManager (SceneManager scmgr)
     {
         if (_scenemgrs.remove(scmgr.getScene().getId()) == null) {
-            Log.warning("Requested to unmap unmapped scene manager [scmgr=" + scmgr + "].");
+            log.warning("Requested to unmap unmapped scene manager [scmgr=" + scmgr + "].");
             return;
         }
 
-        if (Log.debug()) {
-            Log.debug("Unmapped scene manager " + scmgr + ".");
-        }
+        log.debug("Unmapped scene manager", "scmgr", scmgr);
     }
 
     /** The entity from which we load scene models. */

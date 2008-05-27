@@ -30,7 +30,7 @@ import com.threerings.io.ObjectOutputStream;
 import com.threerings.io.Streamable;
 import com.threerings.util.ActionScript;
 
-import com.threerings.whirled.Log;
+import static com.threerings.whirled.Log.log;
 
 /**
  * Used to encapsulate updates to scenes in such a manner that updates can be stored persistently
@@ -109,7 +109,7 @@ public class SceneUpdate
 
         // sanity check for the amazing two billion updates
         if (model.version == _targetVersion) {
-            Log.warning("Egads! This scene has been updated two billion times [model=" + model +
+            log.warning("Egads! This scene has been updated two billion times [model=" + model +
                         ", update=" + this + "].");
         }
     }

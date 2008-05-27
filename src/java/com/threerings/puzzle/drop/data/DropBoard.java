@@ -29,10 +29,11 @@ import org.apache.commons.lang.StringUtils;
 
 import com.threerings.util.DirectionUtil;
 
-import com.threerings.puzzle.Log;
 import com.threerings.puzzle.data.Board;
 import com.threerings.puzzle.drop.client.DropControllerDelegate;
 import com.threerings.puzzle.drop.util.DropBoardUtil;
+
+import static com.threerings.puzzle.Log.log;
 
 /**
  * A class that provides for various useful logical operations to be enacted on a two-dimensional
@@ -132,8 +133,7 @@ public class DropBoard extends Board
         try {
             return _board[(row*_bwid) + col];
         } catch (Exception e) {
-            Log.warning("Failed getting piece [col=" + col + ", row=" + row + ", error=" + e + "].");
-            Log.logStackTrace(e);
+            log.warning("Failed getting piece [col=" + col + ", row=" + row + "].", e);
             return -1;
         }
     }
@@ -319,7 +319,7 @@ public class DropBoard extends Board
 
         // this should never happen since even in the most tightly constrained case where the block
         // is entirely surrounded by other pieces there are always two valid orientations.
-        Log.warning("**** We're horked and couldn't rotate at all!");
+        log.warning("**** We're horked and couldn't rotate at all!");
 //         System.exit(0);
         return null;
     }
@@ -425,7 +425,7 @@ public class DropBoard extends Board
             return true;
 
         } else {
-            Log.warning("Attempt to set piece outside board bounds " +
+            log.warning("Attempt to set piece outside board bounds " +
                         "[col=" + col + ", row=" + row + ", p=" + piece + "].");
             return false;
         }
@@ -649,7 +649,7 @@ public class DropBoard extends Board
     {
         // make sure the target board is a valid target
         if (board.getWidth() != _bwid || board.getHeight() != _bhei) {
-            Log.warning("Can't copy board into destination board with different dimensions " +
+            log.warning("Can't copy board into destination board with different dimensions " +
                         "[src=" + this + ", dest=" + board + "].");
             return;
         }
@@ -686,7 +686,7 @@ public class DropBoard extends Board
     {
         int size = (_bwid*_bhei);
         if (board.length < size) {
-            Log.warning("Attempt to set board with invalid data size " +
+            log.warning("Attempt to set board with invalid data size " +
                         "[len=" + board.length + ", expected=" + size + "].");
             return;
         }

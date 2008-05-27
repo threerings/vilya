@@ -27,9 +27,10 @@ import java.util.List;
 
 import com.samskivert.util.StringUtil;
 
-import com.threerings.puzzle.Log;
 import com.threerings.puzzle.drop.data.DropBoard;
 import com.threerings.puzzle.drop.data.DropPieceCodes;
+
+import static com.threerings.puzzle.Log.log;
 
 /**
  * Handles dropping pieces in a board.
@@ -156,7 +157,7 @@ public class PieceDropper
             int end = _logic.getConstrainedEdge(board, xx, yy, RIGHT);
             int bwid = board.getWidth();
             if (start < 0 || end >= bwid) {
-                Log.warning("Board reported bogus constrained edge " +
+                log.warning("Board reported bogus constrained edge " +
                             "[x=" + xx + ", y=" + yy + ", start=" + start + ", end=" + end + "].");
                 board.dump();
                 start = Math.max(start, 0);

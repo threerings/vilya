@@ -42,6 +42,8 @@ import com.threerings.media.tile.tools.xml.ObjectTileSetRuleSet;
 import com.threerings.media.tile.tools.xml.SwissArmyTileSetRuleSet;
 import com.threerings.media.tile.tools.xml.XMLTileSetParser;
 
+import static com.threerings.stage.Log.log;
+
 /**
  * The TestTileLoader handles test tiles. Test tiles are tiles that an
  * artist can load in on-the-fly to see how things look in the scene editor.
@@ -83,7 +85,7 @@ public class TestTileLoader implements TileSetIDBroker
         File testdir = new File(directory);
         // make sure it's a directory
         if (!testdir.isDirectory()) {
-            Log.warning("Test tileset directory is not actually a directory: " +
+            log.warning("Test tileset directory is not actually a directory: " +
                 directory);
             return map;
         }
@@ -124,8 +126,7 @@ public class TestTileLoader implements TileSetIDBroker
             try {
                 _parser.loadTileSets(xmlfile, tiles);
             } catch (IOException ioe) {
-                Log.warning("Error while parsing " + xmlfile.getPath());
-                Log.logStackTrace(ioe);
+                log.warning("Error while parsing " + xmlfile.getPath(), ioe);
                 continue;
             }
 

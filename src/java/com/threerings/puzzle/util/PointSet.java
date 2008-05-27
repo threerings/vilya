@@ -24,7 +24,7 @@ package com.threerings.puzzle.util;
 import java.awt.Point;
 import java.util.Iterator;
 
-import com.threerings.puzzle.Log;
+import static com.threerings.puzzle.Log.log;
 
 /**
  * The point set class provides an efficient implementation of a set
@@ -224,7 +224,7 @@ public class PointSet
             }
 
             if (_curY >= _rangeY) {
-                Log.warning("Advanced past point range.");
+                log.warning("Advanced past point range.");
                 _curY = 0;
             }
         }

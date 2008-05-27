@@ -37,10 +37,11 @@ import com.threerings.crowd.data.PlaceObject;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.util.RobotPlayer;
 
-import com.threerings.puzzle.Log;
 import com.threerings.puzzle.data.PuzzleCodes;
 import com.threerings.puzzle.data.PuzzleGameCodes;
 import com.threerings.puzzle.util.PuzzleContext;
+
+import static com.threerings.puzzle.Log.log;
 
 /**
  * The puzzle panel class should be extended by classes that provide a
@@ -108,7 +109,7 @@ public abstract class PuzzlePanel extends JPanel
     {
         // bail if we've already got an overlay
         if (_opanel != null) {
-            Log.info("Refusing to push overlay panel, we've already got one " +
+            log.info("Refusing to push overlay panel, we've already got one " +
                      "[opanel=" + _opanel + ", npanel=" + opanel + "].");
             return false;
         }

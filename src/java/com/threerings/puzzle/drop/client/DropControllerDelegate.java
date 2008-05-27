@@ -39,7 +39,6 @@ import com.threerings.crowd.util.CrowdContext;
 
 import com.threerings.puzzle.util.PuzzleContext;
 
-import com.threerings.puzzle.Log;
 import com.threerings.puzzle.client.PuzzleController;
 import com.threerings.puzzle.client.PuzzleControllerDelegate;
 import com.threerings.puzzle.client.PuzzlePanel;
@@ -54,6 +53,8 @@ import com.threerings.puzzle.drop.data.DropPieceCodes;
 import com.threerings.puzzle.drop.util.PieceDropLogic;
 import com.threerings.puzzle.drop.util.PieceDropper.PieceDropInfo;
 import com.threerings.puzzle.drop.util.PieceDropper;
+
+import static com.threerings.puzzle.Log.log;
 
 /**
  * Games that wish to make use of the drop puzzle services will need to
@@ -187,7 +188,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
         // it on its merry way once more
         if (_blocksprite != null) {
             long delta = _dview.getTimeStamp() - _blockStamp;
-            Log.info("Restarting drop sprite [delta=" + delta + "].");
+            log.info("Restarting drop sprite [delta=" + delta + "].");
             _blocksprite.fastForward(delta);
             _blockStamp = 0L;
             _dview.addSprite(_blocksprite);
@@ -196,7 +197,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
             // bouncing, we need to land the block to get things going
             // again
             if (_blocksprite.isBouncing()) {
-                Log.info("Ended on a bounce, landing the block and " +
+                log.info("Ended on a bounce, landing the block and " +
                          "starting things up.");
                 checkBlockLanded("bounced", true, true);
             }
@@ -210,7 +211,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     protected boolean canClearAction ()
     {
         if (!_stable) {
-            Log.info("Rejecting canClear() request because not stable.");
+            log.info("Rejecting canClear() request because not stable.");
         }
         return _stable && super.canClearAction();
     }
@@ -442,7 +443,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     protected void dropNextBlock ()
     {
         if (_blocksprite != null || !_ctrl.hasAction()) {
-            Log.info("Not dropping block [bs=" + (_blocksprite != null) +
+            log.info("Not dropping block [bs=" + (_blocksprite != null) +
                      ", action=" + _ctrl.hasAction() + "].");
             return;
         }
@@ -674,7 +675,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
 
         if (_dboard.isValidDrop(rows, cols, pctdone)) {
             if (commit) {
-                Log.info("Not valid drop [source=" + source +
+                log.info("Not valid drop [source=" + source +
                          ", commit=" + commit + ", atTop=" + atTop +
                          ", pctdone=" + pctdone + "].");
             }
@@ -698,7 +699,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
                     // a valid position, and that we aren't somehow
                     // overwriting an existing piece
                     if (col < 0 || col >= _bwid || row >= _bhei) {
-                        Log.warning("Placing drop block piece outside board " +
+                        log.warning("Placing drop block piece outside board " +
                                     "bounds!? [x=" + col + ", y=" + row +
                                     ", pidx=" + ii +
                                     ", blocksprite=" + _blocksprite + "].");
@@ -707,7 +708,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
                     } else {
                         int cpiece = _dboard.getPiece(col, row);
                         if (cpiece != PIECE_NONE) {
-                            Log.warning("Placing drop block piece onto " +
+                            log.warning("Placing drop block piece onto " +
                                         "occupied board position!? [x=" + col +
                                         ", y=" + row + ", pidx=" + ii +
                                         ", blocksprite=" + _blocksprite + "].");
@@ -724,7 +725,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
 
                 if (DEBUG_PUZZLE && error) {
                     _dboard.dump();
-                    Log.warning("Bailing out in a flaming pyre of glory.");
+                    log.warning("Bailing out in a flaming pyre of glory.");
                     System.exit(0);
                 }
             }
@@ -910,7 +911,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
         boolean evolving = evolveBoard();
         boolean debug = false;
         if (debug) {
-            Log.info("Evolved board [evolving=" + evolving + "].");
+            log.info("Evolved board [evolving=" + evolving + "].");
         }
 
         // if we're no longer evolving and the action has not ended, go
@@ -922,7 +923,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
 
             // this will trigger further puzzle activity
             if (debug) {
-                Log.info("Board did stabilize");
+                log.info("Board did stabilize");
             }
             boardDidStabilize();
 
@@ -930,7 +931,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
             // evolution, that it will now be cleared
             if (!_ctrl.hasAction()) {
                 if (debug) {
-                    Log.info("Maybe clearing action.");
+                    log.info("Maybe clearing action.");
                 }
                 maybeClearAction();
             }
@@ -1067,7 +1068,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
                 unstabilizeBoard();
 
             } else {
-                Log.debug("Sticking fork in it [risers=" +
+                log.debug("Sticking fork in it [risers=" +
                           StringUtil.toString(pieces) + ".");
 
                 // let the controller know that we're done for

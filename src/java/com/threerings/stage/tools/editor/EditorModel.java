@@ -30,6 +30,8 @@ import com.threerings.media.tile.TileUtil;
 
 import com.threerings.util.DirectionCodes;
 
+import static com.threerings.stage.Log.log;
+
 /**
  * The EditorModel class provides a holding place for storing,
  * modifying and retrieving data that is shared across the Editor
@@ -183,7 +185,7 @@ public class EditorModel
             }
         }
 
-        Log.warning("Attempt to set to unknown mode [cmd=" + cmd + "].");
+        log.warning("Attempt to set to unknown mode [cmd=" + cmd + "].");
     }
 
     /**

@@ -38,6 +38,8 @@ import com.samskivert.swing.VGroupLayout;
 
 import com.threerings.stage.tools.editor.util.EditorDialogUtil;
 
+import static com.threerings.stage.Log.log;
+
 /**
  * A dialog for editing preferences.
  */
@@ -87,7 +89,7 @@ public class PreferencesDialog extends JInternalFrame
             EditorDialogUtil.dispose(this);
 
         } else {
-            Log.warning("Unknown action command [cmd=" + cmd + "].");
+            log.warning("Unknown action command [cmd=" + cmd + "].");
         }
     }
 

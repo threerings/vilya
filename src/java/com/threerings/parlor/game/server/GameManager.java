@@ -454,7 +454,7 @@ public class GameManager extends PlaceManager
                     boolean result = startGame();
                     // TEMP: track down weirdness
                     if (!result && !_postponedStart) {
-                        log.log(Level.WARNING, "First call to startGame: ", firstCall);
+                        log.warning("First call to startGame: ", firstCall);
                     }
                     // End: temp
                 }
@@ -1286,7 +1286,7 @@ public class GameManager extends PlaceManager
             try {
                 gmgr.tick(now);
             } catch (Exception e) {
-                log.log(Level.WARNING, "Game manager choked during tick [gmgr=" + gmgr + "].", e);
+                log.warning("Game manager choked during tick [gmgr=" + gmgr + "].", e);
             }
         }
     }

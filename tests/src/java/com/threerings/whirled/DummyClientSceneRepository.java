@@ -23,10 +23,11 @@ package com.threerings.whirled;
 
 import java.io.IOException;
 
-import com.threerings.whirled.Log;
 import com.threerings.whirled.client.persist.SceneRepository;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.util.NoSuchSceneException;
+
+import static com.threerings.whirled.Log.log;
 
 /**
  * The dummy scene repository just pretends to load and store scenes, but
@@ -39,7 +40,7 @@ public class DummyClientSceneRepository implements SceneRepository
     public SceneModel loadSceneModel (int sceneId)
         throws IOException, NoSuchSceneException
     {
-        Log.info("Creating dummy scene model [id=" + sceneId + "].");
+        log.info("Creating dummy scene model [id=" + sceneId + "].");
         return new SceneModel();
     }
 

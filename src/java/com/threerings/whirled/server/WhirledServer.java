@@ -30,9 +30,10 @@ import com.threerings.presents.server.PresentsClient;
 
 import com.threerings.crowd.server.CrowdServer;
 
-import com.threerings.whirled.Log;
 import com.threerings.whirled.server.persist.SceneRepository;
 import com.threerings.whirled.util.SceneFactory;
+
+import static com.threerings.whirled.Log.log;
 
 /**
  * The Whirled server extends the {@link CrowdServer} and provides access to managers and the like

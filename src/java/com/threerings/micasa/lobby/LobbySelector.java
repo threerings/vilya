@@ -31,8 +31,9 @@ import javax.swing.*;
 
 import com.threerings.crowd.data.PlaceObject;
 
-import com.threerings.micasa.Log;
 import com.threerings.micasa.util.MiCasaContext;
+
+import static com.threerings.micasa.Log.log;
 
 /**
  * The lobby selector displays a drop-down box listing the categories of
@@ -141,7 +142,7 @@ public class LobbySelector extends JPanel
     // documentation inherited from interface
     public void requestFailed (String reason)
     {
-        Log.info("Request failed [reason=" + reason + "].");
+        log.info("Request failed [reason=" + reason + "].");
 
         // clear out our pending category indicator in case this was a
         // failed getLobbies() request
@@ -166,7 +167,7 @@ public class LobbySelector extends JPanel
             _lservice.getLobbies(_ctx.getClient(), category, this);
 
         } else {
-            Log.info("Ignoring category select request because " +
+            log.info("Ignoring category select request because " +
                      "one is outstanding [pcat=" + _pendingCategory +
                      ", newcat=" + category + "].");
         }
@@ -184,7 +185,7 @@ public class LobbySelector extends JPanel
         // otherwise request that we go there
         _ctx.getLocationDirector().moveTo(lobby.placeOid);
 
-        Log.info("Entering lobby " + lobby + ".");
+        log.info("Entering lobby " + lobby + ".");
 
     }
 

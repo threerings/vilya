@@ -48,10 +48,11 @@ import com.threerings.media.util.Path;
 import com.threerings.stage.client.StageScenePanel;
 import com.threerings.whirled.spot.data.Location;
 
-import com.threerings.stage.Log;
 import com.threerings.stage.data.StageLocation;
 import com.threerings.stage.data.StageScene;
 import com.threerings.stage.util.StageContext;
+
+import static com.threerings.stage.Log.log;
 
 public class ViewerScenePanel extends StageScenePanel
     implements PerformanceObserver, PathObserver
@@ -165,7 +166,7 @@ public class ViewerScenePanel extends StageScenePanel
     // documentation inherited
     public void checkpoint (String name, int ticks)
     {
-        Log.info(name + " [ticks=" + ticks + "].");
+        log.info(name + " [ticks=" + ticks + "].");
     }
 
     /** MouseListener interface methods */

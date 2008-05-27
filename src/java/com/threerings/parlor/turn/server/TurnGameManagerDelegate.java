@@ -27,11 +27,12 @@ import com.threerings.util.Name;
 import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.server.PlaceManager;
 
-import com.threerings.parlor.Log;
 import com.threerings.parlor.game.server.GameManager;
 import com.threerings.parlor.game.server.GameManagerDelegate;
 
 import com.threerings.parlor.turn.data.TurnGameObject;
+
+import static com.threerings.parlor.Log.log;
 
 /**
  * Performs the server-side turn-based game processing for a turn based game.  Game managers which
@@ -96,7 +97,7 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
     {
         // sanity check
         if (_turnIdx < 0 || _turnIdx >= _turnGame.getPlayers().length) {
-            Log.warning("startTurn() called with invalid turn index [game=" + where() +
+            log.warning("startTurn() called with invalid turn index [game=" + where() +
                         ", turnIdx=" + _turnIdx + "].");
             // abort, abort
             return;
@@ -105,7 +106,7 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
         // get the player name and sanity-check again
         Name name = _tgmgr.getPlayerName(_turnIdx);
         if (name == null) {
-            Log.warning("startTurn() called with invalid player [game=" + where() +
+            log.warning("startTurn() called with invalid player [game=" + where() +
                         ", turnIdx=" + _turnIdx + "].");
             return;
         }
@@ -218,7 +219,7 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
             if (_turnIdx == oturnIdx) {
                 // if we've wrapped all the way around, stop where we are even if the current
                 // player is not active.
-                Log.warning("1 or less active players. Unable to properly change turn. " +
+                log.warning("1 or less active players. Unable to properly change turn. " +
                             "[game=" + where() + "].");
                 break;
             }
@@ -236,7 +237,7 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
             while (!_tgmgr.isActivePlayer(_turnIdx)) {
                 _turnIdx = (_turnIdx + 1) % size;
                 if (_turnIdx == firstPick) {
-                    Log.warning("No players eligible for randomly-assigned turn. Choking. " +
+                    log.warning("No players eligible for randomly-assigned turn. Choking. " +
                                 "[game=" + where() + "].");
                     return;
                 }

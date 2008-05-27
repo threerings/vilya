@@ -70,13 +70,14 @@ import com.threerings.whirled.spot.data.Location;
 import com.threerings.whirled.spot.data.Portal;
 import com.threerings.whirled.spot.data.SceneLocation;
 
-import com.threerings.stage.Log;
 import com.threerings.stage.data.StageLocation;
 import com.threerings.stage.data.StageMisoSceneModel;
 import com.threerings.stage.data.StageScene;
 import com.threerings.stage.data.StageSceneModel;
 import com.threerings.stage.util.StageContext;
 import com.threerings.stage.util.StageSceneUtil;
+
+import static com.threerings.stage.Log.log;
 
 /**
  * Extends the basic Miso scene panel with Stage fun stuff like portals,
@@ -149,7 +150,7 @@ public class StageScenePanel extends MisoScenePanel
             setSceneModel(StageMisoSceneModel.getSceneModel(
                               scene.getSceneModel()));
         } else {
-            Log.warning("Zoiks! We can't display a null scene!");
+            log.warning("Zoiks! We can't display a null scene!");
             // TODO: display something to the user letting them know that
             // we're so hosed that we don't even know what time it is
         }

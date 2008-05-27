@@ -42,7 +42,7 @@ import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.game.data.GameObject;
 import com.threerings.parlor.game.server.GameManager;
 
-import com.threerings.micasa.Log;
+import static com.threerings.micasa.Log.log;
 
 /**
  * The simulator manager is responsible for handling the simulator services on the server side.
@@ -103,8 +103,7 @@ public class SimulatorManager
                 _gmgr = (GameManager)_plreg.createPlace(config);
 
             } catch (Exception e) {
-                Log.warning("Unable to create game manager [e=" + e + "].");
-                Log.logStackTrace(e);
+                log.warning("Unable to create game manager [e=" + e + "].", e);
                 return;
             }
 
@@ -136,7 +135,7 @@ public class SimulatorManager
                     }
                 }
                 public void resolutionFailed (Name username, Exception cause) {
-                    Log.warning("Unable to create simulant body object [error=" + cause + "].");
+                    log.warning("Unable to create simulant body object [error=" + cause + "].");
                 }
             };
 
@@ -160,7 +159,7 @@ public class SimulatorManager
                 try {
                     sim = (Simulant)Class.forName(_simClass).newInstance();
                 } catch (Exception e) {
-                    Log.warning("Unable to create simulant " +
+                    log.warning("Unable to create simulant " +
                                 "[class=" + _simClass + "].");
                     return;
                 }
@@ -177,7 +176,7 @@ public class SimulatorManager
                 try {
                     _plreg.locprov.moveTo(bobj, _gobj.getOid());
                 } catch (Exception e) {
-                    Log.warning("Failed to move simulant into room " +
+                    log.warning("Failed to move simulant into room " +
                                 "[e=" + e + "].");
                     return;
                 }

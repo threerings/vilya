@@ -75,6 +75,8 @@ import com.threerings.stage.tools.editor.util.EditorContext;
 import com.threerings.stage.tools.editor.util.EditorDialogUtil;
 import com.threerings.stage.tools.editor.util.ExtrasPainter;
 
+import static com.threerings.stage.Log.log;
+
 /**
  * Displays the scene view and handles UI events on the scene. Various
  * actions may be performed on the scene depending on the selected action
@@ -204,7 +206,7 @@ public class EditorScenePanel extends StageScenePanel
         _vertRange.setRangeProperties(
             vval, _vbounds.height, _area.y, vmax, false);
 
-//         Log.info("Updated extents area:" + StringUtil.toString(_area) +
+//         log.info("Updated extents area:" + StringUtil.toString(_area) +
 //                  " vb:" + StringUtil.toString(_vbounds) + ".");
         // update the dimensions of the scrollbox
 
@@ -251,7 +253,7 @@ public class EditorScenePanel extends StageScenePanel
     protected void deleteTile (int x, int y)
     {
         Rectangle drag = clearTileSelectRegion(x, y);
-        Log.info("Deleting " + drag);
+        log.info("Deleting " + drag);
 
         switch (_emodel.getLayerIndex()) {
         case EditorModel.BASE_LAYER:
@@ -658,7 +660,7 @@ public class EditorScenePanel extends StageScenePanel
             }
             return true;
         }
-        Log.warning("Requested to remove unknown object " + scobj + ".");
+        log.warning("Requested to remove unknown object " + scobj + ".");
         return false;
     }
 

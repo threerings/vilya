@@ -50,8 +50,9 @@ import com.threerings.cast.ComponentRepository;
 
 import com.threerings.miso.tile.MisoTileManager;
 
-import com.threerings.stage.Log;
 import com.threerings.stage.util.StageContext;
+
+import static com.threerings.stage.Log.log;
 
 /**
  * The ViewerApp is a scene viewing application that allows for trying out
@@ -71,7 +72,7 @@ public class ViewerApp
 
         // get the target graphics device
         GraphicsDevice gd = env.getDefaultScreenDevice();
-        Log.info("Graphics device [dev=" + gd +
+        log.info("Graphics device [dev=" + gd +
                  ", mem=" + gd.getAvailableAcceleratedMemory() +
                  ", displayChange=" + gd.isDisplayChangeSupported() +
                  ", fullScreen=" + gd.isFullScreenSupported() + "].");
@@ -79,7 +80,7 @@ public class ViewerApp
         // get the graphics configuration and display mode information
         GraphicsConfiguration gc = gd.getDefaultConfiguration();
         DisplayMode dm = gd.getDisplayMode();
-        Log.info("Display mode [bits=" + dm.getBitDepth() +
+        log.info("Display mode [bits=" + dm.getBitDepth() +
                  ", wid=" + dm.getWidth() + ", hei=" + dm.getHeight() +
                  ", refresh=" + dm.getRefreshRate() + "].");
 
@@ -105,7 +106,7 @@ public class ViewerApp
         // size and position the window, entering full-screen exclusive
         // mode if available and desired
         if (gd.isFullScreenSupported() /* && _viewFullScreen.getValue() */) {
-            Log.info("Entering full-screen exclusive mode.");
+            log.info("Entering full-screen exclusive mode.");
             gd.setFullScreenWindow(_frame);
          } else {
              _frame.setSize(640, 575);

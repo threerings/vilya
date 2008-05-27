@@ -46,12 +46,13 @@ import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.ScenePlace;
 import com.threerings.whirled.util.WhirledContext;
 
-import com.threerings.whirled.spot.Log;
 import com.threerings.whirled.spot.data.ClusteredBodyObject;
 import com.threerings.whirled.spot.data.Location;
 import com.threerings.whirled.spot.data.Portal;
 import com.threerings.whirled.spot.data.SpotCodes;
 import com.threerings.whirled.spot.data.SpotScene;
+
+import static com.threerings.whirled.spot.Log.log;
 
 /**
  * Extends the standard scene director with facilities to move between locations within a scene.
@@ -124,7 +125,7 @@ public class SpotSceneDirector extends BasicDirector
         // look up the destination scene and location
         SpotScene scene = (SpotScene)_scdir.getScene();
         if (scene == null) {
-            Log.warning("Requested to traverse portal when we have no scene " +
+            log.warning("Requested to traverse portal when we have no scene " +
                         "[portalId=" + portalId + "].");
             return false;
         }
@@ -133,7 +134,7 @@ public class SpotSceneDirector extends BasicDirector
         int sceneId = _scdir.getScene().getId();
         int clSceneId = ScenePlace.getSceneId((BodyObject)_ctx.getClient().getClientObject());
         if (sceneId != clSceneId) {
-            Log.warning("Client and server differ in opinion of what scene we're in " +
+            log.warning("Client and server differ in opinion of what scene we're in " +
                         "[sSceneId=" + clSceneId + ", cSceneId=" + sceneId + "].");
             return false;
         }
@@ -141,14 +142,14 @@ public class SpotSceneDirector extends BasicDirector
         // find the portal they're talking about
         Portal dest = scene.getPortal(portalId);
         if (dest == null) {
-            Log.warning("Requested to traverse non-existent portal [portalId=" + portalId +
+            log.warning("Requested to traverse non-existent portal [portalId=" + portalId +
                         ", portals=" + StringUtil.toString(scene.getPortals()) + "].");
             return false;
         }
 
         // prepare to move to this scene (sets up pending data)
         if (!_scdir.prepareMoveTo(dest.targetSceneId, rl)) {
-            Log.info("Portal traversal vetoed by scene director [portalId=" + portalId + "].");
+            log.info("Portal traversal vetoed by scene director [portalId=" + portalId + "].");
             return false;
         }
 
@@ -161,7 +162,7 @@ public class SpotSceneDirector extends BasicDirector
         }
 
         // issue a traversePortal request
-        Log.info("Issuing traversePortal(" + sceneId + ", " + dest + ", " + sceneVer + ").");
+        log.info("Issuing traversePortal(" + sceneId + ", " + dest + ", " + sceneVer + ").");
         _sservice.traversePortal(_ctx.getClient(), sceneId, portalId, sceneVer, _scdir);
         return true;
     }
@@ -181,7 +182,7 @@ public class SpotSceneDirector extends BasicDirector
         // refuse if there's a pending location change or if we're already at the specified
         // location
         if (loc.equivalent(_location)) {
-            Log.info("Not going to " + loc + "; we're at " + _location + " and we're headed to " +
+            log.info("Not going to " + loc + "; we're at " + _location + " and we're headed to " +
                      _pendingLoc + ".");
             if (listener != null) {
                 // This isn't really a failure, it's just a no-op.
@@ -191,7 +192,7 @@ public class SpotSceneDirector extends BasicDirector
         }
 
         if (_pendingLoc != null) {
-            Log.info("Not going to " + loc + "; we're at " + _location + " and we're headed to " +
+            log.info("Not going to " + loc + "; we're at " + _location + " and we're headed to " +
                      _pendingLoc + ".");
             if (listener != null) {
                 // Already moving, best thing to do is ignore it.
@@ -202,7 +203,7 @@ public class SpotSceneDirector extends BasicDirector
 
         SpotScene scene = (SpotScene)_scdir.getScene();
         if (scene == null) {
-            Log.warning("Requested to change locations, but we're not currently in any scene " +
+            log.warning("Requested to change locations, but we're not currently in any scene " +
                         "[loc=" + loc + "].");
             if (listener != null) {
                 listener.requestFailed(new Exception("m.cant_get_there"));
@@ -211,7 +212,7 @@ public class SpotSceneDirector extends BasicDirector
         }
 
         int sceneId = _scdir.getScene().getId();
-        Log.info("Sending changeLocation request [scid=" + sceneId + ", loc=" + loc + "].");
+        log.info("Sending changeLocation request [scid=" + sceneId + ", loc=" + loc + "].");
 
         _pendingLoc = (Location)loc.clone();
         ConfirmListener clist = new ConfirmListener() {
@@ -245,7 +246,7 @@ public class SpotSceneDirector extends BasicDirector
     {
         SpotScene scene = (SpotScene)_scdir.getScene();
         if (scene == null) {
-            Log.warning("Requested to join cluster, but we're not currently in any scene " +
+            log.warning("Requested to join cluster, but we're not currently in any scene " +
                         "[froid=" + froid + "].");
             if (listener != null) {
                 listener.requestFailed(new Exception("m.cant_get_there"));
@@ -253,7 +254,7 @@ public class SpotSceneDirector extends BasicDirector
             return;
         }
 
-        Log.info("Joining cluster [friend=" + froid + "].");
+        log.info("Joining cluster [friend=" + froid + "].");
 
         _sservice.joinCluster(_ctx.getClient(), froid, new ConfirmListener() {
             public void requestProcessed () {
@@ -293,14 +294,14 @@ public class SpotSceneDirector extends BasicDirector
         // make sure we're currently in a scene
         SpotScene scene = (SpotScene)_scdir.getScene();
         if (scene == null) {
-            Log.warning("Requested to speak to cluster, but we're not currently in any scene " +
+            log.warning("Requested to speak to cluster, but we're not currently in any scene " +
                         "[message=" + message + "].");
             return false;
         }
 
         // make sure we're part of a cluster
         if (_self.getClusterOid() <= 0) {
-            Log.info("Ignoring cluster speak as we're not in a cluster " +
+            log.info("Ignoring cluster speak as we're not in a cluster " +
                      "[cloid=" + _self.getClusterOid() + "].");
             return false;
         }
@@ -333,7 +334,7 @@ public class SpotSceneDirector extends BasicDirector
     // documentation inherited from interface
     public void requestFailed (int oid, ObjectAccessException cause)
     {
-        Log.warning("Unable to subscribe to cluster chat object [oid=" + oid +
+        log.warning("Unable to subscribe to cluster chat object [oid=" + oid +
                     ", cause=" + cause + "].");
     }
 

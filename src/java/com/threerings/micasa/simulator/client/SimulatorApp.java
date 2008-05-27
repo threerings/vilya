@@ -34,10 +34,11 @@ import com.threerings.presents.client.Client;
 import com.threerings.presents.client.ClientAdapter;
 import com.threerings.presents.net.UsernamePasswordCreds;
 
-import com.threerings.micasa.Log;
 import com.threerings.micasa.simulator.data.SimulatorInfo;
 import com.threerings.micasa.simulator.server.SimpleServer;
 import com.threerings.micasa.simulator.server.SimulatorServer;
+
+import static com.threerings.micasa.Log.log;
 
 /**
  * The simulator application is a test harness to facilitate development
@@ -71,12 +72,12 @@ public class SimulatorApp
                 try {
                     run();
                 } catch (Exception e) {
-                    Log.warning("Simulator initialization failed " +
+                    log.warning("Simulator initialization failed " +
                                 "[e=" + e + "].");
                 }
             }
             public void requestFailed (Exception e) {
-                Log.warning("Simulator initialization failed [e=" + e + "].");
+                log.warning("Simulator initialization failed [e=" + e + "].");
             }
         });
 
@@ -119,13 +120,13 @@ public class SimulatorApp
 
         // start up the client
         Client client = _client.getParlorContext().getClient();
-        Log.info("Connecting to localhost.");
+        log.info("Connecting to localhost.");
         client.setServer("localhost", Client.DEFAULT_SERVER_PORTS);
 
         // we want to exit when we logged off or failed to log on
         client.addClientObserver(new ClientAdapter() {
             public void clientFailedToLogon (Client c, Exception cause) {
-                Log.info("Client failed to logon: " + cause);
+                log.info("Client failed to logon: " + cause);
                 System.exit(0);
             }
             public void clientDidLogoff (Client c) {
@@ -171,8 +172,7 @@ public class SimulatorApp
         try {
             app.start(args);
         } catch (Exception e) {
-            Log.warning("Error starting up application.");
-            Log.logStackTrace(e);
+            log.warning("Error starting up application.", e);
         }
     }
 

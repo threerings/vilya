@@ -32,11 +32,12 @@ import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.server.CrowdServer;
 import com.threerings.crowd.server.PlaceRegistry;
 
-import com.threerings.parlor.Log;
 import com.threerings.parlor.client.ParlorService;
 import com.threerings.parlor.data.ParlorCodes;
 import com.threerings.parlor.data.TableConfig;
 import com.threerings.parlor.game.data.GameConfig;
+
+import static com.threerings.parlor.Log.log;
 
 /**
  * The parlor manager is responsible for the parlor services in aggregate. This includes
@@ -107,7 +108,7 @@ public class ParlorManager
     {
         BodyObject user = (BodyObject)caller;
 
-        Log.debug("Processing start solitaire [caller=" + user.who() + ", config=" + config + "].");
+        log.debug("Processing start solitaire [caller=" + user.who() + ", config=" + config + "].");
 
         try {
             // just this fellow will be playing
@@ -123,9 +124,8 @@ public class ParlorManager
             listener.requestProcessed();
 
         } catch (InstantiationException ie) {
-            Log.warning("Error instantiating game manager " +
-                        "[for=" + caller.who() + ", config=" + config + "].");
-            Log.logStackTrace(ie);
+            log.warning("Error instantiating game manager " +
+                        "[for=" + caller.who() + ", config=" + config + "].", ie);
             throw new InvocationException(INTERNAL_ERROR);
         }
     }
@@ -183,7 +183,7 @@ public class ParlorManager
         // look up the invitation
         Invitation invite = (Invitation)_invites.get(inviteId);
         if (invite == null) {
-            Log.warning("Requested to respond to non-existent invitation " +
+            log.warning("Requested to respond to non-existent invitation " +
                         "[source=" + source + ", inviteId=" + inviteId +
                         ", code=" + code + ", arg=" + arg + "].");
             return;
@@ -191,7 +191,7 @@ public class ParlorManager
 
         // make sure this response came from the proper person
         if (source != invite.invitee) {
-            Log.warning("Got response from non-invitee [source=" + source +
+            log.warning("Got response from non-invitee [source=" + source +
                         ", invite=" + invite + ", code=" + code +
                         ", arg=" + arg + "].");
             return;
@@ -221,7 +221,7 @@ public class ParlorManager
             break;
 
         default:
-            Log.warning("Requested to respond to invitation with unknown response code " +
+            log.warning("Requested to respond to invitation with unknown response code " +
                         "[source=" + source + ", invite=" + invite + ", code=" + code +
                         ", arg=" + arg + "].");
             break;
@@ -245,7 +245,7 @@ public class ParlorManager
     protected void processAcceptedInvitation (Invitation invite)
     {
         try {
-            Log.info("Creating game manager [invite=" + invite + "].");
+            log.info("Creating game manager [invite=" + invite + "].");
 
             // configure the game config with the player info
             invite.config.players = new Name[] { invite.invitee.getVisibleName(),
@@ -256,8 +256,7 @@ public class ParlorManager
             createGameManager(invite.config);
 
         } catch (Exception e) {
-            Log.warning("Unable to create game manager [invite=" + invite + ", error=" + e + "].");
-            Log.logStackTrace(e);
+            log.warning("Unable to create game manager [invite=" + invite + "].", e);
         }
     }
 

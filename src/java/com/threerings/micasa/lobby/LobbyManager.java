@@ -26,7 +26,8 @@ import com.samskivert.util.StringUtil;
 
 import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.server.PlaceManager;
-import com.threerings.micasa.Log;
+
+import static com.threerings.micasa.Log.log;
 
 /**
  * Takes care of the server side of a particular lobby.
@@ -48,7 +49,7 @@ public class LobbyManager extends PlaceManager
         // let the lobby registry know that we're up and running
         lobreg.lobbyReady(_plobj.getOid(), _gameIdent, _name);
 
-        Log.info("Lobby manager initialized [ident=" + _gameIdent +
+        log.info("Lobby manager initialized [ident=" + _gameIdent +
                  ", name=" + _name + "].");
     }
 

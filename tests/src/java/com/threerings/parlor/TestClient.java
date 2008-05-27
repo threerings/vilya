@@ -30,11 +30,12 @@ import com.threerings.crowd.client.*;
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.util.CrowdContext;
 
-import com.threerings.parlor.Log;
 import com.threerings.parlor.client.*;
 import com.threerings.parlor.game.client.*;
 import com.threerings.parlor.game.data.*;
 import com.threerings.parlor.util.ParlorContext;
+
+import static com.threerings.parlor.Log.log;
 
 public class TestClient extends com.threerings.crowd.client.TestClient
     implements InvitationHandler, InvitationResponseObserver
@@ -54,7 +55,7 @@ public class TestClient extends com.threerings.crowd.client.TestClient
     {
         // we intentionally don't call super()
 
-        Log.info("Client did logon [client=" + client + "].");
+        log.info("Client did logon [client=" + client + "].");
 
         // get a casted reference to our body object
         _body = (BodyObject)client.getClientObject();
@@ -69,7 +70,7 @@ public class TestClient extends com.threerings.crowd.client.TestClient
 
     public void invitationReceived (Invitation invite)
     {
-        Log.info("Invitation received [invite=" + invite + "].");
+        log.info("Invitation received [invite=" + invite + "].");
 
         // accept the invitation. we're game...
         invite.accept();
@@ -77,23 +78,23 @@ public class TestClient extends com.threerings.crowd.client.TestClient
 
     public void invitationCancelled (Invitation invite)
     {
-        Log.info("Invitation cancelled [invite=" + invite + "].");
+        log.info("Invitation cancelled [invite=" + invite + "].");
     }
 
     public void invitationAccepted (Invitation invite)
     {
-        Log.info("Invitation accepted [invite=" + invite + "].");
+        log.info("Invitation accepted [invite=" + invite + "].");
     }
 
     public void invitationRefused (Invitation invite, String message)
     {
-        Log.info("Invitation refused [invite=" + invite +
+        log.info("Invitation refused [invite=" + invite +
                  ", message=" + message + "].");
     }
 
     public void invitationCountered (Invitation invite, GameConfig config)
     {
-        Log.info("Invitation countered [invite=" + invite +
+        log.info("Invitation countered [invite=" + invite +
                  ", config=" + config + "].");
     }
 

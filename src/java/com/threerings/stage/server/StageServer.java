@@ -28,8 +28,9 @@ import com.threerings.media.tile.bundle.BundledTileSetRepository;
 
 import com.threerings.whirled.server.WhirledServer;
 
-import com.threerings.stage.Log;
 import com.threerings.stage.data.StageCodes;
+
+import static com.threerings.stage.Log.log;
 
 /**
  * Extends the Whirled server to provide services needed by the Stage
@@ -62,7 +63,7 @@ public abstract class StageServer extends WhirledServer
             new BundledTileSetRepository(rsrcmgr, null,
                                          StageCodes.TILESET_RSRC_SET));
 
-        Log.info("Stage server initialized.");
+        log.info("Stage server initialized.");
     }
 
     /**

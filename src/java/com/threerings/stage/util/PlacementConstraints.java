@@ -40,10 +40,11 @@ import com.threerings.media.tile.TileManager;
 
 import com.threerings.miso.data.ObjectInfo;
 
-import com.threerings.stage.Log;
 import com.threerings.stage.data.StageCodes;
 import com.threerings.stage.data.StageMisoSceneModel;
 import com.threerings.stage.data.StageScene;
+
+import static com.threerings.stage.Log.log;
 
 /**
  * Maintains extra information on objects in a scene and checks proposed
@@ -169,7 +170,7 @@ public class PlacementConstraints
         for (int ii = 0; ii < info.length; ii++) {
             data[ii] = _objectData.get(info[ii]);
             if (data[ii] == null) {
-                Log.warning("Couldn't match object info up to data [info=" +
+                log.warning("Couldn't match object info up to data [info=" +
                         info[ii] + "].");
                 return null;
             }
@@ -532,9 +533,7 @@ public class PlacementConstraints
             return new ObjectData(bounds, tile);
             
         } catch (Exception e) {
-            Log.warning("Error retrieving tile for object [info=" +
-                info + ", error=" + e + "].");
-            Log.logStackTrace(e);
+            log.warning("Error retrieving tile for object [info=" + info + "].", e);
             return null;
         }
     }

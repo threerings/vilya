@@ -36,11 +36,12 @@ import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.server.SceneManager;
 import com.threerings.whirled.server.SceneRegistry;
 
-import com.threerings.whirled.zone.Log;
 import com.threerings.whirled.zone.client.ZoneService.ZoneMoveListener;
 import com.threerings.whirled.zone.data.ZoneCodes;
 import com.threerings.whirled.zone.data.ZoneSummary;
 import com.threerings.whirled.zone.data.ZonedBodyObject;
+
+import static com.threerings.whirled.zone.Log.log;
 
 /**
  * Provides zone related services which are presently the ability to move from zone to zone.
@@ -74,7 +75,7 @@ public class ZoneProvider
         throws InvocationException
     {
         if (!(caller instanceof ZonedBodyObject)) {
-            Log.warning("Request to switch zones by non-ZonedBodyObject " +
+            log.warning("Request to switch zones by non-ZonedBodyObject " +
                         "[clobj=" + caller.getClass() + "].");
             throw new InvocationException(INTERNAL_ERROR);
         }
@@ -93,7 +94,7 @@ public class ZoneProvider
         // look up the zone manager for the zone
         ZoneManager zmgr = _zonereg.getZoneManager(zoneId);
         if (zmgr == null) {
-            Log.warning("Requested to enter a zone for which we have no manager " +
+            log.warning("Requested to enter a zone for which we have no manager " +
                         "[user=" + body.who() + ", zoneId=" + zoneId + "].");
             throw new InvocationException(NO_SUCH_ZONE);
         }

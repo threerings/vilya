@@ -41,7 +41,6 @@ import com.threerings.crowd.server.PlaceManager;
 
 import com.threerings.parlor.turn.server.TurnGameManagerDelegate;
 
-import com.threerings.parlor.card.Log;
 import com.threerings.parlor.card.data.Card;
 import com.threerings.parlor.card.data.CardGameObject;
 import com.threerings.parlor.card.data.Deck;
@@ -50,6 +49,8 @@ import com.threerings.parlor.card.data.PlayerCard;
 import com.threerings.parlor.card.server.CardGameManager;
 import com.threerings.parlor.card.trick.data.TrickCardGameMarshaller;
 import com.threerings.parlor.card.trick.data.TrickCardGameObject;
+
+import static com.threerings.parlor.card.Log.log;
 
 /**
  * A card game manager delegate for trick-based card games, such as Spades and Hearts.
@@ -216,14 +217,14 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
         // make sure they're actually a player
         int fromidx = _cgmgr.getPlayerIndex(client);
         if (fromidx == -1) {
-            Log.warning("Send request from non-player [username=" +
+            log.warning("Send request from non-player [username=" +
                 ((BodyObject)client).who() + ", cards=" + StringUtil.toString(cards) + "].");
             return;
         }
 
         // make sure they have the cards
         if (!_hands[fromidx].containsAll(cards)) {
-            Log.warning("Tried to send cards not held [username=" +
+            log.warning("Tried to send cards not held [username=" +
                 ((BodyObject)client).who() + ", cards=" + StringUtil.toString(cards) + "].");
             return;
         }
@@ -254,14 +255,14 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
 
         // make sure their hand contains the specified card
         if (!_hands[pidx].contains(card)) {
-            Log.warning("Tried to play card not held [username=" + username +
+            log.warning("Tried to play card not held [username=" + username +
                 ", card=" + card + "].");
             return;
         }
 
         // make sure the card is legal to play
         if (!_trickCardGame.isCardPlayable(_hands[pidx], card)) {
-            Log.warning("Tried to play illegal card [username=" + username +
+            log.warning("Tried to play illegal card [username=" + username +
                 ", card=" + card + "].");
             return;
         }
@@ -274,7 +275,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
     {
         // make sure the game is over
         if (_cardGame.state != CardGameObject.GAME_OVER) {
-            Log.warning("Tried to request rematch when game wasn't over " +
+            log.warning("Tried to request rematch when game wasn't over " +
                 "[username=" + ((BodyObject)client).who() + "].");
             return;
         }
@@ -282,14 +283,14 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
         // make sure the requester is one of the players
         int pidx = _cgmgr.getPlayerIndex(client);
         if (pidx == -1) {
-            Log.warning("Rematch request from non-player [username=" +
+            log.warning("Rematch request from non-player [username=" +
                 ((BodyObject)client).who() + "].");
             return;
         }
 
         // make sure the player hasn't already requested
         if (_trickCardGame.getRematchRequests()[pidx] != TrickCardGameObject.NO_REQUEST) {
-            Log.warning("Repeated rematch request [username=" + ((BodyObject)client).who() + "].");
+            log.warning("Repeated rematch request [username=" + ((BodyObject)client).who() + "].");
             return;
         }
 

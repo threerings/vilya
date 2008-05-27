@@ -28,9 +28,10 @@ import com.threerings.presents.server.InvocationManager;
 import com.threerings.crowd.server.PlaceRegistry;
 import com.threerings.whirled.server.SceneRegistry;
 
-import com.threerings.whirled.zone.Log;
 import com.threerings.whirled.zone.data.ZoneCodes;
 import com.threerings.whirled.zone.util.ZoneUtil;
+
+import static com.threerings.whirled.zone.Log.log;
 
 /**
  * The zone registry takes care of mapping zone requests to the appropriate registered zone
@@ -61,7 +62,7 @@ public class ZoneRegistry
     {
         ZoneManager old = (ZoneManager)_managers.get(zoneType);
         if (old != null) {
-            Log.warning("Zone manager already registered with requested type [type=" + zoneType +
+            log.warning("Zone manager already registered with requested type [type=" + zoneType +
                         ", old=" + old + ", new=" + manager + "].");
         } else {
             _managers.put(zoneType, manager);

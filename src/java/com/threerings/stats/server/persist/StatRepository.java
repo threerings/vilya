@@ -103,7 +103,7 @@ public class StatRepository extends DepotRepository
                     updateStat(playerId, stats[ii]);
                 }
             } catch (Exception e) {
-                log.log(Level.WARNING, "Error flushing modified stat [stat=" + stats[ii] + "].", e);
+                log.warning("Error flushing modified stat [stat=" + stats[ii] + "].", e);
             }
         }
     }
@@ -120,7 +120,7 @@ public class StatRepository extends DepotRepository
             try {
                 code = assignStringCode(type, value);
             } catch (PersistenceException pe) {
-                log.log(Level.WARNING, "Failed to assign code [type=" + type +
+                log.warning("Failed to assign code [type=" + type +
                         ", value=" + value + "].", pe);
                 // at this point the database is probably totally hosed, so we can just punt here,
                 // and assume that this value will never be persisted
@@ -142,7 +142,7 @@ public class StatRepository extends DepotRepository
             try {
                 loadStringCodes(type);
             } catch (PersistenceException pe) {
-                log.log(Level.WARNING, "Failed to reload string codes " +
+                log.warning("Failed to reload string codes " +
                     "[type=" + type + ", code=" + code + "].", pe);
             }
             map = _codeToString.get(type);
@@ -200,7 +200,7 @@ public class StatRepository extends DepotRepository
             errmsg = "Unable to decode stat";
         }
 
-        log.log(Level.WARNING, errmsg + " [type=" + stat.getType() + "]", error);
+        log.warning(errmsg + " [type=" + stat.getType() + "]", error);
         return null;
     }
 

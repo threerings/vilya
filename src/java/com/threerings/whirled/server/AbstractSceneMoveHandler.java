@@ -30,7 +30,7 @@ import com.threerings.crowd.data.BodyObject;
 import com.threerings.whirled.client.SceneService;
 import com.threerings.whirled.data.SceneCodes;
 
-import com.threerings.whirled.Log;
+import static com.threerings.whirled.Log.log;
 
 /**
  * Handles the basics of moving a client into a new scene, which may involve resolution. Takes care
@@ -52,7 +52,7 @@ public abstract class AbstractSceneMoveHandler
         // make sure our caller is still around; under heavy load, clients might end their session
         // while the scene is resolving
         if (!_body.isActive()) {
-            Log.info("Abandoning scene move, client gone [who=" + _body.who()  +
+            log.info("Abandoning scene move, client gone [who=" + _body.who()  +
                      ", dest=" + scmgr.where() + "].");
             InvocationMarshaller.setNoResponse(_listener);
             return;
@@ -65,7 +65,7 @@ public abstract class AbstractSceneMoveHandler
             _listener.requestFailed(sfe.getMessage());
 
         } catch (RuntimeException re) {
-            Log.logStackTrace(re);
+            log.warning(re);
             _listener.requestFailed(SceneCodes.INTERNAL_ERROR);
         }
     }
@@ -73,7 +73,7 @@ public abstract class AbstractSceneMoveHandler
     // from interface SceneRegistry.ResolutionListener
     public void sceneFailedToResolve (int sceneId, Exception reason)
     {
-        Log.warning("Unable to resolve scene [sceneid=" + sceneId + ", reason=" + reason + "].");
+        log.warning("Unable to resolve scene [sceneid=" + sceneId + ", reason=" + reason + "].");
         _listener.requestFailed(SceneCodes.NO_SUCH_PLACE);
     }
 

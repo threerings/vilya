@@ -25,8 +25,6 @@ import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.OccupantInfo;
 import com.threerings.crowd.server.OccupantOp;
 
-import com.threerings.parlor.card.Log;
-
 import com.threerings.parlor.card.data.Card;
 import com.threerings.parlor.card.data.CardCodes;
 import com.threerings.parlor.card.data.CardGameObject;
@@ -41,6 +39,8 @@ import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.dobj.MessageEvent;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.presents.server.PresentsServer;
+
+import static com.threerings.parlor.card.Log.log;
 
 /**
  * A manager class for card games.  Handles common functions like dealing

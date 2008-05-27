@@ -64,7 +64,7 @@ import com.threerings.crowd.data.OccupantInfo;
 import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.util.CrowdContext;
 
-import com.threerings.micasa.Log;
+import static com.threerings.micasa.Log.log;
 
 public class ChatPanel extends JPanel
     implements ActionListener, ChatDisplay, OccupantObserver, PlaceView
@@ -267,7 +267,7 @@ public class ChatPanel extends JPanel
             return true;
 
         } else {
-            Log.warning("Received unknown message type [message=" +
+            log.warning("Received unknown message type [message=" +
                         message + "].");
             return false;
         }
@@ -287,7 +287,7 @@ public class ChatPanel extends JPanel
         try {
             doc.insertString(doc.getLength(), text, style);
         } catch (BadLocationException ble) {
-            Log.warning("Unable to insert text!? [error=" + ble + "].");
+            log.warning("Unable to insert text!? [error=" + ble + "].");
         }
     }
 

@@ -29,9 +29,10 @@ import com.threerings.crowd.util.CrowdContext;
 import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.spot.client.SpotSceneController;
 
-import com.threerings.stage.Log;
 import com.threerings.stage.data.StageLocation;
 import com.threerings.stage.util.StageContext;
+
+import static com.threerings.stage.Log.log;
 
 /**
  * Extends the {@link SpotSceneController} with functionality specific to
@@ -44,7 +45,7 @@ public class StageSceneController extends SpotSceneController
      */
     public void handleLocationClicked (Object source, StageLocation loc)
     {
-        Log.warning("handleLocationClicked(" + source + ", " + loc + ")");
+        log.warning("handleLocationClicked(" + source + ", " + loc + ")");
     }
 
     /**
@@ -55,7 +56,7 @@ public class StageSceneController extends SpotSceneController
      */
     public void handleClusterClicked (Object source, Tuple tuple)
     {
-        Log.warning("handleClusterClicked(" + source + ", " + tuple + ")");
+        log.warning("handleClusterClicked(" + source + ", " + tuple + ")");
     }
 
     // documentation inherited

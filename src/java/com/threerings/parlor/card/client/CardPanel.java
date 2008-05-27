@@ -47,11 +47,12 @@ import com.threerings.media.util.Path;
 import com.threerings.media.util.PathSequence;
 import com.threerings.media.util.Pathable;
 
-import com.threerings.parlor.card.Log;
 import com.threerings.parlor.card.data.Card;
 import com.threerings.parlor.card.data.CardCodes;
 import com.threerings.parlor.card.data.Deck;
 import com.threerings.parlor.card.data.Hand;
+
+import static com.threerings.parlor.card.Log.log;
 
 /**
  * Extends VirtualMediaPanel to provide services specific to rendering and manipulating playing

@@ -50,11 +50,12 @@ import com.threerings.crowd.data.PlaceObject;
 import com.threerings.parlor.game.client.GameController;
 import com.threerings.parlor.game.data.GameObject;
 
-import com.threerings.puzzle.Log;
 import com.threerings.puzzle.data.Board;
 import com.threerings.puzzle.data.PuzzleCodes;
 import com.threerings.puzzle.data.PuzzleObject;
 import com.threerings.puzzle.util.PuzzleContext;
+
+import static com.threerings.puzzle.Log.log;
 
 /**
  * The puzzle game controller handles logical actions for a puzzle game.
@@ -163,7 +164,7 @@ public abstract class PuzzleController extends GameController
         // if we're moving focus to chat..
         if (chatting) {
             if (_unpauser != null) {
-                Log.warning("Huh? Already have a mouse unpauser?");
+                log.warning("Huh? Already have a mouse unpauser?");
                 _unpauser.release();
             }
             _unpauser = new Unpauser(_panel);
@@ -407,26 +408,26 @@ public abstract class PuzzleController extends GameController
 
         // refuse to start the action if our puzzle view is hidden
         if (_pidx != -1 && !_panel.getBoardView().isShowing()) {
-            Log.warning("Refusing to start action on hidden puzzle.");
+            log.warning("Refusing to start action on hidden puzzle.");
             Thread.dumpStack();
             return;
         }
 
         // refuse to start the action if it's already going
         if (_astate != ACTION_CLEARED) {
-            Log.warning("Action state inappropriate for startAction() " +
+            log.warning("Action state inappropriate for startAction() " +
                         "[astate=" + _astate + "].");
             Thread.dumpStack();
             return;
         }
 
         if (isChatting() && supportsActionPause()) {
-            Log.info("Not starting action, player is chatting in a puzzle " +
+            log.info("Not starting action, player is chatting in a puzzle " +
                      "that supports pausing the action.");
             return;
         }
 
-        Log.debug("Starting puzzle action.");
+        log.debug("Starting puzzle action.");
 
         // register the game progress updater; it may already be updated
         // because we can cycle through clearing the action and starting
@@ -498,7 +499,7 @@ public abstract class PuzzleController extends GameController
             return;
         }
 
-        Log.debug("Attempting to clear puzzle action.");
+        log.debug("Attempting to clear puzzle action.");
 
         // put ourselves into a pending clear state and attempt to clear
         // the action
@@ -527,13 +528,13 @@ public abstract class PuzzleController extends GameController
         // if the action is already ended, fire this pender immediately
         if (_astate == ACTION_CLEARED) {
             if (pender.actionCleared() == ClearPender.RESTART_ACTION) {
-                Log.debug("Restarting action at behest of pender " +
+                log.debug("Restarting action at behest of pender " +
                           pender + ".");
                 startAction();
             }
 
         } else {
-            Log.debug("Queueing action pender " + pender + ".");
+            log.debug("Queueing action pender " + pender + ".");
             _clearPenders.add(pender);
         }
     }
@@ -593,7 +594,7 @@ public abstract class PuzzleController extends GameController
      */
     protected void actuallyClearAction ()
     {
-        Log.debug("Actually clearing action.");
+        log.debug("Actually clearing action.");
 
         // make a note that we've cleared the action
         _astate = ACTION_CLEARED;
@@ -617,8 +618,7 @@ public abstract class PuzzleController extends GameController
         try {
             actionWasCleared();
         } catch (Exception e) {
-            Log.warning("Choked in actionWasCleared");
-            Log.logStackTrace(e);
+            log.warning("Choked in actionWasCleared", e);
         }
 
         // notify any penders that the action has cleared
@@ -734,7 +734,7 @@ public abstract class PuzzleController extends GameController
     {
         // make sure they don't queue things up at strange times
         if (_puzobj.state != PuzzleObject.IN_PLAY) {
-            Log.warning("Rejecting progress event; game not in play " +
+            log.warning("Rejecting progress event; game not in play " +
                         "[puzobj=" + _puzobj.which() +
                         ", event=" + event + "].");
             return;
@@ -744,7 +744,7 @@ public abstract class PuzzleController extends GameController
         if (isSyncingBoards()) {
             _states.add((board == null) ? null : board.clone());
             if (board == null) {
-                Log.warning("Added progress event with no associated board " +
+                log.warning("Added progress event with no associated board " +
                             "state, server will not be able to ensure " +
                             "board state synchronization.");
             }

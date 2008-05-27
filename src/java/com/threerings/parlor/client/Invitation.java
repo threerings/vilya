@@ -23,10 +23,11 @@ package com.threerings.parlor.client;
 
 import com.threerings.util.Name;
 
-import com.threerings.parlor.Log;
 import com.threerings.parlor.data.ParlorCodes;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.util.ParlorContext;
+
+import static com.threerings.parlor.Log.log;
 
 /**
  * The invitation class is used to track information related to
@@ -151,7 +152,7 @@ public class Invitation
     {
         // make sure we have an observer to notify
         if (_observer == null) {
-            Log.warning("No observer registered for invitation " +
+            log.warning("No observer registered for invitation " +
                         this + ".");
             return;
         }
@@ -173,10 +174,9 @@ public class Invitation
             }
 
         } catch (Exception e) {
-            Log.warning("Invitation response observer choked on response " +
+            log.warning("Invitation response observer choked on response " +
                         "[code=" + code + ", arg=" + arg +
-                        ", invite=" + this + "].");
-            Log.logStackTrace(e);
+                        ", invite=" + this + "].", e);
         }
 
         // unless the invitation was countered, we can remove it from the

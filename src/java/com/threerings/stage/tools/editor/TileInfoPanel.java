@@ -67,6 +67,8 @@ import com.threerings.media.tile.TileSetRepository;
 import com.threerings.stage.tools.editor.util.EditorContext;
 import com.threerings.stage.tools.editor.util.TileSetUtil;
 
+import static com.threerings.stage.Log.log;
+
 /**
  * The tile info panel presents the user with options to select the
  * tile to be applied to the scene.
@@ -114,8 +116,7 @@ public class TileInfoPanel extends JSplitPane
             }
 
         } catch (Exception e) {
-            Log.warning("Error enumerating tilesets.");
-            Log.logStackTrace(e);
+            log.warning("Error enumerating tilesets.", e);
         }
 
         // set up a border denoting our contents
@@ -271,7 +272,7 @@ public class TileInfoPanel extends JSplitPane
 
             Object uobj = node.getUserObject();
             if (!(uobj instanceof TileSetRecord)) {
-                Log.info("Eh? Non-TileSetRecord leaf [obj=" + uobj +
+                log.info("Eh? Non-TileSetRecord leaf [obj=" + uobj +
                          ", class=" + StringUtil.shortClassName(uobj) + "].");
                 return;
             }

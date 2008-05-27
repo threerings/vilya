@@ -25,7 +25,7 @@ import java.util.Iterator;
 
 import com.samskivert.util.HashIntMap;
 
-import com.threerings.whirled.spot.Log;
+import static com.threerings.whirled.spot.Log.log;
 
 /**
  * An implementation of the {@link SpotScene} interface.
@@ -103,7 +103,7 @@ public class SpotSceneImpl
     public void addPortal (Portal portal)
     {
         if (portal.portalId <= 0) {
-            Log.warning("Refusing to add zero-id portal " +
+            log.warning("Refusing to add zero-id portal " +
                         "[scene=" + this + ", portal=" + portal + "].");
             return;
         }

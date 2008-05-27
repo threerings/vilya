@@ -32,6 +32,8 @@ import com.threerings.media.tile.TileIcon;
 import com.threerings.media.tile.TileManager;
 import com.threerings.media.tile.UniformTileSet;
 
+import static com.threerings.stage.Log.log;
+
 public class EditorToolBarPanel extends JPanel implements ActionListener
 {
     public EditorToolBarPanel (TileManager tilemgr, EditorModel model)
@@ -63,7 +65,7 @@ public class EditorToolBarPanel extends JPanel implements ActionListener
                 _buttons.add(b);
 
             } else {
-                Log.warning("Unable to load toolbar icon " +
+                log.warning("Unable to load toolbar icon " +
                             "[index=" + ii + "].");
             }
         }
@@ -113,7 +115,7 @@ public class EditorToolBarPanel extends JPanel implements ActionListener
             _model.setActionMode(cmd.substring(5));
 
         } else {
-            Log.warning("Unknown action command [cmd=" + cmd + "].");
+            log.warning("Unknown action command [cmd=" + cmd + "].");
         }
     }
 

@@ -46,10 +46,11 @@ import com.threerings.miso.util.ObjectSet;
 import com.threerings.whirled.spot.data.Cluster;
 import com.threerings.whirled.spot.data.SceneLocation;
 
-import com.threerings.stage.Log;
 import com.threerings.stage.data.StageLocation;
 import com.threerings.stage.data.StageMisoSceneModel;
 import com.threerings.stage.data.StageSceneModel;
+
+import static com.threerings.stage.Log.log;
 
 /**
  * Provides scene related utility functions.
@@ -144,7 +145,7 @@ public class StageSceneUtil
             return new StageLocation(opos.x, opos.y, (byte)orient);
 
         } catch (Exception e) {
-            Log.warning("Unable to look up object tile for scene object " +
+            log.warning("Unable to look up object tile for scene object " +
                         "[tileId=" + tileId + ", error=" + e + "].");
         }
         return null;
@@ -208,7 +209,7 @@ public class StageSceneUtil
             return true;
 
         } catch (Exception e) {
-            Log.warning("Unable to look up object tile for scene object " +
+            log.warning("Unable to look up object tile for scene object " +
                         "[tileId=" + tileId + ", error=" + e + "].");
             return false;
         }
@@ -232,7 +233,7 @@ public class StageSceneUtil
             return tset.getPassability()[tidx];
 
         } catch (Exception e) {
-            Log.warning("Unable to look up base tile [tileId=" + tileId +
+            log.warning("Unable to look up base tile [tileId=" + tileId +
                         ", error=" + e + "].");
             return true;
         }
@@ -266,7 +267,7 @@ public class StageSceneUtil
         double radius = (double)fwid/2;
         int clidx = cluster.width-2;
         if (clidx >= CLUSTER_METRICS.length/2 || clidx < 0) {
-            Log.warning("Requested locs from invalid cluster " + cluster + ".");
+            log.warning("Requested locs from invalid cluster " + cluster + ".");
             Thread.dumpStack();
             return list;
         }
@@ -434,7 +435,7 @@ public class StageSceneUtil
                     objs.remove(ii--);
                 }
             } else {
-                Log.warning("Unknown potentially intersecting object?! " +
+                log.warning("Unknown potentially intersecting object?! " +
                             "[scene=" + model.name + " (" + model.sceneId +
                             "), info=" + info + "].");
             }

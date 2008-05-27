@@ -30,10 +30,11 @@ import com.threerings.presents.client.BasicDirector;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 
-import com.threerings.parlor.Log;
 import com.threerings.parlor.data.ParlorCodes;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.util.ParlorContext;
+
+import static com.threerings.parlor.Log.log;
 
 /**
  * The parlor director manages the client side of the game configuration and matchmaking
@@ -132,7 +133,7 @@ public class ParlorDirector extends BasicDirector
     // documentation inherited from interface
     public void gameIsReady (int gameOid)
     {
-        Log.info("Handling game ready [goid=" + gameOid + "].");
+        log.info("Handling game ready [goid=" + gameOid + "].");
 
         // see what our observers have to say about it
         boolean handled = false;
@@ -163,8 +164,7 @@ public class ParlorDirector extends BasicDirector
             _handler.invitationReceived(invite);
 
         } catch (Exception e) {
-            Log.warning("Invitation handler choked on invite notification " + invite + ".");
-            Log.logStackTrace(e);
+            log.warning("Invitation handler choked on invite notification " + invite + ".", e);
         }
     }
 
@@ -174,7 +174,7 @@ public class ParlorDirector extends BasicDirector
         // look up the invitation record for this invitation
         Invitation invite = (Invitation)_pendingInvites.get(remoteId);
         if (invite == null) {
-            Log.warning("Have no record of invitation for which we received a response?! " +
+            log.warning("Have no record of invitation for which we received a response?! " +
                         "[remoteId=" + remoteId + ", code=" + code + ", arg=" + arg + "].");
 
         } else {

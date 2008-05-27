@@ -46,10 +46,11 @@ import com.threerings.media.sprite.Sprite;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.media.ScoreAnimation;
 
-import com.threerings.puzzle.Log;
 import com.threerings.puzzle.data.Board;
 import com.threerings.puzzle.data.PuzzleCodes;
 import com.threerings.puzzle.util.PuzzleContext;
+
+import static com.threerings.puzzle.Log.log;
 
 /**
  * The puzzle board view displays a view of a puzzle game.
@@ -160,7 +161,7 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
     protected void animationFinished (Animation anim)
     {
         if (DEBUG_ACTION) {
-            Log.info("Animation cleared " + StringUtil.shortClassName(anim) +
+            log.info("Animation cleared " + StringUtil.shortClassName(anim) +
                      ":" + _actionAnims.contains(anim));
         }
 
@@ -194,7 +195,7 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
         super.removeSprite(sprite);
 
         if (DEBUG_ACTION) {
-            Log.info("Sprite cleared " + StringUtil.shortClassName(sprite) +
+            log.info("Sprite cleared " + StringUtil.shortClassName(sprite) +
                      ":" + _actionSprites.contains(sprite));
         }
 
@@ -253,7 +254,7 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
                 return StringUtil.shortClassName(obj);
             }
         };
-        Log.info("Board contents [board=" + StringUtil.shortClassName(this) +
+        log.info("Board contents [board=" + StringUtil.shortClassName(this) +
                  ", sprites=" + StringUtil.listToString(_actionSprites, fmt) +
                  ", anims=" + StringUtil.listToString(_actionAnims, fmt) +
                  "].");
@@ -348,7 +349,7 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
     protected void maybeFireCleared ()
     {
         if (DEBUG_ACTION) {
-            Log.info("Maybe firing cleared " +
+            log.info("Maybe firing cleared " +
                      getActionCount() + ":" + isShowing());
         }
         if (getActionCount() == 0) {

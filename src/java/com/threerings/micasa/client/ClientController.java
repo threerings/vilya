@@ -29,9 +29,10 @@ import com.threerings.presents.client.SessionObserver;
 
 import com.threerings.crowd.data.BodyObject;
 
-import com.threerings.micasa.Log;
 import com.threerings.micasa.data.MiCasaBootstrapData;
 import com.threerings.micasa.util.MiCasaContext;
+
+import static com.threerings.micasa.Log.log;
 
 /**
  * Responsible for top-level control of the client user interface.
@@ -68,7 +69,7 @@ public class ClientController extends Controller
             return true;
         }
 
-        Log.info("Unhandled action: " + action);
+        log.info("Unhandled action: " + action);
         return false;
     }
 
@@ -81,7 +82,7 @@ public class ClientController extends Controller
     // documentation inherited
     public void clientDidLogon (Client client)
     {
-        Log.info("Client did logon [client=" + client + "].");
+        log.info("Client did logon [client=" + client + "].");
 
         // keep the body object around for stuff
         _body = (BodyObject)client.getClientObject();
@@ -94,14 +95,14 @@ public class ClientController extends Controller
         try {
             jumpOidStr = System.getProperty("jumpoid");
         } catch (SecurityException se) {
-            Log.info("Not checking for jumpOid as we're in an applet.");
+            log.info("Not checking for jumpOid as we're in an applet.");
         }
 
         if (jumpOidStr != null) {
             try {
                 moveOid = Integer.parseInt(jumpOidStr);
             } catch (NumberFormatException nfe) {
-                Log.warning("Invalid jump oid [oid=" + jumpOidStr +
+                log.warning("Invalid jump oid [oid=" + jumpOidStr +
                             ", err=" + nfe + "].");
             }
 
@@ -131,7 +132,7 @@ public class ClientController extends Controller
     // documentation inherited
     public void clientDidLogoff (Client client)
     {
-        Log.info("Client did logoff [client=" + client + "].");
+        log.info("Client did logoff [client=" + client + "].");
 
         // reinstate the logon panel
         _frame.setPanel(_logonPanel);

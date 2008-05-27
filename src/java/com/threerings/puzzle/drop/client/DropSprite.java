@@ -32,7 +32,7 @@ import com.threerings.util.DirectionUtil;
 import com.threerings.media.image.Mirage;
 import com.threerings.media.sprite.Sprite;
 
-import com.threerings.puzzle.Log;
+import static com.threerings.puzzle.Log.log;
 
 /**
  * The drop sprite is a sprite that displays one or more pieces falling

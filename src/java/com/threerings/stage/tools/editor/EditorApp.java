@@ -69,6 +69,8 @@ import com.threerings.stage.data.StageSceneModel;
 import com.threerings.stage.tools.editor.util.EditorContext;
 import com.threerings.stage.tools.xml.StageSceneWriter;
 
+import static com.threerings.stage.Log.log;
+
 /**
  * A scene editor application that provides facilities for viewing,
  * editing, and saving the scene templates that comprise a game.
@@ -84,7 +86,7 @@ public class EditorApp implements Runnable
         final String target = (args.length > 0) ? args[0] : null;
 
         if (System.getProperty("no_log_redir") != null) {
-            Log.info("Logging to console only.");
+            log.info("Logging to console only.");
 
         } else {
             String dlog = localDataDir("editor.log");
@@ -93,10 +95,10 @@ public class EditorApp implements Runnable
                     new BufferedOutputStream(new FileOutputStream(dlog)), true);
                 System.setOut(logOut);
                 System.setErr(logOut);
-                Log.info("Opened debug log '" + dlog + "'.");
+                log.info("Opened debug log '" + dlog + "'.");
 
             } catch (IOException ioe) {
-                Log.warning("Failed to open debug log [path=" + dlog +
+                log.warning("Failed to open debug log [path=" + dlog +
                             ", error=" + ioe + "].");
             }
         }
@@ -145,8 +147,7 @@ public class EditorApp implements Runnable
             }
 
             public void initializationFailed (Exception e) {
-                Log.warning("Failed unpacking bundles [e=" + e + "].");
-                Log.logStackTrace(e);
+                log.warning("Failed unpacking bundles [e=" + e + "].", e);
             }
         };
         // we want our methods called on the AWT thread
@@ -166,7 +167,7 @@ public class EditorApp implements Runnable
             _crepo = new BundledComponentRepository(
                 _rmgr, _imgr, "components");
         } catch (IOException e) {
-            Log.warning("Exception loading tilesets and and icon manager " +
+            log.warning("Exception loading tilesets and and icon manager " +
                         "[Exception=" + e + "].");
             return;
         }
@@ -224,13 +225,12 @@ public class EditorApp implements Runnable
         } catch (Throwable t) {
             // Win98 seems to choke on it's own vomit when we attempt to
             // enumerate the available display modes; yay!
-            Log.warning("Failed to probe display mode.");
-            Log.logStackTrace(t);
+            log.warning("Failed to probe display mode.", t);
         }
 
         if (_viewFullScreen.getValue() && gd.isFullScreenSupported() &&
             pmode != null) {
-            Log.info("Switching to screen mode " +
+            log.info("Switching to screen mode " +
                      "[mode=" + ModeUtil.toString(pmode) + "].");
             // set the frame to undecorated, full-screen
             _frame.setUndecorated(true);
@@ -277,8 +277,7 @@ public class EditorApp implements Runnable
             EventQueue.invokeLater(app);
 
         } catch (IOException ioe) {
-            Log.warning("Unable to initialize editor.");
-            Log.logStackTrace(ioe);
+            log.warning("Unable to initialize editor.", ioe);
         }
     }
 
@@ -328,7 +327,7 @@ public class EditorApp implements Runnable
         public String xlate (String bundle, String message) {
             MessageBundle mbundle = _msgmgr.getBundle(bundle);
             if (mbundle == null) {
-                Log.warning("Requested to translate message with " +
+                log.warning("Requested to translate message with " +
                             "non-existent bundle [bundle=" + bundle +
                             ", message=" + message + "].");
                 return message;

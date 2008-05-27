@@ -23,11 +23,12 @@ package com.threerings.whirled.server.persist;
 
 import com.samskivert.io.PersistenceException;
 
-import com.threerings.whirled.Log;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.util.NoSuchSceneException;
 import com.threerings.whirled.util.UpdateList;
+
+import static com.threerings.whirled.Log.log;
 
 /**
  * The dummy scene repository just pretends to load and store scenes, but
@@ -40,7 +41,7 @@ public class DummySceneRepository implements SceneRepository
     public SceneModel loadSceneModel (int sceneId)
         throws PersistenceException, NoSuchSceneException
     {
-        Log.info("Creating dummy scene [id=" + sceneId + "].");
+        log.info("Creating dummy scene [id=" + sceneId + "].");
         return SceneModel.blankSceneModel();
     }
 

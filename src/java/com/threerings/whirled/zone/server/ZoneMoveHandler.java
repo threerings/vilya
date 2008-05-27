@@ -35,11 +35,12 @@ import com.threerings.whirled.server.SceneMoveHandler;
 import com.threerings.whirled.server.SceneRegistry;
 import com.threerings.whirled.server.WhirledServer;
 
-import com.threerings.whirled.zone.Log;
 import com.threerings.whirled.zone.client.ZoneService;
 import com.threerings.whirled.zone.data.ZoneCodes;
 import com.threerings.whirled.zone.data.ZoneSummary;
 import com.threerings.whirled.zone.data.ZonedBodyObject;
+
+import static com.threerings.whirled.zone.Log.log;
 
 /**
  * Handles transitioning between zones.
@@ -74,7 +75,7 @@ public class ZoneMoveHandler extends AbstractSceneMoveHandler
     // from interface ZoneManager.ResolutionListener
     public void zoneFailedToResolve (int zoneId, Exception reason)
     {
-        Log.warning("Unable to resolve zone [zoneId=" + zoneId + ", reason=" + reason + "].");
+        log.warning("Unable to resolve zone [zoneId=" + zoneId + ", reason=" + reason + "].");
         _listener.requestFailed(ZoneCodes.NO_SUCH_ZONE);
     }
 

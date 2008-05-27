@@ -36,7 +36,6 @@ import com.samskivert.swing.HGroupLayout;
 import com.samskivert.swing.VGroupLayout;
 import com.samskivert.swing.util.SwingUtil;
 
-import com.threerings.micasa.Log;
 import com.threerings.micasa.lobby.LobbyConfig;
 import com.threerings.micasa.util.MiCasaContext;
 
@@ -51,6 +50,8 @@ import com.threerings.parlor.game.data.GameConfig;
 
 import com.threerings.crowd.client.PlaceView;
 import com.threerings.crowd.data.PlaceObject;
+
+import static com.threerings.micasa.Log.log;
 
 /**
  * A view that displays the tables in a table lobby. It displays two
@@ -103,7 +104,7 @@ public class TableListView extends JPanel
 
             _tableFigger = gconfig.createTableConfigurator();
             if (_tableFigger == null) {
-                Log.warning("Game config has not been set up to work with " +
+                log.warning("Game config has not been set up to work with " +
                     "tables: it needs to return non-null from " +
                     "createTableConfigurator().");
                 // let's just wait until we throw an NPE below
@@ -123,9 +124,8 @@ public class TableListView extends JPanel
             panel.add(_create, VGroupLayout.FIXED);
 
         } catch (Exception e) {
-            Log.warning("Unable to create configurator interface " +
-                        "[config=" + gconfig + "].");
-            Log.logStackTrace(e);
+            log.warning("Unable to create configurator interface " +
+                        "[config=" + gconfig + "].", e);
 
             // stick something in the UI to let them know we're hosed
             panel.add(new JLabel("Aiya! Can't create tables. " +
@@ -174,7 +174,7 @@ public class TableListView extends JPanel
     // documentation inherited
     public void tableAdded (Table table)
     {
-        Log.info("Table added [table=" + table + "].");
+        log.info("Table added [table=" + table + "].");
 
         // create a table item for this table and insert it into the
         // appropriate list
@@ -186,12 +186,12 @@ public class TableListView extends JPanel
     // documentation inherited
     public void tableUpdated (Table table)
     {
-        Log.info("Table updated [table=" + table + "].");
+        log.info("Table updated [table=" + table + "].");
 
         // locate the table item associated with this table
         TableItem item = getTableItem(table.tableId);
         if (item == null) {
-            Log.warning("Received table updated notification for " +
+            log.warning("Received table updated notification for " +
                         "unknown table [table=" + table + "].");
             return;
         }
@@ -212,12 +212,12 @@ public class TableListView extends JPanel
     // documentation inherited
     public void tableRemoved (int tableId)
     {
-        Log.info("Table removed [tableId=" + tableId + "].");
+        log.info("Table removed [tableId=" + tableId + "].");
 
         // locate the table item associated with this table
         TableItem item = getTableItem(tableId);
         if (item == null) {
-            Log.warning("Received table removed notification for " +
+            log.warning("Received table removed notification for " +
                         "unknown table [tableId=" + tableId + "].");
             return;
         }

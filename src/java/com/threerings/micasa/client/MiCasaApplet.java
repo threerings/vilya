@@ -31,7 +31,7 @@ import com.threerings.presents.client.Client;
 import com.threerings.presents.client.ClientAdapter;
 import com.threerings.presents.net.UsernamePasswordCreds;
 
-import com.threerings.micasa.Log;
+import static com.threerings.micasa.Log.log;
 
 /**
  * The MiCasa applet is used to make MiCasa games available via the web
@@ -74,8 +74,7 @@ public class MiCasaApplet extends Applet
             });
 
         } catch (IOException ioe) {
-            Log.warning("Unable to create client.");
-            Log.logStackTrace(ioe);
+            log.warning("Unable to create client.", ioe);
         }
     }
 

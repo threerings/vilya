@@ -32,8 +32,9 @@ import com.threerings.crowd.server.CrowdServer;
 
 import com.threerings.parlor.server.ParlorManager;
 
-import com.threerings.micasa.Log;
 import com.threerings.micasa.lobby.LobbyRegistry;
+
+import static com.threerings.micasa.Log.log;
 
 /**
  * This class is the main entry point and general organizer of everything
@@ -72,7 +73,7 @@ public class MiCasaServer extends CrowdServer
         // initialize the lobby registry
         lobreg.init(invmgr);
 
-        Log.info("MiCasa server initialized.");
+        log.info("MiCasa server initialized.");
     }
 
     public static void main (String[] args)
@@ -82,8 +83,7 @@ public class MiCasaServer extends CrowdServer
             server.init();
             server.run();
         } catch (Exception e) {
-            Log.warning("Unable to initialize server.");
-            Log.logStackTrace(e);
+            log.warning("Unable to initialize server.", e);
         }
     }
 }

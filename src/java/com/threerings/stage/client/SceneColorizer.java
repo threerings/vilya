@@ -30,8 +30,9 @@ import com.threerings.media.tile.TileSet;
 
 import com.threerings.miso.data.ObjectInfo;
 
-import com.threerings.stage.Log;
 import com.threerings.stage.data.StageScene;
+
+import static com.threerings.stage.Log.log;
 
 /**
  * Handles colorization of object tiles in a scene.
@@ -123,7 +124,7 @@ public class SceneColorizer implements TileSet.Colorizer
             // 3. If there are no defaults whatsoever, just hash on the sceneId.
             int[] cids = (int[])_cids.get(zation);
             if (cids == null) {
-                Log.warning("Zoiks, have no colorizations for '" +
+                log.warning("Zoiks, have no colorizations for '" +
                             zation + "'.");
                 return -1;
             } else {

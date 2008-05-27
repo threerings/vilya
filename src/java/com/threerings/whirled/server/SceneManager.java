@@ -28,13 +28,14 @@ import com.threerings.crowd.data.Place;
 import com.threerings.crowd.server.CrowdServer;
 import com.threerings.crowd.server.PlaceManager;
 
-import com.threerings.whirled.Log;
 import com.threerings.whirled.data.Scene;
 import com.threerings.whirled.data.SceneCodes;
 import com.threerings.whirled.data.ScenePlace;
 import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.server.WhirledServer;
 import com.threerings.whirled.util.UpdateList;
+
+import static com.threerings.whirled.Log.log;
 
 /**
  * The scene manager extends the place manager and takes care of basic scene services. Presently
@@ -87,7 +88,7 @@ public class SceneManager extends PlaceManager
 
         // make sure the list and our version of the scene are in accordance
         if (!_updates.validate(scene.getVersion())) {
-            Log.warning("Provided with invalid updates; flushing [where=" + where() +
+            log.warning("Provided with invalid updates; flushing [where=" + where() +
                         ", sceneId=" + scene.getId() + ", version=" + scene.getVersion() + "].");
             // clear out the update list as it will not allow us to bring clients up to date with
             // our current scene version; instead they'll have to download the whole thing

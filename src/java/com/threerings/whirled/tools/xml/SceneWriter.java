@@ -32,9 +32,10 @@ import org.xml.sax.helpers.AttributesImpl;
 import com.megginson.sax.DataWriter;
 import com.threerings.tools.xml.NestableWriter;
 
-import com.threerings.whirled.Log;
 import com.threerings.whirled.data.AuxModel;
 import com.threerings.whirled.data.SceneModel;
+
+import static com.threerings.whirled.Log.log;
 
 /**
  * Generates an XML representation of an {@link SceneModel}.
@@ -111,7 +112,7 @@ public class SceneWriter
             if (awriter != null) {
                 awriter.write(amodel, writer);
             } else {
-                Log.warning("No writer registered for auxiliary scene model " +
+                log.warning("No writer registered for auxiliary scene model " +
                             "[mclass=" + amodel.getClass() + "].");
             }
         }

@@ -38,7 +38,7 @@ import com.threerings.whirled.spot.data.SpotScene;
 import com.threerings.whirled.spot.data.SpotSceneImpl;
 import com.threerings.whirled.spot.data.SpotSceneModel;
 
-import com.threerings.stage.Log;
+import static com.threerings.stage.Log.log;
 
 /**
  * The implementation of the Stage scene interface.
@@ -119,7 +119,7 @@ public class StageScene extends SceneImpl
         StageMisoSceneModel mmodel = StageMisoSceneModel.getSceneModel(_model);
         if (mmodel != null) {
             if (!mmodel.addObject(info)) {
-                Log.warning("Scene model rejected object add " +
+                log.warning("Scene model rejected object add " +
                             "[scene=" + this + ", object=" + info + "].");
             }
         }

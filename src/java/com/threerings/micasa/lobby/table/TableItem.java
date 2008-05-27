@@ -42,8 +42,9 @@ import com.threerings.parlor.client.TableDirector;
 import com.threerings.parlor.client.SeatednessObserver;
 import com.threerings.parlor.data.Table;
 
-import com.threerings.micasa.Log;
 import com.threerings.micasa.util.MiCasaContext;
+
+import static com.threerings.micasa.Log.log;
 
 /**
  * A table item displays the user interface for a single table (whether it
@@ -195,7 +196,7 @@ public class TableItem
 
             // sanity check
             if (position == -1) {
-                Log.warning("Unable to figure out what position a <join> " +
+                log.warning("Unable to figure out what position a <join> " +
                             "click came from [event=" + event + "].");
             } else {
                 // otherwise, request to join the table at this position
@@ -211,7 +212,7 @@ public class TableItem
             _ctx.getLocationDirector().moveTo(table.gameOid);
 
         } else {
-            Log.warning("Received unknown action [event=" + event + "].");
+            log.warning("Received unknown action [event=" + event + "].");
         }
     }
 

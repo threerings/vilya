@@ -23,7 +23,7 @@ package com.threerings.whirled.data;
 
 import com.threerings.crowd.data.PlaceConfig;
 
-import com.threerings.whirled.Log;
+import static com.threerings.whirled.Log.log;
 
 /**
  * An implementation of the {@link Scene} interface.
@@ -99,9 +99,8 @@ public class SceneImpl implements Scene
             update.validate(_model);
             update.apply(_model);
         } catch (Exception e) {
-            Log.warning("Error applying update [scene=" + this +
-                        ", update=" + update + "].");
-            Log.logStackTrace(e);
+            log.warning("Error applying update [scene=" + this +
+                        ", update=" + update + "].", e);
         }
     }
 

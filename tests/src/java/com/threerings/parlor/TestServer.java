@@ -23,8 +23,9 @@ package com.threerings.parlor;
 
 import com.threerings.crowd.server.CrowdServer;
 
-import com.threerings.parlor.Log;
 import com.threerings.parlor.server.ParlorManager;
+
+import static com.threerings.parlor.Log.log;
 
 /**
  * A test server for the Parlor services.
@@ -43,7 +44,7 @@ public class TestServer extends CrowdServer
         // initialize our parlor manager
         parmgr.init(invmgr, plreg);
 
-        Log.info("Parlor server initialized.");
+        log.info("Parlor server initialized.");
     }
 
     /** Main entry point for test server. */
@@ -54,8 +55,7 @@ public class TestServer extends CrowdServer
             server.init();
             server.run();
         } catch (Exception e) {
-            Log.warning("Unable to initialize server.");
-            Log.logStackTrace(e);
+            log.warning("Unable to initialize server.", e);
         }
     }
 }

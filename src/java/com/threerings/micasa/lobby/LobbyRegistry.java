@@ -31,11 +31,12 @@ import com.threerings.presents.server.InvocationManager;
 
 import com.threerings.crowd.data.BodyObject;
 
-import com.threerings.micasa.Log;
 import com.threerings.micasa.lobby.LobbyService.CategoriesListener;
 import com.threerings.micasa.lobby.LobbyService.LobbiesListener;
 import com.threerings.micasa.server.MiCasaConfig;
 import com.threerings.micasa.server.MiCasaServer;
+
+import static com.threerings.micasa.Log.log;
 
 /**
  * The lobby registry is the primary class that coordinates the lobby services on the client. It
@@ -101,7 +102,7 @@ public class LobbyRegistry
         String[] lmgrs = null;
         lmgrs = MiCasaConfig.config.getValue(LOBIDS_KEY, lmgrs);
         if (lmgrs == null || lmgrs.length == 0) {
-            Log.warning("No lobbies specified in config file (via '" +
+            log.warning("No lobbies specified in config file (via '" +
                         LOBIDS_KEY + "' parameter).");
 
         } else {
@@ -145,7 +146,7 @@ public class LobbyRegistry
             lobmgr.init(this, props);
 
         } catch (Exception e) {
-            Log.warning("Unable to create lobby manager [lobbyId=" + lobbyId +
+            log.warning("Unable to create lobby manager [lobbyId=" + lobbyId +
                         ", error=" + e + "].");
         }
     }
@@ -239,7 +240,7 @@ public class LobbyRegistry
             _lobbies.put(category, catlist);
         }
         catlist.add(record);
-        Log.info("Registered lobby [cat=" + category + ", record=" + record + "].");
+        log.info("Registered lobby [cat=" + category + ", record=" + record + "].");
     }
 
     /** A table containing references to all of our lobby records (in the form of category

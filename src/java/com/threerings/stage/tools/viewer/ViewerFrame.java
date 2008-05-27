@@ -46,11 +46,12 @@ import com.threerings.whirled.spot.data.Location;
 import com.threerings.whirled.spot.data.Portal;
 import com.threerings.whirled.spot.data.SpotSceneModel;
 
-import com.threerings.stage.Log;
 import com.threerings.stage.data.StageScene;
 import com.threerings.stage.data.StageSceneModel;
 import com.threerings.stage.tools.xml.StageSceneParser;
 import com.threerings.stage.util.StageContext;
+
+import static com.threerings.stage.Log.log;
 
 /**
  * The viewer frame is the main application window.
@@ -167,7 +168,7 @@ public class ViewerFrame extends ManagedJFrame
                     }
                 }
                 if (defloc == null) {
-                    Log.warning("Scene has no def. entrance '" + path + "'.");
+                    log.warning("Scene has no def. entrance '" + path + "'.");
                 }
 
                 _panel.setScene(new StageScene(model, null), defloc);
@@ -175,7 +176,7 @@ public class ViewerFrame extends ManagedJFrame
 
         } catch (Exception e) {
             errmsg = "Error parsing scene file '" + path + "'.";
-            Log.logStackTrace(e);
+            log.warning(e);
         }
 
         if (errmsg != null) {

@@ -25,8 +25,9 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import com.threerings.whirled.Log;
 import com.threerings.whirled.data.SceneUpdate;
+
+import static com.threerings.whirled.Log.log;
 
 /**
  * A list specialized for storing {@link SceneUpdate} objects.
@@ -51,7 +52,7 @@ public class UpdateList
         int expVersion = last.getSceneVersion() + last.getVersionIncrement();
         int gotVersion = update.getSceneVersion();
         if (gotVersion > expVersion) {
-            Log.warning("Update continuity broken, flushing list [got=" + update +
+            log.warning("Update continuity broken, flushing list [got=" + update +
                         ", expect=" + expVersion + ", ucount=" + _updates.size() + "].");
             _updates.clear(); // flush out our old updates, fall through and add this one
 

@@ -35,12 +35,13 @@ import com.threerings.presents.dobj.SetListener;
 
 import com.threerings.crowd.data.BodyObject;
 
-import com.threerings.parlor.Log;
 import com.threerings.parlor.data.Table;
 import com.threerings.parlor.data.TableConfig;
 import com.threerings.parlor.data.TableLobbyObject;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.util.ParlorContext;
+
+import static com.threerings.parlor.Log.log;
 
 /**
  * As tables are created and managed within the scope of a place (a lobby), we want to fold the
@@ -146,14 +147,14 @@ public class TableDirector extends BasicDirector
     {
         // if we're already in a table, refuse the request
         if (_ourTable != null) {
-            Log.warning("Ignoring request to create table as we're already in a table " +
+            log.warning("Ignoring request to create table as we're already in a table " +
                         "[table=" + _ourTable + "].");
             return;
         }
 
         // make sure we're currently in a place
         if (_tlobj == null) {
-            Log.warning("Requested to create a table but we're not currently in a place " +
+            log.warning("Requested to create a table but we're not currently in a place " +
                         "[config=" + config + "].");
             return;
         }
@@ -170,14 +171,14 @@ public class TableDirector extends BasicDirector
     {
         // if we're already in a table, refuse the request
         if (_ourTable != null) {
-            Log.warning("Ignoring request to join table as we're already in a table " +
+            log.warning("Ignoring request to join table as we're already in a table " +
                         "[table=" + _ourTable + "].");
             return;
         }
 
         // make sure we're currently in a place
         if (_tlobj == null) {
-            Log.warning("Requested to join a table but we're not currently in a place " +
+            log.warning("Requested to join a table but we're not currently in a place " +
                         "[tableId=" + tableId + "].");
             return;
         }
@@ -194,7 +195,7 @@ public class TableDirector extends BasicDirector
     {
         // make sure we're currently in a place
         if (_tlobj == null) {
-            Log.warning("Requested to leave a table but we're not currently in a place " +
+            log.warning("Requested to leave a table but we're not currently in a place " +
                         "[tableId=" + tableId + "].");
             return;
         }
@@ -210,7 +211,7 @@ public class TableDirector extends BasicDirector
     public void startTableNow (int tableId)
     {
         if (_tlobj == null) {
-            Log.warning("Requested to start a table but we're not currently in a place " +
+            log.warning("Requested to start a table but we're not currently in a place " +
                         "[tableId=" + tableId + "].");
             return;
         }
@@ -270,13 +271,13 @@ public class TableDirector extends BasicDirector
         int tableId = (Integer)result;
         if (_tlobj == null) {
             // we've left, it's none of our concern anymore
-            Log.info("Table created, but no lobby. [tableId=" + tableId + "].");
+            log.info("Table created, but no lobby. [tableId=" + tableId + "].");
             return;
         }
 
         Table table = (Table) _tlobj.getTables().get(tableId);
         if (table == null) {
-            Log.warning("Table created, but where is it? [tableId=" + tableId + "]");
+            log.warning("Table created, but where is it? [tableId=" + tableId + "]");
             return;
         }
 
@@ -289,7 +290,7 @@ public class TableDirector extends BasicDirector
     // from interface TableService.ResultListener
     public void requestFailed (String reason)
     {
-        Log.warning("Table action failed [reason=" + reason + "].");
+        log.warning("Table action failed [reason=" + reason + "].");
     }
 
     /**

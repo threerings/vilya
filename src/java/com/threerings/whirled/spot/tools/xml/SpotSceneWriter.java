@@ -29,10 +29,11 @@ import org.xml.sax.helpers.AttributesImpl;
 import com.megginson.sax.DataWriter;
 import com.threerings.tools.xml.NestableWriter;
 
-import com.threerings.whirled.spot.Log;
 import com.threerings.whirled.spot.data.Location;
 import com.threerings.whirled.spot.data.SpotSceneModel;
 import com.threerings.whirled.spot.tools.EditablePortal;
+
+import static com.threerings.whirled.spot.Log.log;
 
 /**
  * Generates an XML representation of a {@link SpotSceneModel}.
@@ -93,7 +94,7 @@ public class SpotSceneWriter
                 attrs.addAttribute("", fields[ii].getName(), "", "",
                     String.valueOf(fields[ii].get(portalLoc)));
             } catch (IllegalAccessException iae) {
-                Log.warning("Unable to write portal field, skipping " +
+                log.warning("Unable to write portal field, skipping " +
                     "[field=" + fields[ii].getName() + ", e=" + iae + "].");
             }
         }

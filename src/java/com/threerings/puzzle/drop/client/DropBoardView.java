@@ -40,7 +40,6 @@ import com.threerings.media.util.Path;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.media.ScoreAnimation;
 
-import com.threerings.puzzle.Log;
 import com.threerings.puzzle.client.PuzzleBoardView;
 import com.threerings.puzzle.data.Board;
 import com.threerings.puzzle.util.PuzzleContext;
@@ -48,6 +47,8 @@ import com.threerings.puzzle.util.PuzzleContext;
 import com.threerings.puzzle.drop.data.DropBoard;
 import com.threerings.puzzle.drop.data.DropConfig;
 import com.threerings.puzzle.drop.data.DropPieceCodes;
+
+import static com.threerings.puzzle.Log.log;
 
 /**
  * The drop board view displays a drop puzzle game in progress for a
@@ -141,7 +142,7 @@ public abstract class DropBoardView extends PuzzleBoardView
     public void createPiece (int piece, int sx, int sy)
     {
         if (sx < 0 || sy < 0 || sx >= _bwid || sy >= _bhei) {
-            Log.warning("Requested to create piece in invalid location " +
+            log.warning("Requested to create piece in invalid location " +
                         "[sx=" + sx + ", sy=" + sy + "].");
             Thread.dumpStack();
             return;
@@ -171,7 +172,7 @@ public abstract class DropBoardView extends PuzzleBoardView
     public void updatePiece (int piece, int sx, int sy)
     {
         if (sx < 0 || sy < 0 || sx >= _bwid || sy >= _bhei) {
-            Log.warning("Requested to update piece in invalid location " +
+            log.warning("Requested to update piece in invalid location " +
                         "[sx=" + sx + ", sy=" + sy + "].");
             Thread.dumpStack();
             return;
@@ -192,7 +193,7 @@ public abstract class DropBoardView extends PuzzleBoardView
                              long duration)
     {
         if (tx < 0 || ty < 0 || tx >= _bwid || ty >= _bhei) {
-            Log.warning("Requested to create and move piece to invalid " +
+            log.warning("Requested to create and move piece to invalid " +
                         "location [tx=" + tx + ", ty=" + ty + "].");
             Thread.dumpStack();
             return;
@@ -224,7 +225,7 @@ public abstract class DropBoardView extends PuzzleBoardView
         int spos = sy * _bwid + sx;
         Sprite piece = _pieces[spos];
         if (piece == null) {
-            Log.warning("Missing source sprite for drop [sx=" + sx +
+            log.warning("Missing source sprite for drop [sx=" + sx +
                         ", sy=" + sy + ", tx=" + tx + ", ty=" + ty + "].");
             return null;
         }
@@ -247,11 +248,9 @@ public abstract class DropBoardView extends PuzzleBoardView
         if (sx == tx && sy == ty) {
             int tpos = ty * _bwid + tx;
             if (_pieces[tpos] != null) {
-                Log.warning("Zoiks! Asked to add a piece where we already " +
+                log.warning("Zoiks! Asked to add a piece where we already " +
                             "have one [sx=" + sx + ", sy=" + sy +
-                            ", tx=" + tx + ", ty=" + ty + "].");
-                Log.logStackTrace(where);
-                return;
+                            ", tx=" + tx + ", ty=" + ty + "].", where);
             }
             _pieces[tpos] = piece;
             piece.setLocation(start.x, start.y);
@@ -269,10 +268,9 @@ public abstract class DropBoardView extends PuzzleBoardView
             public void pathCompleted (Sprite sprite, Path path, long when) {
                 sprite.removeSpriteObserver(this);
                 if (_pieces[tpos] != null) {
-                    Log.warning("Oh god, we're dropping onto another piece " +
+                    log.warning("Oh god, we're dropping onto another piece " +
                                 "[sx=" + sx + ", sy=" + sy +
-                                ", tx=" + tx + ", ty=" + ty + "].");
-                    Log.logStackTrace(where);
+                                ", tx=" + tx + ", ty=" + ty + "].", where);
                     return;
                 }
                 _pieces[tpos] = sprite;

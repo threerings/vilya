@@ -24,7 +24,6 @@ package com.threerings.puzzle.drop.server;
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.data.PlaceObject;
 
-import com.threerings.puzzle.Log;
 import com.threerings.puzzle.data.Board;
 import com.threerings.puzzle.data.PuzzleCodes;
 import com.threerings.puzzle.server.PuzzleManager;
@@ -36,6 +35,8 @@ import com.threerings.puzzle.drop.data.DropConfig;
 import com.threerings.puzzle.drop.data.DropLogic;
 import com.threerings.puzzle.drop.util.PieceDropLogic;
 import com.threerings.puzzle.drop.util.PieceDropper;
+
+import static com.threerings.puzzle.Log.log;
 
 /**
  * Provides the necessary support for a puzzle game that involves a
@@ -81,7 +82,7 @@ public abstract class DropManagerDelegate extends PuzzleManagerDelegate
         _usedrop = logic.useBlockDropping();
         _userise = logic.useBoardRising();
         if (_usedrop && _userise) {
-            Log.warning("Can't use dropping blocks and board rising "+
+            log.warning("Can't use dropping blocks and board rising "+
                         "functionality simultaneously in a drop puzzle game! " +
                         "Falling back to straight dropping.");
             _userise = false;

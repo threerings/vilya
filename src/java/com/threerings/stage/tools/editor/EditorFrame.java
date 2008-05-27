@@ -52,6 +52,7 @@ import com.samskivert.swing.util.SwingUtil;
 import com.threerings.media.ManagedJFrame;
 import com.threerings.miso.tile.BaseTileSet;
 import com.threerings.miso.util.MisoSceneMetrics;
+
 import com.threerings.stage.data.StageScene;
 import com.threerings.stage.data.StageSceneModel;
 import com.threerings.stage.tools.editor.util.EditorContext;
@@ -59,6 +60,8 @@ import com.threerings.stage.tools.editor.util.EditorDialogUtil;
 import com.threerings.stage.tools.xml.StageSceneParser;
 import com.threerings.stage.tools.xml.StageSceneWriter;
 import com.threerings.whirled.tools.xml.SceneParser;
+
+import static com.threerings.stage.Log.log;
 
 public class EditorFrame extends ManagedJFrame
 {
@@ -171,8 +174,7 @@ public class EditorFrame extends ManagedJFrame
             try {
                 loaded = loadScene(lastFile);
             } catch (Exception e) {
-                Log.warning("Unable to load last scene, creating new one [file=" + lastFile + "]");
-                Log.logStackTrace(e);
+                log.warning("Unable to load last scene, creating new one", "file", lastFile, e);
             }
         }
         if (!loaded) {
@@ -290,8 +292,7 @@ public class EditorFrame extends ManagedJFrame
             setScene(new StageScene(model, null));
 
         } catch (Exception e) {
-            Log.warning("Unable to set blank scene.");
-            Log.logStackTrace(e);
+            log.warning("Unable to set blank scene.", e);
         }
     }
 
@@ -337,7 +338,7 @@ public class EditorFrame extends ManagedJFrame
 
         } catch (Exception e) {
             errmsg = "Parse error: " + e;
-            Log.logStackTrace(e);
+            log.warning(e);
         }
 
         if (errmsg != null) {
@@ -387,14 +388,14 @@ public class EditorFrame extends ManagedJFrame
             // the old file
             File sfile = new File(_filepath);
             if (!sfile.delete()) {
-                Log.warning("Aiya! Not able to remove " + _filepath +
+                log.warning("Aiya! Not able to remove " + _filepath +
                             " so that we can replace it with " +
                             tmpfile.getPath() + ".");
             }
 
             // now rename the new save file into place
             if (!tmpfile.renameTo(sfile)) {
-                Log.warning("Fork! Not able to rename " + tmpfile.getPath() +
+                log.warning("Fork! Not able to rename " + tmpfile.getPath() +
                             " to " + _filepath + ".");
             }
 
@@ -402,9 +403,7 @@ public class EditorFrame extends ManagedJFrame
             String errmsg = "Unable to save scene to " + _filepath + ":\n" + e;
             JOptionPane.showMessageDialog(
                 this, errmsg, "Save error", JOptionPane.ERROR_MESSAGE);
-            Log.warning("Error writing scene " +
-                        "[fname=" + _filepath + ", e=" + e + "].");
-            Log.logStackTrace(e);
+            log.warning("Error writing scene [fname=" + _filepath + "].", e);
         }
     }
 
@@ -514,7 +513,7 @@ public class EditorFrame extends ManagedJFrame
         if (_model.getTileSet() instanceof BaseTileSet) {
             _svpanel.updateDefaultTileSet(_model.getTileSetId());
         } else {
-            Log.warning("Not making non-base tileset into default " +
+            log.warning("Not making non-base tileset into default " +
                         _model.getTileSet() + ".");
         }
     }
@@ -545,7 +544,7 @@ public class EditorFrame extends ManagedJFrame
                     break;
 
                 default:
-                    Log.warning("Wha? Weird dialog type " + _chooser.getDialogType() + ".");
+                    log.warning("Wha? Weird dialog type " + _chooser.getDialogType() + ".");
                     break;
                 }
             }

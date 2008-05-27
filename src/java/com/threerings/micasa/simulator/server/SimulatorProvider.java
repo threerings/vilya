@@ -27,7 +27,7 @@ import com.threerings.presents.server.InvocationProvider;
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.parlor.game.data.GameConfig;
 
-import com.threerings.micasa.Log;
+import static com.threerings.micasa.Log.log;
 
 /**
  * The simulator provider handles game creation requests on the server
@@ -50,7 +50,7 @@ public class SimulatorProvider
     public void createGame (ClientObject caller, GameConfig config,
                             String simClass, int playerCount)
     {
-        Log.info("handleCreateGameRequest [caller=" + caller.who() +
+        log.info("handleCreateGameRequest [caller=" + caller.who() +
                  ", config=" + config + ", simClass=" + simClass +
                  ", playerCount=" + playerCount + "].");
 

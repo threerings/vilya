@@ -47,7 +47,6 @@ import com.threerings.whirled.spot.data.Portal;
 import com.threerings.whirled.spot.data.SceneLocation;
 import com.threerings.whirled.spot.server.SpotSceneManager;
 
-import com.threerings.stage.Log;
 import com.threerings.stage.client.StageSceneService;
 import com.threerings.stage.data.DefaultColorUpdate;
 import com.threerings.stage.data.ModifyObjectsUpdate;
@@ -60,6 +59,8 @@ import com.threerings.stage.data.StageSceneMarshaller;
 import com.threerings.stage.data.StageSceneModel;
 import com.threerings.stage.data.StageSceneObject;
 import com.threerings.stage.util.StageSceneUtil;
+
+import static com.threerings.stage.Log.log;
 
 /**
  * Defines extensions to the basic Stage scene manager specific to
@@ -111,7 +112,7 @@ public class StageSceneManager extends SpotSceneManager
         Rectangle foot = StageSceneUtil.getObjectFootprint(
             StageServer.tilemgr, info.tileId, info.x, info.y);
         if (foot == null) {
-            Log.warning("Aiya! Unable to compute object footprint! " +
+            log.warning("Aiya! Unable to compute object footprint! " +
                         "[where=" + where() + ", info=" + info + "].");
             return false;
         }
@@ -130,7 +131,7 @@ public class StageSceneManager extends SpotSceneManager
         update.init(_sscene.getId(), _sscene.getVersion(),
             new ObjectInfo[] { info }, killOverlap ? lappers : null);
 
-        Log.info("Modifying objects '" + update + ".");
+        log.info("Modifying objects '" + update + ".");
         recordUpdate(update, true);
 
         return true;
@@ -197,7 +198,7 @@ public class StageSceneManager extends SpotSceneManager
         ModifyObjectsUpdate update = new ModifyObjectsUpdate();
         update.init(_sscene.getId(), _sscene.getVersion(), null, info);
 
-        Log.info("Modifying objects '" + update + ".");
+        log.info("Modifying objects '" + update + ".");
         recordUpdate(update, true);
         
         listener.requestProcessed();
@@ -393,7 +394,7 @@ public class StageSceneManager extends SpotSceneManager
     {
         // sanity check
         if (entry == null) {
-            Log.warning("Requested to compute entering location for " +
+            log.warning("Requested to compute entering location for " +
                         "non-existent portal [where=" + where() +
                         ", who=" + body.who() + "].");
             entry = _sscene.getDefaultEntrance();
@@ -553,7 +554,7 @@ public class StageSceneManager extends SpotSceneManager
                 // make sure this person isn't already in our cluster
                 ClusterObject clobj = clrec.getClusterObject();
                 if (clobj != null && clobj.occupants.contains(bodyOid)) {
-                    Log.warning("Ignoring stale occupant [where=" + where() +
+                    log.warning("Ignoring stale occupant [where=" + where() +
                                 ", cluster=" + cl + ", occ=" + bodyOid + "].");
                     continue;
                 }
@@ -561,7 +562,7 @@ public class StageSceneManager extends SpotSceneManager
                 // make sure the subsumee exists
                 final BodyObject bobj = (BodyObject)StageServer.omgr.getObject(bodyOid);
                 if (bobj == null) {
-                    Log.warning("Can't subsume disappeared body " +
+                    log.warning("Can't subsume disappeared body " +
                                 "[where=" + where() + ", cluster=" + cl +
                                 ", boid=" + bodyOid + "].");
                     continue;
@@ -574,12 +575,12 @@ public class StageSceneManager extends SpotSceneManager
                 StageServer.omgr.postRunnable(new Runnable() {
                     public void run () {
                         try {
-                            Log.info("Subsuming " + bobj.who() +
+                            log.info("Subsuming " + bobj.who() +
                                      " into " + fclrec.getCluster() + ".");
                             fclrec.addBody(bobj);
 
                         } catch (InvocationException ie) {
-                            Log.info("Unable to subsume neighbor " +
+                            log.info("Unable to subsume neighbor " +
                                      "[cluster=" + fclrec.getCluster() +
                                      ", neighbor=" + bobj.who() +
                                      ", cause=" + ie.getMessage() + "].");
@@ -672,7 +673,7 @@ public class StageSceneManager extends SpotSceneManager
             cl.width = 1; cl.height = 1;
             SceneLocation loc = locationForBody(bodyOid);
             if (loc == null) {
-                Log.warning("Foreign body added to cluster [clrec=" + clrec +
+                log.warning("Foreign body added to cluster [clrec=" + clrec +
                             ", body=" + body.who() + "].");
                 cl.x = 10; cl.y = 10;
             } else {
@@ -710,7 +711,7 @@ public class StageSceneManager extends SpotSceneManager
         if (sloc == null) {
             BodyObject user = (BodyObject)StageServer.omgr.getObject(bodyOid);
             String who = (user == null) ? ("" + bodyOid) : user.who();
-            Log.warning("Can't position locationless user " +
+            log.warning("Can't position locationless user " +
                         "[where=" + where() + ", cluster=" + cl +
                         ", boid=" + who + "].");
             return;
@@ -772,7 +773,7 @@ public class StageSceneManager extends SpotSceneManager
         StageOccupantInfo info = (StageOccupantInfo)_ssobj.occupantInfo.get(
             Integer.valueOf(target.getOid()));
         if (info == null) {
-            Log.warning("Have no occinfo for cluster target " +
+            log.warning("Have no occinfo for cluster target " +
                         "[where=" + where() + ", init=" + initiator.who() +
                         ", target=" + target.who() + "].");
             throw new InvocationException(INTERNAL_ERROR);

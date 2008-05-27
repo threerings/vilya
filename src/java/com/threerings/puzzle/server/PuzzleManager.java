@@ -42,12 +42,13 @@ import com.threerings.parlor.game.server.GameManager;
 import com.threerings.util.MessageBundle;
 import com.threerings.util.Name;
 
-import com.threerings.puzzle.Log;
 import com.threerings.puzzle.data.Board;
 import com.threerings.puzzle.data.BoardSummary;
 import com.threerings.puzzle.data.PuzzleCodes;
 import com.threerings.puzzle.data.PuzzleGameMarshaller;
 import com.threerings.puzzle.data.PuzzleObject;
+
+import static com.threerings.puzzle.Log.log;
 
 /**
  * Extends the {@link GameManager} with facilities for the puzzle games
@@ -263,7 +264,7 @@ public abstract class PuzzleManager extends GameManager
         // log the AI skill levels for games involving AIs as it's useful
         // when tuning AI algorithms
         if (_AIs != null) {
-            Log.info("AIs on the job [game=" + _puzobj.which() +
+            log.info("AIs on the job [game=" + _puzobj.which() +
                      ", skillz=" + StringUtil.toString(_AIs) + "].");
         }
     }
@@ -411,7 +412,7 @@ public abstract class PuzzleManager extends GameManager
 
             // apply the event to the player's board
             if (!applyProgressEvent(pidx, gevent, cboard)) {
-                Log.warning("Unknown event [puzzle=" + where() +
+                log.warning("Unknown event [puzzle=" + where() +
                     ", pidx=" + pidx + ", event=" + gevent + "].");
             }
 
@@ -429,19 +430,19 @@ public abstract class PuzzleManager extends GameManager
                                   int gevent, boolean before)
     {
         if (DEBUG_PUZZLE) {
-            Log.info((before ? "About to apply " : "Just applied ") +
+            log.info((before ? "About to apply " : "Just applied ") +
                      "[game=" + _puzobj.which() + ", pidx=" + pidx +
                      ", event=" + gevent + "].");
         }
         if (boardstate == null) {
             if (DEBUG_PUZZLE) {
-                Log.info("No board state provided. Can't compare.");
+                log.info("No board state provided. Can't compare.");
             }
             return;
         }
         boolean equal = _boards[pidx].equals(boardstate);
         if (!equal) {
-            Log.warning("Client and server board states not equal! " +
+            log.warning("Client and server board states not equal! " +
                         "[game=" + _puzobj.which() +
                         ", type=" + _puzobj.getClass().getName() + "].");
         }
@@ -524,7 +525,7 @@ public abstract class PuzzleManager extends GameManager
             // only warn if this isn't a straggling update from the
             // previous round
             if (roundId != _puzobj.roundId-1) {
-                Log.warning("Received progress update for invalid round, " +
+                log.warning("Received progress update for invalid round, " +
                             "not applying [game=" + _puzobj.which() +
                             ", invalidRoundId=" + roundId +
                             ", roundId=" + _puzobj.roundId + "].");
@@ -534,7 +535,7 @@ public abstract class PuzzleManager extends GameManager
 
         // if the game is over, we wing straggling updates
         if (!_puzobj.isInPlay()) {
-            Log.debug("Ignoring straggling events " +
+            log.debug("Ignoring straggling events " +
                       "[game=" + _puzobj.which() +
                       ", who=" + caller.who() + 
                       ", events=" + StringUtil.toString(events) + "].");
@@ -544,7 +545,7 @@ public abstract class PuzzleManager extends GameManager
         // determine the caller's player index in the game
         int pidx = IntListUtil.indexOf(_playerOids, caller.getOid());
         if (pidx == -1) {
-            Log.warning("Received progress update for non-player?! " +
+            log.warning("Received progress update for non-player?! " +
                         "[game=" + _puzobj.which() + ", who=" + caller.who() +
                         ", ploids=" + StringUtil.toString(_playerOids) + "].");
             return;

@@ -32,8 +32,9 @@ import com.threerings.crowd.data.BodyObject;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.util.ParlorContext;
 
-import com.threerings.micasa.Log;
 import com.threerings.micasa.simulator.data.SimulatorInfo;
+
+import static com.threerings.micasa.Log.log;
 
 /**
  * Responsible for top-level control of the simulator client user interface.
@@ -73,7 +74,7 @@ public class SimulatorController extends Controller
             return true;
         }
 
-        Log.info("Unhandled action: " + action);
+        log.info("Unhandled action: " + action);
         return false;
     }
 
@@ -86,7 +87,7 @@ public class SimulatorController extends Controller
     // documentation inherited
     public void clientDidLogon (Client client)
     {
-        Log.info("Client did logon [client=" + client + "].");
+        log.info("Client did logon [client=" + client + "].");
 
         // keep the body object around for stuff
         _body = (BodyObject)client.getClientObject();
@@ -110,7 +111,7 @@ public class SimulatorController extends Controller
             // straightaway
 
         } catch (Exception e) {
-            Log.warning("Failed to instantiate game config [class=" + _info.gameConfigClass +
+            log.warning("Failed to instantiate game config [class=" + _info.gameConfigClass +
                         ", error=" + e + "].");
         }
     }
@@ -125,7 +126,7 @@ public class SimulatorController extends Controller
     // documentation inherited
     public void clientDidLogoff (Client client)
     {
-        Log.info("Client did logoff [client=" + client + "].");
+        log.info("Client did logoff [client=" + client + "].");
     }
 
     protected ParlorContext _ctx;
