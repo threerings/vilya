@@ -23,7 +23,6 @@ package com.threerings.whirled;
 
 import com.threerings.presents.client.Client;
 
-import com.threerings.crowd.Log;
 import com.threerings.crowd.client.*;
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.data.PlaceObject;
@@ -36,6 +35,8 @@ import com.threerings.whirled.data.SceneImpl;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.util.SceneFactory;
 import com.threerings.whirled.util.WhirledContext;
+
+import static com.threerings.crowd.Log.log;
 
 public class TestClient extends com.threerings.crowd.client.TestClient
     implements LocationObserver
@@ -62,7 +63,7 @@ public class TestClient extends com.threerings.crowd.client.TestClient
     {
         // we specifically do not call super()
 
-        Log.info("Client did logon [client=" + client + "].");
+        log.info("Client did logon [client=" + client + "].");
 
         // request to move to scene 0
         _ctx.getSceneDirector().moveTo(0);
@@ -76,14 +77,12 @@ public class TestClient extends com.threerings.crowd.client.TestClient
 
     public void locationDidChange (PlaceObject place)
     {
-        Log.info("At new location [plobj=" + place +
-                 ", scene=" + _scdir.getScene() + "].");
+        log.info("At new location [plobj=" + place + ", scene=" + _scdir.getScene() + "].");
     }
 
     public void locationChangeFailed (int placeId, String reason)
     {
-        Log.warning("Location change failed [plid=" + placeId +
-                    ", reason=" + reason + "].");
+        log.warning("Location change failed [plid=" + placeId + ", reason=" + reason + "].");
     }
 
     protected CrowdContext createContext ()
