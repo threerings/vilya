@@ -1,0 +1,2 @@
+com/threerings/parlor/data/Parameter.as
+com/threerings/parlor/game/client/GameControllerDelegate.as
