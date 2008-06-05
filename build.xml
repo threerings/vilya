@@ -232,9 +232,9 @@
     <taskdef name="asc" classname="flex.ant.AscTask" classpathref="classpath"/>
     <asc as3="true" strict="true" classpathref="classpath" use="AS3">
       <import dir="${deploy.dir}/lib">
-        <include name="builtin.abc"/>
-        <include name="thane.abc"/>
-        <include name="narya-abc.abc"/>
+        <include name="tamarin-builtin*.abc"/>
+        <include name="thane*.abc"/>
+        <include name="narya-abc*.abc"/>
       </import>
       <in dir="src/as"><includesfile name="etc/asc-files-00.txt"/></in>
       <in dir="src/as"><includesfile name="etc/asc-files-01.txt"/></in>

@@ -29,8 +29,8 @@
     <include name="naryalib.swc"/>
     <include name="nenyalib.swc"/>
     <!-- Thane dependencies -->
-    <include name="thane.abc"/>
-    <include name="builtin.abc"/>
-    <include name="narya-abc.abc"/>
+    <include name="thane*.abc"/>
+    <include name="tamarin-builtin*.abc"/>
+    <include name="narya-abc*.abc"/>
   </fileset>
 </project>
