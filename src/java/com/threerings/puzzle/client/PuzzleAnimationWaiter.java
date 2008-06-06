@@ -26,11 +26,9 @@ import com.threerings.media.animation.AnimationWaiter;
 import com.threerings.puzzle.data.PuzzleObject;
 
 /**
- * An animation waiter to be used with puzzles that want to modify the
- * game object or board in some way after the animations end, and would
- * like to do so in a safe fashion such that their changes aren't
- * unwittingly performed on game data for a subsequent round of the
- * puzzle.
+ * An animation waiter to be used with puzzles that want to modify the game object or board in some
+ * way after the animations end, and would like to do so in a safe fashion such that their changes
+ * aren't unwittingly performed on game data for a subsequent round of the puzzle.
  */
 public abstract class PuzzleAnimationWaiter extends AnimationWaiter
 {
@@ -40,16 +38,15 @@ public abstract class PuzzleAnimationWaiter extends AnimationWaiter
     public PuzzleAnimationWaiter (PuzzleObject puzobj)
     {
         _puzobj = puzobj;
-        _roundId = puzobj.roundId;
+        _sessionId = puzobj.sessionId;
     }
 
     /**
-     * Returns whether the puzzle associated with this puzzle animation
-     * waiter is still valid.
+     * Returns whether the puzzle associated with this puzzle animation waiter is still valid.
      */
     public boolean puzzleStillValid ()
     {
-        return (_puzobj.isInPlay() && (_roundId == _puzobj.roundId));
+        return (_puzobj.isInPlay() && (_sessionId == _puzobj.sessionId));
     }
 
     // documentation inherited
@@ -59,16 +56,14 @@ public abstract class PuzzleAnimationWaiter extends AnimationWaiter
     }
 
     /**
-     * Replacement for {@link AnimationWaiter#allAnimationsFinished} that
-     * also reports whether the puzzle associated with this animation
-     * waiter is still valid.
+     * Replacement for {@link AnimationWaiter#allAnimationsFinished} that also reports whether the
+     * puzzle associated with this animation waiter is still valid.
      */
     protected abstract void allAnimationsFinished (boolean puzStillValid);
 
-    /** The initial round id. */
-    protected int _roundId;
+    /** The initial session id. */
+    protected int _sessionId;
 
-    /** The puzzle object that the animations we're observering want to
-     * modify. */
+    /** The puzzle object that the animations we're observering want to modify. */
     protected PuzzleObject _puzobj;
 }

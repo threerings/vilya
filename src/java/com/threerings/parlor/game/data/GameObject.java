@@ -27,13 +27,11 @@ import com.threerings.util.Name;
 import com.threerings.crowd.data.PlaceObject;
 
 /**
- * A game object hosts the shared data associated with a game played by
- * one or more players. The game object extends the place object so that
- * the game can act as a place where players actually go when playing the
- * game. Only very basic information is maintained in the base game
- * object. It serves as the base for a hierarchy of game object
- * derivatives that handle basic gameplay for a suite of different game
- * types (ie. turn based games, party games, board games, card games,
+ * A game object hosts the shared data associated with a game played by one or more players. The
+ * game object extends the place object so that the game can act as a place where players actually
+ * go when playing the game. Only very basic information is maintained in the base game object. It
+ * serves as the base for a hierarchy of game object derivatives that handle basic gameplay for a
+ * suite of different game types (ie. turn based games, party games, board games, card games,
  * etc.).
  */
 public class GameObject extends PlaceObject
@@ -54,15 +52,15 @@ public class GameObject extends PlaceObject
     /** The field name of the <code>winners</code> field. */
     public static final String WINNERS = "winners";
 
-    /** The field name of the <code>roundId</code> field. */
-    public static final String ROUND_ID = "roundId";
+    /** The field name of the <code>sessionId</code> field. */
+    public static final String SESSION_ID = "sessionId";
 
     /** The field name of the <code>playerStatus</code> field. */
     public static final String PLAYER_STATUS = "playerStatus";
     // AUTO-GENERATED: FIELDS END
 
-    /** A game state constant indicating that the game has not yet started
-     * and is still awaiting the arrival of all of the players. */
+    /** A game state constant indicating that the game has not yet started and is still awaiting
+     * the arrival of all of the players. */
     public static final int PRE_GAME = 0;
 
     /** A game state constant indicating that the game is in play. */
@@ -77,13 +75,12 @@ public class GameObject extends PlaceObject
     /** The player status constant for a player whose game is in play. */
     public static final int PLAYER_IN_PLAY = 0;
 
-    /** The player status constant for a player whose has been knocked out
-     * of the game. NOTE: This can include a player choosing to leave a
-     * game prematurely. */
+    /** The player status constant for a player whose has been knocked out of the game. NOTE: This
+     * can include a player choosing to leave a game prematurely. */
     public static final int PLAYER_LEFT_GAME = 1;
 
-    /** The game state, one of {@link #PRE_GAME}, {@link #IN_PLAY},
-     * {@link #GAME_OVER}, or {@link #CANCELLED}. */
+    /** The game state, one of {@link #PRE_GAME}, {@link #IN_PLAY}, {@link #GAME_OVER}, or
+     * {@link #CANCELLED}. */
     public int state = PRE_GAME;
 
     /** Indicates whether or not this game is rated. */
@@ -95,19 +92,19 @@ public class GameObject extends PlaceObject
     /** The usernames of the players involved in this game. */
     public Name[] players;
 
-    /** Whether each player in the game is a winner, or <code>null</code>
-     * if the game is not yet over. */
+    /** Whether each player in the game is a winner, or null if the game is not yet over. */
     public boolean[] winners;
 
-    /** The unique round identifier for the current round. */
-    public int roundId;
+    /** A unique identifier for each game session. Every time the game is started, this value will
+     * be incremented to provide a unique identifier for that particular session. */
+    public int sessionId;
 
     /**
      * If null, indicates that all present players are active, or for more complex games can be
      * non-null to indicate the current status of each player in the game. The status value is one
-     * of {@link #PLAYER_LEFT_GAME} or {@link #PLAYER_IN_PLAY}.<p>
-     * Subclasses of GameObject may use other means to determine a player's status in the game, so
-     * call {@link #isActivePlayer(int)} to see if a player is still participating in a game.
+     * of {@link #PLAYER_LEFT_GAME} or {@link #PLAYER_IN_PLAY}.<p> Subclasses of GameObject may use
+     * other means to determine a player's status in the game, so call {@link #isActivePlayer(int)}
+     * to see if a player is still participating in a game.
      */
     public int[] playerStatus;
 
@@ -142,8 +139,8 @@ public class GameObject extends PlaceObject
     }
 
     /**
-     * Returns whether the given player is still an active player in
-     * the game.  (Ie. whether or not they are still participating.)
+     * Returns whether the given player is still an active player in the game.  (Ie. whether or not
+     * they are still participating.)
      */
     public boolean isActivePlayer (int pidx)
     {
@@ -152,8 +149,8 @@ public class GameObject extends PlaceObject
     }
 
     /**
-     * Returns the player index of the given user in the game, or 
-     * <code>-1</code> if the player is not involved in the game.
+     * Returns the player index of the given user in the game, or <code>-1</code> if the player is
+     * not involved in the game.
      */
     public int getPlayerIndex (Name username)
     {
@@ -167,8 +164,8 @@ public class GameObject extends PlaceObject
     }
 
     /**
-     * Returns whether the game is in play.  A game that is not in play
-     * could either be awaiting players, ended, or cancelled.
+     * Returns whether the game is in play.  A game that is not in play could either be awaiting
+     * players, ended, or cancelled.
      */
     public boolean isInPlay ()
     {
@@ -184,8 +181,8 @@ public class GameObject extends PlaceObject
     }
 
     /**
-     * Returns whether the given player index is a winner, or false if the
-     * winners are not yet assigned.
+     * Returns whether the given player index is a winner, or false if the winners are not yet
+     * assigned.
      */
     public boolean isWinner (int pidx)
     {
@@ -193,8 +190,8 @@ public class GameObject extends PlaceObject
     }
 
     /**
-     * Returns the number of winners for this game, or <code>0</code> if
-     * the winners array is not populated, e.g., the game is not yet over.
+     * Returns the number of winners for this game, or <code>0</code> if the winners array is not
+     * populated, e.g., the game is not yet over.
      */
     public int getWinnerCount ()
     {
@@ -217,10 +214,9 @@ public class GameObject extends PlaceObject
     }
 
     /**
-     * Returns the winner index of the first winning player for this game,
-     * or <code>-1</code> if there are no winners or the winners array is
-     * not yet assigned.  This is only likely to be useful for games that
-     * are known to have a single winner.
+     * Returns the winner index of the first winning player for this game, or <code>-1</code> if
+     * there are no winners or the winners array is not yet assigned.  This is only likely to be
+     * useful for games that are known to have a single winner.
      */
     public int getWinnerIndex ()
     {
@@ -234,9 +230,8 @@ public class GameObject extends PlaceObject
     }
 
     /**
-     * Used by {@link #isActivePlayer} to determine if the supplied status is
-     * associated with an active player (one that has not resigned from the
-     * game and/or left the game room).
+     * Used by {@link #isActivePlayer} to determine if the supplied status is associated with an
+     * active player (one that has not resigned from the game and/or left the game room).
      */
     protected boolean isActivePlayerStatus (int playerStatus)
     {
@@ -367,19 +362,19 @@ public class GameObject extends PlaceObject
     }
 
     /**
-     * Requests that the <code>roundId</code> field be set to the
+     * Requests that the <code>sessionId</code> field be set to the
      * specified value. The local value will be updated immediately and an
      * event will be propagated through the system to notify all listeners
      * that the attribute did change. Proxied copies of this object (on
      * clients) will apply the value change when they received the
      * attribute changed notification.
      */
-    public void setRoundId (int value)
+    public void setSessionId (int value)
     {
-        int ovalue = this.roundId;
+        int ovalue = this.sessionId;
         requestAttributeChange(
-            ROUND_ID, Integer.valueOf(value), Integer.valueOf(ovalue));
-        this.roundId = value;
+            SESSION_ID, Integer.valueOf(value), Integer.valueOf(ovalue));
+        this.sessionId = value;
     }
 
     /**

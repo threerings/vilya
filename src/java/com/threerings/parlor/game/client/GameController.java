@@ -163,11 +163,11 @@ public abstract class GameController extends PlaceController
     }
 
     /**
-     * Returns the unique round identifier for the current round.
+     * Returns the unique session identifier for the current gameplay session.
      */
-    public int getRoundId ()
+    public int getSessionId ()
     {
-        return (_gobj == null) ? -1 : _gobj.roundId;
+        return (_gobj == null) ? -1 : _gobj.sessionId;
     }
 
     /**

@@ -362,10 +362,9 @@ public abstract class PuzzleController extends GameController
                 break;
             }
 
-        } else if (name.equals(PuzzleObject.ROUND_ID)) {
-            // Need to clear out stale events.  If we don't, we could send
-            //  events that claim to be from the new round that are actually
-            //  from the old round.
+        } else if (name.equals(PuzzleObject.SESSION_ID)) {
+            // Need to clear out stale events.  If we don't, we could send events that claim to be
+            // from the new session that are actually from the old session.
             _events.clear();
         }
     }
@@ -378,9 +377,8 @@ public abstract class PuzzleController extends GameController
         // stop the old action
         clearAction();
 
-        // when the server gets around to resetting the game, we'll get a
-        // 'state => IN_PLAY' message which will result in gameDidStart()
-        // being called and starting the action back up
+        // when the server gets around to resetting the game, we'll get a 'state => IN_PLAY'
+        // message which will result in gameDidStart() being called and starting the action back up
     }
 
     /**
@@ -767,7 +765,7 @@ public abstract class PuzzleController extends GameController
         int[] events = CollectionUtil.toIntArray(_events);
         _events.clear();
 
-//        Log.info("Sending progress [round=" + _puzobj.roundId +
+//        Log.info("Sending progress [session=" + _puzobj.sessionId +
 //                 ", events=" + StringUtil.toString(events) + "].");
 
         // create an array of the board states that correspond with those
@@ -780,12 +778,11 @@ public abstract class PuzzleController extends GameController
 
             // send the update progress request
             _puzobj.puzzleGameService.updateProgressSync(
-                _ctx.getClient(), _puzobj.roundId, events, states);
+                _ctx.getClient(), _puzobj.sessionId, events, states);
 
         } else {
             // send the update progress request
-            _puzobj.puzzleGameService.updateProgress(
-                _ctx.getClient(), _puzobj.roundId, events);
+            _puzobj.puzzleGameService.updateProgress(_ctx.getClient(), _puzobj.sessionId, events);
         }
     }
 

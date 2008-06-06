@@ -160,11 +160,11 @@ public /*abstract*/ class GameController extends PlaceController
     }
 
     /**
-     * Returns the unique round identifier for the current round.
+     * Returns the unique identifier for the current gameplay session.
      */
-    public function getRoundId () :int
+    public function getSessionId () :int
     {
-        return (_gobj == null) ? -1 : _gobj.roundId;
+        return (_gobj == null) ? -1 : _gobj.sessionId;
     }
 
     /**

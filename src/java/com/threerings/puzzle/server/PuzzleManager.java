@@ -508,9 +508,9 @@ public abstract class PuzzleManager extends GameManager
     protected abstract BoardSummary newBoardSummary (Board board);
 
     // documentation inherited from interface PuzzleGameProvider
-    public void updateProgress (ClientObject caller, int roundId, int[] events)
+    public void updateProgress (ClientObject caller, int sessionId, int[] events)
     {
-        updateProgressSync(caller, roundId, events, null);
+        updateProgressSync(caller, sessionId, events, null);
     }
 
     /**
@@ -518,42 +518,37 @@ public abstract class PuzzleManager extends GameManager
      * checks to make sure that the progress update is valid and the
      * puzzle is still in play and then applies the updates via {@link #applyProgressEvents}.
      */
-    public void updateProgressSync (ClientObject caller, int roundId, int[] events, Board[] states)
+    public void updateProgressSync (ClientObject caller, int sessionId, int[] events, Board[] states)
     {
-        // bail if the progress update isn't for the current round
-        if (roundId != _puzobj.roundId) {
-            // only warn if this isn't a straggling update from the
-            // previous round
-            if (roundId != _puzobj.roundId-1) {
-                log.warning("Received progress update for invalid round, " +
-                            "not applying [game=" + _puzobj.which() +
-                            ", invalidRoundId=" + roundId +
-                            ", roundId=" + _puzobj.roundId + "].");
+        // bail if the progress update isn't for the current session
+        if (sessionId != _puzobj.sessionId) {
+            // only warn if this isn't a straggling update from the previous session
+            if (sessionId != _puzobj.sessionId-1) {
+                log.warning("Received progress update for invalid session, not applying " +
+                            "[game=" + _puzobj.which() + ", invalidSessionId=" + sessionId +
+                            ", sessionId=" + _puzobj.sessionId + "].");
             }
             return;
         }
 
         // if the game is over, we wing straggling updates
         if (!_puzobj.isInPlay()) {
-            log.debug("Ignoring straggling events " +
-                      "[game=" + _puzobj.which() +
-                      ", who=" + caller.who() + 
-                      ", events=" + StringUtil.toString(events) + "].");
+            log.debug("Ignoring straggling events", "game", _puzobj.which(), "who", caller.who(),
+                      "events", events);
             return;
         }
 
         // determine the caller's player index in the game
         int pidx = IntListUtil.indexOf(_playerOids, caller.getOid());
         if (pidx == -1) {
-            log.warning("Received progress update for non-player?! " +
-                        "[game=" + _puzobj.which() + ", who=" + caller.who() +
-                        ", ploids=" + StringUtil.toString(_playerOids) + "].");
+            log.warning("Received progress update for non-player?!", "game", _puzobj.which(),
+                        "who", caller.who(), "ploids", _playerOids);
             return;
         }
 
 
 //         Log.info("Handling progress events [game=" + _puzobj.which() +
-//                  ", pidx=" + pidx + ", roundId=" + roundId +
+//                  ", pidx=" + pidx + ", sessionId=" + sessionId +
 //                  ", count=" + events.length + "].");
 
         // note that we received a progress update from this player
