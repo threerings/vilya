@@ -28,22 +28,21 @@ import com.threerings.puzzle.data.Board;
 import com.threerings.puzzle.data.PuzzleCodes;
 
 /**
- * Provides services used by puzzle game clients to request that actions
- * be taken by the puzzle manager.
+ * Provides services used by puzzle game clients to request that actions be taken by the puzzle
+ * manager.
  */
 public interface PuzzleGameService extends InvocationService, PuzzleCodes
 {
     /**
-     * Asks the puzzle manager to apply the supplied progress events for
-     * the specified puzzle round to the player's state.
+     * Asks the puzzle manager to apply the supplied progress events for the specified puzzle round
+     * to the player's state.
      */
-    public void updateProgress (Client client, int roundId, int[] events);
+    public void updateProgress (Client client, int sessionId, int[] events);
 
     /**
      * Debug variant of {@link #updateProgress} that is only used when
-     * {@link PuzzlePanel#isSyncingBoards} is true and which includes the
-     * board states associated with each event.
+     * {@link PuzzlePanel#isSyncingBoards} is true and which includes the board states associated
+     * with each event.
      */
-    public void updateProgressSync (
-        Client client, int roundId, int[] events, Board[] states);
+    public void updateProgressSync (Client client, int sessionId, int[] events, Board[] states);
 }
