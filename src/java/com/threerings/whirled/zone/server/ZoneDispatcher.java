@@ -21,17 +21,12 @@
 
 package com.threerings.whirled.zone.server;
 
-import com.threerings.crowd.data.PlaceConfig;
-import com.threerings.presents.client.Client;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
-import com.threerings.whirled.data.SceneModel;
-import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.zone.client.ZoneService;
 import com.threerings.whirled.zone.data.ZoneMarshaller;
-import com.threerings.whirled.zone.data.ZoneSummary;
 
 /**
  * Dispatches requests to the {@link ZoneProvider}.
@@ -47,13 +42,14 @@ public class ZoneDispatcher extends InvocationDispatcher
         this.provider = provider;
     }
 
-    // from InvocationDispatcher
+    @Override // documentation inherited
     public InvocationMarshaller createMarshaller ()
     {
         return new ZoneMarshaller();
     }
 
-    @SuppressWarnings("unchecked") // from InvocationDispatcher
+    @SuppressWarnings("unchecked")
+    @Override // documentation inherited
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
         throws InvocationException

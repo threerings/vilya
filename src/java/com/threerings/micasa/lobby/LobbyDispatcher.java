@@ -21,14 +21,10 @@
 
 package com.threerings.micasa.lobby;
 
-import com.threerings.micasa.lobby.LobbyMarshaller;
-import com.threerings.micasa.lobby.LobbyService;
-import com.threerings.presents.client.Client;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
-import java.util.List;
 
 /**
  * Dispatches requests to the {@link LobbyProvider}.
@@ -44,13 +40,14 @@ public class LobbyDispatcher extends InvocationDispatcher
         this.provider = provider;
     }
 
-    // from InvocationDispatcher
+    @Override // documentation inherited
     public InvocationMarshaller createMarshaller ()
     {
         return new LobbyMarshaller();
     }
 
-    @SuppressWarnings("unchecked") // from InvocationDispatcher
+    @SuppressWarnings("unchecked")
+    @Override // documentation inherited
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
         throws InvocationException

@@ -27,6 +27,7 @@ import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.dobj.InvocationResponseEvent;
+import com.threerings.presents.net.Transport;
 import com.threerings.util.Name;
 
 /**
@@ -55,7 +56,7 @@ public class ParlorMarshaller extends InvocationMarshaller
             _invId = null;
             omgr.postEvent(new InvocationResponseEvent(
                                callerOid, requestId, INVITE_RECEIVED,
-                               new Object[] { Integer.valueOf(arg1) }));
+                               new Object[] { Integer.valueOf(arg1) }, transport));
         }
 
         @Override // from InvocationMarshaller

@@ -21,12 +21,10 @@
 
 package com.threerings.puzzle.server;
 
-import com.threerings.presents.client.Client;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
-import com.threerings.puzzle.client.PuzzleGameService;
 import com.threerings.puzzle.data.Board;
 import com.threerings.puzzle.data.PuzzleGameMarshaller;
 
@@ -44,13 +42,14 @@ public class PuzzleGameDispatcher extends InvocationDispatcher
         this.provider = provider;
     }
 
-    // from InvocationDispatcher
+    @Override // documentation inherited
     public InvocationMarshaller createMarshaller ()
     {
         return new PuzzleGameMarshaller();
     }
 
-    @SuppressWarnings("unchecked") // from InvocationDispatcher
+    @SuppressWarnings("unchecked")
+    @Override // documentation inherited
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
         throws InvocationException

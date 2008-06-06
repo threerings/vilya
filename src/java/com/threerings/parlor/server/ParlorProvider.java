@@ -23,7 +23,6 @@ package com.threerings.parlor.server;
 
 import com.threerings.parlor.client.ParlorService;
 import com.threerings.parlor.game.data.GameConfig;
-import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationException;

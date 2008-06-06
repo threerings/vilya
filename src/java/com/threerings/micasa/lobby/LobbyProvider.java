@@ -21,12 +21,9 @@
 
 package com.threerings.micasa.lobby;
 
-import com.threerings.micasa.lobby.LobbyService;
-import com.threerings.presents.client.Client;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.presents.server.InvocationProvider;
-import java.util.List;
 
 /**
  * Defines the server-side of the {@link LobbyService}.

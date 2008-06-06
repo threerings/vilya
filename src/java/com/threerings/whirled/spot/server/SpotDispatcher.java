@@ -21,15 +21,12 @@
 
 package com.threerings.whirled.spot.server;
 
-import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.whirled.client.SceneService;
-import com.threerings.whirled.data.SceneMarshaller;
-import com.threerings.whirled.spot.client.SpotService;
 import com.threerings.whirled.spot.data.Location;
 import com.threerings.whirled.spot.data.SpotMarshaller;
 
@@ -47,13 +44,14 @@ public class SpotDispatcher extends InvocationDispatcher
         this.provider = provider;
     }
 
-    // from InvocationDispatcher
+    @Override // documentation inherited
     public InvocationMarshaller createMarshaller ()
     {
         return new SpotMarshaller();
     }
 
-    @SuppressWarnings("unchecked") // from InvocationDispatcher
+    @SuppressWarnings("unchecked")
+    @Override // documentation inherited
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
         throws InvocationException

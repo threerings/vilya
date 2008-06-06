@@ -25,10 +25,10 @@ import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.dobj.InvocationResponseEvent;
+import com.threerings.presents.net.Transport;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.zone.client.ZoneService;
-import com.threerings.whirled.zone.data.ZoneSummary;
 
 /**
  * Provides the implementation of the {@link ZoneService} interface
@@ -56,7 +56,7 @@ public class ZoneMarshaller extends InvocationMarshaller
             _invId = null;
             omgr.postEvent(new InvocationResponseEvent(
                                callerOid, requestId, MOVE_SUCCEEDED,
-                               new Object[] { Integer.valueOf(arg1), arg2, arg3 }));
+                               new Object[] { Integer.valueOf(arg1), arg2, arg3 }, transport));
         }
 
         /** The method id used to dispatch {@link #moveSucceededWithScene}
@@ -69,7 +69,7 @@ public class ZoneMarshaller extends InvocationMarshaller
             _invId = null;
             omgr.postEvent(new InvocationResponseEvent(
                                callerOid, requestId, MOVE_SUCCEEDED_WITH_SCENE,
-                               new Object[] { Integer.valueOf(arg1), arg2, arg3, arg4 }));
+                               new Object[] { Integer.valueOf(arg1), arg2, arg3, arg4 }, transport));
         }
 
         /** The method id used to dispatch {@link #moveSucceededWithUpdates}
@@ -82,7 +82,7 @@ public class ZoneMarshaller extends InvocationMarshaller
             _invId = null;
             omgr.postEvent(new InvocationResponseEvent(
                                callerOid, requestId, MOVE_SUCCEEDED_WITH_UPDATES,
-                               new Object[] { Integer.valueOf(arg1), arg2, arg3, arg4 }));
+                               new Object[] { Integer.valueOf(arg1), arg2, arg3, arg4 }, transport));
         }
 
         @Override // from InvocationMarshaller

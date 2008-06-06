@@ -21,10 +21,10 @@
 
 package com.threerings.micasa.lobby;
 
-import com.threerings.micasa.lobby.LobbyService;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.dobj.InvocationResponseEvent;
+import com.threerings.presents.net.Transport;
 import java.util.List;
 
 /**
@@ -53,7 +53,7 @@ public class LobbyMarshaller extends InvocationMarshaller
             _invId = null;
             omgr.postEvent(new InvocationResponseEvent(
                                callerOid, requestId, GOT_CATEGORIES,
-                               new Object[] { arg1 }));
+                               new Object[] { arg1 }, transport));
         }
 
         @Override // from InvocationMarshaller
@@ -88,7 +88,7 @@ public class LobbyMarshaller extends InvocationMarshaller
             _invId = null;
             omgr.postEvent(new InvocationResponseEvent(
                                callerOid, requestId, GOT_LOBBIES,
-                               new Object[] { arg1 }));
+                               new Object[] { arg1 }, transport));
         }
 
         @Override // from InvocationMarshaller

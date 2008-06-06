@@ -22,12 +22,11 @@
 package com.threerings.parlor.data;
 
 import com.threerings.parlor.client.TableService;
-import com.threerings.parlor.data.TableConfig;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.InvocationMarshaller;
-import com.threerings.presents.dobj.InvocationResponseEvent;
+import com.threerings.presents.net.Transport;
 
 /**
  * Provides the implementation of the {@link TableService} interface

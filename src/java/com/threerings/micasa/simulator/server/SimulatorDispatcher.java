@@ -21,10 +21,8 @@
 
 package com.threerings.micasa.simulator.server;
 
-import com.threerings.micasa.simulator.client.SimulatorService;
 import com.threerings.micasa.simulator.data.SimulatorMarshaller;
 import com.threerings.parlor.game.data.GameConfig;
-import com.threerings.presents.client.Client;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.server.InvocationDispatcher;
@@ -44,13 +42,14 @@ public class SimulatorDispatcher extends InvocationDispatcher
         this.provider = provider;
     }
 
-    // from InvocationDispatcher
+    @Override // documentation inherited
     public InvocationMarshaller createMarshaller ()
     {
         return new SimulatorMarshaller();
     }
 
-    @SuppressWarnings("unchecked") // from InvocationDispatcher
+    @SuppressWarnings("unchecked")
+    @Override // documentation inherited
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
         throws InvocationException

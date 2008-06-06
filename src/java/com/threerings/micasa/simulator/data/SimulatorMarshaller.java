@@ -25,7 +25,7 @@ import com.threerings.micasa.simulator.client.SimulatorService;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller;
-import com.threerings.presents.dobj.InvocationResponseEvent;
+import com.threerings.presents.net.Transport;
 
 /**
  * Provides the implementation of the {@link SimulatorService} interface

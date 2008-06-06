@@ -23,9 +23,8 @@ package com.threerings.puzzle.data;
 
 import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller;
-import com.threerings.presents.dobj.InvocationResponseEvent;
+import com.threerings.presents.net.Transport;
 import com.threerings.puzzle.client.PuzzleGameService;
-import com.threerings.puzzle.data.Board;
 
 /**
  * Provides the implementation of the {@link PuzzleGameService} interface

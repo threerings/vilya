@@ -21,14 +21,10 @@
 
 package com.threerings.whirled.server;
 
-import com.threerings.crowd.data.PlaceConfig;
-import com.threerings.presents.client.Client;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.presents.server.InvocationProvider;
 import com.threerings.whirled.client.SceneService;
-import com.threerings.whirled.data.SceneModel;
-import com.threerings.whirled.data.SceneUpdate;
 
 /**
  * Defines the server-side of the {@link SceneService}.

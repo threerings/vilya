@@ -21,10 +21,8 @@
 
 package com.threerings.parlor.tourney.server;
 
-import com.threerings.parlor.tourney.client.TourniesService;
 import com.threerings.parlor.tourney.data.TourneyConfig;
 import com.threerings.parlor.tourney.data.TourniesMarshaller;
-import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.data.InvocationMarshaller;
@@ -45,13 +43,14 @@ public class TourniesDispatcher extends InvocationDispatcher
         this.provider = provider;
     }
 
-    // from InvocationDispatcher
+    @Override // documentation inherited
     public InvocationMarshaller createMarshaller ()
     {
         return new TourniesMarshaller();
     }
 
-    @SuppressWarnings("unchecked") // from InvocationDispatcher
+    @SuppressWarnings("unchecked")
+    @Override // documentation inherited
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
         throws InvocationException
