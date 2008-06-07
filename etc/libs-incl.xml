@@ -9,6 +9,7 @@
     <include name="commons-lang.jar"/>
     <include name="commons-logging.jar"/>
     <include name="google-collect.jar"/>
+    <include name="guice.jar"/>
     <include name="javassist.jar"/>
     <include name="junit4.jar"/>
     <include name="retroweaver-all-1.2.2.jar"/>

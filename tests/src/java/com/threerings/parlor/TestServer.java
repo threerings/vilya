@@ -21,6 +21,9 @@
 
 package com.threerings.parlor;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
 import com.threerings.crowd.server.CrowdServer;
 
 import com.threerings.parlor.server.ParlorManager;
@@ -35,11 +38,11 @@ public class TestServer extends CrowdServer
     /** The parlor manager in operation on this server. */
     public static ParlorManager parmgr = new ParlorManager();
 
-    /** Initializes the Parlor test server. */
-    public void init ()
+    @Override // from CrowdServer
+    public void init (Injector injector)
         throws Exception
     {
-        super.init();
+        super.init(injector);
 
         // initialize our parlor manager
         parmgr.init(invmgr, plreg);
@@ -50,9 +53,10 @@ public class TestServer extends CrowdServer
     /** Main entry point for test server. */
     public static void main (String[] args)
     {
-        TestServer server = new TestServer();
+        Injector injector = Guice.createInjector(new Module());
+        TestServer server = injector.getInstance(TestServer.class);
         try {
-            server.init();
+            server.init(injector);
             server.run();
         } catch (Exception e) {
             log.warning("Unable to initialize server.", e);

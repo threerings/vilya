@@ -23,6 +23,9 @@ package com.threerings.micasa.simulator.client;
 
 import javax.swing.JFrame;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
 import com.samskivert.swing.Controller;
 import com.samskivert.swing.util.SwingUtil;
 import com.samskivert.util.Interval;
@@ -41,8 +44,7 @@ import com.threerings.micasa.simulator.server.SimulatorServer;
 import static com.threerings.micasa.Log.log;
 
 /**
- * The simulator application is a test harness to facilitate development
- * and debugging of games.
+ * The simulator application is a test harness to facilitate development and debugging of games.
  */
 public class SimulatorApp
 {
@@ -55,8 +57,7 @@ public class SimulatorApp
         SimulatorInfo siminfo = new SimulatorInfo();
         siminfo.gameConfigClass = args[0];
         siminfo.simClass = args[1];
-        siminfo.playerCount = getInt(
-            System.getProperty("playercount"), DEFAULT_PLAYER_COUNT);
+        siminfo.playerCount = getInt(System.getProperty("playercount"), DEFAULT_PLAYER_COUNT);
 
         // create our client instance
         _client = createSimulatorClient(_frame);
@@ -66,14 +67,14 @@ public class SimulatorApp
         _frame.setController(ctrl);
 
         // create the server
-        SimulatorServer server = createSimulatorServer();
-        server.init(new ResultListener() {
+        Injector injector = Guice.createInjector(new SimpleServer.Module());
+        SimulatorServer server = createSimulatorServer(injector);
+        server.init(injector, new ResultListener() {
             public void requestCompleted (Object result) {
                 try {
                     run();
                 } catch (Exception e) {
-                    log.warning("Simulator initialization failed " +
-                                "[e=" + e + "].");
+                    log.warning("Simulator initialization failed [e=" + e + "].");
                 }
             }
             public void requestFailed (Exception e) {
@@ -83,14 +84,13 @@ public class SimulatorApp
 
         // run the server on a separate thread
         _serverThread = new ServerThread(server);
-        // start up the server so that we can be notified when
-        // initialization is complete
+        // start up the server so that we can be notified when initialization is complete
         _serverThread.start();
     }
 
-    protected SimulatorServer createSimulatorServer ()
+    protected SimulatorServer createSimulatorServer (Injector injector)
     {
-        return new SimpleServer();
+        return injector.getInstance(SimpleServer.class);
     }
 
     protected SimulatorFrame createSimulatorFrame ()

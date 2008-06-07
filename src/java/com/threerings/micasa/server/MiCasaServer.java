@@ -21,6 +21,9 @@
 
 package com.threerings.micasa.server;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
 import com.threerings.util.Name;
 
 import com.threerings.presents.net.AuthRequest;
@@ -48,17 +51,14 @@ public class MiCasaServer extends CrowdServer
     /** The lobby registry operating on this server. */
     public static LobbyRegistry lobreg = new LobbyRegistry();
 
-    /**
-     * Initializes all of the server services and prepares for operation.
-     */
-    public void init ()
+    @Override // from CrowdServer
+    public void init (Injector injector)
         throws Exception
     {
-        // do the base server initialization
-        super.init();
+        super.init(injector);
 
         // configure the client manager to use our client class
-        clmgr.setClientFactory(new ClientFactory() {
+        _clmgr.setClientFactory(new ClientFactory() {
             public PresentsClient createClient (AuthRequest areq) {
                 return new MiCasaClient();
             }
@@ -78,9 +78,10 @@ public class MiCasaServer extends CrowdServer
 
     public static void main (String[] args)
     {
-        MiCasaServer server = new MiCasaServer();
+        Injector injector = Guice.createInjector(new Module());
+        MiCasaServer server = injector.getInstance(MiCasaServer.class);
         try {
-            server.init();
+            server.init(injector);
             server.run();
         } catch (Exception e) {
             log.warning("Unable to initialize server.", e);

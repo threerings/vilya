@@ -21,6 +21,8 @@
 
 package com.threerings.stage.server;
 
+import com.google.inject.Injector;
+
 import com.threerings.resource.ResourceManager;
 
 import com.threerings.media.tile.TileManager;
@@ -46,12 +48,11 @@ public abstract class StageServer extends WhirledServer
     /** Provides access to our tile repository. */
     public static TileManager tilemgr;
 
-    // documentation inherited
-    public void init ()
+    @Override // from WhirledServer
+    public void init (Injector injector)
         throws Exception
     {
-        // do the base server initialization
-        super.init();
+        super.init(injector);
 
         // create the resource manager
         rsrcmgr = new ResourceManager("rsrc");

@@ -38,24 +38,24 @@ import com.threerings.parlor.tourney.data.TourneyConfig;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.presents.server.PresentsServer;
+import com.threerings.presents.server.ShutdownManager;
 import com.threerings.presents.data.ClientObject;
 
 /**
  * An extensible tournament manager.
  */
 public abstract class TourniesManager
-    implements TourniesProvider, PresentsServer.Shutdowner
+    implements TourniesProvider, ShutdownManager.Shutdowner
 {
-    public TourniesManager (ConnectionProvider conprov)
+    /**
+     * Initializes the tournies manager and starts its periodic update task.
+     */
+    public void init (ConnectionProvider conprov)
         throws PersistenceException
     {
         _tournrep = new TourneyRepository(conprov, getDBIdent());
-
         loadTourneyConfigs();
-    }
 
-    public void init ()
-    {
         _interval = new Interval(getRunQueue()) {
             public void expired () {
                 updateTournies();
@@ -64,18 +64,23 @@ public abstract class TourniesManager
         _interval.schedule(getIntervalDelay(), true);
     }
 
-    // documentation inherited from interface PresentsServer.Shutdowner
+    // from interface ShutdownManager.Shutdowner
     public void shutdown ()
     {
         _interval.cancel();
     }
 
-    // documentation inherited from interface TourniesService
+    // from interface TourniesService
     public void createTourney (ClientObject caller, TourneyConfig config, 
             final InvocationService.ResultListener listener)
         throws InvocationException
     {
         makeTourney(config, listener);
+    }
+
+    protected TourniesManager (ShutdownManager shutmgr)
+    {
+        shutmgr.registerShutdowner(this);
     }
 
     /**

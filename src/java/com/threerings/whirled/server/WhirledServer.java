@@ -21,6 +21,8 @@
 
 package com.threerings.whirled.server;
 
+import com.google.inject.Injector;
+
 import com.threerings.util.Name;
 
 import com.threerings.presents.net.AuthRequest;
@@ -41,17 +43,23 @@ import static com.threerings.whirled.Log.log;
  */
 public abstract class WhirledServer extends CrowdServer
 {
+    /** Configures dependencies needed by the Whirled server. */
+    public static class Module extends CrowdServer.Module
+    {
+        @Override protected void configure () {
+            super.configure();
+            // nada
+        }
+    }
+
     /** The scene registry. */
     public static SceneRegistry screg;
 
-    /**
-     * Initializes all of the server services and prepares for operation.
-     */
-    public void init ()
+    @Override // from CrowdServer
+    public void init (Injector injector)
         throws Exception
     {
-        // do the base server initialization
-        super.init();
+        super.init(injector);
 
         // configure the client to use our whirled client
         clmgr.setClientFactory(new ClientFactory() {
