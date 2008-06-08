@@ -35,14 +35,21 @@ import com.threerings.stage.data.StageCodes;
 import static com.threerings.stage.Log.log;
 
 /**
- * Extends the Whirled server to provide services needed by the Stage
- * system.
+ * Extends the Whirled server to provide services needed by the Stage system.
  */
 public abstract class StageServer extends WhirledServer
 {
-    /** A resource manager with which we can load resources in the same
-     * manner that the client does (for resources that are used on both
-     * the server and client). */
+    /** Configures dependencies needed by the Stage services. */
+    public static class Module extends WhirledServer.Module
+    {
+        @Override protected void configure () {
+            super.configure();
+            // nada (yet)
+        }
+    }
+
+    /** A resource manager with which we can load resources in the same manner that the client does
+     * (for resources that are used on both the server and client). */
     public ResourceManager rsrcmgr;
 
     /** Provides access to our tile repository. */
@@ -61,17 +68,15 @@ public abstract class StageServer extends WhirledServer
         // create our tile manager and repository
         tilemgr = new TileManager(null);
         tilemgr.setTileSetRepository(
-            new BundledTileSetRepository(rsrcmgr, null,
-                                         StageCodes.TILESET_RSRC_SET));
+            new BundledTileSetRepository(rsrcmgr, null, StageCodes.TILESET_RSRC_SET));
 
         log.info("Stage server initialized.");
     }
 
     /**
-     * Returns the path to the configuration file for the resource manager that
-     * will be created for use by the server. This is a resource path (meaning
-     * it should be relative to the resource prefix (which is
-     * <code>rsrc</code>).
+     * Returns the path to the configuration file for the resource manager that will be created for
+     * use by the server. This is a resource path (meaning it should be relative to the resource
+     * prefix (which is <code>rsrc</code>).
      */
     protected String getResourceConfig ()
     {
