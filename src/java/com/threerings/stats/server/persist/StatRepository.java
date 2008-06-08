@@ -12,6 +12,9 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.logging.Level;
 
+import com.google.inject.Singleton;
+import com.google.inject.Inject;
+
 import com.samskivert.io.ByteArrayOutInputStream;
 import com.samskivert.io.PersistenceException;
 import com.samskivert.util.HashIntMap;
@@ -38,13 +41,14 @@ import static com.threerings.stats.Log.log;
 /**
  * Responsible for the persistent storage of per-player statistics.
  */
+@Singleton
 public class StatRepository extends DepotRepository
     implements Stat.AuxDataSource
 {
     /**
      * Constructs a new statistics repository with the specified persistence context.
      */
-    public StatRepository (PersistenceContext context)
+    @Inject public StatRepository (PersistenceContext context)
         throws PersistenceException
     {
         super(context);
