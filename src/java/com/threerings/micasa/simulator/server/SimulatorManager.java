@@ -23,6 +23,8 @@ package com.threerings.micasa.simulator.server;
 
 import java.util.ArrayList;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.threerings.util.Name;
 
 import com.threerings.presents.data.ClientObject;
@@ -34,6 +36,7 @@ import com.threerings.presents.server.InvocationManager;
 
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceObject;
+import com.threerings.crowd.server.LocationManager;
 import com.threerings.crowd.server.PlaceManager;
 import com.threerings.crowd.server.PlaceRegistry;
 
@@ -47,27 +50,14 @@ import static com.threerings.micasa.Log.log;
 /**
  * The simulator manager is responsible for handling the simulator services on the server side.
  */
+@Singleton
 public class SimulatorManager
 {
-    /**
-     * Initializes the simulator manager manager. This should be called by the server that is
-     * making use of the simulator services on the single instance of simulator manager that it has
-     * created.
-     *
-     * @param invmgr a reference to the invocation manager in use by this server.
-     */
-    public void init (InvocationManager invmgr, PlaceRegistry plreg, ClientManager clmgr,
-                      RootDObjectManager omgr, SimulatorServer simserv)
+    @Inject public SimulatorManager (InvocationManager invmgr)
     {
         // register our simulator provider
         SimulatorProvider sprov = new SimulatorProvider(this);
         invmgr.registerDispatcher(new SimulatorDispatcher(sprov), InvocationCodes.GLOBAL_GROUP);
-
-        // keep these for later
-        _plreg = plreg;
-        _clmgr = clmgr;
-        _omgr = omgr;
-        _simserv = simserv;
     }
 
     /**
@@ -174,7 +164,7 @@ public class SimulatorManager
                 // move the simulant into the game room since they have no location director to
                 // move them automagically
                 try {
-                    _plreg.locprov.moveTo(bobj, _gobj.getOid());
+                    _locman.moveTo(bobj, _gobj.getOid());
                 } catch (Exception e) {
                     log.warning("Failed to move simulant into room " +
                                 "[e=" + e + "].");
@@ -206,10 +196,10 @@ public class SimulatorManager
     }
 
     // needed for general operation
-    protected PlaceRegistry _plreg;
-    protected ClientManager _clmgr;
-    protected RootDObjectManager _omgr;
-    protected SimulatorServer _simserv;
+    @Inject protected PlaceRegistry _plreg;
+    @Inject protected ClientManager _clmgr;
+    @Inject protected RootDObjectManager _omgr;
+    @Inject protected LocationManager _locman;
 
     /** The default skill level for AI players. */
     protected static final byte DEFAULT_SKILL = 50;

@@ -197,7 +197,7 @@ public class SceneRegistry
     public void moveBody (BodyObject source, int sceneId)
     {
         // first remove them from their old place
-        CrowdServer.plreg.locprov.leaveOccupiedPlace(source);
+        CrowdServer.locman.leaveOccupiedPlace(source);
 
         // then send a forced move notification
         SceneSender.forcedMove(source, sceneId);
@@ -210,7 +210,7 @@ public class SceneRegistry
     public void leaveOccupiedScene (BodyObject source)
     {
         // remove them from their occupied place (clears out scene info as well)
-        CrowdServer.plreg.locprov.leaveOccupiedPlace(source);
+        CrowdServer.locman.leaveOccupiedPlace(source);
     }
     
     /**

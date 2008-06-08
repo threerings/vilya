@@ -21,16 +21,18 @@
 
 package com.threerings.micasa.simulator.server;
 
+import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.google.inject.Singleton;
 
 import com.samskivert.util.ResultListener;
 
 import com.threerings.micasa.server.MiCasaServer;
 
 /**
- * A simple simulator server implementation that extends the MiCasa server and provides no special
- * functionality.
+ * A simple simulator server implementation that extends the MiCasa server.
  */
+@Singleton
 public class SimpleServer extends MiCasaServer
     implements SimulatorServer
 {
@@ -39,13 +41,12 @@ public class SimpleServer extends MiCasaServer
     {
         init(injector); // do our standard initialization
 
-        // create the simulator manager
-        SimulatorManager simmgr = new SimulatorManager();
-        simmgr.init(invmgr, plreg, clmgr, omgr, this);
-
         if (obs != null) {
             // let the initialization observer know that we've started up
             obs.requestCompleted(this);
         }
     }
+
+    // cause the simulator manager to be created
+    @Inject protected SimulatorManager _simmgr;
 }

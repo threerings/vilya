@@ -25,7 +25,7 @@ import com.samskivert.util.HashIntMap;
 
 import com.threerings.presents.server.InvocationManager;
 
-import com.threerings.crowd.server.PlaceRegistry;
+import com.threerings.crowd.server.LocationManager;
 import com.threerings.whirled.server.SceneRegistry;
 
 import com.threerings.whirled.zone.data.ZoneCodes;
@@ -45,10 +45,10 @@ public class ZoneRegistry
     /**
      * Creates a zone manager with the supplied configuration.
      */
-    public ZoneRegistry (InvocationManager invmgr, PlaceRegistry plreg, SceneRegistry screg)
+    public ZoneRegistry (InvocationManager invmgr, LocationManager locman, SceneRegistry screg)
     {
         // create a zone provider and register it with the invocation services
-        zoneprov = new ZoneProvider(plreg.locprov, this, screg);
+        zoneprov = new ZoneProvider(locman, this, screg);
         invmgr.registerDispatcher(new ZoneDispatcher(zoneprov), ZoneCodes.WHIRLED_GROUP);
     }
 

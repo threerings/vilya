@@ -85,7 +85,7 @@ public class ZoneMoveHandler extends AbstractSceneMoveHandler
     {
         // move to the place object associated with this scene
         int ploid = scmgr.getPlaceObject().getOid();
-        PlaceConfig config = WhirledServer.plreg.locprov.moveTo(_body, ploid);
+        PlaceConfig config = WhirledServer.locman.moveTo(_body, ploid);
 
         // now that we've moved, we can update the user object with the new scene and zone ids
         _body.startTransaction();

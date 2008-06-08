@@ -50,7 +50,7 @@ public class SceneMoveHandler extends AbstractSceneMoveHandler
     {
         // move to location associated with this scene
         int ploid = scmgr.getPlaceObject().getOid();
-        PlaceConfig config = CrowdServer.plreg.locprov.moveTo(_body, ploid);
+        PlaceConfig config = CrowdServer.locman.moveTo(_body, ploid);
 
         // check to see if they need a newer version of the scene data
         SceneService.SceneMoveListener listener = (SceneService.SceneMoveListener)_listener;
