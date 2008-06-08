@@ -33,11 +33,10 @@ import com.threerings.util.Name;
 
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.dobj.DObject;
-import com.threerings.presents.server.PresentsServer;
 
 import com.threerings.crowd.data.BodyObject;
+import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.data.PlaceObject;
-import com.threerings.crowd.server.PlaceManager;
 
 import com.threerings.parlor.turn.server.TurnGameManagerDelegate;
 
@@ -70,10 +69,10 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
     }
 
     @Override // from PlaceManagerDelegate
-    public void setPlaceManager (PlaceManager plmgr)
+    public void didInit (PlaceConfig config)
     {
-        super.setPlaceManager(plmgr);
-        _cgmgr = (CardGameManager)plmgr;
+        super.didInit(config);
+        _cgmgr = (CardGameManager)_plmgr;
     }
 
     @Override // from PlaceManagerDelegate
@@ -85,8 +84,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
         _trickCardGame = (TrickCardGameObject)plobj;
         _cardGame = (CardGameObject)plobj;
         _trickCardGame.setTrickCardGameService(
-            (TrickCardGameMarshaller)PresentsServer.invmgr.registerDispatcher(
-                new TrickCardGameDispatcher(this)));
+            (TrickCardGameMarshaller)_invmgr.registerDispatcher(new TrickCardGameDispatcher(this)));
     }
 
     @Override // from PlaceManagerDelegate
@@ -94,7 +92,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
     {
         super.didShutdown();
 
-        PresentsServer.invmgr.clearDispatcher(_trickCardGame.getTrickCardGameService());
+        _invmgr.clearDispatcher(_trickCardGame.getTrickCardGameService());
     }
 
     @Override // from GameManagerDelegate
@@ -573,7 +571,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
     }
 
     /** The all-purpose turn timeout interval.  */
-    protected Interval _turnTimeoutInterval = new Interval(PresentsServer.omgr) {
+    protected Interval _turnTimeoutInterval = new Interval(_omgr) {
         public void expired () {
             _turnTimedOut = true;
             turnTimedOut();
@@ -581,7 +579,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
     };
 
     /** Calls {@link #endTrick} upon expiration. */
-    protected Interval _endTrickInterval = new Interval(PresentsServer.omgr) {
+    protected Interval _endTrickInterval = new Interval(_omgr) {
         public void expired () {
             endTrick();
         }

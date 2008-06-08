@@ -63,11 +63,11 @@ public abstract class WhirledServer extends CrowdServer
 
         // configure the client to use our whirled client
         clmgr.setClientFactory(new ClientFactory() {
-            public PresentsClient createClient (AuthRequest areq) {
-                return new WhirledClient();
+            public Class<? extends PresentsClient> getClientClass (AuthRequest areq) {
+                return WhirledClient.class;
             }
-            public ClientResolver createClientResolver (Name username) {
-                return new ClientResolver();
+            public Class<? extends ClientResolver> getClientResolverClass (Name username) {
+                return ClientResolver.class;
             }
         });
 

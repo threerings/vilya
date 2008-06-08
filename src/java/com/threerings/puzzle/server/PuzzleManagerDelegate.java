@@ -21,7 +21,8 @@
 
 package com.threerings.puzzle.server;
 
-import com.threerings.crowd.server.PlaceManager;
+import com.threerings.crowd.data.PlaceConfig;
+
 import com.threerings.parlor.game.server.GameManagerDelegate;
 
 /**
@@ -42,10 +43,10 @@ public class PuzzleManagerDelegate extends GameManagerDelegate
     }
 
     @Override // from PlaceManagerDelegate
-    public void setPlaceManager (PlaceManager plmgr)
+    public void didInit (PlaceConfig config)
     {
-        super.setPlaceManager(plmgr);
-        _puzmgr = (PuzzleManager)plmgr;
+        super.didInit(config);
+        _puzmgr = (PuzzleManager)_plmgr;
     }
 
     protected PuzzleManager _puzmgr;

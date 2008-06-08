@@ -38,7 +38,6 @@ import com.threerings.presents.client.InvocationService.ConfirmListener;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.dobj.MessageEvent;
 import com.threerings.presents.server.InvocationException;
-import com.threerings.presents.server.PresentsServer;
 
 import static com.threerings.parlor.card.Log.log;
 
@@ -121,8 +120,7 @@ public class CardGameManager extends GameManager
         } else {
             Hand hand = deck.dealHand(size);
             if (!isAI(playerIndex)) {
-                ClientObject clobj = (ClientObject)
-                    PresentsServer.omgr.getObject(_playerOids[playerIndex]);
+                ClientObject clobj = (ClientObject)_omgr.getObject(_playerOids[playerIndex]);
                 if (clobj != null) {
                     CardGameSender.sendHand(clobj, _cardgameobj.getOid(), hand);
                 }
@@ -183,8 +181,7 @@ public class CardGameManager extends GameManager
     public ClientObject getClientObject (int pidx)
     {
         if (_playerOids[pidx] != 0) {
-            return (ClientObject)PresentsServer.omgr.getObject(
-                _playerOids[pidx]);
+            return (ClientObject)_omgr.getObject(_playerOids[pidx]);
         
         } else {
             return null;
@@ -252,8 +249,8 @@ public class CardGameManager extends GameManager
     }
     
     /**
-     * Notifies everyone in the room (other than the sender and the receiver)
-     * that a set of cards have been transferred.
+     * Notifies everyone in the room (other than the sender and the receiver) that a set of cards
+     * have been transferred.
      *
      * @param fromPlayerIdx the index of the player sending the cards
      * @param toPlayerIdx the index of the player receiving the cards
@@ -268,8 +265,7 @@ public class CardGameManager extends GameManager
             public void apply (OccupantInfo info) {
                 int oid = info.getBodyOid();
                 if (oid != senderOid && oid != receiverOid) {
-                    ClientObject client =
-                        (ClientObject)PresentsServer.omgr.getObject(oid);
+                    ClientObject client = (ClientObject)_omgr.getObject(oid);
                     if (client != null) {
                         CardGameSender.cardsTransferredBetweenPlayers(client,
                             fromPlayerIdx, toPlayerIdx, cards);

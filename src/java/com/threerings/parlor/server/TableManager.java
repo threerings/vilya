@@ -40,7 +40,6 @@ import com.threerings.presents.dobj.ObjectDestroyedEvent;
 import com.threerings.presents.dobj.ObjectRemovedEvent;
 import com.threerings.presents.dobj.OidListListener;
 import com.threerings.presents.server.InvocationException;
-import com.threerings.presents.server.PresentsServer;
 
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.OccupantInfo;
@@ -312,7 +311,7 @@ public class TableManager
      */
     final protected Table notePlayerRemoved (int playerOid)
     {
-        return notePlayerRemoved(playerOid, (BodyObject) PresentsServer.omgr.getObject(playerOid));
+        return notePlayerRemoved(playerOid, (BodyObject) CrowdServer.omgr.getObject(playerOid));
     }
 
     /**
@@ -438,7 +437,7 @@ public class TableManager
         }
 
         // update this table's occupants information and update the table
-        GameObject gameObj = (GameObject) PresentsServer.omgr.getObject(gameOid);
+        GameObject gameObj = (GameObject) CrowdServer.omgr.getObject(gameOid);
         table.updateOccupants(gameObj);
         _tlobj.updateTables(table);
     }

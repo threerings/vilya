@@ -45,7 +45,6 @@ import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.server.CrowdServer;
-import com.threerings.crowd.server.PlaceManager;
 
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.game.data.GameObject;
@@ -63,16 +62,10 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
     implements RatingCodes
 {
     @Override // from PlaceManagerDelegate
-    public void setPlaceManager (PlaceManager plmgr)
-    {
-        super.setPlaceManager(plmgr);
-        _gmgr = (GameManager)plmgr;
-    }
-
-    @Override // from PlaceManagerDelegate
     public void didInit (PlaceConfig config)
     {
         super.didInit(config);
+        _gmgr = (GameManager)_plmgr;
         _repo = getRatingRepository();
     }
 
@@ -89,7 +82,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
         super.bodyEntered(bodyOid);
 
         // if the game is in play and this is a player, load their ratings
-        BodyObject occupant = (BodyObject)CrowdServer.omgr.getObject(bodyOid);
+        BodyObject occupant = (BodyObject)_omgr.getObject(bodyOid);
         if (shouldRateGame() && _gobj.isInPlay() && isPlayer(occupant)) {
             Rating rating = maybeCreateRating(occupant);
             if (rating != null) {
@@ -132,7 +125,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
         // player id of each player position for seated table games
         ArrayList<Rating> toLoad = new ArrayList<Rating>();
         for (int ii = 0, ll = _gobj.occupants.size(); ii < ll; ii++) {
-            BodyObject bobj = (BodyObject)CrowdServer.omgr.getObject(_gobj.occupants.get(ii));
+            BodyObject bobj = (BodyObject)_omgr.getObject(_gobj.occupants.get(ii));
             int pidx = _gmgr.getPlayerIndex(bobj.getVisibleName());
             if (pidx != -1) {
                 _playerIds[pidx] = _gmgr.getPlayerPersistentId(bobj);

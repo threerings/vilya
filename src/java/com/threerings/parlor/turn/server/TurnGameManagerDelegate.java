@@ -24,8 +24,8 @@ package com.threerings.parlor.turn.server;
 import com.samskivert.util.RandomUtil;
 import com.threerings.util.Name;
 
+import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.data.PlaceObject;
-import com.threerings.crowd.server.PlaceManager;
 
 import com.threerings.parlor.game.server.GameManager;
 import com.threerings.parlor.game.server.GameManagerDelegate;
@@ -51,13 +51,6 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
      */
     @Deprecated public TurnGameManagerDelegate (TurnGameManager tgmgr)
     {
-    }
-
-    @Override // from PlaceManagerDelegate
-    public void setPlaceManager (PlaceManager plmgr)
-    {
-        super.setPlaceManager(plmgr);
-        _tgmgr = (TurnGameManager)plmgr;
     }
 
     /**
@@ -154,7 +147,14 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
         }
     }
 
-    // documentation inherited
+    @Override // from PlaceManagerDelegate
+    public void didInit (PlaceConfig config)
+    {
+        super.didInit(config);
+        _tgmgr = (TurnGameManager)_plmgr;
+    }
+
+    @Override // from PlaceManagerDelegate
     public void didStartup (PlaceObject plobj)
     {
         _turnGame = (TurnGameObject)plobj;

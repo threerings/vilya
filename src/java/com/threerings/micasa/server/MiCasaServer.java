@@ -59,11 +59,11 @@ public class MiCasaServer extends CrowdServer
 
         // configure the client manager to use our client class
         _clmgr.setClientFactory(new ClientFactory() {
-            public PresentsClient createClient (AuthRequest areq) {
-                return new MiCasaClient();
+            public Class<? extends PresentsClient> getClientClass (AuthRequest areq) {
+                return MiCasaClient.class;
             }
-            public ClientResolver createClientResolver (Name username) {
-                return new ClientResolver();
+            public Class<? extends ClientResolver> getClientResolverClass (Name username) {
+                return ClientResolver.class;
             }
         });
 
