@@ -28,6 +28,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import com.google.inject.Singleton;
+import com.google.inject.Inject;
+
 import com.samskivert.io.PersistenceException;
 import com.samskivert.util.HashIntMap;
 import com.samskivert.util.IntMap;
@@ -50,12 +53,13 @@ import com.threerings.parlor.rating.util.Percentiler;
 /**
  * Handles the persistent storage of per-user per-game ratings.
  */
+@Singleton
 public class RatingRepository extends DepotRepository
 {
     /**
      * Initialize the {@link RatingRepository}.
      */
-    public RatingRepository (PersistenceContext ctx)
+    @Inject public RatingRepository (PersistenceContext ctx)
     {
         super(ctx);
     }
