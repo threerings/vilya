@@ -285,7 +285,7 @@
   <target name="all" depends="clean,dist,javadoc,dist"/>
 
   <!-- builds our distribution files (war and jar) -->
-  <target name="dist" depends="prepare,compile,tcompile,procstream,aslib,abclib">
+  <target name="dist" depends="prepare,compile,tcompile,procstream,aslib">
     <!-- build our various jar files -->
     <jar destfile="${deploy.dir}/${lib.name}-parlor.jar">
       <fileset dir="${classes.dir}" includes="rsrc/i18n/game/**"/>
