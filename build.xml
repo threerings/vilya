@@ -214,35 +214,6 @@
     <delete file="${deploy.dir}/aslib-config.xml"/>
   </target>
 
-  <!-- checks whether our thane library needs building -->
-  <target name="checkabclib">
-    <condition property="no_build_abclib"><or>
-      <not><available classname="macromedia.asc.embedding.ScriptCompiler"
-                      classpathref="classpath"/></not>
-      <uptodate targetfile="${deploy.dir}/${lib.name}-abc.abc">
-        <srcfiles dir="src/as" includes="**/*.as"/>
-        <srcfiles dir="etc" includes="asc-files-*.txt"/>
-        <srcfiles dir="${deploy.dir}/lib" includes="*.abc"/>
-      </uptodate>
-    </or></condition>
-  </target>
-
-  <!-- builds our thane library -->
-  <target name="abclib" unless="no_build_abclib" depends="checkabclib">
-    <taskdef name="asc" classname="flex.ant.AscTask" classpathref="classpath"/>
-    <asc as3="true" strict="true" classpathref="classpath" use="AS3">
-      <import dir="${deploy.dir}/lib">
-        <include name="tamarin-builtin*.abc"/>
-        <include name="thane*.abc"/>
-        <include name="narya-abc*.abc"/>
-      </import>
-      <in dir="src/as"><includesfile name="etc/asc-files-00.txt"/></in>
-      <in dir="src/as"><includesfile name="etc/asc-files-01.txt"/></in>
-      <filespec dir="etc" includes="empty.as"/>
-    </asc>
-    <move overwrite="true" file="etc/empty.abc" tofile="${deploy.dir}/${lib.name}-abc.abc"/>
-  </target>
-
   <!-- builds the javadoc documentation -->
   <target name="javadoc" depends="prepare">
     <javadoc sourcepath="src/java" packagenames="com.threerings.*"
