@@ -21,63 +21,54 @@
 
 package com.threerings.stage.client;
 
+import static com.threerings.stage.Log.log;
+
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Composite;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.Stroke;
-import java.awt.geom.Ellipse2D;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
-
+import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
+import com.samskivert.util.Tuple;
 
 import com.samskivert.swing.Controller;
 import com.samskivert.swing.ControllerProvider;
-import com.samskivert.swing.RuntimeAdjust;
 import com.samskivert.swing.util.SwingUtil;
-
-import com.samskivert.util.Tuple;
-import com.threerings.util.StreamableArrayList;
-
-import com.threerings.media.tile.ObjectTile;
-import com.threerings.media.tile.TileSet;
-import com.threerings.media.tile.UniformTileSet;
-
-import com.threerings.miso.client.MisoScenePanel;
-import com.threerings.miso.client.SceneObject;
-import com.threerings.miso.client.SceneObjectTip;
-import com.threerings.miso.data.ObjectInfo;
-import com.threerings.miso.util.MisoUtil;
 
 import com.threerings.crowd.client.PlaceView;
 import com.threerings.crowd.data.PlaceObject;
-
+import com.threerings.media.tile.ObjectTile;
+import com.threerings.media.tile.TileSet;
+import com.threerings.media.tile.UniformTileSet;
+import com.threerings.miso.client.MisoScenePanel;
+import com.threerings.miso.client.SceneObject;
+import com.threerings.miso.data.ObjectInfo;
+import com.threerings.miso.util.MisoUtil;
+import com.threerings.stage.data.StageLocation;
+import com.threerings.stage.data.StageMisoSceneModel;
+import com.threerings.stage.data.StageScene;
+import com.threerings.stage.util.StageContext;
+import com.threerings.stage.util.StageSceneUtil;
 import com.threerings.whirled.data.SceneUpdate;
-
 import com.threerings.whirled.spot.data.Cluster;
 import com.threerings.whirled.spot.data.Location;
 import com.threerings.whirled.spot.data.Portal;
 import com.threerings.whirled.spot.data.SceneLocation;
-
-import com.threerings.stage.data.StageLocation;
-import com.threerings.stage.data.StageMisoSceneModel;
-import com.threerings.stage.data.StageScene;
-import com.threerings.stage.data.StageSceneModel;
-import com.threerings.stage.util.StageContext;
-import com.threerings.stage.util.StageSceneUtil;
-
-import static com.threerings.stage.Log.log;
 
 /**
  * Extends the basic Miso scene panel with Stage fun stuff like portals,
@@ -124,7 +115,7 @@ public class StageScenePanel extends MisoScenePanel
         return _rizer;
     }
 
-    // documentation inherited
+    @Override
     protected TileSet.Colorizer getColorizer (ObjectInfo oinfo)
     {
         return _rizer.getColorizer(oinfo);
@@ -147,15 +138,14 @@ public class StageScenePanel extends MisoScenePanel
         if (_scene != null) {
             _rizer = new SceneColorizer(_ctx.getColorPository(), scene);
             recomputePortals();
-            setSceneModel(StageMisoSceneModel.getSceneModel(
-                              scene.getSceneModel()));
+            setSceneModel(StageMisoSceneModel.getSceneModel(scene.getSceneModel()));
         } else {
             log.warning("Zoiks! We can't display a null scene!");
             // TODO: display something to the user letting them know that
             // we're so hosed that we don't even know what time it is
         }
     }
-
+    
     /**
      * Called when we have received a scene update from the server.
      */
@@ -179,18 +169,16 @@ public class StageScenePanel extends MisoScenePanel
         UniformTileSet ots = loadPortalTileSet();
 
         _portobjs.clear();
-        for (Iterator iter = _scene.getPortals(); iter.hasNext(); ) {
-            Portal portal = (Portal) iter.next();
+        for (Iterator<Portal> iter = _scene.getPortals(); iter.hasNext(); ) {
+            Portal portal = iter.next();
             StageLocation loc = (StageLocation) portal.loc;
             Point p = getScreenCoords(loc.x, loc.y);
             int tx = MisoUtil.fullToTile(loc.x);
             int ty = MisoUtil.fullToTile(loc.y);
             Point ts = MisoUtil.tileToScreen(_metrics, tx, ty, new Point());
 
-//             Log.info("Added portal " + portal +
-//                      " [screen=" + StringUtil.toString(p) +
-//                      ", tile=" + StringUtil.coordsToString(tx, ty) +
-//                      ", tscreen=" + StringUtil.toString(ts) + "].");
+//             log.info("Added portal", "portal", portal, "screen", StringUtil.toString(p), "tile",
+//                StringUtil.coordsToString(tx, ty), "tscreen", StringUtil.toString(ts));
 
             ObjectInfo info = new ObjectInfo(0, tx, ty);
             info.action = "portal:" + portal.portalId;
@@ -202,6 +190,7 @@ public class StageScenePanel extends MisoScenePanel
             tile.setImage(ots.getTileMirage(loc.orient));
 
             _portobjs.add(new SceneObject(this, info, tile) {
+                @Override
                 public boolean setHovered (boolean hovered) {
                     ((PortalObjectTile)this.tile).hovered = hovered;
                     return isResponsive();
@@ -210,14 +199,14 @@ public class StageScenePanel extends MisoScenePanel
         }
     }
 
-    // documentation inherited
+    @Override
     protected void recomputeVisible ()
     {
         super.recomputeVisible();
 
         // add our visible portal objects to the list of visible objects
         for (int ii = 0, ll = _portobjs.size(); ii < ll; ii++) {
-            SceneObject pobj = (SceneObject)_portobjs.get(ii);
+            SceneObject pobj = _portobjs.get(ii);
             if (pobj.bounds != null && _vbounds.intersects(pobj.bounds)) {
                 _vizobjs.add(pobj);
             }
@@ -274,7 +263,7 @@ public class StageScenePanel extends MisoScenePanel
         // nothing
     }
 
-    // documentation inherited
+    @Override
     protected boolean handleMousePressed (Object hobject, MouseEvent event)
     {
         // let our parent have a crack at the old mouse press
@@ -302,15 +291,15 @@ public class StageScenePanel extends MisoScenePanel
     /**
      * Called when our show flags have changed.
      */
+    @Override
     protected void showFlagsDidChange (int oldflags)
     {
         super.showFlagsDidChange(oldflags);
 
         if ((oldflags & SHOW_CLUSTERS) != (_showFlags & SHOW_CLUSTERS)) {
             // dirty every cluster rectangle
-            Iterator iter = _clusters.values().iterator();
-            while (iter.hasNext()) {
-                dirtyCluster((Shape)iter.next());
+            for (Shape shape : _clusters.values()) {
+                dirtyCluster(shape);
             }
         }
     }
@@ -381,7 +370,7 @@ public class StageScenePanel extends MisoScenePanel
         Cluster key = new Cluster();
         key.clusterOid = clusterOid;
         _clusterWells.remove(key);
-        Shape shape = (Shape)_clusters.remove(key);
+        Shape shape = _clusters.remove(key);
         if (shape == null) {
             return false;
         }
@@ -399,6 +388,7 @@ public class StageScenePanel extends MisoScenePanel
      * A place for subclasses to react to the hover object changing.
      * One of the supplied arguments may be null.
      */
+    @Override
     protected void hoverObjectChanged (Object oldHover, Object newHover)
     {
         super.hoverObjectChanged(oldHover, newHover);
@@ -417,6 +407,7 @@ public class StageScenePanel extends MisoScenePanel
      * returns non-null, no sprite or object hover calculations will be
      * performed and the object returned will become the new hover object.
      */
+    @Override
     protected Object computeOverHover (int mx, int my)
     {
         return null;
@@ -429,6 +420,7 @@ public class StageScenePanel extends MisoScenePanel
      * sprites or objects under the mouse. Thus if it returns non-null,
      * the object returned will become the new hover object.
      */
+    @Override
     protected Object computeUnderHover (int mx, int my)
     {
         if (!isResponsive()) {
@@ -445,11 +437,9 @@ public class StageScenePanel extends MisoScenePanel
         }
 
         // otherwise, check to see if the mouse is in some new cluster
-        Iterator iter = _clusters.keySet().iterator();
-        while (iter.hasNext()) {
-            Cluster cclust = (Cluster)iter.next();
-            if (containsPoint(cclust, mx, my)) {
-                return cclust;
+        for (Cluster cluster : _clusters.keySet()) {
+            if (containsPoint(cluster, mx, my)) {
+                return cluster;
             }
         }
 
@@ -462,7 +452,7 @@ public class StageScenePanel extends MisoScenePanel
      */
     protected boolean containsPoint (Cluster cluster, int mx, int my)
     {
-        Shape shape = (Shape)_clusterWells.get(cluster);
+        Shape shape = _clusterWells.get(cluster);
         return (shape == null) ? false : shape.contains(mx, my);
     }
 
@@ -472,7 +462,7 @@ public class StageScenePanel extends MisoScenePanel
     protected void dirtyCluster (Cluster cluster)
     {
         if (cluster != null) {
-            dirtyCluster((Shape)_clusters.get(cluster));
+            dirtyCluster(_clusters.get(cluster));
         }
     }
 
@@ -497,9 +487,9 @@ public class StageScenePanel extends MisoScenePanel
      */
     public Portal getPortal (int fullX, int fullY)
     {
-        Iterator iter = _scene.getPortals();
+        Iterator<Portal> iter = _scene.getPortals();
         while (iter.hasNext()) {
-            Portal portal = (Portal)iter.next();
+            Portal portal = iter.next();
             StageLocation loc = (StageLocation) portal.loc;
             if (loc.x == fullX && loc.y == fullY) {
                 return portal;
@@ -508,7 +498,7 @@ public class StageScenePanel extends MisoScenePanel
         return null;
     }
 
-    // documentation inherited
+    @Override
     protected void paintBaseDecorations (Graphics2D gfx, Rectangle clip)
     {
         super.paintBaseDecorations(gfx, clip);
@@ -533,9 +523,8 @@ public class StageScenePanel extends MisoScenePanel
         if (checkShowFlag(SHOW_CLUSTERS)
             /* || // _alwaysShowClusters.getValue() */) {
             // draw all clusters
-            Iterator iter = _clusters.keySet().iterator();
-            while (iter.hasNext()) {
-                drawCluster(gfx, clip, (Cluster)iter.next());
+            for (Cluster cluster : _clusters.keySet()) {
+                drawCluster(gfx, clip, cluster);
             }
 
         } else if (_hobject instanceof Cluster) {
@@ -554,7 +543,7 @@ public class StageScenePanel extends MisoScenePanel
      */
     protected void drawCluster (Graphics2D gfx, Rectangle clip, Cluster cluster)
     {
-        Shape shape = (Shape)_clusters.get(cluster);
+        Shape shape = _clusters.get(cluster);
         if ((shape != null) && shape.intersects(clip)) {
             if (_hobject == cluster) {
                 gfx.setComposite(HIGHLIGHT_ALPHA);
@@ -573,10 +562,9 @@ public class StageScenePanel extends MisoScenePanel
         if (_scene == null) {
             return false;
         }
-        Iterator iter = _scene.getPortals();
+        Iterator<Portal> iter = _scene.getPortals();
         while (iter.hasNext()) {
-            Portal p = (Portal)iter.next();
-            if (loc.equals(p.loc)) {
+            if (loc.equals(iter.next().loc)) {
                 return true;
             }
         }
@@ -596,15 +584,14 @@ public class StageScenePanel extends MisoScenePanel
     /** Used to render portals as objects in a scene. */
     protected class PortalObjectTile extends ObjectTile
     {
-        public boolean hovered = false;
+        public boolean hovered;
 
-        public PortalObjectTile (int ox, int oy)
-        {
+        public PortalObjectTile (int ox, int oy) {
             setOrigin(ox, oy);
         }
 
-        public void paint (Graphics2D gfx, int x, int y)
-        {
+        @Override
+        public void paint (Graphics2D gfx, int x, int y) {
             Composite ocomp = gfx.getComposite();
             if (!isResponsive() || !hovered) {
                 gfx.setComposite(INACTIVE_PORTAL_ALPHA);
@@ -624,13 +611,13 @@ public class StageScenePanel extends MisoScenePanel
     protected StageScene _scene;
 
     /** Contains scene objects for our portals. */
-    protected ArrayList _portobjs = new ArrayList();
+    protected List<SceneObject> _portobjs = Lists.newArrayList();
 
     /** Shapes describing the clusters, indexed by cluster. */
-    protected HashMap _clusters = new HashMap();
+    protected Map<Cluster, Shape> _clusters = Maps.newHashMap();
 
     /** Shapes describing the clusters, indexed by cluster. */
-    protected HashMap _clusterWells = new HashMap();
+    protected Map<Cluster, Shape> _clusterWells = Maps.newHashMap();
 
     /** Handles scene object colorization. */
     protected SceneColorizer _rizer;
