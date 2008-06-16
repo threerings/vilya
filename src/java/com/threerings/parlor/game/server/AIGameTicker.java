@@ -21,8 +21,12 @@
 
 package com.threerings.parlor.game.server;
 
-import java.util.Iterator;
+import static com.threerings.parlor.Log.log;
 import java.util.HashSet;
+import java.util.List;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import com.samskivert.util.Interval;
 
@@ -63,7 +67,7 @@ public class AIGameTicker extends Interval
     private AIGameTicker ()
     {
         super(CrowdServer.omgr);
-        _games = new HashSet();
+        _games = Sets.newHashSet();
 
         schedule(TICK_FREQUENCY, true);
     }
@@ -93,16 +97,30 @@ public class AIGameTicker extends Interval
     /**
      * Tick all the game AIs while on the dobj thread.
      */
+    @Override
     public void expired ()
     {
-        Iterator iter = _games.iterator();
-        while (iter.hasNext()) {
-            ((GameManager) iter.next()).tickAIs();
+        List<GameManager> busted = null;
+        for (GameManager game : _games) {
+            try {
+                game.tickAIs();
+            } catch (Throwable t) {
+                log.warning("Game AI going rogue, removing from ticker", "game", game, t);
+                if (busted == null) {
+                    busted = Lists.newArrayList();
+                }
+                busted.add(game);
+            }
+        }
+        if (busted != null) {
+            for (GameManager game : busted) {
+                removeAIGame(game);
+            }
         }
     }
 
     /** Our set of ai games. */
-    protected HashSet _games;
+    protected HashSet<GameManager> _games;
 
     /** Our single ticker for all AI games. */
     protected static AIGameTicker _ticker;
