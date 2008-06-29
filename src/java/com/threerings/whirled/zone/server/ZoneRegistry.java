@@ -21,14 +21,23 @@
 
 package com.threerings.whirled.zone.server;
 
-import com.samskivert.util.HashIntMap;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
+import com.samskivert.util.IntMap;
+import com.samskivert.util.IntMaps;
+
+import com.threerings.presents.data.ClientObject;
+import com.threerings.presents.server.InvocationException;
 import com.threerings.presents.server.InvocationManager;
 
+import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.server.LocationManager;
 import com.threerings.whirled.server.SceneRegistry;
 
+import com.threerings.whirled.zone.client.ZoneService;
 import com.threerings.whirled.zone.data.ZoneCodes;
+import com.threerings.whirled.zone.data.ZonedBodyObject;
 import com.threerings.whirled.zone.util.ZoneUtil;
 
 import static com.threerings.whirled.zone.Log.log;
@@ -37,19 +46,16 @@ import static com.threerings.whirled.zone.Log.log;
  * The zone registry takes care of mapping zone requests to the appropriate registered zone
  * manager.
  */
+@Singleton
 public class ZoneRegistry
+    implements ZoneProvider
 {
-    /** Implements the server-side of the zone-related services. */
-    public ZoneProvider zoneprov;
-
     /**
      * Creates a zone manager with the supplied configuration.
      */
-    public ZoneRegistry (InvocationManager invmgr, LocationManager locman, SceneRegistry screg)
+    @Inject public ZoneRegistry (InvocationManager invmgr)
     {
-        // create a zone provider and register it with the invocation services
-        zoneprov = new ZoneProvider(locman, this, screg);
-        invmgr.registerDispatcher(new ZoneDispatcher(zoneprov), ZoneCodes.WHIRLED_GROUP);
+        invmgr.registerDispatcher(new ZoneDispatcher(this), ZoneCodes.WHIRLED_GROUP);
     }
 
     /**
@@ -60,7 +66,7 @@ public class ZoneRegistry
      */
     public void registerZoneManager (byte zoneType, ZoneManager manager)
     {
-        ZoneManager old = (ZoneManager)_managers.get(zoneType);
+        ZoneManager old = _managers.get(zoneType);
         if (old != null) {
             log.warning("Zone manager already registered with requested type [type=" + zoneType +
                         ", old=" + old + ", new=" + manager + "].");
@@ -76,10 +82,104 @@ public class ZoneRegistry
      */
     public ZoneManager getZoneManager (int qualifiedZoneId)
     {
-        int zoneType = ZoneUtil.zoneType(qualifiedZoneId);
-        return (ZoneManager)_managers.get(zoneType);
+        return _managers.get(ZoneUtil.zoneType(qualifiedZoneId));
+    }
+
+    /**
+     * Ejects the specified body from their current scene and sends them a request to move to the
+     * specified new zone and scene. This is the zone-equivalent to {@link
+     * LocationProvider#moveBody}.
+     *
+     * @return null if the user was forcibly moved, or a string indicating the reason for denial of
+     * departure of their current zone (from {@link ZoneManager#ratifyBodyExit}).
+     */
+    public String moveBody (ZonedBodyObject source, int zoneId, int sceneId)
+    {
+        if (source.getZoneId() == zoneId) {
+            // handle the case of moving somewhere in the same zone
+            _screg.moveBody((BodyObject) source, sceneId);
+
+        } else {
+            // first remove them from their old location
+            String reason = leaveOccupiedZone(source);
+            if (reason != null) {
+                return reason;
+            }
+
+            // then send a forced move notification
+            ZoneSender.forcedMove((BodyObject)source, zoneId, sceneId);
+        }
+        return null;
+    }
+
+    /**
+     * Ejects the specified body from their current scene and zone. This is the zone equivalent to
+     * {@link LocationProvider#leaveOccupiedPlace}.
+     *
+     * @return null if the user was forcibly moved, or a string indicating the reason for denial of
+     * departure of their current zone (from {@link ZoneManager#ratifyBodyExit}).
+     */
+    public String leaveOccupiedZone (ZonedBodyObject source)
+    {
+        // look up the caller's current zone id and make sure it is happy about their departure
+        // from the current zone
+        ZoneManager zmgr = getZoneManager(source.getZoneId());
+        String msg;
+        if (zmgr != null &&
+            (msg = zmgr.ratifyBodyExit((BodyObject)source)) != null) {
+            return msg;
+        }
+
+        // remove them from their occupied scene
+        _screg.leaveOccupiedScene((BodyObject)source);
+
+        // and clear out their zone information
+        source.setZoneId(-1);
+
+        return null;
+    }
+
+    // from interface ZoneProvider
+    public void moveTo (ClientObject caller, int zoneId, int sceneId,
+                        int sceneVer, ZoneService.ZoneMoveListener listener)
+        throws InvocationException
+    {
+        if (!(caller instanceof ZonedBodyObject)) {
+            log.warning("Request to switch zones by non-ZonedBodyObject " +
+                        "[clobj=" + caller.getClass() + "].");
+            throw new InvocationException(ZoneCodes.INTERNAL_ERROR);
+        }
+
+        // look up the caller's current zone id and make sure it is happy about their departure
+        // from the current zone
+        BodyObject body = (BodyObject)caller;
+        ZoneManager ozmgr = getZoneManager(((ZonedBodyObject)caller).getZoneId());
+        if (ozmgr != null) {
+            String msg = ozmgr.ratifyBodyExit(body);
+            if (msg != null) {
+                throw new InvocationException(msg);
+            }
+        }
+
+        // look up the zone manager for the zone
+        ZoneManager zmgr = getZoneManager(zoneId);
+        if (zmgr == null) {
+            log.warning("Requested to enter a zone for which we have no manager " +
+                        "[user=" + body.who() + ", zoneId=" + zoneId + "].");
+            throw new InvocationException(ZoneCodes.NO_SUCH_ZONE);
+        }
+
+        // resolve the zone and move the user
+        zmgr.resolveZone(zoneId, new ZoneMoveHandler(_locman, zmgr, _screg, (BodyObject)caller,
+                                                     sceneId, sceneVer, listener));
     }
 
     /** A table of zone managers. */
-    protected HashIntMap _managers = new HashIntMap();
+    protected IntMap<ZoneManager> _managers = IntMaps.newHashIntMap();
+
+    /** Provides access to scene managers by scene. */
+    @Inject protected SceneRegistry _screg;
+
+    /** Provides location services. */
+    @Inject protected LocationManager _locman;
 }

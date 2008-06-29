@@ -25,6 +25,7 @@ import com.threerings.presents.server.InvocationException;
 
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceConfig;
+import com.threerings.crowd.server.LocationManager;
 
 import com.threerings.whirled.client.SceneService;
 import com.threerings.whirled.data.SceneModel;
@@ -33,7 +34,6 @@ import com.threerings.whirled.server.AbstractSceneMoveHandler;
 import com.threerings.whirled.server.SceneManager;
 import com.threerings.whirled.server.SceneMoveHandler;
 import com.threerings.whirled.server.SceneRegistry;
-import com.threerings.whirled.server.WhirledServer;
 
 import com.threerings.whirled.zone.client.ZoneService;
 import com.threerings.whirled.zone.data.ZoneCodes;
@@ -48,11 +48,13 @@ import static com.threerings.whirled.zone.Log.log;
 public class ZoneMoveHandler extends AbstractSceneMoveHandler
     implements ZoneManager.ResolutionListener
 {
-    public ZoneMoveHandler (ZoneManager zmgr, BodyObject body, int sceneId, int sceneVer,
+    public ZoneMoveHandler (LocationManager locmgr, ZoneManager zmgr, SceneRegistry screg,
+                            BodyObject body, int sceneId, int sceneVer,
                             ZoneService.ZoneMoveListener listener)
     {
-        super(body, listener);
+        super(locmgr, body, listener);
         _zmgr = zmgr;
+        _screg = screg;
         _sceneId = sceneId;
         _version = sceneVer;
     }
@@ -69,7 +71,7 @@ public class ZoneMoveHandler extends AbstractSceneMoveHandler
         _summary = summary;
 
         // now resolve the target scene
-        WhirledServer.screg.resolveScene(_sceneId, this);
+        _screg.resolveScene(_sceneId, this);
     }
 
     // from interface ZoneManager.ResolutionListener
@@ -85,7 +87,7 @@ public class ZoneMoveHandler extends AbstractSceneMoveHandler
     {
         // move to the place object associated with this scene
         int ploid = scmgr.getPlaceObject().getOid();
-        PlaceConfig config = WhirledServer.locman.moveTo(_body, ploid);
+        PlaceConfig config = _locman.moveTo(_body, ploid);
 
         // now that we've moved, we can update the user object with the new scene and zone ids
         _body.startTransaction();
@@ -114,6 +116,7 @@ public class ZoneMoveHandler extends AbstractSceneMoveHandler
     }
 
     protected ZoneManager _zmgr;
+    protected SceneRegistry _screg;
     protected int _sceneId, _version;
     protected ZoneSummary _summary;
 }
