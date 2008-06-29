@@ -35,7 +35,7 @@ public class TableLobbyManager extends LobbyManager
     {
         super.didStartup();
         // now that we have our place object, we can create our table manager
-        _tmgr = new TableManager(getPlaceObject());
+        _tmgr = new TableManager(_omgr, _invmgr, _registry, getPlaceObject());
     }
 
     // documentation inherited
