@@ -32,9 +32,9 @@ import com.threerings.presents.server.InvocationException;
 
 import com.threerings.crowd.chat.data.UserMessage;
 import com.threerings.crowd.chat.server.SpeakUtil;
+import com.threerings.crowd.server.PlaceRegistry;
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.OccupantInfo;
-import com.threerings.crowd.server.CrowdServer;
 
 import com.threerings.whirled.server.SceneManager;
 
@@ -60,10 +60,9 @@ public class SpotSceneManager extends SceneManager
     /**
      * Move the specified body to the default portal, if possible.
      */
-    public static void moveBodyToDefaultPortal (BodyObject body)
+    public static void moveBodyToDefaultPortal (PlaceRegistry plreg, BodyObject body)
     {
-        SpotSceneManager mgr = (SpotSceneManager)
-            CrowdServer.plreg.getPlaceManager(body.getPlaceOid());
+        SpotSceneManager mgr = (SpotSceneManager)plreg.getPlaceManager(body.getPlaceOid());
         if (mgr != null) {
             mgr.moveToDefaultPortal(body);
         }
@@ -313,7 +312,7 @@ public class SpotSceneManager extends SceneManager
         }
 
         // otherwise see if they sent us the user's oid
-        DObject tobj = CrowdServer.omgr.getObject(targetOid);
+        DObject tobj = _omgr.getObject(targetOid);
         if (!(tobj instanceof BodyObject)) {
             log.info("Can't join cluster, missing target [creator=" + joiner.who() +
                      ", targetOid=" + targetOid + "].");
@@ -385,7 +384,7 @@ public class SpotSceneManager extends SceneManager
      */
     protected ClusterRecord getCluster (int bodyOid)
     {
-        BodyObject bobj = (BodyObject)CrowdServer.omgr.getObject(bodyOid);
+        BodyObject bobj = (BodyObject)_omgr.getObject(bodyOid);
         if (bobj instanceof ClusteredBodyObject) {
             return _clusters.get(((ClusteredBodyObject)bobj).getClusterOid());
         } else {
@@ -457,7 +456,7 @@ public class SpotSceneManager extends SceneManager
     {
         public ClusterRecord ()
         {
-            _clobj = CrowdServer.omgr.registerObject(new ClusterObject());
+            _clobj = _omgr.registerObject(new ClusterObject());
             _clusters.put(_clobj.getOid(), this);
 
             // let any mapped users know about our cluster
@@ -579,7 +578,7 @@ public class SpotSceneManager extends SceneManager
             if (doRemoval) {
                 _clusters.remove(_clobj.getOid());
             }
-            CrowdServer.omgr.destroyObject(_clobj.getOid());
+            _omgr.destroyObject(_clobj.getOid());
         }
 
         protected ClusterObject _clobj;

@@ -24,6 +24,7 @@ package com.threerings.whirled.spot.server;
 import com.threerings.presents.server.InvocationException;
 
 import com.threerings.crowd.data.BodyObject;
+import com.threerings.crowd.server.LocationManager;
 
 import com.threerings.whirled.client.SceneService;
 import com.threerings.whirled.server.SceneManager;
@@ -36,10 +37,10 @@ import com.threerings.whirled.spot.data.Portal;
  */
 public class SpotSceneMoveHandler extends SceneMoveHandler
 {
-    public SpotSceneMoveHandler (SpotSceneManager srcmgr, BodyObject body, int sceneVer,
-                                 Portal dest, SceneService.SceneMoveListener listener)
+    public SpotSceneMoveHandler (LocationManager locman, SpotSceneManager srcmgr, BodyObject body,
+                                 int sceneVer, Portal dest, SceneService.SceneMoveListener listener)
     {
-        super(body, sceneVer, listener);
+        super(locman, body, sceneVer, listener);
         _srcmgr = srcmgr;
         _dest = dest;
     }
