@@ -31,7 +31,7 @@ import com.threerings.whirled.zone.data.ZoneMarshaller;
 /**
  * Dispatches requests to the {@link ZoneProvider}.
  */
-public class ZoneDispatcher extends InvocationDispatcher
+public class ZoneDispatcher extends InvocationDispatcher<ZoneMarshaller>
 {
     /**
      * Creates a dispatcher that may be registered to dispatch invocation
@@ -43,7 +43,7 @@ public class ZoneDispatcher extends InvocationDispatcher
     }
 
     @Override // documentation inherited
-    public InvocationMarshaller createMarshaller ()
+    public ZoneMarshaller createMarshaller ()
     {
         return new ZoneMarshaller();
     }

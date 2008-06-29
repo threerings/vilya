@@ -34,7 +34,7 @@ import com.threerings.util.Name;
 /**
  * Dispatches requests to the {@link ParlorProvider}.
  */
-public class ParlorDispatcher extends InvocationDispatcher
+public class ParlorDispatcher extends InvocationDispatcher<ParlorMarshaller>
 {
     /**
      * Creates a dispatcher that may be registered to dispatch invocation
@@ -46,7 +46,7 @@ public class ParlorDispatcher extends InvocationDispatcher
     }
 
     @Override // documentation inherited
-    public InvocationMarshaller createMarshaller ()
+    public ParlorMarshaller createMarshaller ()
     {
         return new ParlorMarshaller();
     }

@@ -32,7 +32,7 @@ import com.threerings.presents.server.InvocationException;
 /**
  * Dispatches requests to the {@link TourniesProvider}.
  */
-public class TourniesDispatcher extends InvocationDispatcher
+public class TourniesDispatcher extends InvocationDispatcher<TourniesMarshaller>
 {
     /**
      * Creates a dispatcher that may be registered to dispatch invocation
@@ -44,7 +44,7 @@ public class TourniesDispatcher extends InvocationDispatcher
     }
 
     @Override // documentation inherited
-    public InvocationMarshaller createMarshaller ()
+    public TourniesMarshaller createMarshaller ()
     {
         return new TourniesMarshaller();
     }

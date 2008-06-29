@@ -32,7 +32,7 @@ import com.threerings.stage.data.StageSceneMarshaller;
 /**
  * Dispatches requests to the {@link StageSceneProvider}.
  */
-public class StageSceneDispatcher extends InvocationDispatcher
+public class StageSceneDispatcher extends InvocationDispatcher<StageSceneMarshaller>
 {
     /**
      * Creates a dispatcher that may be registered to dispatch invocation
@@ -44,7 +44,7 @@ public class StageSceneDispatcher extends InvocationDispatcher
     }
 
     @Override // documentation inherited
-    public InvocationMarshaller createMarshaller ()
+    public StageSceneMarshaller createMarshaller ()
     {
         return new StageSceneMarshaller();
     }

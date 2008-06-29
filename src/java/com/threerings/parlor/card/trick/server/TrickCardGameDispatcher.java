@@ -31,7 +31,7 @@ import com.threerings.presents.server.InvocationException;
 /**
  * Dispatches requests to the {@link TrickCardGameProvider}.
  */
-public class TrickCardGameDispatcher extends InvocationDispatcher
+public class TrickCardGameDispatcher extends InvocationDispatcher<TrickCardGameMarshaller>
 {
     /**
      * Creates a dispatcher that may be registered to dispatch invocation
@@ -43,7 +43,7 @@ public class TrickCardGameDispatcher extends InvocationDispatcher
     }
 
     @Override // documentation inherited
-    public InvocationMarshaller createMarshaller ()
+    public TrickCardGameMarshaller createMarshaller ()
     {
         return new TrickCardGameMarshaller();
     }

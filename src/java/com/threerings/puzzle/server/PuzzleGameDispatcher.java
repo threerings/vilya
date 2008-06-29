@@ -31,7 +31,7 @@ import com.threerings.puzzle.data.PuzzleGameMarshaller;
 /**
  * Dispatches requests to the {@link PuzzleGameProvider}.
  */
-public class PuzzleGameDispatcher extends InvocationDispatcher
+public class PuzzleGameDispatcher extends InvocationDispatcher<PuzzleGameMarshaller>
 {
     /**
      * Creates a dispatcher that may be registered to dispatch invocation
@@ -43,7 +43,7 @@ public class PuzzleGameDispatcher extends InvocationDispatcher
     }
 
     @Override // documentation inherited
-    public InvocationMarshaller createMarshaller ()
+    public PuzzleGameMarshaller createMarshaller ()
     {
         return new PuzzleGameMarshaller();
     }

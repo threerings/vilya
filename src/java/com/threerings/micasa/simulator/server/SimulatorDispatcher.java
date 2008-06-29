@@ -31,7 +31,7 @@ import com.threerings.presents.server.InvocationException;
 /**
  * Dispatches requests to the {@link SimulatorProvider}.
  */
-public class SimulatorDispatcher extends InvocationDispatcher
+public class SimulatorDispatcher extends InvocationDispatcher<SimulatorMarshaller>
 {
     /**
      * Creates a dispatcher that may be registered to dispatch invocation
@@ -43,7 +43,7 @@ public class SimulatorDispatcher extends InvocationDispatcher
     }
 
     @Override // documentation inherited
-    public InvocationMarshaller createMarshaller ()
+    public SimulatorMarshaller createMarshaller ()
     {
         return new SimulatorMarshaller();
     }

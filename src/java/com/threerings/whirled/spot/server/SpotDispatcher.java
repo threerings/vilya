@@ -33,7 +33,7 @@ import com.threerings.whirled.spot.data.SpotMarshaller;
 /**
  * Dispatches requests to the {@link SpotProvider}.
  */
-public class SpotDispatcher extends InvocationDispatcher
+public class SpotDispatcher extends InvocationDispatcher<SpotMarshaller>
 {
     /**
      * Creates a dispatcher that may be registered to dispatch invocation
@@ -45,7 +45,7 @@ public class SpotDispatcher extends InvocationDispatcher
     }
 
     @Override // documentation inherited
-    public InvocationMarshaller createMarshaller ()
+    public SpotMarshaller createMarshaller ()
     {
         return new SpotMarshaller();
     }

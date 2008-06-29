@@ -31,7 +31,7 @@ import com.threerings.whirled.data.SceneMarshaller;
 /**
  * Dispatches requests to the {@link SceneProvider}.
  */
-public class SceneDispatcher extends InvocationDispatcher
+public class SceneDispatcher extends InvocationDispatcher<SceneMarshaller>
 {
     /**
      * Creates a dispatcher that may be registered to dispatch invocation
@@ -43,7 +43,7 @@ public class SceneDispatcher extends InvocationDispatcher
     }
 
     @Override // documentation inherited
-    public InvocationMarshaller createMarshaller ()
+    public SceneMarshaller createMarshaller ()
     {
         return new SceneMarshaller();
     }

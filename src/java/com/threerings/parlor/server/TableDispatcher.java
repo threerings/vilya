@@ -33,7 +33,7 @@ import com.threerings.presents.server.InvocationException;
 /**
  * Dispatches requests to the {@link TableProvider}.
  */
-public class TableDispatcher extends InvocationDispatcher
+public class TableDispatcher extends InvocationDispatcher<TableMarshaller>
 {
     /**
      * Creates a dispatcher that may be registered to dispatch invocation
@@ -45,7 +45,7 @@ public class TableDispatcher extends InvocationDispatcher
     }
 
     @Override // documentation inherited
-    public InvocationMarshaller createMarshaller ()
+    public TableMarshaller createMarshaller ()
     {
         return new TableMarshaller();
     }
