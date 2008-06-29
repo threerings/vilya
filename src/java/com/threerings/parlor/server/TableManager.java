@@ -24,7 +24,9 @@ package com.threerings.parlor.server;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import com.samskivert.util.HashIntMap;
+import com.google.inject.Inject;
+import com.samskivert.util.IntMap;
+import com.samskivert.util.IntMaps;
 import com.samskivert.util.StringUtil;
 import com.threerings.util.Name;
 
@@ -39,12 +41,14 @@ import com.threerings.presents.dobj.ObjectDeathListener;
 import com.threerings.presents.dobj.ObjectDestroyedEvent;
 import com.threerings.presents.dobj.ObjectRemovedEvent;
 import com.threerings.presents.dobj.OidListListener;
+import com.threerings.presents.dobj.RootDObjectManager;
 import com.threerings.presents.server.InvocationException;
+import com.threerings.presents.server.InvocationManager;
 
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.OccupantInfo;
+import com.threerings.crowd.server.PlaceRegistry;
 import com.threerings.crowd.data.PlaceObject;
-import com.threerings.crowd.server.CrowdServer;
 
 import com.threerings.parlor.client.TableService;
 import com.threerings.parlor.data.ParlorCodes;
@@ -69,12 +73,16 @@ public class TableManager
      * Creates a table manager that will manage tables in the supplied distributed object (which
      * must implement {@link TableLobbyObject}.
      */
-    public TableManager (DObject tableObject)
+    public TableManager (InvocationManager invmgr, RootDObjectManager omgr, PlaceRegistry plreg,
+                         DObject tableObject)
     {
+        _invmgr = invmgr;
+        _omgr = omgr;
+        _plreg = plreg;
+
         // set up our object references
         _tlobj = (TableLobbyObject)tableObject;
-        _tlobj.setTableService(
-            (TableMarshaller)CrowdServer.invmgr.registerDispatcher(new TableDispatcher(this)));
+        _tlobj.setTableService(invmgr.registerDispatcher(new TableDispatcher(this)));
         _dobj = tableObject;
 
         // if our table is in a "place" add ourselves as a listener so that we can tell if a user
@@ -90,7 +98,7 @@ public class TableManager
     public void shutdown ()
     {
         if (_tlobj != null) {
-            CrowdServer.invmgr.clearDispatcher(_tlobj.getTableService());
+            _invmgr.clearDispatcher(_tlobj.getTableService());
             _tlobj.setTableService(null);
         }
         if (_dobj instanceof PlaceObject) {
@@ -311,7 +319,7 @@ public class TableManager
      */
     final protected Table notePlayerRemoved (int playerOid)
     {
-        return notePlayerRemoved(playerOid, (BodyObject) CrowdServer.omgr.getObject(playerOid));
+        return notePlayerRemoved(playerOid, (BodyObject)_omgr.getObject(playerOid));
     }
 
     /**
@@ -367,7 +375,7 @@ public class TableManager
     protected GameManager createGameManager (GameConfig config)
         throws InstantiationException, InvocationException
     {
-        return (GameManager)CrowdServer.plreg.createPlace(config);
+        return (GameManager)_plreg.createPlace(config);
     }
 
     /**
@@ -437,7 +445,7 @@ public class TableManager
         }
 
         // update this table's occupants information and update the table
-        GameObject gameObj = (GameObject) CrowdServer.omgr.getObject(gameOid);
+        GameObject gameObj = (GameObject)_omgr.getObject(gameOid);
         table.updateOccupants(gameObj);
         _tlobj.updateTables(table);
     }
@@ -519,30 +527,6 @@ public class TableManager
         }
     } // END: class UserListener
 
-    /** A reference to the distributed object in which we're managing tables. */
-    protected DObject _dobj;
-
-    /** A reference to our distributed object casted to a table lobby object. */
-    protected TableLobbyObject _tlobj;
-
-    /** The class of table we instantiate. */
-    protected Class<? extends Table> _tableClass = Table.class;
-
-    /** The table of pending tables. */
-    protected HashIntMap<Table> _tables = new HashIntMap<Table>();
-
-    /** A mapping from body oid to table. */
-    protected HashIntMap<Table> _boidMap = new HashIntMap<Table>();
-
-    /** Once a game starts, a mapping from gameOid to table. */
-    protected HashIntMap<Table> _goidMap = new HashIntMap<Table>();
-
-    /** A listener that prunes tables after the game dies. */
-    protected ChangeListener _gameListener = new GameListener();
-
-    /** A listener that removes users from tables when they're no longer able to play. */
-    protected ChangeListener _userListener = new UserListener();
-
     /** Listens for players leaving the place that contains our tables. */
     protected ChangeListener _placeListener = new OidListListener() {
         public void objectAdded (ObjectAddedEvent event) {
@@ -555,4 +539,32 @@ public class TableManager
             }
         }
     };
+
+    /** A reference to the distributed object in which we're managing tables. */
+    protected DObject _dobj;
+
+    /** A reference to our distributed object casted to a table lobby object. */
+    protected TableLobbyObject _tlobj;
+
+    /** The class of table we instantiate. */
+    protected Class<? extends Table> _tableClass = Table.class;
+
+    /** The table of pending tables. */
+    protected IntMap<Table> _tables = IntMaps.newHashIntMap();
+
+    /** A mapping from body oid to table. */
+    protected IntMap<Table> _boidMap = IntMaps.newHashIntMap();
+
+    /** Once a game starts, a mapping from gameOid to table. */
+    protected IntMap<Table> _goidMap = IntMaps.newHashIntMap();
+
+    /** A listener that prunes tables after the game dies. */
+    protected ChangeListener _gameListener = new GameListener();
+
+    /** A listener that removes users from tables when they're no longer able to play. */
+    protected ChangeListener _userListener = new UserListener();
+
+    protected PlaceRegistry _plreg;
+    protected InvocationManager _invmgr;
+    protected RootDObjectManager _omgr;
 }
