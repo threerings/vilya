@@ -23,28 +23,29 @@ package com.threerings.parlor.rating.server;
 
 import static com.threerings.parlor.Log.log;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
+
+import com.google.common.collect.Lists;
 
 import com.samskivert.io.PersistenceException;
 import com.samskivert.jdbc.RepositoryUnit;
 
 import com.samskivert.util.ArrayIntSet;
 import com.samskivert.util.ArrayUtil;
-import com.samskivert.util.HashIntMap;
+import com.samskivert.util.IntMap;
+import com.samskivert.util.IntMaps;
+import com.samskivert.util.Invoker;
 import com.samskivert.util.StringUtil;
 
 import com.threerings.util.Name;
-
 import com.threerings.media.util.MathUtil;
 
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.data.PlaceObject;
-import com.threerings.crowd.server.CrowdServer;
 
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.game.data.GameObject;
@@ -61,6 +62,11 @@ import com.threerings.parlor.rating.server.persist.RatingRepository;
 public abstract class RatingManagerDelegate extends GameManagerDelegate
     implements RatingCodes
 {
+    public RatingManagerDelegate (Invoker invoker)
+    {
+        _invoker = invoker;
+    }
+
     @Override // from PlaceManagerDelegate
     public void didInit (PlaceConfig config)
     {
@@ -123,7 +129,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
 
         // load up the ratings for all players in this game; also make a note of the persistent
         // player id of each player position for seated table games
-        ArrayList<Rating> toLoad = new ArrayList<Rating>();
+        List<Rating> toLoad = Lists.newArrayList();
         for (int ii = 0, ll = _gobj.occupants.size(); ii < ll; ii++) {
             BodyObject bobj = (BodyObject)_omgr.getObject(_gobj.occupants.get(ii));
             int pidx = _gmgr.getPlayerIndex(bobj.getVisibleName());
@@ -158,7 +164,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
         updateRatings();
 
         // any players who are no longer in the room need their ratings flushed immediately
-        ArrayList<Rating> flushes = new ArrayList<Rating>();
+        List<Rating> flushes = Lists.newArrayList();
         for (Rating rating : _ratings.values()) {
             if (rating.modified && !_gobj.occupants.contains(rating.playerOid)) {
                 flushes.add(rating.cloneForSave());
@@ -217,10 +223,10 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
         }
 
         final int gameId = getGameId();
-        CrowdServer.invoker.postUnit(new RepositoryUnit("loadRatings(" + gameId + ")") {
+        _invoker.postUnit(new RepositoryUnit("loadRatings(" + gameId + ")") {
             public void invokePersist () throws Exception {
                 // map the records by player id so that we can correlate with the db results
-                HashIntMap<Rating> map = new HashIntMap<Rating>();
+                IntMap<Rating> map = IntMaps.newHashIntMap();
                 for (Rating rating : ratings) {
                     map.put(rating.playerId, rating);
                 }
@@ -252,7 +258,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
         }
 
         final int gameId = getGameId();
-        CrowdServer.invoker.postUnit(new RepositoryUnit("saveRatings(" + gameId + ")") {
+        _invoker.postUnit(new RepositoryUnit("saveRatings(" + gameId + ")") {
             public void invokePersist () throws Exception {
                 for (Rating rating : ratings) {
                     _repo.setRating(gameId, rating.playerId, rating.rating, rating.experience);
@@ -474,8 +480,11 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
     protected int[] _playerIds;
 
     /** The ratings for each player as they were at the beginning of the game. */
-    protected HashIntMap<Rating> _ratings = new HashIntMap<Rating>();
+    protected IntMap<Rating> _ratings = IntMaps.newHashIntMap();
 
     /** A timestamp set at the beginning of the game, used to calculate its duration. */
     protected int _startStamp;
+
+    /** The invoker on which we'll perform our database activity. */
+    protected Invoker _invoker;
 }
