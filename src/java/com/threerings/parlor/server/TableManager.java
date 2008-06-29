@@ -73,11 +73,11 @@ public class TableManager
      * Creates a table manager that will manage tables in the supplied distributed object (which
      * must implement {@link TableLobbyObject}.
      */
-    public TableManager (InvocationManager invmgr, RootDObjectManager omgr, PlaceRegistry plreg,
+    public TableManager (RootDObjectManager omgr, InvocationManager invmgr, PlaceRegistry plreg,
                          DObject tableObject)
     {
-        _invmgr = invmgr;
         _omgr = omgr;
+        _invmgr = invmgr;
         _plreg = plreg;
 
         // set up our object references
@@ -564,7 +564,7 @@ public class TableManager
     /** A listener that removes users from tables when they're no longer able to play. */
     protected ChangeListener _userListener = new UserListener();
 
-    protected PlaceRegistry _plreg;
-    protected InvocationManager _invmgr;
     protected RootDObjectManager _omgr;
+    protected InvocationManager _invmgr;
+    protected PlaceRegistry _plreg;
 }
