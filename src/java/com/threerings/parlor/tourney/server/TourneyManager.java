@@ -31,14 +31,13 @@ import com.threerings.crowd.data.BodyObject;
 import com.threerings.parlor.tourney.data.Participant;
 import com.threerings.parlor.tourney.data.TourneyConfig;
 import com.threerings.parlor.tourney.data.TourneyCodes;
-import com.threerings.parlor.tourney.data.TourneyMarshaller;
 import com.threerings.parlor.tourney.data.TourneyObject;
 
 import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.data.ClientObject;
+import com.threerings.presents.dobj.RootDObjectManager;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.presents.server.InvocationManager;
-import com.threerings.presents.server.PresentsDObjectMgr;
-import com.threerings.presents.data.ClientObject;
 
 /**
  * Controls a running tourney.
@@ -46,17 +45,19 @@ import com.threerings.presents.data.ClientObject;
 public abstract class TourneyManager
     implements TourneyProvider, TourneyCodes
 {
-    public TourneyManager (TourneyConfig config, TourniesManager tmgr, Comparable key,
-            InvocationService.ResultListener listener)
+    public TourneyManager (InvocationManager invmgr, RootDObjectManager omgr, TourneyConfig config,
+                           TourniesManager tmgr, Comparable key,
+                           InvocationService.ResultListener listener)
     {
+        _invmgr = invmgr;
+        _omgr = omgr;
         _config = config;
         _tmgr = tmgr;
         _key = key;
 
         // creare and configure our Tourney object
-        _trobj = getOMgr().registerObject(new TourneyObject());
-        _trobj.setTourneyService((TourneyMarshaller)getInvMgr().registerDispatcher(
-                    new TourneyDispatcher(this)));
+        _trobj = _omgr.registerObject(new TourneyObject());
+        _trobj.setTourneyService(_invmgr.registerDispatcher(new TourneyDispatcher(this)));
 
         _trobj.config = config;
 
@@ -255,27 +256,17 @@ public abstract class TourneyManager
 
         // release the tourney provider
         if (_trobj.tourneyService != null) {
-            getInvMgr().clearDispatcher(_trobj.tourneyService);
+            _invmgr.clearDispatcher(_trobj.tourneyService);
             _trobj.tourneyService = null;
         }
 
         // destroy the object in a couple of minutes
-        new Interval(getOMgr()) {
+        new Interval(_omgr) {
             public void expired () {
-                getOMgr().destroyObject(_trobj.getOid());
+                _omgr.destroyObject(_trobj.getOid());
             }
         }.schedule(MINUTE * 2);
     }
-
-    /**
-     * Returns a reference to our distributed object manager.
-     */
-    protected abstract PresentsDObjectMgr getOMgr ();
-
-    /**
-     * Returns a reference to our invocation manager.
-     */
-    protected abstract InvocationManager getInvMgr ();
 
     /**
      * Looks up the BodyObject for a username.
@@ -288,8 +279,11 @@ public abstract class TourneyManager
     protected abstract void joinTourney (BodyObject body)
         throws InvocationException;
 
-    /** One minute in milliseconds. */
-    protected static long MINUTE = 60 * 1000L;
+    /** Used to register and clear invocation services. */
+    protected InvocationManager _invmgr;
+
+    /** Provides distributed object services. */
+    protected RootDObjectManager _omgr;
 
     /** Our touney configuration. */
     protected TourneyConfig _config;
@@ -305,4 +299,7 @@ public abstract class TourneyManager
 
     /** The key this tourney is recorded under. */
     protected Comparable _key;
+
+    /** One minute in milliseconds. */
+    protected static long MINUTE = 60 * 1000L;
 }
