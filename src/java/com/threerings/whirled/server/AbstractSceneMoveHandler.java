@@ -26,6 +26,7 @@ import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.server.InvocationException;
 
 import com.threerings.crowd.data.BodyObject;
+import com.threerings.crowd.server.LocationManager;
 
 import com.threerings.whirled.client.SceneService;
 import com.threerings.whirled.data.SceneCodes;
@@ -40,8 +41,10 @@ import static com.threerings.whirled.Log.log;
 public abstract class AbstractSceneMoveHandler
     implements SceneRegistry.ResolutionListener
 {
-    public AbstractSceneMoveHandler (BodyObject body, InvocationService.InvocationListener listener)
+    public AbstractSceneMoveHandler (LocationManager locman, BodyObject body,
+                                     InvocationService.InvocationListener listener)
     {
+        _locman = locman;
         _body = body;
         _listener = listener;
     }
@@ -80,6 +83,7 @@ public abstract class AbstractSceneMoveHandler
     protected abstract void effectSceneMove (SceneManager scmgr)
         throws InvocationException;
 
+    protected LocationManager _locman;
     protected BodyObject _body;
     protected InvocationService.InvocationListener _listener;
 }

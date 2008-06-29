@@ -26,7 +26,7 @@ import com.threerings.presents.server.InvocationException;
 
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceConfig;
-import com.threerings.crowd.server.CrowdServer;
+import com.threerings.crowd.server.LocationManager;
 
 import com.threerings.whirled.client.SceneService;
 import com.threerings.whirled.data.SceneCodes;
@@ -38,9 +38,10 @@ import com.threerings.whirled.data.SceneUpdate;
  */
 public class SceneMoveHandler extends AbstractSceneMoveHandler
 {
-    public SceneMoveHandler (BodyObject body, int sceneVer, SceneService.SceneMoveListener listener)
+    public SceneMoveHandler (LocationManager locman, BodyObject body, int sceneVer,
+                             SceneService.SceneMoveListener listener)
     {
-        super(body, listener);
+        super(locman, body, listener);
         _version = sceneVer;
     }
 
@@ -50,7 +51,7 @@ public class SceneMoveHandler extends AbstractSceneMoveHandler
     {
         // move to location associated with this scene
         int ploid = scmgr.getPlaceObject().getOid();
-        PlaceConfig config = CrowdServer.locman.moveTo(_body, ploid);
+        PlaceConfig config = _locman.moveTo(_body, ploid);
 
         // check to see if they need a newer version of the scene data
         SceneService.SceneMoveListener listener = (SceneService.SceneMoveListener)_listener;

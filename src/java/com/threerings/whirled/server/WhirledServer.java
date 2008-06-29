@@ -21,6 +21,7 @@
 
 package com.threerings.whirled.server;
 
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 import com.threerings.util.Name;
@@ -52,9 +53,6 @@ public abstract class WhirledServer extends CrowdServer
         }
     }
 
-    /** The scene registry. */
-    public static SceneRegistry screg;
-
     @Override // from CrowdServer
     public void init (Injector injector)
         throws Exception
@@ -62,7 +60,7 @@ public abstract class WhirledServer extends CrowdServer
         super.init(injector);
 
         // configure the client to use our whirled client
-        clmgr.setClientFactory(new ClientFactory() {
+        _clmgr.setClientFactory(new ClientFactory() {
             public Class<? extends PresentsClient> getClientClass (AuthRequest areq) {
                 return WhirledClient.class;
             }
@@ -70,14 +68,5 @@ public abstract class WhirledServer extends CrowdServer
                 return ClientResolver.class;
             }
         });
-
-        // create our scene registry
-        screg = createSceneRegistry();
     }
-
-    /**
-     * Creates the scene registry to be used on this server.
-     */
-    protected abstract SceneRegistry createSceneRegistry ()
-        throws Exception;
 }

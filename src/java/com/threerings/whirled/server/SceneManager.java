@@ -21,11 +21,14 @@
 
 package com.threerings.whirled.server;
 
+import com.google.inject.Inject;
+
 import com.samskivert.jdbc.WriteOnlyUnit;
 import com.samskivert.util.Invoker;
 
+import com.threerings.presents.annotation.MainInvoker;
+
 import com.threerings.crowd.data.Place;
-import com.threerings.crowd.server.CrowdServer;
 import com.threerings.crowd.server.PlaceManager;
 
 import com.threerings.whirled.data.Scene;
@@ -118,7 +121,7 @@ public class SceneManager extends PlaceManager
 
         // Wait until us and all of our subclasses have completely finished running didStartup
         // prior to registering the scene as being ready.
-        CrowdServer.omgr.postRunnable(new Runnable() {
+        _omgr.postRunnable(new Runnable() {
             public void run () {
                 _screg.sceneManagerDidStart(SceneManager.this);
             }
@@ -157,7 +160,7 @@ public class SceneManager extends PlaceManager
 
         // and apply and store it in the repository
         if (isPersistent()) {
-            WhirledServer.invoker.postUnit(new WriteOnlyUnit("recordUpdate(" + update + ")") {
+            _invoker.postUnit(new WriteOnlyUnit("recordUpdate(" + update + ")") {
                 public void invokePersist () throws Exception {
                     _screg.getSceneRepository().applyAndRecordUpdate(_scene.getSceneModel(), update);
                 }
@@ -193,4 +196,7 @@ public class SceneManager extends PlaceManager
     /** A reference to the scene registry so that we can call back to it when we're fully
      * initialized. */
     protected SceneRegistry _screg;
+
+    /** The invoker on which we'll do our database operations. */
+    @Inject protected @MainInvoker Invoker _invoker;
 }

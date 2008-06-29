@@ -21,11 +21,18 @@
 
 package com.threerings.whirled.server;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import com.google.common.collect.Lists;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import com.samskivert.jdbc.RepositoryUnit;
-import com.samskivert.util.HashIntMap;
+import com.samskivert.util.IntMaps;
+import com.samskivert.util.IntMap;
+import com.samskivert.util.Invoker;
 
+import com.threerings.presents.annotation.MainInvoker;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.server.InvocationException;
@@ -33,7 +40,7 @@ import com.threerings.presents.server.InvocationManager;
 
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceConfig;
-import com.threerings.crowd.server.CrowdServer;
+import com.threerings.crowd.server.LocationManager;
 import com.threerings.crowd.server.PlaceManager;
 import com.threerings.crowd.server.PlaceRegistry;
 
@@ -61,6 +68,7 @@ import static com.threerings.whirled.Log.log;
  *
  * <p><em>Note:</em> All access to the scene registry should take place from the dobjmgr thread.
  */
+@Singleton
 public class SceneRegistry
     implements SceneCodes, SceneProvider
 {
@@ -97,16 +105,10 @@ public class SceneRegistry
     }
 
     /**
-     * Constructs a scene registry, instructing it to load and store scenes using the supplied
-     * scene repository.
+     * Constructs a scene registry.
      */
-    public SceneRegistry (InvocationManager invmgr, SceneRepository screp,
-                          SceneFactory scfact, ConfigFactory confact)
+    @Inject public SceneRegistry (InvocationManager invmgr)
     {
-        _screp = screp;
-        _scfact = scfact;
-        _confact = confact;
-
         // register our scene service
         invmgr.registerDispatcher(new SceneDispatcher(this), SceneCodes.WHIRLED_GROUP);
     }
@@ -166,7 +168,7 @@ public class SceneRegistry
 
         // otherwise we have to load the scene from the repository
         final int fsceneId = sceneId;
-        WhirledServer.invoker.postUnit(new RepositoryUnit("resolveScene(" + sceneId + ")") {
+        _invoker.postUnit(new RepositoryUnit("resolveScene(" + sceneId + ")") {
             public void invokePersist () throws Exception {
                 _model = _screp.loadSceneModel(fsceneId);
                 _updates = _screp.loadUpdates(fsceneId);
@@ -187,7 +189,7 @@ public class SceneRegistry
                         SceneService.SceneMoveListener listener)
     {
         BodyObject body = (BodyObject)caller;
-        resolveScene(sceneId, new SceneMoveHandler(body, sceneVer, listener));
+        resolveScene(sceneId, new SceneMoveHandler(_locman, body, sceneVer, listener));
     }
 
     /**
@@ -197,7 +199,7 @@ public class SceneRegistry
     public void moveBody (BodyObject source, int sceneId)
     {
         // first remove them from their old place
-        CrowdServer.locman.leaveOccupiedPlace(source);
+        _locman.leaveOccupiedPlace(source);
 
         // then send a forced move notification
         SceneSender.forcedMove(source, sceneId);
@@ -210,7 +212,7 @@ public class SceneRegistry
     public void leaveOccupiedScene (BodyObject source)
     {
         // remove them from their occupied place (clears out scene info as well)
-        CrowdServer.locman.leaveOccupiedPlace(source);
+        _locman.leaveOccupiedPlace(source);
     }
     
     /**
@@ -220,11 +222,11 @@ public class SceneRegistry
      */
     protected boolean addResolutionListener (int sceneId, ResolutionListener rl)
     {
-        ArrayList<ResolutionListener> penders = _penders.get(sceneId);
+        List<ResolutionListener> penders = _penders.get(sceneId);
         boolean newList = false;
         
         if (penders == null) {
-            _penders.put(sceneId, penders = new ArrayList<ResolutionListener>());
+            _penders.put(sceneId, penders = Lists.newArrayList());
             newList = true;
         }
         
@@ -247,8 +249,7 @@ public class SceneRegistry
             final Scene scene = _scfact.createScene(model, _confact.createPlaceConfig(model));
 
             // now create our scene manager
-            CrowdServer.plreg.createPlace(
-                scene.getPlaceConfig(), new PlaceRegistry.PreStartupHook() {
+            _plreg.createPlace(scene.getPlaceConfig(), new PlaceRegistry.PreStartupHook() {
                 public void invoke (PlaceManager pmgr) {
                     ((SceneManager)pmgr).setSceneData(scene, updates, SceneRegistry.this);
                 }
@@ -274,7 +275,7 @@ public class SceneRegistry
         }
 
         // alas things didn't work out, notify our penders
-        ArrayList<ResolutionListener> penders = _penders.remove(sceneId);
+        List<ResolutionListener> penders = _penders.remove(sceneId);
         if (penders != null) {
             for (ResolutionListener rl : penders) {
                 try {
@@ -299,7 +300,7 @@ public class SceneRegistry
         log.debug("Registering scene manager", "scid", sceneId, "scmgr", scmgr);
 
         // now notify any penders
-        ArrayList<ResolutionListener> penders = _penders.remove(sceneId);
+        List<ResolutionListener> penders = _penders.remove(sceneId);
         if (penders != null) {
             for (ResolutionListener rl : penders) {
                 try {
@@ -325,18 +326,26 @@ public class SceneRegistry
     }
 
     /** The entity from which we load scene models. */
-    protected SceneRepository _screp;
+    @Inject protected SceneRepository _screp;
 
     /** Used to generate place configs for our scenes. */
-    protected ConfigFactory _confact;
+    @Inject protected ConfigFactory _confact;
 
     /** The entity via which we create scene instances from scene models. */
-    protected SceneFactory _scfact;
+    @Inject protected SceneFactory _scfact;
+
+    /** The invoker on which we do database operations. */
+    @Inject protected @MainInvoker Invoker _invoker;
+
+    /** Provides access to place managers. */
+    @Inject protected PlaceRegistry _plreg;
+
+    /** Provides location services. */
+    @Inject protected LocationManager _locman;
 
     /** A mapping from scene ids to scene managers. */
-    protected HashIntMap<SceneManager> _scenemgrs = new HashIntMap<SceneManager>();
+    protected IntMap<SceneManager> _scenemgrs = IntMaps.newHashIntMap();
 
     /** The table of pending resolution listeners. */
-    protected HashIntMap<ArrayList<ResolutionListener>> _penders = 
-        new HashIntMap<ArrayList<ResolutionListener>>();
+    protected IntMap<List<ResolutionListener>> _penders = IntMaps.newHashIntMap();
 }
