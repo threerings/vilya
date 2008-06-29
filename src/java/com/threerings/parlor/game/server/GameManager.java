@@ -1048,14 +1048,9 @@ public class GameManager extends PlaceManager
             _startmsgs = null;
         }
 
-        // and register ourselves to receive AI ticks
+        // and potentially register ourselves to receive AI ticks
         if (_AIs != null && needsAITick()) {
-            _aiTicker = new Interval(_omgr) {
-                public void expired () {
-                    tickAIs();
-                }
-            };
-            _aiTicker.schedule(AI_TICK_DELAY, false);
+            startAITicker();
         }
 
         // any players who have not claimed that they are ready should now be given le boote royale
@@ -1070,7 +1065,33 @@ public class GameManager extends PlaceManager
     }
 
     /**
-     * Called by the {@link AIGameTicker} if we're registered as an AI game.
+     * Starts our AI ticker if it is not already started.
+     */
+    protected void startAITicker ()
+    {
+        if (_aiTicker == null) {
+            _aiTicker = new Interval(_omgr) {
+                public void expired () {
+                    tickAIs();
+                }
+            };
+            _aiTicker.schedule(AI_TICK_DELAY, false);
+        }
+    }
+
+    /**
+     * Stops our AI ticker if it's running.
+     */
+    protected void stopAITicker ()
+    {
+        if (_aiTicker != null) {
+            _aiTicker.cancel();
+            _aiTicker = null;
+        }
+    }
+
+    /**
+     * Called by the AI ticker if we're registered as an AI game.
      */
     protected void tickAIs ()
     {
@@ -1167,10 +1188,7 @@ public class GameManager extends PlaceManager
     protected void gameDidEnd ()
     {
         // remove ourselves from the AI ticker, if applicable
-        if (_aiTicker != null) {
-            _aiTicker.cancel();
-            _aiTicker = null;
-        }
+        stopAITicker();
 
         // let our delegates do their business
         applyToDelegates(new DelegateOp() {
