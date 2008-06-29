@@ -21,30 +21,33 @@
 
 package com.threerings.micasa.server;
 
+import com.google.inject.Inject;
+
 import com.threerings.presents.net.BootstrapData;
 import com.threerings.crowd.server.CrowdClient;
 
 import com.threerings.micasa.data.MiCasaBootstrapData;
+import com.threerings.micasa.lobby.LobbyRegistry;
 
 /**
- * Extends the Crowd client and provides bootstrap data specific to the
- * MiCasa services.
+ * Extends the Crowd client and provides bootstrap data specific to the MiCasa services.
  */
 public class MiCasaClient extends CrowdClient
 {
-    // documentation inherited
+    @Override // from PresentsClient
     protected BootstrapData createBootstrapData ()
     {
         return new MiCasaBootstrapData();
     }
 
-    // documentation inherited
+    @Override // from PresentsClient
     protected void populateBootstrapData (BootstrapData data)
     {
         super.populateBootstrapData(data);
 
         // let the client know their default lobby oid
-        ((MiCasaBootstrapData)data).defLobbyOid =
-            MiCasaServer.lobreg.getDefaultLobbyOid();
+        ((MiCasaBootstrapData)data).defLobbyOid = _lobreg.getDefaultLobbyOid();
     }
+
+    @Inject protected LobbyRegistry _lobreg;
 }

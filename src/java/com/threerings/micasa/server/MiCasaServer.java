@@ -22,6 +22,7 @@
 package com.threerings.micasa.server;
 
 import com.google.inject.Guice;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 import com.threerings.util.Name;
@@ -40,16 +41,21 @@ import com.threerings.micasa.lobby.LobbyRegistry;
 import static com.threerings.micasa.Log.log;
 
 /**
- * This class is the main entry point and general organizer of everything
- * that goes on in the MiCasa game server process.
+ * The main general organizer of everything that goes on in the MiCasa game server process.
  */
 public class MiCasaServer extends CrowdServer
 {
-    /** The parlor manager in operation on this server. */
-    public static ParlorManager parmgr = new ParlorManager();
-
-    /** The lobby registry operating on this server. */
-    public static LobbyRegistry lobreg = new LobbyRegistry();
+    public static void main (String[] args)
+    {
+        Injector injector = Guice.createInjector(new Module());
+        MiCasaServer server = injector.getInstance(MiCasaServer.class);
+        try {
+            server.init(injector);
+            server.run();
+        } catch (Exception e) {
+            log.warning("Unable to initialize server.", e);
+        }
+    }
 
     @Override // from CrowdServer
     public void init (Injector injector)
@@ -67,24 +73,12 @@ public class MiCasaServer extends CrowdServer
             }
         });
 
-        // initialize our parlor manager
-        parmgr.init(invmgr, plreg);
-
         // initialize the lobby registry
-        lobreg.init(invmgr);
+        _lobreg.init();
 
         log.info("MiCasa server initialized.");
     }
 
-    public static void main (String[] args)
-    {
-        Injector injector = Guice.createInjector(new Module());
-        MiCasaServer server = injector.getInstance(MiCasaServer.class);
-        try {
-            server.init(injector);
-            server.run();
-        } catch (Exception e) {
-            log.warning("Unable to initialize server.", e);
-        }
-    }
+    @Inject protected LobbyRegistry _lobreg;
+    @Inject protected ParlorManager _parmgr;
 }

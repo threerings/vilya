@@ -21,8 +21,17 @@
 
 package com.threerings.micasa.lobby;
 
-import java.util.*;
-import com.samskivert.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.StringTokenizer;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.samskivert.util.StringUtil;
+import com.google.inject.Inject;
+
 import com.threerings.util.StreamableArrayList;
 
 import com.threerings.presents.data.ClientObject;
@@ -30,11 +39,11 @@ import com.threerings.presents.data.InvocationCodes;
 import com.threerings.presents.server.InvocationManager;
 
 import com.threerings.crowd.data.BodyObject;
+import com.threerings.crowd.server.PlaceRegistry;
 
 import com.threerings.micasa.lobby.LobbyService.CategoriesListener;
 import com.threerings.micasa.lobby.LobbyService.LobbiesListener;
 import com.threerings.micasa.server.MiCasaConfig;
-import com.threerings.micasa.server.MiCasaServer;
 
 import static com.threerings.micasa.Log.log;
 
@@ -87,24 +96,22 @@ import static com.threerings.micasa.Log.log;
 public class LobbyRegistry
     implements LobbyProvider
 {
-    /**
-     * Initializes the registry. It will use the supplied configuration instance to determine which
-     * lobbies to load, etc.
-     *
-     * @param invmgr a reference to the server's invocation manager.
-     */
-    public void init (InvocationManager invmgr)
+    @Inject public LobbyRegistry (InvocationManager invmgr)
     {
         // register ourselves as an invocation service handler
         invmgr.registerDispatcher(new LobbyDispatcher(this), InvocationCodes.GLOBAL_GROUP);
+    }
 
+    /**
+     * Initializes the registry, creating our default lobbies.
+     */
+    public void init ()
+    {
         // create our lobby managers
         String[] lmgrs = null;
         lmgrs = MiCasaConfig.config.getValue(LOBIDS_KEY, lmgrs);
         if (lmgrs == null || lmgrs.length == 0) {
-            log.warning("No lobbies specified in config file (via '" +
-                        LOBIDS_KEY + "' parameter).");
-
+            log.warning("No lobbies specified in config file (via '" + LOBIDS_KEY + "' parameter).");
         } else {
             for (int i = 0; i < lmgrs.length; i++) {
                 loadLobby(lmgrs[i]);
@@ -142,7 +149,7 @@ public class LobbyRegistry
 
             // create and initialize the lobby manager. it will call lobbyReady() when it has
             // obtained a reference to its lobby object and is ready to roll
-            LobbyManager lobmgr = (LobbyManager)MiCasaServer.plreg.createPlace(config);
+            LobbyManager lobmgr = (LobbyManager)_plreg.createPlace(config);
             lobmgr.init(this, props);
 
         } catch (Exception e) {
@@ -159,9 +166,9 @@ public class LobbyRegistry
      * @param category the category of game for which the lobbies are desired.
      * @param target the list into which the matching lobbies will be deposited.
      */
-    public void getLobbies (BodyObject requester, String category, List target)
+    public void getLobbies (BodyObject requester, String category, List<Lobby> target)
     {
-        ArrayList list = (ArrayList)_lobbies.get(category);
+        List<Lobby> list = _lobbies.get(category);
         if (list != null) {
             target.addAll(list);
         }
@@ -176,12 +183,10 @@ public class LobbyRegistry
      */
     public String[] getCategories (BodyObject requester)
     {
-        // might want to cache this some day so that we don't recreate it every time someone wants
-        // it. we can cache the array until the category count changes
         String[] cats = new String[_lobbies.size()];
-        Iterator iter = _lobbies.keySet().iterator();
-        for (int i = 0; iter.hasNext(); i++) {
-            cats[i] = (String)iter.next();
+        Iterator<String> iter = _lobbies.keySet().iterator();
+        for (int ii = 0; iter.hasNext(); ii++) {
+            cats[ii] = iter.next();
         }
         return cats;
     }
@@ -202,7 +207,7 @@ public class LobbyRegistry
     public void getLobbies (ClientObject caller, String category, LobbiesListener listener)
     {
         StreamableArrayList target = new StreamableArrayList();
-        ArrayList list = (ArrayList)_lobbies.get(category);
+        List<Lobby> list = _lobbies.get(category);
         if (list != null) {
             target.addAll(list);
         }
@@ -234,18 +239,19 @@ public class LobbyRegistry
     /** Registers the supplied lobby in the specified category table. */
     protected void registerLobby (String category, Lobby record)
     {
-        ArrayList catlist = (ArrayList)_lobbies.get(category);
+        List<Lobby> catlist = _lobbies.get(category);
         if (catlist == null) {
-            catlist = new ArrayList();
+            catlist = Lists.newArrayList();
             _lobbies.put(category, catlist);
         }
         catlist.add(record);
         log.info("Registered lobby [cat=" + category + ", record=" + record + "].");
     }
 
-    /** A table containing references to all of our lobby records (in the form of category
-     * lists. */
-    protected HashMap _lobbies = new HashMap();
+    @Inject protected PlaceRegistry _plreg;
+
+    /** A table containing references to our lobby records (in the form of category lists. */
+    protected Map<String,List<Lobby>> _lobbies = Maps.newHashMap();
 
     /** The oid of the default lobby. */
     protected int _defLobbyOid = -1;
