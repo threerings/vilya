@@ -21,7 +21,10 @@
 
 package com.threerings.parlor.server;
 
-import com.samskivert.util.HashIntMap;
+import com.google.inject.Inject;
+
+import com.samskivert.util.IntMap;
+import com.samskivert.util.IntMaps;
 import com.threerings.util.Name;
 
 import com.threerings.presents.data.ClientObject;
@@ -29,6 +32,7 @@ import com.threerings.presents.server.InvocationException;
 import com.threerings.presents.server.InvocationManager;
 
 import com.threerings.crowd.data.BodyObject;
+import com.threerings.crowd.server.BodyLocator;
 import com.threerings.crowd.server.CrowdServer;
 import com.threerings.crowd.server.PlaceRegistry;
 
@@ -48,21 +52,9 @@ import static com.threerings.parlor.Log.log;
 public class ParlorManager
     implements ParlorCodes, ParlorProvider
 {
-    /**
-     * Initializes the parlor manager. This should be called by the server that is making use of
-     * the parlor services on the single instance of parlor manager that it has created.
-     *
-     * @param invmgr a reference to the invocation manager in use by this server.
-     * @param plreg a reference to the place registry to be used by the parlor manager when
-     * creating game places.
-     */
-    public void init (InvocationManager invmgr, PlaceRegistry plreg)
+    @Inject public ParlorManager (InvocationManager invmgr)
     {
-        // create and register our invocation provider
         invmgr.registerDispatcher(new ParlorDispatcher(this), PARLOR_GROUP);
-
-        // keep this for later
-        _plreg = plreg;
     }
 
     // from interface ParlorProvider
@@ -77,7 +69,7 @@ public class ParlorManager
         String rsp = null;
 
         // ensure that the invitee is online at present
-        BodyObject target = CrowdServer.lookupBody(invitee);
+        BodyObject target = _locator.lookupBody(invitee);
         if (target == null) {
             throw new InvocationException(INVITEE_NOT_ONLINE);
         }
@@ -181,7 +173,7 @@ public class ParlorManager
     public void respondToInvite (BodyObject source, int inviteId, int code, Object arg)
     {
         // look up the invitation
-        Invitation invite = (Invitation)_invites.get(inviteId);
+        Invitation invite = _invites.get(inviteId);
         if (invite == null) {
             log.warning("Requested to respond to non-existent invitation " +
                         "[source=" + source + ", inviteId=" + inviteId +
@@ -309,10 +301,13 @@ public class ParlorManager
     }
 
     /** The place registry with which we operate. */
-    protected PlaceRegistry _plreg;
+    @Inject protected PlaceRegistry _plreg;
+
+    /** Used to look body objects up by name. */
+    @Inject protected BodyLocator _locator;
 
     /** The table of pending invitations. */
-    protected HashIntMap _invites = new HashIntMap();
+    protected IntMap<Invitation> _invites = IntMaps.newHashIntMap();
 
     /** A counter used to generate unique identifiers for invitation records. */
     protected static int _nextInviteId = 0;
