@@ -21,9 +21,11 @@
 
 package com.threerings.parlor.game.server;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Arrays;
 import java.util.logging.Level;
+
+import com.google.common.collect.Lists;
 
 import com.samskivert.util.ArrayIntSet;
 import com.samskivert.util.IntListUtil;
@@ -39,7 +41,6 @@ import com.threerings.presents.dobj.DObject;
 import com.threerings.crowd.chat.server.SpeakUtil;
 
 import com.threerings.crowd.data.BodyObject;
-import com.threerings.crowd.server.CrowdServer;
 import com.threerings.crowd.server.PlaceManager;
 import com.threerings.crowd.server.PlaceManagerDelegate;
 
@@ -165,7 +166,7 @@ public class GameManager extends PlaceManager
         }
 
         // get the player's body object
-        BodyObject bobj = CrowdServer.lookupBody(player);
+        BodyObject bobj = _locator.lookupBody(player);
         if (bobj == null) {
             log.warning("Unable to get body object while adding player [game=" + where() +
                         ", player=" + player + "].");
@@ -257,11 +258,11 @@ public class GameManager extends PlaceManager
         // if we have their oid, use that
         int ploid = _playerOids[playerIdx];
         if (ploid > 0) {
-            return (BodyObject)CrowdServer.omgr.getObject(ploid);
+            return (BodyObject)_omgr.getObject(ploid);
         }
         // otherwise look them up by name
         Name name = getPlayerName(playerIdx);
-        return (name == null) ? null : CrowdServer.lookupBody(name);
+        return (name == null) ? null : _locator.lookupBody(name);
     }
 
     /**
@@ -277,8 +278,6 @@ public class GameManager extends PlaceManager
         if (_AIs == null) {
             // create and initialize the AI configuration array
             _AIs = new GameAI[getPlayerSlots()];
-            // set up a delegate op for AI ticking
-            _tickAIOp = new TickAIDelegateOp();
         }
 
         // save off the AI's configuration
@@ -393,9 +392,9 @@ public class GameManager extends PlaceManager
         if (waitForStart && ((_gameobj == null) || (_gameobj.state == GameObject.PRE_GAME))) {
             // queue up the message.
             if (_startmsgs == null) {
-                _startmsgs = new ArrayList<Tuple<String,String>>();
+                _startmsgs = Lists.newArrayList();
             }
-            _startmsgs.add(new Tuple<String,String>(msgbundle, msg));
+            _startmsgs.add(Tuple.create(msgbundle, msg));
             return;
         }
 
@@ -449,7 +448,7 @@ public class GameManager extends PlaceManager
             // TEMP: track down weirdness
             final Exception firstCall = new Exception();
             // End: temp
-            CrowdServer.omgr.postRunnable(new Runnable() {
+            _omgr.postRunnable(new Runnable() {
                 public void run () {
                     boolean result = startGame();
                     // TEMP: track down weirdness
@@ -725,7 +724,7 @@ public class GameManager extends PlaceManager
             return; // body object can be null for ai players
         }
 
-        DObject place = CrowdServer.omgr.getObject(user.getPlaceOid());
+        DObject place = _omgr.getObject(user.getPlaceOid());
         if (place != null) {
             place.postMessage(PLAYER_KNOCKED_OUT, new Object[] { new int[] { user.getOid() } });
         }
@@ -739,18 +738,13 @@ public class GameManager extends PlaceManager
         // save off a casted reference to our config
         _gameconfig = (GameConfig)_config;
 
-        // register this game manager
-        _managers.add(this);
-
-        // and start up a tick interval if we've not already got one
-        if (_tickInterval == null) {
-            _tickInterval = new Interval(CrowdServer.omgr) {
-                public void expired () {
-                    tickAllGames();
-                }
-            };
-            _tickInterval.schedule(TICK_DELAY, true);
-        }
+        // start up our tick interval
+        _tickInterval = new Interval(_omgr) {
+            public void expired () {
+                tick(System.currentTimeMillis());
+            }
+        };
+        _tickInterval.schedule(TICK_DELAY, true);
 
         // configure our AIs
         for (int ii = 0; ii < _gameconfig.ais.length; ii++) {
@@ -791,7 +785,7 @@ public class GameManager extends PlaceManager
                 continue;
             }
 
-            BodyObject bobj = CrowdServer.lookupBody(_gameobj.players[ii]);
+            BodyObject bobj = _locator.lookupBody(_gameobj.players[ii]);
             if (bobj == null) {
                 log.warning("Unable to deliver game ready to non-existent player [game=" + where() +
                             ", player=" + _gameobj.players[ii] + "].");
@@ -804,7 +798,7 @@ public class GameManager extends PlaceManager
 
         // start up a no-show timer if needed
         if (needsNoShowTimer()) {
-            _noShowInterval = new Interval(CrowdServer.omgr) {
+            _noShowInterval = new Interval(_omgr) {
                 public void expired () {
                     checkForNoShows();
                 }
@@ -818,14 +812,9 @@ public class GameManager extends PlaceManager
     {
         super.didShutdown();
 
-        // unregister this game manager
-        _managers.remove(this);
-
-        // remove the tick interval if there are no remaining managers
-        if (_managers.size() == 0) {
-            _tickInterval.cancel();
-            _tickInterval = null;
-        }
+        // shutdown our tick interval
+        _tickInterval.cancel();
+        _tickInterval = null;
 
         if (_gameobj != null) {
             // remove our state listener
@@ -1061,7 +1050,12 @@ public class GameManager extends PlaceManager
 
         // and register ourselves to receive AI ticks
         if (_AIs != null && needsAITick()) {
-            AIGameTicker.registerAIGame(this);
+            _aiTicker = new Interval(_omgr) {
+                public void expired () {
+                    tickAIs();
+                }
+            };
+            _aiTicker.schedule(AI_TICK_DELAY, false);
         }
 
         // any players who have not claimed that they are ready should now be given le boote royale
@@ -1088,12 +1082,15 @@ public class GameManager extends PlaceManager
     }
 
     /**
-     * Called by tickAIs to tick each AI in the game.
+     * Called by {@link #tickAIs} to tick each AI in the game.
      */
-    protected void tickAI (int pidx, GameAI ai)
+    protected void tickAI (final int pidx, final GameAI ai)
     {
-        _tickAIOp.setAI(pidx, ai);
-        applyToDelegates(_tickAIOp);
+        applyToDelegates(new DelegateOp() {
+            public void apply (PlaceManagerDelegate delegate) {
+                ((GameManagerDelegate) delegate).tickAI(pidx, ai);
+            }
+        });
     }
 
     /**
@@ -1170,8 +1167,9 @@ public class GameManager extends PlaceManager
     protected void gameDidEnd ()
     {
         // remove ourselves from the AI ticker, if applicable
-        if (_AIs != null && needsAITick()) {
-            AIGameTicker.unregisterAIGame(this);
+        if (_aiTicker != null) {
+            _aiTicker.cancel();
+            _aiTicker = null;
         }
 
         // let our delegates do their business
@@ -1233,7 +1231,7 @@ public class GameManager extends PlaceManager
 
         // now send a message event to each room
         for (int ii=0, nn = places.size(); ii < nn; ii++) {
-            DObject place = CrowdServer.omgr.getObject(places.get(ii));
+            DObject place = _omgr.getObject(places.get(ii));
             if (place != null) {
                 place.postMessage(WINNERS_AND_LOSERS, args);
             }
@@ -1267,42 +1265,6 @@ public class GameManager extends PlaceManager
         // nothing for now
     }
 
-    /**
-     * Called periodically to call {@link #tick} on all registered game managers.
-     */
-    protected static void tickAllGames ()
-    {
-        long now = System.currentTimeMillis();
-        int size = _managers.size();
-        for (int ii = 0; ii < size; ii++) {
-            GameManager gmgr = _managers.get(ii);
-            try {
-                gmgr.tick(now);
-            } catch (Exception e) {
-                log.warning("Game manager choked during tick [gmgr=" + gmgr + "].", e);
-            }
-        }
-    }
-
-    /**
-     * A helper operation to distribute AI ticks to our delegates.
-     */
-    protected class TickAIDelegateOp implements DelegateOp
-    {
-        public void apply (PlaceManagerDelegate delegate) {
-            ((GameManagerDelegate) delegate).tickAI(_pidx, _ai);
-        }
-
-        public void setAI (int pidx, GameAI ai)
-        {
-            _pidx = pidx;
-            _ai = ai;
-        }
-
-        protected int _pidx;
-        protected GameAI _ai;
-    }
-
     /** Listens for game state changes. */
     protected AttributeChangeListener _stateListener = new AttributeChangeListener() {
         public void attributeChanged (AttributeChangedEvent event) {
@@ -1333,10 +1295,7 @@ public class GameManager extends PlaceManager
 
     /** If non-null, contains bundles and messages that should be sent as system messages once the
      * game has started. */
-    protected ArrayList<Tuple<String,String>> _startmsgs;
-
-    /** Our delegate operator to tick AIs. */
-    protected TickAIDelegateOp _tickAIOp;
+    protected List<Tuple<String,String>> _startmsgs;
 
     /** The state of the game that has been propagated to our subscribers. */
     protected int _committedState;
@@ -1350,11 +1309,11 @@ public class GameManager extends PlaceManager
     /** Whether we have already postponed the start of the game. */
     protected boolean _postponedStart = false;
 
-    /** A list of all currently active game managers. */
-    protected static ArrayList<GameManager> _managers = new ArrayList<GameManager>();
-
     /** The interval for the game manager tick. */
-    protected static Interval _tickInterval;
+    protected Interval _tickInterval;
+
+    /** The interval for the AI tick. */
+    protected Interval _aiTicker;
 
     /** Used to map users to persistent integer identifiers. */
     protected static UserIdentifier _userIder = new UserIdentifier() {
@@ -1368,4 +1327,7 @@ public class GameManager extends PlaceManager
 
     /** The delay in milliseconds between ticking of all game managers. */
     protected static final long TICK_DELAY = 5L * 1000L;
+
+    /** The frequency with which we dispatch AI game ticks. */
+    protected static final long AI_TICK_DELAY = 3333L; // every 3 1/3 seconds
 }
