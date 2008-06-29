@@ -46,7 +46,6 @@ import com.threerings.parlor.card.data.Deck;
 import com.threerings.parlor.card.data.Hand;
 import com.threerings.parlor.card.data.PlayerCard;
 import com.threerings.parlor.card.server.CardGameManager;
-import com.threerings.parlor.card.trick.data.TrickCardGameMarshaller;
 import com.threerings.parlor.card.trick.data.TrickCardGameObject;
 
 import static com.threerings.parlor.card.Log.log;
@@ -84,7 +83,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
         _trickCardGame = (TrickCardGameObject)plobj;
         _cardGame = (CardGameObject)plobj;
         _trickCardGame.setTrickCardGameService(
-            (TrickCardGameMarshaller)_invmgr.registerDispatcher(new TrickCardGameDispatcher(this)));
+            _invmgr.registerDispatcher(new TrickCardGameDispatcher(this)));
     }
 
     @Override // from PlaceManagerDelegate
