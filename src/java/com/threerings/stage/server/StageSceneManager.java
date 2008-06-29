@@ -55,7 +55,6 @@ import com.threerings.stage.data.StageLocation;
 import com.threerings.stage.data.StageMisoSceneModel;
 import com.threerings.stage.data.StageOccupantInfo;
 import com.threerings.stage.data.StageScene;
-import com.threerings.stage.data.StageSceneMarshaller;
 import com.threerings.stage.data.StageSceneModel;
 import com.threerings.stage.data.StageSceneObject;
 import com.threerings.stage.util.StageSceneUtil;
@@ -254,16 +253,14 @@ public class StageSceneManager extends SpotSceneManager
         _ssobj = (StageSceneObject)_plobj;
 
         // register and fill in our stage scene service
-        StageSceneMarshaller service = (StageSceneMarshaller)
-            StageServer.invmgr.registerDispatcher(new StageSceneDispatcher(this));
-        _ssobj.setStageSceneService(service);
+        _ssobj.setStageSceneService(_invmgr.registerDispatcher(new StageSceneDispatcher(this)));
     }
 
     @Override // documentation inherited
     protected void didShutdown ()
     {
         super.didShutdown();
-        StageServer.invmgr.clearDispatcher(_ssobj.stageSceneService);
+        _invmgr.clearDispatcher(_ssobj.stageSceneService);
     }
 
     @Override // documentation inherited
@@ -560,7 +557,7 @@ public class StageSceneManager extends SpotSceneManager
                 }
 
                 // make sure the subsumee exists
-                final BodyObject bobj = (BodyObject)StageServer.omgr.getObject(bodyOid);
+                final BodyObject bobj = (BodyObject)_omgr.getObject(bodyOid);
                 if (bobj == null) {
                     log.warning("Can't subsume disappeared body " +
                                 "[where=" + where() + ", cluster=" + cl +
@@ -572,7 +569,7 @@ public class StageSceneManager extends SpotSceneManager
                 // to our cluster to be processed after we finish adding
                 // ourselves to this cluster
                 final ClusterRecord fclrec = clrec;
-                StageServer.omgr.postRunnable(new Runnable() {
+                _omgr.postRunnable(new Runnable() {
                     public void run () {
                         try {
                             log.info("Subsuming " + bobj.who() +
@@ -709,7 +706,7 @@ public class StageSceneManager extends SpotSceneManager
     {
         SceneLocation sloc = _ssobj.occupantLocs.get(Integer.valueOf(bodyOid));
         if (sloc == null) {
-            BodyObject user = (BodyObject)StageServer.omgr.getObject(bodyOid);
+            BodyObject user = (BodyObject)_omgr.getObject(bodyOid);
             String who = (user == null) ? ("" + bodyOid) : user.who();
             log.warning("Can't position locationless user " +
                         "[where=" + where() + ", cluster=" + cl +
