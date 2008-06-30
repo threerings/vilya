@@ -30,6 +30,9 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
 import com.samskivert.io.PersistenceException;
 
 import com.samskivert.jdbc.ConnectionProvider;
@@ -49,6 +52,7 @@ import static com.threerings.parlor.Log.log;
 /**
  * The persistent store for tourney related information.
  */
+@Singleton
 public class TourneyRepository extends JORARepository
 {
     /** Contains tourney information loaded from the database. */
@@ -100,9 +104,13 @@ public class TourneyRepository extends JORARepository
         }
     }
 
-    public TourneyRepository (ConnectionProvider conprov, String dbident)
+    /** The database identifier used when establishing a database connection. This value being
+     * <code>tourneydb</code>. */
+    public static final String TOURNEY_DB_IDENT = "tourneydb";
+
+    @Inject public TourneyRepository (ConnectionProvider conprov)
     {
-        super(conprov, dbident);
+        super(conprov, TOURNEY_DB_IDENT);
     }
 
     /**

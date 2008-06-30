@@ -21,12 +21,14 @@
 
 package com.threerings.parlor.tourney.server;
 
+import com.google.inject.Inject;
 import com.samskivert.util.Interval;
 import com.samskivert.util.ResultListener;
 
 import com.threerings.util.Name;
 
 import com.threerings.crowd.data.BodyObject;
+import com.threerings.crowd.server.BodyLocator;
 
 import com.threerings.parlor.tourney.data.Participant;
 import com.threerings.parlor.tourney.data.TourneyConfig;
@@ -45,14 +47,14 @@ import com.threerings.presents.server.InvocationManager;
 public abstract class TourneyManager
     implements TourneyProvider, TourneyCodes
 {
-    public TourneyManager (InvocationManager invmgr, RootDObjectManager omgr, TourneyConfig config,
-                           TourniesManager tmgr, Comparable key,
-                           InvocationService.ResultListener listener)
+    /**
+     * Initializes this tourney manager and prepares it for operation.
+     *
+     * @return the oid of this manager's tourney object.
+     */
+    public int init (TourneyConfig config, Comparable key)
     {
-        _invmgr = invmgr;
-        _omgr = omgr;
         _config = config;
-        _tmgr = tmgr;
         _key = key;
 
         // creare and configure our Tourney object
@@ -70,9 +72,7 @@ public abstract class TourneyManager
             _startTime = System.currentTimeMillis() + (MINUTE * _config.startsIn);
         }
 
-        if (listener != null) {
-            listener.requestProcessed(Integer.valueOf(_trobj.getOid()));
-        }
+        return _trobj.getOid();
     }
 
     // documentation inherited from TourneyProvider
@@ -185,7 +185,7 @@ public abstract class TourneyManager
         // return the fees
         if (_trobj.config.entryFee != null) {
             for (Participant part : _trobj.participants) {
-                BodyObject body = lookupBody(part.username);
+                BodyObject body = _locator.lookupBody(part.username);
                 if (body != null) {
                     _trobj.config.entryFee.returnFee(body);
                 }
@@ -269,21 +269,10 @@ public abstract class TourneyManager
     }
 
     /**
-     * Looks up the BodyObject for a username.
-     */
-    protected abstract BodyObject lookupBody (Name username);
-
-    /**
      * Will throw an InvocationException if the user cannot join the tourney.
      */
     protected abstract void joinTourney (BodyObject body)
         throws InvocationException;
-
-    /** Used to register and clear invocation services. */
-    protected InvocationManager _invmgr;
-
-    /** Provides distributed object services. */
-    protected RootDObjectManager _omgr;
 
     /** Our touney configuration. */
     protected TourneyConfig _config;
@@ -291,14 +280,17 @@ public abstract class TourneyManager
     /** Our distributed tourney object. */
     protected TourneyObject _trobj;
 
-    /** Reference to the tournies manager. */
-    protected TourniesManager _tmgr;
-
     /** The time, in milliseconds, when the tourney starts. */
     protected long _startTime;
 
     /** The key this tourney is recorded under. */
     protected Comparable _key;
+
+    // services on which we depend
+    @Inject protected RootDObjectManager _omgr;
+    @Inject protected InvocationManager _invmgr;
+    @Inject protected BodyLocator _locator;
+    @Inject protected TourniesManager _tmgr;
 
     /** One minute in milliseconds. */
     protected static long MINUTE = 60 * 1000L;

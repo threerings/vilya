@@ -22,41 +22,47 @@
 package com.threerings.parlor.tourney.server;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import com.samskivert.util.Interval;
-import com.samskivert.util.RunQueue;
+import com.google.common.collect.Maps;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.google.inject.Singleton;
 
 import com.samskivert.io.PersistenceException;
 import com.samskivert.jdbc.ConnectionProvider;
-
-import com.threerings.parlor.tourney.server.persist.TourneyRepository;
-import com.threerings.parlor.tourney.data.Prize;
-import com.threerings.parlor.tourney.data.TourneyConfig;
+import com.samskivert.util.Interval;
+import com.samskivert.util.RunQueue;
 
 import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.data.ClientObject;
+import com.threerings.presents.dobj.RootDObjectManager;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.presents.server.PresentsServer;
 import com.threerings.presents.server.ShutdownManager;
-import com.threerings.presents.data.ClientObject;
+
+import com.threerings.parlor.tourney.data.Prize;
+import com.threerings.parlor.tourney.data.TourneyConfig;
+import com.threerings.parlor.tourney.server.persist.TourneyRepository;
 
 /**
  * An extensible tournament manager.
  */
+@Singleton
 public abstract class TourniesManager
     implements TourniesProvider, ShutdownManager.Shutdowner
 {
     /**
      * Initializes the tournies manager and starts its periodic update task.
      */
-    public void init (ConnectionProvider conprov)
+    public void init (Injector injector)
         throws PersistenceException
     {
-        _tournrep = new TourneyRepository(conprov, getDBIdent());
         loadTourneyConfigs();
 
-        _interval = new Interval(getRunQueue()) {
+        _injector = injector;
+        _interval = new Interval(_omgr) {
             public void expired () {
                 updateTournies();
             }
@@ -90,8 +96,13 @@ public abstract class TourniesManager
     protected void makeTourney (TourneyConfig config, InvocationService.ResultListener listener)
     {
         // create a new tourney manager which will run things
-        Integer tourneyID = Integer.valueOf(_tourneyCount++);
-        _tourneys.put(tourneyID, makeTourneyManager(config, tourneyID, listener));
+        TourneyManager tmgr = _injector.getInstance(getTourneyManagerClass());
+        int tournId = _tourneyCount++;
+        int tournOid = tmgr.init(config, tournId);
+        _tourneys.put(tournId, tmgr);
+        if (listener != null) {
+            listener.requestProcessed(tournOid);
+        }
     }
 
     /**
@@ -112,7 +123,6 @@ public abstract class TourniesManager
         for (TourneyConfig config : tournies) {
             makeTourney(config, null);
         }
-
     }
 
     /**
@@ -124,36 +134,28 @@ public abstract class TourniesManager
     }
 
     /**
-     * Instantiates a new tourney manager.
+     * Returns the derivation of {@link TourneyManager} to use.
      */
-    protected abstract TourneyManager makeTourneyManager(
-            TourneyConfig config, Comparable key, InvocationService.ResultListener listener);
-
-    /**
-     * Returns the database identifier for our repository.
-     */
-    protected abstract String getDBIdent ();
-
-    /**
-     * Returns the RunQueue to use for our tourney interval.
-     */
-    protected abstract RunQueue getRunQueue ();
+    protected abstract Class<? extends TourneyManager> getTourneyManagerClass ();
 
     /**
      * Returns the tourney interval delay in milliseconds.
      */
     protected abstract long getIntervalDelay ();
 
-    /** Holds all the current tournies in the game. */
-    protected HashMap<Comparable, TourneyManager> _tourneys = 
-        new HashMap<Comparable, TourneyManager>();
-
-    /** Reference to our tourney repository. */
-    protected TourneyRepository _tournrep;
+    /** Used to resolve dependencies in the {@link TourneyManager}s that we create. */
+    protected Injector _injector;
 
     /** The interval which updates loaded tournies. */
     protected Interval _interval;
 
     /** Count to provide a unique key to tournies as they're created. */
     protected int _tourneyCount;
+
+    /** Holds all the current tournies in the game. */
+    protected Map<Comparable, TourneyManager> _tourneys = Maps.newHashMap();
+
+    // our dependencies
+    @Inject protected RootDObjectManager _omgr;
+    @Inject protected TourneyRepository _tournrep;
 }
