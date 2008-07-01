@@ -21,6 +21,8 @@
 
 package com.threerings.parlor.game.client;
 
+import static com.threerings.parlor.Log.log;
+
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.util.ParlorContext;
 
@@ -62,7 +64,23 @@ public abstract class GameConfigurator
     {
         _config = config;
         // set up the user interface
-        gotGameConfig();
+        try {
+            gotGameConfig();
+        } catch (RuntimeException re) {
+            // This config is booched in a way that is unfathomable to our simple GameConfigurator
+            // ways, but GameConfigs are SimpleStreamables and should be valid when created with
+            // their default constructors.  Try creating one of those to keep things rolling.
+            log.warning("Unable to fill in interface from config, trying to use a default config",
+                re);
+            try {
+                _config = config.getClass().newInstance();
+            } catch (Exception e) {
+                log.warning("Unable to create replacement game config", "class", e.getClass(), e);
+                throw re;// Rethrow the original exception since it's a little more relevant
+            }
+            // We've got a default config, see how that does
+            gotGameConfig();
+        }
     }
 
     /**
