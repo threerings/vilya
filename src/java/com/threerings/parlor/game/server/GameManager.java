@@ -1075,7 +1075,7 @@ public class GameManager extends PlaceManager
                     tickAIs();
                 }
             };
-            _aiTicker.schedule(AI_TICK_DELAY, false);
+            _aiTicker.schedule(AI_TICK_DELAY, true);
         }
     }
 
