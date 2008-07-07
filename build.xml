@@ -277,7 +277,7 @@
       <fileset dir="${classes.dir}" includes="rsrc/**/stats/**"/>
     </jar>
     <jar destfile="${deploy.dir}/${lib.name}-whirled.jar">
-      <fileset dir="${classes.dir}" includes="com/threerings/whirled/**"/>
+      <fileset dir="${classes.dir}" includes="com/threerings/whirled/**" excludes="**/*.png"/>
       <fileset dir="${classes.dir}" includes="rsrc/**/whirled/**"/>
     </jar>
   </target>
