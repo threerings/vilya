@@ -22,6 +22,7 @@
 package com.threerings.whirled.server;
 
 import com.threerings.presents.data.ClientObject;
+import com.threerings.presents.net.Transport;
 import com.threerings.presents.server.InvocationSender;
 import com.threerings.whirled.client.SceneDecoder;
 import com.threerings.whirled.client.SceneReceiver;
