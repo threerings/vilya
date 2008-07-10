@@ -296,6 +296,16 @@ public abstract class GameController extends PlaceController
         });
     }
 
+    @Override // from PlaceController
+    protected void ratifyDelegate (PlaceControllerDelegate delegate)
+    {
+        super.ratifyDelegate(delegate);
+        if (!(delegate instanceof GameControllerDelegate)) {
+            throw new IllegalArgumentException(
+                "Must provide GameController with GameControllerDelegate");
+        }
+    }
+
     /** A reference to the active parlor context. */
     protected ParlorContext _ctx;
 

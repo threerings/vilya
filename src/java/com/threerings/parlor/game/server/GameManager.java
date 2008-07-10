@@ -1283,6 +1283,15 @@ public class GameManager extends PlaceManager
         // nothing for now
     }
 
+    @Override // from PlaceManager
+    protected void ratifyDelegate (PlaceManagerDelegate delegate)
+    {
+        super.ratifyDelegate(delegate);
+        if (!(delegate instanceof GameManagerDelegate)) {
+            throw new IllegalArgumentException("Must provide GameManager with GameManagerDelegate");
+        }
+    }
+
     /** Listens for game state changes. */
     protected AttributeChangeListener _stateListener = new AttributeChangeListener() {
         public void attributeChanged (AttributeChangedEvent event) {
