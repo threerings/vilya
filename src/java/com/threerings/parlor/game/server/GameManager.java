@@ -242,7 +242,7 @@ public class GameManager extends PlaceManager
         playerWasReplaced(pidx, oplayer, player);
 
         // notify our delegates
-        applyToDelegates(new DelegateOp() {
+        applyToDelegates(new DelegateOp(GameManagerDelegate.class) {
             public void apply (PlaceManagerDelegate delegate) {
                 ((GameManagerDelegate)delegate).playerWasReplaced(pidx, oplayer, player);
             }
@@ -284,7 +284,7 @@ public class GameManager extends PlaceManager
         _AIs[pidx] = ai;
 
         // let the delegates know that the player's been made an AI
-        applyToDelegates(new DelegateOp() {
+        applyToDelegates(new DelegateOp(GameManagerDelegate.class) {
             public void apply (PlaceManagerDelegate delegate) {
                 ((GameManagerDelegate)delegate).setAI(pidx, ai);
             }
@@ -974,7 +974,7 @@ public class GameManager extends PlaceManager
         _gameobj.setSessionId(_gameobj.sessionId + 1);
 
         // let our delegates do their business
-        applyToDelegates(new DelegateOp() {
+        applyToDelegates(new DelegateOp(GameManagerDelegate.class) {
             public void apply (PlaceManagerDelegate delegate) {
                 ((GameManagerDelegate)delegate).gameWillStart();
             }
@@ -1034,7 +1034,7 @@ public class GameManager extends PlaceManager
         }
 
         // let our delegates do their business
-        applyToDelegates(new DelegateOp() {
+        applyToDelegates(new DelegateOp(GameManagerDelegate.class) {
             public void apply (PlaceManagerDelegate delegate) {
                 ((GameManagerDelegate)delegate).gameDidStart();
             }
@@ -1107,7 +1107,7 @@ public class GameManager extends PlaceManager
      */
     protected void tickAI (final int pidx, final GameAI ai)
     {
-        applyToDelegates(new DelegateOp() {
+        applyToDelegates(new DelegateOp(GameManagerDelegate.class) {
             public void apply (PlaceManagerDelegate delegate) {
                 ((GameManagerDelegate) delegate).tickAI(pidx, ai);
             }
@@ -1173,7 +1173,7 @@ public class GameManager extends PlaceManager
     protected void gameWillEnd ()
     {
         // let our delegates do their business
-        applyToDelegates(new DelegateOp() {
+        applyToDelegates(new DelegateOp(GameManagerDelegate.class) {
             public void apply (PlaceManagerDelegate delegate) {
                 ((GameManagerDelegate)delegate).gameWillEnd();
             }
@@ -1191,7 +1191,7 @@ public class GameManager extends PlaceManager
         stopAITicker();
 
         // let our delegates do their business
-        applyToDelegates(new DelegateOp() {
+        applyToDelegates(new DelegateOp(GameManagerDelegate.class) {
             public void apply (PlaceManagerDelegate delegate) {
                 ((GameManagerDelegate)delegate).gameDidEnd();
             }
@@ -1267,7 +1267,7 @@ public class GameManager extends PlaceManager
         _gameobj.setPlayerStatus(new int[getPlayerSlots()]);
 
         // let our delegates do their business
-        applyToDelegates(new DelegateOp() {
+        applyToDelegates(new DelegateOp(GameManagerDelegate.class) {
             public void apply (PlaceManagerDelegate delegate) {
                 ((GameManagerDelegate)delegate).gameWillReset();
             }
@@ -1281,15 +1281,6 @@ public class GameManager extends PlaceManager
     protected void tick (long tickStamp)
     {
         // nothing for now
-    }
-
-    @Override // from PlaceManager
-    protected void ratifyDelegate (PlaceManagerDelegate delegate)
-    {
-        super.ratifyDelegate(delegate);
-        if (!(delegate instanceof GameManagerDelegate)) {
-            throw new IllegalArgumentException("Must provide GameManager with GameManagerDelegate");
-        }
     }
 
     /** Listens for game state changes. */

@@ -29,8 +29,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import java.util.ArrayList;
+import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.samskivert.swing.util.MouseHijacker;
 
 import com.samskivert.util.CollectionUtil;
@@ -180,7 +181,7 @@ public abstract class PuzzleController extends GameController
         _chatting = chatting;
 
         // dispatch the change to our delegates
-        applyToDelegates(PuzzleControllerDelegate.class, new DelegateOp() {
+        applyToDelegates(new DelegateOp(PuzzleControllerDelegate.class) {
             public void apply (PlaceControllerDelegate delegate) {
                 ((PuzzleControllerDelegate)delegate).setChatting(_chatting);
             }
@@ -224,7 +225,7 @@ public abstract class PuzzleController extends GameController
     {
         // check with the delegates
         final boolean[] canChatNow = new boolean[] { true };
-        applyToDelegates(PuzzleControllerDelegate.class, new DelegateOp() {
+        applyToDelegates(new DelegateOp(PuzzleControllerDelegate.class) {
             public void apply (PlaceControllerDelegate delegate) {
                 canChatNow[0] =
                     ((PuzzleControllerDelegate)delegate).canStartChatting() &&
@@ -447,7 +448,7 @@ public abstract class PuzzleController extends GameController
         }
 
         // let our delegates do their business
-        applyToDelegates(PuzzleControllerDelegate.class, new DelegateOp() {
+        applyToDelegates(new DelegateOp(PuzzleControllerDelegate.class) {
             public void apply (PlaceControllerDelegate delegate) {
                 ((PuzzleControllerDelegate)delegate).startAction();
             }
@@ -557,7 +558,7 @@ public abstract class PuzzleController extends GameController
 //         }
 
         // let our delegates do their business
-        applyToDelegates(PuzzleControllerDelegate.class, new DelegateOp() {
+        applyToDelegates(new DelegateOp(PuzzleControllerDelegate.class) {
             public void apply (PlaceControllerDelegate delegate) {
                 canClear[0] = canClear[0] &&
                     ((PuzzleControllerDelegate)delegate).canClearAction();
@@ -599,7 +600,7 @@ public abstract class PuzzleController extends GameController
 //         PuzzleBoardView.DEBUG_ACTION = false;
 
         // let our delegates do their business
-        applyToDelegates(PuzzleControllerDelegate.class, new DelegateOp() {
+        applyToDelegates(new DelegateOp(PuzzleControllerDelegate.class) {
             public void apply (PlaceControllerDelegate delegate) {
                 ((PuzzleControllerDelegate)delegate).clearAction();
             }
@@ -693,12 +694,11 @@ public abstract class PuzzleController extends GameController
                 _pview.repaint();
 
                 // let our delegates do their business
-                DelegateOp dop = new DelegateOp() {
+                applyToDelegates(new DelegateOp(PuzzleControllerDelegate.class) {
                     public void apply (PlaceControllerDelegate delegate) {
                         ((PuzzleControllerDelegate)delegate).setBoard(_pboard);
                     }
-                };
-                applyToDelegates(PuzzleControllerDelegate.class, dop);
+                });
 
                 return CARE_NOT;
             }
@@ -740,7 +740,7 @@ public abstract class PuzzleController extends GameController
 
         _events.add(Integer.valueOf(event));
         if (isSyncingBoards()) {
-            _states.add((board == null) ? null : board.clone());
+            _states.add((board == null) ? null : (Board)board.clone());
             if (board == null) {
                 log.warning("Added progress event with no associated board " +
                             "state, server will not be able to ensure " +
@@ -795,7 +795,7 @@ public abstract class PuzzleController extends GameController
     protected void playerKnockedOut (final int pidx)
     {
         // dispatch this to our delegates
-        applyToDelegates(PuzzleControllerDelegate.class, new DelegateOp() {
+        applyToDelegates(new DelegateOp(PuzzleControllerDelegate.class) {
             public void apply (PlaceControllerDelegate delegate) {
                 ((PuzzleControllerDelegate)delegate).playerKnockedOut(pidx);
             }
@@ -922,11 +922,10 @@ public abstract class PuzzleController extends GameController
     protected Board _pboard;
 
     /** The list of relevant game events since the last progress update. */
-    protected ArrayList _events = new ArrayList();
+    protected List<Integer> _events = Lists.newArrayList();
 
-    /** Board snapshots that correspond to our board state after each of
-     * our events has been applied. */
-    protected ArrayList _states = new ArrayList();
+    /** Board snapshots that correspond to board state after each event has been applied. */
+    protected List<Board> _states = Lists.newArrayList();
 
     /** A flag indicating that we're in chatting mode. */
     protected boolean _chatting = false;
@@ -935,8 +934,7 @@ public abstract class PuzzleController extends GameController
     protected int _astate = ACTION_CLEARED;
 
     /** The action cleared penders. */
-    protected ObserverList _clearPenders = new ObserverList(
-        ObserverList.SAFE_IN_ORDER_NOTIFY);
+    protected ObserverList _clearPenders = ObserverList.newSafeInOrder();
 
     /** A key listener that currently just toggles pause in the puzzle. */
     protected KeyListener _globalKeyListener = new KeyAdapter() {

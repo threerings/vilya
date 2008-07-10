@@ -248,7 +248,7 @@ public abstract class GameController extends PlaceController
         setGameOver(false);
 
         // let our delegates do their business
-        applyToDelegates(new DelegateOp() {
+        applyToDelegates(new DelegateOp(GameControllerDelegate.class) {
             public void apply (PlaceControllerDelegate delegate) {
                 ((GameControllerDelegate)delegate).gameDidStart();
             }
@@ -262,7 +262,7 @@ public abstract class GameController extends PlaceController
     protected void gameDidEnd ()
     {
         // let our delegates do their business
-        applyToDelegates(new DelegateOp() {
+        applyToDelegates(new DelegateOp(GameControllerDelegate.class) {
             public void apply (PlaceControllerDelegate delegate) {
                 ((GameControllerDelegate)delegate).gameDidEnd();
             }
@@ -275,7 +275,7 @@ public abstract class GameController extends PlaceController
     protected void gameWasCancelled ()
     {
         // let our delegates do their business
-        applyToDelegates(new DelegateOp() {
+        applyToDelegates(new DelegateOp(GameControllerDelegate.class) {
             public void apply (PlaceControllerDelegate delegate) {
                 ((GameControllerDelegate)delegate).gameWasCancelled();
             }
@@ -289,21 +289,11 @@ public abstract class GameController extends PlaceController
     protected void gameWillReset ()
     {
         // let our delegates do their business
-        applyToDelegates(new DelegateOp() {
+        applyToDelegates(new DelegateOp(GameControllerDelegate.class) {
             public void apply (PlaceControllerDelegate delegate) {
                 ((GameControllerDelegate)delegate).gameWillReset();
             }
         });
-    }
-
-    @Override // from PlaceController
-    protected void ratifyDelegate (PlaceControllerDelegate delegate)
-    {
-        super.ratifyDelegate(delegate);
-        if (!(delegate instanceof GameControllerDelegate)) {
-            throw new IllegalArgumentException(
-                "Must provide GameController with GameControllerDelegate");
-        }
     }
 
     /** A reference to the active parlor context. */
