@@ -13,11 +13,11 @@ import com.threerings.io.ObjectOutputStream;
 public class IntSetStat extends Stat
 {
     /**
-     * Constructs a new IntSetStat that will store an unbounded number of ints.
+     * Constructs a new IntSetStat that will store up to Integer.MAX_VALUE ints.
      */
     public IntSetStat ()
     {
-        _maxSize = -1;
+        _maxSize = Integer.MAX_VALUE;
     }
 
     /**
@@ -51,14 +51,15 @@ public class IntSetStat extends Stat
      */
     public boolean add (int key)
     {
-        return (_maxSize < 0 || _intSet.size() < _maxSize ? _intSet.add(key) : false);
+        return (_intSet.size() < _maxSize ? _intSet.add(key) : false);
     }
 
     @Override
     public void persistTo (ObjectOutputStream out, AuxDataSource aux)
         throws IOException
     {
-        out.writeByte(_intSet.size());
+        out.writeInt(_maxSize);
+        out.writeInt(_intSet.size());
         for (int key : _intSet) {
             out.writeInt(key);
         }
@@ -68,7 +69,8 @@ public class IntSetStat extends Stat
     public void unpersistFrom (ObjectInputStream in, AuxDataSource aux)
         throws IOException, ClassNotFoundException
     {
-        int numValues = in.readByte();
+        _maxSize = in.readInt();
+        int numValues = in.readInt();
         _intSet = new HashSet<Integer>(numValues);
         for (int ii = 0; ii < numValues; ii++) {
             _intSet.add(in.readInt());
