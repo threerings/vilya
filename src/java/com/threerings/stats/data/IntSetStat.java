@@ -13,19 +13,21 @@ import com.threerings.io.ObjectOutputStream;
 public class IntSetStat extends Stat
 {
     /**
-     * Constructs a new IntSetStat that will store up to Integer.MAX_VALUE ints.
+     * Constructs a new IntSetStat that will store up to 255 ints.
      */
     public IntSetStat ()
     {
-        _maxSize = Integer.MAX_VALUE;
+        _maxSize = MAX_MAX_SIZE;
     }
 
     /**
      * Constructs a new IntSetStat that will store up to maxSize ints.
+     *
+     * @param the maximum number of ints to store in the IntSetStat. Must be <= 255.
      */
     public IntSetStat (int maxSize)
     {
-        _maxSize = maxSize;
+        _maxSize = Math.min(maxSize, MAX_MAX_SIZE);
     }
 
     /**
@@ -58,7 +60,7 @@ public class IntSetStat extends Stat
     public void persistTo (ObjectOutputStream out, AuxDataSource aux)
         throws IOException
     {
-        out.writeInt(_maxSize);
+        out.writeByte(_maxSize - 128);
         out.writeInt(_intSet.size());
         for (int key : _intSet) {
             out.writeInt(key);
@@ -69,7 +71,7 @@ public class IntSetStat extends Stat
     public void unpersistFrom (ObjectInputStream in, AuxDataSource aux)
         throws IOException, ClassNotFoundException
     {
-        _maxSize = in.readInt();
+        _maxSize = in.readByte() + 128;
         int numValues = in.readInt();
         _intSet = new HashSet<Integer>(numValues);
         for (int ii = 0; ii < numValues; ii++) {
@@ -86,5 +88,7 @@ public class IntSetStat extends Stat
 
     protected int _maxSize;
     protected HashSet<Integer> _intSet = new HashSet<Integer>();
+
+    protected static final int MAX_MAX_SIZE = 255;
 
 }
