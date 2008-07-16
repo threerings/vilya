@@ -61,7 +61,7 @@ public class IntSetStat extends Stat
         throws IOException
     {
         out.writeByte(_maxSize - 128);
-        out.writeInt(_intSet.size());
+        out.writeByte(_intSet.size() - 128);
         for (int key : _intSet) {
             out.writeInt(key);
         }
@@ -71,8 +71,8 @@ public class IntSetStat extends Stat
     public void unpersistFrom (ObjectInputStream in, AuxDataSource aux)
         throws IOException, ClassNotFoundException
     {
-        _maxSize = in.readByte() + 128;
-        int numValues = in.readInt();
+        _maxSize = ((int)in.readByte()) + 128;
+        int numValues = ((int)in.readByte()) + 128;
         _intSet = new HashSet<Integer>(numValues);
         for (int ii = 0; ii < numValues; ii++) {
             _intSet.add(in.readInt());
