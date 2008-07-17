@@ -52,9 +52,16 @@ public class StatRecord extends PersistentRecord
     /** The qualified column identifier for the {@link #statData} field. */
     public static final ColumnExp STAT_DATA_C =
         new ColumnExp(StatRecord.class, STAT_DATA);
+
+    /** The column identifier for the {@link #modCount} field. */
+    public static final String MOD_COUNT = "modCount";
+
+    /** The qualified column identifier for the {@link #modCount} field. */
+    public static final ColumnExp MOD_COUNT_C =
+        new ColumnExp(StatRecord.class, MOD_COUNT);
     // AUTO-GENERATED: FIELDS END
 
-    public static final int SCHEMA_VERSION = 2;
+    public static final int SCHEMA_VERSION = 4;
 
     /** The identifier of the player this is a stat for. */
     @Id
@@ -71,6 +78,13 @@ public class StatRecord extends PersistentRecord
     public byte[] statData;
 
     /**
+     * The number of times this stat has been updated, so that simultaneous attempts to update
+     * the same stat in the repository can be caught and handled. Stored as a byte because
+     * we don't expect to ever have more than a couple simultaneous attempts to update a stat.
+     */
+    public byte modCount;
+
+    /**
      * An empty constructor for unmarshalling.
      */
     public StatRecord ()
@@ -83,10 +97,16 @@ public class StatRecord extends PersistentRecord
      */
     public StatRecord (int playerId, int statCode, byte[] data)
     {
+        this(playerId, statCode, data, (byte)0);
+    }
+
+    public StatRecord (int playerId, int statCode, byte[] data, byte modCount)
+    {
         super();
         this.playerId = playerId;
         this.statCode = statCode;
         this.statData = data;
+        this.modCount = modCount;
     }
 
     // AUTO-GENERATED: METHODS START

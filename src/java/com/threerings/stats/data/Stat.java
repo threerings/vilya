@@ -122,6 +122,23 @@ public abstract class Stat
         _modified = modified;
     }
 
+    /**
+     * Returns the modification count of this Stat when it was loaded from the repository.
+     */
+    public byte getModCount ()
+    {
+        return _modCount;
+    }
+
+    /**
+     * Sets the modification count for this Stat. StatRepository calls this when converting
+     * a StatRecord into a Stat; it shouldn't be called otherwise.
+     */
+    public void setModCount (byte modCount)
+    {
+        _modCount = modCount;
+    }
+
     /** Writes our custom streamable fields. */
     public void writeObject (ObjectOutputStream out)
         throws IOException
@@ -191,6 +208,9 @@ public abstract class Stat
     /** Indicates whether or not this statistic has been modified since it
      * was loaded from the database. */
     protected transient boolean _modified;
+
+    /** The last known modification count for this stat, if it was read from the database. */
+    protected transient byte _modCount;
 
     /** Used for computing our stat codes. */
     protected static CRC32 _crc = new CRC32();
