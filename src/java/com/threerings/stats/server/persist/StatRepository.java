@@ -121,8 +121,6 @@ public class StatRepository extends DepotRepository
     /**
      * Writes out any of the stats in the supplied array that have been modified since they were
      * first loaded. Exceptions that occur while writing the stats will be caught and logged.
-     *
-     *
      */
     public void writeModified (int playerId, Stat[] stats)
     {
