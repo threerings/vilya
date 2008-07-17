@@ -49,7 +49,8 @@ public class IntSetStat extends Stat
     /**
      * Adds the specified int to this set.
      *
-     * @return true if the int was newly added, false if it was already contained in the set.
+     * @return true if the int was newly added, false if it was already contained in the set, or
+     * if the set is full.
      */
     public boolean add (int key)
     {
