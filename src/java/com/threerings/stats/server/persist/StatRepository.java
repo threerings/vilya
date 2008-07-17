@@ -258,7 +258,7 @@ public class StatRepository extends DepotRepository
                 StatRecord.STAT_CODE_C, stat.getCode(),
                 StatRecord.MOD_COUNT_C, stat.getModCount()),
             StatRecord.getKey(playerId, stat.getCode()),
-            StatRecord.STAT_DATA_C, out.toByteArray(), StatRecord.MOD_COUNT_C, nextModCount);
+            StatRecord.STAT_DATA, out.toByteArray(), StatRecord.MOD_COUNT, nextModCount);
 
         if (numRows == 0) {
             // If we failed to update any rows, it could be because we saw an unexpected modCount,
