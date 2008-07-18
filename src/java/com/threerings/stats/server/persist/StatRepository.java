@@ -63,8 +63,8 @@ public class StatRepository extends DepotRepository
     {
         Where where = new Where(StatRecord.PLAYER_ID_C, playerId, StatRecord.STAT_CODE_C, statCode);
         StatRecord record = load(StatRecord.class, where);
-        return (null != record ? decodeStat(record.statCode, record.statData, record.modCount)
-            : null);
+        return (null == record) ? null :
+            decodeStat(record.statCode, record.statData, record.modCount);
     }
 
     /**
@@ -78,7 +78,7 @@ public class StatRepository extends DepotRepository
     public boolean updateStatIfCurrent (int playerId, Stat stat)
         throws PersistenceException
     {
-        return this.updateStat(playerId, stat, true);
+        return updateStat(playerId, stat, true);
     }
 
     /**
@@ -245,20 +245,19 @@ public class StatRepository extends DepotRepository
         try {
             stat.persistTo(new ObjectOutputStream(out), this);
         } catch (IOException ioe) {
-            String errmsg = "Error serializing stat " + stat;
-            throw new PersistenceException(errmsg, ioe);
+            throw new PersistenceException("Error serializing stat " + stat, ioe);
         }
-
+        byte[] data = out.toByteArray();
         byte nextModCount = (byte)((stat.getModCount() + 1) % Byte.MAX_VALUE);
 
         // update the row in the database only if it has the expected modCount
         int numRows = updatePartial(
             StatRecord.class,
             new Where(StatRecord.PLAYER_ID_C, playerId,
-                StatRecord.STAT_CODE_C, stat.getCode(),
-                StatRecord.MOD_COUNT_C, stat.getModCount()),
+                      StatRecord.STAT_CODE_C, stat.getCode(),
+                      StatRecord.MOD_COUNT_C, stat.getModCount()),
             StatRecord.getKey(playerId, stat.getCode()),
-            StatRecord.STAT_DATA, out.toByteArray(), StatRecord.MOD_COUNT, nextModCount);
+            StatRecord.STAT_DATA, data, StatRecord.MOD_COUNT, nextModCount);
 
         if (numRows == 0) {
             // If we failed to update any rows, it could be because we saw an unexpected modCount,
@@ -266,8 +265,7 @@ public class StatRepository extends DepotRepository
             // try to create it.
             if (loadStat(playerId, stat.getCode()) == null) {
                 try {
-                    insert(new StatRecord(playerId, stat.getCode(), out.toByteArray(),
-                        nextModCount));
+                    insert(new StatRecord(playerId, stat.getCode(), data, nextModCount));
                     numRows = 1;
                 } catch (DuplicateKeyException e) {
                     // somebody else inserted the StatRecord before we were able to.
@@ -277,9 +275,9 @@ public class StatRepository extends DepotRepository
 
             if (numRows == 0 && !failIfUncurrent) {
                 // give up and store the stat anyway
-                log.warning("Possible collision while storing StatRecord (playerId: " +
-                    playerId + " stat: " + stat.getType().name() + ")");
-                store(new StatRecord(playerId, stat.getCode(), out.toByteArray(), nextModCount));
+                log.warning("Possible collision while storing StatRecord",
+                            "playerId", playerId, "stat", stat.getType().name());
+                store(new StatRecord(playerId, stat.getCode(), data, nextModCount));
                 numRows = 1;
             }
         }
