@@ -8,19 +8,23 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
-import com.google.inject.Singleton;
+
+import com.google.common.collect.Maps;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import com.samskivert.io.ByteArrayOutInputStream;
 import com.samskivert.io.PersistenceException;
-import com.samskivert.util.HashIntMap;
+import com.samskivert.util.IntMap;
+import com.samskivert.util.IntMaps;
 
 import com.samskivert.jdbc.DuplicateKeyException;
 import com.samskivert.jdbc.depot.CacheInvalidator;
 import com.samskivert.jdbc.depot.DepotRepository;
 import com.samskivert.jdbc.depot.PersistenceContext.CacheEvictionFilter;
+import com.samskivert.jdbc.depot.Key;
 import com.samskivert.jdbc.depot.PersistenceContext;
 import com.samskivert.jdbc.depot.PersistentRecord;
 import com.samskivert.jdbc.depot.clause.FieldDefinition;
@@ -33,6 +37,7 @@ import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 
 import com.threerings.stats.data.Stat;
+import com.threerings.stats.data.StatModifier;
 
 import static com.threerings.stats.Log.log;
 
@@ -56,29 +61,35 @@ public class StatRepository extends DepotRepository
     }
 
     /**
-     * Loads a single stat for the specified player.
-     */
-    public Stat loadStat (int playerId, int statCode)
-        throws PersistenceException
-    {
-        Where where = new Where(StatRecord.PLAYER_ID_C, playerId, StatRecord.STAT_CODE_C, statCode);
-        StatRecord record = load(StatRecord.class, where);
-        return (null == record) ? null :
-            decodeStat(record.statCode, record.statData, record.modCount);
-    }
-
-    /**
-     * Saves a single stat for the specified player, if the stat hasn't been modified in the
-     * repository since being loaded (that is, if its modCount field in the repository hasn't
-     * changed).
+     * Applies a modification to a single stat. If the stat in question does not exist, a blank
+     * instance will be created via {@link Stat.Type#newStat}.
      *
-     * @return true if the stat was written to the repository, false if its modCount prevented
-     * it from being written.
+     * @return true if the stat was modified and written to the database, false if the modifier had
+     * no effect on the stat's data.
      */
-    public boolean updateStatIfCurrent (int playerId, Stat stat)
+    public <T extends Stat> boolean updateStat (int playerId, StatModifier<T> modifier)
         throws PersistenceException
     {
-        return updateStat(playerId, stat, true);
+        Where where = new Where(StatRecord.PLAYER_ID_C, playerId,
+                                StatRecord.STAT_CODE_C, modifier.getType().code());
+
+        for (int ii = 0; ii < MAX_UPDATE_TRIES; ii++) {
+            StatRecord record = load(StatRecord.class, where); // TODO: force cache skip on ii > 0
+            Stat stat = (record == null) ? modifier.getType().newStat() :
+                decodeStat(record.statCode, record.statData, record.modCount);
+            @SuppressWarnings("unchecked") T tstat = (T)stat;
+            modifier.modify(tstat);
+            if (!tstat.isModified()) {
+                return false;
+            }
+            if (updateStat(playerId, stat, false)) {
+                return true;
+            }
+        }
+
+        throw new PersistenceException(
+            "Unable to update stat after " + MAX_UPDATE_TRIES + " attempts " +
+            "[stat=" + modifier.getType() + ", pid=" + playerId + "]");
     }
 
     /**
@@ -128,7 +139,7 @@ public class StatRepository extends DepotRepository
             try {
                 if (stats[ii].getType().isPersistent() &&
                     stats[ii].isModified()) {
-                    updateStat(playerId, stats[ii], false);
+                    updateStat(playerId, stats[ii], true);
                 }
             } catch (Exception e) {
                 log.warning("Error flushing modified stat [stat=" + stats[ii] + "].", e);
@@ -139,9 +150,9 @@ public class StatRepository extends DepotRepository
     // documentation inherited from interface Stat.AuxDataSource
     public int getStringCode (Stat.Type type, String value)
     {
-        HashMap<String,Integer> map = _stringToCode.get(type);
+        Map<String,Integer> map = _stringToCode.get(type);
         if (map == null) {
-            _stringToCode.put(type, map = new HashMap<String,Integer>());
+            _stringToCode.put(type, map = Maps.newHashMap());
         }
         Integer code = map.get(value);
         if (code == null) {
@@ -162,7 +173,7 @@ public class StatRepository extends DepotRepository
     // documentation inherited from interface Stat.AuxDataSource
     public String getCodeString (Stat.Type type, int code)
     {
-        HashIntMap<String> map = _codeToString.get(type);
+        IntMap<String> map = _codeToString.get(type);
         String value = (map == null) ? null : map.get(code);
         if (value == null) {
             // our value may have been mapped on a different server, so refresh
@@ -236,9 +247,10 @@ public class StatRepository extends DepotRepository
     /**
      * Updates the specified stat in the database, inserting it if necessary.
      *
-     * @return true if the update was successful, false if it failed.
+     * @return true if the update was successful, false if it failed due to the stat being
+     * simultaneously modified by another database client.
      */
-    protected boolean updateStat (int playerId, final Stat stat, boolean failIfUncurrent)
+    protected boolean updateStat (int playerId, final Stat stat, boolean forceWrite)
         throws PersistenceException
     {
         ByteArrayOutInputStream out = new ByteArrayOutInputStream();
@@ -247,8 +259,10 @@ public class StatRepository extends DepotRepository
         } catch (IOException ioe) {
             throw new PersistenceException("Error serializing stat " + stat, ioe);
         }
+
         byte[] data = out.toByteArray();
         byte nextModCount = (byte)((stat.getModCount() + 1) % Byte.MAX_VALUE);
+        Key<StatRecord> key = StatRecord.getKey(playerId, stat.getCode());
 
         // update the row in the database only if it has the expected modCount
         int numRows = updatePartial(
@@ -256,27 +270,28 @@ public class StatRepository extends DepotRepository
             new Where(StatRecord.PLAYER_ID_C, playerId,
                       StatRecord.STAT_CODE_C, stat.getCode(),
                       StatRecord.MOD_COUNT_C, stat.getModCount()),
-            StatRecord.getKey(playerId, stat.getCode()),
+            key,
             StatRecord.STAT_DATA, data, StatRecord.MOD_COUNT, nextModCount);
 
+        // if we failed to update any rows, it could be because we saw an unexpected modCount, or
+        // because the stat did not already exist in the repo
         if (numRows == 0) {
-            // If we failed to update any rows, it could be because we saw an unexpected modCount,
-            // or because the stat did not already exist in the repo. If it didn't exist, let's
-            // try to create it.
-            if (loadStat(playerId, stat.getCode()) == null) {
+            // if it didn't exist, let's try to create it
+            if (load(StatRecord.class, key) == null) {
                 try {
                     insert(new StatRecord(playerId, stat.getCode(), data, nextModCount));
                     numRows = 1;
                 } catch (DuplicateKeyException e) {
-                    // somebody else inserted the StatRecord before we were able to.
+                    // someone else inserted the StatRecord before we were able to
                     numRows = 0;
                 }
             }
 
-            if (numRows == 0 && !failIfUncurrent) {
-                // give up and store the stat anyway
+            // if it did exist but we collided with another writer, we may want to write anyway
+            if (numRows == 0 && forceWrite) {
                 log.warning("Possible collision while storing StatRecord",
-                            "playerId", playerId, "stat", stat.getType().name());
+                            "playerId", playerId, "stat", stat.getType().name(),
+                            "overwriting", load(StatRecord.class, key));
                 store(new StatRecord(playerId, stat.getCode(), data, nextModCount));
                 numRows = 1;
             }
@@ -355,14 +370,14 @@ public class StatRepository extends DepotRepository
     /** Helper function used at repository startup. */
     protected void mapStringCode (Stat.Type type, String value, int code)
     {
-        HashMap<String,Integer> fmap = _stringToCode.get(type);
+        Map<String,Integer> fmap = _stringToCode.get(type);
         if (fmap == null) {
-            _stringToCode.put(type, fmap = new HashMap<String,Integer>());
+            _stringToCode.put(type, fmap = Maps.newHashMap());
         }
         fmap.put(value, code);
-        HashIntMap<String> rmap = _codeToString.get(type);
+        IntMap<String> rmap = _codeToString.get(type);
         if (rmap == null) {
-            _codeToString.put(type, rmap = new HashIntMap<String>());
+            _codeToString.put(type, rmap = IntMaps.newHashIntMap());
         }
         rmap.put(code, value);
     }
@@ -374,8 +389,8 @@ public class StatRepository extends DepotRepository
         classes.add(StringCodeRecord.class);
     }
 
-    protected HashMap<Stat.Type,HashMap<String,Integer>> _stringToCode =
-        new HashMap<Stat.Type,HashMap<String,Integer>>();
-    protected HashMap<Stat.Type,HashIntMap<String>> _codeToString =
-        new HashMap<Stat.Type,HashIntMap<String>>();
+    protected Map<Stat.Type,Map<String,Integer>> _stringToCode = Maps.newHashMap();
+    protected Map<Stat.Type,IntMap<String>> _codeToString = Maps.newHashMap();
+
+    protected static final int MAX_UPDATE_TRIES = 5;
 }

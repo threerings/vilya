@@ -4,6 +4,7 @@
 package com.threerings.stats.data;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.zip.CRC32;
 
 import com.samskivert.util.HashIntMap;
@@ -27,7 +28,7 @@ public abstract class Stat
     /**
      * Defines the various per-player tracked statistics.
      */
-    public interface Type
+    public interface Type extends Serializable
     {
         /** Returns a new blank stat instance of the specified type. */
         public Stat newStat ();
