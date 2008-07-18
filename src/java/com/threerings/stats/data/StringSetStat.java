@@ -45,7 +45,7 @@ public abstract class StringSetStat extends Stat
         System.arraycopy(_values, iidx, values, iidx+1, (_values.length-iidx));
         values[iidx] = key;
         _values = values;
-        _modified = true;
+        setModified(true);
         return true;
     }
 

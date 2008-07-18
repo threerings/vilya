@@ -30,7 +30,7 @@ public class IntStat extends Stat
     {
         if (value != _value) {
             _value = value;
-            _modified = true;
+            setModified(true);
             return true;
         }
         return false;

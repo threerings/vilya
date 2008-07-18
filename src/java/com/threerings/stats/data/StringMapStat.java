@@ -47,7 +47,7 @@ public abstract class StringMapStat extends Stat
         int ovalue = _values[iidx];
         _values[iidx] = Math.min(value, getMaxValue());
         if (_values[iidx] != ovalue) {
-            _modified = true;
+            setModified(true);
             return true;
         }
         return false;
@@ -67,7 +67,7 @@ public abstract class StringMapStat extends Stat
         int ovalue = _values[iidx];
         _values[iidx] = Math.min(_values[iidx] + amount, getMaxValue());
         if (_values[iidx] != ovalue) {
-            _modified = true;
+            setModified(true);
             return true;
         }
         return false;

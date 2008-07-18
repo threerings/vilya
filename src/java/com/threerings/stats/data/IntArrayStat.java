@@ -35,7 +35,7 @@ public class IntArrayStat extends Stat
     {
         if (!Arrays.equals(_value, value)) {
             _value = value;
-            _modified = true;
+            setModified(true);
             return true;
         }
         return false;
@@ -47,7 +47,7 @@ public class IntArrayStat extends Stat
     public void appendValue (int value)
     {
         _value = ArrayUtil.append(_value, value);
-        _modified = true;
+        setModified(true);
     }
     
     @Override // documentation inherited
