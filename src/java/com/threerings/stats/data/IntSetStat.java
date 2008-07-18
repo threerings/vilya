@@ -10,6 +10,9 @@ import com.samskivert.util.StringUtil;
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 
+/**
+ * Used to track a statistic comprised of a bounded set of integers.
+ */
 public class IntSetStat extends Stat
 {
     /**
