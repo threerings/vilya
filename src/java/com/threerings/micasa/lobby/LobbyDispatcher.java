@@ -22,7 +22,6 @@
 package com.threerings.micasa.lobby;
 
 import com.threerings.presents.data.ClientObject;
-import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
 

@@ -281,9 +281,7 @@ public class Percentiler
         return data;
     }
 
-    /**
-     * Generates a string representation of this instance.
-     */
+    @Override
     public String toString ()
     {
         StringBuilder buf = new StringBuilder();

@@ -483,7 +483,7 @@ public class SceneDirector extends BasicDirector
         }
     }
 
-    // documentation inherited from interface
+    @Override
     public void clientDidLogoff (Client client)
     {
         super.clientDidLogoff(client);
@@ -497,13 +497,13 @@ public class SceneDirector extends BasicDirector
         _sservice = null;
     }
 
-    // documentation inherited from interface
+    @Override
     protected void registerServices (Client client)
     {
         client.addServiceGroup(WHIRLED_GROUP);
     }
 
-    // documentation inherited from interface
+    @Override
     protected void fetchServices (Client client)
     {
         // get a handle on our scene service

@@ -152,6 +152,7 @@ public class TileInfoPanel extends JSplitPane
         _quickList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         _quickList.addListSelectionListener(this);
         _quickList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
             public Component getListCellRendererComponent (
                 JList list, Object value, int index, boolean isSelected,
                 boolean cellHasFocus)
@@ -197,6 +198,7 @@ public class TileInfoPanel extends JSplitPane
     protected void registerKeyListener (EditorContext ctx)
     {
         ctx.getKeyDispatcher().addGlobalKeyListener(new KeyAdapter() {
+            @Override
             public void keyTyped (KeyEvent e)
             {
                 char keychar = e.getKeyChar();
@@ -251,7 +253,7 @@ public class TileInfoPanel extends JSplitPane
         }
     }
 
-    // documentation inherited
+    @Override
     public Dimension getPreferredSize ()
     {
         return new Dimension(WIDTH, HEIGHT);
@@ -598,7 +600,7 @@ public class TileInfoPanel extends JSplitPane
             return 1;
         }
 
-        // documentation inherited
+        @Override
         public String getColumnName (int columnIndex)
         {
             return null;
@@ -631,7 +633,7 @@ public class TileInfoPanel extends JSplitPane
             return (_icons[row] = new ImageIcon(img));
         }
 
-        // documentation inherited
+        @Override
         public Class getColumnClass (int c)
         {
             // return the object associated with the column to force
@@ -673,6 +675,7 @@ public class TileInfoPanel extends JSplitPane
             return tileSet.getName();
         }
 
+        @Override
         public String toString ()
         {
             return shortname;
@@ -684,6 +687,7 @@ public class TileInfoPanel extends JSplitPane
                 ((TileSetRecord) o).fullname());
         }
 
+        @Override
         public boolean equals (Object o)
         {
             if (o instanceof TileSetRecord) {

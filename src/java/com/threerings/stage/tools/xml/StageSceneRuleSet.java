@@ -31,7 +31,7 @@ import com.threerings.stage.data.StageSceneModel;
  */
 public class StageSceneRuleSet extends SceneRuleSet
 {
-    // documentation inherited
+    @Override
     protected Class getSceneClass ()
     {
         return StageSceneModel.class;

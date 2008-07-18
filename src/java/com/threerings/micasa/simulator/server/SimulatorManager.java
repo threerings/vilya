@@ -35,9 +35,7 @@ import com.threerings.presents.server.ClientResolutionListener;
 import com.threerings.presents.server.InvocationManager;
 
 import com.threerings.crowd.data.BodyObject;
-import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.server.LocationManager;
-import com.threerings.crowd.server.PlaceManager;
 import com.threerings.crowd.server.PlaceRegistry;
 
 import com.threerings.parlor.game.data.GameAI;

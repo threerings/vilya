@@ -57,6 +57,7 @@ public class DirectionButton extends AbstractButton
         setModel(new DefaultButtonModel());
 
         addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed (MouseEvent event)
             {
                 if (isEnabled()) {
@@ -65,6 +66,7 @@ public class DirectionButton extends AbstractButton
                 }
             }
 
+            @Override
             public void mouseReleased (MouseEvent event)
             {
                 if ((_armed != -1) &&
@@ -87,6 +89,7 @@ public class DirectionButton extends AbstractButton
      * Paint this component and the selected direction,
      * dimmed if we're inactive.
      */
+    @Override
     public void paintComponent (Graphics g)
     {
         super.paintComponent(g);
@@ -151,7 +154,7 @@ public class DirectionButton extends AbstractButton
         return -1;
     }
 
-    // documentation inherited
+    @Override
     public void setSize (Dimension d)
     {
         super.setSize(d);
@@ -183,7 +186,7 @@ public class DirectionButton extends AbstractButton
         }
     }
 
-    // documentation inherited
+    @Override
     public Dimension getPreferredSize ()
     {
         return new Dimension(_prefdia, _prefdia);

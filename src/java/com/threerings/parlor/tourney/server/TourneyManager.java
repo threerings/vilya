@@ -25,8 +25,6 @@ import com.google.inject.Inject;
 import com.samskivert.util.Interval;
 import com.samskivert.util.ResultListener;
 
-import com.threerings.util.Name;
-
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.server.BodyLocator;
 
@@ -262,6 +260,7 @@ public abstract class TourneyManager
 
         // destroy the object in a couple of minutes
         new Interval(_omgr) {
+            @Override
             public void expired () {
                 _omgr.destroyObject(_trobj.getOid());
             }

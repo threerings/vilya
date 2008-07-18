@@ -9,8 +9,6 @@ import java.util.zip.CRC32;
 
 import com.samskivert.util.HashIntMap;
 import com.samskivert.util.StringUtil;
-import com.threerings.util.MessageBundle;
-
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 
@@ -170,9 +168,7 @@ public abstract class Stat
     public abstract void unpersistFrom (ObjectInputStream in, AuxDataSource aux)
         throws IOException, ClassNotFoundException;
 
-    /**
-     * Generates a string representation of this instance.
-     */
+    @Override
     public String toString ()
     {
         StringBuffer buf = new StringBuffer(StringUtil.toUSLowerCase(_type.name()));
@@ -193,7 +189,7 @@ public abstract class Stat
         return _type.name();
     }
 
-    // documentation inherited from Cloneable
+    @Override
     public Object clone ()
     {
         try {

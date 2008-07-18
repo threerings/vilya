@@ -32,7 +32,6 @@ import com.threerings.miso.util.MisoUtil;
 import com.threerings.util.DirectionCodes;
 import com.threerings.util.DirectionUtil;
 
-import com.threerings.whirled.spot.data.Location;
 import com.threerings.whirled.spot.tools.EditablePortal;
 
 import com.threerings.stage.data.StageLocation;
@@ -72,6 +71,7 @@ public class PortalTool extends MouseInputAdapter
     /**
      * When the mouse is dragged we update the current portal.
      */
+    @Override
     public void mouseDragged (MouseEvent event)
     {
         calculateOrientation(event.getX(), event.getY());
@@ -81,6 +81,7 @@ public class PortalTool extends MouseInputAdapter
      * If button1 is released, we store the new portal, if button3: we
      * cancel.
      */
+    @Override
     public void mouseReleased (MouseEvent event)
     {
         switch (event.getButton()) {

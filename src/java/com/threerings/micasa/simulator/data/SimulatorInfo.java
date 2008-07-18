@@ -32,6 +32,7 @@ public class SimulatorInfo
     /** The number of players in the game. */
     public int playerCount;
 
+    @Override
     public String toString ()
     {
         return "[gameConfigClass=" + gameConfigClass +

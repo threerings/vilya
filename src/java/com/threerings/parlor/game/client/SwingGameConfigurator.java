@@ -28,10 +28,7 @@ import java.awt.Insets;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import com.samskivert.swing.VGroupLayout;
-
 import com.threerings.parlor.game.data.GameConfig;
-import com.threerings.parlor.util.ParlorContext;
 
 /**
  * Provides the base from which interfaces can be built to configure games

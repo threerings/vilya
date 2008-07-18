@@ -68,6 +68,7 @@ public class LobbySelector extends JPanel
         _loblist.setCellRenderer(new LobbyCellRenderer());
         // add a mouse listener that tells us about double clicks
         MouseListener ml = new MouseAdapter() {
+            @Override
             public void mouseClicked (MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     int index = _loblist.locationToIndex(e.getPoint());
@@ -80,7 +81,7 @@ public class LobbySelector extends JPanel
         add(_loblist, BorderLayout.CENTER);
     }
 
-    // documentation inherited
+    @Override
     public void addNotify ()
     {
         super.addNotify();
@@ -193,6 +194,7 @@ public class LobbySelector extends JPanel
     protected static class LobbyCellRenderer
         extends DefaultListCellRenderer
     {
+        @Override
         public Component getListCellRendererComponent(
             JList list,
             Object value,

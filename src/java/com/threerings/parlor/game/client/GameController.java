@@ -61,6 +61,7 @@ public abstract class GameController extends PlaceController
      * @param config the configuration of the game we are intended to
      * control.
      */
+    @Override
     public void init (CrowdContext ctx, PlaceConfig config)
     {
         // cast our references before we call super.init() so that when super.init() calls
@@ -75,6 +76,7 @@ public abstract class GameController extends PlaceController
      * Adds this controller as a listener to the game object (thus derived classes need not do so)
      * and lets the game manager know that we are now ready to go.
      */
+    @Override
     public void willEnterPlace (PlaceObject plobj)
     {
         super.willEnterPlace(plobj);
@@ -109,6 +111,7 @@ public abstract class GameController extends PlaceController
     /**
      * Removes our listener registration from the game object and cleans house.
      */
+    @Override
     public void didLeavePlace (PlaceObject plobj)
     {
         super.didLeavePlace(plobj);
@@ -174,6 +177,7 @@ public abstract class GameController extends PlaceController
      * Handles basic game controller action events. Derived classes should be sure to call
      * <code>super.handleAction</code> for events they don't specifically handle.
      */
+    @Override
     public boolean handleAction (ActionEvent action)
     {
         return super.handleAction(action);
@@ -249,6 +253,7 @@ public abstract class GameController extends PlaceController
 
         // let our delegates do their business
         applyToDelegates(new DelegateOp(GameControllerDelegate.class) {
+            @Override
             public void apply (PlaceControllerDelegate delegate) {
                 ((GameControllerDelegate)delegate).gameDidStart();
             }
@@ -263,6 +268,7 @@ public abstract class GameController extends PlaceController
     {
         // let our delegates do their business
         applyToDelegates(new DelegateOp(GameControllerDelegate.class) {
+            @Override
             public void apply (PlaceControllerDelegate delegate) {
                 ((GameControllerDelegate)delegate).gameDidEnd();
             }
@@ -276,6 +282,7 @@ public abstract class GameController extends PlaceController
     {
         // let our delegates do their business
         applyToDelegates(new DelegateOp(GameControllerDelegate.class) {
+            @Override
             public void apply (PlaceControllerDelegate delegate) {
                 ((GameControllerDelegate)delegate).gameWasCancelled();
             }
@@ -290,6 +297,7 @@ public abstract class GameController extends PlaceController
     {
         // let our delegates do their business
         applyToDelegates(new DelegateOp(GameControllerDelegate.class) {
+            @Override
             public void apply (PlaceControllerDelegate delegate) {
                 ((GameControllerDelegate)delegate).gameWillReset();
             }

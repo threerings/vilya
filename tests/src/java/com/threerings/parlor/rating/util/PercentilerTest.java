@@ -36,6 +36,7 @@ public class PercentilerTest extends TestCase
         super(PercentilerTest.class.getName());
     }
 
+    @Override
     public void runTest ()
     {
         // create a percentiler

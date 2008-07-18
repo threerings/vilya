@@ -27,13 +27,9 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
-import javax.swing.UIManager;
-
 import com.samskivert.swing.Label;
-import com.samskivert.swing.util.SwingUtil;
 import com.samskivert.util.StringUtil;
 
 import com.threerings.media.VirtualMediaPanel;
@@ -110,6 +106,7 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
      * If paused, a label will be displayed with the component's font,
      * which may be set with setFont().
      */
+    @Override
     public void setPaused (boolean paused)
     {
         if (paused) {
@@ -146,7 +143,7 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
         anim.addAnimationObserver(_actionAnimObs);
     }
 
-    // documentation inherited
+    @Override
     public void abortAnimation (Animation anim)
     {
         super.abortAnimation(anim);
@@ -187,9 +184,7 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
         _actionSprites.add(sprite);
     }
 
-    /**
-     * Removes the given sprite from the board.
-     */
+    @Override
     public void removeSprite (Sprite sprite)
     {
         super.removeSprite(sprite);
@@ -205,14 +200,14 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
         }
     }
 
-    // documentation inherited
+    @Override
     public void clearSprites ()
     {
         super.clearSprites();
         _actionSprites.clear();
     }
 
-    // documentation inherited
+    @Override
     public void clearAnimations ()
     {
         super.clearAnimations();
@@ -250,6 +245,7 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
     public void dumpActors ()
     {
         StringUtil.Formatter fmt = new StringUtil.Formatter() {
+            @Override
             public String toString (Object obj) {
                 return StringUtil.shortClassName(obj);
             }
@@ -302,7 +298,7 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
         _avoidArranger.positionAvoidAnimation(anim, _vbounds);
     }
 
-    // documentation inherited
+    @Override
     public void paintBehind (Graphics2D gfx, Rectangle dirty)
     {
         super.paintBehind(gfx, dirty);
@@ -320,7 +316,7 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
           gfx.fill(dirty);
     }
 
-    // documentation inherited
+    @Override
     public void paintBetween (Graphics2D gfx, Rectangle dirty)
     {
         super.paintBetween(gfx, dirty);
@@ -328,7 +324,7 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
         renderBoard(gfx, dirty);
     }
 
-    // documentation inherited
+    @Override
     protected void paintInFront (Graphics2D gfx, Rectangle dirty)
     {
         super.paintInFront(gfx, dirty);
@@ -404,6 +400,7 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
 
     /** Listens to our action animations and clears them when they're done. */
     protected AnimationAdapter _actionAnimObs = new AnimationAdapter() {
+        @Override
         public void animationCompleted (Animation anim, long when) {
             animationFinished(anim);
         }

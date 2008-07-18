@@ -84,7 +84,7 @@ public abstract class SpotSceneRuleSet implements NestableRuleSet
             _ruleset = ruleset;
         }
 
-        // documentation inherited
+        @Override
         public void begin (String namespace, String name, Attributes attributes)
                 throws Exception
         {
@@ -105,7 +105,7 @@ public abstract class SpotSceneRuleSet implements NestableRuleSet
      */
     protected static class PortalFieldsRule extends Rule
     {
-        // documentation inherited
+        @Override
         public void begin (String namespace, String name, Attributes attrs)
             throws Exception
         {

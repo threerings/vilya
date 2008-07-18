@@ -147,20 +147,20 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
         }
     }
 
-    @Override // from PlaceManagerDelegate
+    @Override
     public void didInit (PlaceConfig config)
     {
         super.didInit(config);
         _tgmgr = (TurnGameManager)_plmgr;
     }
 
-    @Override // from PlaceManagerDelegate
+    @Override
     public void didStartup (PlaceObject plobj)
     {
         _turnGame = (TurnGameObject)plobj;
     }
 
-    // documentation inherited
+    @Override
     public void playerWasReplaced (int pidx, Name oplayer, Name nplayer)
     {
         // we need to update the turn holder if the current turn holder was the player that was
@@ -178,6 +178,7 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
      * This should be called from {@link GameManager#gameDidStart} to let the turn delegate perform
      * start of game processing.
      */
+    @Override
     public void gameDidStart ()
     {
         // figure out who will be first

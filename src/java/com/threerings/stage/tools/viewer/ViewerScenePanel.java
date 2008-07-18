@@ -21,10 +21,8 @@
 
 package com.threerings.stage.tools.viewer;
 
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 
 import com.samskivert.swing.Controller;
@@ -36,12 +34,10 @@ import com.threerings.media.util.PerformanceObserver;
 import com.threerings.cast.CharacterDescriptor;
 import com.threerings.cast.CharacterManager;
 import com.threerings.cast.CharacterSprite;
-import com.threerings.cast.ComponentRepository;
 import com.threerings.cast.util.CastUtil;
 
 import com.threerings.media.sprite.PathObserver;
 import com.threerings.media.sprite.Sprite;
-import com.threerings.media.sprite.SpriteManager;
 import com.threerings.media.util.LineSegmentPath;
 import com.threerings.media.util.Path;
 
@@ -156,7 +152,7 @@ public class ViewerScenePanel extends StageScenePanel
         }
     }
 
-    // documentation inherited
+    @Override
     public void paint (Graphics g)
     {
         super.paint(g);
@@ -169,7 +165,7 @@ public class ViewerScenePanel extends StageScenePanel
         log.info(name + " [ticks=" + ticks + "].");
     }
 
-    /** MouseListener interface methods */
+    @Override
     public void mousePressed (MouseEvent e)
     {
         int x = e.getX(), y = e.getY();

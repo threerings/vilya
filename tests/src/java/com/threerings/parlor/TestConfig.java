@@ -30,31 +30,37 @@ public class TestConfig extends GameConfig
     /** The foozle parameter. */
     public int foozle;
 
+    @Override
     public int getGameId ()
     {
         return 0;
     }
 
+    @Override
     public String getGameIdent ()
     {
         return "test";
     }
 
+    @Override
     public GameConfigurator createConfigurator ()
     {
         return null;
     }
 
+    @Override
     public PlaceController createController ()
     {
         return new TestController();
     }
 
+    @Override
     public String getManagerClassName ()
     {
         return "com.threerings.parlor.test.TestManager";
     }
 
+    @Override
     protected void toString (StringBuilder buf)
     {
         super.toString(buf);

@@ -237,9 +237,7 @@ public class EditorModel
         return _objectGrip;
     }
 
-    /**
-     * Returns a string representation of the editor model.
-     */
+    @Override
     public String toString ()
     {
         StringBuilder buf = new StringBuilder();

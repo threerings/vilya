@@ -36,23 +36,23 @@ public interface SpotProvider extends InvocationProvider
     /**
      * Handles a {@link SpotService#changeLocation} request.
      */
-    public void changeLocation (ClientObject caller, int arg1, Location arg2, InvocationService.ConfirmListener arg3)
+    void changeLocation (ClientObject caller, int arg1, Location arg2, InvocationService.ConfirmListener arg3)
         throws InvocationException;
 
     /**
      * Handles a {@link SpotService#clusterSpeak} request.
      */
-    public void clusterSpeak (ClientObject caller, String arg1, byte arg2);
+    void clusterSpeak (ClientObject caller, String arg1, byte arg2);
 
     /**
      * Handles a {@link SpotService#joinCluster} request.
      */
-    public void joinCluster (ClientObject caller, int arg1, InvocationService.ConfirmListener arg2)
+    void joinCluster (ClientObject caller, int arg1, InvocationService.ConfirmListener arg2)
         throws InvocationException;
 
     /**
      * Handles a {@link SpotService#traversePortal} request.
      */
-    public void traversePortal (ClientObject caller, int arg1, int arg2, int arg3, SceneService.SceneMoveListener arg4)
+    void traversePortal (ClientObject caller, int arg1, int arg2, int arg3, SceneService.SceneMoveListener arg4)
         throws InvocationException;
 }

@@ -26,7 +26,6 @@ import com.threerings.parlor.data.ParlorMarshaller;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.ClientObject;
-import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.util.Name;

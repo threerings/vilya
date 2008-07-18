@@ -385,21 +385,19 @@ public class Table
         return tableId;
     }
 
-    // documentation inherited
+    @Override
     public boolean equals (Object other)
     {
         return (other instanceof Table) && (tableId == ((Table) other).tableId);
     }
 
-    // documentation inherited
+    @Override
     public int hashCode ()
     {
         return tableId;
     }
 
-    /**
-     * Generates a string representation of this table instance.
-     */
+    @Override
     public String toString ()
     {
         StringBuilder buf = new StringBuilder();

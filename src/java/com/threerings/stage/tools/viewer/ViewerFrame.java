@@ -23,7 +23,6 @@ package com.threerings.stage.tools.viewer;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.GraphicsConfiguration;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -118,9 +117,11 @@ public class ViewerFrame extends ManagedJFrame
         String where = System.getProperty("user.dir");
         JFileChooser chooser = new JFileChooser(where);
         chooser.setFileFilter(new FileFilter () {
+            @Override
             public boolean accept (File f) {
                 return (f.isDirectory() || f.getName().endsWith(".xml"));
             }
+            @Override
             public String getDescription () {
                 return "XML Files";
             }

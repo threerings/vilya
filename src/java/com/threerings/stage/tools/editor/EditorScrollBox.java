@@ -54,6 +54,7 @@ public class EditorScrollBox extends ScrollBox
         _panel = panel;
         _panel.setEditorScrollBox(this);
         _panel.addComponentListener(new ComponentAdapter() {
+            @Override
             public void componentResized (ComponentEvent e)
             {
                 SwingUtil.refresh(EditorScrollBox.this);
@@ -122,7 +123,7 @@ public class EditorScrollBox extends ScrollBox
         _vert.setValue(y);
     }
 
-    // documentation inherited
+    @Override
     public Dimension getPreferredSize ()
     {
         int horz = _horz.getMaximum() - _horz.getMinimum();
@@ -139,7 +140,7 @@ public class EditorScrollBox extends ScrollBox
         return new Dimension(width, height);
     }
 
-    // documentation inherited
+    @Override
     public void setBounds (int x, int y, int w, int h)
     {
         super.setBounds(x, y, w, h);
@@ -149,7 +150,7 @@ public class EditorScrollBox extends ScrollBox
         }
     }
 
-    // documentation inherited
+    @Override
     protected void paintBackground (Graphics g)
     {
         g.drawImage(_miniMap, 0, 0, null);
@@ -171,7 +172,7 @@ public class EditorScrollBox extends ScrollBox
         g.dispose();
     }
 
-    // documentation inherited
+    @Override
     protected boolean isActiveButton (MouseEvent e)
     {
         // all buttons are ok.

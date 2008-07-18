@@ -26,8 +26,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 
-import java.util.List;
-
 import com.samskivert.util.IntListUtil;
 
 import com.threerings.media.FrameParticipant;
@@ -51,7 +49,6 @@ import com.threerings.puzzle.drop.data.DropConfig;
 import com.threerings.puzzle.drop.data.DropLogic;
 import com.threerings.puzzle.drop.data.DropPieceCodes;
 import com.threerings.puzzle.drop.util.PieceDropLogic;
-import com.threerings.puzzle.drop.util.PieceDropper.PieceDropInfo;
 import com.threerings.puzzle.drop.util.PieceDropper;
 
 import static com.threerings.puzzle.Log.log;
@@ -124,7 +121,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
         }
     }
 
-    // documentation inherited
+    @Override
     public void init (CrowdContext ctx, PlaceConfig config)
     {
         super.init(ctx, config);
@@ -169,6 +166,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     /**
      * Starts up the action; tries evolving the board to get things going.
      */
+    @Override
     protected void startAction ()
     {
         super.startAction();
@@ -207,7 +205,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
         unstabilizeBoard();
     }
 
-    // documentation inherited
+    @Override
     protected boolean canClearAction ()
     {
         if (!_stable) {
@@ -221,6 +219,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
      * sprites, any pieces rising in the board, and resets the animation
      * timestamps.
      */
+    @Override
     protected void clearAction ()
     {
         super.clearAction();
@@ -246,7 +245,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
         _ctx.getFrameManager().removeFrameParticipant(this);
     }
 
-    // documentation inherited
+    @Override
     public void gameDidEnd ()
     {
         super.gameDidEnd();
@@ -259,7 +258,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
 //        _dview.setRisingPieces(null);
     }
 
-    // documentation inherited
+    @Override
     public boolean handleAction (ActionEvent action)
     {
         // handle any block-related movement actions
@@ -281,7 +280,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
         return true;
     }
 
-    // documentation inherited
+    @Override
     public void setBoard (Board board)
     {
         super.setBoard(board);
@@ -1183,6 +1182,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
 
     /** Used to evolve the board following the completion of animations. */
     protected AnimationAdapter _evolveObserver = new AnimationAdapter() {
+        @Override
         public void animationCompleted (Animation anim, long when) {
             animationDidFinish(anim);
         }

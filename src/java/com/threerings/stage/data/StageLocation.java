@@ -91,6 +91,7 @@ public class StageLocation extends SimpleStreamableObject
     /**
      * Location equality is determined by coordinates.
      */
+    @Override
     public boolean equals (Object other)
     {
         if (other instanceof StageLocation) {
@@ -105,14 +106,13 @@ public class StageLocation extends SimpleStreamableObject
     /**
      * Computes a reasonable hashcode for location instances.
      */
+    @Override
     public int hashCode ()
     {
         return x ^ y;
     }
 
-    /**
-     * Creates a clone of this instance.
-     */
+    @Override
     public Object clone ()
     {
         try {

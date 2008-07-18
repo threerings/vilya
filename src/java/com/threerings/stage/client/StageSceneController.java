@@ -59,13 +59,13 @@ public class StageSceneController extends SpotSceneController
         log.warning("handleClusterClicked(" + source + ", " + tuple + ")");
     }
 
-    // documentation inherited
+    @Override
     protected PlaceView createPlaceView (CrowdContext ctx)
     {
         return new StageScenePanel((StageContext)ctx, this);
     }
 
-    // documentation inherited
+    @Override
     protected void sceneUpdated (SceneUpdate update)
     {
         super.sceneUpdated(update);

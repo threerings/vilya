@@ -27,12 +27,10 @@ import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.server.LocationManager;
 
-import com.threerings.whirled.client.SceneService;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.server.AbstractSceneMoveHandler;
 import com.threerings.whirled.server.SceneManager;
-import com.threerings.whirled.server.SceneMoveHandler;
 import com.threerings.whirled.server.SceneRegistry;
 
 import com.threerings.whirled.zone.client.ZoneService;
@@ -81,7 +79,7 @@ public class ZoneMoveHandler extends AbstractSceneMoveHandler
         _listener.requestFailed(ZoneCodes.NO_SUCH_ZONE);
     }
 
-    @Override // from AbstractSceneMoveHandler
+    @Override
     protected void effectSceneMove (SceneManager scmgr)
         throws InvocationException
     {

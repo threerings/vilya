@@ -216,6 +216,7 @@ public class ObjectEditorDialog extends EditorDialog
             return colorId - ((ZationChoice)other).colorId;
         }
 
+        @Override
         public String toString ()
         {
             return name;

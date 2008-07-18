@@ -111,7 +111,7 @@ public class SpotSceneManager extends SceneManager
         updateLocation(body, portal.getLocation());
     }
 
-    // documentation inherited
+    @Override
     protected void didStartup ()
     {
         // get a casted reference to our place object (we need to do this before calling
@@ -122,7 +122,7 @@ public class SpotSceneManager extends SceneManager
         super.didStartup();
     }
 
-    // documentation inherited
+    @Override
     protected void gotSceneData ()
     {
         super.gotSceneData();
@@ -131,7 +131,7 @@ public class SpotSceneManager extends SceneManager
         _sscene = (SpotScene)_scene;
     }
 
-    // documentation inherited
+    @Override
     protected void bodyLeft (int bodyOid)
     {
         super.bodyLeft(bodyOid);
@@ -160,7 +160,7 @@ public class SpotSceneManager extends SceneManager
         }
     }
 
-    // documentation inherited
+    @Override
     protected void insertOccupantInfo (OccupantInfo info, BodyObject body)
     {
         super.insertOccupantInfo(info, body);
@@ -564,6 +564,7 @@ public class SpotSceneManager extends SceneManager
             return _cluster;
         }
 
+        @Override
         public String toString ()
         {
             return "[cluster=" + _cluster + ", size=" + size() + "]";

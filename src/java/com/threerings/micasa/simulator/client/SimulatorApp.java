@@ -125,10 +125,12 @@ public class SimulatorApp
 
         // we want to exit when we logged off or failed to log on
         client.addClientObserver(new ClientAdapter() {
+            @Override
             public void clientFailedToLogon (Client c, Exception cause) {
                 log.info("Client failed to logon: " + cause);
                 System.exit(0);
             }
+            @Override
             public void clientDidLogoff (Client c) {
                 System.exit(0);
             }
@@ -156,6 +158,7 @@ public class SimulatorApp
         // in normal circumstances they are entirely different processes;
         // so we just wait half a second which does the job
         new Interval() {
+            @Override
             public void expired () {
                 _client.getParlorContext().getClient().logon();
             }
@@ -210,6 +213,7 @@ public class SimulatorApp
             _server = server;
         }
 
+        @Override
         public void run ()
         {
             _server.run();

@@ -26,7 +26,6 @@ import com.threerings.parlor.card.client.CardGameReceiver;
 import com.threerings.parlor.card.data.Card;
 import com.threerings.parlor.card.data.Hand;
 import com.threerings.presents.data.ClientObject;
-import com.threerings.presents.net.Transport;
 import com.threerings.presents.server.InvocationSender;
 
 /**

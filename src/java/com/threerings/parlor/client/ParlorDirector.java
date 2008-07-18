@@ -122,7 +122,7 @@ public class ParlorDirector extends BasicDirector
         _pservice.startSolitaire(_ctx.getClient(), config, listener);
     }
 
-    // documentation inherited
+    @Override
     public void clientDidLogoff (Client client)
     {
         super.clientDidLogoff(client);
@@ -188,13 +188,13 @@ public class ParlorDirector extends BasicDirector
         // TBD
     }
 
-    @Override // from BasicDirector
+    @Override
     protected void registerServices (Client client)
     {
         client.addServiceGroup(PARLOR_GROUP);
     }
 
-    @Override // from BasicDirector
+    @Override
     protected void fetchServices (Client client)
     {
         // get a handle on our parlor services

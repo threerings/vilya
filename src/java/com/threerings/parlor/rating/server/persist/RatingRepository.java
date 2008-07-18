@@ -32,12 +32,9 @@ import com.google.inject.Singleton;
 import com.google.inject.Inject;
 
 import com.samskivert.io.PersistenceException;
-import com.samskivert.util.HashIntMap;
-import com.samskivert.util.IntMap;
 import com.samskivert.util.IntSet;
 
 import com.samskivert.jdbc.depot.DepotRepository;
-import com.samskivert.jdbc.depot.EntityMigration;
 import com.samskivert.jdbc.depot.PersistenceContext;
 import com.samskivert.jdbc.depot.PersistentRecord;
 import com.samskivert.jdbc.depot.clause.Limit;
@@ -182,7 +179,7 @@ public class RatingRepository extends DepotRepository
         store(record);
     }
 
-    @Override // from DepotRepository
+    @Override
     protected void getManagedRecords (Set<Class<? extends PersistentRecord>> classes)
     {
         classes.add(RatingRecord.class);

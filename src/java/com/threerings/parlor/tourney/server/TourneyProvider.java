@@ -34,18 +34,18 @@ public interface TourneyProvider extends InvocationProvider
     /**
      * Handles a {@link TourneyService#cancel} request.
      */
-    public void cancel (ClientObject caller, InvocationService.ConfirmListener arg1)
+    void cancel (ClientObject caller, InvocationService.ConfirmListener arg1)
         throws InvocationException;
 
     /**
      * Handles a {@link TourneyService#join} request.
      */
-    public void join (ClientObject caller, InvocationService.ConfirmListener arg1)
+    void join (ClientObject caller, InvocationService.ConfirmListener arg1)
         throws InvocationException;
 
     /**
      * Handles a {@link TourneyService#leave} request.
      */
-    public void leave (ClientObject caller, InvocationService.ConfirmListener arg1)
+    void leave (ClientObject caller, InvocationService.ConfirmListener arg1)
         throws InvocationException;
 }

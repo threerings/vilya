@@ -25,7 +25,6 @@ import com.threerings.parlor.client.ParlorDecoder;
 import com.threerings.parlor.client.ParlorReceiver;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.presents.data.ClientObject;
-import com.threerings.presents.net.Transport;
 import com.threerings.presents.server.InvocationSender;
 import com.threerings.util.Name;
 

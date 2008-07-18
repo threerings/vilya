@@ -26,15 +26,10 @@ import static com.threerings.parlor.Log.log;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
-
 import com.google.common.collect.Lists;
 
-import com.samskivert.io.PersistenceException;
 import com.samskivert.jdbc.RepositoryUnit;
 
-import com.samskivert.util.ArrayIntSet;
-import com.samskivert.util.ArrayUtil;
 import com.samskivert.util.IntMap;
 import com.samskivert.util.IntMaps;
 import com.samskivert.util.Invoker;
@@ -67,7 +62,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
         _invoker = invoker;
     }
 
-    @Override // from PlaceManagerDelegate
+    @Override
     public void didInit (PlaceConfig config)
     {
         super.didInit(config);
@@ -75,14 +70,14 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
         _repo = getRatingRepository();
     }
 
-    @Override // from PlaceManagerDelegate
+    @Override
     public void didStartup (PlaceObject plobj)
     {
         super.didStartup(plobj);
         _gobj = (GameObject) plobj;
     }
 
-    @Override // from PlaceManagerDelegate
+    @Override
     public void bodyEntered (int bodyOid)
     {
         super.bodyEntered(bodyOid);
@@ -97,7 +92,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
         }
     }
 
-    @Override // from PlaceManagerDelegate
+    @Override
     public void bodyLeft (int bodyOid)
     {
         super.bodyLeft(bodyOid);
@@ -111,7 +106,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
         }
     }
 
-    @Override // from GameManagerDelegate
+    @Override
     public void gameWillStart ()
     {
         super.gameWillStart();
@@ -144,7 +139,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
         loadRatings(toLoad);
     }
 
-    @Override // from GameManagerDelegate
+    @Override
     public void gameDidEnd ()
     {
         super.gameDidEnd();
@@ -224,6 +219,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
 
         final int gameId = getGameId();
         _invoker.postUnit(new RepositoryUnit("loadRatings(" + gameId + ")") {
+            @Override
             public void invokePersist () throws Exception {
                 // map the records by player id so that we can correlate with the db results
                 IntMap<Rating> map = IntMaps.newHashIntMap();
@@ -242,6 +238,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
                 }
             }
 
+            @Override
             public void handleSuccess () {
                 // stuff our populated records into the _ratings mapping
                 for (Rating rating : ratings) {
@@ -259,12 +256,14 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
 
         final int gameId = getGameId();
         _invoker.postUnit(new RepositoryUnit("saveRatings(" + gameId + ")") {
+            @Override
             public void invokePersist () throws Exception {
                 for (Rating rating : ratings) {
                     _repo.setRating(gameId, rating.playerId, rating.rating, rating.experience);
                 }
             }
 
+            @Override
             public void handleSuccess () {
                 // let subclasses publish the new ratings if they so desire
                 for (Rating rating : ratings) {
@@ -460,7 +459,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
             }
         }
 
-        @Override // from Object
+        @Override
         public String toString ()
         {
             return StringUtil.fieldsToString(this);

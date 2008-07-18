@@ -46,9 +46,7 @@ public class SceneSummary implements Streamable
     /** The directions in which each of the neighbors lay. */
     public int[] neighborDirs;
 
-    /**
-     * Generates a string representation of this instance.
-     */
+    @Override
     public String toString ()
     {
         return "[sceneId=" + sceneId + ", name=" + name +

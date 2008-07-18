@@ -65,6 +65,7 @@ public class LogonPanel extends JPanel
         JPanel box = new JPanel(
             new VGroupLayout(VGroupLayout.NONE, VGroupLayout.STRETCH,
                              5, VGroupLayout.CENTER)) {
+            @Override
             public Dimension getPreferredSize () {
                 Dimension psize = super.getPreferredSize();
                 psize.width = Math.max(psize.width, 300);
@@ -118,6 +119,7 @@ public class LogonPanel extends JPanel
 
         box.add(new JLabel(_msgs.get("m.status")));
         _status = new JTextArea() {
+            @Override
             public Dimension getPreferredScrollableViewportSize ()
             {
                 return new Dimension(10, 100);

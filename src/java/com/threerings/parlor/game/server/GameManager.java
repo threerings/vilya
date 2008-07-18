@@ -23,8 +23,6 @@ package com.threerings.parlor.game.server;
 
 import java.util.List;
 import java.util.Arrays;
-import java.util.logging.Level;
-
 import com.google.common.collect.Lists;
 
 import com.samskivert.util.ArrayIntSet;
@@ -243,6 +241,7 @@ public class GameManager extends PlaceManager
 
         // notify our delegates
         applyToDelegates(new DelegateOp(GameManagerDelegate.class) {
+            @Override
             public void apply (PlaceManagerDelegate delegate) {
                 ((GameManagerDelegate)delegate).playerWasReplaced(pidx, oplayer, player);
             }
@@ -285,6 +284,7 @@ public class GameManager extends PlaceManager
 
         // let the delegates know that the player's been made an AI
         applyToDelegates(new DelegateOp(GameManagerDelegate.class) {
+            @Override
             public void apply (PlaceManagerDelegate delegate) {
                 ((GameManagerDelegate)delegate).setAI(pidx, ai);
             }
@@ -730,7 +730,7 @@ public class GameManager extends PlaceManager
         }
     }
 
-    @Override // from PlaceManager
+    @Override
     protected void didInit ()
     {
         super.didInit();
@@ -740,6 +740,7 @@ public class GameManager extends PlaceManager
 
         // start up our tick interval
         _tickInterval = new Interval(_omgr) {
+            @Override
             public void expired () {
                 tick(System.currentTimeMillis());
             }
@@ -754,7 +755,7 @@ public class GameManager extends PlaceManager
         }
     }
 
-    @Override // from PlaceManager
+    @Override
     protected void didStartup ()
     {
         // obtain a casted reference to our game object
@@ -799,6 +800,7 @@ public class GameManager extends PlaceManager
         // start up a no-show timer if needed
         if (needsNoShowTimer()) {
             _noShowInterval = new Interval(_omgr) {
+                @Override
                 public void expired () {
                     checkForNoShows();
                 }
@@ -807,7 +809,7 @@ public class GameManager extends PlaceManager
         }
     }
 
-    @Override // from PlaceManager
+    @Override
     protected void didShutdown ()
     {
         super.didShutdown();
@@ -822,7 +824,7 @@ public class GameManager extends PlaceManager
         }
     }
 
-    @Override // from PlaceManager
+    @Override
     protected void bodyLeft (int bodyOid)
     {
         // first resign the player from the game
@@ -878,7 +880,7 @@ public class GameManager extends PlaceManager
         }
     }
 
-    @Override // from GameManager
+    @Override
     protected void checkShutdownInterval ()
     {
         // PlaceManager will attempt to set up an idle shutdown interval when it is first created
@@ -975,6 +977,7 @@ public class GameManager extends PlaceManager
 
         // let our delegates do their business
         applyToDelegates(new DelegateOp(GameManagerDelegate.class) {
+            @Override
             public void apply (PlaceManagerDelegate delegate) {
                 ((GameManagerDelegate)delegate).gameWillStart();
             }
@@ -1035,6 +1038,7 @@ public class GameManager extends PlaceManager
 
         // let our delegates do their business
         applyToDelegates(new DelegateOp(GameManagerDelegate.class) {
+            @Override
             public void apply (PlaceManagerDelegate delegate) {
                 ((GameManagerDelegate)delegate).gameDidStart();
             }
@@ -1071,6 +1075,7 @@ public class GameManager extends PlaceManager
     {
         if (_aiTicker == null) {
             _aiTicker = new Interval(_omgr) {
+                @Override
                 public void expired () {
                     tickAIs();
                 }
@@ -1108,6 +1113,7 @@ public class GameManager extends PlaceManager
     protected void tickAI (final int pidx, final GameAI ai)
     {
         applyToDelegates(new DelegateOp(GameManagerDelegate.class) {
+            @Override
             public void apply (PlaceManagerDelegate delegate) {
                 ((GameManagerDelegate) delegate).tickAI(pidx, ai);
             }
@@ -1174,6 +1180,7 @@ public class GameManager extends PlaceManager
     {
         // let our delegates do their business
         applyToDelegates(new DelegateOp(GameManagerDelegate.class) {
+            @Override
             public void apply (PlaceManagerDelegate delegate) {
                 ((GameManagerDelegate)delegate).gameWillEnd();
             }
@@ -1192,6 +1199,7 @@ public class GameManager extends PlaceManager
 
         // let our delegates do their business
         applyToDelegates(new DelegateOp(GameManagerDelegate.class) {
+            @Override
             public void apply (PlaceManagerDelegate delegate) {
                 ((GameManagerDelegate)delegate).gameDidEnd();
             }
@@ -1268,6 +1276,7 @@ public class GameManager extends PlaceManager
 
         // let our delegates do their business
         applyToDelegates(new DelegateOp(GameManagerDelegate.class) {
+            @Override
             public void apply (PlaceManagerDelegate delegate) {
                 ((GameManagerDelegate)delegate).gameWillReset();
             }

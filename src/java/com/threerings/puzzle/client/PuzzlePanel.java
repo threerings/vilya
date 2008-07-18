@@ -77,7 +77,7 @@ public abstract class PuzzlePanel extends JPanel
         add(_bpanel, BorderLayout.CENTER);
     }
 
-    // documentation inherited
+    @Override
     public void addNotify ()
     {
         super.addNotify();
@@ -87,7 +87,7 @@ public abstract class PuzzlePanel extends JPanel
         setPuzzleGrabsKeys(false);
     }
 
-    // documentation inherited
+    @Override
     public void removeNotify ()
     {
         super.removeNotify();

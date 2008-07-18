@@ -68,7 +68,7 @@ public class DropBlockSprite extends DropSprite
         _orient = orient;
     }
 
-    // documentation inherited
+    @Override
     protected void init ()
     {
         super.init();
@@ -124,21 +124,21 @@ public class DropBlockSprite extends DropSprite
         return _ecol;
     }
 
-    // documentation inherited
+    @Override
     public void setColumn (int col)
     {
         super.setColumn(col);
         updateDropInfo();
     }
 
-    // documentation inherited
+    @Override
     public void setRow (int row)
     {
         super.setRow(row);
         updateDropInfo();
     }
 
-    // documentation inherited
+    @Override
     public void setBoardLocation (int row, int col)
     {
         super.setBoardLocation(row, col);
@@ -149,6 +149,7 @@ public class DropBlockSprite extends DropSprite
      * Updates the sprite image offset to reflect the direction in which
      * the external piece is hanging.
      */
+    @Override
     public void setOrientation (int orient)
     {
         super.setOrientation(orient);
@@ -168,7 +169,7 @@ public class DropBlockSprite extends DropSprite
         updateDropInfo();
     }
 
-    // documentation inherited
+    @Override
     public void toString (StringBuilder buf)
     {
         super.toString(buf);

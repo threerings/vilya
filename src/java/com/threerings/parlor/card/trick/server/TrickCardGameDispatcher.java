@@ -24,7 +24,6 @@ package com.threerings.parlor.card.trick.server;
 import com.threerings.parlor.card.data.Card;
 import com.threerings.parlor.card.trick.data.TrickCardGameMarshaller;
 import com.threerings.presents.data.ClientObject;
-import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
 

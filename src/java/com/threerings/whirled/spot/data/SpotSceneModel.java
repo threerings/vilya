@@ -65,7 +65,7 @@ public class SpotSceneModel extends SimpleStreamableObject
         }
     }
 
-    // documentation inherited
+    @Override
     public Object clone ()
         throws CloneNotSupportedException
     {

@@ -138,7 +138,7 @@ public class PortalDialog extends EditorDialog
         }
     }
 
-    // documentation inherited
+    @Override
     protected void processKeyEvent (KeyEvent e)
     {
         switch (e.getKeyCode()) {

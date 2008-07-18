@@ -35,7 +35,6 @@ import com.threerings.whirled.data.Scene;
 import com.threerings.whirled.data.SceneCodes;
 import com.threerings.whirled.data.ScenePlace;
 import com.threerings.whirled.data.SceneUpdate;
-import com.threerings.whirled.server.WhirledServer;
 import com.threerings.whirled.util.UpdateList;
 
 import static com.threerings.whirled.Log.log;
@@ -64,7 +63,7 @@ public class SceneManager extends PlaceManager
         return _updates.getUpdates(fromVersion);
     }
 
-    @Override // from PlaceManager
+    @Override
     public Place getLocation ()
     {
         return new ScenePlace(_plobj.getOid(), _scene.getId());
@@ -115,6 +114,7 @@ public class SceneManager extends PlaceManager
      * We're fully ready to go, so now we register ourselves with the scene registry which will
      * make us available to the clients and system at large.
      */
+    @Override
     protected void didStartup ()
     {
         super.didStartup();
@@ -128,9 +128,7 @@ public class SceneManager extends PlaceManager
         });
     }
 
-    /**
-     * Called when we have shutdown.
-     */
+    @Override
     protected void didShutdown ()
     {
         super.didShutdown();
@@ -161,6 +159,7 @@ public class SceneManager extends PlaceManager
         // and apply and store it in the repository
         if (isPersistent()) {
             _invoker.postUnit(new WriteOnlyUnit("recordUpdate(" + update + ")") {
+                @Override
                 public void invokePersist () throws Exception {
                     _screg.getSceneRepository().applyAndRecordUpdate(_scene.getSceneModel(), update);
                 }
@@ -171,13 +170,13 @@ public class SceneManager extends PlaceManager
         _plobj.postMessage(SceneCodes.SCENE_UPDATE, new Object[] { update });
     }
 
-    // documentation inherited
+    @Override
     public String where ()
     {
         return _scene.getName() + " (" + super.where() + ":" + _scene.getId() + ")";
     }
 
-    // documentation inherited
+    @Override
     protected void toString (StringBuilder buf)
     {
         super.toString(buf);

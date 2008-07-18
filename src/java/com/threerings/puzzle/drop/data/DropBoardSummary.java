@@ -66,7 +66,7 @@ public class DropBoardSummary extends BoardSummary
         return idx;
     }
 
-    // documentation inherited
+    @Override
     public void setBoard (Board board)
     {
         _dboard = (DropBoard)board;
@@ -76,7 +76,7 @@ public class DropBoardSummary extends BoardSummary
         super.setBoard(board);
     }
 
-    // documentation inherited
+    @Override
     public void summarize ()
     {
         // update the board column levels

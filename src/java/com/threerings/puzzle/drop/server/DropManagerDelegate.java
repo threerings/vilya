@@ -89,7 +89,7 @@ public abstract class DropManagerDelegate extends PuzzleManagerDelegate
         }
     }
 
-    // documentation inherited
+    @Override
     public void didInit (PlaceConfig config)
     {
         _dconfig = (DropConfig)config;
@@ -101,7 +101,7 @@ public abstract class DropManagerDelegate extends PuzzleManagerDelegate
         super.didInit(config);
     }
 
-    // documentation inherited
+    @Override
     public void didStartup (PlaceObject plobj)
     {
         super.didStartup(plobj);
@@ -116,7 +116,7 @@ public abstract class DropManagerDelegate extends PuzzleManagerDelegate
         }
     }
 
-    // documentation inherited
+    @Override
     public void gameWillStart ()
     {
         super.gameWillStart();

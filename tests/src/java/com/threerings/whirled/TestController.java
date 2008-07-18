@@ -26,6 +26,7 @@ import com.threerings.crowd.util.CrowdContext;
 
 public class TestController extends PlaceController
 {
+    @Override
     protected PlaceView createPlaceView (CrowdContext ctx)
     {
         // nothing doing

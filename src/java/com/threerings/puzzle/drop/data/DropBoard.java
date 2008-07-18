@@ -27,8 +27,6 @@ import java.util.Arrays;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.threerings.util.DirectionUtil;
-
 import com.threerings.puzzle.data.Board;
 import com.threerings.puzzle.drop.client.DropControllerDelegate;
 import com.threerings.puzzle.drop.util.DropBoardUtil;
@@ -534,13 +532,13 @@ public class DropBoard extends Board
         op.execute(this, col, row);
     }
 
-    // documentation inherited from interface
+    @Override
     public void dump ()
     {
         dumpAndCompare(null);
     }
 
-    // documentation inherited from interface
+    @Override
     public void dumpAndCompare (Board other)
     {
         if (other != null && !(other instanceof DropBoard)) {
@@ -571,7 +569,7 @@ public class DropBoard extends Board
         }
     }
 
-    /** Returns a string representation of this instance. */
+    @Override
     public String toString ()
     {
         StringBuilder buf = new StringBuilder();
@@ -580,7 +578,7 @@ public class DropBoard extends Board
         return buf.append("]").toString();
     }
 
-    // documentation inherited from interface
+    @Override
     public boolean equals (Board other)
     {
         // make sure we're comparing the same class type
@@ -694,7 +692,7 @@ public class DropBoard extends Board
         _board = board;
     }
 
-    // documentation inherited
+    @Override
     public Object clone ()
     {
         DropBoard board = (DropBoard)super.clone();

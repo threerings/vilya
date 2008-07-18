@@ -49,9 +49,7 @@ public class MicroCardSprite extends CardSprite
         super(panel, card, facingUp);
     }
 
-    /**
-     * Updates the mirage according to the current state.
-     */
+    @Override
     protected void updateMirage ()
     {
         setMirage((_card != null && _facingUp ) ?

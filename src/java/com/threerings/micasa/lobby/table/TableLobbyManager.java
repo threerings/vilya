@@ -30,7 +30,7 @@ import com.threerings.micasa.lobby.LobbyManager;
  */
 public class TableLobbyManager extends LobbyManager
 {
-    // documentation inherited
+    @Override
     protected void didStartup ()
     {
         super.didStartup();
@@ -38,7 +38,7 @@ public class TableLobbyManager extends LobbyManager
         _tmgr = new TableManager(_omgr, _invmgr, _registry, getPlaceObject());
     }
 
-    // documentation inherited
+    @Override
     protected void didShutdown ()
     {
         super.didShutdown();
@@ -46,7 +46,7 @@ public class TableLobbyManager extends LobbyManager
         _tmgr.shutdown();
     }
 
-    // documentation inherited
+    @Override
     protected PlaceObject createPlaceObject ()
     {
         return new TableLobbyObject();

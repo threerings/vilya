@@ -77,6 +77,7 @@ public class SpotSceneDirector extends BasicDirector
 
         // wire ourselves up to hear about leave place notifications
         locdir.addLocationObserver(new LocationAdapter() {
+            @Override
             public void locationDidChange (PlaceObject place) {
                 // we need to clear some things out when we leave a place
                 handleDeparture();
@@ -347,7 +348,7 @@ public class SpotSceneDirector extends BasicDirector
         }
     }
 
-    // documentation inherited
+    @Override
     public void clientDidLogon (Client client)
     {
         super.clientDidLogon(client);
@@ -363,7 +364,7 @@ public class SpotSceneDirector extends BasicDirector
         }
     }
 
-    // documentation inherited
+    @Override
     public void clientObjectDidChange (Client client)
     {
         super.clientObjectDidChange(client);
@@ -374,7 +375,7 @@ public class SpotSceneDirector extends BasicDirector
         _self = (ClusteredBodyObject) clientObj;
     }
 
-    // documentation inherited
+    @Override
     public void clientDidLogoff (Client client)
     {
         super.clientDidLogoff(client);
@@ -390,7 +391,7 @@ public class SpotSceneDirector extends BasicDirector
         _self = null;
     }
 
-    // documentation inherited
+    @Override
     protected void fetchServices (Client client)
     {
         _sservice = client.requireService(SpotService.class);

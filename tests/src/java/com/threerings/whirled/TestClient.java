@@ -59,6 +59,7 @@ public class TestClient extends com.threerings.crowd.client.TestClient
         _locdir.addLocationObserver(this);
     }
 
+    @Override
     public void clientDidLogon (Client client)
     {
         // we specifically do not call super()
@@ -85,6 +86,7 @@ public class TestClient extends com.threerings.crowd.client.TestClient
         log.warning("Location change failed [plid=" + placeId + ", reason=" + reason + "].");
     }
 
+    @Override
     protected CrowdContext createContext ()
     {
         return (_ctx = new WhirledContextImpl());

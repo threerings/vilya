@@ -23,8 +23,6 @@ package com.threerings.parlor.tourney.client;
 
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
-import com.threerings.presents.client.InvocationService.ConfirmListener;
-import com.threerings.presents.client.InvocationService.InvocationListener;
 
 /**
  * Provides tourney management services for the particular tourney this

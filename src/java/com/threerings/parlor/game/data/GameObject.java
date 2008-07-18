@@ -238,7 +238,7 @@ public class GameObject extends PlaceObject
         return playerStatus == PLAYER_IN_PLAY;
     }
 
-    // documentation inherited
+    @Override
     protected void which (StringBuilder buf)
     {
         super.which(buf);

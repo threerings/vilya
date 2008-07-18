@@ -186,7 +186,7 @@ public class Invitation
         }
     }
 
-    /** Returns a string representation of this invitation record. */
+    @Override
     public String toString ()
     {
         return "[inviteId=" + inviteId + ", opponent=" + opponent +

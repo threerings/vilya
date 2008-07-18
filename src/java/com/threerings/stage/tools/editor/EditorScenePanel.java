@@ -135,7 +135,7 @@ public class EditorScenePanel extends StageScenePanel
         _refreshBox = true;
     }
 
-    // documentation inherited
+    @Override
     public void setSceneModel (MisoSceneModel model)
     {
         super.setSceneModel(model);
@@ -154,7 +154,7 @@ public class EditorScenePanel extends StageScenePanel
         rethink();
     }
 
-    // documentation inherited
+    @Override
     public void setBounds (int x, int y, int width, int height)
     {
         super.setBounds(x, y, width, height);

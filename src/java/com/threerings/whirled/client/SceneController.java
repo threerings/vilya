@@ -40,21 +40,21 @@ import com.threerings.whirled.util.WhirledContext;
  */
 public abstract class SceneController extends PlaceController
 {
-    // documentation inherited
+    @Override
     public void init (CrowdContext ctx, PlaceConfig config)
     {
         super.init(ctx, config);
         _wctx = (WhirledContext)ctx;
     }
 
-    // documentation inherited
+    @Override
     public void willEnterPlace (PlaceObject plobj)
     {
         super.willEnterPlace(plobj);
         plobj.addListener(_updateListener);
     }
 
-    // documentation inherited
+    @Override
     public void didLeavePlace (PlaceObject plobj)
     {
         super.didLeavePlace(plobj);

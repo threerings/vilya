@@ -33,8 +33,7 @@ import com.threerings.puzzle.client.PuzzlePanel;
 public class PuzzleGameUtil
 {
     /**
-     * Returns a key translator configured with basic puzzle game
-     * mappings.
+     * Returns a key translator configured with basic puzzle game mappings.
      */
     public static KeyTranslatorImpl getKeyTranslator ()
     {
@@ -42,8 +41,7 @@ public class PuzzleGameUtil
 
         if (!PuzzlePanel.isRobotTesting()) {
             // add the standard pause keys
-            xlate.addPressCommand(
-                KeyEvent.VK_P, PuzzleController.TOGGLE_CHATTING);
+            xlate.addPressCommand(KeyEvent.VK_P, PuzzleController.TOGGLE_CHATTING);
         }
 
         return xlate;

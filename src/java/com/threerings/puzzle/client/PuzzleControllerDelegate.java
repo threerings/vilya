@@ -50,7 +50,7 @@ public class PuzzleControllerDelegate extends GameControllerDelegate
         _ctrl = ctrl;
     }
 
-    // documentation inherited
+    @Override
     public void willEnterPlace (PlaceObject plobj)
     {
         super.willEnterPlace(plobj);
@@ -59,7 +59,7 @@ public class PuzzleControllerDelegate extends GameControllerDelegate
         _puzobj = (PuzzleObject)plobj;
     }
 
-    // documentation inherited
+    @Override
     public void didLeavePlace (PlaceObject plobj)
     {
         super.didLeavePlace(plobj);

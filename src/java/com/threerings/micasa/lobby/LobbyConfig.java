@@ -34,13 +34,13 @@ import com.threerings.parlor.game.data.GameConfig;
 
 public class LobbyConfig extends PlaceConfig
 {
-    // documentation inherited
+    @Override
     public PlaceController createController ()
     {
         return new LobbyController();
     }
 
-    // documentation inherited
+    @Override
     public String getManagerClassName ()
     {
         return "com.threerings.micasa.lobby.LobbyManager";
@@ -79,7 +79,7 @@ public class LobbyConfig extends PlaceConfig
         _gameConfigClass = getConfigValue(config, "game_config");
     }
 
-    // documentation inherited
+    @Override
     protected void toString (StringBuilder buf)
     {
         super.toString(buf);

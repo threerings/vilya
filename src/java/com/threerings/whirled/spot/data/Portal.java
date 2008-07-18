@@ -84,9 +84,7 @@ public class Portal extends SimpleStreamableObject
             ((targetPortalId > 0) || (targetPortalId == -1));
     }
 
-    /**
-     * Creates a clone of this instance.
-     */
+    @Override
     public Object clone ()
     {
         try {
@@ -99,6 +97,7 @@ public class Portal extends SimpleStreamableObject
     /**
      * Portal equality is determined by portal id.
      */
+    @Override
     public boolean equals (Object other)
     {
         return (other instanceof Portal) &&
@@ -108,6 +107,7 @@ public class Portal extends SimpleStreamableObject
     /**
      * Computes a reasonable hashcode for portal instances.
      */
+    @Override
     public int hashCode ()
     {
         return portalId;

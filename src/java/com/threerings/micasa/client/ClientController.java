@@ -58,7 +58,7 @@ public class ClientController extends Controller
         _frame.setPanel(_logonPanel);
     }
 
-    // documentation inherited
+    @Override
     public boolean handleAction (ActionEvent action)
     {
         String cmd = action.getActionCommand();

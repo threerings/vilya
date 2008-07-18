@@ -51,7 +51,7 @@ public class StageSceneWriter extends SceneWriter
                           new SparseMisoSceneWriter());
     }
 
-    // documentation inherited
+    @Override
     protected void addSceneAttributes (SceneModel scene, AttributesImpl attrs)
     {
         super.addSceneAttributes(scene, attrs);
@@ -59,7 +59,7 @@ public class StageSceneWriter extends SceneWriter
         attrs.addAttribute("", "type", "", "", sscene.type);
     }
 
-    // documentation inherited
+    @Override
     protected void writeSceneData (SceneModel scene, DataWriter writer)
         throws SAXException
     {

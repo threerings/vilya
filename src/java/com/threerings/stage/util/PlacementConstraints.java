@@ -28,8 +28,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import com.samskivert.util.ListUtil;
-import com.samskivert.util.StringUtil;
-
 import com.threerings.util.DirectionCodes;
 import com.threerings.util.DirectionUtil;
 import com.threerings.util.MessageBundle;

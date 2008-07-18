@@ -21,10 +21,6 @@
 
 package com.threerings.puzzle.drop.util;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import com.samskivert.util.StringUtil;
 
 import com.threerings.puzzle.drop.data.DropBoard;
@@ -65,7 +61,7 @@ public class PieceDropper
             this.dist = dist;
         }
 
-        /** Returns a string representation of this instance. */
+        @Override
         public String toString ()
         {
             return StringUtil.fieldsToString(this);

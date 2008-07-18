@@ -32,6 +32,7 @@ import com.threerings.stage.data.StageMisoSceneModel;
  */
 public class StageMisoSceneRuleSet extends SparseMisoSceneRuleSet
 {
+    @Override
     protected SparseMisoSceneModel createMisoSceneModel ()
     {
         return new StageMisoSceneModel();

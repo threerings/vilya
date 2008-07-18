@@ -21,7 +21,6 @@
 
 package com.threerings.stage.data;
 
-import com.threerings.util.StreamableArrayList;
 import com.threerings.util.StreamableIntIntMap;
 
 import com.threerings.whirled.data.SceneModel;

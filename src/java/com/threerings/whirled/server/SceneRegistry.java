@@ -34,8 +34,6 @@ import com.samskivert.util.Invoker;
 
 import com.threerings.presents.annotation.MainInvoker;
 import com.threerings.presents.data.ClientObject;
-import com.threerings.presents.data.InvocationMarshaller;
-import com.threerings.presents.server.InvocationException;
 import com.threerings.presents.server.InvocationManager;
 
 import com.threerings.crowd.data.BodyObject;
@@ -48,7 +46,6 @@ import com.threerings.whirled.client.SceneService;
 import com.threerings.whirled.data.Scene;
 import com.threerings.whirled.data.SceneCodes;
 import com.threerings.whirled.data.SceneModel;
-import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.server.persist.SceneRepository;
 import com.threerings.whirled.util.NoSuchSceneException;
 import com.threerings.whirled.util.SceneFactory;
@@ -169,13 +166,16 @@ public class SceneRegistry
         // otherwise we have to load the scene from the repository
         final int fsceneId = sceneId;
         _invoker.postUnit(new RepositoryUnit("resolveScene(" + sceneId + ")") {
+            @Override
             public void invokePersist () throws Exception {
                 _model = _screp.loadSceneModel(fsceneId);
                 _updates = _screp.loadUpdates(fsceneId);
             }
+            @Override
             public void handleSuccess () {
                 processSuccessfulResolution(_model, _updates);
             }
+            @Override
             public void handleFailure (Exception error) {
                 processFailedResolution(fsceneId, error);
             }

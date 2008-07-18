@@ -22,7 +22,6 @@
 package com.threerings.parlor.tourney.server;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
@@ -31,18 +30,13 @@ import com.google.inject.Injector;
 import com.google.inject.Singleton;
 
 import com.samskivert.io.PersistenceException;
-import com.samskivert.jdbc.ConnectionProvider;
 import com.samskivert.util.Interval;
-import com.samskivert.util.RunQueue;
-
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.dobj.RootDObjectManager;
 import com.threerings.presents.server.InvocationException;
-import com.threerings.presents.server.PresentsServer;
 import com.threerings.presents.server.ShutdownManager;
 
-import com.threerings.parlor.tourney.data.Prize;
 import com.threerings.parlor.tourney.data.TourneyConfig;
 import com.threerings.parlor.tourney.server.persist.TourneyRepository;
 
@@ -63,6 +57,7 @@ public abstract class TourniesManager
 
         _injector = injector;
         _interval = new Interval(_omgr) {
+            @Override
             public void expired () {
                 updateTournies();
             }

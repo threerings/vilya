@@ -70,6 +70,7 @@ public class EditorFrame extends ManagedJFrame
         _writer = writer;
         // treat a closing window as a request to quit
         addWindowListener(new WindowAdapter () {
+            @Override
             public void windowClosing (WindowEvent e) {
                 handleQuit(null);
             }

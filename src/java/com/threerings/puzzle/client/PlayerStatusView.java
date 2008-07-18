@@ -97,7 +97,7 @@ public class PlayerStatusView extends JPanel
         }
     }
 
-    /** Returns a string representation of this instance. */
+    @Override
     public String toString ()
     {
         return "[user=" + _username + ", pidx=" + _pidx +

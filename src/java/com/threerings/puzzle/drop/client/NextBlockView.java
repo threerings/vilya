@@ -61,7 +61,7 @@ public class NextBlockView extends JComponent
         repaint();
     }
 
-    // documentation inherited
+    @Override
     public void paintComponent (Graphics g)
     {
         super.paintComponent(g);
@@ -85,7 +85,7 @@ public class NextBlockView extends JComponent
         }
     }
 
-    // documentation inherited
+    @Override
     public Dimension getPreferredSize ()
     {
         int wid = (_orient == VERTICAL) ? _pwid : (2 * _pwid);

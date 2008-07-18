@@ -219,7 +219,7 @@ public class TableDirector extends BasicDirector
         _tlobj.getTableService().startTableNow(_ctx.getClient(), tableId, this);
     }
 
-    // documentation inherited
+    @Override
     public void clientDidLogoff (Client client)
     {
         super.clientDidLogoff(client);

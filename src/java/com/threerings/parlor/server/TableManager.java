@@ -21,15 +21,8 @@
 
 package com.threerings.parlor.server;
 
-import java.util.HashMap;
-import java.util.Iterator;
-
-import com.google.inject.Inject;
 import com.samskivert.util.IntMap;
 import com.samskivert.util.IntMaps;
-import com.samskivert.util.StringUtil;
-import com.threerings.util.Name;
-
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.dobj.AttributeChangeListener;
 import com.threerings.presents.dobj.AttributeChangedEvent;
@@ -55,7 +48,6 @@ import com.threerings.parlor.data.ParlorCodes;
 import com.threerings.parlor.data.Table;
 import com.threerings.parlor.data.TableConfig;
 import com.threerings.parlor.data.TableLobbyObject;
-import com.threerings.parlor.data.TableMarshaller;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.game.data.GameObject;
 import com.threerings.parlor.game.server.GameManager;

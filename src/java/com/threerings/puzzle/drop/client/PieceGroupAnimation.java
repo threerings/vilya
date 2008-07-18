@@ -25,13 +25,11 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 import com.threerings.media.animation.Animation;
-import com.threerings.media.sprite.ImageSprite;
 import com.threerings.media.sprite.PathObserver;
 import com.threerings.media.sprite.Sprite;
 import com.threerings.media.util.Path;
 
 import com.threerings.puzzle.drop.data.DropBoard;
-import com.threerings.puzzle.drop.data.DropPieceCodes;
 
 /**
  * Animates all the pieces on a puzzle board doing some sort of global
@@ -51,13 +49,13 @@ public abstract class PieceGroupAnimation extends Animation
         _board = board;
     }
 
-    // documentation inherited
+    @Override
     public void tick (long tickStamp)
     {
         // nothing doing
     }
 
-    // documentation inherited
+    @Override
     public void paint (Graphics2D gfx)
     {
         // nothing doing
@@ -75,7 +73,7 @@ public abstract class PieceGroupAnimation extends Animation
         _finished = (--_penders == 0);
     }
 
-    // documentation inherited
+    @Override
     protected void willStart (long tickStamp)
     {
         super.willStart(tickStamp);

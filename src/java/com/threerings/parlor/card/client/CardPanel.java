@@ -45,14 +45,9 @@ import com.threerings.media.sprite.Sprite;
 import com.threerings.media.util.LinePath;
 import com.threerings.media.util.Path;
 import com.threerings.media.util.PathSequence;
-import com.threerings.media.util.Pathable;
-
 import com.threerings.parlor.card.data.Card;
 import com.threerings.parlor.card.data.CardCodes;
-import com.threerings.parlor.card.data.Deck;
 import com.threerings.parlor.card.data.Hand;
-
-import static com.threerings.parlor.card.Log.log;
 
 /**
  * Extends VirtualMediaPanel to provide services specific to rendering and manipulating playing
@@ -842,7 +837,7 @@ public abstract class CardPanel extends VirtualMediaPanel
         }
     }
 
-    // documentation inherited
+    @Override
     protected void paintBehind (Graphics2D gfx, Rectangle dirtyRect)
     {
         gfx.setColor(DEFAULT_BACKGROUND);
@@ -854,6 +849,7 @@ public abstract class CardPanel extends VirtualMediaPanel
     protected class HandSpriteObserver extends PathAdapter
         implements CardSpriteObserver
     {
+        @Override
         public void pathCompleted (Sprite sprite, Path path, long when)
         {
             updateActiveCardSprite();
@@ -897,6 +893,7 @@ public abstract class CardPanel extends VirtualMediaPanel
     /** Listens for mouse interactions with cards. */
     protected class CardListener extends MouseInputAdapter
     {
+        @Override
         public void mousePressed (MouseEvent me)
         {
             if (_activeCardSprite != null &&
@@ -907,6 +904,7 @@ public abstract class CardPanel extends VirtualMediaPanel
             }
         }
 
+        @Override
         public void mouseReleased (MouseEvent me)
         {
             if (_activeCardSprite != null &&
@@ -918,6 +916,7 @@ public abstract class CardPanel extends VirtualMediaPanel
             }
         }
 
+        @Override
         public void mouseClicked (MouseEvent me)
         {
             if (_activeCardSprite != null &&
@@ -928,6 +927,7 @@ public abstract class CardPanel extends VirtualMediaPanel
             }
         }
 
+        @Override
         public void mouseMoved (MouseEvent me)
         {
             _mouseEvent = me;
@@ -935,6 +935,7 @@ public abstract class CardPanel extends VirtualMediaPanel
             updateActiveCardSprite();
         }
 
+        @Override
         public void mouseDragged (MouseEvent me)
         {
             _mouseEvent = me;
@@ -953,11 +954,13 @@ public abstract class CardPanel extends VirtualMediaPanel
             }
         }
 
+        @Override
         public void mouseEntered (MouseEvent me)
         {
             _mouseEvent = me;
         }
 
+        @Override
         public void mouseExited (MouseEvent me)
         {
             _mouseEvent = me;
@@ -1106,6 +1109,7 @@ public abstract class CardPanel extends VirtualMediaPanel
 
     /** A path observer that removes the sprite at the end of its path. */
     protected PathAdapter _pathEndRemover = new PathAdapter() {
+        @Override
         public void pathCompleted (Sprite sprite, Path path, long when) {
             removeSprite(sprite);
         }

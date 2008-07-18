@@ -49,7 +49,7 @@ public class Cluster extends Rectangle
         return _key;
     }
 
-    // documentation inherited
+    @Override
     @ActionScript(omit=true)
     public boolean equals (Object other)
     {
@@ -60,15 +60,13 @@ public class Cluster extends Rectangle
         }
     }
 
-    // documentation inherited
+    @Override
     public int hashCode ()
     {
         return clusterOid;
     }
 
-    /**
-     * Generates a string representation of this instance.
-     */
+    @Override
     public String toString ()
     {
         return StringUtil.fieldsToString(this);

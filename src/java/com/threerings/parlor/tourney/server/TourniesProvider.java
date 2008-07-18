@@ -35,6 +35,6 @@ public interface TourniesProvider extends InvocationProvider
     /**
      * Handles a {@link TourniesService#createTourney} request.
      */
-    public void createTourney (ClientObject caller, TourneyConfig arg1, InvocationService.ResultListener arg2)
+    void createTourney (ClientObject caller, TourneyConfig arg1, InvocationService.ResultListener arg2)
         throws InvocationException;
 }

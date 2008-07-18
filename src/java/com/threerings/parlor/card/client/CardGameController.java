@@ -40,7 +40,7 @@ import static com.threerings.parlor.card.Log.log;
 public abstract class CardGameController extends GameController
     implements TurnGameController, CardCodes, CardGameReceiver
 {
-    // Documentation inherited.
+    @Override
     public void willEnterPlace (PlaceObject plobj)
     {
         if (_ctx.getClient().getClientObject().receivers.containsKey(
@@ -56,7 +56,7 @@ public abstract class CardGameController extends GameController
         super.willEnterPlace(plobj);
     }
 
-    // Documentation inherited.
+    @Override
     public void didLeavePlace (PlaceObject plobj)
     {
         super.didLeavePlace(plobj);

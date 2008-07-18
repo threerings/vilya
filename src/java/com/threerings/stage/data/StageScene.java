@@ -25,8 +25,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.threerings.miso.data.ObjectInfo;
-import com.threerings.miso.util.MisoUtil;
-
 import com.threerings.crowd.data.PlaceConfig;
 
 import com.threerings.whirled.data.Scene;
@@ -141,7 +139,7 @@ public class StageScene extends SceneImpl
         return removed;
     }
 
-    // documentation inherited
+    @Override
     public void updateReceived (SceneUpdate update)
     {
         super.updateReceived(update);
@@ -153,7 +151,7 @@ public class StageScene extends SceneImpl
         readInterestingObjects();
     }
 
-    // documentation inherited
+    @Override
     public Object clone ()
         throws CloneNotSupportedException
     {

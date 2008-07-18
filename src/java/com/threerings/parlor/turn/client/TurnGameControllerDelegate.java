@@ -84,13 +84,13 @@ public class TurnGameControllerDelegate extends GameControllerDelegate
         return _gameObj.getPlayerIndex(_turnGame.getTurnHolder());
     }
 
-    // documentation inherited
+    @Override
     public void init (CrowdContext ctx, PlaceConfig config)
     {
         _ctx = ctx;
     }
 
-    // documentation inherited
+    @Override
     public void willEnterPlace (PlaceObject plobj)
     {
         // get a casted reference to the object
@@ -102,7 +102,7 @@ public class TurnGameControllerDelegate extends GameControllerDelegate
         plobj.addListener(this);
     }
 
-    // documentation inherited
+    @Override
     public void didLeavePlace (PlaceObject plobj)
     {
         // remove our listenership

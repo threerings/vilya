@@ -49,7 +49,7 @@ public class Participant extends SimpleStreamableObject
         return username.compareTo(op.username);
     }
 
-    // documentation inherited from interface Comparable
+    @Override
     public boolean equals (Object other)
     {
         if (other instanceof Participant) {
@@ -58,7 +58,7 @@ public class Participant extends SimpleStreamableObject
         return false;
     }
 
-    // documentation inherited
+    @Override
     public String toString ()
     {
         return username.toString();

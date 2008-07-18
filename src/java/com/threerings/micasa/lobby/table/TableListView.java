@@ -21,7 +21,6 @@
 
 package com.threerings.micasa.lobby.table;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;

@@ -21,7 +21,6 @@
 
 package com.threerings.whirled.server;
 
-import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.server.InvocationException;
 
 import com.threerings.crowd.data.BodyObject;
@@ -29,7 +28,6 @@ import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.server.LocationManager;
 
 import com.threerings.whirled.client.SceneService;
-import com.threerings.whirled.data.SceneCodes;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.SceneUpdate;
 
@@ -45,7 +43,7 @@ public class SceneMoveHandler extends AbstractSceneMoveHandler
         _version = sceneVer;
     }
 
-    @Override // from AbstractSceneMoveHandler
+    @Override
     protected void effectSceneMove (SceneManager scmgr)
         throws InvocationException
     {

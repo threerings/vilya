@@ -21,10 +21,6 @@
 
 package com.threerings.parlor.card.data;
 
-import java.io.IOException;
-
-import com.threerings.io.ObjectInputStream;
-import com.threerings.io.ObjectOutputStream;
 import com.threerings.util.ActionScript;
 
 import com.threerings.presents.dobj.DSet;
@@ -144,22 +140,13 @@ public class Card implements DSet.Entry, Comparable, CardCodes
         return _key;
     }
     
-    /**
-     * Returns a hash code for this card.
-     *
-     * @return this card's hash code
-     */
+    @Override
     public int hashCode ()
     {
         return _value;
     }
     
-    /**
-     * Checks this card for equality with another.
-     *
-     * @param other the other card to compare
-     * @return true if the cards are equal, false otherwise
-     */
+    @Override
     public boolean equals (Object other)
     {
         if (other instanceof Card) {
@@ -193,11 +180,7 @@ public class Card implements DSet.Entry, Comparable, CardCodes
         }
     }
     
-    /**
-     * Returns a string representation of this card.
-     *
-     * @return a description of this card
-     */
+    @Override
     public String toString ()
     {
         int number = getNumber();

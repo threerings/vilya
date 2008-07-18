@@ -60,7 +60,7 @@ public class SceneModel extends SimpleStreamableObject
         auxModels = ArrayUtil.append(auxModels, auxModel);
     }
 
-    // documentation inherited
+    @Override
     public Object clone ()
         throws CloneNotSupportedException
     {

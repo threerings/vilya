@@ -125,6 +125,7 @@ public abstract class GameConfig extends PlaceConfig implements Cloneable
      * Returns true if this game config object is equal to the supplied object (meaning it is a
      * game config for the same game and its configuration settings are the same as ours).
      */
+    @Override
     public boolean equals (Object other)
     {
         if (!(other instanceof GameConfig)) {
@@ -138,13 +139,14 @@ public abstract class GameConfig extends PlaceConfig implements Cloneable
      * Computes a hashcode for this game config object that supports our {@link #equals}
      * implementation. Objects that are equal should have the same hashcode.
      */
+    @Override
     public int hashCode ()
     {
         // look ma, it's so sophisticated!
         return getClass().hashCode() + (rated ? 1 : 0);
     }
 
-    // documentation inherited
+    @Override
     public Object clone ()
     {
         try {

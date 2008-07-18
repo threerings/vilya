@@ -28,17 +28,7 @@ import com.samskivert.util.Interval;
 import com.samskivert.util.RandomUtil;
 
 import com.threerings.presents.data.ClientObject;
-import com.threerings.presents.dobj.DObject;
-import com.threerings.presents.dobj.OidList;
-
-import com.threerings.crowd.data.BodyObject;
-import com.threerings.crowd.data.PlaceObject;
-
-import com.threerings.parlor.game.data.GameObject;
 import com.threerings.parlor.game.server.GameManager;
-
-import com.threerings.util.MessageBundle;
-import com.threerings.util.Name;
 
 import com.threerings.puzzle.data.Board;
 import com.threerings.puzzle.data.BoardSummary;
@@ -127,7 +117,7 @@ public abstract class PuzzleManager extends GameManager
         }
     }
 
-    // documentation inherited
+    @Override
     protected void playerGameDidEnd (int pidx)
     {
         super.playerGameDidEnd(pidx);
@@ -158,7 +148,7 @@ public abstract class PuzzleManager extends GameManager
         return false;
     }
 
-    // documentation inherited
+    @Override
     protected void didStartup ()
     {
         super.didStartup();
@@ -170,7 +160,7 @@ public abstract class PuzzleManager extends GameManager
         _puzobj.setPuzzleGameService(_invmgr.registerDispatcher(new PuzzleGameDispatcher(this)));
     }
 
-    // documentation inherited
+    @Override
     protected void gameWillStart ()
     {
         int size = getPlayerSlots();
@@ -205,6 +195,7 @@ public abstract class PuzzleManager extends GameManager
         if (_statusInterval == null && statusInterval > 0) {
             // register the status update interval to address subsequent periodic updates
             _statusInterval = new Interval(_omgr) {
+                @Override
                 public void expired () {
                     sendStatusUpdate();
                 }
@@ -236,7 +227,7 @@ public abstract class PuzzleManager extends GameManager
         return DEFAULT_DIFFICULTY;
     }
 
-    // documentation inherited
+    @Override
     protected void gameDidStart ()
     {
         super.gameDidStart();
@@ -332,7 +323,7 @@ public abstract class PuzzleManager extends GameManager
         return (_puzobj.isOccupiedPlayer(pidx));
     }
 
-    // documentation inherited
+    @Override
     protected void gameDidEnd ()
     {
         if (_statusInterval != null) {
@@ -347,7 +338,7 @@ public abstract class PuzzleManager extends GameManager
         super.gameDidEnd();
     }
 
-    // documentation inherited
+    @Override
     protected void didShutdown ()
     {
         super.didShutdown();
@@ -452,6 +443,7 @@ public abstract class PuzzleManager extends GameManager
      * Overrides the game manager implementation to mark all active players as winners.  Derived
      * classes may wish to override this method in order to customize the winning conditions.
      */
+    @Override
     protected void assignWinners (boolean[] winners)
     {
         for (int ii = 0; ii < winners.length; ii++) {
@@ -520,7 +512,7 @@ public abstract class PuzzleManager extends GameManager
         applyProgressEvents(pidx, events, states);
     }
 
-    // documentation inherited
+    @Override
     protected void tick (long tickStamp)
     {
         super.tick(tickStamp);

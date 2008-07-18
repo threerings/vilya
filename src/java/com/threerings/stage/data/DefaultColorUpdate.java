@@ -46,7 +46,7 @@ public class DefaultColorUpdate extends SceneUpdate
         this.colorId = colorId;
     }
 
-    // documentation inherited
+    @Override
     public void apply (SceneModel model)
     {
         super.apply(model);

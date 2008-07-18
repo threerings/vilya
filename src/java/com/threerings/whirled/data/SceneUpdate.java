@@ -172,9 +172,7 @@ public class SceneUpdate
         }
     }
 
-    /**
-     * Generates a string representation of this instance.
-     */
+    @Override
     public String toString ()
     {
         StringBuilder buf = new StringBuilder("[");

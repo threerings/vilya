@@ -27,6 +27,7 @@ import com.threerings.parlor.game.client.GameController;
 
 public class TestController extends GameController
 {
+    @Override
     public PlaceView createPlaceView (CrowdContext ctx)
     {
         // nothing doing

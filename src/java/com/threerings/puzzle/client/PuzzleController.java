@@ -36,8 +36,6 @@ import com.samskivert.swing.util.MouseHijacker;
 
 import com.samskivert.util.CollectionUtil;
 import com.samskivert.util.ObserverList;
-import com.samskivert.util.StringUtil;
-
 import com.threerings.media.FrameParticipant;
 
 import com.threerings.presents.dobj.AttributeChangeListener;
@@ -88,7 +86,7 @@ public abstract class PuzzleController extends GameController
         public int actionCleared ();
     }
 
-    // documentation inherited
+    @Override
     protected void didInit ()
     {
         super.didInit();
@@ -125,7 +123,7 @@ public abstract class PuzzleController extends GameController
         return _pidx;
     }
 
-    // documentation inherited
+    @Override
     public void setGameOver (boolean gameOver)
     {
         super.setGameOver(gameOver);
@@ -182,6 +180,7 @@ public abstract class PuzzleController extends GameController
 
         // dispatch the change to our delegates
         applyToDelegates(new DelegateOp(PuzzleControllerDelegate.class) {
+            @Override
             public void apply (PlaceControllerDelegate delegate) {
                 ((PuzzleControllerDelegate)delegate).setChatting(_chatting);
             }
@@ -226,6 +225,7 @@ public abstract class PuzzleController extends GameController
         // check with the delegates
         final boolean[] canChatNow = new boolean[] { true };
         applyToDelegates(new DelegateOp(PuzzleControllerDelegate.class) {
+            @Override
             public void apply (PlaceControllerDelegate delegate) {
                 canChatNow[0] =
                     ((PuzzleControllerDelegate)delegate).canStartChatting() &&
@@ -244,7 +244,7 @@ public abstract class PuzzleController extends GameController
         return _chatting;
     }
 
-    // documentation inherited
+    @Override
     public void willEnterPlace (PlaceObject plobj)
     {
         super.willEnterPlace(plobj);
@@ -269,7 +269,7 @@ public abstract class PuzzleController extends GameController
         }
     }
 
-    // documentation inherited
+    @Override
     public void mayLeavePlace (PlaceObject plobj)
     {
         super.mayLeavePlace(plobj);
@@ -278,7 +278,7 @@ public abstract class PuzzleController extends GameController
         sendProgressUpdate();
     }
 
-    // documentation inherited
+    @Override
     public void didLeavePlace (PlaceObject plobj)
     {
         super.didLeavePlace(plobj);
@@ -319,7 +319,7 @@ public abstract class PuzzleController extends GameController
         return true;
     }
 
-    // documentation inherited
+    @Override
     public void attributeChanged (AttributeChangedEvent event)
     {
         String name = event.getName();
@@ -370,7 +370,7 @@ public abstract class PuzzleController extends GameController
         }
     }
 
-    // documentation inherited
+    @Override
     protected void gameWillReset ()
     {
         super.gameWillReset();
@@ -449,6 +449,7 @@ public abstract class PuzzleController extends GameController
 
         // let our delegates do their business
         applyToDelegates(new DelegateOp(PuzzleControllerDelegate.class) {
+            @Override
             public void apply (PlaceControllerDelegate delegate) {
                 ((PuzzleControllerDelegate)delegate).startAction();
             }
@@ -559,6 +560,7 @@ public abstract class PuzzleController extends GameController
 
         // let our delegates do their business
         applyToDelegates(new DelegateOp(PuzzleControllerDelegate.class) {
+            @Override
             public void apply (PlaceControllerDelegate delegate) {
                 canClear[0] = canClear[0] &&
                     ((PuzzleControllerDelegate)delegate).canClearAction();
@@ -601,6 +603,7 @@ public abstract class PuzzleController extends GameController
 
         // let our delegates do their business
         applyToDelegates(new DelegateOp(PuzzleControllerDelegate.class) {
+            @Override
             public void apply (PlaceControllerDelegate delegate) {
                 ((PuzzleControllerDelegate)delegate).clearAction();
             }
@@ -648,7 +651,7 @@ public abstract class PuzzleController extends GameController
     {
     }
 
-    // documentation inherited
+    @Override
     public boolean handleAction (ActionEvent action)
     {
         String cmd = action.getActionCommand();
@@ -695,6 +698,7 @@ public abstract class PuzzleController extends GameController
 
                 // let our delegates do their business
                 applyToDelegates(new DelegateOp(PuzzleControllerDelegate.class) {
+                    @Override
                     public void apply (PlaceControllerDelegate delegate) {
                         ((PuzzleControllerDelegate)delegate).setBoard(_pboard);
                     }
@@ -796,6 +800,7 @@ public abstract class PuzzleController extends GameController
     {
         // dispatch this to our delegates
         applyToDelegates(new DelegateOp(PuzzleControllerDelegate.class) {
+            @Override
             public void apply (PlaceControllerDelegate delegate) {
                 ((PuzzleControllerDelegate)delegate).playerKnockedOut(pidx);
             }
@@ -816,6 +821,7 @@ public abstract class PuzzleController extends GameController
             panel.getBoardView().addMouseListener(_clicker);
         }
 
+        @Override
         public Component release ()
         {
             _panel.removeMouseListener(_clicker);
@@ -824,6 +830,7 @@ public abstract class PuzzleController extends GameController
         }
 
         protected MouseAdapter _clicker = new MouseAdapter() {
+            @Override
             public void mousePressed (MouseEvent event) {
                 setChatting(false); // this will call release
             }
@@ -938,6 +945,7 @@ public abstract class PuzzleController extends GameController
 
     /** A key listener that currently just toggles pause in the puzzle. */
     protected KeyListener _globalKeyListener = new KeyAdapter() {
+        @Override
         public void keyReleased (KeyEvent e)
         {
             int keycode = e.getKeyCode();

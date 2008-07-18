@@ -35,6 +35,7 @@ public class SceneParserTest extends TestCase
         super(SceneParserTest.class.getName());
     }
 
+    @Override
     public void runTest ()
     {
         try {

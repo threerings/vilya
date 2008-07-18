@@ -95,7 +95,7 @@ public class RobotPlayer extends Interval
         return _active;
     }
 
-    // documentation inherited
+    @Override
     public void expired ()
     {
         // post a random key press command

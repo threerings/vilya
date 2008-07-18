@@ -49,7 +49,7 @@ public abstract class PuzzleAnimationWaiter extends AnimationWaiter
         return (_puzobj.isInPlay() && (_sessionId == _puzobj.sessionId));
     }
 
-    // documentation inherited
+    @Override
     protected final void allAnimationsFinished ()
     {
         allAnimationsFinished(puzzleStillValid());

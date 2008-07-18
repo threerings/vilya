@@ -33,12 +33,10 @@ import com.threerings.presents.server.InvocationManager;
 
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.server.BodyLocator;
-import com.threerings.crowd.server.CrowdServer;
 import com.threerings.crowd.server.PlaceRegistry;
 
 import com.threerings.parlor.client.ParlorService;
 import com.threerings.parlor.data.ParlorCodes;
-import com.threerings.parlor.data.TableConfig;
 import com.threerings.parlor.game.data.GameConfig;
 
 import static com.threerings.parlor.Log.log;

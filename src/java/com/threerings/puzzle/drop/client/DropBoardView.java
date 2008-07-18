@@ -81,6 +81,7 @@ public abstract class DropBoardView extends PuzzleBoardView
     /**
      * Initializes the board with the board dimensions.
      */
+    @Override
     public void init (GameConfig config)
     {
         DropConfig dconfig = (DropConfig)config;
@@ -265,6 +266,7 @@ public abstract class DropBoardView extends PuzzleBoardView
         Point end = new Point();
         getPiecePosition(tx, ty, end);
         piece.addSpriteObserver(new PathAdapter() {
+            @Override
             public void pathCompleted (Sprite sprite, Path path, long when) {
                 sprite.removeSpriteObserver(this);
                 if (_pieces[tpos] != null) {
@@ -323,7 +325,7 @@ public abstract class DropBoardView extends PuzzleBoardView
     public abstract Mirage getPieceImage (
         int piece, int col, int row, int orient);
 
-    // documentation inherited
+    @Override
     public void setBoard (Board board)
     {
         // when a new board arrives, we want to remove all drop sprites
@@ -525,7 +527,7 @@ public abstract class DropBoardView extends PuzzleBoardView
         // nothing for now
     }
 
-    // documentation inherited
+    @Override
     public void paintBetween (Graphics2D gfx, Rectangle dirtyRect)
     {
         gfx.translate(0, -_roff);
@@ -534,7 +536,7 @@ public abstract class DropBoardView extends PuzzleBoardView
         gfx.translate(0, _roff);
     }
 
-    // documentation inherited
+    @Override
     public Dimension getPreferredSize ()
     {
         int wid = _bwid * _pwid;

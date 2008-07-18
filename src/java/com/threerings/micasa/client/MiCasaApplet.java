@@ -42,6 +42,7 @@ public class MiCasaApplet extends Applet
     /**
      * Create the client instance and set things up.
      */
+    @Override
     public void init ()
     {
         try {
@@ -67,6 +68,7 @@ public class MiCasaApplet extends Applet
 
             // we want to hide the client frame when we logoff
             client.addClientObserver(new ClientAdapter() {
+                @Override
                 public void clientDidLogoff (Client c)
                 {
                     _frame.setVisible(false);
@@ -91,6 +93,7 @@ public class MiCasaApplet extends Applet
     /**
      * Display the client frame and really get things going.
      */
+    @Override
     public void start ()
     {
         if (_client != null) {
@@ -106,6 +109,7 @@ public class MiCasaApplet extends Applet
     /**
      * Log off and shut on down.
      */
+    @Override
     public void stop ()
     {
         if (_client != null) {

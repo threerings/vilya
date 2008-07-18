@@ -33,10 +33,10 @@ public interface PuzzleGameProvider extends InvocationProvider
     /**
      * Handles a {@link PuzzleGameService#updateProgress} request.
      */
-    public void updateProgress (ClientObject caller, int arg1, int[] arg2);
+    void updateProgress (ClientObject caller, int arg1, int[] arg2);
 
     /**
      * Handles a {@link PuzzleGameService#updateProgressSync} request.
      */
-    public void updateProgressSync (ClientObject caller, int arg1, int[] arg2, Board[] arg3);
+    void updateProgressSync (ClientObject caller, int arg1, int[] arg2, Board[] arg3);
 }

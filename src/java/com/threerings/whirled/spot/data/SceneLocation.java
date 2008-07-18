@@ -63,14 +63,14 @@ public class SceneLocation extends SimpleStreamableObject
         return _key;
     }
 
-    // documentation inherited
+    @Override
     public boolean equals (Object other)
     {
         return (other instanceof SceneLocation) &&
             this.loc.equals(((SceneLocation) other).loc);
     }
 
-    // documentation inherited
+    @Override
     public int hashCode ()
     {
         return loc.hashCode();

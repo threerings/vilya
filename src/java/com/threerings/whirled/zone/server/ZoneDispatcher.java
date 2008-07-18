@@ -22,7 +22,6 @@
 package com.threerings.whirled.zone.server;
 
 import com.threerings.presents.data.ClientObject;
-import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.whirled.zone.client.ZoneService;

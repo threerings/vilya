@@ -47,7 +47,7 @@ public abstract class Board
      */
     public abstract boolean equals (Board other);
 
-    // documentation inherited
+    @Override
     public Object clone ()
     {
         try {
@@ -96,13 +96,13 @@ public abstract class Board
             setSeed(seed);
         }
 
-        // documentation inherited
+        @Override
         public synchronized void setSeed (long seed)
         {
             _seed = (seed ^ multiplier) & mask;
         }
 
-        // documentation inherited
+        @Override
         synchronized protected int next (int bits)
         {
             long nextseed = (_seed * multiplier + addend) & mask;
@@ -110,7 +110,7 @@ public abstract class Board
             return (int)(nextseed >>> (48 - bits));
         }
 
-        // documentation inherited
+        @Override
         public void nextBytes (byte[] bytes)
         {
             unimplemented();
@@ -122,7 +122,7 @@ public abstract class Board
         // nextBoolean()
         // nextFloat()
 
-        // documentation inherited
+        @Override
         public int nextInt (int n)
         {
             if (n <= 0) {
@@ -141,14 +141,14 @@ public abstract class Board
             return val;
         }
 
-        // documentation inherited
+        @Override
         public double nextDouble ()
         {
             long l = ((long)(next(26)) << 27) + next(27);
             return l / (double)(1L << 53);
         }
 
-        // documentation inherited
+        @Override
         public synchronized double nextGaussian ()
         {
             if (_haveNextNextGaussian) {
@@ -169,7 +169,7 @@ public abstract class Board
             }
         }
 
-        // documentation inherited
+        @Override
         public Object clone ()
         {
             try {

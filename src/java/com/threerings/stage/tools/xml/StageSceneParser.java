@@ -48,6 +48,7 @@ public class StageSceneParser extends SceneParser
 
         // add a rule to parse scene colorizations
         _digester.addRule("scene/zations/zation", new Rule() {
+            @Override
             public void begin (String namespace, String name,
                                Attributes attrs) throws Exception {
                 StageSceneModel yoscene = (StageSceneModel) digester.peek();
@@ -59,6 +60,7 @@ public class StageSceneParser extends SceneParser
 
         // add rule sets for our aux scene models
         registerAuxRuleSet(new SpotSceneRuleSet() {
+            @Override
             protected Location createLocation () {
                 return new StageLocation();
             }
@@ -66,7 +68,7 @@ public class StageSceneParser extends SceneParser
         registerAuxRuleSet(new StageMisoSceneRuleSet());
     }
 
-    // documentation inherited from interface
+    @Override
     protected SceneRuleSet createSceneRuleSet ()
     {
         return new StageSceneRuleSet();

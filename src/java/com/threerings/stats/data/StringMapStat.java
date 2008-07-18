@@ -4,7 +4,6 @@
 package com.threerings.stats.data;
 
 import com.samskivert.util.ArrayUtil;
-import com.samskivert.util.StringUtil;
 
 /**
  * Used to track a statistic comprised of a set of strings that map to numeric counts.
@@ -73,7 +72,7 @@ public abstract class StringMapStat extends Stat
         return false;
     }
 
-    @Override // documentation inherited
+    @Override
     public String valueToString ()
     {
         StringBuffer buf = new StringBuffer("[");

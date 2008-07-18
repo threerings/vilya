@@ -30,7 +30,6 @@ import com.threerings.media.FrameManager;
 import com.threerings.media.image.ColorPository;
 import com.threerings.media.image.ImageManager;
 
-import com.threerings.cast.CharacterManager;
 import com.threerings.cast.ComponentRepository;
 import com.threerings.miso.util.MisoContext;
 

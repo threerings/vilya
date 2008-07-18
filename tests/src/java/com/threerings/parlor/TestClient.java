@@ -24,14 +24,10 @@ package com.threerings.parlor;
 import com.threerings.util.Name;
 
 import com.threerings.presents.client.*;
-import com.threerings.presents.net.*;
-
-import com.threerings.crowd.client.*;
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.util.CrowdContext;
 
 import com.threerings.parlor.client.*;
-import com.threerings.parlor.game.client.*;
 import com.threerings.parlor.game.data.*;
 import com.threerings.parlor.util.ParlorContext;
 
@@ -51,6 +47,7 @@ public class TestClient extends com.threerings.crowd.client.TestClient
         _pardtr.setInvitationHandler(this);
     }
 
+    @Override
     public void clientDidLogon (Client client)
     {
         // we intentionally don't call super()
@@ -98,6 +95,7 @@ public class TestClient extends com.threerings.crowd.client.TestClient
                  ", config=" + config + "].");
     }
 
+    @Override
     protected CrowdContext createContext ()
     {
         return (_ctx = new ParlorContextImpl());

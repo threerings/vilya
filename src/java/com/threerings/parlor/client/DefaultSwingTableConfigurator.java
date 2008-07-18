@@ -23,16 +23,8 @@ package com.threerings.parlor.client;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import com.samskivert.swing.SimpleSlider;
-import com.samskivert.swing.VGroupLayout;
-
-import com.threerings.parlor.data.TableConfig;
-import com.threerings.parlor.util.ParlorContext;
-
 import com.threerings.parlor.game.client.SwingGameConfigurator;
-import com.threerings.parlor.game.data.GameConfig;
 
 /**
  * Provides a default implementation of a TableConfigurator for
@@ -83,7 +75,7 @@ public class DefaultSwingTableConfigurator extends TableConfigurator
         }
     }
 
-    // documentation inherited
+    @Override
     protected void createConfigInterface ()
     {
         super.createConfigInterface();
@@ -101,13 +93,13 @@ public class DefaultSwingTableConfigurator extends TableConfigurator
         }
     }
 
-    // documentation inherited
+    @Override
     public boolean isEmpty ()
     {
         return (_playerSlider == null) && (_privateCheck == null);
     }
 
-    // documentation inherited
+    @Override
     protected void flushTableConfig()
     {
         super.flushTableConfig();

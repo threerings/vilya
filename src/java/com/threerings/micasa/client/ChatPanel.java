@@ -119,6 +119,7 @@ public class ChatPanel extends JPanel
 
         // listen to ancestor events to request focus when added
         addAncestorListener(new AncestorAdapter() {
+            @Override
             public void ancestorAdded (AncestorEvent e) {
                 if (_focus) {
                     _entry.requestFocusInWindow();
@@ -308,7 +309,7 @@ public class ChatPanel extends JPanel
         // nothing doing
     }
 
-    // documentation inherited
+    @Override
     public Dimension getPreferredSize ()
     {
         Dimension size = super.getPreferredSize();

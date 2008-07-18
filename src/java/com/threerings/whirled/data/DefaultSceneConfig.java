@@ -36,7 +36,7 @@ import com.threerings.whirled.client.SceneController;
  */
 public class DefaultSceneConfig extends PlaceConfig
 {
-    // documentation inherited
+    @Override
     public String getManagerClassName ()
     {
         return "com.threerings.whirled.server.SceneManager";

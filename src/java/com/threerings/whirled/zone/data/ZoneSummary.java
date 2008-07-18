@@ -42,9 +42,7 @@ public class ZoneSummary extends SimpleStreamableObject
     /** The summary information for all of the scenes in the zone. */
     public SceneSummary[] scenes;
 
-    /**
-     * Generates a string representation of this instance.
-     */
+    @Override
     public String toString ()
     {
         return "[zoneId=" + zoneId + ", name=" + name +

@@ -67,14 +67,14 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
     {
     }
 
-    @Override // from PlaceManagerDelegate
+    @Override
     public void didInit (PlaceConfig config)
     {
         super.didInit(config);
         _cgmgr = (CardGameManager)_plmgr;
     }
 
-    @Override // from PlaceManagerDelegate
+    @Override
     public void didStartup (PlaceObject plobj)
     {
         super.didStartup(plobj);
@@ -86,7 +86,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
             _invmgr.registerDispatcher(new TrickCardGameDispatcher(this)));
     }
 
-    @Override // from PlaceManagerDelegate
+    @Override
     public void didShutdown ()
     {
         super.didShutdown();
@@ -94,7 +94,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
         _invmgr.clearDispatcher(_trickCardGame.getTrickCardGameService());
     }
 
-    @Override // from GameManagerDelegate
+    @Override
     public void gameWillStart ()
     {
         super.gameWillStart();
@@ -111,6 +111,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
     /**
      * Called when the game has started.  Default implementation starts the first hand.
      */
+    @Override
     public void gameDidStart ()
     {
         super.gameDidStart();
@@ -119,7 +120,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
         startHand();
     }
 
-    @Override // from GameManagerDelegate
+    @Override
     public void gameDidEnd ()
     {
         super.gameDidEnd();
@@ -137,7 +138,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
         _trickCardGame.setRematchRequests(new int[_cardGame.getPlayerCount()]);
     }
 
-    @Override // from TurnGameManagerDelegate
+    @Override
     public void startTurn ()
     {
         super.startTurn();
@@ -147,7 +148,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
         _turnTimeoutInterval.schedule(_trickCardGame.getTurnDuration());
     }
 
-    @Override // from TurnGameManagerDelegate
+    @Override
     public void endTurn ()
     {
         // cancel the timeout interval
@@ -376,7 +377,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
         return _trickCardGame.getCardsPlayed().length == _cardGame.getPlayerCount();
     }
 
-    @Override // from TurnGameManagerDelegate
+    @Override
     protected void setFirstTurnHolder ()
     {
         if (_trickCardGame.getTrickState() == TrickCardGameObject.PLAYING_TRICK) {
@@ -387,7 +388,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
         }
     }
 
-    @Override // from TurnGameManagerDelegate
+    @Override
     protected void setNextTurnHolder ()
     {
         if (_trickCardGame.getTrickState() == TrickCardGameObject.PLAYING_TRICK &&
@@ -571,6 +572,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
 
     /** The all-purpose turn timeout interval.  */
     protected Interval _turnTimeoutInterval = new Interval(_omgr) {
+        @Override
         public void expired () {
             _turnTimedOut = true;
             turnTimedOut();
@@ -579,6 +581,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
 
     /** Calls {@link #endTrick} upon expiration. */
     protected Interval _endTrickInterval = new Interval(_omgr) {
+        @Override
         public void expired () {
             endTrick();
         }

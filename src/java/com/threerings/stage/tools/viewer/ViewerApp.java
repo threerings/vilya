@@ -27,10 +27,8 @@ import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 
-import java.io.File;
 import java.io.IOException;
 
-import com.samskivert.swing.RuntimeAdjust;
 import com.samskivert.swing.util.SwingUtil;
 
 import com.threerings.resource.ResourceManager;

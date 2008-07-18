@@ -31,13 +31,13 @@ import com.threerings.micasa.util.MiCasaContext;
  */
 public class TableLobbyConfig extends LobbyConfig
 {
-    // documentation inherited
+    @Override
     public String getManagerClassName ()
     {
         return "com.threerings.micasa.lobby.table.TableLobbyManager";
     }
 
-    // documentation inherited
+    @Override
     public JComponent createMatchMakingView (MiCasaContext ctx)
     {
         return new TableListView(ctx, this);

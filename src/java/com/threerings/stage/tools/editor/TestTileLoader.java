@@ -39,7 +39,6 @@ import com.threerings.media.tile.TileSetIDBroker;
 
 import com.threerings.miso.tile.tools.xml.BaseTileSetRuleSet;
 import com.threerings.media.tile.tools.xml.ObjectTileSetRuleSet;
-import com.threerings.media.tile.tools.xml.SwissArmyTileSetRuleSet;
 import com.threerings.media.tile.tools.xml.XMLTileSetParser;
 
 import static com.threerings.stage.Log.log;
@@ -184,6 +183,7 @@ public class TestTileLoader implements TileSetIDBroker
 
     /** Our image provider. */
     protected ImageProvider _improv = new SimpleCachingImageProvider() {
+        @Override
         protected BufferedImage loadImage (String path)
             throws IOException {
             return ImageIO.read(new File(path));

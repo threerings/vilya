@@ -21,7 +21,6 @@
 
 package com.threerings.parlor.card.server;
 
-import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.OccupantInfo;
 import com.threerings.crowd.server.OccupantOp;
 
@@ -34,12 +33,7 @@ import com.threerings.parlor.game.data.GameObject;
 import com.threerings.parlor.game.server.GameManager;
 import com.threerings.parlor.turn.server.TurnGameManager;
 
-import com.threerings.presents.client.InvocationService.ConfirmListener;
 import com.threerings.presents.data.ClientObject;
-import com.threerings.presents.dobj.MessageEvent;
-import com.threerings.presents.server.InvocationException;
-
-import static com.threerings.parlor.card.Log.log;
 
 /**
  * A manager class for card games.  Handles common functions like dealing
@@ -48,7 +42,7 @@ import static com.threerings.parlor.card.Log.log;
 public class CardGameManager extends GameManager
     implements TurnGameManager, CardCodes
 {
-    // Documentation inherited.
+    @Override
     protected void didStartup ()
     {
         super.didStartup();
@@ -67,7 +61,7 @@ public class CardGameManager extends GameManager
     public void turnDidEnd ()
     {}
 
-    @Override // documentation inherited
+    @Override
     protected void gameDidEnd ()
     {
         // Copy off our player oids so we have them handy to see if somebody was a player for

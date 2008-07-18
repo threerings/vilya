@@ -39,6 +39,7 @@ import static com.threerings.micasa.Log.log;
 public class LobbyController extends PlaceController
     implements InvitationHandler, InvitationResponseObserver
 {
+    @Override
     public void init (CrowdContext ctx, PlaceConfig config)
     {
         // cast our context reference
@@ -51,12 +52,13 @@ public class LobbyController extends PlaceController
         _ctx.getParlorDirector().setInvitationHandler(this);
     }
 
+    @Override
     protected PlaceView createPlaceView (CrowdContext ctx)
     {
         return new LobbyPanel(_ctx, _config);
     }
 
-    // documentation inherited
+    @Override
     public void willEnterPlace (PlaceObject plobj)
     {
         super.willEnterPlace(plobj);

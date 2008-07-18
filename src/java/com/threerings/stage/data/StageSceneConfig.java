@@ -31,13 +31,13 @@ import com.threerings.stage.client.StageSceneController;
  */
 public class StageSceneConfig extends PlaceConfig
 {
-    // documentation inherited
+    @Override
     public PlaceController createController ()
     {
         return new StageSceneController();
     }
 
-    // documentation inherited
+    @Override
     public String getManagerClassName ()
     {
         return "com.threerings.stage.server.StageSceneManager";

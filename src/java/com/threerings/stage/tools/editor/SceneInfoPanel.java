@@ -36,14 +36,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import com.samskivert.swing.GroupLayout;
 import com.samskivert.swing.HGroupLayout;
-import com.samskivert.util.CollectionUtil;
 import com.samskivert.util.Collections;
 import com.samskivert.util.ComparableArrayList;
 
@@ -93,6 +90,7 @@ public class SceneInfoPanel extends JPanel
         hbox.add(createLabel("Scene name:", _scenename = new JTextField(10)));
         _scenename.addActionListener(this);
         _scenename.addFocusListener(new FocusAdapter() {
+            @Override
             public void focusLost (FocusEvent e) {
                 _scenename.postActionEvent();
             }

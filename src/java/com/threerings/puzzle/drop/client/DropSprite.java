@@ -32,8 +32,6 @@ import com.threerings.util.DirectionUtil;
 import com.threerings.media.image.Mirage;
 import com.threerings.media.sprite.Sprite;
 
-import static com.threerings.puzzle.Log.log;
-
 /**
  * The drop sprite is a sprite that displays one or more pieces falling
  * toward the bottom of the board.
@@ -79,7 +77,7 @@ public class DropSprite extends Sprite
         setRenderOrder(renderOrder);
     }
 
-    // documentation inherited
+    @Override
     protected void init ()
     {
         super.init();
@@ -304,7 +302,7 @@ public class DropSprite extends Sprite
         setLocation(_ox, _srcPos.y+1);
     }
 
-    // documentation inherited
+    @Override
     public boolean inside (Shape shape)
     {
         return shape.contains(_bounds);
@@ -336,7 +334,7 @@ public class DropSprite extends Sprite
         return pctdone;
     }
 
-    // documentation inherited
+    @Override
     public void paint (Graphics2D gfx)
     {
         // get the column and row increment based on the sprite's orientation
@@ -370,7 +368,7 @@ public class DropSprite extends Sprite
         image.paint(gfx, x, y);
     }
 
-    // documentation inherited
+    @Override
     public void tick (long timestamp)
     {
         super.tick(timestamp);
@@ -440,7 +438,7 @@ public class DropSprite extends Sprite
         // Log.info("Moved to row " + _row);
     }
 
-    // documentation inherited
+    @Override
     public void fastForward (long timeDelta)
     {
         if (_rowstamp > 0) {
@@ -448,7 +446,7 @@ public class DropSprite extends Sprite
         }
     }
 
-    // documentation inherited
+    @Override
     public void toString (StringBuilder buf)
     {
         super.toString(buf);
@@ -470,7 +468,7 @@ public class DropSprite extends Sprite
         setLocation(_srcPos.x, _srcPos.y);
     }
 
-    // documentation inherited
+    @Override
     public void setOrientation (int orient)
     {
         invalidate();

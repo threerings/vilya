@@ -26,8 +26,6 @@ import com.threerings.util.MessageBundle;
 import com.threerings.presents.data.InvocationCodes;
 import com.threerings.presents.data.Permission;
 
-import com.threerings.crowd.data.BodyObject;
-
 /**
  * Codes and constants relating to the Stage system.
  */

@@ -50,9 +50,7 @@ public class SegmentInfo
         this.len = len;
     }
 
-    /**
-     * Returns a string representation of this instance.
-     */
+    @Override
     public String toString ()
     {
         return StringUtil.fieldsToString(this);

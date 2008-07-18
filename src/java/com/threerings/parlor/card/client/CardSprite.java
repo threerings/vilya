@@ -24,11 +24,7 @@ package com.threerings.parlor.card.client;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 
-import com.threerings.media.AbstractMedia;
-import com.threerings.media.image.Mirage;
 import com.threerings.media.sprite.FadableImageSprite;
-import com.threerings.media.util.Path;
-
 import com.threerings.parlor.card.data.Card;
 
 /**
@@ -144,7 +140,7 @@ public class CardSprite extends FadableImageSprite
         _scaleFactor = 1.0;
     }
 
-    // Documentation inherited.
+    @Override
     public void tick (long tickStamp)
     {
         super.tick(tickStamp);
@@ -183,7 +179,7 @@ public class CardSprite extends FadableImageSprite
 
     }
 
-    // Documentation inherited.
+    @Override
     public void paint (Graphics2D gfx)
     {
         if (_scaleFactor <= 0) {

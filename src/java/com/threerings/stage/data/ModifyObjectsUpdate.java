@@ -54,7 +54,7 @@ public class ModifyObjectsUpdate extends SceneUpdate
         this.removed = removed;
     }
 
-    // documentation inherited
+    @Override
     public void apply (SceneModel model)
     {
         super.apply(model);

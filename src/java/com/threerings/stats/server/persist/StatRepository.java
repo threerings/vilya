@@ -120,6 +120,7 @@ public class StatRepository extends DepotRepository
             public void invalidate (PersistenceContext ctx) {
                 ctx.cacheTraverse(
                     StatRecord.class.getName(), new CacheEvictionFilter<StatRecord>() {
+                    @Override
                     public boolean testForEviction (Serializable key, StatRecord record) {
                         return record != null && record.playerId == playerId;
                     }
@@ -382,7 +383,7 @@ public class StatRepository extends DepotRepository
         rmap.put(code, value);
     }
 
-    @Override // from DepotRepository
+    @Override
     protected void getManagedRecords (Set<Class<? extends PersistentRecord>> classes)
     {
         classes.add(StatRecord.class);

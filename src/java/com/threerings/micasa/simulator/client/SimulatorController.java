@@ -63,7 +63,7 @@ public class SimulatorController extends Controller
         _ctx.getClient().addClientObserver(this);
     }
 
-    // documentation inherited
+    @Override
     public boolean handleAction (ActionEvent action)
     {
         String cmd = action.getActionCommand();

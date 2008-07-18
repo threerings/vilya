@@ -163,9 +163,7 @@ public class PointSet
         return _count;
     }
 
-    /**
-     * Returns a string representation of the point set.
-     */
+    @Override
     public String toString ()
     {
         StringBuilder buf = new StringBuilder();

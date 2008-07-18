@@ -39,11 +39,13 @@ public class SpotSceneParserTest extends TestCase
         super(SpotSceneParserTest.class.getName());
     }
 
+    @Override
     public void runTest ()
     {
         try {
             SceneParser parser = new SceneParser("scene");
             parser.registerAuxRuleSet(new SpotSceneRuleSet() {
+                @Override
                 protected Location createLocation () {
                     return new StageLocation(); // breaks package, but ok
                 }

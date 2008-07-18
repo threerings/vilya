@@ -24,7 +24,6 @@ package com.threerings.parlor.game.server;
 import com.threerings.presents.dobj.AttributeChangeListener;
 import com.threerings.presents.dobj.AttributeChangedEvent;
 
-import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.server.PlaceManager;
 
 import com.threerings.parlor.game.data.GameObject;

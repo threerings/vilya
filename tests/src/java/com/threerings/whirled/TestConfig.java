@@ -27,11 +27,13 @@ import com.threerings.whirled.server.SceneManager;
 
 public class TestConfig extends PlaceConfig
 {
+    @Override
     public PlaceController createController ()
     {
         return new TestController();
     }
 
+    @Override
     public String getManagerClassName ()
     {
         return SceneManager.class.getName();
