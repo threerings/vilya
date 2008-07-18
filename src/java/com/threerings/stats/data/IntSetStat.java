@@ -4,8 +4,9 @@
 package com.threerings.stats.data;
 
 import java.io.IOException;
-import java.util.HashSet;
 
+import com.samskivert.util.ArrayIntSet;
+import com.samskivert.util.IntSet;
 import com.samskivert.util.StringUtil;
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
@@ -57,7 +58,9 @@ public class IntSetStat extends Stat
      */
     public boolean add (int key)
     {
-        return (_intSet.size() < _maxSize ? _intSet.add(key) : false);
+        boolean modified = (_intSet.size() < _maxSize) && _intSet.add(key);
+        setModified(_modified || modified);
+        return modified;
     }
 
     @Override
@@ -77,7 +80,7 @@ public class IntSetStat extends Stat
     {
         _maxSize = ((int)in.readByte()) + 128;
         int numValues = ((int)in.readByte()) + 128;
-        _intSet = new HashSet<Integer>(numValues);
+        _intSet = new ArrayIntSet(numValues);
         for (int ii = 0; ii < numValues; ii++) {
             _intSet.add(in.readInt());
         }
@@ -91,7 +94,7 @@ public class IntSetStat extends Stat
     }
 
     protected int _maxSize;
-    protected HashSet<Integer> _intSet = new HashSet<Integer>();
+    protected IntSet _intSet = new ArrayIntSet();
 
     protected static final int MAX_MAX_SIZE = 255;
 
