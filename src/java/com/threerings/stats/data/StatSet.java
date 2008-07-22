@@ -108,7 +108,7 @@ public final class StatSet extends DSet<Stat>
             updateStat(stat);
         }
     }
-    
+
     /**
      * Adds a string value to a {@link StringSetStat}.
      *
@@ -120,6 +120,24 @@ public final class StatSet extends DSet<Stat>
         StringSetStat stat = (StringSetStat)get(type.name());
         if (stat == null) {
             stat = (StringSetStat)type.newStat();
+            stat.add(value);
+            addStat(stat);
+        } else if (stat.add(value)) {
+            updateStat(stat);
+        }
+    }
+
+    /**
+     * Adds an int value to a {@link IntSetStat}.
+     *
+     * @exception ClassCastException thrown if the registered type of the specified stat is not an
+     * {@link IntSetStat}.
+     */
+    public void addToSetStat (Stat.Type type, int value)
+    {
+        IntSetStat stat = (IntSetStat)get(type.name());
+        if (stat == null) {
+            stat = (IntSetStat)type.newStat();
             stat.add(value);
             addStat(stat);
         } else if (stat.add(value)) {
@@ -172,7 +190,7 @@ public final class StatSet extends DSet<Stat>
         IntArrayStat stat = (IntArrayStat)get(type.name());
         return (stat == null) ? new int[0] : stat.getValue();
     }
-    
+
     /**
      * Returns true if the specified {@link StringSetStat} contains the specified value, false
      * otherwise.
