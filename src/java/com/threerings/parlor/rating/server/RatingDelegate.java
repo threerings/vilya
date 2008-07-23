@@ -26,7 +26,9 @@ import static com.threerings.parlor.Log.log;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
 import com.google.common.collect.Lists;
+import com.google.inject.Inject;
 
 import com.samskivert.jdbc.RepositoryUnit;
 
@@ -37,6 +39,8 @@ import com.samskivert.util.StringUtil;
 
 import com.threerings.util.Name;
 import com.threerings.media.util.MathUtil;
+
+import com.threerings.presents.annotation.MainInvoker;
 
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceConfig;
@@ -54,20 +58,14 @@ import com.threerings.parlor.rating.server.persist.RatingRepository;
 /**
  * Rates players after each game and handles persisting the results.
  */
-public abstract class RatingManagerDelegate extends GameManagerDelegate
+public abstract class RatingDelegate extends GameManagerDelegate
     implements RatingCodes
 {
-    public RatingManagerDelegate (Invoker invoker)
-    {
-        _invoker = invoker;
-    }
-
     @Override
     public void didInit (PlaceConfig config)
     {
         super.didInit(config);
         _gmgr = (GameManager)_plmgr;
-        _repo = getRatingRepository();
     }
 
     @Override
@@ -117,7 +115,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
         }
 
         // note the time at which we started
-        _startStamp = (int) (System.currentTimeMillis() / 1000);
+        _startStamp = (int)(System.currentTimeMillis() / 1000);
 
         // this contains the persistent player id for each position in a seated table game
         _playerIds = new int[_gmgr.getPlayerSlots()];
@@ -219,8 +217,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
 
         final int gameId = getGameId();
         _invoker.postUnit(new RepositoryUnit("loadRatings(" + gameId + ")") {
-            @Override
-            public void invokePersist () throws Exception {
+            @Override public void invokePersist () throws Exception {
                 // map the records by player id so that we can correlate with the db results
                 IntMap<Rating> map = IntMaps.newHashIntMap();
                 for (Rating rating : ratings) {
@@ -238,8 +235,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
                 }
             }
 
-            @Override
-            public void handleSuccess () {
+            @Override public void handleSuccess () {
                 // stuff our populated records into the _ratings mapping
                 for (Rating rating : ratings) {
                     _ratings.put(rating.playerId, rating);
@@ -256,15 +252,13 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
 
         final int gameId = getGameId();
         _invoker.postUnit(new RepositoryUnit("saveRatings(" + gameId + ")") {
-            @Override
-            public void invokePersist () throws Exception {
+            @Override public void invokePersist () throws Exception {
                 for (Rating rating : ratings) {
                     _repo.setRating(gameId, rating.playerId, rating.rating, rating.experience);
                 }
             }
 
-            @Override
-            public void handleSuccess () {
+            @Override public void handleSuccess () {
                 // let subclasses publish the new ratings if they so desire
                 for (Rating rating : ratings) {
                     updateRatingInMemory(gameId, rating);
@@ -398,11 +392,6 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
     protected abstract int minimumRatedDuration ();
 
     /**
-     * Return a reference to the {@link RatingRepository} instance we should use to persist.
-     */
-    protected abstract RatingRepository getRatingRepository ();
-
-    /**
      * Optionally store update ratings in memory e.g. in the user object.
      *
      * This method is called on the dobj thread.
@@ -472,9 +461,6 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
     /** An appropriately casted reference to our GameObject. */
     protected GameObject _gobj;
 
-    /** The RatingRepository that holds our data. */
-    protected RatingRepository _repo;
-
     /** Contains the persistent id of the players in this game. */
     protected int[] _playerIds;
 
@@ -484,6 +470,7 @@ public abstract class RatingManagerDelegate extends GameManagerDelegate
     /** A timestamp set at the beginning of the game, used to calculate its duration. */
     protected int _startStamp;
 
-    /** The invoker on which we'll perform our database activity. */
-    protected Invoker _invoker;
+    // our dependencies
+    @Inject protected RatingRepository _repo;
+    @Inject protected @MainInvoker Invoker _invoker;
 }
