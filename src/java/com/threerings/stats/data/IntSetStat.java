@@ -5,11 +5,10 @@ package com.threerings.stats.data;
 
 import java.io.IOException;
 
-import com.samskivert.util.ArrayIntSet;
-import com.samskivert.util.IntSet;
 import com.samskivert.util.StringUtil;
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
+import com.threerings.util.StreamableArrayIntSet;
 
 /**
  * Used to track a statistic comprised of a bounded set of integers.
@@ -80,7 +79,7 @@ public class IntSetStat extends Stat
     {
         _maxSize = ((int)in.readByte()) + 128;
         int numValues = ((int)in.readByte()) + 128;
-        _intSet = new ArrayIntSet(numValues);
+        _intSet = new StreamableArrayIntSet(numValues);
         for (int ii = 0; ii < numValues; ii++) {
             _intSet.add(in.readInt());
         }
@@ -93,37 +92,8 @@ public class IntSetStat extends Stat
         return StringUtil.toString(_intSet);
     }
 
-    /** Writes our custom streamable fields. */
-    @Override // from Stat
-    public void writeObject (ObjectOutputStream out)
-        throws IOException
-    {
-        super.writeObject(out);
-
-        out.writeInt(_intSet.size());
-        for (int val : _intSet) {
-            out.writeInt(val);
-        }
-    }
-
-    /** Reads our custom streamable fields. */
-    @Override // from Stat
-    public void readObject (ObjectInputStream in)
-        throws IOException, ClassNotFoundException
-    {
-        super.readObject(in);
-
-        int setSize = in.readInt();
-        _intSet = new ArrayIntSet(setSize);
-        for (int ii = 0; ii < setSize; ii++) {
-            _intSet.add(in.readInt());
-        }
-    }
-
     protected int _maxSize;
-
-    /** ArrayIntSet is not Streamable, so we implement writeObject() and readObject() ourselves. */
-    protected transient IntSet _intSet = new ArrayIntSet();
+    protected StreamableArrayIntSet _intSet = new StreamableArrayIntSet();
 
     protected static final int MAX_MAX_SIZE = 255;
 
