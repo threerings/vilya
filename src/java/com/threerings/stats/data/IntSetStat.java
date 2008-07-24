@@ -93,8 +93,37 @@ public class IntSetStat extends Stat
         return StringUtil.toString(_intSet);
     }
 
+    /** Writes our custom streamable fields. */
+    @Override // from Stat
+    public void writeObject (ObjectOutputStream out)
+        throws IOException
+    {
+        super.writeObject(out);
+
+        out.writeInt(_intSet.size());
+        for (int val : _intSet) {
+            out.writeInt(val);
+        }
+    }
+
+    /** Reads our custom streamable fields. */
+    @Override // from Stat
+    public void readObject (ObjectInputStream in)
+        throws IOException, ClassNotFoundException
+    {
+        super.readObject(in);
+
+        int setSize = in.readInt();
+        _intSet = new ArrayIntSet(setSize);
+        for (int ii = 0; ii < setSize; ii++) {
+            _intSet.add(in.readInt());
+        }
+    }
+
     protected int _maxSize;
-    protected IntSet _intSet = new ArrayIntSet();
+
+    /** ArrayIntSet is not Streamable, so we implement writeObject() and readObject() ourselves. */
+    protected transient IntSet _intSet = new ArrayIntSet();
 
     protected static final int MAX_MAX_SIZE = 255;
 
