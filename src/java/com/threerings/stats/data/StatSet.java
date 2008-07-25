@@ -264,8 +264,7 @@ public final class StatSet extends DSet<Stat>
      */
     protected Stat getStat (Stat.Type type)
     {
-        Stat stat = get(type.name());
-        return (stat != null ? stat : null);
+        return get(type.name());
     }
 
     protected transient Container _container;
