@@ -1,5 +1,23 @@
 //
 // $Id$
+//
+// Vilya library - tools for developing networked games
+// Copyright (C) 2002-2007 Three Rings Design, Inc., All Rights Reserved
+// http://www.threerings.net/code/vilya/
+//
+// This library is free software; you can redistribute it and/or modify it
+// under the terms of the GNU Lesser General Public License as published
+// by the Free Software Foundation; either version 2.1 of the License, or
+// (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 package com.threerings.stats.data;
 
@@ -67,7 +85,7 @@ public final class StatSet extends DSet<Stat>
      */
     public void setStat (Stat.Type type, int value)
     {
-        IntStat stat = (IntStat)get(type.name());
+        IntStat stat = (IntStat)getStat(type);
         if (stat == null) {
             stat = (IntStat)type.newStat();
             stat.setValue(value);
@@ -99,7 +117,7 @@ public final class StatSet extends DSet<Stat>
      */
     public void incrementStat (Stat.Type type, int delta)
     {
-        IntStat stat = (IntStat)get(type.name());
+        IntStat stat = (IntStat)getStat(type);
         if (stat == null) {
             stat = (IntStat)type.newStat();
             stat.increment(delta);
@@ -117,7 +135,7 @@ public final class StatSet extends DSet<Stat>
      */
     public void appendStat (Stat.Type type, int value)
     {
-        IntArrayStat stat = (IntArrayStat)get(type.name());
+        IntArrayStat stat = (IntArrayStat)getStat(type);
         if (stat == null) {
             stat = (IntArrayStat)type.newStat();
             stat.appendValue(value);
@@ -129,34 +147,17 @@ public final class StatSet extends DSet<Stat>
     }
 
     /**
-     * Adds a string value to a {@link StringSetStat}.
+     * Adds a value to a {@link SetStat}.
      *
-     * @exception ClassCastException thrown if the registered type of the specified stat is not an
-     * {@link StringSetStat}.
+     * @exception ClassCastException thrown if the registered type of the specified stat is not
+     * an {@link SetStat} parameterized on the given type.
      */
-    public void addToSetStat (Stat.Type type, String value)
+    @SuppressWarnings("unchecked")
+    public <T> void addToSetStat (Stat.Type type, T value)
     {
-        StringSetStat stat = (StringSetStat)get(type.name());
+        SetStat<T> stat = (SetStat<T>)getStat(type);
         if (stat == null) {
-            stat = (StringSetStat)type.newStat();
-            stat.add(value);
-            addStat(stat);
-        } else if (stat.add(value)) {
-            updateStat(stat);
-        }
-    }
-
-    /**
-     * Adds an int value to a {@link IntSetStat}.
-     *
-     * @exception ClassCastException thrown if the registered type of the specified stat is not an
-     * {@link IntSetStat}.
-     */
-    public void addToSetStat (Stat.Type type, int value)
-    {
-        IntSetStat stat = (IntSetStat)get(type.name());
-        if (stat == null) {
-            stat = (IntSetStat)type.newStat();
+            stat = (SetStat<T>)type.newStat();
             stat.add(value);
             addStat(stat);
         } else if (stat.add(value)) {
@@ -172,7 +173,7 @@ public final class StatSet extends DSet<Stat>
      */
     public void incrementMapStat (Stat.Type type, String value, int amount)
     {
-        StringMapStat stat = (StringMapStat)get(type.name());
+        StringMapStat stat = (StringMapStat)getStat(type);
         if (stat == null) {
             stat = (StringMapStat)type.newStat();
             stat.increment(value, amount);
@@ -184,39 +185,62 @@ public final class StatSet extends DSet<Stat>
 
     /**
      * Returns the current value of the specified integer statistic.
+     *
+     * @exception ClassCastException thrown if the registered type of the specified stat is not an
+     * {@link IntStat}.
      */
     public int getIntStat (Stat.Type type)
     {
-        IntStat stat = (IntStat)get(type.name());
+        IntStat stat = (IntStat)getStat(type);
         return (stat == null) ? 0 : stat.getValue();
     }
 
     /**
      * Returns the maximum value by which the specified integer statistic has ever been
      * incremented.
+     *
+     * @exception ClassCastException thrown if the registered type of the specified stat is not an
+     * {@link MaxIntStat}.
      */
     public int getMaxIntStat (Stat.Type type)
     {
-        MaxIntStat stat = (MaxIntStat)get(type.name());
+        MaxIntStat stat = (MaxIntStat)getStat(type);
         return (stat == null) ? 0 : stat.getMaxValue();
     }
 
     /**
      * Returns the current value of the specified integer array statistic.
+     *
+     * @exception ClassCastException thrown if the registered type of the specified stat is not an
+     * {@link IntArrayStat}.
      */
     public int[] getIntArrayStat (Stat.Type type)
     {
-        IntArrayStat stat = (IntArrayStat)get(type.name());
+        IntArrayStat stat = (IntArrayStat)getStat(type);
         return (stat == null) ? new int[0] : stat.getValue();
     }
 
     /**
-     * Returns true if the specified {@link StringSetStat} contains the specified value, false
+     * Returns the current size of the specified SetStat statistic.
+     *
+     * @exception ClassCastException thrown if the registered type of the specified stat is not an
+     * {@link SetStat}.
+     */
+    @SuppressWarnings("unchecked")
+    public int getSetStatSize (Stat.Type type)
+    {
+        SetStat stat = (SetStat)getStat(type);
+        return (stat == null ? 0 : stat.size());
+    }
+
+    /**
+     * Returns true if the specified {@link SetStat} contains the specified value, false
      * otherwise.
      */
-    public boolean containsValue (Stat.Type type, String value)
+    @SuppressWarnings("unchecked")
+    public <T> boolean containsValue (Stat.Type type, T value)
     {
-        StringSetStat stat = (StringSetStat)get(type.name());
+        SetStat<T> stat = (SetStat<T>)getStat(type);
         return (stat == null) ? false : stat.contains(value);
     }
 
@@ -226,7 +250,7 @@ public final class StatSet extends DSet<Stat>
      */
     public int getMapValue (Stat.Type type, String value)
     {
-        StringMapStat stat = (StringMapStat)get(type.name());
+        StringMapStat stat = (StringMapStat)getStat(type);
         return (stat == null) ? 0 : stat.get(value);
     }
 

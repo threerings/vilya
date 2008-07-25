@@ -1,5 +1,23 @@
 //
 // $Id$
+//
+// Vilya library - tools for developing networked games
+// Copyright (C) 2002-2007 Three Rings Design, Inc., All Rights Reserved
+// http://www.threerings.net/code/vilya/
+//
+// This library is free software; you can redistribute it and/or modify it
+// under the terms of the GNU Lesser General Public License as published
+// by the Free Software Foundation; either version 2.1 of the License, or
+// (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 package com.threerings.stats.data;
 
@@ -13,7 +31,7 @@ import com.threerings.util.StreamableArrayIntSet;
 /**
  * Used to track a statistic comprised of a bounded set of integers.
  */
-public class IntSetStat extends Stat
+public class IntSetStat extends SetStat<Integer>
 {
     /**
      * Constructs a new IntSetStat that will store up to 255 ints.
@@ -36,6 +54,7 @@ public class IntSetStat extends Stat
     /**
      * Returns the number of values stored in the set.
      */
+    @Override // from SetStat
     public int size ()
     {
         return _intSet.size();
@@ -44,7 +63,8 @@ public class IntSetStat extends Stat
     /**
      * Returns true if the specified int is contained in this set.
      */
-    public boolean contains (int key)
+    @Override // from SetStat
+    public boolean contains (Integer key)
     {
         return _intSet.contains(key);
     }
@@ -55,7 +75,8 @@ public class IntSetStat extends Stat
      * @return true if the int was newly added, false if it was already contained in the set, or
      * if the set is full.
      */
-    public boolean add (int key)
+    @Override // from SetStat
+    public boolean add (Integer key)
     {
         boolean modified = (_intSet.size() < _maxSize) && _intSet.add(key);
         setModified(_modified || modified);
