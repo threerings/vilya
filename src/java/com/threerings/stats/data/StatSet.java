@@ -5,6 +5,7 @@ package com.threerings.stats.data;
 
 import java.util.Iterator;
 
+import com.threerings.media.Log;
 import com.threerings.presents.dobj.DSet;
 
 /**
@@ -38,6 +39,24 @@ public final class StatSet extends DSet<Stat>
     public void setContainer (Container container)
     {
         _container = container;
+    }
+
+    /**
+     * Updates a stat in this set, using the supplied StatModifier.
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends Stat> void updateStat (StatModifier<T> modifier)
+    {
+        Stat stat = getStat(modifier.getType());
+        if (stat != null) {
+            modifier.modify((T)stat);
+            updateStat(stat);
+
+        } else {
+            stat = modifier.getType().newStat();
+            modifier.modify((T)stat);
+            addStat(stat);
+        }
     }
 
     /**
@@ -227,6 +246,8 @@ public final class StatSet extends DSet<Stat>
         } else {
             add(stat);
         }
+
+        Log.log.info("StatSet.addStat()", "Stat", stat);
     }
 
     protected void updateStat (Stat stat)
@@ -234,6 +255,17 @@ public final class StatSet extends DSet<Stat>
         if (_container != null) {
             _container.updateStats(stat);
         }
+
+        Log.log.info("StatSet.updateStat()", "Stat", stat);
+    }
+
+    /**
+     * Returns the Stat of the given type, if it exists in the set, and null otherwise.
+     */
+    protected Stat getStat (Stat.Type type)
+    {
+        Stat stat = get(type.name());
+        return (stat != null ? stat : null);
     }
 
     protected transient Container _container;

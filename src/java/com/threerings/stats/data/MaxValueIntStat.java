@@ -11,7 +11,7 @@ import com.threerings.io.ObjectOutputStream;
 
 /**
  * Extends the {@link IntStat} by maintaining the maximum value that the stat has ever been
- * assigned (unlike {@link MaxIntStat}, which tracks the maximum value that the stat has ever 
+ * assigned (unlike {@link MaxIntStat}, which tracks the maximum value that the stat has ever
  * been incremented by).
  */
 public class MaxValueIntStat extends IntStat
@@ -23,7 +23,7 @@ public class MaxValueIntStat extends IntStat
     {
         return _maxValue;
     }
-    
+
     @Override // from IntStat
     public boolean setValue (int value)
     {
@@ -53,6 +53,6 @@ public class MaxValueIntStat extends IntStat
         _maxValue = in.readInt();
     }
 
-    /** The largest value ever accumulated to this stat. */
+    /** The largest value that this stat has been assigned. */
     protected int _maxValue;
 }
