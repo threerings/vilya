@@ -83,7 +83,6 @@ public class IntSetStat extends Stat
         for (int ii = 0; ii < numValues; ii++) {
             _intSet.add(in.readInt());
         }
-
     }
 
     @Override
@@ -96,5 +95,4 @@ public class IntSetStat extends Stat
     protected StreamableArrayIntSet _intSet = new StreamableArrayIntSet();
 
     protected static final int MAX_MAX_SIZE = 255;
-
 }
