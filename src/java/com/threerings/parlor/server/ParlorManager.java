@@ -64,7 +64,6 @@ public class ParlorManager
 //                  ", config=" + config + "].");
 
         BodyObject source = (BodyObject)caller;
-        String rsp = null;
 
         // ensure that the invitee is online at present
         BodyObject target = _locator.lookupBody(invitee);

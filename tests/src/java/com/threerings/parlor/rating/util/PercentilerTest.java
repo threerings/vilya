@@ -55,7 +55,7 @@ public class PercentilerTest extends TestCase
         // serialize and unserialize
         Percentiler t2 = new Percentiler(tiler.toBytes());
         // and dump again
-        tiler.dump(System.out);
+        t2.dump(System.out);
     }
 
     public static Test suite ()

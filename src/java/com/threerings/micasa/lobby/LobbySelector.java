@@ -71,7 +71,6 @@ public class LobbySelector extends JPanel
             @Override
             public void mouseClicked (MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    int index = _loblist.locationToIndex(e.getPoint());
                     Object item = _loblist.getSelectedValue();
                     enterLobby((Lobby)item);
                 }

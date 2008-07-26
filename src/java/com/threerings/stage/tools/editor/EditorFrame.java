@@ -51,7 +51,6 @@ import com.samskivert.swing.util.MenuUtil;
 import com.samskivert.swing.util.SwingUtil;
 import com.threerings.media.ManagedJFrame;
 import com.threerings.miso.tile.BaseTileSet;
-import com.threerings.miso.util.MisoSceneMetrics;
 
 import com.threerings.stage.data.StageScene;
 import com.threerings.stage.data.StageSceneModel;
@@ -287,7 +286,6 @@ public class EditorFrame extends ManagedJFrame
     protected void newScene ()
     {
         try {
-            MisoSceneMetrics metrics = _svpanel.getSceneMetrics();
             StageSceneModel model = StageSceneModel.blankStageSceneModel();
             model.type = StageSceneModel.WORLD;
             setScene(new StageScene(model, null));

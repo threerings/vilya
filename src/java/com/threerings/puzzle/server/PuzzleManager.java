@@ -363,7 +363,7 @@ public abstract class PuzzleManager extends GameManager
         int size = gevents.length;
         boolean before = compareBeforeApply();
 
-        for (int ii = 0, pos = 0; ii < size; ii++) {
+        for (int ii = 0; ii < size; ii++) {
             int gevent = gevents[ii];
             Board cboard = (states == null) ? null : states[ii];
 
