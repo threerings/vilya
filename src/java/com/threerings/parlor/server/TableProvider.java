@@ -21,6 +21,7 @@
 
 package com.threerings.parlor.server;
 
+import com.threerings.parlor.client.TableService;
 import com.threerings.parlor.data.TableConfig;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.presents.client.InvocationService;

@@ -56,8 +56,7 @@ public class ZoneDispatcher extends InvocationDispatcher<ZoneMarshaller>
         switch (methodId) {
         case ZoneMarshaller.MOVE_TO:
             ((ZoneProvider)provider).moveTo(
-                source,
-                ((Integer)args[0]).intValue(), ((Integer)args[1]).intValue(), ((Integer)args[2]).intValue(), (ZoneService.ZoneMoveListener)args[3]
+                source, ((Integer)args[0]).intValue(), ((Integer)args[1]).intValue(), ((Integer)args[2]).intValue(), (ZoneService.ZoneMoveListener)args[3]
             );
             return;
 

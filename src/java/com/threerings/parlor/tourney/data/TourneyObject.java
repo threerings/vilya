@@ -181,10 +181,10 @@ public class TourneyObject extends DObject
      * change. Proxied copies of this object (on clients) will apply the
      * value change when they received the attribute changed notification.
      */
-    public void setParticipants (DSet<com.threerings.parlor.tourney.data.Participant> value)
+    public void setParticipants (DSet<Participant> value)
     {
         requestAttributeChange(PARTICIPANTS, value, this.participants);
-        @SuppressWarnings("unchecked") DSet<com.threerings.parlor.tourney.data.Participant> clone =
+        @SuppressWarnings("unchecked") DSet<Participant> clone =
             (value == null) ? null : value.typedClone();
         this.participants = clone;
     }

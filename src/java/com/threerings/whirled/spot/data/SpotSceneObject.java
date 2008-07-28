@@ -85,10 +85,10 @@ public class SpotSceneObject extends SceneObject
      * change. Proxied copies of this object (on clients) will apply the
      * value change when they received the attribute changed notification.
      */
-    public void setOccupantLocs (DSet<com.threerings.whirled.spot.data.SceneLocation> value)
+    public void setOccupantLocs (DSet<SceneLocation> value)
     {
         requestAttributeChange(OCCUPANT_LOCS, value, this.occupantLocs);
-        @SuppressWarnings("unchecked") DSet<com.threerings.whirled.spot.data.SceneLocation> clone =
+        @SuppressWarnings("unchecked") DSet<SceneLocation> clone =
             (value == null) ? null : value.typedClone();
         this.occupantLocs = clone;
     }
@@ -133,10 +133,10 @@ public class SpotSceneObject extends SceneObject
      * change. Proxied copies of this object (on clients) will apply the
      * value change when they received the attribute changed notification.
      */
-    public void setClusters (DSet<com.threerings.whirled.spot.data.Cluster> value)
+    public void setClusters (DSet<Cluster> value)
     {
         requestAttributeChange(CLUSTERS, value, this.clusters);
-        @SuppressWarnings("unchecked") DSet<com.threerings.whirled.spot.data.Cluster> clone =
+        @SuppressWarnings("unchecked") DSet<Cluster> clone =
             (value == null) ? null : value.typedClone();
         this.clusters = clone;
     }

@@ -57,8 +57,7 @@ public class TourniesDispatcher extends InvocationDispatcher<TourniesMarshaller>
         switch (methodId) {
         case TourniesMarshaller.CREATE_TOURNEY:
             ((TourniesProvider)provider).createTourney(
-                source,
-                (TourneyConfig)args[0], (InvocationService.ResultListener)args[1]
+                source, (TourneyConfig)args[0], (InvocationService.ResultListener)args[1]
             );
             return;
 

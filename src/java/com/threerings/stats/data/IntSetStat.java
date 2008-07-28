@@ -98,8 +98,8 @@ public class IntSetStat extends SetStat<Integer>
     public void unpersistFrom (ObjectInputStream in, AuxDataSource aux)
         throws IOException, ClassNotFoundException
     {
-        _maxSize = ((int)in.readByte()) + 128;
-        int numValues = ((int)in.readByte()) + 128;
+        _maxSize = in.readByte() + 128;
+        int numValues = in.readByte() + 128;
         _intSet = new StreamableArrayIntSet(numValues);
         for (int ii = 0; ii < numValues; ii++) {
             _intSet.add(in.readInt());

@@ -56,8 +56,7 @@ public class SimulatorDispatcher extends InvocationDispatcher<SimulatorMarshalle
         switch (methodId) {
         case SimulatorMarshaller.CREATE_GAME:
             ((SimulatorProvider)provider).createGame(
-                source,
-                (GameConfig)args[0], (String)args[1], ((Integer)args[2]).intValue()
+                source, (GameConfig)args[0], (String)args[1], ((Integer)args[2]).intValue()
             );
             return;
 

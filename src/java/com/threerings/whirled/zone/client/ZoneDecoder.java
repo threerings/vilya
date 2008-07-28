@@ -22,7 +22,6 @@
 package com.threerings.whirled.zone.client;
 
 import com.threerings.presents.client.InvocationDecoder;
-import com.threerings.whirled.zone.client.ZoneReceiver;
 
 /**
  * Dispatches calls to a {@link ZoneReceiver} instance.

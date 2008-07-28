@@ -56,15 +56,13 @@ public class PuzzleGameDispatcher extends InvocationDispatcher<PuzzleGameMarshal
         switch (methodId) {
         case PuzzleGameMarshaller.UPDATE_PROGRESS:
             ((PuzzleGameProvider)provider).updateProgress(
-                source,
-                ((Integer)args[0]).intValue(), (int[])args[1]
+                source, ((Integer)args[0]).intValue(), (int[])args[1]
             );
             return;
 
         case PuzzleGameMarshaller.UPDATE_PROGRESS_SYNC:
             ((PuzzleGameProvider)provider).updateProgressSync(
-                source,
-                ((Integer)args[0]).intValue(), (int[])args[1], (Board[])args[2]
+                source, ((Integer)args[0]).intValue(), (int[])args[1], (Board[])args[2]
             );
             return;
 

@@ -59,29 +59,25 @@ public class ParlorDispatcher extends InvocationDispatcher<ParlorMarshaller>
         switch (methodId) {
         case ParlorMarshaller.CANCEL:
             ((ParlorProvider)provider).cancel(
-                source,
-                ((Integer)args[0]).intValue(), (InvocationService.InvocationListener)args[1]
+                source, ((Integer)args[0]).intValue(), (InvocationService.InvocationListener)args[1]
             );
             return;
 
         case ParlorMarshaller.INVITE:
             ((ParlorProvider)provider).invite(
-                source,
-                (Name)args[0], (GameConfig)args[1], (ParlorService.InviteListener)args[2]
+                source, (Name)args[0], (GameConfig)args[1], (ParlorService.InviteListener)args[2]
             );
             return;
 
         case ParlorMarshaller.RESPOND:
             ((ParlorProvider)provider).respond(
-                source,
-                ((Integer)args[0]).intValue(), ((Integer)args[1]).intValue(), args[2], (InvocationService.InvocationListener)args[3]
+                source, ((Integer)args[0]).intValue(), ((Integer)args[1]).intValue(), args[2], (InvocationService.InvocationListener)args[3]
             );
             return;
 
         case ParlorMarshaller.START_SOLITAIRE:
             ((ParlorProvider)provider).startSolitaire(
-                source,
-                (GameConfig)args[0], (InvocationService.ConfirmListener)args[1]
+                source, (GameConfig)args[0], (InvocationService.ConfirmListener)args[1]
             );
             return;
 

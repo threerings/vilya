@@ -56,8 +56,7 @@ public class SceneDispatcher extends InvocationDispatcher<SceneMarshaller>
         switch (methodId) {
         case SceneMarshaller.MOVE_TO:
             ((SceneProvider)provider).moveTo(
-                source,
-                ((Integer)args[0]).intValue(), ((Integer)args[1]).intValue(), (SceneService.SceneMoveListener)args[2]
+                source, ((Integer)args[0]).intValue(), ((Integer)args[1]).intValue(), (SceneService.SceneMoveListener)args[2]
             );
             return;
 

@@ -57,15 +57,13 @@ public class StageSceneDispatcher extends InvocationDispatcher<StageSceneMarshal
         switch (methodId) {
         case StageSceneMarshaller.ADD_OBJECT:
             ((StageSceneProvider)provider).addObject(
-                source,
-                (ObjectInfo)args[0], (InvocationService.ConfirmListener)args[1]
+                source, (ObjectInfo)args[0], (InvocationService.ConfirmListener)args[1]
             );
             return;
 
         case StageSceneMarshaller.REMOVE_OBJECTS:
             ((StageSceneProvider)provider).removeObjects(
-                source,
-                (ObjectInfo[])args[0], (InvocationService.ConfirmListener)args[1]
+                source, (ObjectInfo[])args[0], (InvocationService.ConfirmListener)args[1]
             );
             return;
 

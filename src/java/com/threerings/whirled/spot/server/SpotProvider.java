@@ -26,6 +26,7 @@ import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.presents.server.InvocationProvider;
 import com.threerings.whirled.client.SceneService;
+import com.threerings.whirled.spot.client.SpotService;
 import com.threerings.whirled.spot.data.Location;
 
 /**

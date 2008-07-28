@@ -58,29 +58,25 @@ public class TableDispatcher extends InvocationDispatcher<TableMarshaller>
         switch (methodId) {
         case TableMarshaller.CREATE_TABLE:
             ((TableProvider)provider).createTable(
-                source,
-                (TableConfig)args[0], (GameConfig)args[1], (InvocationService.ResultListener)args[2]
+                source, (TableConfig)args[0], (GameConfig)args[1], (InvocationService.ResultListener)args[2]
             );
             return;
 
         case TableMarshaller.JOIN_TABLE:
             ((TableProvider)provider).joinTable(
-                source,
-                ((Integer)args[0]).intValue(), ((Integer)args[1]).intValue(), (InvocationService.InvocationListener)args[2]
+                source, ((Integer)args[0]).intValue(), ((Integer)args[1]).intValue(), (InvocationService.InvocationListener)args[2]
             );
             return;
 
         case TableMarshaller.LEAVE_TABLE:
             ((TableProvider)provider).leaveTable(
-                source,
-                ((Integer)args[0]).intValue(), (InvocationService.InvocationListener)args[1]
+                source, ((Integer)args[0]).intValue(), (InvocationService.InvocationListener)args[1]
             );
             return;
 
         case TableMarshaller.START_TABLE_NOW:
             ((TableProvider)provider).startTableNow(
-                source,
-                ((Integer)args[0]).intValue(), (InvocationService.InvocationListener)args[1]
+                source, ((Integer)args[0]).intValue(), (InvocationService.InvocationListener)args[1]
             );
             return;
 

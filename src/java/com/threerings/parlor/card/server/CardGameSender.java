@@ -22,7 +22,6 @@
 package com.threerings.parlor.card.server;
 
 import com.threerings.parlor.card.client.CardGameDecoder;
-import com.threerings.parlor.card.client.CardGameReceiver;
 import com.threerings.parlor.card.data.Card;
 import com.threerings.parlor.card.data.Hand;
 import com.threerings.presents.data.ClientObject;

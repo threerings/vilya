@@ -58,29 +58,25 @@ public class SpotDispatcher extends InvocationDispatcher<SpotMarshaller>
         switch (methodId) {
         case SpotMarshaller.CHANGE_LOCATION:
             ((SpotProvider)provider).changeLocation(
-                source,
-                ((Integer)args[0]).intValue(), (Location)args[1], (InvocationService.ConfirmListener)args[2]
+                source, ((Integer)args[0]).intValue(), (Location)args[1], (InvocationService.ConfirmListener)args[2]
             );
             return;
 
         case SpotMarshaller.CLUSTER_SPEAK:
             ((SpotProvider)provider).clusterSpeak(
-                source,
-                (String)args[0], ((Byte)args[1]).byteValue()
+                source, (String)args[0], ((Byte)args[1]).byteValue()
             );
             return;
 
         case SpotMarshaller.JOIN_CLUSTER:
             ((SpotProvider)provider).joinCluster(
-                source,
-                ((Integer)args[0]).intValue(), (InvocationService.ConfirmListener)args[1]
+                source, ((Integer)args[0]).intValue(), (InvocationService.ConfirmListener)args[1]
             );
             return;
 
         case SpotMarshaller.TRAVERSE_PORTAL:
             ((SpotProvider)provider).traversePortal(
-                source,
-                ((Integer)args[0]).intValue(), ((Integer)args[1]).intValue(), ((Integer)args[2]).intValue(), (SceneService.SceneMoveListener)args[3]
+                source, ((Integer)args[0]).intValue(), ((Integer)args[1]).intValue(), ((Integer)args[2]).intValue(), (SceneService.SceneMoveListener)args[3]
             );
             return;
 

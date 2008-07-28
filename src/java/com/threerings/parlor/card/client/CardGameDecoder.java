@@ -21,7 +21,6 @@
 
 package com.threerings.parlor.card.client;
 
-import com.threerings.parlor.card.client.CardGameReceiver;
 import com.threerings.parlor.card.data.Card;
 import com.threerings.parlor.card.data.Hand;
 import com.threerings.presents.client.InvocationDecoder;

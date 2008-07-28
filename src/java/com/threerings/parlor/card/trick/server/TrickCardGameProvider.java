@@ -22,6 +22,7 @@
 package com.threerings.parlor.card.trick.server;
 
 import com.threerings.parlor.card.data.Card;
+import com.threerings.parlor.card.trick.client.TrickCardGameService;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationProvider;
 
