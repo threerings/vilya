@@ -33,35 +33,35 @@ public interface TableLobbyObject
      * Returns a reference to the distributed set instance that will be
      * holding the tables.
      */
-    public DSet getTables ();
+    DSet getTables ();
 
     /**
      * Adds the supplied table instance to the tables set (using the
      * appropriate distributed object mechanisms).
      */
-    public void addToTables (Table table);
+    void addToTables (Table table);
 
     /**
      * Updates the value of the specified table instance in the tables
      * distributed set (using the appropriate distributed object
      * mechanisms).
      */
-    public void updateTables (Table table);
+    void updateTables (Table table);
 
     /**
      * Removes the table instance that matches the specified key from the
      * tables set (using the appropriate distributed object mechanisms).
      */
-    public void removeFromTables (Comparable key);
+    void removeFromTables (Comparable<?> key);
 
     /**
      * Returns a reference to the table service configured in this object.
      */
-    public TableMarshaller getTableService ();
+    TableMarshaller getTableService ();
 
     /**
      * Configures the table service that clients should use to communicate table requests back to
      * the table manager handling these tables.
      */
-    public void setTableService (TableMarshaller service);
+    void setTableService (TableMarshaller service);
 }

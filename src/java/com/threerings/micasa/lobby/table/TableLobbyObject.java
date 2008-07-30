@@ -63,7 +63,7 @@ public class TableLobbyObject extends LobbyObject
     }
 
     // from interface TableLobbyObject
-    public void removeFromTables (Comparable key)
+    public void removeFromTables (Comparable<?> key)
     {
         removeFromTableSet(key);
     }
