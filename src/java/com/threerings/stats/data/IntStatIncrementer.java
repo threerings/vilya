@@ -32,6 +32,11 @@ public class IntStatIncrementer extends StatModifier<IntStat>
         _delta = delta;
     }
 
+    /** Constructs an empty IntStatIncrementer (for Streaming purposes). */
+    public IntStatIncrementer ()
+    {
+    }
+
     @Override // from StatModifier
     public void modify (IntStat stat)
     {

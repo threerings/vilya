@@ -21,13 +21,20 @@
 
 package com.threerings.stats.data;
 
+import java.io.IOException;
 import java.io.Serializable;
+
+import com.threerings.io.NotStreamable;
+import com.threerings.io.ObjectInputStream;
+import com.threerings.io.ObjectOutputStream;
+import com.threerings.io.Streamable;
 
 /**
  * Encapsulates a modification to a single stat that can be serialized and sent to a different
  * server, if needed, to update stats loaded at runtime.
  */
-public abstract class StatModifier<T extends Stat> implements Serializable
+public abstract class StatModifier<T extends Stat>
+    implements Serializable, Streamable
 {
     /**
      * Creates a modifier that will operate on the supplied stat type. Note that this type may be
@@ -38,6 +45,11 @@ public abstract class StatModifier<T extends Stat> implements Serializable
         _type = type;
     }
 
+    /** Constructs an empty StatModifier (for Streaming purposes). */
+    protected StatModifier ()
+    {
+    }
+
     /**
      * Returns the {@link Stat.Type} of the stat being modified.
      */
@@ -46,11 +58,28 @@ public abstract class StatModifier<T extends Stat> implements Serializable
         return _type;
     }
 
+    /** Writes our custom streamable fields. */
+    public void writeObject (ObjectOutputStream out)
+        throws IOException
+    {
+        out.writeInt(_type.code());
+        out.defaultWriteObject();
+    }
+
+    /** Reads our custom streamable fields. */
+    public void readObject (ObjectInputStream in)
+        throws IOException, ClassNotFoundException
+    {
+        _type = Stat.getType(in.readInt());
+        in.defaultReadObject();
+    }
+
     /**
      * Applies the modification to the stat in question.
      */
     public abstract void modify (T stat);
 
     /** The type of the stat on which we're operating. */
+    @NotStreamable
     protected Stat.Type _type;
 }

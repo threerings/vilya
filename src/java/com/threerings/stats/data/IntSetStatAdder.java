@@ -32,6 +32,11 @@ public class IntSetStatAdder extends StatModifier<IntSetStat>
         _value = value;
     }
 
+    /** Constructs an empty IntSetStatAdder (for Streaming purposes). */
+    public IntSetStatAdder ()
+    {
+    }
+
     @Override // from StatModifier
     public void modify (IntSetStat stat)
     {
