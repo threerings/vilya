@@ -47,7 +47,6 @@ public class TrickCardGameDispatcher extends InvocationDispatcher<TrickCardGameM
         return new TrickCardGameMarshaller();
     }
 
-    @SuppressWarnings("unchecked")
     @Override // documentation inherited
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)

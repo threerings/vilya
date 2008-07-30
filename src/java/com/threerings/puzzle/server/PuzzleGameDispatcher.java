@@ -47,7 +47,6 @@ public class PuzzleGameDispatcher extends InvocationDispatcher<PuzzleGameMarshal
         return new PuzzleGameMarshaller();
     }
 
-    @SuppressWarnings("unchecked")
     @Override // documentation inherited
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)

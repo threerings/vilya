@@ -90,7 +90,7 @@ public class TableLobbyObject extends LobbyObject
      * the <code>tableSet</code> set. The set will not change until the
      * event is actually propagated through the system.
      */
-    public void removeFromTableSet (Comparable key)
+    public void removeFromTableSet (Comparable<?> key)
     {
         requestEntryRemove(TABLE_SET, tableSet, key);
     }
@@ -118,8 +118,7 @@ public class TableLobbyObject extends LobbyObject
     public void setTableSet (DSet value)
     {
         requestAttributeChange(TABLE_SET, value, this.tableSet);
-        @SuppressWarnings("unchecked") DSet clone =
-            (value == null) ? null : value.typedClone();
+        DSet clone = (value == null) ? null : value.typedClone();
         this.tableSet = clone;
     }
 

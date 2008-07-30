@@ -32,7 +32,7 @@ import com.threerings.presents.data.InvocationMarshaller_ResultMarshaller;
 import com.threerings.util.Integer;
 
 /**
- * Provides the implementation of the {@link TableService} interface
+ * Provides the implementation of the <code>TableService</code> interface
  * that marshalls the arguments and delivers the request to the provider
  * on the server. Also provides an implementation of the response listener
  * interfaces that marshall the response arguments and deliver them back
@@ -41,7 +41,7 @@ import com.threerings.util.Integer;
 public class TableMarshaller extends InvocationMarshaller
     implements TableService
 {
-    /** The method id used to dispatch {@link #createTable} requests. */
+    /** The method id used to dispatch <code>createTable</code> requests. */
     public static const CREATE_TABLE :int = 1;
 
     // from interface TableService
@@ -54,7 +54,7 @@ public class TableMarshaller extends InvocationMarshaller
         ]);
     }
 
-    /** The method id used to dispatch {@link #joinTable} requests. */
+    /** The method id used to dispatch <code>joinTable</code> requests. */
     public static const JOIN_TABLE :int = 2;
 
     // from interface TableService
@@ -67,7 +67,7 @@ public class TableMarshaller extends InvocationMarshaller
         ]);
     }
 
-    /** The method id used to dispatch {@link #leaveTable} requests. */
+    /** The method id used to dispatch <code>leaveTable</code> requests. */
     public static const LEAVE_TABLE :int = 3;
 
     // from interface TableService
@@ -80,7 +80,7 @@ public class TableMarshaller extends InvocationMarshaller
         ]);
     }
 
-    /** The method id used to dispatch {@link #startTableNow} requests. */
+    /** The method id used to dispatch <code>startTableNow</code> requests. */
     public static const START_TABLE_NOW :int = 4;
 
     // from interface TableService

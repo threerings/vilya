@@ -33,13 +33,13 @@ import com.threerings.whirled.zone.client.ZoneService_ZoneMoveListener;
 public class ZoneMarshaller_ZoneMoveMarshaller
     extends InvocationMarshaller_ListenerMarshaller
 {
-    /** The method id used to dispatch {@link #moveSucceeded} responses. */
+    /** The method id used to dispatch <code>moveSucceeded</code> responses. */
     public static const MOVE_SUCCEEDED :int = 1;
 
-    /** The method id used to dispatch {@link #moveSucceededWithScene} responses. */
+    /** The method id used to dispatch <code>moveSucceededWithScene</code> responses. */
     public static const MOVE_SUCCEEDED_WITH_SCENE :int = 2;
 
-    /** The method id used to dispatch {@link #moveSucceededWithUpdates} responses. */
+    /** The method id used to dispatch <code>moveSucceededWithUpdates</code> responses. */
     public static const MOVE_SUCCEEDED_WITH_UPDATES :int = 3;
 
     // from InvocationMarshaller_ListenerMarshaller

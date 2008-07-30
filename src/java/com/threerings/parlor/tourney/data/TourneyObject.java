@@ -156,7 +156,7 @@ public class TourneyObject extends DObject
      * the <code>participants</code> set. The set will not change until the
      * event is actually propagated through the system.
      */
-    public void removeFromParticipants (Comparable key)
+    public void removeFromParticipants (Comparable<?> key)
     {
         requestEntryRemove(PARTICIPANTS, participants, key);
     }
@@ -184,8 +184,7 @@ public class TourneyObject extends DObject
     public void setParticipants (DSet<Participant> value)
     {
         requestAttributeChange(PARTICIPANTS, value, this.participants);
-        @SuppressWarnings("unchecked") DSet<Participant> clone =
-            (value == null) ? null : value.typedClone();
+        DSet<Participant> clone = (value == null) ? null : value.typedClone();
         this.participants = clone;
     }
     // AUTO-GENERATED: METHODS END

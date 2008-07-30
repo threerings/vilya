@@ -49,7 +49,6 @@ public class SpotDispatcher extends InvocationDispatcher<SpotMarshaller>
         return new SpotMarshaller();
     }
 
-    @SuppressWarnings("unchecked")
     @Override // documentation inherited
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)

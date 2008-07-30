@@ -60,7 +60,7 @@ public class SpotSceneObject extends SceneObject
      * the <code>occupantLocs</code> set. The set will not change until the
      * event is actually propagated through the system.
      */
-    public void removeFromOccupantLocs (Comparable key)
+    public void removeFromOccupantLocs (Comparable<?> key)
     {
         requestEntryRemove(OCCUPANT_LOCS, occupantLocs, key);
     }
@@ -88,8 +88,7 @@ public class SpotSceneObject extends SceneObject
     public void setOccupantLocs (DSet<SceneLocation> value)
     {
         requestAttributeChange(OCCUPANT_LOCS, value, this.occupantLocs);
-        @SuppressWarnings("unchecked") DSet<SceneLocation> clone =
-            (value == null) ? null : value.typedClone();
+        DSet<SceneLocation> clone = (value == null) ? null : value.typedClone();
         this.occupantLocs = clone;
     }
 
@@ -108,7 +107,7 @@ public class SpotSceneObject extends SceneObject
      * the <code>clusters</code> set. The set will not change until the
      * event is actually propagated through the system.
      */
-    public void removeFromClusters (Comparable key)
+    public void removeFromClusters (Comparable<?> key)
     {
         requestEntryRemove(CLUSTERS, clusters, key);
     }
@@ -136,8 +135,7 @@ public class SpotSceneObject extends SceneObject
     public void setClusters (DSet<Cluster> value)
     {
         requestAttributeChange(CLUSTERS, value, this.clusters);
-        @SuppressWarnings("unchecked") DSet<Cluster> clone =
-            (value == null) ? null : value.typedClone();
+        DSet<Cluster> clone = (value == null) ? null : value.typedClone();
         this.clusters = clone;
     }
     // AUTO-GENERATED: METHODS END

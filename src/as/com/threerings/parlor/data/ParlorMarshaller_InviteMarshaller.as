@@ -30,7 +30,7 @@ import com.threerings.presents.data.InvocationMarshaller_ListenerMarshaller;
 public class ParlorMarshaller_InviteMarshaller
     extends InvocationMarshaller_ListenerMarshaller
 {
-    /** The method id used to dispatch {@link #inviteReceived} responses. */
+    /** The method id used to dispatch <code>inviteReceived</code> responses. */
     public static const INVITE_RECEIVED :int = 1;
 
     // from InvocationMarshaller_ListenerMarshaller

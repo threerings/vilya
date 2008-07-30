@@ -47,7 +47,6 @@ public class SimulatorDispatcher extends InvocationDispatcher<SimulatorMarshalle
         return new SimulatorMarshaller();
     }
 
-    @SuppressWarnings("unchecked")
     @Override // documentation inherited
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)

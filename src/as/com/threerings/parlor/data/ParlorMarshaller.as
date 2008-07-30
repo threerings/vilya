@@ -34,7 +34,7 @@ import com.threerings.util.Integer;
 import com.threerings.util.Name;
 
 /**
- * Provides the implementation of the {@link ParlorService} interface
+ * Provides the implementation of the <code>ParlorService</code> interface
  * that marshalls the arguments and delivers the request to the provider
  * on the server. Also provides an implementation of the response listener
  * interfaces that marshall the response arguments and deliver them back
@@ -43,7 +43,7 @@ import com.threerings.util.Name;
 public class ParlorMarshaller extends InvocationMarshaller
     implements ParlorService
 {
-    /** The method id used to dispatch {@link #cancel} requests. */
+    /** The method id used to dispatch <code>cancel</code> requests. */
     public static const CANCEL :int = 1;
 
     // from interface ParlorService
@@ -56,7 +56,7 @@ public class ParlorMarshaller extends InvocationMarshaller
         ]);
     }
 
-    /** The method id used to dispatch {@link #invite} requests. */
+    /** The method id used to dispatch <code>invite</code> requests. */
     public static const INVITE :int = 2;
 
     // from interface ParlorService
@@ -69,7 +69,7 @@ public class ParlorMarshaller extends InvocationMarshaller
         ]);
     }
 
-    /** The method id used to dispatch {@link #respond} requests. */
+    /** The method id used to dispatch <code>respond</code> requests. */
     public static const RESPOND :int = 3;
 
     // from interface ParlorService
@@ -82,7 +82,7 @@ public class ParlorMarshaller extends InvocationMarshaller
         ]);
     }
 
-    /** The method id used to dispatch {@link #startSolitaire} requests. */
+    /** The method id used to dispatch <code>startSolitaire</code> requests. */
     public static const START_SOLITAIRE :int = 4;
 
     // from interface ParlorService

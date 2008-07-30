@@ -47,7 +47,6 @@ public class ZoneDispatcher extends InvocationDispatcher<ZoneMarshaller>
         return new ZoneMarshaller();
     }
 
-    @SuppressWarnings("unchecked")
     @Override // documentation inherited
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)

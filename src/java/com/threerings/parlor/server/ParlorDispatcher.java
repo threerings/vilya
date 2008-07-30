@@ -50,7 +50,6 @@ public class ParlorDispatcher extends InvocationDispatcher<ParlorMarshaller>
         return new ParlorMarshaller();
     }
 
-    @SuppressWarnings("unchecked")
     @Override // documentation inherited
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)

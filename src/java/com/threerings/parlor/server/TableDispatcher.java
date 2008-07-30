@@ -49,7 +49,6 @@ public class TableDispatcher extends InvocationDispatcher<TableMarshaller>
         return new TableMarshaller();
     }
 
-    @SuppressWarnings("unchecked")
     @Override // documentation inherited
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
