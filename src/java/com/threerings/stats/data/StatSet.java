@@ -60,13 +60,18 @@ public final class StatSet extends DSet<Stat>
     }
 
     /**
-     * Updates a stat in this set, using the supplied StatModifier.
+     * Updates a stat in this set, using the supplied StatModifier. This function should
+     * only be called after a successful stat modification has been made to the StatRepository.
+     * It will increment the Stat's modCount, and won't set its dirty bit if it's not already
+     * set, to prevent the Stat from being re-written to the repo unnecessarily.
      */
     @SuppressWarnings("unchecked")
-    public <T extends Stat> void updateStat (StatModifier<T> modifier)
+    public <T extends Stat> void syncStat (StatModifier<T> modifier)
     {
+        boolean wasModified = false;
         Stat stat = getStat(modifier.getType());
         if (stat != null) {
+            wasModified = stat.isModified();
             modifier.modify((T)stat);
             updateStat(stat);
 
@@ -75,6 +80,9 @@ public final class StatSet extends DSet<Stat>
             modifier.modify((T)stat);
             addStat(stat);
         }
+
+        stat.setModified(wasModified);
+        stat.setModCount((byte)((stat.getModCount() + 1) % Byte.MAX_VALUE));
     }
 
     /**
