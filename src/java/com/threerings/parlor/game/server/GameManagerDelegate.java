@@ -21,16 +21,16 @@
 
 package com.threerings.parlor.game.server;
 
-import com.threerings.util.Name;
+import com.threerings.crowd.server.PlayManagerDelegate;
 
-import com.threerings.crowd.server.PlaceManagerDelegate;
+import com.threerings.util.Name;
 
 import com.threerings.parlor.game.data.GameAI;
 
 /**
- * Extends the {@link PlaceManagerDelegate} mechanism with game manager specific methods.
+ * Extends the {@link PlayManagerDelegate} mechanism with game manager specific methods.
  */
-public class GameManagerDelegate extends PlaceManagerDelegate
+public class GameManagerDelegate extends PlayManagerDelegate
 {
     public GameManagerDelegate ()
     {

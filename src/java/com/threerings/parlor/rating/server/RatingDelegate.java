@@ -46,7 +46,6 @@ import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.data.PlaceObject;
 
-import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.game.data.GameObject;
 import com.threerings.parlor.game.server.GameManager;
 import com.threerings.parlor.game.server.GameManagerDelegate;
@@ -179,30 +178,6 @@ public abstract class RatingDelegate extends GameManagerDelegate
             return null;
         }
         return new Rating(bobj, playerId);
-    }
-
-    /**
-     * Returns true if the supplied occupant is a player, false if not.
-     */
-    protected boolean isPlayer (BodyObject occupant)
-    {
-        // avoid having to do this check all over the damned place
-        if (occupant == null) {
-            return false;
-        }
-
-        // if this is a seated table game, ask the game object
-        if (_gobj.getPlayerIndex(occupant.getVisibleName()) != -1) {
-            return true;
-        }
-
-        // if this is a party game, everyone's a player!
-        if (_gmgr.getGameConfig().getMatchType() == GameConfig.PARTY) {
-            return true;
-        }
-
-        // otherwise, sorry pardner
-        return false;
     }
 
     /**

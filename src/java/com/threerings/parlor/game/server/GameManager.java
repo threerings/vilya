@@ -33,6 +33,7 @@ import com.samskivert.util.StringUtil;
 import com.samskivert.util.Tuple;
 import com.threerings.util.Name;
 
+import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.dobj.AttributeChangeListener;
 import com.threerings.presents.dobj.AttributeChangedEvent;
 import com.threerings.presents.dobj.DObject;
@@ -41,6 +42,7 @@ import com.threerings.crowd.chat.server.SpeakUtil;
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.server.PlaceManager;
 import com.threerings.crowd.server.PlaceManagerDelegate;
+import com.threerings.crowd.server.PlayManager;
 
 import com.threerings.parlor.data.ParlorCodes;
 import com.threerings.parlor.game.data.GameAI;
@@ -61,7 +63,7 @@ import static com.threerings.parlor.Log.log;
  * location, the players of the game implicitly bodies in that location.
  */
 public class GameManager extends PlaceManager
-    implements ParlorCodes, GameCodes
+    implements ParlorCodes, GameCodes, PlayManager
 {
     /**
      * An interface for identifying users. A larger system using the Parlor game services can
@@ -651,6 +653,43 @@ public class GameManager extends PlaceManager
                  !_pendingOids.contains(_playerOids[pidx])) || // ...has reported ready
                 isAI(pidx));                                   // player is AI
     }
+
+    // from PlayManager
+    public boolean isPlayer (ClientObject client)
+    {
+        // players must have bodies
+        if (client != null && client instanceof BodyObject) {
+            BodyObject body = (BodyObject) client;
+
+            // players must be occupants
+            if (_gameobj.occupants.contains(body.getOid())) {
+
+                // in a party game, all occupants are players
+                if (getGameConfig().getMatchType() == GameConfig.PARTY) {
+                    return true;
+                }
+
+                // else they must be seated
+                return _gameobj.getPlayerIndex(body.getVisibleName()) >= 0;
+            }
+        }
+        return false;
+    }
+
+    // from PlayManager
+    public boolean isAgent (ClientObject client)
+    {
+        // agent-savvy subclasses override this
+        return false;
+    }
+
+    // from PlayManager
+    public BodyObject checkWritePermission (ClientObject client, int playerId)
+    {
+        // subclasses can be more restrictive here
+        return true;
+    }
+    
 
     /**
      * Returns true if this game requires a no-show timer. The default implementation returns true
