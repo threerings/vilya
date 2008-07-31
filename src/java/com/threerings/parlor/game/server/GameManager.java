@@ -687,7 +687,8 @@ public class GameManager extends PlaceManager
     public BodyObject checkWritePermission (ClientObject client, int playerId)
     {
         // subclasses can be more restrictive here
-        return _omgr.getObject(client.getOid());
+        DObject player = _omgr.getObject(playerId);
+        return (player instanceof BodyObject) ? (BodyObject) player : null;
     }
     
 
