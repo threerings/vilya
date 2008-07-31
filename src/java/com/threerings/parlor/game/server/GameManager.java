@@ -42,7 +42,6 @@ import com.threerings.crowd.chat.server.SpeakUtil;
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.server.PlaceManager;
 import com.threerings.crowd.server.PlaceManagerDelegate;
-import com.threerings.crowd.server.PlayManager;
 
 import com.threerings.parlor.data.ParlorCodes;
 import com.threerings.parlor.game.data.GameAI;
@@ -50,6 +49,7 @@ import com.threerings.parlor.game.data.GameCodes;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.game.data.GameObject;
 import com.threerings.parlor.server.ParlorSender;
+import com.threerings.parlor.server.PlayManager;
 
 import com.threerings.util.MessageBundle;
 
