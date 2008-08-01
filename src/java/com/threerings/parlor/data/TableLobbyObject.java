@@ -33,7 +33,7 @@ public interface TableLobbyObject
      * Returns a reference to the distributed set instance that will be
      * holding the tables.
      */
-    DSet getTables ();
+    DSet<Table> getTables ();
 
     /**
      * Adds the supplied table instance to the tables set (using the
