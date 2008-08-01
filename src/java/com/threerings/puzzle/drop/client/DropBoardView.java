@@ -330,8 +330,8 @@ public abstract class DropBoardView extends PuzzleBoardView
     {
         // when a new board arrives, we want to remove all drop sprites
         // so that they don't modify the new board with their old ideas
-        for (Iterator iter = _actionSprites.iterator(); iter.hasNext(); ) {
-            Sprite s = (Sprite) iter.next();
+        for (Iterator<Sprite> iter = _actionSprites.iterator(); iter.hasNext(); ) {
+            Sprite s = iter.next();
             if (s instanceof DropSprite) {
                 // remove it from _sprites safely
                 iter.remove();

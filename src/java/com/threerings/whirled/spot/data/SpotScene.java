@@ -43,7 +43,7 @@ public interface SpotScene
     /**
      * Returns an iterator over the portals in this scene.
      */
-    public Iterator getPortals ();
+    public Iterator<Portal> getPortals ();
 
     /**
      * Returns the portal id that should be assigned to the next portal

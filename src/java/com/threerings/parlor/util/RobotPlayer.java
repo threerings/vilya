@@ -23,6 +23,7 @@ package com.threerings.parlor.util;
 
 import java.awt.Component;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.samskivert.swing.Controller;
 import com.samskivert.util.CollectionUtil;
@@ -100,7 +101,7 @@ public class RobotPlayer extends Interval
     {
         // post a random key press command
         int idx = RandomUtil.getInt(_press.size());
-        String command = (String)_press.get(idx);
+        String command = _press.get(idx);
         // Log.info("Posting artificial command [cmd=" + command + "].");
         Controller.postAction(_target, command);
     }
@@ -115,10 +116,10 @@ public class RobotPlayer extends Interval
     protected long _robotDelay = DEFAULT_ROBOT_DELAY;
 
     /** The list of available key press action commands. */
-    protected ArrayList _press = new ArrayList();
+    protected List<String> _press = new ArrayList<String>();
 
     /** The list of available key release action commands. */
-    protected ArrayList _release = new ArrayList();
+    protected List<String> _release = new ArrayList<String>();
 
     /** The key translator that describes available keys and commands. */
     protected KeyTranslator _xlate;

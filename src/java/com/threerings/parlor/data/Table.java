@@ -380,7 +380,7 @@ public class Table
     }
 
     // documentation inherited
-    public Comparable getKey ()
+    public Comparable<?> getKey ()
     {
         return tableId;
     }

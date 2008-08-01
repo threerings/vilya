@@ -58,7 +58,7 @@ import static com.threerings.parlor.Log.log;
  * matchmaking takes place implements the {@link TableLobbyObject} interface.
  */
 public class TableDirector extends BasicDirector
-    implements SetListener, TableService.ResultListener
+    implements SetListener<Table>, TableService.ResultListener
 {
     /**
      * Creates a new table director to manage tables with the specified observer which will receive
@@ -227,10 +227,10 @@ public class TableDirector extends BasicDirector
     }
 
     // documentation inherited
-    public void entryAdded (EntryAddedEvent event)
+    public void entryAdded (EntryAddedEvent<Table> event)
     {
         if (event.getName().equals(_tableField)) {
-            Table table = (Table)event.getEntry();
+            Table table = event.getEntry();
             // check to see if we just joined a table
             checkSeatedness(table);
             // now let the observer know what's up
@@ -239,10 +239,10 @@ public class TableDirector extends BasicDirector
     }
 
     // documentation inherited
-    public void entryUpdated (EntryUpdatedEvent event)
+    public void entryUpdated (EntryUpdatedEvent<Table> event)
     {
         if (event.getName().equals(_tableField)) {
-            Table table = (Table)event.getEntry();
+            Table table = event.getEntry();
             // check to see if we just joined or left a table
             checkSeatedness(table);
             // now let the observer know what's up
@@ -251,7 +251,7 @@ public class TableDirector extends BasicDirector
     }
 
     // documentation inherited
-    public void entryRemoved (EntryRemovedEvent event)
+    public void entryRemoved (EntryRemovedEvent<Table> event)
     {
         if (event.getName().equals(_tableField)) {
             int tableId = ((Integer) event.getKey()).intValue();
@@ -275,7 +275,7 @@ public class TableDirector extends BasicDirector
             return;
         }
 
-        Table table = (Table) _tlobj.getTables().get(tableId);
+        Table table = _tlobj.getTables().get(tableId);
         if (table == null) {
             log.warning("Table created, but where is it? [tableId=" + tableId + "]");
             return;

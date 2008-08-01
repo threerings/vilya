@@ -50,7 +50,7 @@ public abstract class TourneyManager
      *
      * @return the oid of this manager's tourney object.
      */
-    public int init (TourneyConfig config, Comparable key)
+    public int init (TourneyConfig config, Comparable<?> key)
     {
         _config = config;
         _key = key;
@@ -120,8 +120,8 @@ public abstract class TourneyManager
             // make the assumption that they're going to get in
             _trobj.addToParticipants(part);
 
-            ResultListener rl = new ResultListener() {
-                public void requestCompleted (Object result) {
+            ResultListener<Void> rl = new ResultListener<Void>() {
+                public void requestCompleted (Void result) {
                     listener.requestProcessed();
                 }
                 public void requestFailed (Exception cause) {
@@ -150,7 +150,7 @@ public abstract class TourneyManager
             throw new InvocationException(TOO_LATE_LEAVE);
         }
 
-        Comparable key = body.username;
+        Comparable<?> key = body.username;
         if (!_trobj.participants.containsKey(key)) {
             throw new InvocationException(NOT_IN_TOURNEY);
         }
@@ -283,7 +283,7 @@ public abstract class TourneyManager
     protected long _startTime;
 
     /** The key this tourney is recorded under. */
-    protected Comparable _key;
+    protected Comparable<?> _key;
 
     // services on which we depend
     @Inject protected RootDObjectManager _omgr;

@@ -31,21 +31,20 @@ import com.threerings.presents.dobj.DSet;
  * Contains information on a particular tourney participant.
  */
 public class Participant extends SimpleStreamableObject
-    implements DSet.Entry, Comparable
+    implements DSet.Entry, Comparable<Participant>
 {
     /** The username of the participant. */
     public Name username;
 
     // documentation inherited from interface DSet.Entry
-    public Comparable getKey ()
+    public Comparable<?> getKey ()
     {
         return username;
     }
 
     // documentation inherited from interface Comparable
-    public int compareTo (Object o)
+    public int compareTo (Participant op)
     {
-        Participant op = (Participant)o;
         return username.compareTo(op.username);
     }
 

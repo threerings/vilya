@@ -21,6 +21,8 @@
 
 package com.threerings.stage.client;
 
+import java.awt.Point;
+
 import com.samskivert.util.Tuple;
 
 import com.threerings.crowd.client.PlaceView;
@@ -28,6 +30,7 @@ import com.threerings.crowd.util.CrowdContext;
 
 import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.spot.client.SpotSceneController;
+import com.threerings.whirled.spot.data.Cluster;
 
 import com.threerings.stage.data.StageLocation;
 import com.threerings.stage.util.StageContext;
@@ -51,10 +54,9 @@ public class StageSceneController extends SpotSceneController
     /**
      * Handles a cluster clicked event.
      *
-     * @param tuple a Tuple containing (Cluster, Point) with the Cluster
-     * that was clicked and the Point being the screen coords of the click.
+     * @param tuple the cluster that was clicked and the screen coords of the click.
      */
-    public void handleClusterClicked (Object source, Tuple tuple)
+    public void handleClusterClicked (Object source, Tuple<Cluster, Point> tuple)
     {
         log.warning("handleClusterClicked(" + source + ", " + tuple + ")");
     }

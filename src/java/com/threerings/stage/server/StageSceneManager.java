@@ -26,6 +26,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 
 import com.samskivert.util.HashIntMap;
 import com.threerings.media.util.AStarPathUtil;
@@ -159,7 +160,7 @@ public class StageSceneManager extends SpotSceneManager
     {
         return (StageSceneUtil.isPassable(
                     StageServer.tilemgr, _mmodel.getBaseTileId(tx, ty)) &&
-                !checkContains(_footprints.iterator(), tx, ty));
+                !checkContains(_footprints, tx, ty));
     }
 
     /**
@@ -311,8 +312,8 @@ public class StageSceneManager extends SpotSceneManager
         // place the tile coordinates of our portals into a set for
         // efficient comparison with location coordinates
         _plocs.clear();
-        for (Iterator iter = _sscene.getPortals(); iter.hasNext(); ) {
-            Portal port = (Portal)iter.next();
+        for (Iterator<Portal> iter = _sscene.getPortals(); iter.hasNext(); ) {
+            Portal port = iter.next();
             StageLocation loc = (StageLocation) port.loc;
             _plocs.add(new Point(MisoUtil.fullToTile(loc.x),
                                  MisoUtil.fullToTile(loc.y)));
@@ -355,9 +356,9 @@ public class StageSceneManager extends SpotSceneManager
 
         // make sure they're not standing in a cluster footprint, an
         // object footprint, or in the same tile as another scene occupant
-        if (checkContains(_ssobj.clusters.iterator(), tx, ty) ||
-            checkContains(_footprints.iterator(), tx, ty) ||
-            checkContains(_loners.values().iterator(), tx, ty)) {
+        if (checkContains(_ssobj.clusters, tx, ty) ||
+            checkContains(_footprints, tx, ty) ||
+            checkContains(_loners.values(), tx, ty)) {
 //             Log.info("Rejecting loc [who=" + source.who() +
 //                      ", loc=" + loc + ", inCluster=" +
 //                      checkContains(_ssobj.clusters.iterator(), tx, ty) +
@@ -373,10 +374,9 @@ public class StageSceneManager extends SpotSceneManager
     }
 
     /** Helper function for {@link #validateLocation}. */
-    protected boolean checkContains (Iterator iter, int tx, int ty)
+    protected boolean checkContains (Iterable<? extends Rectangle> rects, int tx, int ty)
     {
-        while (iter.hasNext()) {
-            Rectangle rect = (Rectangle)iter.next();
+        for (Rectangle rect : rects) {
             if (rect.contains(tx, ty)) {
 //                 Log.info(StringUtil.toString(rect) + " contains " +
 //                          StringUtil.coordsToString(tx, ty) + ".");
@@ -517,8 +517,8 @@ public class StageSceneManager extends SpotSceneManager
 
             // if this rect overlaps objects, other clusters, portals or
             // impassable tiles, it's no good
-            if (checkIntersects(_ssobj.clusters.iterator(), rect, cl) ||
-                checkIntersects(_footprints.iterator(), rect, cl) ||
+            if (checkIntersects(_ssobj.clusters, rect, cl) ||
+                checkIntersects(_footprints, rect, cl) ||
                 checkPortals(rect) || checkViolatesPassability(rect)) {
                 rect = null;
             } else {
@@ -595,11 +595,10 @@ public class StageSceneManager extends SpotSceneManager
     }
 
     /** Helper function for {@link #canAddBody}. */
-    protected boolean checkIntersects (Iterator iter, Rectangle rect,
-                                       Rectangle ignore)
+    protected boolean checkIntersects (
+        Iterable<? extends Rectangle> rects, Rectangle rect, Rectangle ignore)
     {
-        while (iter.hasNext()) {
-            Rectangle trect = (Rectangle)iter.next();
+        for (Rectangle trect : rects) {
             if (ignore != null && trect.equals(ignore)) {
                 continue;
             }
@@ -613,8 +612,8 @@ public class StageSceneManager extends SpotSceneManager
     /** Helper function for {@link #canAddBody}. */
     protected boolean checkPortals (Rectangle rect)
     {
-        for (Iterator iter = _plocs.iterator(); iter.hasNext(); ) {
-            Point ppoint = (Point)iter.next();
+        for (Iterator<Point> iter = _plocs.iterator(); iter.hasNext(); ) {
+            Point ppoint = iter.next();
             if (rect.contains(ppoint)) {
                 return true;
             }
@@ -683,14 +682,14 @@ public class StageSceneManager extends SpotSceneManager
         }
 
         // generate a list of all valid locations for this cluster
-        ArrayList locs = StageSceneUtil.getClusterLocs(cl);
+        List<SceneLocation> locs = StageSceneUtil.getClusterLocs(cl);
 
 //         Log.info("Positioning " + clrec.size() + " bodies in " +
 //                  StringUtil.toString(locs) + " for " + cl + ".");
 
         // make sure everyone is in their proper position
-        for (Iterator iter = clrec.keySet().iterator(); iter.hasNext(); ) {
-            int tbodyOid = ((Integer)iter.next()).intValue();
+        for (Iterator<Integer> iter = clrec.keySet().iterator(); iter.hasNext(); ) {
+            int tbodyOid = iter.next().intValue();
             // leave the newly added player to last
             if (tbodyOid != bodyOid) {
                 positionBody(cl, tbodyOid, locs);
@@ -702,7 +701,7 @@ public class StageSceneManager extends SpotSceneManager
     }
 
     /** Helper function for {@link #bodyAdded}. */
-    protected void positionBody (Cluster cl, int bodyOid, ArrayList locs)
+    protected void positionBody (Cluster cl, int bodyOid, List<SceneLocation> locs)
     {
         SceneLocation sloc = _ssobj.occupantLocs.get(Integer.valueOf(bodyOid));
         if (sloc == null) {
@@ -751,11 +750,11 @@ public class StageSceneManager extends SpotSceneManager
         cl.height = target;
 
         // generate a list of all valid locations for this cluster
-        ArrayList locs = StageSceneUtil.getClusterLocs(cl);
+        List<SceneLocation> locs = StageSceneUtil.getClusterLocs(cl);
 
         // make sure everyone is in their proper position
-        for (Iterator iter = clrec.keySet().iterator(); iter.hasNext(); ) {
-            int bodyOid = ((Integer)iter.next()).intValue();
+        for (Iterator<Integer> iter = clrec.keySet().iterator(); iter.hasNext(); ) {
+            int bodyOid = iter.next().intValue();
             // leave the newly added player to last
             if (bodyOid != body.getOid()) {
                 positionBody(cl, bodyOid, locs);
@@ -786,14 +785,14 @@ public class StageSceneManager extends SpotSceneManager
      * supplied location.
      */
     protected static SceneLocation getClosestLoc (
-        ArrayList locs, SceneLocation optimalLocation)
+        List<SceneLocation>locs, SceneLocation optimalLocation)
     {
         StageLocation loc = (StageLocation) optimalLocation.loc;
         SceneLocation cloc = null;
         float cdist = Integer.MAX_VALUE;
         int cidx = -1;
         for (int ii = 0, ll = locs.size(); ii < ll; ii++) {
-            SceneLocation tloc = (SceneLocation)locs.get(ii);
+            SceneLocation tloc = locs.get(ii);
             StageLocation sl = (StageLocation) tloc.loc;
             float tdist = MathUtil.distance(loc.x, loc.y, sl.x, sl.y);
             if (tdist < cdist) {
@@ -819,14 +818,14 @@ public class StageSceneManager extends SpotSceneManager
 
     /** Rectangles describing the footprints (in tile coordinates) of all
      * of our scene objects. */
-    protected ArrayList _footprints = new ArrayList();
+    protected ArrayList<Rectangle> _footprints = new ArrayList<Rectangle>();
 
     /** Rectangles containing a "footprint" for the users that aren't in
      * any clusters. */
     protected HashIntMap<Rectangle> _loners = new HashIntMap<Rectangle>();
 
     /** Contains the (tile) coordinates of all of our portals. */
-    protected HashSet _plocs = new HashSet();
+    protected HashSet<Point> _plocs = new HashSet<Point>();
 
     /** The dimensions of a cluster with the specified number of
      * occupants. */

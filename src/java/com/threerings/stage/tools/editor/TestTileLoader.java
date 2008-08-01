@@ -28,6 +28,8 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+
 import javax.imageio.ImageIO;
 
 import com.samskivert.util.HashIntMap;
@@ -74,10 +76,10 @@ public class TestTileLoader implements TileSetIDBroker
      * @return a HashIntMap containing a TileSetId -> TileSet mapping for
      * all the tilesets we create.
      */
-    public HashIntMap loadTestTiles ()
+    public HashIntMap<TileSet> loadTestTiles ()
     {
         String directory = EditorConfig.getTestTileDirectory();
-        HashIntMap map = new HashIntMap();
+        HashIntMap<TileSet> map = new HashIntMap<TileSet>();
 
         // recurse test directory, making a tileset from the xml file inside
         // and cloning it for each image we find in there.
@@ -98,8 +100,7 @@ public class TestTileLoader implements TileSetIDBroker
     /**
      * Load xml tile sets from a directory.
      */
-    protected void loadTestTilesFromDir (File directory,
-                                         HashIntMap sets)
+    protected void loadTestTilesFromDir (File directory, HashIntMap<TileSet> sets)
     {
         // first recurse
         File[] subdirs = directory.listFiles(new FileFilter() {
@@ -121,7 +122,7 @@ public class TestTileLoader implements TileSetIDBroker
         for (int ii=0; ii < xml.length; ii++) {
             File xmlfile = new File(directory, xml[ii]);
 
-            HashMap tiles = new HashMap();
+            Map<String, TileSet> tiles = new HashMap<String, TileSet>();
             try {
                 _parser.loadTileSets(xmlfile, tiles);
             } catch (IOException ioe) {
@@ -129,9 +130,9 @@ public class TestTileLoader implements TileSetIDBroker
                 continue;
             }
 
-            Iterator iter = tiles.values().iterator();
+            Iterator<TileSet> iter = tiles.values().iterator();
             while (iter.hasNext()) {
-                TileSet ts = (TileSet) iter.next();
+                TileSet ts = iter.next();
                 String path = new File(directory, ts.getImagePath()).getPath();
 
                 // before we insert, make sure we can load the image
@@ -150,7 +151,7 @@ public class TestTileLoader implements TileSetIDBroker
      */
     public int getTileSetID (String tileSetPath)
     {
-        Integer id = (Integer) _idmap.get(tileSetPath);
+        Integer id = _idmap.get(tileSetPath);
         if (null == id) {
             id = Integer.valueOf(_fakeID--);
             _idmap.put(tileSetPath, id);
@@ -176,7 +177,7 @@ public class TestTileLoader implements TileSetIDBroker
     protected int _fakeID = Short.MAX_VALUE;
 
     /** A mapping of pathname -> tileset id. */
-    protected HashMap _idmap = new HashMap();
+    protected Map<String, Integer> _idmap = new HashMap<String, Integer>();
 
     /** Our xml parser. */
     protected XMLTileSetParser _parser;

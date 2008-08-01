@@ -39,13 +39,13 @@ public class TableLobbyObject extends LobbyObject
     // AUTO-GENERATED: FIELDS END
 
     /** A set containing all of the tables being managed by this lobby. */
-    public DSet tableSet = new DSet();
+    public DSet<Table> tableSet = new DSet<Table>();
 
     /** Handles our table services. */
     public TableMarshaller tableService;
 
     // from interface TableLobbyObject
-    public DSet getTables ()
+    public DSet<Table> getTables ()
     {
         return tableSet;
     }
@@ -80,7 +80,7 @@ public class TableLobbyObject extends LobbyObject
      * <code>tableSet</code> set. The set will not change until the event is
      * actually propagated through the system.
      */
-    public void addToTableSet (DSet.Entry elem)
+    public void addToTableSet (Table elem)
     {
         requestEntryAdd(TABLE_SET, tableSet, elem);
     }
@@ -100,7 +100,7 @@ public class TableLobbyObject extends LobbyObject
      * <code>tableSet</code> set. The set will not change until the event is
      * actually propagated through the system.
      */
-    public void updateTableSet (DSet.Entry elem)
+    public void updateTableSet (Table elem)
     {
         requestEntryUpdate(TABLE_SET, tableSet, elem);
     }
@@ -115,10 +115,10 @@ public class TableLobbyObject extends LobbyObject
      * change. Proxied copies of this object (on clients) will apply the
      * value change when they received the attribute changed notification.
      */
-    public void setTableSet (DSet value)
+    public void setTableSet (DSet<Table> value)
     {
         requestAttributeChange(TABLE_SET, value, this.tableSet);
-        DSet clone = (value == null) ? null : value.typedClone();
+        DSet<Table> clone = (value == null) ? null : value.typedClone();
         this.tableSet = clone;
     }
 

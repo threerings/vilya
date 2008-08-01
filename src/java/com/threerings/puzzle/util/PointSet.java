@@ -72,9 +72,9 @@ public class PointSet
      */
     public void addAll (PointSet set)
     {
-        Iterator iter = set.iterator();
         Point pt;
-        while ((pt = (Point)iter.next()) != null) {
+        Iterator<Point> iter = set.iterator();
+        while ((pt = iter.next()) != null) {
             add(pt.x, pt.y);
         }
     }
@@ -129,7 +129,7 @@ public class PointSet
      *
      * @return the iterator over the set's points.
      */
-    public Iterator iterator ()
+    public Iterator<Point> iterator ()
     {
         return new PointIterator();
     }
@@ -168,9 +168,9 @@ public class PointSet
     {
         StringBuilder buf = new StringBuilder();
         buf.append("[");
-        Iterator iter = iterator();
+        Iterator<Point> iter = iterator();
         Point val;
-        while ((val = (Point)iter.next()) != null) {
+        while ((val = iter.next()) != null) {
             buf.append("(").append(val.x);
             buf.append(",").append(val.y);
             buf.append(")");
@@ -182,14 +182,14 @@ public class PointSet
         return buf.append("]").toString();
     }
 
-    protected class PointIterator implements Iterator
+    protected class PointIterator implements Iterator<Point>
     {
         public boolean hasNext ()
         {
             return (_curCount < _count);
         }
 
-        public Object next ()
+        public Point next ()
         {
             if (_curCount == _count) {
                 return null;

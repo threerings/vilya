@@ -30,6 +30,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.event.MouseInputAdapter;
 
@@ -620,10 +621,10 @@ public abstract class CardPanel extends VirtualMediaPanel
      * Returns the first card sprite in the specified list that represents the specified card, or
      * null if there is no such sprite in the list.
      */
-    protected CardSprite getCardSprite (ArrayList list, Card card)
+    protected CardSprite getCardSprite (List<CardSprite> list, Card card)
     {
         for (int i = 0; i < list.size(); i++) {
-            CardSprite cs = (CardSprite)list.get(i);
+            CardSprite cs = list.get(i);
             if (card.equals(cs.getCard())) {
                 return cs;
             }
@@ -800,10 +801,10 @@ public abstract class CardPanel extends VirtualMediaPanel
     /**
      * Clears an array of sprites from the specified list and from the panel.
      */
-    protected void clearSprites (ArrayList sprites)
+    protected void clearSprites (List<CardSprite> sprites)
     {
-        for (Iterator it = sprites.iterator(); it.hasNext(); ) {
-            removeSprite((CardSprite)it.next());
+        for (Iterator<CardSprite> it = sprites.iterator(); it.hasNext(); ) {
+            removeSprite(it.next());
             it.remove();
         }
     }
@@ -972,7 +973,7 @@ public abstract class CardPanel extends VirtualMediaPanel
 
     /** Calls CardSpriteObserver.cardSpriteClicked. */
     protected static class CardSpriteClickedOp implements
-        ObserverList.ObserverOp
+        ObserverList.ObserverOp<Object>
     {
         public CardSpriteClickedOp (CardSprite sprite, MouseEvent me)
         {
@@ -995,7 +996,7 @@ public abstract class CardPanel extends VirtualMediaPanel
 
     /** Calls CardSpriteObserver.cardSpriteEntered. */
     protected static class CardSpriteEnteredOp implements
-        ObserverList.ObserverOp
+        ObserverList.ObserverOp<Object>
     {
         public CardSpriteEnteredOp (CardSprite sprite, MouseEvent me)
         {
@@ -1006,8 +1007,7 @@ public abstract class CardPanel extends VirtualMediaPanel
         public boolean apply (Object observer)
         {
             if (observer instanceof CardSpriteObserver) {
-                ((CardSpriteObserver)observer).cardSpriteEntered(_sprite,
-                    _me);
+                ((CardSpriteObserver)observer).cardSpriteEntered(_sprite, _me);
             }
             return true;
         }
@@ -1018,7 +1018,7 @@ public abstract class CardPanel extends VirtualMediaPanel
 
     /** Calls CardSpriteObserver.cardSpriteExited. */
     protected static class CardSpriteExitedOp implements
-        ObserverList.ObserverOp
+        ObserverList.ObserverOp<Object>
     {
         public CardSpriteExitedOp (CardSprite sprite, MouseEvent me)
         {
@@ -1040,7 +1040,7 @@ public abstract class CardPanel extends VirtualMediaPanel
 
     /** Calls CardSpriteObserver.cardSpriteDragged. */
     protected static class CardSpriteDraggedOp implements
-        ObserverList.ObserverOp
+        ObserverList.ObserverOp<Object>
     {
         public CardSpriteDraggedOp (CardSprite sprite, MouseEvent me)
         {

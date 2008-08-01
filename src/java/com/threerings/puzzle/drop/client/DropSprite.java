@@ -501,7 +501,7 @@ public class DropSprite extends Sprite
     }
 
     /** Used to dispatch {@link DropSpriteObserver#pieceMoved}. */
-    protected static class PieceMovedOp implements ObserverList.ObserverOp
+    protected static class PieceMovedOp implements ObserverList.ObserverOp<Object>
     {
         public PieceMovedOp (DropSprite sprite, long when, int col, int row)
         {

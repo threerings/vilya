@@ -39,7 +39,7 @@ public interface SimulatorServer
      *
      * @exception Exception thrown if anything goes wrong initializing the server.
      */
-    public void init (Injector injector, ResultListener obs) throws Exception;
+    public void init (Injector injector, ResultListener<SimulatorServer> obs) throws Exception;
 
     /**
      * Called to perform the main body of server processing. This is called from the server thread

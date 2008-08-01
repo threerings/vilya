@@ -21,11 +21,18 @@
 
 package com.threerings.stage.tools.editor;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.ArrayList;
-import javax.swing.*;
-import com.samskivert.swing.*;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
+
+import com.google.common.collect.Lists;
+
+import com.samskivert.swing.DimmedIcon;
 
 import com.threerings.media.tile.Tile;
 import com.threerings.media.tile.TileIcon;
@@ -50,7 +57,7 @@ public class EditorToolBarPanel extends JPanel implements ActionListener
         JToolBar toolbar = new JToolBar();
 
         // add all of the toolbar buttons
-        _buttons = new ArrayList();
+        _buttons = Lists.newArrayList();
         for (int ii = 0; ii < EditorModel.NUM_ACTIONS; ii++) {
             // get the button icon images
             Tile tile = tbset.getTile(ii);
@@ -71,7 +78,7 @@ public class EditorToolBarPanel extends JPanel implements ActionListener
         }
 
         // default to the first button
-        setSelectedButton((JButton)_buttons.get(0));
+        setSelectedButton(_buttons.get(0));
 
         // add the toolbar
         add(toolbar);
@@ -96,7 +103,7 @@ public class EditorToolBarPanel extends JPanel implements ActionListener
     protected void setSelectedButton (JButton button)
     {
         for (int ii = 0; ii < _buttons.size(); ii++) {
-            JButton tb = (JButton)_buttons.get(ii);
+            JButton tb = _buttons.get(ii);
             tb.setSelected(tb == button);
         }
     }
@@ -120,7 +127,7 @@ public class EditorToolBarPanel extends JPanel implements ActionListener
     }
 
     /** The buttons in the tool bar. */
-    protected ArrayList _buttons;
+    protected List<JButton> _buttons;
 
     /** The editor data model. */
     protected EditorModel _model;

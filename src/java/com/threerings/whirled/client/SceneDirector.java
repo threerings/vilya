@@ -22,6 +22,7 @@
 package com.threerings.whirled.client;
 
 import java.io.IOException;
+import java.util.Map;
 
 import com.samskivert.util.LRUHashMap;
 import com.samskivert.util.ResultListener;
@@ -164,7 +165,7 @@ public class SceneDirector extends BasicDirector
      * and our pending scene mode is loaded from the scene repository. This can be called by
      * cooperating directors that need to coopt the moveTo process.
      */
-    public boolean prepareMoveTo (int sceneId, ResultListener rl)
+    public boolean prepareMoveTo (int sceneId, ResultListener<PlaceConfig> rl)
     {
         // first check to see if our observers are happy with this move request
         if (!_locdir.mayMoveTo(sceneId, rl)) {
@@ -449,7 +450,7 @@ public class SceneDirector extends BasicDirector
     {
         // first look in the model cache
         Integer key = Integer.valueOf(sceneId);
-        SceneModel model = (SceneModel)_scache.get(key);
+        SceneModel model = _scache.get(key);
 
         // load from the repository if it's not cached
         if (model == null) {
@@ -526,7 +527,7 @@ public class SceneDirector extends BasicDirector
     protected SceneFactory _fact;
 
     /** A cache of scene model information. */
-    protected LRUHashMap _scache = new LRUHashMap(5);
+    protected Map<Integer, SceneModel> _scache = new LRUHashMap<Integer, SceneModel>(5);
 
     /** The display scene object for the scene we currently occupy. */
     protected Scene _scene;

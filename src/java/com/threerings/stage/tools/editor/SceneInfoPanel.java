@@ -97,7 +97,7 @@ public class SceneInfoPanel extends JPanel
         });
 
         // create a drop-down for selecting the scene type
-        ComparableArrayList types = new ComparableArrayList();
+        ComparableArrayList<String> types = new ComparableArrayList<String>();
         ctx.enumerateSceneTypes(types);
         types.sort();
         types.add(0, "");
@@ -172,7 +172,7 @@ public class SceneInfoPanel extends JPanel
     {
         // add all possible colorization names to the list
         final TileManager tilemgr = _ctx.getTileManager();
-        final HashSet set = new HashSet();
+        final HashSet<String> set = new HashSet<String>();
         StageMisoSceneModel msmodel = StageMisoSceneModel.getSceneModel(
             _scene.getSceneModel());
         msmodel.visitObjects(new ObjectVisitor() {
@@ -202,7 +202,7 @@ public class SceneInfoPanel extends JPanel
         DefaultComboBoxModel model =
             (DefaultComboBoxModel) _colorClasses.getModel();
         model.removeAllElements();
-        for (Iterator itr = Collections.getSortedIterator(set);
+        for (Iterator<String> itr = Collections.getSortedIterator(set);
                 itr.hasNext(); ) {
             model.addElement(itr.next());
         }
@@ -235,7 +235,7 @@ public class SceneInfoPanel extends JPanel
             int pick = _scene.getDefaultColor(classRec.classId);
 
             ColorPository.ColorRecord[] colors = cpos.enumerateColors(cclass);
-            ComparableArrayList list = new ComparableArrayList();
+            ComparableArrayList<String> list = new ComparableArrayList<String>();
             for (int ii=0; ii < colors.length; ii++) {
                 list.insertSorted(colors[ii].name);
                 if (colors[ii].colorId == pick) {

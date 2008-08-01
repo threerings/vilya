@@ -23,7 +23,6 @@ package com.threerings.micasa.lobby.table;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -153,9 +152,8 @@ public class TableListView extends JPanel
         // iterate over the tables already active in this lobby and put
         // them in their respective lists
         TableLobbyObject tlobj = (TableLobbyObject)place;
-        Iterator iter = tlobj.tableSet.iterator();
-        while (iter.hasNext()) {
-            tableAdded((Table)iter.next());
+        for (Table table : tlobj.tableSet) {
+            tableAdded(table);
         }
     }
 

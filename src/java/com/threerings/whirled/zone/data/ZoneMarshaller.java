@@ -40,7 +40,7 @@ public class ZoneMarshaller extends InvocationMarshaller
     implements ZoneService
 {
     /**
-     * Marshalls results to implementations of {@link ZoneMoveListener}.
+     * Marshalls results to implementations of {@link ZoneService.ZoneMoveListener}.
      */
     public static class ZoneMoveMarshaller extends ListenerMarshaller
         implements ZoneMoveListener

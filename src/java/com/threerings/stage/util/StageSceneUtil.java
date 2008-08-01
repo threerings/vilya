@@ -25,6 +25,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 import com.samskivert.util.SortableArrayList;
 import com.threerings.util.DirectionCodes;
@@ -242,9 +243,9 @@ public class StageSceneUtil
     /**
      * Computes a list of the valid locations in this cluster.
      */
-    public static ArrayList<SceneLocation> getClusterLocs (Cluster cluster)
+    public static List<SceneLocation> getClusterLocs (Cluster cluster)
     {
-        ArrayList<SceneLocation> list = new ArrayList<SceneLocation>();
+        List<SceneLocation> list = new ArrayList<SceneLocation>();
 
         // convert our tile coordinates into a cartesian coordinate system
         // with units equal to one fine coordinate in size
@@ -340,7 +341,7 @@ public class StageSceneUtil
     {
         // generate a list of the tile coordinates of all squares around
         // this footprint
-        SortableArrayList spots = new SortableArrayList();
+        SortableArrayList<StageLocation> spots = new SortableArrayList<StageLocation>();
 
         for (int dd = 1; dd <= dist; dd++) {
             int yy1 = foot.y-dd, yy2 = foot.y+foot.height+dd-1;
@@ -372,9 +373,9 @@ public class StageSceneUtil
 
             // sort them in order of closeness to the players current
             // coordinate
-            spots.sort(new Comparator() {
-                public int compare (Object o1, Object o2) {
-                    return dist((StageLocation)o1) - dist((StageLocation)o2);
+            spots.sort(new Comparator<StageLocation>() {
+                public int compare (StageLocation o1, StageLocation o2) {
+                    return dist(o1) - dist(o2);
                 }
                 private final int dist (StageLocation l) {
                     return Math.round(100*MathUtil.distance(
@@ -385,7 +386,7 @@ public class StageSceneUtil
             // return the first spot that can be "traversed" which we're
             // taking to mean "stood upon"
             for (int ii = 0, ll = spots.size(); ii < ll; ii++) {
-                StageLocation loc = (StageLocation)spots.get(ii);
+                StageLocation loc = spots.get(ii);
                 if (pred.canTraverse(traverser, loc.x, loc.y)) {
                     // convert to full coordinates
                     loc.x = MisoUtil.toFull(loc.x, 2);

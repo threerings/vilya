@@ -87,7 +87,7 @@ public class SpotSceneWriter
     {
         // we just add all the visible fields of the location, but something
         // more sophisticated could be done
-        Class clazz = portalLoc.getClass();
+        Class<?> clazz = portalLoc.getClass();
         Field[] fields = clazz.getFields();
         for (int ii=0; ii < fields.length; ii++) {
             try {

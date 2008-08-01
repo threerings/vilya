@@ -23,9 +23,11 @@ package com.threerings.stage.util;
 
 import java.awt.Rectangle;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import com.samskivert.util.ListUtil;
 import com.threerings.util.DirectionCodes;
@@ -252,9 +254,9 @@ public class PlacementConstraints
     protected boolean hasOnSurface (ObjectData data, ObjectData[] added,
         ObjectData[] removed)
     {
-        ArrayList objects = getObjectData(data.bounds, added, removed);
+        List<ObjectData> objects = getObjectData(data.bounds, added, removed);
         for (int i = 0, size = objects.size(); i < size; i++) {
-            ObjectData odata = (ObjectData)objects.get(i);
+            ObjectData odata = objects.get(i);
             if (odata.tile.hasConstraint(ObjectTileSet.ON_SURFACE) &&
                 !isOnSurface(odata, added, removed)) {
                 return true;
@@ -270,9 +272,9 @@ public class PlacementConstraints
     protected boolean hasOnWall (ObjectData data, ObjectData[] added,
         ObjectData[] removed, int dir)
     {
-        ArrayList objects = getObjectData(data.bounds, added, removed);
+        List<ObjectData> objects = getObjectData(data.bounds, added, removed);
         for (int i = 0, size = objects.size(); i < size; i++) {
-            ObjectData odata = (ObjectData)objects.get(i);
+            ObjectData odata = objects.get(i);
             if (getConstraintDirection(odata, ObjectTileSet.ON_WALL) == dir &&
                 !isOnWall(odata, added, removed, dir)) {
                 return true;
@@ -290,10 +292,10 @@ public class PlacementConstraints
     {
         DirectionHeight dirheight = new DirectionHeight();
         
-        ArrayList objects = getObjectData(getAdjacentEdge(data.bounds,
+        List<ObjectData> objects = getObjectData(getAdjacentEdge(data.bounds,
             DirectionUtil.getOpposite(dir)), added, removed);
         for (int i = 0, size = objects.size(); i < size; i++) {
-            ObjectData odata = (ObjectData)objects.get(i);
+            ObjectData odata = objects.get(i);
             if (getConstraintDirectionHeight(odata, ObjectTileSet.ATTACH,
                     dirheight) && !isAttached(odata, added, removed,
                         dirheight.dir, dirheight.low)) {
@@ -314,9 +316,9 @@ public class PlacementConstraints
         // grow the ObjectData bounds 1 square in each direction
         _constrainRect.setBounds(r.x - 1, r.y - 1, r.width + 2, r.height + 2);
         
-        ArrayList objects = getObjectData(_constrainRect, added, removed);
+        List<ObjectData> objects = getObjectData(_constrainRect, added, removed);
         for (int i = 0, size = objects.size(); i < size; i++) {
-            ObjectData odata = (ObjectData)objects.get(i);
+            ObjectData odata = objects.get(i);
             int dir = getConstraintDirection(odata, ObjectTileSet.SPACE);
             if (dir != NONE && !hasSpace(odata, added, removed, dir)) {
                 return true;
@@ -378,12 +380,12 @@ public class PlacementConstraints
     protected boolean isCovered (Rectangle rect, ObjectData[] added,
         ObjectData[] removed, String constraint, String altstraint)
     {
-        ArrayList objects = getObjectData(rect, added, removed);
+        List<ObjectData> objects = getObjectData(rect, added, removed);
         for (int y = rect.y, ymax = rect.y + rect.height; y < ymax; y++) {
             for (int x = rect.x, xmax = rect.x + rect.width; x < xmax; x++) {
                 boolean covered = false;
                 for (int i = 0, size = objects.size(); i < size; i++) {
-                    ObjectData data = (ObjectData)objects.get(i);
+                    ObjectData data = objects.get(i);
                     if (data.bounds.contains(x, y) && (constraint == null ||
                             data.tile.hasConstraint(constraint) ||
                             (altstraint != null &&
@@ -495,13 +497,13 @@ public class PlacementConstraints
      * @param added an array of objects to add to the search
      * @param removed an array of objects to exclude from the search
      */
-    protected ArrayList getObjectData (Rectangle rect, ObjectData[] added,
+    protected List<ObjectData> getObjectData (Rectangle rect, ObjectData[] added,
         ObjectData[] removed)
     {
-        ArrayList list = new ArrayList();
+        List<ObjectData> list = Lists.newArrayList();
         
-        for (Iterator it = _objectData.values().iterator(); it.hasNext(); ) {
-            ObjectData data = (ObjectData)it.next();
+        for (Iterator<ObjectData> it = _objectData.values().iterator(); it.hasNext(); ) {
+            ObjectData data = it.next();
             if (rect.intersects(data.bounds) && !ListUtil.contains(removed,
                     data)) {
                 list.add(data);

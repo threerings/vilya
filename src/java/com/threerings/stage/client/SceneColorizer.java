@@ -23,6 +23,7 @@ package com.threerings.stage.client;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import com.threerings.media.image.ColorPository;
 import com.threerings.media.image.Colorization;
@@ -48,8 +49,8 @@ public class SceneColorizer implements TileSet.Colorizer
         _scene = scene;
 
         // enumerate the color ids for all possible colorization classes
-        for (Iterator iter = _cpos.enumerateClasses(); iter.hasNext(); ) {
-            String cname = ((ColorPository.ClassRecord)iter.next()).name;
+        for (Iterator<ColorPository.ClassRecord> iter = _cpos.enumerateClasses(); iter.hasNext(); ) {
+            String cname = iter.next().name;
             _cids.put(cname, _cpos.enumerateColorIds(cname));
         }
     }
@@ -122,10 +123,9 @@ public class SceneColorizer implements TileSet.Colorizer
             }
 
             // 3. If there are no defaults whatsoever, just hash on the sceneId.
-            int[] cids = (int[])_cids.get(zation);
+            int[] cids = _cids.get(zation);
             if (cids == null) {
-                log.warning("Zoiks, have no colorizations for '" +
-                            zation + "'.");
+                log.warning("Zoiks, have no colorizations for '" + zation + "'.");
                 return -1;
             } else {
                 colorId = cids[_scene.getZoneId() % cids.length];
@@ -145,5 +145,5 @@ public class SceneColorizer implements TileSet.Colorizer
     protected StageScene _scene;
 
     /** Contains our colorization class information. */
-    protected HashMap _cids = new HashMap();
+    protected Map<String, int[]> _cids = new HashMap<String, int[]>();
 }

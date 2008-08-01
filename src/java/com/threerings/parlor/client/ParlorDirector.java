@@ -21,7 +21,9 @@
 
 package com.threerings.parlor.client;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import com.samskivert.util.HashIntMap;
 import com.threerings.util.Name;
@@ -138,7 +140,7 @@ public class ParlorDirector extends BasicDirector
         // see what our observers have to say about it
         boolean handled = false;
         for (int i = 0; i < _grobs.size(); i++) {
-            GameReadyObserver grob = (GameReadyObserver)_grobs.get(i);
+            GameReadyObserver grob = _grobs.get(i);
             handled = grob.receivedGameReady(gameOid) || handled;
         }
 
@@ -172,7 +174,7 @@ public class ParlorDirector extends BasicDirector
     public void receivedInviteResponse (int remoteId, int code, Object arg)
     {
         // look up the invitation record for this invitation
-        Invitation invite = (Invitation)_pendingInvites.get(remoteId);
+        Invitation invite = _pendingInvites.get(remoteId);
         if (invite == null) {
             log.warning("Have no record of invitation for which we received a response?! " +
                         "[remoteId=" + remoteId + ", code=" + code + ", arg=" + arg + "].");
@@ -230,8 +232,8 @@ public class ParlorDirector extends BasicDirector
 
     /** A table of acknowledged (but not yet accepted or refused) invitation requests, keyed on
      * invitation id. */
-    protected HashIntMap _pendingInvites = new HashIntMap();
+    protected HashIntMap<Invitation> _pendingInvites = new HashIntMap<Invitation>();
 
     /** We notify the entities on this list when we get a game ready notification. */
-    protected ArrayList _grobs = new ArrayList();
+    protected List<GameReadyObserver> _grobs = Lists.newArrayList();
 }

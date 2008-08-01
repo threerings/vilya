@@ -109,7 +109,7 @@ public class ZoneDirector extends BasicDirector
      * made and when the response is received, the location observers will be notified of success
      * or failure.
      */
-    public boolean moveTo (int zoneId, int sceneId, ResultListener rl)
+    public boolean moveTo (int zoneId, int sceneId, ResultListener<PlaceConfig> rl)
     {
         // make sure the zoneId and sceneId are valid
         if (zoneId < 0 || sceneId < 0) {

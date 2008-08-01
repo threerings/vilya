@@ -452,7 +452,7 @@ public class SpotSceneManager extends SceneManager
     /**
      * Used to manage clusters which are groups of users that can chat to one another.
      */
-    protected class ClusterRecord extends HashIntMap
+    protected class ClusterRecord extends HashIntMap<ClusteredBodyObject>
     {
         public ClusterRecord ()
         {
@@ -460,9 +460,7 @@ public class SpotSceneManager extends SceneManager
             _clusters.put(_clobj.getOid(), this);
 
             // let any mapped users know about our cluster
-            Iterator iter = values().iterator();
-            while (iter.hasNext()) {
-                ClusteredBodyObject body = (ClusteredBodyObject)iter.next();
+            for (ClusteredBodyObject body : values()) {
                 body.setClusterOid(_clobj.getOid());
                 _clobj.addToOccupants(((BodyObject)body).getOid());
             }
@@ -495,7 +493,7 @@ public class SpotSceneManager extends SceneManager
             // make sure our intrepid joiner is not in any another cluster
             removeFromCluster(body.getOid());
 
-            put(body.getOid(), body);
+            put(body.getOid(), (ClusteredBodyObject)body);
             _ssobj.startTransaction();
             try {
                 body.startTransaction();

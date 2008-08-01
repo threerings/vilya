@@ -40,7 +40,7 @@ public class ParlorMarshaller extends InvocationMarshaller
     implements ParlorService
 {
     /**
-     * Marshalls results to implementations of {@link InviteListener}.
+     * Marshalls results to implementations of {@link ParlorService.InviteListener}.
      */
     public static class InviteMarshaller extends ListenerMarshaller
         implements InviteListener

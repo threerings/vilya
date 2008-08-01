@@ -39,6 +39,7 @@ import com.threerings.crowd.chat.data.ChatCodes;
 import com.threerings.crowd.client.LocationAdapter;
 import com.threerings.crowd.client.LocationDirector;
 import com.threerings.crowd.data.BodyObject;
+import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.data.PlaceObject;
 
 import com.threerings.whirled.client.SceneDirector;
@@ -58,7 +59,7 @@ import static com.threerings.whirled.spot.Log.log;
  * Extends the standard scene director with facilities to move between locations within a scene.
  */
 public class SpotSceneDirector extends BasicDirector
-    implements SpotCodes, Subscriber, AttributeChangeListener
+    implements SpotCodes, Subscriber<DObject>, AttributeChangeListener
 {
     /**
      * Creates a new spot scene director with the specified context and which will cooperate with
@@ -121,7 +122,7 @@ public class SpotSceneDirector extends BasicDirector
      * request will be made and when the response is received, the location observers will be
      * notified of success or failure.
      */
-    public boolean traversePortal (int portalId, ResultListener rl)
+    public boolean traversePortal (int portalId, ResultListener<PlaceConfig> rl)
     {
         // look up the destination scene and location
         SpotScene scene = (SpotScene)_scdir.getScene();
@@ -178,7 +179,7 @@ public class SpotSceneDirector extends BasicDirector
      * anticipation of a successful location change (like by starting a sprite moving toward the
      * new location), but backtrack if it finds out that the location change failed.
      */
-    public void changeLocation (Location loc, final ResultListener listener)
+    public void changeLocation (Location loc, final ResultListener<Location> listener)
     {
         // refuse if there's a pending location change or if we're already at the specified
         // location
@@ -243,7 +244,7 @@ public class SpotSceneDirector extends BasicDirector
      * user's cluster.
      * @param listener will be notified of success or failure.
      */
-    public void joinCluster (int froid, final ResultListener listener)
+    public void joinCluster (int froid, final ResultListener<Void> listener)
     {
         SpotScene scene = (SpotScene)_scdir.getScene();
         if (scene == null) {

@@ -41,7 +41,7 @@ public class Cluster extends Rectangle
     public int clusterOid;
 
     // documentation inherited
-    public Comparable getKey ()
+    public Comparable<?> getKey ()
     {
         if (_key == null) {
             _key = Integer.valueOf(clusterOid);

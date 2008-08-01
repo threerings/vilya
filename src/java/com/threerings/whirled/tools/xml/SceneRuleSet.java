@@ -53,7 +53,7 @@ public class SceneRuleSet implements NestableRuleSet
      * This indicates the class (which should extend {@link SceneModel})
      * to be instantiated during the parsing process.
      */
-    protected Class getSceneClass ()
+    protected Class<? extends SceneModel> getSceneClass ()
     {
         return SceneModel.class;
     }

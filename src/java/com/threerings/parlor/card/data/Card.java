@@ -28,7 +28,7 @@ import com.threerings.presents.dobj.DSet;
 /**
  * Instances of this class represent individual playing cards.
  */
-public class Card implements DSet.Entry, Comparable, CardCodes
+public class Card implements DSet.Entry, Comparable<Card>, CardCodes
 {
     /**
      * No-arg constructor for deserialization.
@@ -131,7 +131,7 @@ public class Card implements DSet.Entry, Comparable, CardCodes
     }
     
     // Documentation inherited.
-    public Comparable getKey ()
+    public Comparable<?> getKey ()
     {
         if (_key == null) {
             _key = Byte.valueOf(_value);
@@ -167,9 +167,9 @@ public class Card implements DSet.Entry, Comparable, CardCodes
      * @return -1, 0, or +1, depending on whether this card is less than,
      * equal to, or greater than the other card
      */
-    public int compareTo (Object other)
+    public int compareTo (Card other)
     {
-        int otherValue = ((Card)other)._value;
+        int otherValue = other._value;
         
         if (_value > otherValue) {
             return +1;

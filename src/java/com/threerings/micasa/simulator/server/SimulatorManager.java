@@ -22,6 +22,7 @@
 package com.threerings.micasa.simulator.server;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -172,7 +173,7 @@ public class SimulatorManager
         }
 
         /** The simulant body objects. */
-        protected ArrayList _sims = new ArrayList();
+        protected List<ClientObject> _sims = new ArrayList<ClientObject>();
 
         /** The game object for the game being created. */
         protected GameObject _gobj;

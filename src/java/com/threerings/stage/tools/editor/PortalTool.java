@@ -32,6 +32,7 @@ import com.threerings.miso.util.MisoUtil;
 import com.threerings.util.DirectionCodes;
 import com.threerings.util.DirectionUtil;
 
+import com.threerings.whirled.spot.data.Portal;
 import com.threerings.whirled.spot.tools.EditablePortal;
 
 import com.threerings.stage.data.StageLocation;
@@ -152,7 +153,7 @@ public class PortalTool extends MouseInputAdapter
      */
     protected boolean portalNameExists (String name)
     {
-        Iterator iter = _scene.getPortals();
+        Iterator<Portal> iter = _scene.getPortals();
         while (iter.hasNext()) {
             if (((EditablePortal)iter.next()).name.equals(name)) {
                 return true;

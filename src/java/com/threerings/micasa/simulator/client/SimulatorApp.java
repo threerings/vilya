@@ -69,8 +69,8 @@ public class SimulatorApp
         // create the server
         Injector injector = Guice.createInjector(new SimpleServer.Module());
         SimulatorServer server = createSimulatorServer(injector);
-        server.init(injector, new ResultListener() {
-            public void requestCompleted (Object result) {
+        server.init(injector, new ResultListener<SimulatorServer>() {
+            public void requestCompleted (SimulatorServer result) {
                 try {
                     run();
                 } catch (Exception e) {

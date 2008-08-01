@@ -261,7 +261,7 @@ public class EditorApp implements Runnable
      * Derived classes can override this method and add additional scene
      * types.
      */
-    protected void enumerateSceneTypes (List types)
+    protected void enumerateSceneTypes (List<String> types)
     {
         types.add(StageSceneModel.WORLD);
     }
@@ -344,7 +344,7 @@ public class EditorApp implements Runnable
             return _colpos;
         }
 
-        public void enumerateSceneTypes (List types) {
+        public void enumerateSceneTypes (List<String> types) {
             EditorApp.this.enumerateSceneTypes(types);
         }
     }

@@ -21,8 +21,9 @@
 
 package com.threerings.puzzle.drop.util;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import com.threerings.puzzle.drop.data.DropBoard;
 import com.threerings.puzzle.drop.data.DropBoard.PieceOperation;
@@ -74,7 +75,7 @@ public class PieceDestroyer
      * the pieces in the segments may overlap, i.e., two segments may
      * contain the same piece.
      */
-    public List destroyPieces (DropBoard board, PieceOperation destroyOp)
+    public List<SegmentInfo> destroyPieces (DropBoard board, PieceOperation destroyOp)
     {
         // find all horizontally-oriented destroyed segments
         int bwid = board.getWidth(), bhei = board.getHeight();
@@ -99,7 +100,7 @@ public class PieceDestroyer
         // destroy the pieces
         int size = _destroyed.size();
         for (int ii = 0; ii < size; ii++) {
-            SegmentInfo si = (SegmentInfo)_destroyed.get(ii);
+            SegmentInfo si = _destroyed.get(ii);
             board.applyOp(si.dir, si.x, si.y, si.len, destroyOp);
         }
 
@@ -177,5 +178,5 @@ public class PieceDestroyer
     protected SegmentLengthOperation _lengthOp = new SegmentLengthOperation();
 
     /** The list of destroyed piece segments. */
-    protected ArrayList _destroyed = new ArrayList();
+    protected List<SegmentInfo> _destroyed = Lists.newArrayList();
 }

@@ -29,7 +29,7 @@ import com.threerings.util.StreamableArrayList;
 /**
  * Instances of this class represent decks of cards.
  */
-public class Deck extends StreamableArrayList
+public class Deck extends StreamableArrayList<Card>
     implements CardCodes
 {
     /**
@@ -100,7 +100,7 @@ public class Deck extends StreamableArrayList
             Hand hand = new Hand();
         
             // use a sublist view to manipulate the top of the deck
-            List sublist = subList(dsize - size, dsize);
+            List<Card> sublist = subList(dsize - size, dsize);
             hand.addAll(sublist);
             sublist.clear();
             

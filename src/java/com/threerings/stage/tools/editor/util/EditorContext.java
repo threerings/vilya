@@ -45,5 +45,5 @@ public interface EditorContext extends StageContext
     /**
      * Inserts all known scene types into the supplied list.
      */
-    public void enumerateSceneTypes (List types);
+    public void enumerateSceneTypes (List<String> types);
 }

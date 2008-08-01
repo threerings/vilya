@@ -31,6 +31,8 @@ import java.awt.event.KeyEvent;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
@@ -53,6 +55,8 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
+
+import com.google.common.collect.Maps;
 
 import com.samskivert.util.HashIntMap;
 import com.samskivert.util.QuickSort;
@@ -92,27 +96,25 @@ public class TileInfoPanel extends JSplitPane
         // we're going to sort all of the available tilesets into those
         // which are applicable to each layer
         try {
-            _layerSets = new ArrayList[2];
             _layerLengths = new int[2];
             for (int ii=0; ii < 2; ii++) {
-                _layerSets[ii] = new ArrayList();
+                _layerSets.put(ii, new ArrayList<TileSetRecord>());
             }
 
-            Iterator tsids = tsrepo.enumerateTileSetIds();
+            Iterator<Integer> tsids = tsrepo.enumerateTileSetIds();
             while (tsids.hasNext()) {
-                Integer tsid = (Integer)tsids.next();
+                Integer tsid = tsids.next();
                 TileSet set = tsrepo.getTileSet(tsid.intValue());
 
                 // determine which layer to which this tileset applies
                 int lidx = TileSetUtil.getLayerIndex(set);
                 if (lidx != -1) {
-                    _layerSets[lidx].add(
-                        new TileSetRecord(lidx, tsid.intValue(), set));
+                    _layerSets.get(lidx).add(new TileSetRecord(lidx, tsid.intValue(), set));
                 }
             }
 
             for (int ii=0; ii < 2; ii++) {
-                _layerLengths[ii] = _layerSets[ii].size();
+                _layerLengths[ii] = _layerSets.get(ii).size();
             }
 
         } catch (Exception e) {
@@ -316,13 +318,13 @@ public class TileInfoPanel extends JSplitPane
     /**
      * Remove previous test tiles and insert the new batch.
      */
-    protected void insertTestTiles (HashIntMap tests)
+    protected void insertTestTiles (HashIntMap<TileSet> tests)
     {
         // trim the tilesets back to remove any previous test tiles
         for (int ii=0; ii < 2; ii++) {
-            for (int jj=_layerSets[ii].size() - 1; jj >= _layerLengths[ii];
+            for (int jj=_layerSets.get(ii).size() - 1; jj >= _layerLengths[ii];
                     jj--) {
-                _layerSets[ii].remove(jj);
+                _layerSets.get(ii).remove(jj);
             }
         }
 
@@ -332,18 +334,14 @@ public class TileInfoPanel extends JSplitPane
         }
 
         // insert the new test tiles
-        Iterator iter = tests.keys();
-        while (iter.hasNext()) {
-            Integer tsid = (Integer) iter.next();
-
-            TileSet set = (TileSet) tests.get(tsid);
+        for (Integer tsid : tests.keySet()) {
+            TileSet set = tests.get(tsid);
 
             // determine which layer to which this tileset applies
             int lidx = TileSetUtil.getLayerIndex(set);
             if (lidx != -1) {
                 // make up a negative number to refer to this temporary tileset
-                _layerSets[lidx].add(
-                    new TileSetRecord(lidx, tsid, set));
+                _layerSets.get(lidx).add(new TileSetRecord(lidx, tsid, set));
             }
 
             if (tileMgr instanceof EditorTileManager) {
@@ -365,7 +363,7 @@ public class TileInfoPanel extends JSplitPane
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
         root.removeAllChildren();
 
-        ArrayList expand = new ArrayList();
+        ArrayList<TreePath> expand = new ArrayList<TreePath>();
 
         // add all the elements in the base layer
         DefaultMutableTreeNode base = new DefaultMutableTreeNode("Base Layer");
@@ -383,8 +381,8 @@ public class TileInfoPanel extends JSplitPane
         model.reload();
 
         // expand our container categories
-        for (Iterator iter = expand.iterator(); iter.hasNext(); ) {
-            _tsettree.expandPath((TreePath)iter.next());
+        for (Iterator<TreePath> iter = expand.iterator(); iter.hasNext(); ) {
+            _tsettree.expandPath(iter.next());
         }
 
         // now select the previously selected item, or the first...
@@ -400,7 +398,7 @@ public class TileInfoPanel extends JSplitPane
     protected TileSetRecord[] getSortedTileSets (int layer)
     {
         // get the list of tilesets we now want to show
-        ArrayList sets = _layerSets[layer];
+        List<TileSetRecord> sets = _layerSets.get(layer);
 
         // we don't want to sort the actual array since we have
         // kept the test tiles at the end
@@ -421,7 +419,7 @@ public class TileInfoPanel extends JSplitPane
      */
     protected int addNodes (DefaultMutableTreeNode node,
                             TileSetRecord[] list, String prefix, int position,
-                            ArrayList expand)
+                            ArrayList<TreePath> expand)
     {
         int prefixlen = prefix.length();
 
@@ -634,7 +632,7 @@ public class TileInfoPanel extends JSplitPane
         }
 
         @Override
-        public Class getColumnClass (int c)
+        public Class<?> getColumnClass (int c)
         {
             // return the object associated with the column to force
             // rendering of our icon images rather than straight text
@@ -648,7 +646,7 @@ public class TileInfoPanel extends JSplitPane
     /**
      * Used to manage tilesets in the tileset selection combobox.
      */
-    protected static class TileSetRecord implements Comparable
+    protected static class TileSetRecord implements Comparable<TileSetRecord>
     {
         public int layer;
         public int tileSetId;
@@ -681,10 +679,9 @@ public class TileInfoPanel extends JSplitPane
             return shortname;
         }
 
-        public int compareTo (Object o)
+        public int compareTo (TileSetRecord o)
         {
-            return fullname().compareToIgnoreCase(
-                ((TileSetRecord) o).fullname());
+            return fullname().compareToIgnoreCase(o.fullname());
         }
 
         @Override
@@ -707,7 +704,7 @@ public class TileInfoPanel extends JSplitPane
     protected static final int EDGE_TILE_V = 4;
 
     /** An ArrayList of TileSetRecords for each layer. */
-    protected ArrayList[] _layerSets;
+    protected Map<Integer,List<TileSetRecord>> _layerSets = Maps.newHashMap();
 
     /** The original number of TileSetRecords for each layer. */
     protected int[] _layerLengths;

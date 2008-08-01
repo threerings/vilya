@@ -36,7 +36,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -274,7 +273,7 @@ public class StageScenePanel extends MisoScenePanel
         // if the hover object is a cluster, we clicked it!
         if (event.getButton() == MouseEvent.BUTTON1) {
             if (hobject instanceof Cluster) {
-                Object actarg = new Tuple(hobject, event.getPoint());
+                Object actarg = new Tuple<Object, Point>(hobject, event.getPoint());
                 Controller.postAction(this, CLUSTER_CLICKED, actarg);
             } else {
                 // post an action indicating that we've clicked on a location
@@ -311,7 +310,7 @@ public class StageScenePanel extends MisoScenePanel
     {
         // compute a screen rectangle that contains all possible "spots"
         // in this cluster
-        ArrayList<SceneLocation> spots = StageSceneUtil.getClusterLocs(cluster);
+        List<SceneLocation> spots = StageSceneUtil.getClusterLocs(cluster);
         Rectangle cbounds = null;
         for (int ii = 0, ll = spots.size(); ii < ll; ii++) {
             StageLocation loc = ((StageLocation) spots.get(ii).loc);

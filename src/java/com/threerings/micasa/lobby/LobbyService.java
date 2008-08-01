@@ -55,7 +55,7 @@ public interface LobbyService extends InvocationService
          * Supplies the listener with the results of a {@link
          * #getLobbies} request.
          */
-        public void gotLobbies (List lobbies);
+        public void gotLobbies (List<Lobby> lobbies);
     }
 
     /**

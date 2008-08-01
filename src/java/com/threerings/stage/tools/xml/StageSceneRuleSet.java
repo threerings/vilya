@@ -21,6 +21,7 @@
 
 package com.threerings.stage.tools.xml;
 
+import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.tools.xml.SceneRuleSet;
 
 import com.threerings.stage.data.StageScene;
@@ -32,7 +33,7 @@ import com.threerings.stage.data.StageSceneModel;
 public class StageSceneRuleSet extends SceneRuleSet
 {
     @Override
-    protected Class getSceneClass ()
+    protected Class<? extends SceneModel> getSceneClass ()
     {
         return StageSceneModel.class;
     }

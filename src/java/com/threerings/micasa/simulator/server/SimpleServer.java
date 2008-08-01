@@ -36,7 +36,7 @@ import com.threerings.micasa.server.MiCasaServer;
 public class SimpleServer extends MiCasaServer
     implements SimulatorServer
 {
-    public void init (Injector injector, ResultListener obs)
+    public void init (Injector injector, ResultListener<SimulatorServer> obs)
         throws Exception
     {
         init(injector); // do our standard initialization

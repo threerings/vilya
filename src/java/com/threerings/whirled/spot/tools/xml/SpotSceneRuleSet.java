@@ -110,9 +110,9 @@ public abstract class SpotSceneRuleSet implements NestableRuleSet
             throws Exception
         {
             Portal portal = (Portal) digester.peek();
-            Class portalClass = portal.getClass();
+            Class<?> portalClass = portal.getClass();
             Location loc = portal.loc;
-            Class locClass = loc.getClass();
+            Class<?> locClass = loc.getClass();
 
             // iterate over the attributes, setting public fields where
             // applicable

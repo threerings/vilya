@@ -103,7 +103,7 @@ public abstract class TourniesManager
     /**
      * Called by the tourney manager to remove itself from the tournies.
      */
-    protected void releaseTourney (Comparable key)
+    protected void releaseTourney (Comparable<?> key)
     {
         _tourneys.remove(key);
     }
@@ -148,7 +148,7 @@ public abstract class TourniesManager
     protected int _tourneyCount;
 
     /** Holds all the current tournies in the game. */
-    protected Map<Comparable, TourneyManager> _tourneys = Maps.newHashMap();
+    protected Map<Comparable<?>, TourneyManager> _tourneys = Maps.newHashMap();
 
     // our dependencies
     @Inject protected RootDObjectManager _omgr;

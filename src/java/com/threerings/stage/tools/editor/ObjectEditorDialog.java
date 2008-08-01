@@ -200,7 +200,7 @@ public class ObjectEditorDialog extends EditorDialog
 
     /** Used to display colorization choices. */
     protected static class ZationChoice
-        implements Comparable
+        implements Comparable<ZationChoice>
     {
         public short colorId;
         public String name;
@@ -211,9 +211,9 @@ public class ObjectEditorDialog extends EditorDialog
             this.name = name;
         }
 
-        public int compareTo (Object other)
+        public int compareTo (ZationChoice other)
         {
-            return colorId - ((ZationChoice)other).colorId;
+            return colorId - other.colorId;
         }
 
         @Override

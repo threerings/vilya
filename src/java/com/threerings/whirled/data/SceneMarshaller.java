@@ -38,7 +38,7 @@ public class SceneMarshaller extends InvocationMarshaller
     implements SceneService
 {
     /**
-     * Marshalls results to implementations of {@link SceneMoveListener}.
+     * Marshalls results to implementations of {@link SceneService.SceneMoveListener}.
      */
     public static class SceneMoveMarshaller extends ListenerMarshaller
         implements SceneMoveListener

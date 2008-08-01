@@ -48,9 +48,9 @@ public class SceneUpdateMarshaller
      * used again. If you need to remove an update type, it should be replaced with null in the
      * class list to reserve the old type id that it represented.
      */
-    public SceneUpdateMarshaller (Class ... typesClasses)
+    public SceneUpdateMarshaller (Class<?> ... typesClasses)
     {
-        for (Class c : typesClasses) {
+        for (Class<?> c : typesClasses) {
             registerUpdateClass(c);
         }
     }
@@ -66,7 +66,7 @@ public class SceneUpdateMarshaller
     /**
      * Returns the type code that is assigned to the specified SceneUpdate class, or -1.
      */
-    public int getUpdateType (Class typeClass)
+    public int getUpdateType (Class<?> typeClass)
     {
         Integer type = _classToType.get(typeClass);
         return (type == null) ? -1 : type.intValue();
@@ -75,7 +75,7 @@ public class SceneUpdateMarshaller
     /**
      * Returns the update class associated with the specified type code, or null.
      */
-    public Class getUpdateClass (int type)
+    public Class<?> getUpdateClass (int type)
     {
         return _typeToClass.get(type);
     }
@@ -105,7 +105,7 @@ public class SceneUpdateMarshaller
         Exception error = null;
 
         try {
-            Class updateClass = getUpdateClass(updateType);
+            Class<?> updateClass = getUpdateClass(updateType);
             if (updateClass == null) {
                 errmsg = "No class registered for update type [sceneId=" + sceneId +
                     ", sceneVersion=" + sceneVersion + ", updateType=" + updateType + "].";
@@ -146,7 +146,7 @@ public class SceneUpdateMarshaller
      * Registers the update class with the update factory. This should be called below in the
      * canonical list of update registrations.
      */
-    protected void registerUpdateClass (Class typeClass)
+    protected void registerUpdateClass (Class<?> typeClass)
     {
         // ensure that callers can't fuck up the reciprocal nature of our two maps.
         if (_classToType.containsKey(typeClass)) {
@@ -164,10 +164,10 @@ public class SceneUpdateMarshaller
     }
 
     /** The table mapping update types to classes. */
-    protected HashIntMap<Class> _typeToClass = new HashIntMap<Class>();
+    protected HashIntMap<Class<?>> _typeToClass = new HashIntMap<Class<?>>();
 
     /** The table mapping update classes to types. */
-    protected HashMap<Class,Integer> _classToType = new HashMap<Class,Integer>();
+    protected HashMap<Class<?>,Integer> _classToType = new HashMap<Class<?>,Integer>();
 
     /** A counter used in assigning update types to classes. */
     protected int _nextType = 0;

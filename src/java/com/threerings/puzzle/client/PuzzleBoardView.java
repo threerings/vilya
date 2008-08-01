@@ -28,6 +28,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.samskivert.swing.Label;
 import com.samskivert.util.StringUtil;
@@ -381,10 +382,10 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
     protected Rectangle _bounds;
 
     /** The action animations on the board. */
-    protected ArrayList _actionAnims = new ArrayList();
+    protected List<Animation> _actionAnims = new ArrayList<Animation>();
 
     /** The action sprites on the board. */
-    protected ArrayList _actionSprites = new ArrayList();
+    protected List<Sprite> _actionSprites = new ArrayList<Sprite>();
 
     /** Prevents certain animations from overlapping others. */
     protected AnimationArranger _avoidArranger;

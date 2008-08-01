@@ -625,9 +625,9 @@ public abstract class PuzzleController extends GameController
 
         // notify any penders that the action has cleared
         final int[] results = new int[2];
-        _clearPenders.apply(new ObserverList.ObserverOp() {
-            public boolean apply (Object observer) {
-                switch (((ClearPender)observer).actionCleared()) {
+        _clearPenders.apply(new ObserverList.ObserverOp<ClearPender>() {
+            public boolean apply (ClearPender observer) {
+                switch (observer.actionCleared()) {
                 case ClearPender.RESTART_ACTION: results[0]++; break;
                 case ClearPender.NO_RESTART_ACTION: results[1]++; break;
                 }
@@ -941,7 +941,7 @@ public abstract class PuzzleController extends GameController
     protected int _astate = ACTION_CLEARED;
 
     /** The action cleared penders. */
-    protected ObserverList _clearPenders = ObserverList.newSafeInOrder();
+    protected ObserverList<ClearPender> _clearPenders = ObserverList.newSafeInOrder();
 
     /** A key listener that currently just toggles pause in the puzzle. */
     protected KeyListener _globalKeyListener = new KeyAdapter() {

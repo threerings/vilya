@@ -23,14 +23,22 @@ package com.threerings.micasa.lobby;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import java.util.*;
-
-import javax.swing.*;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
+import javax.swing.JComboBox;
+import javax.swing.JList;
+import javax.swing.JPanel;
 
 import com.threerings.crowd.data.PlaceObject;
-
 import com.threerings.micasa.util.MiCasaContext;
 
 import static com.threerings.micasa.Log.log;
@@ -115,15 +123,14 @@ public class LobbySelector extends JPanel
     }
 
     // documentation inherited from interface
-    public void gotLobbies (List lobbies)
+    public void gotLobbies (List<Lobby> lobbies)
     {
         // create a list model for this category
         DefaultListModel model = new DefaultListModel();
 
         // populate it with the lobby info
-        Iterator iter = lobbies.iterator();
-        while (iter.hasNext()) {
-            model.addElement(iter.next());
+        for (Lobby lobby : lobbies) {
+            model.addElement(lobby);
         }
 
         // stick it in the table
@@ -156,7 +163,7 @@ public class LobbySelector extends JPanel
      */
     protected void selectCategory (String category)
     {
-        DefaultListModel model = (DefaultListModel)_catlists.get(category);
+        DefaultListModel model = _catlists.get(category);
         if (model != null) {
             _loblist.setModel(model);
 
@@ -213,7 +220,7 @@ public class LobbySelector extends JPanel
     protected JComboBox _combo;
     protected JList _loblist;
 
-    protected HashMap _catlists = new HashMap();
+    protected Map<String, DefaultListModel> _catlists = new HashMap<String, DefaultListModel>();
     protected String _pendingCategory;
 
     protected static final String CAT_FIRST_ITEM = "<categories...>";

@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -49,7 +50,7 @@ public class SceneWriter
      * Registers a writer for writing auxiliary scene models of the
      * supplied class.
      */
-    public void registerAuxWriter (Class aclass, NestableWriter writer)
+    public void registerAuxWriter (Class<?> aclass, NestableWriter writer)
     {
         _auxers.put(aclass, writer);
     }
@@ -107,8 +108,7 @@ public class SceneWriter
         // write out our auxiliary scene models
         for (int ii = 0; ii < model.auxModels.length; ii++) {
             AuxModel amodel = model.auxModels[ii];
-            NestableWriter awriter = (NestableWriter)
-                _auxers.get(amodel.getClass());
+            NestableWriter awriter = _auxers.get(amodel.getClass());
             if (awriter != null) {
                 awriter.write(amodel, writer);
             } else {
@@ -118,5 +118,5 @@ public class SceneWriter
         }
     }
 
-    protected HashMap _auxers = new HashMap();
+    protected Map<Class<?>, NestableWriter> _auxers = new HashMap<Class<?>, NestableWriter>();
 }

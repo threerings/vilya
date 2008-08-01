@@ -21,7 +21,9 @@
 
 package com.threerings.stage.tools.editor;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import com.threerings.media.tile.Tile;
 import com.threerings.media.tile.TileManager;
@@ -89,7 +91,7 @@ public class EditorModel
     {
         int size = _listeners.size();
         for (int ii = 0; ii < size; ii++) {
-            ((EditorModelListener)_listeners.get(ii)).modelChanged(event);
+            _listeners.get(ii).modelChanged(event);
         }
     }
 
@@ -270,7 +272,7 @@ public class EditorModel
     protected Tile _tile;
 
     /** The model listeners. */
-    protected ArrayList _listeners = new ArrayList();
+    protected List<EditorModelListener> _listeners = Lists.newArrayList();
 
     /** The tile manager. */
     protected TileManager _tilemgr;

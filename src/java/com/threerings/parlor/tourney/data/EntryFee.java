@@ -45,7 +45,7 @@ public abstract class EntryFee extends SimpleStreamableObject
     /**
      * Attempts to reserve the entry fee.
      */
-    public abstract void reserveFee (BodyObject body, ResultListener listener);
+    public abstract void reserveFee (BodyObject body, ResultListener<Void> listener);
 
     /**
      * Returns the entry fee.

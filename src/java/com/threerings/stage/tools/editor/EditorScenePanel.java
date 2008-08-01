@@ -40,12 +40,15 @@ import java.awt.geom.Ellipse2D;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.BoundedRangeModel;
 import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.JFrame;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import com.google.common.collect.Lists;
 
 import com.samskivert.swing.Controller;
 import com.samskivert.swing.TGraphics2D;
@@ -169,12 +172,10 @@ public class EditorScenePanel extends StageScenePanel
     {
         StageMisoSceneModel ysmodel = (StageMisoSceneModel)_model;
         _area = null;
-        for (Iterator iter = ysmodel.getSections(); iter.hasNext(); ) {
-            StageMisoSceneModel.Section sect =
-                (StageMisoSceneModel.Section)iter.next();
+        for (Iterator<StageMisoSceneModel.Section> iter = ysmodel.getSections(); iter.hasNext(); ) {
+            StageMisoSceneModel.Section sect = iter.next();
             Rectangle sbounds = MisoUtil.getFootprintPolygon(
-                _metrics, sect.x, sect.y,
-                ysmodel.swidth, ysmodel.sheight).getBounds();
+                _metrics, sect.x, sect.y, ysmodel.swidth, ysmodel.sheight).getBounds();
             if (_area == null) {
                 _area = sbounds;
             } else {
@@ -263,16 +264,15 @@ public class EditorScenePanel extends StageScenePanel
         case EditorModel.OBJECT_LAYER:
             if (drag != null) {
                 // locate any object that intersects this rectangle
-                ArrayList hits = new ArrayList();
-                for (Iterator iter = _vizobjs.iterator(); iter.hasNext(); ) {
-                    SceneObject scobj = (SceneObject)iter.next();
+                List<SceneObject> hits = Lists.newArrayList();
+                for (SceneObject scobj: _vizobjs) {
                     if (scobj.objectFootprintOverlaps(drag)) {
                         hits.add(scobj);
                     }
                 }
                 // and delete 'em
                 for (int ii = 0; ii < hits.size(); ii++) {
-                    deleteObject((SceneObject)hits.get(ii));
+                    deleteObject(hits.get(ii));
                 }
 
             } else {
@@ -926,7 +926,7 @@ public class EditorScenePanel extends StageScenePanel
      */
     protected void paintPortals (Graphics2D gfx)
     {
-        Iterator iter = _scene.getPortals();
+        Iterator<Portal> iter = _scene.getPortals();
         while (iter.hasNext()) {
             paintPortal(gfx, (EditablePortal)iter.next());
         }
