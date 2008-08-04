@@ -65,19 +65,19 @@ public final class StatSet extends DSet<Stat>
      * It will increment the Stat's modCount, and won't set its dirty bit if it's not already
      * set, to prevent the Stat from being re-written to the repo unnecessarily.
      */
-    @SuppressWarnings("unchecked")
     public <T extends Stat> void syncStat (StatModifier<T> modifier)
     {
         boolean wasModified = false;
-        Stat stat = getStat(modifier.getType());
+        @SuppressWarnings("unchecked") T stat = (T)getStat(modifier.getType());
         if (stat != null) {
             wasModified = stat.isModified();
-            modifier.modify((T)stat);
+            modifier.modify(stat);
             updateStat(stat);
 
         } else {
-            stat = modifier.getType().newStat();
-            modifier.modify((T)stat);
+            @SuppressWarnings("unchecked") T nstat = (T)modifier.getType().newStat();
+            stat = nstat;
+            modifier.modify(stat);
             addStat(stat);
         }
 

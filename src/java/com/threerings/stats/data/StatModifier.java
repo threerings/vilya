@@ -80,6 +80,5 @@ public abstract class StatModifier<T extends Stat>
     public abstract void modify (T stat);
 
     /** The type of the stat on which we're operating. */
-    @NotStreamable
-    protected Stat.Type _type;
+    @NotStreamable protected Stat.Type _type;
 }
