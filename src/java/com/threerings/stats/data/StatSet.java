@@ -159,10 +159,9 @@ public final class StatSet extends DSet<Stat>
      * @exception ClassCastException thrown if the registered type of the specified stat is not
      * an {@link SetStat} parameterized on the given type.
      */
-    @SuppressWarnings("unchecked")
     public <T> void addToSetStat (Stat.Type type, T value)
     {
-        SetStat<T> stat = (SetStat<T>)getStat(type);
+        @SuppressWarnings("unchecked") SetStat<T> stat = (SetStat<T>)getStat(type);
         if (stat == null) {
             stat = (SetStat<T>)type.newStat();
             stat.add(value);
@@ -233,10 +232,9 @@ public final class StatSet extends DSet<Stat>
      * @exception ClassCastException thrown if the registered type of the specified stat is not an
      * {@link SetStat}.
      */
-    @SuppressWarnings("unchecked")
     public int getSetStatSize (Stat.Type type)
     {
-        SetStat stat = (SetStat)getStat(type);
+        @SuppressWarnings("unchecked") SetStat stat = (SetStat)getStat(type);
         return (stat == null ? 0 : stat.size());
     }
 
@@ -244,10 +242,9 @@ public final class StatSet extends DSet<Stat>
      * Returns true if the specified {@link SetStat} contains the specified value, false
      * otherwise.
      */
-    @SuppressWarnings("unchecked")
     public <T> boolean containsValue (Stat.Type type, T value)
     {
-        SetStat<T> stat = (SetStat<T>)getStat(type);
+        @SuppressWarnings("unchecked") SetStat<T> stat = (SetStat<T>)getStat(type);
         return (stat == null) ? false : stat.contains(value);
     }
 
