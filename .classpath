@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" output="dist/classes" path="src/java"/>
-	<classpathentry kind="src" path="tests/src/java"/>
+	<classpathentry kind="src" output="tests/dist/classes" path="tests/src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/nenya"/>
 	<classpathentry exported="true" kind="var" path="EXT_LIBS_DIR/commons-beanutils.jar"/>
-	<classpathentry kind="output" path="tests/dist/classes"/>
 </classpath>
