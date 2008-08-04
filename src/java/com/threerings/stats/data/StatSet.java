@@ -163,7 +163,8 @@ public final class StatSet extends DSet<Stat>
     {
         @SuppressWarnings("unchecked") SetStat<T> stat = (SetStat<T>)getStat(type);
         if (stat == null) {
-            stat = (SetStat<T>)type.newStat();
+            @SuppressWarnings("unchecked") SetStat<T> nstat = (SetStat<T>)type.newStat();
+            stat = nstat;
             stat.add(value);
             addStat(stat);
         } else if (stat.add(value)) {
@@ -234,7 +235,7 @@ public final class StatSet extends DSet<Stat>
      */
     public int getSetStatSize (Stat.Type type)
     {
-        @SuppressWarnings("unchecked") SetStat stat = (SetStat)getStat(type);
+        SetStat<?> stat = (SetStat<?>)getStat(type);
         return (stat == null ? 0 : stat.size());
     }
 
