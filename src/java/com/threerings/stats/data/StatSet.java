@@ -23,7 +23,6 @@ package com.threerings.stats.data;
 
 import java.util.Iterator;
 
-import com.threerings.media.Log;
 import com.threerings.presents.dobj.DSet;
 
 /**
@@ -278,8 +277,6 @@ public final class StatSet extends DSet<Stat>
         } else {
             add(stat);
         }
-
-        Log.log.info("StatSet.addStat()", "Stat", stat);
     }
 
     protected void updateStat (Stat stat)
@@ -287,8 +284,6 @@ public final class StatSet extends DSet<Stat>
         if (_container != null) {
             _container.updateStats(stat);
         }
-
-        Log.log.info("StatSet.updateStat()", "Stat", stat);
     }
 
     /**
