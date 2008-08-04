@@ -27,6 +27,7 @@ import com.threerings.io.ObjectOutputStream;
 import com.threerings.presents.dobj.DSet;
 import com.threerings.presents.dobj.DSet_Entry;
 import com.threerings.whirled.data.SceneObject;
+import com.threerings.whirled.spot.data.SceneLocation;
 
 /**
  * Extends the {@link SceneObject} with information specific to spots.
@@ -44,6 +45,7 @@ public class SpotSceneObject extends SceneObject
     /** A distributed set containing {@link SceneLocation} records for all
      * occupants of this scene. */
     public var occupantLocs :DSet = new DSet();
+    SceneLocation; // plain reference to force linkage
 
     /** Contains information on all {@link Cluster}s in this scene. */
     public var clusters :DSet = new DSet();
