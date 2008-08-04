@@ -77,6 +77,7 @@
         <include name="**/stage/client/*Service.java"/>
         <include name="**/puzzle/client/*Service.java"/>
         <include name="**/micasa/simulator/client/*Service.java"/>
+        <include name="**/micasa/lobby/*Service.java"/>
         <include name="**/parlor/tourney/client/*Service.java"/>
       </fileset>
       <providerless service="SimulatorService"/>

@@ -91,6 +91,7 @@ public class LobbyMarshaller extends InvocationMarshaller
         }
 
         @Override // from InvocationMarshaller
+        @SuppressWarnings("unchecked")
         public void dispatchResponse (int methodId, Object[] args)
         {
             switch (methodId) {
