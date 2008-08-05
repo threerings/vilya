@@ -480,8 +480,8 @@ public class EditorScenePanel extends StageScenePanel
             boolean changed;
 
             if (_ptile instanceof ObjectTile) {
-                if (changed = updateObjectTileCoords(
-                        x, y, _ppos, (ObjectTile)_ptile)) {
+                changed = updateObjectTileCoords(x, y, _ppos, (ObjectTile)_ptile);
+                if (changed) {
                     _pscobj.relocateObject(_metrics, _ppos.x, _ppos.y);
                 }
             } else {
@@ -532,7 +532,7 @@ public class EditorScenePanel extends StageScenePanel
             setShowFlags(SHOW_TIPS, true);
         }
     }
-    
+
     @Override
     public void keyReleased (KeyEvent e)
     {
@@ -572,7 +572,7 @@ public class EditorScenePanel extends StageScenePanel
     /**
      * Sets a base tile at the specified position in the scene (in tile
      * coordinates).
-     * 
+     *
      * @return - if the tile was successfully set
      */
     public boolean setBaseTile (int fqTileId, int x, int y)
@@ -614,7 +614,7 @@ public class EditorScenePanel extends StageScenePanel
 
     /**
      * Sets an object tile at the specified position in the scene (in tile coordinates).
-     * 
+     *
      * @return - the created object or null if an identical object was already in that spot.
      */
     public ObjectInfo addObject (ObjectTile tile, int fqTileId, int x, int y)
@@ -626,7 +626,7 @@ public class EditorScenePanel extends StageScenePanel
 
     /**
      * Adds the given object to the scene.
-     * 
+     *
      * @return the added object or null if an identical object was already in that spot.
      */
     public ObjectInfo addObject (ObjectInfo oinfo)
@@ -648,7 +648,7 @@ public class EditorScenePanel extends StageScenePanel
 
     /**
      * Deletes the object tile at the specified tile coordinates.
-     * 
+     *
      * @return true - if a matching object was found and deleted.
      */
     public boolean deleteObject (SceneObject scobj)
@@ -666,7 +666,7 @@ public class EditorScenePanel extends StageScenePanel
 
     /**
      * Delete the given object from the scene.
-     * 
+     *
      * @return true - if a matching object was found and deleted.
      */
     public boolean deleteObject (ObjectInfo info)
@@ -940,7 +940,7 @@ public class EditorScenePanel extends StageScenePanel
         paintLocation(gfx, (StageLocation)port.loc, Color.BLUE,
             port.equals(_scene.getDefaultEntrance()));
     }
-    
+
     /**
      * Paint the specified StageLocation
      */

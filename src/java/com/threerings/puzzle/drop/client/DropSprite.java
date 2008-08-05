@@ -269,7 +269,8 @@ public class DropSprite extends Sprite
      */
     public void setBouncing (boolean bouncing)
     {
-        if (_bouncing = bouncing) {
+        _bouncing = bouncing;
+        if (_bouncing) {
             // if we've activated bouncing, shift the sprite slightly to
             // illustrate its new state
             shiftForBounce();
@@ -328,7 +329,7 @@ public class DropSprite extends Sprite
 
 //         Log.info("getPercentDone [timestamp=" + timestamp +
 //                  ", rowstamp=" + _rowstamp + ", msecs=" + msecs +
-//                  ", travpix=" + travpix + ", pctdone=" + pctdone + 
+//                  ", travpix=" + travpix + ", pctdone=" + pctdone +
 //                  ", vel=" + _vel + "].");
 
         return pctdone;
