@@ -219,6 +219,20 @@ public class TableDirector extends BasicDirector
         _tlobj.getTableService().startTableNow(_ctx.getClient(), tableId, this);
     }
 
+    /**
+     * Sends a request to boot a player from a table.
+     */
+    public void bootPlayer (int tableId, int bodyId)
+    {
+        if (_tlobj == null) {
+            log.warning("Requesting to boot a player from a table we're not currently in " +
+                        "[tableId=" + tableId + ", target=" + bodyId + "].");
+            return;
+        }
+
+        _tlobj.getTableService().bootPlayer(_ctx.getClient(), tableId, bodyId, this);
+    }
+
     @Override
     public void clientDidLogoff (Client client)
     {
