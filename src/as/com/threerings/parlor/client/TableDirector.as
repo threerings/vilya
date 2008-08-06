@@ -243,6 +243,20 @@ public class TableDirector extends BasicDirector
         _tlobj.getTableService().startTableNow(_ctx.getClient(), tableId, this);
     }
 
+    /**
+     * Sends a request to boot a player from a table.
+     */
+    public function bootPlayer (tableId :int, bodyId :int) :void
+    {
+        if (_tlobj == null) {
+            log.warning("Requesting to boot a player from a table we're not currently in " +
+                        "[tableId=" + tableId + ", target=" + bodyId + "].");
+            return;
+        }
+
+        _tlobj.getTableService().bootPlayer(_ctx.getClient(), tableId, bodyId, this);
+    }
+
     // documentation inherited
     override public function clientDidLogoff (event :ClientEvent) :void
     {
