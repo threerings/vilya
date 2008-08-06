@@ -55,11 +55,14 @@ public interface ParlorCodes extends InvocationCodes
      * occupied. */
     public static final String TABLE_POSITION_OCCUPIED = "m.table_position_occupied";
 
-    /** An error code returned when a user requests to creat or join a table but they're already
+    /** An error code returned when a user requests to create or join a table but they're already
      * sitting at another table. */
     public static final String ALREADY_AT_TABLE = "m.already_at_table";
 
     /** An error code returned when a user requests to leave a table that they were not sitting at
      * in the first place. */
     public static final String NOT_AT_TABLE = "m.not_at_table";
+
+    /** An error code returned when a user requests to join a table they've been banned from. */
+    public static final String BANNED_FROM_TABLE = "m.banned_from_table";
 }

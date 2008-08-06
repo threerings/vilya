@@ -22,6 +22,7 @@
 package com.threerings.parlor.data;
 
 import java.util.List;
+import java.util.HashSet;
 
 import com.google.common.collect.Lists;
 
@@ -228,6 +229,10 @@ public class Table
             return TABLE_POSITION_OCCUPIED;
         }
 
+        if (_bannedUsers != null && _bannedUsers.contains(player.username)) {
+            return BANNED_FROM_TABLE;
+        }
+
         // otherwise all is well, stick 'em in
         setPlayerPos(position, player);
         return null;
@@ -242,6 +247,19 @@ public class Table
     {
         players[position] = player.getVisibleName();
         bodyOids[position] = player.getOid();
+    }
+
+    /**
+     * Indicate to this table that a user was booted and should
+     * be prevented from rejoining.
+     */
+    public void addBannedUser (Name username)
+    {
+        if (_bannedUsers == null) {
+            _bannedUsers = new HashSet<Name>();
+        }
+
+        _bannedUsers.add(username);
     }
 
     /**
@@ -423,4 +441,7 @@ public class Table
 
     /** A counter for assigning table ids. */
     protected static int _tableIdCounter = 0;
+
+    /** On the server, the usernames that have been banned from this table. */
+    protected transient HashSet<Name> _bannedUsers;
 }

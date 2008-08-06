@@ -282,7 +282,7 @@ public class TableManager
     }
 
     // from interface TableProvider
-    public void bootPlayer (ClientObject caller, int tableId, int bodyId,
+    public void bootPlayer (ClientObject caller, int tableId, int position,
                             TableService.InvocationListener listener)
         throws InvocationException
     {
@@ -291,20 +291,24 @@ public class TableManager
 
         if (table == null) {
             throw new InvocationException(NO_SUCH_TABLE);
-        } else if (booter.getOid() != table.bodyOids[0]) {
+        } else if (position == 0 || booter.getOid() != table.bodyOids[0]) {
+            // Must be head of the table, and can't self-boot
             throw new InvocationException(INVALID_TABLE_POSITION);
         } else if ( ! _allowBooting) {
             throw new InvocationException(INTERNAL_ERROR);
         }
 
+        // Remember to keep him banned
+        table.addBannedUser(table.players[position]);
+
         // Remove the player from the table
-        if ( ! table.clearPlayerByOid(bodyId)) {
-            throw new InvocationException(NOT_AT_TABLE);
-        }
-        if (notePlayerRemoved(bodyId) == null) {
-            log.warning("No body to table mapping to clear? [bodyId=" + bodyId +
+        table.clearPlayerPos(position);
+        if (notePlayerRemoved(table.bodyOids[position]) == null) {
+            log.warning("No body to table mapping to clear? [position=" + position +
                         ", table=" + table + "].");
         }
+
+        _tlobj.updateTables(table);
     }
 
     /**
