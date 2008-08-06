@@ -26,6 +26,7 @@ import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.InvocationMarshaller;
+import com.threerings.presents.net.Transport;
 
 /**
  * Provides the implementation of the {@link TableService} interface
@@ -37,8 +38,21 @@ import com.threerings.presents.data.InvocationMarshaller;
 public class TableMarshaller extends InvocationMarshaller
     implements TableService
 {
+    /** The method id used to dispatch {@link #bootPlayer} requests. */
+    public static final int BOOT_PLAYER = 1;
+
+    // from interface TableService
+    public void bootPlayer (Client arg1, int arg2, int arg3, InvocationService.InvocationListener arg4)
+    {
+        ListenerMarshaller listener4 = new ListenerMarshaller();
+        listener4.listener = arg4;
+        sendRequest(arg1, BOOT_PLAYER, new Object[] {
+            Integer.valueOf(arg2), Integer.valueOf(arg3), listener4
+        });
+    }
+
     /** The method id used to dispatch {@link #createTable} requests. */
-    public static final int CREATE_TABLE = 1;
+    public static final int CREATE_TABLE = 2;
 
     // from interface TableService
     public void createTable (Client arg1, TableConfig arg2, GameConfig arg3, InvocationService.ResultListener arg4)
@@ -51,7 +65,7 @@ public class TableMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #joinTable} requests. */
-    public static final int JOIN_TABLE = 2;
+    public static final int JOIN_TABLE = 3;
 
     // from interface TableService
     public void joinTable (Client arg1, int arg2, int arg3, InvocationService.InvocationListener arg4)
@@ -64,7 +78,7 @@ public class TableMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #leaveTable} requests. */
-    public static final int LEAVE_TABLE = 3;
+    public static final int LEAVE_TABLE = 4;
 
     // from interface TableService
     public void leaveTable (Client arg1, int arg2, InvocationService.InvocationListener arg3)
@@ -77,7 +91,7 @@ public class TableMarshaller extends InvocationMarshaller
     }
 
     /** The method id used to dispatch {@link #startTableNow} requests. */
-    public static final int START_TABLE_NOW = 4;
+    public static final int START_TABLE_NOW = 5;
 
     // from interface TableService
     public void startTableNow (Client arg1, int arg2, InvocationService.InvocationListener arg3)

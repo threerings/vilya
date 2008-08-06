@@ -34,6 +34,6 @@ public interface ZoneProvider extends InvocationProvider
     /**
      * Handles a {@link ZoneService#moveTo} request.
      */
-    void moveTo (ClientObject caller, int arg1, int arg2, int arg3, ZoneService.ZoneMoveListener arg4)
+    public void moveTo (ClientObject caller, int arg1, int arg2, int arg3, ZoneService.ZoneMoveListener arg4)
         throws InvocationException;
 }

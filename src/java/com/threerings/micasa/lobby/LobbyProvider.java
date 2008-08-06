@@ -33,12 +33,12 @@ public interface LobbyProvider extends InvocationProvider
     /**
      * Handles a {@link LobbyService#getCategories} request.
      */
-    void getCategories (ClientObject caller, LobbyService.CategoriesListener arg1)
+    public void getCategories (ClientObject caller, LobbyService.CategoriesListener arg1)
         throws InvocationException;
 
     /**
      * Handles a {@link LobbyService#getLobbies} request.
      */
-    void getLobbies (ClientObject caller, String arg1, LobbyService.LobbiesListener arg2)
+    public void getLobbies (ClientObject caller, String arg1, LobbyService.LobbiesListener arg2)
         throws InvocationException;
 }

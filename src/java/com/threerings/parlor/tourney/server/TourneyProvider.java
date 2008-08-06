@@ -21,7 +21,6 @@
 
 package com.threerings.parlor.tourney.server;
 
-import com.threerings.parlor.tourney.client.TourneyService;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationException;
@@ -35,18 +34,18 @@ public interface TourneyProvider extends InvocationProvider
     /**
      * Handles a {@link TourneyService#cancel} request.
      */
-    void cancel (ClientObject caller, InvocationService.ConfirmListener arg1)
+    public void cancel (ClientObject caller, InvocationService.ConfirmListener arg1)
         throws InvocationException;
 
     /**
      * Handles a {@link TourneyService#join} request.
      */
-    void join (ClientObject caller, InvocationService.ConfirmListener arg1)
+    public void join (ClientObject caller, InvocationService.ConfirmListener arg1)
         throws InvocationException;
 
     /**
      * Handles a {@link TourneyService#leave} request.
      */
-    void leave (ClientObject caller, InvocationService.ConfirmListener arg1)
+    public void leave (ClientObject caller, InvocationService.ConfirmListener arg1)
         throws InvocationException;
 }

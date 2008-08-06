@@ -21,7 +21,6 @@
 
 package com.threerings.parlor.tourney.server;
 
-import com.threerings.parlor.tourney.client.TourniesService;
 import com.threerings.parlor.tourney.data.TourneyConfig;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.ClientObject;
@@ -36,6 +35,6 @@ public interface TourniesProvider extends InvocationProvider
     /**
      * Handles a {@link TourniesService#createTourney} request.
      */
-    void createTourney (ClientObject caller, TourneyConfig arg1, InvocationService.ResultListener arg2)
+    public void createTourney (ClientObject caller, TourneyConfig arg1, InvocationService.ResultListener arg2)
         throws InvocationException;
 }

@@ -37,24 +37,24 @@ public interface ParlorProvider extends InvocationProvider
     /**
      * Handles a {@link ParlorService#cancel} request.
      */
-    void cancel (ClientObject caller, int arg1, InvocationService.InvocationListener arg2)
+    public void cancel (ClientObject caller, int arg1, InvocationService.InvocationListener arg2)
         throws InvocationException;
 
     /**
      * Handles a {@link ParlorService#invite} request.
      */
-    void invite (ClientObject caller, Name arg1, GameConfig arg2, ParlorService.InviteListener arg3)
+    public void invite (ClientObject caller, Name arg1, GameConfig arg2, ParlorService.InviteListener arg3)
         throws InvocationException;
 
     /**
      * Handles a {@link ParlorService#respond} request.
      */
-    void respond (ClientObject caller, int arg1, int arg2, Object arg3, InvocationService.InvocationListener arg4)
+    public void respond (ClientObject caller, int arg1, int arg2, Object arg3, InvocationService.InvocationListener arg4)
         throws InvocationException;
 
     /**
      * Handles a {@link ParlorService#startSolitaire} request.
      */
-    void startSolitaire (ClientObject caller, GameConfig arg1, InvocationService.ConfirmListener arg2)
+    public void startSolitaire (ClientObject caller, GameConfig arg1, InvocationService.ConfirmListener arg2)
         throws InvocationException;
 }

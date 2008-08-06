@@ -24,6 +24,7 @@ package com.threerings.micasa.lobby;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.dobj.InvocationResponseEvent;
+import com.threerings.presents.net.Transport;
 import java.util.List;
 
 /**
@@ -37,7 +38,7 @@ public class LobbyMarshaller extends InvocationMarshaller
     implements LobbyService
 {
     /**
-     * Marshalls results to implementations of {@link LobbyService.CategoriesListener}.
+     * Marshalls results to implementations of {@link CategoriesListener}.
      */
     public static class CategoriesMarshaller extends ListenerMarshaller
         implements CategoriesListener
@@ -72,7 +73,7 @@ public class LobbyMarshaller extends InvocationMarshaller
     }
 
     /**
-     * Marshalls results to implementations of {@link LobbyService.LobbiesListener}.
+     * Marshalls results to implementations of {@link LobbiesListener}.
      */
     public static class LobbiesMarshaller extends ListenerMarshaller
         implements LobbiesListener
@@ -82,7 +83,7 @@ public class LobbyMarshaller extends InvocationMarshaller
         public static final int GOT_LOBBIES = 1;
 
         // from interface LobbiesMarshaller
-        public void gotLobbies (List<Lobby> arg1)
+        public void gotLobbies (List<com.threerings.micasa.lobby.Lobby> arg1)
         {
             _invId = null;
             omgr.postEvent(new InvocationResponseEvent(
@@ -91,13 +92,12 @@ public class LobbyMarshaller extends InvocationMarshaller
         }
 
         @Override // from InvocationMarshaller
-        @SuppressWarnings("unchecked")
         public void dispatchResponse (int methodId, Object[] args)
         {
             switch (methodId) {
             case GOT_LOBBIES:
                 ((LobbiesListener)listener).gotLobbies(
-                    (List<Lobby>)args[0]);
+                    (List<com.threerings.micasa.lobby.Lobby>)args[0]);
                 return;
 
             default:

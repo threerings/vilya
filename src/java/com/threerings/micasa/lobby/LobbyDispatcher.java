@@ -22,6 +22,7 @@
 package com.threerings.micasa.lobby;
 
 import com.threerings.presents.data.ClientObject;
+import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
 
@@ -45,6 +46,7 @@ public class LobbyDispatcher extends InvocationDispatcher<LobbyMarshaller>
         return new LobbyMarshaller();
     }
 
+    @SuppressWarnings("unchecked")
     @Override // documentation inherited
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
@@ -53,13 +55,15 @@ public class LobbyDispatcher extends InvocationDispatcher<LobbyMarshaller>
         switch (methodId) {
         case LobbyMarshaller.GET_CATEGORIES:
             ((LobbyProvider)provider).getCategories(
-                source, (LobbyService.CategoriesListener)args[0]
+                source,
+                (LobbyService.CategoriesListener)args[0]
             );
             return;
 
         case LobbyMarshaller.GET_LOBBIES:
             ((LobbyProvider)provider).getLobbies(
-                source, (String)args[0], (LobbyService.LobbiesListener)args[1]
+                source,
+                (String)args[0], (LobbyService.LobbiesListener)args[1]
             );
             return;
 

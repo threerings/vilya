@@ -25,6 +25,7 @@ import com.threerings.parlor.tourney.data.TourneyConfig;
 import com.threerings.parlor.tourney.data.TourniesMarshaller;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.ClientObject;
+import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
 
@@ -48,6 +49,7 @@ public class TourniesDispatcher extends InvocationDispatcher<TourniesMarshaller>
         return new TourniesMarshaller();
     }
 
+    @SuppressWarnings("unchecked")
     @Override // documentation inherited
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
@@ -56,7 +58,8 @@ public class TourniesDispatcher extends InvocationDispatcher<TourniesMarshaller>
         switch (methodId) {
         case TourniesMarshaller.CREATE_TOURNEY:
             ((TourniesProvider)provider).createTourney(
-                source, (TourneyConfig)args[0], (InvocationService.ResultListener)args[1]
+                source,
+                (TourneyConfig)args[0], (InvocationService.ResultListener)args[1]
             );
             return;
 

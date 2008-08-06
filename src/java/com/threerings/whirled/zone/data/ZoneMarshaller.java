@@ -25,6 +25,7 @@ import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.dobj.InvocationResponseEvent;
+import com.threerings.presents.net.Transport;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.zone.client.ZoneService;
@@ -40,7 +41,7 @@ public class ZoneMarshaller extends InvocationMarshaller
     implements ZoneService
 {
     /**
-     * Marshalls results to implementations of {@link ZoneService.ZoneMoveListener}.
+     * Marshalls results to implementations of {@link ZoneMoveListener}.
      */
     public static class ZoneMoveMarshaller extends ListenerMarshaller
         implements ZoneMoveListener

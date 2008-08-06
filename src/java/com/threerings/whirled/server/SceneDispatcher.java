@@ -22,6 +22,7 @@
 package com.threerings.whirled.server;
 
 import com.threerings.presents.data.ClientObject;
+import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.whirled.client.SceneService;
@@ -47,6 +48,7 @@ public class SceneDispatcher extends InvocationDispatcher<SceneMarshaller>
         return new SceneMarshaller();
     }
 
+    @SuppressWarnings("unchecked")
     @Override // documentation inherited
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
@@ -55,7 +57,8 @@ public class SceneDispatcher extends InvocationDispatcher<SceneMarshaller>
         switch (methodId) {
         case SceneMarshaller.MOVE_TO:
             ((SceneProvider)provider).moveTo(
-                source, ((Integer)args[0]).intValue(), ((Integer)args[1]).intValue(), (SceneService.SceneMoveListener)args[2]
+                source,
+                ((Integer)args[0]).intValue(), ((Integer)args[1]).intValue(), (SceneService.SceneMoveListener)args[2]
             );
             return;
 

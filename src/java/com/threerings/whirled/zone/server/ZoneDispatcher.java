@@ -22,6 +22,7 @@
 package com.threerings.whirled.zone.server;
 
 import com.threerings.presents.data.ClientObject;
+import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.whirled.zone.client.ZoneService;
@@ -47,6 +48,7 @@ public class ZoneDispatcher extends InvocationDispatcher<ZoneMarshaller>
         return new ZoneMarshaller();
     }
 
+    @SuppressWarnings("unchecked")
     @Override // documentation inherited
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
@@ -55,7 +57,8 @@ public class ZoneDispatcher extends InvocationDispatcher<ZoneMarshaller>
         switch (methodId) {
         case ZoneMarshaller.MOVE_TO:
             ((ZoneProvider)provider).moveTo(
-                source, ((Integer)args[0]).intValue(), ((Integer)args[1]).intValue(), ((Integer)args[2]).intValue(), (ZoneService.ZoneMoveListener)args[3]
+                source,
+                ((Integer)args[0]).intValue(), ((Integer)args[1]).intValue(), ((Integer)args[2]).intValue(), (ZoneService.ZoneMoveListener)args[3]
             );
             return;
 

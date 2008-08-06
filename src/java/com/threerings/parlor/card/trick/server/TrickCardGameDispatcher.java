@@ -24,6 +24,7 @@ package com.threerings.parlor.card.trick.server;
 import com.threerings.parlor.card.data.Card;
 import com.threerings.parlor.card.trick.data.TrickCardGameMarshaller;
 import com.threerings.presents.data.ClientObject;
+import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
 
@@ -47,6 +48,7 @@ public class TrickCardGameDispatcher extends InvocationDispatcher<TrickCardGameM
         return new TrickCardGameMarshaller();
     }
 
+    @SuppressWarnings("unchecked")
     @Override // documentation inherited
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
@@ -55,19 +57,21 @@ public class TrickCardGameDispatcher extends InvocationDispatcher<TrickCardGameM
         switch (methodId) {
         case TrickCardGameMarshaller.PLAY_CARD:
             ((TrickCardGameProvider)provider).playCard(
-                source, (Card)args[0], ((Integer)args[1]).intValue()
+                source,
+                (Card)args[0], ((Integer)args[1]).intValue()
             );
             return;
 
         case TrickCardGameMarshaller.REQUEST_REMATCH:
             ((TrickCardGameProvider)provider).requestRematch(
-                source
+                source                
             );
             return;
 
         case TrickCardGameMarshaller.SEND_CARDS_TO_PLAYER:
             ((TrickCardGameProvider)provider).sendCardsToPlayer(
-                source, ((Integer)args[0]).intValue(), (Card[])args[1]
+                source,
+                ((Integer)args[0]).intValue(), (Card[])args[1]
             );
             return;
 

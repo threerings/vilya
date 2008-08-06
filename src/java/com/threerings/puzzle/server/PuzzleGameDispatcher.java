@@ -22,6 +22,7 @@
 package com.threerings.puzzle.server;
 
 import com.threerings.presents.data.ClientObject;
+import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.puzzle.data.Board;
@@ -47,6 +48,7 @@ public class PuzzleGameDispatcher extends InvocationDispatcher<PuzzleGameMarshal
         return new PuzzleGameMarshaller();
     }
 
+    @SuppressWarnings("unchecked")
     @Override // documentation inherited
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
@@ -55,13 +57,15 @@ public class PuzzleGameDispatcher extends InvocationDispatcher<PuzzleGameMarshal
         switch (methodId) {
         case PuzzleGameMarshaller.UPDATE_PROGRESS:
             ((PuzzleGameProvider)provider).updateProgress(
-                source, ((Integer)args[0]).intValue(), (int[])args[1]
+                source,
+                ((Integer)args[0]).intValue(), (int[])args[1]
             );
             return;
 
         case PuzzleGameMarshaller.UPDATE_PROGRESS_SYNC:
             ((PuzzleGameProvider)provider).updateProgressSync(
-                source, ((Integer)args[0]).intValue(), (int[])args[1], (Board[])args[2]
+                source,
+                ((Integer)args[0]).intValue(), (int[])args[1], (Board[])args[2]
             );
             return;
 

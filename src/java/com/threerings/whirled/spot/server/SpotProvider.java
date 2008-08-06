@@ -26,7 +26,6 @@ import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.presents.server.InvocationProvider;
 import com.threerings.whirled.client.SceneService;
-import com.threerings.whirled.spot.client.SpotService;
 import com.threerings.whirled.spot.data.Location;
 
 /**
@@ -37,23 +36,23 @@ public interface SpotProvider extends InvocationProvider
     /**
      * Handles a {@link SpotService#changeLocation} request.
      */
-    void changeLocation (ClientObject caller, int arg1, Location arg2, InvocationService.ConfirmListener arg3)
+    public void changeLocation (ClientObject caller, int arg1, Location arg2, InvocationService.ConfirmListener arg3)
         throws InvocationException;
 
     /**
      * Handles a {@link SpotService#clusterSpeak} request.
      */
-    void clusterSpeak (ClientObject caller, String arg1, byte arg2);
+    public void clusterSpeak (ClientObject caller, String arg1, byte arg2);
 
     /**
      * Handles a {@link SpotService#joinCluster} request.
      */
-    void joinCluster (ClientObject caller, int arg1, InvocationService.ConfirmListener arg2)
+    public void joinCluster (ClientObject caller, int arg1, InvocationService.ConfirmListener arg2)
         throws InvocationException;
 
     /**
      * Handles a {@link SpotService#traversePortal} request.
      */
-    void traversePortal (ClientObject caller, int arg1, int arg2, int arg3, SceneService.SceneMoveListener arg4)
+    public void traversePortal (ClientObject caller, int arg1, int arg2, int arg3, SceneService.SceneMoveListener arg4)
         throws InvocationException;
 }

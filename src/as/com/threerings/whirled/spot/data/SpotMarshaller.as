@@ -32,7 +32,7 @@ import com.threerings.whirled.data.SceneMarshaller_SceneMoveMarshaller;
 import com.threerings.whirled.spot.client.SpotService;
 
 /**
- * Provides the implementation of the <code>SpotService</code> interface
+ * Provides the implementation of the {@link SpotService} interface
  * that marshalls the arguments and delivers the request to the provider
  * on the server. Also provides an implementation of the response listener
  * interfaces that marshall the response arguments and deliver them back
@@ -41,7 +41,7 @@ import com.threerings.whirled.spot.client.SpotService;
 public class SpotMarshaller extends InvocationMarshaller
     implements SpotService
 {
-    /** The method id used to dispatch <code>changeLocation</code> requests. */
+    /** The method id used to dispatch {@link #changeLocation} requests. */
     public static const CHANGE_LOCATION :int = 1;
 
     // from interface SpotService
@@ -54,7 +54,7 @@ public class SpotMarshaller extends InvocationMarshaller
         ]);
     }
 
-    /** The method id used to dispatch <code>clusterSpeak</code> requests. */
+    /** The method id used to dispatch {@link #clusterSpeak} requests. */
     public static const CLUSTER_SPEAK :int = 2;
 
     // from interface SpotService
@@ -65,7 +65,7 @@ public class SpotMarshaller extends InvocationMarshaller
         ]);
     }
 
-    /** The method id used to dispatch <code>joinCluster</code> requests. */
+    /** The method id used to dispatch {@link #joinCluster} requests. */
     public static const JOIN_CLUSTER :int = 3;
 
     // from interface SpotService
@@ -78,7 +78,7 @@ public class SpotMarshaller extends InvocationMarshaller
         ]);
     }
 
-    /** The method id used to dispatch <code>traversePortal</code> requests. */
+    /** The method id used to dispatch {@link #traversePortal} requests. */
     public static const TRAVERSE_PORTAL :int = 4;
 
     // from interface SpotService

@@ -28,7 +28,7 @@ import com.threerings.whirled.zone.client.ZoneService;
 import com.threerings.whirled.zone.client.ZoneService_ZoneMoveListener;
 
 /**
- * Provides the implementation of the <code>ZoneService</code> interface
+ * Provides the implementation of the {@link ZoneService} interface
  * that marshalls the arguments and delivers the request to the provider
  * on the server. Also provides an implementation of the response listener
  * interfaces that marshall the response arguments and deliver them back
@@ -37,7 +37,7 @@ import com.threerings.whirled.zone.client.ZoneService_ZoneMoveListener;
 public class ZoneMarshaller extends InvocationMarshaller
     implements ZoneService
 {
-    /** The method id used to dispatch <code>moveTo</code> requests. */
+    /** The method id used to dispatch {@link #moveTo} requests. */
     public static const MOVE_TO :int = 1;
 
     // from interface ZoneService

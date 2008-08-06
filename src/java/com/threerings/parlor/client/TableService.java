@@ -68,4 +68,9 @@ public interface TableService extends InvocationService
      * creator).
      */
     public void startTableNow (Client client, int tableId, InvocationListener listener);
+
+    /**
+     * Requests that another user be booted from the specified table.
+     */
+    public void bootPlayer (Client client, int tableId, int bodyId, InvocationListener listener);
 }

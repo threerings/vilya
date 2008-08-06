@@ -32,7 +32,7 @@ import com.threerings.presents.data.InvocationMarshaller_ResultMarshaller;
 import com.threerings.util.Integer;
 
 /**
- * Provides the implementation of the <code>TableService</code> interface
+ * Provides the implementation of the {@link TableService} interface
  * that marshalls the arguments and delivers the request to the provider
  * on the server. Also provides an implementation of the response listener
  * interfaces that marshall the response arguments and deliver them back
@@ -41,8 +41,21 @@ import com.threerings.util.Integer;
 public class TableMarshaller extends InvocationMarshaller
     implements TableService
 {
-    /** The method id used to dispatch <code>createTable</code> requests. */
-    public static const CREATE_TABLE :int = 1;
+    /** The method id used to dispatch {@link #bootPlayer} requests. */
+    public static const BOOT_PLAYER :int = 1;
+
+    // from interface TableService
+    public function bootPlayer (arg1 :Client, arg2 :int, arg3 :int, arg4 :InvocationService_InvocationListener) :void
+    {
+        var listener4 :InvocationMarshaller_ListenerMarshaller = new InvocationMarshaller_ListenerMarshaller();
+        listener4.listener = arg4;
+        sendRequest(arg1, BOOT_PLAYER, [
+            Integer.valueOf(arg2), Integer.valueOf(arg3), listener4
+        ]);
+    }
+
+    /** The method id used to dispatch {@link #createTable} requests. */
+    public static const CREATE_TABLE :int = 2;
 
     // from interface TableService
     public function createTable (arg1 :Client, arg2 :TableConfig, arg3 :GameConfig, arg4 :InvocationService_ResultListener) :void
@@ -54,8 +67,8 @@ public class TableMarshaller extends InvocationMarshaller
         ]);
     }
 
-    /** The method id used to dispatch <code>joinTable</code> requests. */
-    public static const JOIN_TABLE :int = 2;
+    /** The method id used to dispatch {@link #joinTable} requests. */
+    public static const JOIN_TABLE :int = 3;
 
     // from interface TableService
     public function joinTable (arg1 :Client, arg2 :int, arg3 :int, arg4 :InvocationService_InvocationListener) :void
@@ -67,8 +80,8 @@ public class TableMarshaller extends InvocationMarshaller
         ]);
     }
 
-    /** The method id used to dispatch <code>leaveTable</code> requests. */
-    public static const LEAVE_TABLE :int = 3;
+    /** The method id used to dispatch {@link #leaveTable} requests. */
+    public static const LEAVE_TABLE :int = 4;
 
     // from interface TableService
     public function leaveTable (arg1 :Client, arg2 :int, arg3 :InvocationService_InvocationListener) :void
@@ -80,8 +93,8 @@ public class TableMarshaller extends InvocationMarshaller
         ]);
     }
 
-    /** The method id used to dispatch <code>startTableNow</code> requests. */
-    public static const START_TABLE_NOW :int = 4;
+    /** The method id used to dispatch {@link #startTableNow} requests. */
+    public static const START_TABLE_NOW :int = 5;
 
     // from interface TableService
     public function startTableNow (arg1 :Client, arg2 :int, arg3 :InvocationService_InvocationListener) :void

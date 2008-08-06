@@ -22,7 +22,6 @@
 package com.threerings.parlor.card.trick.server;
 
 import com.threerings.parlor.card.data.Card;
-import com.threerings.parlor.card.trick.client.TrickCardGameService;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationProvider;
 
@@ -34,15 +33,15 @@ public interface TrickCardGameProvider extends InvocationProvider
     /**
      * Handles a {@link TrickCardGameService#playCard} request.
      */
-    void playCard (ClientObject caller, Card arg1, int arg2);
+    public void playCard (ClientObject caller, Card arg1, int arg2);
 
     /**
      * Handles a {@link TrickCardGameService#requestRematch} request.
      */
-    void requestRematch (ClientObject caller);
+    public void requestRematch (ClientObject caller);
 
     /**
      * Handles a {@link TrickCardGameService#sendCardsToPlayer} request.
      */
-    void sendCardsToPlayer (ClientObject caller, int arg1, Card[] arg2);
+    public void sendCardsToPlayer (ClientObject caller, int arg1, Card[] arg2);
 }

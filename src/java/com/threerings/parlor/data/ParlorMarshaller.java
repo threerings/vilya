@@ -27,6 +27,7 @@ import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.dobj.InvocationResponseEvent;
+import com.threerings.presents.net.Transport;
 import com.threerings.util.Name;
 
 /**
@@ -40,7 +41,7 @@ public class ParlorMarshaller extends InvocationMarshaller
     implements ParlorService
 {
     /**
-     * Marshalls results to implementations of {@link ParlorService.InviteListener}.
+     * Marshalls results to implementations of {@link InviteListener}.
      */
     public static class InviteMarshaller extends ListenerMarshaller
         implements InviteListener

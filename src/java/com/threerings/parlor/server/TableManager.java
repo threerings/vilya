@@ -109,6 +109,14 @@ public class TableManager
     }
 
     /**
+     * Allow a player in the first position of a table to boot others.
+     */
+    public void setAllowBooting (boolean allowBooting)
+    {
+        _allowBooting = allowBooting;
+    }
+
+    /**
      * Creates a table for the specified creator and returns said table.
      *
      * @exception InvocationException thrown if the table could not be created for any reason.
@@ -126,7 +134,7 @@ public class TableManager
         try {
             table = _tableClass.newInstance();
         } catch (Exception e) {
-            log.warning("Table.newInstance() failde [class=" + _tableClass + ", e=" + e + "].");
+            log.warning("Table.newInstance() failed [class=" + _tableClass + ", e=" + e + "].");
             throw new InvocationException(INTERNAL_ERROR);
         }
         table.init(_dobj.getOid(), tableConfig, config);
@@ -160,7 +168,7 @@ public class TableManager
         return table;
     }
 
-    // from interface ParlorProvider
+    // from interface TableProvider
     public void createTable (ClientObject caller, TableConfig tableConfig, GameConfig config,
                              TableService.ResultListener listener)
         throws InvocationException
@@ -180,7 +188,7 @@ public class TableManager
         listener.requestProcessed(createTable(creator, tableConfig, config).tableId);
     }
 
-    // from interface ParlorProvider
+    // from interface TableProvider
     public void joinTable (ClientObject caller, int tableId, int position,
                            TableService.InvocationListener listener)
         throws InvocationException
@@ -220,7 +228,7 @@ public class TableManager
         // themselves show up in the table that they joined
     }
 
-    // from interface ParlorProvider
+    // from interface TableProvider
     public void leaveTable (ClientObject caller, int tableId,
                             TableService.InvocationListener listener)
         throws InvocationException
@@ -256,7 +264,7 @@ public class TableManager
         // themselves removed from the table they just left
     }
 
-    // from interface ParlorProvider
+    // from interface TableProvider
     public void startTableNow (ClientObject caller, int tableId,
                                TableService.InvocationListener listener)
         throws InvocationException
@@ -271,6 +279,32 @@ public class TableManager
             throw new InvocationException(INTERNAL_ERROR);
         }
         createGame(table);
+    }
+
+    // from interface TableProvider
+    public void bootPlayer (ClientObject caller, int tableId, int bodyId,
+                            TableService.InvocationListener listener)
+        throws InvocationException
+    {
+        BodyObject booter = (BodyObject) caller;
+        Table table = _tables.get(tableId);
+
+        if (table == null) {
+            throw new InvocationException(NO_SUCH_TABLE);
+        } else if (booter.getOid() != table.bodyOids[0]) {
+            throw new InvocationException(INVALID_TABLE_POSITION);
+        } else if ( ! _allowBooting) {
+            throw new InvocationException(INTERNAL_ERROR);
+        }
+
+        // Remove the player from the table
+        if ( ! table.clearPlayerByOid(bodyId)) {
+            throw new InvocationException(NOT_AT_TABLE);
+        }
+        if (notePlayerRemoved(bodyId) == null) {
+            log.warning("No body to table mapping to clear? [bodyId=" + bodyId +
+                        ", table=" + table + "].");
+        }
     }
 
     /**
@@ -555,6 +589,9 @@ public class TableManager
 
     /** A listener that removes users from tables when they're no longer able to play. */
     protected ChangeListener _userListener = new UserListener();
+
+    /** Whether or not tables should support booting. */
+    protected boolean _allowBooting = false;
 
     protected RootDObjectManager _omgr;
     protected InvocationManager _invmgr;

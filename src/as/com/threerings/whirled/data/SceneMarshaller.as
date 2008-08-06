@@ -28,7 +28,7 @@ import com.threerings.whirled.client.SceneService;
 import com.threerings.whirled.client.SceneService_SceneMoveListener;
 
 /**
- * Provides the implementation of the <code>SceneService</code> interface
+ * Provides the implementation of the {@link SceneService} interface
  * that marshalls the arguments and delivers the request to the provider
  * on the server. Also provides an implementation of the response listener
  * interfaces that marshall the response arguments and deliver them back
@@ -37,7 +37,7 @@ import com.threerings.whirled.client.SceneService_SceneMoveListener;
 public class SceneMarshaller extends InvocationMarshaller
     implements SceneService
 {
-    /** The method id used to dispatch <code>moveTo</code> requests. */
+    /** The method id used to dispatch {@link #moveTo} requests. */
     public static const MOVE_TO :int = 1;
 
     // from interface SceneService

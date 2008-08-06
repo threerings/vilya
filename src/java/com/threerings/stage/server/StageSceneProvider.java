@@ -26,7 +26,6 @@ import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.presents.server.InvocationProvider;
-import com.threerings.stage.client.StageSceneService;
 
 /**
  * Defines the server-side of the {@link StageSceneService}.
@@ -36,12 +35,12 @@ public interface StageSceneProvider extends InvocationProvider
     /**
      * Handles a {@link StageSceneService#addObject} request.
      */
-    void addObject (ClientObject caller, ObjectInfo arg1, InvocationService.ConfirmListener arg2)
+    public void addObject (ClientObject caller, ObjectInfo arg1, InvocationService.ConfirmListener arg2)
         throws InvocationException;
 
     /**
      * Handles a {@link StageSceneService#removeObjects} request.
      */
-    void removeObjects (ClientObject caller, ObjectInfo[] arg1, InvocationService.ConfirmListener arg2)
+    public void removeObjects (ClientObject caller, ObjectInfo[] arg1, InvocationService.ConfirmListener arg2)
         throws InvocationException;
 }

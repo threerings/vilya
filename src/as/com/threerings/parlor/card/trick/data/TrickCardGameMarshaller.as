@@ -29,7 +29,7 @@ import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.util.Integer;
 
 /**
- * Provides the implementation of the <code>TrickCardGameService</code> interface
+ * Provides the implementation of the {@link TrickCardGameService} interface
  * that marshalls the arguments and delivers the request to the provider
  * on the server. Also provides an implementation of the response listener
  * interfaces that marshall the response arguments and deliver them back
@@ -38,7 +38,7 @@ import com.threerings.util.Integer;
 public class TrickCardGameMarshaller extends InvocationMarshaller
     implements TrickCardGameService
 {
-    /** The method id used to dispatch <code>playCard</code> requests. */
+    /** The method id used to dispatch {@link #playCard} requests. */
     public static const PLAY_CARD :int = 1;
 
     // from interface TrickCardGameService
@@ -49,7 +49,7 @@ public class TrickCardGameMarshaller extends InvocationMarshaller
         ]);
     }
 
-    /** The method id used to dispatch <code>requestRematch</code> requests. */
+    /** The method id used to dispatch {@link #requestRematch} requests. */
     public static const REQUEST_REMATCH :int = 2;
 
     // from interface TrickCardGameService
@@ -60,7 +60,7 @@ public class TrickCardGameMarshaller extends InvocationMarshaller
         ]);
     }
 
-    /** The method id used to dispatch <code>sendCardsToPlayer</code> requests. */
+    /** The method id used to dispatch {@link #sendCardsToPlayer} requests. */
     public static const SEND_CARDS_TO_PLAYER :int = 3;
 
     // from interface TrickCardGameService

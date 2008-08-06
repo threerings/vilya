@@ -23,6 +23,7 @@ package com.threerings.puzzle.data;
 
 import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller;
+import com.threerings.presents.net.Transport;
 import com.threerings.puzzle.client.PuzzleGameService;
 
 /**

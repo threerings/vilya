@@ -34,6 +34,6 @@ public interface SceneProvider extends InvocationProvider
     /**
      * Handles a {@link SceneService#moveTo} request.
      */
-    void moveTo (ClientObject caller, int arg1, int arg2, SceneService.SceneMoveListener arg3)
+    public void moveTo (ClientObject caller, int arg1, int arg2, SceneService.SceneMoveListener arg3)
         throws InvocationException;
 }
