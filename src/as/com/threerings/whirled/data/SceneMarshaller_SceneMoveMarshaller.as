@@ -32,16 +32,16 @@ import com.threerings.whirled.client.SceneService_SceneMoveListener;
 public class SceneMarshaller_SceneMoveMarshaller
     extends InvocationMarshaller_ListenerMarshaller
 {
-    /** The method id used to dispatch {@link #moveRequiresServerSwitch} responses. */
+    /** The method id used to dispatch <code>moveRequiresServerSwitch</code> responses. */
     public static const MOVE_REQUIRES_SERVER_SWITCH :int = 1;
 
-    /** The method id used to dispatch {@link #moveSucceeded} responses. */
+    /** The method id used to dispatch <code>moveSucceeded</code> responses. */
     public static const MOVE_SUCCEEDED :int = 2;
 
-    /** The method id used to dispatch {@link #moveSucceededWithScene} responses. */
+    /** The method id used to dispatch <code>moveSucceededWithScene</code> responses. */
     public static const MOVE_SUCCEEDED_WITH_SCENE :int = 3;
 
-    /** The method id used to dispatch {@link #moveSucceededWithUpdates} responses. */
+    /** The method id used to dispatch <code>moveSucceededWithUpdates</code> responses. */
     public static const MOVE_SUCCEEDED_WITH_UPDATES :int = 4;
 
     // from InvocationMarshaller_ListenerMarshaller

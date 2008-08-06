@@ -24,7 +24,6 @@ package com.threerings.parlor.tourney.server;
 import com.threerings.parlor.tourney.data.TourneyMarshaller;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.ClientObject;
-import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
 
@@ -48,7 +47,6 @@ public class TourneyDispatcher extends InvocationDispatcher<TourneyMarshaller>
         return new TourneyMarshaller();
     }
 
-    @SuppressWarnings("unchecked")
     @Override // documentation inherited
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
@@ -57,22 +55,19 @@ public class TourneyDispatcher extends InvocationDispatcher<TourneyMarshaller>
         switch (methodId) {
         case TourneyMarshaller.CANCEL:
             ((TourneyProvider)provider).cancel(
-                source,
-                (InvocationService.ConfirmListener)args[0]
+                source, (InvocationService.ConfirmListener)args[0]
             );
             return;
 
         case TourneyMarshaller.JOIN:
             ((TourneyProvider)provider).join(
-                source,
-                (InvocationService.ConfirmListener)args[0]
+                source, (InvocationService.ConfirmListener)args[0]
             );
             return;
 
         case TourneyMarshaller.LEAVE:
             ((TourneyProvider)provider).leave(
-                source,
-                (InvocationService.ConfirmListener)args[0]
+                source, (InvocationService.ConfirmListener)args[0]
             );
             return;
 

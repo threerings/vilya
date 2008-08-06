@@ -24,7 +24,6 @@ package com.threerings.stage.server;
 import com.threerings.miso.data.ObjectInfo;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.ClientObject;
-import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.stage.data.StageSceneMarshaller;
@@ -49,7 +48,6 @@ public class StageSceneDispatcher extends InvocationDispatcher<StageSceneMarshal
         return new StageSceneMarshaller();
     }
 
-    @SuppressWarnings("unchecked")
     @Override // documentation inherited
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
@@ -58,15 +56,13 @@ public class StageSceneDispatcher extends InvocationDispatcher<StageSceneMarshal
         switch (methodId) {
         case StageSceneMarshaller.ADD_OBJECT:
             ((StageSceneProvider)provider).addObject(
-                source,
-                (ObjectInfo)args[0], (InvocationService.ConfirmListener)args[1]
+                source, (ObjectInfo)args[0], (InvocationService.ConfirmListener)args[1]
             );
             return;
 
         case StageSceneMarshaller.REMOVE_OBJECTS:
             ((StageSceneProvider)provider).removeObjects(
-                source,
-                (ObjectInfo[])args[0], (InvocationService.ConfirmListener)args[1]
+                source, (ObjectInfo[])args[0], (InvocationService.ConfirmListener)args[1]
             );
             return;
 

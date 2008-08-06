@@ -23,6 +23,7 @@ package com.threerings.puzzle.server;
 
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationProvider;
+import com.threerings.puzzle.client.PuzzleGameService;
 import com.threerings.puzzle.data.Board;
 
 /**
@@ -33,10 +34,10 @@ public interface PuzzleGameProvider extends InvocationProvider
     /**
      * Handles a {@link PuzzleGameService#updateProgress} request.
      */
-    public void updateProgress (ClientObject caller, int arg1, int[] arg2);
+    void updateProgress (ClientObject caller, int arg1, int[] arg2);
 
     /**
      * Handles a {@link PuzzleGameService#updateProgressSync} request.
      */
-    public void updateProgressSync (ClientObject caller, int arg1, int[] arg2, Board[] arg3);
+    void updateProgressSync (ClientObject caller, int arg1, int[] arg2, Board[] arg3);
 }

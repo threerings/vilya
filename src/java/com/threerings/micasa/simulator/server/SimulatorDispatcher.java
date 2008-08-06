@@ -24,7 +24,6 @@ package com.threerings.micasa.simulator.server;
 import com.threerings.micasa.simulator.data.SimulatorMarshaller;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.presents.data.ClientObject;
-import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
 
@@ -48,7 +47,6 @@ public class SimulatorDispatcher extends InvocationDispatcher<SimulatorMarshalle
         return new SimulatorMarshaller();
     }
 
-    @SuppressWarnings("unchecked")
     @Override // documentation inherited
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
@@ -57,8 +55,7 @@ public class SimulatorDispatcher extends InvocationDispatcher<SimulatorMarshalle
         switch (methodId) {
         case SimulatorMarshaller.CREATE_GAME:
             ((SimulatorProvider)provider).createGame(
-                source,
-                (GameConfig)args[0], (String)args[1], ((Integer)args[2]).intValue()
+                source, (GameConfig)args[0], (String)args[1], ((Integer)args[2]).intValue()
             );
             return;
 

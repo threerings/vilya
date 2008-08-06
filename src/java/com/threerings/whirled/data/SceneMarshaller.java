@@ -25,7 +25,6 @@ import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.dobj.InvocationResponseEvent;
-import com.threerings.presents.net.Transport;
 import com.threerings.whirled.client.SceneService;
 
 /**
@@ -39,7 +38,7 @@ public class SceneMarshaller extends InvocationMarshaller
     implements SceneService
 {
     /**
-     * Marshalls results to implementations of {@link SceneMoveListener}.
+     * Marshalls results to implementations of {@link SceneService.SceneMoveListener}.
      */
     public static class SceneMoveMarshaller extends ListenerMarshaller
         implements SceneMoveListener
