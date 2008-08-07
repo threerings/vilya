@@ -123,7 +123,7 @@ public class DefaultFlexTableConfigurator extends TableConfigurator
     }
 
     // documentation inherited
-    override protected function flushTableConfig() :void
+    override protected function flushTableConfig () :void
     {
         super.flushTableConfig();
 
