@@ -302,11 +302,11 @@ public class TableManager
         table.addBannedUser(table.players[position]);
 
         // Remove the player from the table
-        table.clearPlayerPos(position);
         if (notePlayerRemoved(table.bodyOids[position]) == null) {
             log.warning("No body to table mapping to clear? [position=" + position +
                         ", table=" + table + "].");
         }
+        table.clearPlayerPos(position);
 
         _tlobj.updateTables(table);
     }
