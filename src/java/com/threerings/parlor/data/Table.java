@@ -229,7 +229,7 @@ public class Table
             return TABLE_POSITION_OCCUPIED;
         }
 
-        if (_bannedUsers != null && _bannedUsers.contains(player.username)) {
+        if (_bannedUsers != null && _bannedUsers.contains(player.getVisibleName())) {
             return BANNED_FROM_TABLE;
         }
 
@@ -253,13 +253,13 @@ public class Table
      * Indicate to this table that a user was booted and should
      * be prevented from rejoining.
      */
-    public void addBannedUser (Name username)
+    public void addBannedUser (int position)
     {
         if (_bannedUsers == null) {
             _bannedUsers = new HashSet<Name>();
         }
 
-        _bannedUsers.add(username);
+        _bannedUsers.add(players[position]);
     }
 
     /**

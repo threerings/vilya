@@ -299,7 +299,7 @@ public class TableManager
         }
 
         // Remember to keep him banned
-        table.addBannedUser(table.players[position]);
+        table.addBannedUser(position);
 
         // Remove the player from the table
         if (notePlayerRemoved(table.bodyOids[position]) == null) {
