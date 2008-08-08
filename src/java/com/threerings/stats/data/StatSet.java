@@ -28,7 +28,7 @@ import com.threerings.presents.dobj.DSet;
 /**
  * A distributed set containing {@link Stat} objects.
  */
-public final class StatSet extends DSet<Stat>
+public class StatSet extends DSet<Stat>
 {
     /** An interface to be implemented by an entity that wishes to be notified when the contents of
      * a stat set change. */
