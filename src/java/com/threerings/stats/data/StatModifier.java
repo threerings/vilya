@@ -22,9 +22,7 @@
 package com.threerings.stats.data;
 
 import java.io.IOException;
-import java.io.Serializable;
 
-import com.threerings.io.NotStreamable;
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 import com.threerings.io.Streamable;
@@ -34,7 +32,7 @@ import com.threerings.io.Streamable;
  * server, if needed, to update stats loaded at runtime.
  */
 public abstract class StatModifier<T extends Stat>
-    implements Serializable, Streamable
+    implements Streamable
 {
     /**
      * Creates a modifier that will operate on the supplied stat type. Note that this type may be
@@ -80,5 +78,5 @@ public abstract class StatModifier<T extends Stat>
     public abstract void modify (T stat);
 
     /** The type of the stat on which we're operating. */
-    @NotStreamable protected Stat.Type _type;
+    protected transient Stat.Type _type;
 }
