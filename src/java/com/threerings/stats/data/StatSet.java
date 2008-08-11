@@ -39,9 +39,21 @@ public class StatSet extends DSet<Stat>
     }
 
     /** Creates a stat set with the specified contents. */
+    public StatSet (Iterable<Stat> contents)
+    {
+        super(contents);
+    }
+
+    /** Creates a stat set with the specified contents. */
     public StatSet (Iterator<Stat> contents)
     {
         super(contents);
+    }
+
+    /** Creates a stat set with the specified contents. */
+    public StatSet (Stat stat)
+    {
+        add(stat);
     }
 
     /** Creates a blank stat set. */
