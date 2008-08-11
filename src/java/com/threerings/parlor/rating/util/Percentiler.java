@@ -194,7 +194,7 @@ public class Percentiler
     public float getRequiredScore (int percentile)
     {
         percentile = Math.max(0, Math.min(99, percentile)); // bound this!
-        return _reverse[percentile] * ((float)(_max - _min) / BUCKET_COUNT);
+        return _reverse[percentile] * ((float)(_max - _min) / BUCKET_COUNT) + _min;
     }
 
     /**
