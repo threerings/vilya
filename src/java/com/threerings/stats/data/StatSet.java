@@ -50,12 +50,6 @@ public class StatSet extends DSet<Stat>
         super(contents);
     }
 
-    /** Creates a stat set with the specified contents. */
-    public StatSet (Stat stat)
-    {
-        add(stat);
-    }
-
     /** Creates a blank stat set. */
     public StatSet ()
     {
