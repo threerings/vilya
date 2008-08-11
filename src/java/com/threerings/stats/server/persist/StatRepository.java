@@ -64,10 +64,10 @@ public class StatRepository extends DepotRepository
      * Applies a modification to a single stat. If the stat in question does not exist, a blank
      * instance will be created via {@link Stat.Type#newStat}.
      *
-     * @return the modified Stat, if any modification took place; or null if the modification had
+     * @return true if the stat was modified and written to the database, false if the modifier had
      * no effect on the stat's data.
      */
-    public <T extends Stat> T updateStat (int playerId, StatModifier<T> modifier)
+    public <T extends Stat> boolean updateStat (int playerId, StatModifier<T> modifier)
         throws PersistenceException
     {
         Where where = new Where(StatRecord.PLAYER_ID_C, playerId,
@@ -80,10 +80,10 @@ public class StatRepository extends DepotRepository
             @SuppressWarnings("unchecked") T tstat = (T)stat;
             modifier.modify(tstat);
             if (!tstat.isModified()) {
-                return null;
+                return false;
             }
-            if (updateStat(playerId, tstat, false)) {
-                return tstat;
+            if (updateStat(playerId, stat, false)) {
+                return true;
             }
         }
 
