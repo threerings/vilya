@@ -45,7 +45,8 @@ public class Percentiler
     /**
      * Creates a percentiler that expects values to fall within the given range.
      */
-    public Percentiler(int min, int max) {
+    public Percentiler (int min, int max)
+    {
         _min = min;
         _max = max;
         _fixedRange = true;
