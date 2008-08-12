@@ -43,6 +43,15 @@ public class Percentiler
     }
 
     /**
+     * Creates a percentiler that expects values to fall within the given range.
+     */
+    public Percentiler(int min, int max) {
+        _min = min;
+        _max = max;
+        _fixedRange = true;
+    }
+
+    /**
      * Creates a percentiler from its serialized representation.
      */
     public Percentiler (byte[] data)
@@ -88,13 +97,18 @@ public class Percentiler
     public void recordValue (float value, boolean logNewMax)
     {
         // if this is the first value ever recorded; note our min and max
-        if (_total == 0) {
+        if (_total == 0 && !_fixedRange) {
             _min = (int)Math.floor(value);
-            _max = Math.max((int)Math.ceil(value), _min+1);
+            _max = Math.max((int)Math.ceil(value), _min + 1);
         }
 
         // if this value is outside our bounds, we need to redistribute our buckets
         if (value < _min || value > _max) {
+            if (_fixedRange) {
+                log.warning("Recording value outside of initially fixed range", "min", _min,
+                    "max", _max, "value", value);
+                _fixedRange = false;
+            }
             // expand by 20% in the direction of either our new minimum or new maximum
             int newmin = (value < _min) ? (_max - (int)Math.ceil((_max - value) * 1.2f)) : _min;
             int newmax = (value > _max) ? (_min + (int)Math.ceil((value - _min) * 1.2f)) : _max;
@@ -383,6 +397,9 @@ public class Percentiler
         }
         return idx;
     }
+
+    /** If this Percentiler was created with a fixed range. */
+    protected boolean _fixedRange;
 
     /** The total number of data points seen by this percentiler. */
     protected long _total;
