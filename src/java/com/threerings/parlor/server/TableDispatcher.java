@@ -28,6 +28,7 @@ import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
+import com.threerings.util.Name;
 
 /**
  * Dispatches requests to the {@link TableProvider}.
@@ -57,7 +58,7 @@ public class TableDispatcher extends InvocationDispatcher<TableMarshaller>
         switch (methodId) {
         case TableMarshaller.BOOT_PLAYER:
             ((TableProvider)provider).bootPlayer(
-                source, ((Integer)args[0]).intValue(), ((Integer)args[1]).intValue(), (InvocationService.InvocationListener)args[2]
+                source, ((Integer)args[0]).intValue(), (Name)args[1], (InvocationService.InvocationListener)args[2]
             );
             return;
 

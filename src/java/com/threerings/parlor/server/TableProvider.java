@@ -28,6 +28,7 @@ import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.presents.server.InvocationProvider;
+import com.threerings.util.Name;
 
 /**
  * Defines the server-side of the {@link TableService}.
@@ -37,7 +38,7 @@ public interface TableProvider extends InvocationProvider
     /**
      * Handles a {@link TableService#bootPlayer} request.
      */
-    void bootPlayer (ClientObject caller, int arg1, int arg2, InvocationService.InvocationListener arg3)
+    void bootPlayer (ClientObject caller, int arg1, Name arg2, InvocationService.InvocationListener arg3)
         throws InvocationException;
 
     /**

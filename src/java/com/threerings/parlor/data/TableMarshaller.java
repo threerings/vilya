@@ -26,6 +26,7 @@ import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.InvocationMarshaller;
+import com.threerings.util.Name;
 
 /**
  * Provides the implementation of the {@link TableService} interface
@@ -41,12 +42,12 @@ public class TableMarshaller extends InvocationMarshaller
     public static final int BOOT_PLAYER = 1;
 
     // from interface TableService
-    public void bootPlayer (Client arg1, int arg2, int arg3, InvocationService.InvocationListener arg4)
+    public void bootPlayer (Client arg1, int arg2, Name arg3, InvocationService.InvocationListener arg4)
     {
         ListenerMarshaller listener4 = new ListenerMarshaller();
         listener4.listener = arg4;
         sendRequest(arg1, BOOT_PLAYER, new Object[] {
-            Integer.valueOf(arg2), Integer.valueOf(arg3), listener4
+            Integer.valueOf(arg2), arg3, listener4
         });
     }
 

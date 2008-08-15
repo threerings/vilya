@@ -23,6 +23,9 @@ package com.threerings.parlor.server;
 
 import com.samskivert.util.IntMap;
 import com.samskivert.util.IntMaps;
+import com.samskivert.util.ListUtil;
+import com.threerings.util.Name;
+
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.dobj.AttributeChangeListener;
 import com.threerings.presents.dobj.AttributeChangedEvent;
@@ -282,7 +285,7 @@ public class TableManager
     }
 
     // from interface TableProvider
-    public void bootPlayer (ClientObject caller, int tableId, int position,
+    public void bootPlayer (ClientObject caller, int tableId, Name target,
                             TableService.InvocationListener listener)
         throws InvocationException
     {
@@ -291,15 +294,21 @@ public class TableManager
 
         if (table == null) {
             throw new InvocationException(NO_SUCH_TABLE);
-        } else if (position == 0 || booter.getOid() != table.bodyOids[0]) {
-            // Must be head of the table, and can't self-boot
-            throw new InvocationException(INVALID_TABLE_POSITION);
         } else if ( ! _allowBooting) {
             throw new InvocationException(INTERNAL_ERROR);
         }
+        
+        int position = ListUtil.indexOf(table.players, target);
+        if (position < 0) {
+            throw new InvocationException(NOT_AT_TABLE);
+        } else if (booter.getOid() != table.bodyOids[0] ||
+                   booter.getOid() == table.bodyOids[position]) {
+            // Must be head of the table, and can't self-boot
+            throw new InvocationException(INVALID_TABLE_POSITION);
+        }
 
         // Remember to keep him banned
-        table.addBannedUser(position);
+        table.addBannedUser(target);
 
         // Remove the player from the table
         if (notePlayerRemoved(table.bodyOids[position]) == null) {

@@ -21,6 +21,8 @@
 
 package com.threerings.parlor.client;
 
+import com.threerings.util.Name;
+
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 
@@ -72,5 +74,5 @@ public interface TableService extends InvocationService
     /**
      * Requests that another user be booted from the specified table.
      */
-    public void bootPlayer (Client client, int tableId, int bodyId, InvocationListener listener);
+    public void bootPlayer (Client client, int tableId, Name target, InvocationListener listener);
 }

@@ -23,6 +23,7 @@ package com.threerings.parlor.client;
 
 import com.samskivert.util.ObjectUtil;
 import com.samskivert.util.ObserverList;
+import com.threerings.util.Name;
 
 import com.threerings.presents.client.BasicDirector;
 import com.threerings.presents.client.Client;
@@ -222,15 +223,15 @@ public class TableDirector extends BasicDirector
     /**
      * Sends a request to boot a player from a table.
      */
-    public void bootPlayer (int tableId, int bodyId)
+    public void bootPlayer (int tableId, Name target)
     {
         if (_tlobj == null) {
             log.warning("Requesting to boot a player from a table we're not currently in " +
-                        "[tableId=" + tableId + ", target=" + bodyId + "].");
+                        "[tableId=" + tableId + ", target=" + target + "].");
             return;
         }
 
-        _tlobj.getTableService().bootPlayer(_ctx.getClient(), tableId, bodyId, this);
+        _tlobj.getTableService().bootPlayer(_ctx.getClient(), tableId, target, this);
     }
 
     @Override

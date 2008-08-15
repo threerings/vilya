@@ -253,13 +253,13 @@ public class Table
      * Indicate to this table that a user was booted and should
      * be prevented from rejoining.
      */
-    public void addBannedUser (int position)
+    public void addBannedUser (Name player)
     {
         if (_bannedUsers == null) {
             _bannedUsers = new HashSet<Name>();
         }
 
-        _bannedUsers.add(players[position]);
+        _bannedUsers.add(player);
     }
 
     /**

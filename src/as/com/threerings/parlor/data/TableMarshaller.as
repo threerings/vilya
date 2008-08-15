@@ -30,6 +30,7 @@ import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.data.InvocationMarshaller_ListenerMarshaller;
 import com.threerings.presents.data.InvocationMarshaller_ResultMarshaller;
 import com.threerings.util.Integer;
+import com.threerings.util.Name;
 
 /**
  * Provides the implementation of the <code>TableService</code> interface
@@ -45,12 +46,12 @@ public class TableMarshaller extends InvocationMarshaller
     public static const BOOT_PLAYER :int = 1;
 
     // from interface TableService
-    public function bootPlayer (arg1 :Client, arg2 :int, arg3 :int, arg4 :InvocationService_InvocationListener) :void
+    public function bootPlayer (arg1 :Client, arg2 :int, arg3 :Name, arg4 :InvocationService_InvocationListener) :void
     {
         var listener4 :InvocationMarshaller_ListenerMarshaller = new InvocationMarshaller_ListenerMarshaller();
         listener4.listener = arg4;
         sendRequest(arg1, BOOT_PLAYER, [
-            Integer.valueOf(arg2), Integer.valueOf(arg3), listener4
+            Integer.valueOf(arg2), arg3, listener4
         ]);
     }
 

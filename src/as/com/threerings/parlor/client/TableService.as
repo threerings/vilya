@@ -27,6 +27,7 @@ import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.client.InvocationService_InvocationListener;
 import com.threerings.presents.client.InvocationService_ResultListener;
+import com.threerings.util.Name;
 
 /**
  * An ActionScript version of the Java TableService interface.
@@ -34,7 +35,7 @@ import com.threerings.presents.client.InvocationService_ResultListener;
 public interface TableService extends InvocationService
 {
     // from Java interface TableService
-    function bootPlayer (arg1 :Client, arg2 :int, arg3 :int, arg4 :InvocationService_InvocationListener) :void;
+    function bootPlayer (arg1 :Client, arg2 :int, arg3 :Name, arg4 :InvocationService_InvocationListener) :void;
 
     // from Java interface TableService
     function createTable (arg1 :Client, arg2 :TableConfig, arg3 :GameConfig, arg4 :InvocationService_ResultListener) :void;

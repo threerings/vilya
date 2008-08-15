@@ -23,6 +23,7 @@ package com.threerings.parlor.client {
 
 import com.threerings.util.ArrayUtil;
 import com.threerings.util.Log;
+import com.threerings.util.Name;
 import com.threerings.util.ObserverList;
 import com.threerings.util.Util;
 
@@ -246,15 +247,15 @@ public class TableDirector extends BasicDirector
     /**
      * Sends a request to boot a player from a table.
      */
-    public function bootPlayer (tableId :int, bodyId :int) :void
+    public function bootPlayer (tableId :int, target :Name) :void
     {
         if (_tlobj == null) {
             log.warning("Requesting to boot a player from a table we're not currently in " +
-                        "[tableId=" + tableId + ", target=" + bodyId + "].");
+                        "[tableId=" + tableId + ", target=" + target + "].");
             return;
         }
 
-        _tlobj.getTableService().bootPlayer(_ctx.getClient(), tableId, bodyId, this);
+        _tlobj.getTableService().bootPlayer(_ctx.getClient(), tableId, target, this);
     }
 
     // documentation inherited
