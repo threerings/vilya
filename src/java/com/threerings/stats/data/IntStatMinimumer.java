@@ -22,7 +22,8 @@
 package com.threerings.stats.data;
 
 /**
- * Ensures that a particular stat has been set to a minimum value.
+ * Ensures that a particular stat has been set to a minimum value.  If the value of the stat is
+ * already greater than or equal to the requested minimum, the stat is not modified.
  */
 public class IntStatMinimumer extends StatModifier<IntStat>
 {
@@ -32,7 +33,7 @@ public class IntStatMinimumer extends StatModifier<IntStat>
         _minimum = minimum;
     }
 
-    /** Constructs an empty IntStatIncrementer (for Streaming purposes). */
+    /** Constructs an empty IntStatMinimumer (for Streaming purposes). */
     public IntStatMinimumer ()
     {
     }
