@@ -77,13 +77,13 @@ public class StatSet extends DSet<Stat>
         if (stat != null) {
             wasModified = stat.isModified();
             modifier.modify(stat);
-            updateStat(stat);
+            updateStat(stat, true);
 
         } else {
             @SuppressWarnings("unchecked") T nstat = (T)modifier.getType().newStat();
             stat = nstat;
             modifier.modify(stat);
-            addStat(stat);
+            addStat(stat, true);
         }
 
         stat.setModified(wasModified);
@@ -102,9 +102,9 @@ public class StatSet extends DSet<Stat>
         if (stat == null) {
             stat = (IntStat)type.newStat();
             stat.setValue(value);
-            addStat(stat);
+            addStat(stat, false);
         } else if (stat.setValue(value)) {
-            updateStat(stat);
+            updateStat(stat, false);
         }
     }
 
@@ -134,9 +134,9 @@ public class StatSet extends DSet<Stat>
         if (stat == null) {
             stat = (IntStat)type.newStat();
             stat.increment(delta);
-            addStat(stat);
+            addStat(stat, false);
         } else if (stat.increment(delta)) {
-            updateStat(stat);
+            updateStat(stat, false);
         }
     }
 
@@ -152,10 +152,10 @@ public class StatSet extends DSet<Stat>
         if (stat == null) {
             stat = (IntArrayStat)type.newStat();
             stat.appendValue(value);
-            addStat(stat);
+            addStat(stat, false);
         } else {
             stat.appendValue(value);
-            updateStat(stat);
+            updateStat(stat, false);
         }
     }
 
@@ -172,9 +172,9 @@ public class StatSet extends DSet<Stat>
             @SuppressWarnings("unchecked") SetStat<T> nstat = (SetStat<T>)type.newStat();
             stat = nstat;
             stat.add(value);
-            addStat(stat);
+            addStat(stat, false);
         } else if (stat.add(value)) {
-            updateStat(stat);
+            updateStat(stat, false);
         }
     }
 
@@ -190,9 +190,9 @@ public class StatSet extends DSet<Stat>
         if (stat == null) {
             stat = (StringMapStat)type.newStat();
             stat.increment(value, amount);
-            addStat(stat);
+            addStat(stat, false);
         } else if (stat.increment(value, amount)) {
-            updateStat(stat);
+            updateStat(stat, false);
         }
     }
 
@@ -274,7 +274,14 @@ public class StatSet extends DSet<Stat>
         add(stat);
     }
 
-    protected void addStat (Stat stat)
+    /**
+     * Adds the specified Stat to the set.
+     *
+     * @param syncingWithRepo should be set to true only when called from {@link #syncStat},
+     * which itself is called only when a stat modification has been made to the database,
+     * and the in-memory StatSet needs to be updated as a result.
+     */
+    protected void addStat (Stat stat, boolean syncingWithRepo)
     {
         if (_container != null) {
             _container.addToStats(stat);
@@ -283,7 +290,14 @@ public class StatSet extends DSet<Stat>
         }
     }
 
-    protected void updateStat (Stat stat)
+    /**
+     * Updates the specified Stat in the set.
+     *
+     * @param syncingWithRepo should be set to true only when called from {@link #syncStat},
+     * which itself is called only when a stat modification has been made to the database,
+     * and the in-memory StatSet needs to be updated as a result.
+     */
+    protected void updateStat (Stat stat, boolean syncingWithRepo)
     {
         if (_container != null) {
             _container.updateStats(stat);
