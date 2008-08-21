@@ -116,14 +116,16 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
 
     /**
      * Called to end the turn. Whatever indication a game manager has that the turn has ended
-     * (probably the submission of a valid move of some sort by the turn holding player), it should
-     * call this function to cause this turn to end and the next to begin.
+     * (probably the submission of a valid move of some sort by the turn holding player), it
+     * should call this function to cause this turn to end and the next to begin.
      *
-     * <p> If the game is no longer in play (see {@link TurnGame#isInPlay}) after having called
+     * <p>
+     * If the game is no longer in play (see {@link TurnGameObject#isInPlay}) after having called
      * {@link TurnGameManager#turnDidEnd} and {@link #setNextTurnHolder}, then the next turn will
      * not automatically be started.
      *
-     * <p> If the game is in play, but the next turn should not be started immediately, the game
+     * <p>
+     * If the game is in play, but the next turn should not be started immediately, the game
      * manager should have {@link #setNextTurnHolder} set the {@link #_turnIdx} field to
      * <code>-1</code> which will cause us to not start the next turn. To start things back up
      * again it would set {@link #_turnIdx} to the next turn holder and call {@link #startTurn}

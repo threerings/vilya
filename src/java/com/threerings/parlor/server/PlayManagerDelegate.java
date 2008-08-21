@@ -61,8 +61,6 @@ public class PlayManagerDelegate extends PlaceManagerDelegate
 
     /**
      * Checks that the caller in question is a player if the game is not a party game.
-     *
-     * @return a casted {@link PlayerObject} reference if the method returns at all.
      */
     protected void verifyIsPlayer (ClientObject caller)
         throws InvocationException

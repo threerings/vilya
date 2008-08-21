@@ -33,6 +33,7 @@ import com.threerings.presents.server.InvocationManager;
 
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.server.LocationManager;
+import com.threerings.crowd.server.LocationProvider;
 import com.threerings.whirled.server.SceneRegistry;
 
 import com.threerings.whirled.zone.client.ZoneService;
@@ -88,7 +89,7 @@ public class ZoneRegistry
     /**
      * Ejects the specified body from their current scene and sends them a request to move to the
      * specified new zone and scene. This is the zone-equivalent to {@link
-     * LocationProvider#moveBody}.
+     * LocationProvider#moveTo}.
      *
      * @return null if the user was forcibly moved, or a string indicating the reason for denial of
      * departure of their current zone (from {@link ZoneManager#ratifyBodyExit}).
@@ -114,7 +115,7 @@ public class ZoneRegistry
 
     /**
      * Ejects the specified body from their current scene and zone. This is the zone equivalent to
-     * {@link LocationProvider#leaveOccupiedPlace}.
+     * {@link LocationProvider#leavePlace}.
      *
      * @return null if the user was forcibly moved, or a string indicating the reason for denial of
      * departure of their current zone (from {@link ZoneManager#ratifyBodyExit}).

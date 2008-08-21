@@ -39,6 +39,7 @@ import com.threerings.presents.server.InvocationManager;
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.server.LocationManager;
+import com.threerings.crowd.server.LocationProvider;
 import com.threerings.crowd.server.PlaceManager;
 import com.threerings.crowd.server.PlaceRegistry;
 
@@ -138,7 +139,7 @@ public class SceneRegistry
         SceneManager scmgr = getSceneManager(sceneId);
         return (scmgr == null) ? ("null:" + sceneId) : scmgr.where();
     }
-    
+
     /**
      * Requests that the specified scene be resolved, which means loaded into the server and
      * initialized if the scene is not currently active. The supplied callback instance will be
@@ -194,7 +195,7 @@ public class SceneRegistry
 
     /**
      * Ejects the specified body from their current scene and sends them a request to move to the
-     * specified new scene. This is the scene-equivalent to {@link LocationProvider#moveBody}.
+     * specified new scene. This is the scene-equivalent to {@link LocationProvider#moveTo}.
      */
     public void moveBody (BodyObject source, int sceneId)
     {
@@ -207,14 +208,14 @@ public class SceneRegistry
 
     /**
      * Ejects the specified body from their current scene and zone. This is the zone equivalent to
-     * {@link LocationProvider#leaveOccupiedPlace}.
+     * {@link LocationProvider#leavePlace}.
      */
     public void leaveOccupiedScene (BodyObject source)
     {
         // remove them from their occupied place (clears out scene info as well)
         _locman.leaveOccupiedPlace(source);
     }
-    
+
     /**
      * Adds a callback for when the scene is resolved. Returns true if this is the first such
      * thing (and thusly, the caller should actually fire off scene resolution) or false if we've
@@ -224,12 +225,12 @@ public class SceneRegistry
     {
         List<ResolutionListener> penders = _penders.get(sceneId);
         boolean newList = false;
-        
+
         if (penders == null) {
             _penders.put(sceneId, penders = Lists.newArrayList());
             newList = true;
         }
-        
+
         penders.add(rl);
         return newList;
     }
