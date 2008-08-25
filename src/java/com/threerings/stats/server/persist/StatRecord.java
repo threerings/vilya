@@ -109,6 +109,12 @@ public class StatRecord extends PersistentRecord
         this.modCount = modCount;
     }
 
+    @Override
+    public String toString ()
+    {
+        return "playerId=" + playerId + " statCode=" + statCode + " modCount=" + modCount;
+    }
+
     // AUTO-GENERATED: METHODS START
     /**
      * Create and return a primary {@link Key} to identify a {@link #StatRecord}

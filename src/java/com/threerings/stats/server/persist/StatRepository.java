@@ -292,6 +292,7 @@ public class StatRepository extends DepotRepository
             if (numRows == 0 && forceWrite) {
                 log.warning("Possible collision while storing StatRecord",
                             "playerId", playerId, "stat", stat.getType().name(),
+                            "modCount", nextModCount,
                             "overwriting", load(StatRecord.class, key));
                 store(new StatRecord(playerId, stat.getCode(), data, nextModCount));
                 numRows = 1;
