@@ -28,8 +28,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import com.google.inject.Singleton;
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import com.samskivert.io.PersistenceException;
 import com.samskivert.util.IntSet;
@@ -110,31 +111,35 @@ public class RatingRepository extends DepotRepository
             clauses.add(new Limit(0, count));
         }
         clauses.add(OrderBy.descending(RatingRecord.LAST_UPDATED_C));
-        return findAll(RatingRecord.class, clauses.toArray(new QueryClause[clauses.size()]));
+        return findAll(RatingRecord.class, clauses);
     }
 
     /**
      * Returns the top-ratings for the specified game. Players with equal rating will be sorted
      * most recently played first.
      *
+     * @param since an absolute number of milliseconds (ie. 10*24*60*60*1000L). Players that have
+     * not updated their rating within this many milliseconds in the past will be omitted from the
+     * results. Supply zero to omit this filter.
      * @param playerIds an optional list of player ids to which to limit the top-rankings search.
      */
-    public List<RatingRecord> getTopRatings (int gameId, int limit, IntSet playerIds)
+    public List<RatingRecord> getTopRatings (int gameId, int limit, long since, IntSet playerIds)
         throws PersistenceException
     {
-        ArrayList<QueryClause> clauses = new ArrayList<QueryClause>();
-        if (playerIds == null) {
-            clauses.add(new Where(RatingRecord.GAME_ID_C, gameId));
-        } else {
-            Integer[] pids = playerIds.toArray(new Integer[playerIds.size()]);
-            clauses.add(new Where(new And(new Equals(RatingRecord.GAME_ID_C, gameId),
-                                          new In(RatingRecord.PLAYER_ID_C, pids))));
+        List<SQLExpression> where = Lists.newArrayList();
+        where.add(new Equals(RatingRecord.GAME_ID_C, gameId));
+        if (since > 0L) {
+            where.add(new GreaterThan(RatingRecord.LAST_UPDATED_C,
+                                      new Timestamp(System.currentTimeMillis() - since)));
         }
-        clauses.add(new Limit(0, limit));
-        clauses.add(new OrderBy(
-                        new SQLExpression[] { RatingRecord.RATING_C, RatingRecord.LAST_UPDATED_C },
-                        new OrderBy.Order[] { OrderBy.Order.DESC, OrderBy.Order.DESC }));
-        return findAll(RatingRecord.class, clauses.toArray(new QueryClause[clauses.size()]));
+        if (playerIds != null) {
+            where.add(new In(RatingRecord.PLAYER_ID_C, playerIds));
+        }
+
+        OrderBy ob = new OrderBy(
+            new SQLExpression[] { RatingRecord.RATING_C, RatingRecord.LAST_UPDATED_C },
+            new OrderBy.Order[] { OrderBy.Order.DESC, OrderBy.Order.DESC });
+        return findAll(RatingRecord.class, new Where(new And(where)), new Limit(0, limit), ob);
     }
 
     /**
