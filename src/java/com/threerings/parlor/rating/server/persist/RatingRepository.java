@@ -32,7 +32,6 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import com.samskivert.io.PersistenceException;
 import com.samskivert.util.IntSet;
 
 import com.samskivert.jdbc.depot.DepotRepository;
@@ -67,7 +66,6 @@ public class RatingRepository extends DepotRepository
      * {@link RatingRecord} object, or null if the player has no previous rating for the game.
      */
     public RatingRecord getRating (int gameId, int playerId)
-        throws PersistenceException
     {
         return load(RatingRecord.class, RatingRecord.getKey(gameId, playerId));
     }
@@ -78,7 +76,6 @@ public class RatingRepository extends DepotRepository
      * and no greater than the number of given players.
      */
     public List<RatingRecord> getRatings (int gameId, Integer... players)
-        throws PersistenceException
     {
         if (players.length == 0) {
             return Collections.emptyList();
@@ -97,7 +94,6 @@ public class RatingRepository extends DepotRepository
      * @param count the maximum number of ratings to return or -1 for all ratings.
      */
     public List<RatingRecord> getRatings (int playerId, long since, int count)
-        throws PersistenceException
     {
         ArrayList<QueryClause> clauses = new ArrayList<QueryClause>();
         if (since > 0L) {
@@ -124,7 +120,6 @@ public class RatingRepository extends DepotRepository
      * @param playerIds an optional list of player ids to which to limit the top-rankings search.
      */
     public List<RatingRecord> getTopRatings (int gameId, int limit, long since, IntSet playerIds)
-        throws PersistenceException
     {
         List<SQLExpression> where = Lists.newArrayList();
         where.add(new Equals(RatingRecord.GAME_ID_C, gameId));
@@ -147,7 +142,6 @@ public class RatingRepository extends DepotRepository
      * or create a row.
      */
     public void setRating (int gameId, int playerId, int rating, int experience)
-        throws PersistenceException
     {
         store(new RatingRecord(gameId, playerId, rating, experience));
     }
@@ -156,7 +150,6 @@ public class RatingRepository extends DepotRepository
      * Deletes the specified rating record.
      */
     public void deleteRating (int gameId, int playerId)
-        throws PersistenceException
     {
         delete(RatingRecord.class, RatingRecord.getKey(gameId, playerId));
     }
@@ -166,7 +159,6 @@ public class RatingRepository extends DepotRepository
      * returned, rather a blank percentiler will be created and returned.
      */
     public Percentiler loadPercentile (int gameId)
-        throws PersistenceException
     {
         PercentileRecord record = load(PercentileRecord.class, PercentileRecord.getKey(gameId));
         return (record == null) ? new Percentiler() : new Percentiler(record.data);
@@ -176,7 +168,6 @@ public class RatingRepository extends DepotRepository
      * Writes the supplied percentiler's data out to the database.
      */
     public void updatePercentile (int gameId, Percentiler tiler)
-        throws PersistenceException
     {
         PercentileRecord record = new PercentileRecord();
         record.gameId = gameId;

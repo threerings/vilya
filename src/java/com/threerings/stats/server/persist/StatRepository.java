@@ -16,15 +16,15 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import com.samskivert.io.ByteArrayOutInputStream;
-import com.samskivert.io.PersistenceException;
 import com.samskivert.util.IntMap;
 import com.samskivert.util.IntMaps;
 
-import com.samskivert.jdbc.DuplicateKeyException;
 import com.samskivert.jdbc.depot.CacheInvalidator;
+import com.samskivert.jdbc.depot.DatabaseException;
 import com.samskivert.jdbc.depot.DepotRepository;
-import com.samskivert.jdbc.depot.PersistenceContext.CacheEvictionFilter;
+import com.samskivert.jdbc.depot.DuplicateKeyException;
 import com.samskivert.jdbc.depot.Key;
+import com.samskivert.jdbc.depot.PersistenceContext.CacheEvictionFilter;
 import com.samskivert.jdbc.depot.PersistenceContext;
 import com.samskivert.jdbc.depot.PersistentRecord;
 import com.samskivert.jdbc.depot.clause.FieldDefinition;
@@ -52,7 +52,6 @@ public class StatRepository extends DepotRepository
      * Constructs a new statistics repository with the specified persistence context.
      */
     @Inject public StatRepository (PersistenceContext context)
-        throws PersistenceException
     {
         super(context);
 
@@ -68,7 +67,6 @@ public class StatRepository extends DepotRepository
      * no effect on the stat's data.
      */
     public <T extends Stat> T updateStat (int playerId, StatModifier<T> modifier)
-        throws PersistenceException
     {
         Where where = new Where(StatRecord.PLAYER_ID_C, playerId,
                                 StatRecord.STAT_CODE_C, modifier.getType().code());
@@ -87,7 +85,7 @@ public class StatRepository extends DepotRepository
             }
         }
 
-        throw new PersistenceException(
+        throw new DatabaseException(
             "Unable to update stat after " + MAX_UPDATE_TRIES + " attempts " +
             "[stat=" + modifier.getType() + ", pid=" + playerId + "]");
     }
@@ -97,7 +95,6 @@ public class StatRepository extends DepotRepository
      *
      */
     public ArrayList<Stat> loadStats (int playerId)
-        throws PersistenceException
     {
         ArrayList<Stat> stats = new ArrayList<Stat>();
         Where where = new Where(StatRecord.PLAYER_ID_C, playerId);
@@ -114,7 +111,6 @@ public class StatRepository extends DepotRepository
      * Deletes all stats associated with the specified player.
      */
     public void deleteStats (final int playerId)
-        throws PersistenceException
     {
         CacheInvalidator invalidator = new CacheInvalidator() {
             public void invalidate (PersistenceContext ctx) {
@@ -159,7 +155,7 @@ public class StatRepository extends DepotRepository
         if (code == null) {
             try {
                 code = assignStringCode(type, value);
-            } catch (PersistenceException pe) {
+            } catch (DatabaseException pe) {
                 log.warning("Failed to assign code [type=" + type +
                         ", value=" + value + "].", pe);
                 // at this point the database is probably totally hosed, so we can just punt here,
@@ -181,7 +177,7 @@ public class StatRepository extends DepotRepository
             // this mapping table from the database; then try again
             try {
                 loadStringCodes(type);
-            } catch (PersistenceException pe) {
+            } catch (DatabaseException pe) {
                 log.warning("Failed to reload string codes " +
                     "[type=" + type + ", code=" + code + "].", pe);
             }
@@ -252,13 +248,12 @@ public class StatRepository extends DepotRepository
      * simultaneously modified by another database client.
      */
     protected boolean updateStat (int playerId, final Stat stat, boolean forceWrite)
-        throws PersistenceException
     {
         ByteArrayOutInputStream out = new ByteArrayOutInputStream();
         try {
             stat.persistTo(new ObjectOutputStream(out), this);
         } catch (IOException ioe) {
-            throw new PersistenceException("Error serializing stat " + stat, ioe);
+            throw new DatabaseException("Error serializing stat " + stat, ioe);
         }
 
         byte[] data = out.toByteArray();
@@ -304,7 +299,6 @@ public class StatRepository extends DepotRepository
 
     /** Helper function for {@link #getStringCode}. */
     protected Integer assignStringCode (final Stat.Type type, final String value)
-        throws PersistenceException
     {
         for (int ii = 0; ii < 10; ii++) {
             MaxStatCodeRecord maxRecord = load(
@@ -325,7 +319,7 @@ public class StatRepository extends DepotRepository
                 insert(new StringCodeRecord(type.code(), value, code));
                 return code;
 
-            } catch (PersistenceException pe) {
+            } catch (DatabaseException pe) {
                 // if this is not a duplicate row exception, something is booched and we
                 // just fail
 
@@ -349,13 +343,12 @@ public class StatRepository extends DepotRepository
                     ", value=" + value + "].");
             }
         }
-        throw new PersistenceException(
+        throw new DatabaseException(
             "Unable to assign code after 10 attempts [type=" + type + ", value=" + value + "]");
     }
 
     /** Helper function used at repository startup. */
     protected void loadStringCodes (Stat.Type type)
-        throws PersistenceException
     {
         QueryClause[] clauses;
         if (type != null) {
