@@ -21,15 +21,14 @@
 
 package com.threerings.parlor.turn.client;
 
+import com.threerings.crowd.client.PlaceController;
 import com.threerings.util.Name;
-
-import com.threerings.parlor.game.client.GameController;
 
 /**
  * Games that wish to make use of the turn game services should have their
  * controller implement this interface and create an instance of {@link
  * TurnGameControllerDelegate} which should be passed to {@link
- * GameController#addDelegate}.
+ * PlaceController#addDelegate}.
  */
 public interface TurnGameController
 {

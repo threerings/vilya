@@ -188,8 +188,7 @@ public abstract class PuzzleController extends GameController
 
         // and check if we should be suspending the action during this pause
         if (supportsActionPause()) {
-            // clear the action if we're pausing, resume it if we're
-            // unpausing
+            // clear the action if we're pausing, resume it if we're unpausing
             if (chatting) {
                 clearAction();
             } else {
@@ -228,16 +227,14 @@ public abstract class PuzzleController extends GameController
             @Override
             public void apply (PlaceControllerDelegate delegate) {
                 canChatNow[0] =
-                    ((PuzzleControllerDelegate)delegate).canStartChatting() &&
-                    canChatNow[0];
+                    ((PuzzleControllerDelegate)delegate).canStartChatting() && canChatNow[0];
             }
         });
         return canChatNow[0];
     }
 
     /**
-     * Returns true if the puzzle has been defocused because the player
-     * is doing some chatting.
+     * Returns true if the puzzle has been defocused because the player is doing some chatting.
      */
     public boolean isChatting ()
     {
@@ -274,7 +271,7 @@ public abstract class PuzzleController extends GameController
     {
         super.mayLeavePlace(plobj);
 
-        // flush any pending progress events 
+        // flush any pending progress events
         sendProgressUpdate();
     }
 
@@ -309,7 +306,7 @@ public abstract class PuzzleController extends GameController
 
     /**
      * Indicates whether the action should start immediately as a result
-     * of {@link #gameDidStart} being called. If a puzzle wishes to do
+     * of {@link GameController#gameDidStart} being called. If a puzzle wishes to do
      * some beginning of the game fun stuff, like display a tutorial
      * screen, they can veto the action start and then start it themselves
      * later.

@@ -35,24 +35,24 @@ import com.threerings.whirled.zone.data.ZoneSummary;
  */
 public interface ZoneService extends InvocationService
 {
-    /** Used to deliver responses to {@link #moveTo} requests. */
+    /** Used to deliver responses to {@link ZoneService#moveTo} requests. */
     public static interface ZoneMoveListener extends InvocationListener
     {
         /**
-         * Called in response to a successful {@link #moveTo} request.
+         * Called in response to a successful {@link ZoneService#moveTo} request.
          */
         public void moveSucceeded (int placeId, PlaceConfig config, ZoneSummary summary);
 
         /**
-         * Called in response to a successful {@link #moveTo} request when our cached scene was out
-         * of date and the server determined that we needed some updates.
+         * Called in response to a successful {@link ZoneService#moveTo} request when our cached
+         * scene was out of date and the server determined that we needed some updates.
          */
        public void moveSucceededWithUpdates (
            int placeId, PlaceConfig config, ZoneSummary summary, SceneUpdate[] updates);
 
         /**
-         * Called in response to a successful {@link #moveTo} request when our cached scene was out
-         * of date and the server determined that we needed an updated copy.
+         * Called in response to a successful {@link ZoneService#moveTo} request when our cached
+         * scene was out of date and the server determined that we needed an updated copy.
          */
         public void moveSucceededWithScene (
             int placeId, PlaceConfig config, ZoneSummary summary, SceneModel model);

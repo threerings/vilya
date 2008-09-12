@@ -38,7 +38,7 @@ import com.threerings.parlor.game.data.GameConfig;
  *
  * <p> Clients that use the game configurator will want to instantiate one
  * based on the class returned from the {@link GameConfig} and then
- * initialize it with a call to {@link #init}.
+ * initialize it with a call to {@link GameConfigurator#init}.
  */
 public abstract class SwingGameConfigurator extends GameConfigurator
 {

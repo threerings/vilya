@@ -21,6 +21,8 @@
 
 package com.threerings.stage.tools.editor;
 
+import static com.threerings.stage.Log.log;
+
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -31,13 +33,11 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.Stroke;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -49,42 +49,34 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.google.common.collect.Lists;
-
 import com.samskivert.swing.Controller;
 import com.samskivert.swing.TGraphics2D;
 import com.samskivert.swing.util.SwingUtil;
 import com.samskivert.util.RandomUtil;
-import com.threerings.util.DirectionCodes;
-
 import com.threerings.media.tile.ObjectTile;
 import com.threerings.media.tile.Tile;
 import com.threerings.media.tile.TileUtil;
-
-import com.threerings.whirled.spot.tools.EditablePortal;
-import com.threerings.whirled.spot.data.Portal;
-
+import com.threerings.miso.client.MisoScenePanel;
 import com.threerings.miso.client.ObjectActionHandler;
 import com.threerings.miso.client.SceneBlock;
 import com.threerings.miso.client.SceneObject;
 import com.threerings.miso.data.MisoSceneModel;
 import com.threerings.miso.data.ObjectInfo;
 import com.threerings.miso.util.MisoUtil;
-
 import com.threerings.stage.client.StageScenePanel;
 import com.threerings.stage.data.StageLocation;
 import com.threerings.stage.data.StageMisoSceneModel;
-
 import com.threerings.stage.tools.editor.util.EditorContext;
 import com.threerings.stage.tools.editor.util.EditorDialogUtil;
 import com.threerings.stage.tools.editor.util.ExtrasPainter;
-
-import static com.threerings.stage.Log.log;
+import com.threerings.util.DirectionCodes;
+import com.threerings.whirled.spot.data.Portal;
+import com.threerings.whirled.spot.tools.EditablePortal;
 
 /**
- * Displays the scene view and handles UI events on the scene. Various
- * actions may be performed on the scene depending on the selected action
- * mode, including placing and deleting tiles or locations and creating
- * portals.
+ * Displays the scene view and handles UI events on the scene. Various actions may be performed on
+ * the scene depending on the selected action mode, including placing and deleting tiles or
+ * locations and creating portals.
  */
 public class EditorScenePanel extends StageScenePanel
     implements EditorModelListener, KeyListener, ChangeListener
@@ -94,8 +86,7 @@ public class EditorScenePanel extends StageScenePanel
      */
     public EditorScenePanel (EditorContext ctx, JFrame frame, EditorModel model)
     {
-        super(ctx, new Controller() {
-        });
+        super(ctx, new Controller() { });
 
         // keep these around for later
         _ctx = ctx;
@@ -218,8 +209,7 @@ public class EditorScenePanel extends StageScenePanel
     }
 
     /**
-     * Handle placing the currently selected tile at the given screen
-     * coordinates in the scene.
+     * Handle placing the currently selected tile at the given screen coordinates in the scene.
      */
     protected void placeTile (int x, int y)
     {
@@ -598,8 +588,7 @@ public class EditorScenePanel extends StageScenePanel
     }
 
     /**
-     * Set a region of tiles to a random selection from the supplied
-     * tileset.
+     * Set a region of tiles to a random selection from the supplied tileset.
      */
     public void setBaseTiles (Rectangle r, int setId, int tileCount)
     {
@@ -688,7 +677,7 @@ public class EditorScenePanel extends StageScenePanel
 
     /**
      * Sets the tile that is currently being placed. It will not be
-     * rendered until after a call to {@link #updateTileCoords} on the
+     * rendered until after a call to {@link MisoScenePanel#updateTileCoords} on the
      * placing tile (which happens automatically when the mouse moves).
      */
     public void setPlacingTile (Tile tile)
@@ -698,8 +687,7 @@ public class EditorScenePanel extends StageScenePanel
         // if this is an object tile, create a temporary scene object we
         // can use to perform calculations with the object while placing
         if (_ptile instanceof ObjectTile) {
-            _pscobj = new SceneObject(this, new ObjectInfo(0, _ppos.x, _ppos.y),
-                                      (ObjectTile)tile);
+            _pscobj = new SceneObject(this, new ObjectInfo(0, _ppos.x, _ppos.y), (ObjectTile)tile);
         } else {
             _pscobj = null;
         }

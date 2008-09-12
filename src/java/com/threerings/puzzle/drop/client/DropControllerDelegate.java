@@ -21,28 +21,25 @@
 
 package com.threerings.puzzle.drop.client;
 
+import static com.threerings.puzzle.Log.log;
+
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 
 import com.samskivert.util.IntListUtil;
-
+import com.threerings.crowd.client.PlaceController;
+import com.threerings.crowd.data.PlaceConfig;
+import com.threerings.crowd.util.CrowdContext;
 import com.threerings.media.FrameParticipant;
 import com.threerings.media.animation.Animation;
 import com.threerings.media.animation.AnimationAdapter;
-
-import com.threerings.crowd.data.PlaceConfig;
-import com.threerings.crowd.util.CrowdContext;
-
-import com.threerings.puzzle.util.PuzzleContext;
-
 import com.threerings.puzzle.client.PuzzleController;
 import com.threerings.puzzle.client.PuzzleControllerDelegate;
 import com.threerings.puzzle.client.PuzzlePanel;
 import com.threerings.puzzle.data.Board;
 import com.threerings.puzzle.data.BoardSummary;
-
 import com.threerings.puzzle.drop.data.DropBoard;
 import com.threerings.puzzle.drop.data.DropCodes;
 import com.threerings.puzzle.drop.data.DropConfig;
@@ -50,30 +47,25 @@ import com.threerings.puzzle.drop.data.DropLogic;
 import com.threerings.puzzle.drop.data.DropPieceCodes;
 import com.threerings.puzzle.drop.util.PieceDropLogic;
 import com.threerings.puzzle.drop.util.PieceDropper;
-
-import static com.threerings.puzzle.Log.log;
+import com.threerings.puzzle.util.PuzzleContext;
 
 /**
  * Games that wish to make use of the drop puzzle services will need to
  * create an extension of this delegate class, customizing it for their
- * particular game and then adding it via {@link
- * PuzzleController#addDelegate}.
+ * particular game and then adding it via {@link PlaceController#addDelegate}.
  *
  * <p> It handles logical actions for a puzzle game that generally
  * consists of a two-dimensional board containing pieces, with new pieces
  * either falling into the board as a "drop block", or rising into the
  * bottom of the board in new piece rows.
  *
- * <p> Derived classes must implement {@link #getPieceVelocity} and {@link
- * #evolveBoard}.
+ * <p> Derived classes must implement {@link #getPieceVelocity} and {@link #evolveBoard}.
  *
- * <p> Block-dropping puzzles will likely want to override {@link
- * #createNextBlock}, {@link #blockDidLand}, and {@link
- * #getPieceDropLogic}.
+ * <p> Block-dropping puzzles will likely want to override {@link #createNextBlock},
+ * {@link #blockDidLand}, and {@link #getPieceDropLogic}.
  *
- * <p> Board-rising puzzles will likely want to override {@link
- * #getRiseVelocity}, {@link #getRiseDistance}, {@link
- * #getPieceDropLogic}, and {@link #boardDidRise}.
+ * <p> Board-rising puzzles will likely want to override {@link #getRiseVelocity},
+ * {@link #getRiseDistance}, {@link #getPieceDropLogic}, and {@link #boardDidRise}.
  */
 public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     implements DropCodes, DropPieceCodes, FrameParticipant
@@ -877,7 +869,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     }
 
     /**
-     * Returns the piece dropper used to drop any pieces that need dropping in the board.  
+     * Returns the piece dropper used to drop any pieces that need dropping in the board.
      */
     protected PieceDropper getPieceDropper (PieceDropLogic logic)
     {

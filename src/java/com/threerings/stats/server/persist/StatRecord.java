@@ -117,7 +117,7 @@ public class StatRecord extends PersistentRecord
 
     // AUTO-GENERATED: METHODS START
     /**
-     * Create and return a primary {@link Key} to identify a {@link #StatRecord}
+     * Create and return a primary {@link Key} to identify a {@link StatRecord}
      * with the supplied key values.
      */
     public static Key<StatRecord> getKey (int playerId, int statCode)

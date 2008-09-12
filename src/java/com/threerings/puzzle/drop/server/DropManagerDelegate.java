@@ -21,22 +21,21 @@
 
 package com.threerings.puzzle.drop.server;
 
+import static com.threerings.puzzle.Log.log;
+
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.data.PlaceObject;
-
+import com.threerings.crowd.server.PlaceManager;
 import com.threerings.puzzle.data.Board;
 import com.threerings.puzzle.data.PuzzleCodes;
-import com.threerings.puzzle.server.PuzzleManager;
-import com.threerings.puzzle.server.PuzzleManagerDelegate;
-
 import com.threerings.puzzle.drop.data.DropBoard;
 import com.threerings.puzzle.drop.data.DropCodes;
 import com.threerings.puzzle.drop.data.DropConfig;
 import com.threerings.puzzle.drop.data.DropLogic;
 import com.threerings.puzzle.drop.util.PieceDropLogic;
 import com.threerings.puzzle.drop.util.PieceDropper;
-
-import static com.threerings.puzzle.Log.log;
+import com.threerings.puzzle.server.PuzzleManager;
+import com.threerings.puzzle.server.PuzzleManagerDelegate;
 
 /**
  * Provides the necessary support for a puzzle game that involves a
@@ -52,7 +51,7 @@ import static com.threerings.puzzle.Log.log;
  * <p> A puzzle game using these services will then need to extend this
  * delegate, implementing the necessary methods to customize it for the
  * particulars of their game and then register it with their game manager
- * via {@link PuzzleManager#addDelegate}.
+ * via {@link PlaceManager#addDelegate}.
  *
  * <p> It also keeps track of, for each player, board level information,
  * and player game status.  Miscellaneous utility routines are provided
@@ -146,7 +145,7 @@ public abstract class DropManagerDelegate extends PuzzleManagerDelegate
     }
 
     /**
-     * Returns the piece dropper used to drop any pieces that need dropping in the board.  
+     * Returns the piece dropper used to drop any pieces that need dropping in the board.
      */
     protected PieceDropper getPieceDropper (PieceDropLogic logic)
     {

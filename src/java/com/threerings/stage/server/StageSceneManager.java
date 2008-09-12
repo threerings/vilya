@@ -63,17 +63,15 @@ import com.threerings.stage.util.StageSceneUtil;
 import static com.threerings.stage.Log.log;
 
 /**
- * Defines extensions to the basic Stage scene manager specific to
- * displaying isometric "stage" scenes (these may be indoor, outdoor or
- * aboard a vessel).
+ * Defines extensions to the basic Stage scene manager specific to displaying isometric "stage"
+ * scenes (these may be indoor, outdoor or aboard a vessel).
  */
 public class StageSceneManager extends SpotSceneManager
     implements StageSceneProvider
 {
     /**
-     * Returns a traversal predicate for use with {@link
-     * StageSceneUtil#findStandingSpot} that validates whether a player can
-     * stand in the searched spots.
+     * Returns a traversal predicate for use with {@link StageSceneUtil#findStandingSpot} that
+     * validates whether a player can stand in the searched spots.
      */
     public AStarPathUtil.TraversalPred getCanStandPred ()
     {
@@ -89,21 +87,19 @@ public class StageSceneManager extends SpotSceneManager
     }
 
     /**
-     * Adds the supplied object to this scene. A persistent update is
-     * generated and broadcast to all scene occupants. The update is
-     * stored in the repository for communication to future occupants of
-     * the scene and then entire complex process of changing our virtual
-     * game world is effected at the simple call of this single method.
+     * Adds the supplied object to this scene. A persistent update is generated and broadcast to
+     * all scene occupants. The update is stored in the repository for communication to future
+     * occupants of the scene and then entire complex process of changing our virtual game world is
+     * effected at the simple call of this single method.
      *
-     * @param killOverlap if true, overlapping object will be removed, and
-     * the allowOverlap argument will be ignored.
-     * @param allowOverlap if true, overlapping objects will be allowed
-     * but one must be *very* careful to ensure that they know what they
-     * are doing (ie. the objects have render priorities that correctly
-     * handle the overlap).
+     * @param killOverlap if true, overlapping object will be removed, and the allowOverlap
+     * argument will be ignored.
+     * @param allowOverlap if true, overlapping objects will be allowed but one must be *very*
+     * careful to ensure that they know what they are doing (i.e. the objects have render priorities
+     * that correctly handle the overlap).
      *
-     * @return true if the object was added, false if the add was rejected
-     * because the object overlaps an existing scene object.
+     * @return true if the object was added, false if the add was rejected because the object
+     * overlaps an existing scene object.
      */
     public boolean addObject (ObjectInfo info, boolean killOverlap,
                               boolean allowOverlap)
@@ -192,7 +188,7 @@ public class StageSceneManager extends SpotSceneManager
         throws InvocationException
     {
         InvocationException.requireAccess(caller, StageCodes.MODIFY_SCENE_ACCESS, _sscene);
-        
+
         // create our scene update which will be stored in the database
         // and used to efficiently update clients
         ModifyObjectsUpdate update = new ModifyObjectsUpdate();
@@ -200,10 +196,10 @@ public class StageSceneManager extends SpotSceneManager
 
         log.info("Modifying objects '" + update + ".");
         recordUpdate(update, true);
-        
+
         listener.requestProcessed();
     }
-    
+
     @Override // documentation inherited
     protected void gotSceneData ()
     {
@@ -373,7 +369,7 @@ public class StageSceneManager extends SpotSceneManager
         return true;
     }
 
-    /** Helper function for {@link #validateLocation}. */
+    /** Helper function for {@link #validateLocation(BodyObject,StageLocation,boolean)}. */
     protected boolean checkContains (Iterable<? extends Rectangle> rects, int tx, int ty)
     {
         for (Rectangle rect : rects) {
@@ -463,7 +459,7 @@ public class StageSceneManager extends SpotSceneManager
         return new SceneLocation(sloc, body.getOid());
     }
 
-    /** Helper function for {@link #computeEnteringLocation}. */
+    /** Helper function for {@link #computeEnteringLocation(BodyObject,Portal,int)}. */
     protected boolean checkEntry (MisoSceneMetrics metrics, BodyObject body,
                                   int tx, int ty, StageLocation loc)
     {
@@ -612,8 +608,7 @@ public class StageSceneManager extends SpotSceneManager
     /** Helper function for {@link #canAddBody}. */
     protected boolean checkPortals (Rectangle rect)
     {
-        for (Iterator<Point> iter = _plocs.iterator(); iter.hasNext(); ) {
-            Point ppoint = iter.next();
+        for (Point ppoint : _plocs) {
             if (rect.contains(ppoint)) {
                 return true;
             }
@@ -688,8 +683,8 @@ public class StageSceneManager extends SpotSceneManager
 //                  StringUtil.toString(locs) + " for " + cl + ".");
 
         // make sure everyone is in their proper position
-        for (Iterator<Integer> iter = clrec.keySet().iterator(); iter.hasNext(); ) {
-            int tbodyOid = iter.next().intValue();
+        for (Integer integer : clrec.keySet()) {
+            int tbodyOid = integer.intValue();
             // leave the newly added player to last
             if (tbodyOid != bodyOid) {
                 positionBody(cl, tbodyOid, locs);
@@ -753,8 +748,8 @@ public class StageSceneManager extends SpotSceneManager
         List<SceneLocation> locs = StageSceneUtil.getClusterLocs(cl);
 
         // make sure everyone is in their proper position
-        for (Iterator<Integer> iter = clrec.keySet().iterator(); iter.hasNext(); ) {
-            int bodyOid = iter.next().intValue();
+        for (Integer integer : clrec.keySet()) {
+            int bodyOid = integer.intValue();
             // leave the newly added player to last
             if (bodyOid != body.getOid()) {
                 positionBody(cl, bodyOid, locs);
@@ -845,9 +840,9 @@ public class StageSceneManager extends SpotSceneManager
     /** Used by {@link #canAddBody}. */
     protected static final int[] Y_OFF = { 0, 0, -1, -1 };
 
-    /** Used by {@link #computeEnteringLocation}. */
+    /** Used by {@link #computeEnteringLocation(BodyObject,Portal,int)}. */
     protected static final int[] PORTAL_DX = { 0, -1,  0, 1 }; // W N E S
 
-    /** Used by {@link #computeEnteringLocation}. */
+    /** Used by {@link #computeEnteringLocation(BodyObject,Portal,int)}. */
     protected static final int[] PORTAL_DY = { 1,  0, -1, 0 }; // W N E S
 }

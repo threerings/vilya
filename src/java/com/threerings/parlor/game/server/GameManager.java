@@ -67,7 +67,8 @@ public class GameManager extends PlaceManager
 {
     /**
      * An interface for identifying users. A larger system using the Parlor game services can
-     * enable user identification by passing a UserIdentifier to {@link #setUserIdentifier}.
+     * enable user identification by passing a UserIdentifier to
+     * {@link GameManager#setUserIdentifier}.
      */
     public interface UserIdentifier
     {
@@ -690,7 +691,7 @@ public class GameManager extends PlaceManager
         DObject player = _omgr.getObject(playerId);
         return (player instanceof BodyObject) ? (BodyObject) player : null;
     }
-    
+
 
     /**
      * Returns true if this game requires a no-show timer. The default implementation returns true

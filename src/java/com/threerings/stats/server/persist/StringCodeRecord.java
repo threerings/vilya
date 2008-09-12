@@ -92,7 +92,7 @@ public class StringCodeRecord extends PersistentRecord
 
     // AUTO-GENERATED: METHODS START
     /**
-     * Create and return a primary {@link Key} to identify a {@link #StringCodeRecord}
+     * Create and return a primary {@link Key} to identify a {@link StringCodeRecord}
      * with the supplied key values.
      */
     public static Key<StringCodeRecord> getKey (int statCode, String value)

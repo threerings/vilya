@@ -37,12 +37,12 @@ import com.threerings.parlor.game.data.GameConfig;
 public interface ParlorService extends InvocationService
 {
     /**
-     * Used to communicate responses to {@link #invite} requests.
+     * Used to communicate responses to {@link ParlorService#invite} requests.
      */
     public static interface InviteListener extends InvocationListener
     {
         /**
-         * Called in response to a successful {@link #invite} request.
+         * Called in response to a successful {@link ParlorService#invite} request.
          */
         public void inviteReceived (int inviteId);
     }

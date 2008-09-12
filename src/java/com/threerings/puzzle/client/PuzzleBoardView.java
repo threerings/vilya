@@ -267,8 +267,7 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
      * @param x the x-position at which the score is to be placed.
      * @param y the y-position at which the score is to be placed.
      */
-    public ScoreAnimation createScoreAnimation (
-        String score, Color color, Font font, int x, int y)
+    public ScoreAnimation createScoreAnimation (String score, Color color, Font font, int x, int y)
     {
         return createScoreAnimation(
             ScoreAnimation.createLabel(score, color, font, (Component)this), x, y);
@@ -277,7 +276,7 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
     /**
      * Creates a score animation, allowing derived classes to use custom
      * animations that are customized following a call to
-     * {@link #createScoreAnimation}.
+     * {@link #createScoreAnimation(String,Color,Font,int,int)}.
      */
     protected ScoreAnimation createScoreAnimation (Label label, int x, int y)
     {

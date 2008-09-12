@@ -125,7 +125,7 @@ public class RatingRecord extends PersistentRecord
 
     // AUTO-GENERATED: METHODS START
     /**
-     * Create and return a primary {@link Key} to identify a {@link #RatingRecord}
+     * Create and return a primary {@link Key} to identify a {@link RatingRecord}
      * with the supplied key values.
      */
     public static Key<RatingRecord> getKey (int gameId, int playerId)

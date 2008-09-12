@@ -33,51 +33,42 @@ import com.threerings.presents.client.InvocationService;
 public interface LobbyService extends InvocationService
 {
     /**
-     * Used to communicate the results of a {@link #getCategories}
-     * request.
+     * Used to communicate the results of a {@link LobbyService#getCategories} request.
      */
     public static interface CategoriesListener extends InvocationListener
     {
         /**
-         * Supplies the listener with the results of a {@link
-         * #getCategories} request.
+         * Supplies the listener with the results of a {@link LobbyService#getCategories} request.
          */
         public void gotCategories (String[] categories);
     }
 
     /**
-     * Used to communicate the results of a {@link #getLobbies}
-     * request.
+     * Used to communicate the results of a {@link LobbyService#getLobbies} request.
      */
     public static interface LobbiesListener extends InvocationListener
     {
         /**
-         * Supplies the listener with the results of a {@link
-         * #getLobbies} request.
+         * Supplies the listener with the results of a {@link LobbyService#getLobbies} request.
          */
         public void gotLobbies (List<Lobby> lobbies);
     }
 
     /**
-     * Requests the list of lobby cateogories that are available on this
+     * Requests the list of lobby categories that are available on this
      * server.
      *
      * @param client a connected, operational client instance.
-     * @param listener the listener that will receive and process the
-     * response.
+     * @param listener the listener that will receive and process the response.
      */
     public void getCategories (Client client, CategoriesListener listener);
 
     /**
-     * Requests information on all active lobbies that match the specified
-     * category.
+     * Requests information on all active lobbies that match the specified category.
      *
      * @param client a connected, operational client instance.
-     * @param category the category of game for which a list of lobbies is
-     * desired.
-     * @param listener the listener that will receive and process the
-     * response.
+     * @param category the category of game for which a list of lobbies is desired.
+     * @param listener the listener that will receive and process the response.
      */
-    public void getLobbies (Client client, String category,
-                            LobbiesListener listener);
+    public void getLobbies (Client client, String category, LobbiesListener listener);
 }

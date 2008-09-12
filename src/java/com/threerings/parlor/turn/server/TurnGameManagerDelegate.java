@@ -21,24 +21,22 @@
 
 package com.threerings.parlor.turn.server;
 
-import com.samskivert.util.RandomUtil;
-import com.threerings.util.Name;
+import static com.threerings.parlor.Log.log;
 
+import com.samskivert.util.RandomUtil;
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.data.PlaceObject;
-
+import com.threerings.crowd.server.PlaceManager;
 import com.threerings.parlor.game.server.GameManager;
 import com.threerings.parlor.game.server.GameManagerDelegate;
-
 import com.threerings.parlor.turn.data.TurnGameObject;
-
-import static com.threerings.parlor.Log.log;
+import com.threerings.util.Name;
 
 /**
  * Performs the server-side turn-based game processing for a turn based game.  Game managers which
  * wish to make use of the turn services must implement {@link TurnGameManager} and either create
  * an instance of this class, or an instance of a derivation which customizes the behavior, either
- * of which would be passed to {@link GameManager#addDelegate} to be activated.
+ * of which would be passed to {@link PlaceManager#addDelegate} to be activated.
  */
 public class TurnGameManagerDelegate extends GameManagerDelegate
 {

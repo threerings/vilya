@@ -38,12 +38,14 @@ import com.threerings.parlor.game.client.GameConfigurator;
  *
  * <p> The game config object is also the mechanism used to instantiate the appropriate game
  * manager and controller. Every game must have an associated game config derived class that
- * overrides {@link #createController} and {@link #getManagerClassName}, returning the appropriate
- * game controller and manager class for that game. Thus the entire chain of events that causes a
- * particular game to be created is the construction of the appropriate game config instance which
- * is provided to the server as part of an invitation or via some other matchmaking mechanism.
+ * overrides {@link PlaceConfig#createController} and {@link PlaceConfig#getManagerClassName},
+ * returning the appropriate game controller and manager class for that game. Thus the entire chain
+ * of events that causes a particular game to be created is the construction of the appropriate
+ * game config instance which is provided to the server as part of an invitation or via some other
+ * matchmaking mechanism.
  */
-public abstract class GameConfig extends PlaceConfig implements Cloneable
+public abstract class GameConfig extends PlaceConfig
+    implements Cloneable
 {
     /** Matchmaking type constant: a game that is started with a list of players, and those are the
      * only players that may play. */

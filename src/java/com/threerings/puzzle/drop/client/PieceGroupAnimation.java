@@ -24,11 +24,12 @@ package com.threerings.puzzle.drop.client;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
+import com.threerings.media.AbstractMedia;
+import com.threerings.media.AbstractMediaManager;
 import com.threerings.media.animation.Animation;
 import com.threerings.media.sprite.PathObserver;
 import com.threerings.media.sprite.Sprite;
 import com.threerings.media.util.Path;
-
 import com.threerings.puzzle.drop.data.DropBoard;
 
 /**
@@ -39,8 +40,8 @@ public abstract class PieceGroupAnimation extends Animation
     implements PathObserver
 {
     /**
-     * Creates a piece group animation which must be initialized with a
-     * subsequent call to {@link #init}.
+     * Creates a piece group animation which must be initialized with a subsequent call to
+     * {@link AbstractMedia#init(AbstractMediaManager)}.
      */
     public PieceGroupAnimation (DropBoardView view, DropBoard board)
     {

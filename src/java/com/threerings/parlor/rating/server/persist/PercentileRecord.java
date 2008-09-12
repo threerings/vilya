@@ -26,7 +26,6 @@ import com.samskivert.jdbc.depot.PersistentRecord;
 import com.samskivert.jdbc.depot.annotation.Column;
 import com.samskivert.jdbc.depot.annotation.Id;
 import com.samskivert.jdbc.depot.expression.ColumnExp;
-
 import com.threerings.parlor.rating.util.Percentiler;
 
 /**
@@ -63,7 +62,7 @@ public class PercentileRecord extends PersistentRecord
 
     // AUTO-GENERATED: METHODS START
     /**
-     * Create and return a primary {@link Key} to identify a {@link #PercentileRecord}
+     * Create and return a primary {@link Key} to identify a {@link PercentileRecord}
      * with the supplied key values.
      */
     public static Key<PercentileRecord> getKey (int gameId)

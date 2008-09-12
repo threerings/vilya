@@ -36,7 +36,7 @@ import com.threerings.whirled.data.SceneUpdate;
 public interface SceneService extends InvocationService
 {
     /**
-     * Used to communicate the response to a {@link #moveTo} request.
+     * Used to communicate the response to a {@link SceneService#moveTo} request.
      */
     public static interface SceneMoveListener extends InvocationListener
     {

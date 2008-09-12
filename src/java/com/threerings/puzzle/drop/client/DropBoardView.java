@@ -51,8 +51,7 @@ import com.threerings.puzzle.drop.data.DropPieceCodes;
 import static com.threerings.puzzle.Log.log;
 
 /**
- * The drop board view displays a drop puzzle game in progress for a
- * single player.
+ * The drop board view displays a drop puzzle game in progress for a single player.
  */
 public abstract class DropBoardView extends PuzzleBoardView
     implements DropPieceCodes

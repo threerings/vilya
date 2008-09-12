@@ -21,6 +21,8 @@
 
 package com.threerings.parlor.card.data;
 
+import java.util.ArrayList;
+
 import com.threerings.util.ActionScript;
 import com.threerings.util.StreamableArrayList;
 
@@ -35,22 +37,22 @@ public class Hand extends StreamableArrayList<Card>
     @ActionScript(name="addAllCards")
     public void addAll (Card[] cards)
     {
-        for (int i = 0; i < cards.length; i++) {
-            add(cards[i]);
+        for (Card card : cards) {
+            add(card);
         }
     }
-    
+
     /**
      * Removes all of the specified cards from this hand.
      */
     @ActionScript(name="removeAllCards")
     public void removeAll (Card[] cards)
     {
-        for (int i = 0; i < cards.length; i++) {
-            remove(cards[i]);
+        for (Card card : cards) {
+            remove(card);
         }
     }
-    
+
     /**
      * Checks whether this hand contains all of the specified cards.
      */
@@ -64,7 +66,7 @@ public class Hand extends StreamableArrayList<Card>
         }
         return true;
     }
-    
+
     /**
      * Counts the members of a particular suit within this hand.
      *
@@ -84,7 +86,7 @@ public class Hand extends StreamableArrayList<Card>
 
     /**
      * Converts this list of cards into an array. This only necessary if you
-     * need the cards in array form, use {@link #get} if you simply need to get
+     * need the cards in array form, use {@link ArrayList#get} if you simply need to get
      * a card from the hand.
      */
     public Card[] getCards ()
