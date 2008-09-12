@@ -158,15 +158,10 @@ public class SceneManager extends PlaceManager
 
         // and apply and store it in the repository
         if (isPersistent()) {
-            _invoker.postUnit(new WriteOnlyUnit("recordUpdate") {
+            _invoker.postUnit(new WriteOnlyUnit("recordUpdate(" + update + ")") {
                 @Override
                 public void invokePersist () throws Exception {
                     _screg.getSceneRepository().applyAndRecordUpdate(_scene.getSceneModel(), update);
-                }
-
-                @Override
-                public String getDetail () {
-                    return update.toString();
                 }
             });
         }

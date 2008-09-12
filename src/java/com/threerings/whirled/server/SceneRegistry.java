@@ -166,7 +166,7 @@ public class SceneRegistry
 
         // otherwise we have to load the scene from the repository
         final int fsceneId = sceneId;
-        _invoker.postUnit(new RepositoryUnit("resolveScene") {
+        _invoker.postUnit(new RepositoryUnit("resolveScene(" + sceneId + ")") {
             @Override
             public void invokePersist () throws Exception {
                 _model = _screp.loadSceneModel(fsceneId);
@@ -179,11 +179,6 @@ public class SceneRegistry
             @Override
             public void handleFailure (Exception error) {
                 processFailedResolution(fsceneId, error);
-            }
-            @Override
-            public String getDetail ()
-            {
-                return "" + fsceneId;
             }
             protected SceneModel _model;
             protected UpdateList _updates;
