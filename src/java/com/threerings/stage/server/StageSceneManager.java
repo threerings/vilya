@@ -395,15 +395,24 @@ public class StageSceneManager extends SpotSceneManager
         return computeEnteringLocation(body, entry, 1);
     }
 
-
     /**
      * Returns an entering location for body somewhere at least minDistance tiles away from entry.
      */
     protected SceneLocation computeEnteringLocation (BodyObject body, Portal entry,
         int minDistance)
     {
+        return computeEnteringLocation(body, (StageLocation)entry.getOppLocation(), minDistance);
+
+    }
+
+    /**
+     * Returns an entering location for body somewhere at least minDistance tiles away from base.
+     */
+    protected SceneLocation computeEnteringLocation (BodyObject body, StageLocation base,
+        int minDistance)
+    {
         MisoSceneMetrics metrics = StageSceneUtil.getMetrics();
-        StageLocation sloc = (StageLocation)entry.getOppLocation();
+        StageLocation sloc = (StageLocation)base.clone();
         int tx = MisoUtil.fullToTile(sloc.x), ty = MisoUtil.fullToTile(sloc.y);
         int oidx = sloc.orient/2;
         int lidx = (oidx+3)%4; // rotate to the left
@@ -448,7 +457,7 @@ public class StageSceneManager extends SpotSceneManager
             // if this is our last pass and we didn't find anything,
             // revert back to the portal location
             if (fan == MAX_FAN-1) {
-                sloc = (StageLocation) entry.getOppLocation();
+                sloc = base;
             }
         }
 
