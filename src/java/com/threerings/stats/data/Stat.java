@@ -156,22 +156,6 @@ public abstract class Stat
         _modCount = modCount;
     }
 
-    /** Writes our custom streamable fields. */
-    public void writeObject (ObjectOutputStream out)
-        throws IOException
-    {
-        out.writeInt(_type.code());
-        out.defaultWriteObject();
-    }
-
-    /** Reads our custom streamable fields. */
-    public void readObject (ObjectInputStream in)
-        throws IOException, ClassNotFoundException
-    {
-        _type = getType(in.readInt());
-        in.defaultReadObject();
-    }
-
     /**
      * Serializes this instance for storage in the item database. Derived classes must override
      * this method to implement persistence.
@@ -218,14 +202,14 @@ public abstract class Stat
     }
 
     /** The type of the statistic in question. */
-    protected transient Type _type;
+    protected Type _type;
 
-    /** Indicates whether or not this statistic has been modified since it
-     * was loaded from the database. */
-    protected transient boolean _modified;
+    /** Indicates whether or not this statistic has been modified since it was loaded from the
+     * database. */
+    protected boolean _modified;
 
     /** The last known modification count for this stat, if it was read from the database. */
-    protected transient byte _modCount;
+    protected byte _modCount;
 
     /** Used for computing our stat codes. */
     protected static CRC32 _crc = new CRC32();
