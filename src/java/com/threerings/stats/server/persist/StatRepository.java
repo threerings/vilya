@@ -19,7 +19,6 @@ import com.samskivert.io.ByteArrayOutInputStream;
 import com.samskivert.util.IntMap;
 import com.samskivert.util.IntMaps;
 
-import com.samskivert.jdbc.depot.CacheInvalidator;
 import com.samskivert.jdbc.depot.DatabaseException;
 import com.samskivert.jdbc.depot.DepotRepository;
 import com.samskivert.jdbc.depot.DuplicateKeyException;
@@ -112,18 +111,7 @@ public class StatRepository extends DepotRepository
      */
     public void deleteStats (final int playerId)
     {
-        CacheInvalidator invalidator = new CacheInvalidator() {
-            public void invalidate (PersistenceContext ctx) {
-                ctx.cacheTraverse(
-                    StatRecord.class.getName(), new CacheEvictionFilter<StatRecord>() {
-                    @Override
-                    public boolean testForEviction (Serializable key, StatRecord record) {
-                        return record != null && record.playerId == playerId;
-                    }
-                });
-            }
-        };
-        deleteAll(StatRecord.class, new Where(StatRecord.PLAYER_ID_C, playerId), invalidator);
+        deleteAll(StatRecord.class, new Where(StatRecord.PLAYER_ID_C, playerId));
     }
 
     /**
@@ -134,8 +122,7 @@ public class StatRepository extends DepotRepository
     {
         for (int ii = 0; ii < stats.length; ii++) {
             try {
-                if (stats[ii].getType().isPersistent() &&
-                    stats[ii].isModified()) {
+                if (stats[ii].getType().isPersistent() && stats[ii].isModified()) {
                     updateStat(playerId, stats[ii], true);
                 }
             } catch (Exception e) {
@@ -173,19 +160,17 @@ public class StatRepository extends DepotRepository
         IntMap<String> map = _codeToString.get(type);
         String value = (map == null) ? null : map.get(code);
         if (value == null) {
-            // our value may have been mapped on a different server, so refresh
-            // this mapping table from the database; then try again
+            // our value may have been mapped on a different server, so refresh this mapping table
+            // from the database; then try again
             try {
                 loadStringCodes(type);
             } catch (DatabaseException pe) {
-                log.warning("Failed to reload string codes " +
-                    "[type=" + type + ", code=" + code + "].", pe);
+                log.warning("Failed to reload string codes", "type", type, "code", code, pe);
             }
             map = _codeToString.get(type);
             value = (map == null) ? null : map.get(code);
             if (value == null) {
-                log.warning("Missing reverse maping [type=" + type +
-                    ", code=" + code + "].");
+                log.warning("Missing reverse maping", "type", type, "code", code);
             }
         }
         return value;
@@ -207,7 +192,7 @@ public class StatRepository extends DepotRepository
     {
         Stat.Type type = Stat.getType(statCode);
         if (type == null) {
-            log.warning("Unable to decode stat, unknown type [code=" + statCode + "].");
+            log.warning("Unable to decode stat, unknown type", "code", statCode);
             return null;
         }
         return decodeStat(type.newStat(), data, modCount);
@@ -237,7 +222,7 @@ public class StatRepository extends DepotRepository
             errmsg = "Unable to decode stat";
         }
 
-        log.warning(errmsg + " [type=" + stat.getType() + "]", error);
+        log.warning(errmsg, "type", stat.getType(), error);
         return null;
     }
 
@@ -287,8 +272,7 @@ public class StatRepository extends DepotRepository
             if (numRows == 0 && forceWrite) {
                 log.warning("Possible collision while storing StatRecord",
                             "playerId", playerId, "stat", stat.getType().name(),
-                            "modCount", nextModCount,
-                            "overwriting", load(StatRecord.class, key));
+                            "modCount", nextModCount, "overwriting", load(StatRecord.class, key));
                 store(new StatRecord(playerId, stat.getCode(), data, nextModCount));
                 numRows = 1;
             }
