@@ -5,7 +5,6 @@ package com.threerings.stats.server.persist;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -23,7 +22,6 @@ import com.samskivert.jdbc.depot.DatabaseException;
 import com.samskivert.jdbc.depot.DepotRepository;
 import com.samskivert.jdbc.depot.DuplicateKeyException;
 import com.samskivert.jdbc.depot.Key;
-import com.samskivert.jdbc.depot.PersistenceContext.CacheEvictionFilter;
 import com.samskivert.jdbc.depot.PersistenceContext;
 import com.samskivert.jdbc.depot.PersistentRecord;
 import com.samskivert.jdbc.depot.clause.FieldDefinition;
