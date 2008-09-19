@@ -190,8 +190,8 @@ public abstract class Stat
     public String toString ()
     {
         StringBuffer buf = new StringBuffer(StringUtil.toUSLowerCase(_type.name()));
-        buf.append("=");
-        buf.append(valueToString());
+        buf.append("=").append(valueToString());
+        buf.append("(").append(_modCount).append(")");
         return buf.toString();
     }
 
