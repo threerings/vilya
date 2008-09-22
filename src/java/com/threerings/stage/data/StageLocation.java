@@ -43,7 +43,7 @@ public class StageLocation extends SimpleStreamableObject
     /** The user's orientation (defined by {@link DirectionCodes}). */
     public byte orient;
 
-    /** {@link #toString} helper function. */
+    /** {@link Object#toString} helper function. */
     public String orientToString ()
     {
         return DirectionUtil.toShortString(orient);

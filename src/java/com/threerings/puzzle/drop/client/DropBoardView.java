@@ -298,7 +298,7 @@ public abstract class DropBoardView extends PuzzleBoardView
     /**
      * Returns true if the piece that is supposed to be at the specified
      * coordinates is not yet there but is actually en route to that
-     * location (due to a call to {@link #movePiece}).
+     * location (due to a call to {@link #movePiece(Sprite,int,int,int,int,long)}).
      */
     protected boolean isMoving (int px, int py)
     {

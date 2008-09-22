@@ -613,7 +613,7 @@ public class GameManager extends PlaceManager
 
     /**
      * Called by the client when the player is ready for the game to start.  This method is
-     * dispatched dynamically by {@link #messageReceived}.
+     * dispatched dynamically by {@link PlaceManager#messageReceived}.
      */
     public void playerReady (BodyObject caller)
     {

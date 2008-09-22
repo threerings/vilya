@@ -1014,7 +1014,7 @@ public class EditorScenePanel extends StageScenePanel
 
     /**
      * Converts the supplied screen coordinates into tile coordinates for
-     * an object tile. (See {@link #updateTileCoords}.)
+     * an object tile. (See {@link MisoScenePanel#updateTileCoords}.)
      *
      * @return true if the tile coordinates have changed.
      */
