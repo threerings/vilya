@@ -73,15 +73,17 @@ public class TableDirector extends BasicDirector
      * @param ctx the parlor context in use by the client.
      * @param tableField the field name of the distributed set that contains the tables we will be
      * managing.
-     * @param observer the entity that will receive callbacks when things happen to the tables.
+     * @param bundle the message bundle to use when reporting errors.
      */
-    public function TableDirector (ctx :ParlorContext, tableField :String)
+    public function TableDirector (
+        ctx :ParlorContext, tableField :String, errorBundle :String = null)
     {
         super(ctx);
 
         // keep track of this stuff
         _pctx = ctx;
         _tableField = tableField;
+        _errorBundle = errorBundle;
     }
 
     /**
@@ -342,7 +344,7 @@ public class TableDirector extends BasicDirector
     // documentation inherited from interface
     public function requestFailed (reason :String) :void
     {
-        log.warning("Table action failed [reason=" + reason + "].");
+        _pctx.getChatDirector().displayFeedback(_errorBundle, reason);
     }
 
     /**
@@ -391,6 +393,9 @@ public class TableDirector extends BasicDirector
 
     /** The field name of the distributed set that contains our tables. */
     protected var _tableField :String;
+
+    /** The message bundle to use when reporting errors. */
+    protected var _errorBundle :String;
 
     /** The table of which we are a member if any. */
     protected var _ourTable :Table;

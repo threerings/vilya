@@ -48,6 +48,9 @@ import com.threerings.parlor.game.data.GameObject;
 public class Table
     implements DSet.Entry, ParlorCodes
 {
+    /** Used to request any position at a table. */
+    public static final int ANY_POSITION = -1;
+
     /** The unique identifier for this table. */
     public int tableId;
 
@@ -219,6 +222,22 @@ public class Table
     @ActionScript(omit=true)
     public String setPlayer (int position, BodyObject player)
     {
+        // check whether this player has been banned
+        if (_bannedUsers != null && _bannedUsers.contains(player.getVisibleName())) {
+            return BANNED_FROM_TABLE;
+        }
+
+        // if they just want any position, see if we have one available
+        if (position == ANY_POSITION) {
+            for (int ii = 0; ii < tconfig.desiredPlayerCount; ii++) {
+                if (players[ii] == null) {
+                    setPlayerPos(ii, player);
+                    return null;
+                }
+            }
+            return TABLE_POSITION_OCCUPIED;
+        }
+
         // make sure the requested position is a valid one
         if (position >= tconfig.desiredPlayerCount || position < 0) {
             return INVALID_TABLE_POSITION;
@@ -227,10 +246,6 @@ public class Table
         // make sure the requested position is not already occupied
         if (players[position] != null) {
             return TABLE_POSITION_OCCUPIED;
-        }
-
-        if (_bannedUsers != null && _bannedUsers.contains(player.getVisibleName())) {
-            return BANNED_FROM_TABLE;
         }
 
         // otherwise all is well, stick 'em in

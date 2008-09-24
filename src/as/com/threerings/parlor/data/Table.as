@@ -44,6 +44,9 @@ import com.threerings.parlor.game.data.GameConfig;
 public class Table
     implements DSet_Entry, Hashable
 {
+    /** Used to request any position at a table. */
+    public static const ANY_POSITION :int = -1;
+
     /** The unique identifier for this table. */
     public var tableId :int;
 
