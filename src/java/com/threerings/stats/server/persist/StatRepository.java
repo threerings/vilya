@@ -51,9 +51,6 @@ public class StatRepository extends DepotRepository
     @Inject public StatRepository (PersistenceContext context)
     {
         super(context);
-
-        // load up our string set mappings
-        loadStringCodes(null);
     }
 
     /**
@@ -359,7 +356,16 @@ public class StatRepository extends DepotRepository
         rmap.put(code, value);
     }
 
-    @Override
+    @Override // from DepotRepository
+    protected void init ()
+    {
+        super.init();
+
+        // load up our string set mappings
+        loadStringCodes(null);
+    }
+
+    @Override // from DepotRepository
     protected void getManagedRecords (Set<Class<? extends PersistentRecord>> classes)
     {
         classes.add(StatRecord.class);
