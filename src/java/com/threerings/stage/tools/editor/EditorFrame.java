@@ -182,8 +182,8 @@ public class EditorFrame extends ManagedJFrame
         }
     }
 
-    /** 
-     * Creates the EditorScenePanel to use in this frame. 
+    /**
+     * Creates the EditorScenePanel to use in this frame.
      */
     protected EditorScenePanel createScenePanel ()
     {
@@ -425,10 +425,6 @@ public class EditorFrame extends ManagedJFrame
             err += "No scene type specified.\n";
         }
 
-        if (_svpanel.getEntrance() == null) {
-            err += "No default entrance portal.\n";
-        }
-
         if ("".equals(err)) {
             return true;
         } else {
@@ -461,7 +457,7 @@ public class EditorFrame extends ManagedJFrame
         _filepath = filepath;
         setTitle("Narya Scene Editor: " +
                  (_filepath == null ? "<new>" : _filepath));
-    }        
+    }
 
     /**
      * Handles a request to quit. Presently this just quits, but
