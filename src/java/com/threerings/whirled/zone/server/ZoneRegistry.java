@@ -34,8 +34,8 @@ import com.threerings.presents.server.InvocationManager;
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.server.LocationManager;
 import com.threerings.crowd.server.LocationProvider;
-import com.threerings.whirled.server.SceneRegistry;
 
+import com.threerings.whirled.server.SceneRegistry;
 import com.threerings.whirled.zone.client.ZoneService;
 import com.threerings.whirled.zone.data.ZoneCodes;
 import com.threerings.whirled.zone.data.ZonedBodyObject;

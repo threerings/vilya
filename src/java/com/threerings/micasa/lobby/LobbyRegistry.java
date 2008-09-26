@@ -29,8 +29,9 @@ import java.util.StringTokenizer;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.samskivert.util.StringUtil;
 import com.google.inject.Inject;
+
+import com.samskivert.util.StringUtil;
 
 import com.threerings.util.StreamableArrayList;
 

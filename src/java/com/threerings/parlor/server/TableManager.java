@@ -24,6 +24,7 @@ package com.threerings.parlor.server;
 import com.samskivert.util.IntMap;
 import com.samskivert.util.IntMaps;
 import com.samskivert.util.ListUtil;
+
 import com.threerings.util.Name;
 
 import com.threerings.presents.data.ClientObject;
@@ -43,8 +44,8 @@ import com.threerings.presents.server.InvocationManager;
 
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.OccupantInfo;
-import com.threerings.crowd.server.PlaceRegistry;
 import com.threerings.crowd.data.PlaceObject;
+import com.threerings.crowd.server.PlaceRegistry;
 
 import com.threerings.parlor.client.TableService;
 import com.threerings.parlor.data.ParlorCodes;

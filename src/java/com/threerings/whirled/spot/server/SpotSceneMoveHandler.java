@@ -29,7 +29,6 @@ import com.threerings.crowd.server.LocationManager;
 import com.threerings.whirled.client.SceneService;
 import com.threerings.whirled.server.SceneManager;
 import com.threerings.whirled.server.SceneMoveHandler;
-
 import com.threerings.whirled.spot.data.Portal;
 
 /**

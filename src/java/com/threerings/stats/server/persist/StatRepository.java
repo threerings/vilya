@@ -3,12 +3,12 @@
 
 package com.threerings.stats.server.persist;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;

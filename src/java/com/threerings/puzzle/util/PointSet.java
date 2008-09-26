@@ -21,8 +21,9 @@
 
 package com.threerings.puzzle.util;
 
-import java.awt.Point;
 import java.util.Iterator;
+
+import java.awt.Point;
 
 import static com.threerings.puzzle.Log.log;
 

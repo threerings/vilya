@@ -39,8 +39,6 @@ import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.data.PlaceObject;
 
-import com.threerings.parlor.turn.server.TurnGameManagerDelegate;
-
 import com.threerings.parlor.card.data.Card;
 import com.threerings.parlor.card.data.CardGameObject;
 import com.threerings.parlor.card.data.Deck;
@@ -48,6 +46,7 @@ import com.threerings.parlor.card.data.Hand;
 import com.threerings.parlor.card.data.PlayerCard;
 import com.threerings.parlor.card.server.CardGameManager;
 import com.threerings.parlor.card.trick.data.TrickCardGameObject;
+import com.threerings.parlor.turn.server.TurnGameManagerDelegate;
 
 import static com.threerings.parlor.card.Log.log;
 

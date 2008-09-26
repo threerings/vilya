@@ -21,14 +21,16 @@
 
 package com.threerings.parlor.util;
 
-import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.samskivert.swing.Controller;
+import java.awt.Component;
+
 import com.samskivert.util.CollectionUtil;
 import com.samskivert.util.Interval;
 import com.samskivert.util.RandomUtil;
+
+import com.samskivert.swing.Controller;
 
 import com.threerings.util.KeyTranslator;
 

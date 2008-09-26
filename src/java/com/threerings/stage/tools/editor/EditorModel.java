@@ -25,12 +25,12 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import com.threerings.util.DirectionCodes;
+
 import com.threerings.media.tile.Tile;
 import com.threerings.media.tile.TileManager;
 import com.threerings.media.tile.TileSet;
 import com.threerings.media.tile.TileUtil;
-
-import com.threerings.util.DirectionCodes;
 
 import static com.threerings.stage.Log.log;
 

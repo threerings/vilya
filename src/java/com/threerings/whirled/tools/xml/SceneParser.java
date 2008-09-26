@@ -21,14 +21,17 @@
 
 package com.threerings.whirled.tools.xml;
 
-import java.io.IOException;
 import java.io.FileInputStream;
+import java.io.IOException;
 
 import org.xml.sax.SAXException;
+
 import org.apache.commons.digester.Digester;
 
 import com.samskivert.util.StringUtil;
+
 import com.threerings.tools.xml.NestableRuleSet;
+
 import com.threerings.whirled.data.AuxModel;
 import com.threerings.whirled.data.SceneModel;
 

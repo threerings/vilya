@@ -26,10 +26,11 @@ import javax.swing.JFrame;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import com.samskivert.swing.Controller;
-import com.samskivert.swing.util.SwingUtil;
 import com.samskivert.util.Interval;
 import com.samskivert.util.ResultListener;
+
+import com.samskivert.swing.Controller;
+import com.samskivert.swing.util.SwingUtil;
 
 import com.threerings.util.Name;
 

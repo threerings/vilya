@@ -23,11 +23,11 @@ package com.threerings.parlor.client;
 
 import com.samskivert.util.ObjectUtil;
 import com.samskivert.util.ObserverList;
+
 import com.threerings.util.Name;
 
 import com.threerings.presents.client.BasicDirector;
 import com.threerings.presents.client.Client;
-
 import com.threerings.presents.dobj.DObject;
 import com.threerings.presents.dobj.EntryAddedEvent;
 import com.threerings.presents.dobj.EntryRemovedEvent;

@@ -24,13 +24,13 @@ package com.threerings.stage.data;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.threerings.miso.data.ObjectInfo;
 import com.threerings.crowd.data.PlaceConfig;
+
+import com.threerings.miso.data.ObjectInfo;
 
 import com.threerings.whirled.data.Scene;
 import com.threerings.whirled.data.SceneImpl;
 import com.threerings.whirled.data.SceneUpdate;
-
 import com.threerings.whirled.spot.data.Portal;
 import com.threerings.whirled.spot.data.SpotScene;
 import com.threerings.whirled.spot.data.SpotSceneImpl;

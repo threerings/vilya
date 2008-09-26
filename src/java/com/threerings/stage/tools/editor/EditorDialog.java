@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 
 import com.samskivert.swing.HGroupLayout;
 import com.samskivert.swing.VGroupLayout;
+
 import com.threerings.stage.tools.editor.util.EditorContext;
 import com.threerings.stage.tools.editor.util.EditorDialogUtil;
 

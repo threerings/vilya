@@ -21,9 +21,9 @@
 
 package com.threerings.parlor.server;
 
-import com.threerings.crowd.data.BodyObject;
-
 import com.threerings.presents.data.ClientObject;
+
+import com.threerings.crowd.data.BodyObject;
 
 /**
  * An interface to be implemented by a {@code PlaceManager} that wishes to host

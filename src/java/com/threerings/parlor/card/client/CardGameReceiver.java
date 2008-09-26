@@ -21,10 +21,10 @@
 
 package com.threerings.parlor.card.client;
 
+import com.threerings.presents.client.InvocationReceiver;
+
 import com.threerings.parlor.card.data.Card;
 import com.threerings.parlor.card.data.Hand;
-
-import com.threerings.presents.client.InvocationReceiver;
 
 /**
  * Defines, for the card game services, a set of notifications delivered

@@ -24,8 +24,9 @@ package com.threerings.parlor.game.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.util.Name;
+
+import com.threerings.crowd.data.PlaceConfig;
 
 import com.threerings.parlor.client.TableConfigurator;
 import com.threerings.parlor.game.client.GameConfigurator;

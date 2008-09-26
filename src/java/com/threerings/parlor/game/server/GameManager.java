@@ -21,8 +21,9 @@
 
 package com.threerings.parlor.game.server;
 
-import java.util.List;
 import java.util.Arrays;
+import java.util.List;
+
 import com.google.common.collect.Lists;
 
 import com.samskivert.util.ArrayIntSet;
@@ -31,14 +32,16 @@ import com.samskivert.util.Interval;
 import com.samskivert.util.RepeatCallTracker;
 import com.samskivert.util.StringUtil;
 import com.samskivert.util.Tuple;
+
+import com.threerings.util.MessageBundle;
 import com.threerings.util.Name;
 
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.dobj.AttributeChangeListener;
 import com.threerings.presents.dobj.AttributeChangedEvent;
 import com.threerings.presents.dobj.DObject;
-import com.threerings.crowd.chat.server.SpeakUtil;
 
+import com.threerings.crowd.chat.server.SpeakUtil;
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.server.PlaceManager;
 import com.threerings.crowd.server.PlaceManagerDelegate;
@@ -50,8 +53,6 @@ import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.game.data.GameObject;
 import com.threerings.parlor.server.ParlorSender;
 import com.threerings.parlor.server.PlayManager;
-
-import com.threerings.util.MessageBundle;
 
 import static com.threerings.parlor.Log.log;
 

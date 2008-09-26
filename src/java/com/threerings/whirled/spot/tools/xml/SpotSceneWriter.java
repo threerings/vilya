@@ -27,6 +27,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 import com.megginson.sax.DataWriter;
+
 import com.threerings.tools.xml.NestableWriter;
 
 import com.threerings.whirled.spot.data.Location;

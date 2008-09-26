@@ -21,7 +21,9 @@
 
 package com.threerings.stage.client;
 
-import static com.threerings.stage.Log.log;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
@@ -36,9 +38,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -51,23 +50,29 @@ import com.samskivert.swing.util.SwingUtil;
 
 import com.threerings.crowd.client.PlaceView;
 import com.threerings.crowd.data.PlaceObject;
+
 import com.threerings.media.tile.ObjectTile;
 import com.threerings.media.tile.TileSet;
 import com.threerings.media.tile.UniformTileSet;
+
 import com.threerings.miso.client.MisoScenePanel;
 import com.threerings.miso.client.SceneObject;
 import com.threerings.miso.data.ObjectInfo;
 import com.threerings.miso.util.MisoUtil;
-import com.threerings.stage.data.StageLocation;
-import com.threerings.stage.data.StageMisoSceneModel;
-import com.threerings.stage.data.StageScene;
-import com.threerings.stage.util.StageContext;
-import com.threerings.stage.util.StageSceneUtil;
+
 import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.spot.data.Cluster;
 import com.threerings.whirled.spot.data.Location;
 import com.threerings.whirled.spot.data.Portal;
 import com.threerings.whirled.spot.data.SceneLocation;
+
+import com.threerings.stage.data.StageLocation;
+import com.threerings.stage.data.StageMisoSceneModel;
+import com.threerings.stage.data.StageScene;
+import com.threerings.stage.util.StageContext;
+import com.threerings.stage.util.StageSceneUtil;
+
+import static com.threerings.stage.Log.log;
 
 /**
  * Extends the basic Miso scene panel with Stage fun stuff like portals,

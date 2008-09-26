@@ -21,11 +21,13 @@
 
 package com.threerings.micasa.simulator.server;
 
-import com.threerings.micasa.simulator.data.SimulatorMarshaller;
-import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
+
+import com.threerings.parlor.game.data.GameConfig;
+
+import com.threerings.micasa.simulator.data.SimulatorMarshaller;
 
 /**
  * Dispatches requests to the {@link SimulatorProvider}.

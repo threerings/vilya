@@ -21,20 +21,21 @@
 
 package com.threerings.puzzle.drop.client;
 
-import static com.threerings.puzzle.Log.log;
-
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 
 import com.samskivert.util.IntListUtil;
+
 import com.threerings.crowd.client.PlaceController;
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.util.CrowdContext;
+
 import com.threerings.media.FrameParticipant;
 import com.threerings.media.animation.Animation;
 import com.threerings.media.animation.AnimationAdapter;
+
 import com.threerings.puzzle.client.PuzzleController;
 import com.threerings.puzzle.client.PuzzleControllerDelegate;
 import com.threerings.puzzle.client.PuzzlePanel;
@@ -48,6 +49,8 @@ import com.threerings.puzzle.drop.data.DropPieceCodes;
 import com.threerings.puzzle.drop.util.PieceDropLogic;
 import com.threerings.puzzle.drop.util.PieceDropper;
 import com.threerings.puzzle.util.PuzzleContext;
+
+import static com.threerings.puzzle.Log.log;
 
 /**
  * Games that wish to make use of the drop puzzle services will need to

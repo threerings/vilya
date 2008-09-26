@@ -27,6 +27,7 @@ import java.awt.Point;
 import java.awt.Shape;
 
 import com.samskivert.util.ObserverList;
+
 import com.threerings.util.DirectionUtil;
 
 import com.threerings.media.image.Mirage;

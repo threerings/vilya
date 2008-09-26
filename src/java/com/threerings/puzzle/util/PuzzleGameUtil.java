@@ -24,6 +24,7 @@ package com.threerings.puzzle.util;
 import java.awt.event.KeyEvent;
 
 import com.threerings.util.KeyTranslatorImpl;
+
 import com.threerings.puzzle.client.PuzzleController;
 import com.threerings.puzzle.client.PuzzlePanel;
 

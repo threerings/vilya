@@ -24,6 +24,7 @@ package com.threerings.micasa.server;
 import com.google.inject.Inject;
 
 import com.threerings.presents.net.BootstrapData;
+
 import com.threerings.crowd.server.CrowdClient;
 
 import com.threerings.micasa.data.MiCasaBootstrapData;

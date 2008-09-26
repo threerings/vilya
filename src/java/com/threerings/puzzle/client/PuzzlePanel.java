@@ -22,6 +22,7 @@
 package com.threerings.puzzle.client;
 
 import java.awt.BorderLayout;
+
 import javax.swing.JPanel;
 
 import com.samskivert.swing.Controller;

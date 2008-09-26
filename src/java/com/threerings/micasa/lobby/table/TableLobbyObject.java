@@ -21,9 +21,10 @@
 
 package com.threerings.micasa.lobby.table;
 
+import com.threerings.presents.dobj.DSet;
+
 import com.threerings.parlor.data.Table;
 import com.threerings.parlor.data.TableMarshaller;
-import com.threerings.presents.dobj.DSet;
 
 import com.threerings.micasa.lobby.LobbyObject;
 

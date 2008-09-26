@@ -23,6 +23,7 @@ package com.threerings.whirled.zone.server;
 
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationSender;
+
 import com.threerings.whirled.zone.client.ZoneDecoder;
 import com.threerings.whirled.zone.client.ZoneReceiver;
 

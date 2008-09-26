@@ -24,6 +24,7 @@ package com.threerings.whirled.zone.data;
 import com.samskivert.util.StringUtil;
 
 import com.threerings.io.SimpleStreamableObject;
+
 import com.threerings.util.Name;
 
 /**

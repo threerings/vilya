@@ -22,6 +22,7 @@
 package com.threerings.micasa.simulator.client;
 
 import java.awt.event.ActionEvent;
+
 import com.samskivert.swing.Controller;
 
 import com.threerings.presents.client.Client;

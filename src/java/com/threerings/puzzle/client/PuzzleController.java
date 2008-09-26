@@ -21,22 +21,22 @@
 
 package com.threerings.puzzle.client;
 
+import java.util.List;
+
 import java.awt.Component;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
-import com.samskivert.swing.util.MouseHijacker;
 
 import com.samskivert.util.CollectionUtil;
 import com.samskivert.util.ObserverList;
-import com.threerings.media.FrameParticipant;
+
+import com.samskivert.swing.util.MouseHijacker;
 
 import com.threerings.presents.dobj.AttributeChangeListener;
 import com.threerings.presents.dobj.AttributeChangedEvent;
@@ -45,6 +45,8 @@ import com.threerings.presents.dobj.ElementUpdatedEvent;
 
 import com.threerings.crowd.client.PlaceControllerDelegate;
 import com.threerings.crowd.data.PlaceObject;
+
+import com.threerings.media.FrameParticipant;
 
 import com.threerings.parlor.game.client.GameController;
 import com.threerings.parlor.game.data.GameObject;

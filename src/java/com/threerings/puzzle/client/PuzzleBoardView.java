@@ -21,17 +21,19 @@
 
 package com.threerings.puzzle.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.List;
+
+import com.samskivert.util.StringUtil;
 
 import com.samskivert.swing.Label;
-import com.samskivert.util.StringUtil;
 
 import com.threerings.media.VirtualMediaPanel;
 import com.threerings.media.animation.Animation;

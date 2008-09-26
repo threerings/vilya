@@ -21,8 +21,9 @@
 
 package com.threerings.parlor.turn.client;
 
-import com.threerings.crowd.client.PlaceController;
 import com.threerings.util.Name;
+
+import com.threerings.crowd.client.PlaceController;
 
 /**
  * Games that wish to make use of the turn game services should have their

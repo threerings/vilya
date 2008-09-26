@@ -21,17 +21,19 @@
 
 package com.threerings.stage.util;
 
-import com.threerings.resource.ResourceManager;
 import com.threerings.util.KeyDispatcher;
 import com.threerings.util.KeyboardManager;
 import com.threerings.util.MessageManager;
+
+import com.threerings.resource.ResourceManager;
 
 import com.threerings.media.FrameManager;
 import com.threerings.media.image.ColorPository;
 import com.threerings.media.image.ImageManager;
 
-import com.threerings.cast.ComponentRepository;
 import com.threerings.miso.util.MisoContext;
+
+import com.threerings.cast.ComponentRepository;
 
 /**
  * A context that provides for the myriad requirements of the Stage

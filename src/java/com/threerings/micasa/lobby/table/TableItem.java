@@ -22,10 +22,9 @@
 package com.threerings.micasa.lobby.table;
 
 import java.awt.Color;
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -38,8 +37,8 @@ import com.threerings.util.Name;
 
 import com.threerings.crowd.data.BodyObject;
 
-import com.threerings.parlor.client.TableDirector;
 import com.threerings.parlor.client.SeatednessObserver;
+import com.threerings.parlor.client.TableDirector;
 import com.threerings.parlor.data.Table;
 
 import com.threerings.micasa.util.MiCasaContext;

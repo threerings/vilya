@@ -21,10 +21,10 @@
 
 package com.threerings.parlor.game.client;
 
-import static com.threerings.parlor.Log.log;
-
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.util.ParlorContext;
+
+import static com.threerings.parlor.Log.log;
 
 /**
  * Provides the base from which interfaces can be built to configure games prior to starting

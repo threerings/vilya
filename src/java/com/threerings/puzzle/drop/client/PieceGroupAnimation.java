@@ -30,6 +30,7 @@ import com.threerings.media.animation.Animation;
 import com.threerings.media.sprite.PathObserver;
 import com.threerings.media.sprite.Sprite;
 import com.threerings.media.util.Path;
+
 import com.threerings.puzzle.drop.data.DropBoard;
 
 /**

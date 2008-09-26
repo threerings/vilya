@@ -21,30 +21,30 @@
 
 package com.threerings.parlor.turn.client;
 
+import java.util.HashMap;
+
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
-import java.util.HashMap;
-
+import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.Icon;
 
 import com.samskivert.swing.util.SwingUtil;
 
 import com.threerings.util.Name;
+
+import com.threerings.presents.dobj.AttributeChangeListener;
+import com.threerings.presents.dobj.AttributeChangedEvent;
+import com.threerings.presents.dobj.ElementUpdateListener;
+import com.threerings.presents.dobj.ElementUpdatedEvent;
 
 import com.threerings.crowd.client.PlaceView;
 import com.threerings.crowd.data.PlaceObject;
 
 import com.threerings.parlor.game.data.GameObject;
 import com.threerings.parlor.turn.data.TurnGameObject;
-
-import com.threerings.presents.dobj.AttributeChangeListener;
-import com.threerings.presents.dobj.AttributeChangedEvent;
-import com.threerings.presents.dobj.ElementUpdateListener;
-import com.threerings.presents.dobj.ElementUpdatedEvent;
 
 /**
  * Automatically display a list of players and turn change information

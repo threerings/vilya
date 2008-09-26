@@ -21,6 +21,14 @@
 
 package com.threerings.stage.tools.editor;
 
+import java.util.List;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.DisplayMode;
@@ -34,17 +42,11 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.List;
+import com.samskivert.util.DebugChords;
+import com.samskivert.util.StringUtil;
 
 import com.samskivert.swing.RuntimeAdjust;
 import com.samskivert.swing.util.SwingUtil;
-import com.samskivert.util.DebugChords;
-import com.samskivert.util.StringUtil;
 
 import com.threerings.util.KeyDispatcher;
 import com.threerings.util.KeyboardManager;
@@ -56,14 +58,14 @@ import com.threerings.resource.ResourceManager;
 import com.threerings.media.FrameManager;
 import com.threerings.media.image.ColorPository;
 import com.threerings.media.image.ImageManager;
-import com.threerings.media.util.ModeUtil;
-
 import com.threerings.media.tile.TileSetRepository;
 import com.threerings.media.tile.bundle.BundledTileSetRepository;
+import com.threerings.media.util.ModeUtil;
+
+import com.threerings.miso.tile.MisoTileManager;
 
 import com.threerings.cast.ComponentRepository;
 import com.threerings.cast.bundle.BundledComponentRepository;
-import com.threerings.miso.tile.MisoTileManager;
 
 import com.threerings.stage.data.StageSceneModel;
 import com.threerings.stage.tools.editor.util.EditorContext;

@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import com.samskivert.util.HashIntMap;
+
 import com.threerings.util.Name;
 
 import com.threerings.presents.dobj.DObject;
@@ -32,12 +33,11 @@ import com.threerings.presents.server.InvocationException;
 
 import com.threerings.crowd.chat.data.UserMessage;
 import com.threerings.crowd.chat.server.SpeakUtil;
-import com.threerings.crowd.server.PlaceRegistry;
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.OccupantInfo;
+import com.threerings.crowd.server.PlaceRegistry;
 
 import com.threerings.whirled.server.SceneManager;
-
 import com.threerings.whirled.spot.data.Cluster;
 import com.threerings.whirled.spot.data.ClusterObject;
 import com.threerings.whirled.spot.data.ClusteredBodyObject;

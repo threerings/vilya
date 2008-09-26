@@ -21,9 +21,8 @@
 
 package com.threerings.parlor.card.trick.client;
 
-import com.threerings.parlor.turn.client.TurnGameControllerDelegate;
-
 import com.threerings.parlor.card.client.CardGameController;
+import com.threerings.parlor.turn.client.TurnGameControllerDelegate;
 
 /**
  * A card game controller delegate for trick-based card games, such as

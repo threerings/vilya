@@ -26,6 +26,7 @@ import java.awt.Rectangle;
 import com.samskivert.util.StringUtil;
 
 import com.threerings.io.Streamable;
+
 import com.threerings.util.ActionScript;
 
 import com.threerings.presents.dobj.DSet;

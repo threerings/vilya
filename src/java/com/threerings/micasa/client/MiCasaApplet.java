@@ -22,9 +22,11 @@
 package com.threerings.micasa.client;
 
 import java.applet.Applet;
+
 import java.io.IOException;
 
 import com.samskivert.swing.util.SwingUtil;
+
 import com.threerings.util.Name;
 
 import com.threerings.presents.client.Client;

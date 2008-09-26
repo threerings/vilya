@@ -21,13 +21,13 @@
 
 package com.threerings.stage.tools.editor;
 
+import java.util.HashSet;
+import java.util.Iterator;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-
-import java.util.HashSet;
-import java.util.Iterator;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -35,29 +35,27 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
-import com.samskivert.swing.GroupLayout;
-import com.samskivert.swing.HGroupLayout;
 import com.samskivert.util.Collections;
 import com.samskivert.util.ComparableArrayList;
 
-import com.threerings.miso.data.ObjectInfo;
-import com.threerings.miso.data.SparseMisoSceneModel.ObjectVisitor;
+import com.samskivert.swing.GroupLayout;
+import com.samskivert.swing.HGroupLayout;
 
 import com.threerings.media.image.ColorPository;
-
 import com.threerings.media.tile.NoSuchTileSetException;
 import com.threerings.media.tile.RecolorableTileSet;
 import com.threerings.media.tile.TileManager;
 import com.threerings.media.tile.TileSet;
 import com.threerings.media.tile.TileUtil;
 
+import com.threerings.miso.data.ObjectInfo;
+import com.threerings.miso.data.SparseMisoSceneModel.ObjectVisitor;
+
 import com.threerings.stage.data.StageMisoSceneModel;
 import com.threerings.stage.data.StageScene;
-
 import com.threerings.stage.tools.editor.util.EditorContext;
 
 /**

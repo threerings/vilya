@@ -25,6 +25,7 @@ import com.google.inject.Inject;
 
 import com.samskivert.util.IntMap;
 import com.samskivert.util.IntMaps;
+
 import com.threerings.util.Name;
 
 import com.threerings.presents.data.ClientObject;

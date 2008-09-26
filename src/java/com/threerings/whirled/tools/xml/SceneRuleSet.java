@@ -26,6 +26,7 @@ import org.apache.commons.digester.Digester;
 import com.samskivert.xml.SetPropertyFieldsRule;
 
 import com.threerings.tools.xml.NestableRuleSet;
+
 import com.threerings.whirled.data.SceneModel;
 
 /**

@@ -21,7 +21,9 @@
 
 package com.threerings.stage.tools.editor;
 
-import static com.threerings.stage.Log.log;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
@@ -38,9 +40,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 import javax.swing.BoundedRangeModel;
 import javax.swing.DefaultBoundedRangeModel;
@@ -49,13 +48,19 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.google.common.collect.Lists;
+
+import com.samskivert.util.RandomUtil;
+
 import com.samskivert.swing.Controller;
 import com.samskivert.swing.TGraphics2D;
 import com.samskivert.swing.util.SwingUtil;
-import com.samskivert.util.RandomUtil;
+
+import com.threerings.util.DirectionCodes;
+
 import com.threerings.media.tile.ObjectTile;
 import com.threerings.media.tile.Tile;
 import com.threerings.media.tile.TileUtil;
+
 import com.threerings.miso.client.MisoScenePanel;
 import com.threerings.miso.client.ObjectActionHandler;
 import com.threerings.miso.client.SceneBlock;
@@ -63,15 +68,18 @@ import com.threerings.miso.client.SceneObject;
 import com.threerings.miso.data.MisoSceneModel;
 import com.threerings.miso.data.ObjectInfo;
 import com.threerings.miso.util.MisoUtil;
+
+import com.threerings.whirled.spot.data.Portal;
+import com.threerings.whirled.spot.tools.EditablePortal;
+
 import com.threerings.stage.client.StageScenePanel;
 import com.threerings.stage.data.StageLocation;
 import com.threerings.stage.data.StageMisoSceneModel;
 import com.threerings.stage.tools.editor.util.EditorContext;
 import com.threerings.stage.tools.editor.util.EditorDialogUtil;
 import com.threerings.stage.tools.editor.util.ExtrasPainter;
-import com.threerings.util.DirectionCodes;
-import com.threerings.whirled.spot.data.Portal;
-import com.threerings.whirled.spot.tools.EditablePortal;
+
+import static com.threerings.stage.Log.log;
 
 /**
  * Displays the scene view and handles UI events on the scene. Various actions may be performed on

@@ -21,15 +21,14 @@
 
 package com.threerings.stage.tools.xml;
 
-import org.apache.commons.digester.Rule;
-
 import org.xml.sax.Attributes;
 
+import org.apache.commons.digester.Rule;
+
+import com.threerings.whirled.spot.data.Location;
 import com.threerings.whirled.spot.tools.xml.SpotSceneRuleSet;
 import com.threerings.whirled.tools.xml.SceneParser;
 import com.threerings.whirled.tools.xml.SceneRuleSet;
-
-import com.threerings.whirled.spot.data.Location;
 
 import com.threerings.stage.data.StageLocation;
 import com.threerings.stage.data.StageSceneModel;

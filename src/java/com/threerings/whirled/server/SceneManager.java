@@ -23,8 +23,9 @@ package com.threerings.whirled.server;
 
 import com.google.inject.Inject;
 
-import com.samskivert.jdbc.WriteOnlyUnit;
 import com.samskivert.util.Invoker;
+
+import com.samskivert.jdbc.WriteOnlyUnit;
 
 import com.threerings.presents.annotation.MainInvoker;
 

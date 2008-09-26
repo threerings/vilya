@@ -21,6 +21,9 @@
 
 package com.threerings.stage.tools.editor;
 
+import java.io.File;
+import java.io.IOException;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
@@ -30,8 +33,6 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.IOException;
 
 import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
@@ -49,8 +50,12 @@ import com.samskivert.swing.GroupLayout;
 import com.samskivert.swing.HGroupLayout;
 import com.samskivert.swing.util.MenuUtil;
 import com.samskivert.swing.util.SwingUtil;
+
 import com.threerings.media.ManagedJFrame;
+
 import com.threerings.miso.tile.BaseTileSet;
+
+import com.threerings.whirled.tools.xml.SceneParser;
 
 import com.threerings.stage.data.StageScene;
 import com.threerings.stage.data.StageSceneModel;
@@ -58,7 +63,6 @@ import com.threerings.stage.tools.editor.util.EditorContext;
 import com.threerings.stage.tools.editor.util.EditorDialogUtil;
 import com.threerings.stage.tools.xml.StageSceneParser;
 import com.threerings.stage.tools.xml.StageSceneWriter;
-import com.threerings.whirled.tools.xml.SceneParser;
 
 import static com.threerings.stage.Log.log;
 

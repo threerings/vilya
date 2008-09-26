@@ -34,8 +34,8 @@ import com.samskivert.swing.HGroupLayout;
 import com.samskivert.swing.VGroupLayout;
 import com.samskivert.swing.util.SwingUtil;
 
-import com.threerings.micasa.lobby.LobbyConfig;
-import com.threerings.micasa.util.MiCasaContext;
+import com.threerings.crowd.client.PlaceView;
+import com.threerings.crowd.data.PlaceObject;
 
 import com.threerings.parlor.client.SeatednessObserver;
 import com.threerings.parlor.client.TableConfigurator;
@@ -46,8 +46,8 @@ import com.threerings.parlor.game.client.GameConfigurator;
 import com.threerings.parlor.game.client.SwingGameConfigurator;
 import com.threerings.parlor.game.data.GameConfig;
 
-import com.threerings.crowd.client.PlaceView;
-import com.threerings.crowd.data.PlaceObject;
+import com.threerings.micasa.lobby.LobbyConfig;
+import com.threerings.micasa.util.MiCasaContext;
 
 import static com.threerings.micasa.Log.log;
 

@@ -22,6 +22,7 @@
 package com.threerings.stage.tools.editor.util;
 
 import com.threerings.media.tile.TileSet;
+
 import com.threerings.miso.tile.BaseTileSet;
 
 import com.threerings.stage.tools.editor.EditorModel;

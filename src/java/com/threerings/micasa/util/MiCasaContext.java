@@ -22,7 +22,9 @@
 package com.threerings.micasa.util;
 
 import com.threerings.util.MessageManager;
+
 import com.threerings.parlor.util.ParlorContext;
+
 import com.threerings.micasa.client.MiCasaFrame;
 
 /**

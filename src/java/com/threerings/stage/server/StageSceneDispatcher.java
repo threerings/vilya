@@ -21,11 +21,13 @@
 
 package com.threerings.stage.server;
 
-import com.threerings.miso.data.ObjectInfo;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
+
+import com.threerings.miso.data.ObjectInfo;
+
 import com.threerings.stage.data.StageSceneMarshaller;
 
 /**

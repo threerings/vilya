@@ -21,14 +21,14 @@
 
 package com.threerings.parlor.tourney.server.persist;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 import java.util.ArrayList;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-
-import java.sql.Connection;
-import java.sql.SQLException;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -39,7 +39,6 @@ import com.samskivert.jdbc.ConnectionProvider;
 import com.samskivert.jdbc.DatabaseLiaison;
 import com.samskivert.jdbc.JDBCUtil;
 import com.samskivert.jdbc.JORARepository;
-
 import com.samskivert.jdbc.jora.Table;
 
 import com.threerings.io.ObjectInputStream;

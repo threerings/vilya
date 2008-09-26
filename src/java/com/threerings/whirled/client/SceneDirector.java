@@ -21,8 +21,9 @@
 
 package com.threerings.whirled.client;
 
-import java.io.IOException;
 import java.util.Map;
+
+import java.io.IOException;
 
 import com.samskivert.util.LRUHashMap;
 import com.samskivert.util.ResultListener;
@@ -39,10 +40,10 @@ import com.threerings.whirled.client.persist.SceneRepository;
 import com.threerings.whirled.data.Scene;
 import com.threerings.whirled.data.SceneCodes;
 import com.threerings.whirled.data.SceneModel;
+import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.util.NoSuchSceneException;
 import com.threerings.whirled.util.SceneFactory;
 import com.threerings.whirled.util.WhirledContext;
-import com.threerings.whirled.data.SceneUpdate;
 
 import static com.threerings.whirled.Log.log;
 

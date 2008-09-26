@@ -28,6 +28,7 @@ import com.samskivert.util.Interval;
 import com.samskivert.util.RandomUtil;
 
 import com.threerings.presents.data.ClientObject;
+
 import com.threerings.parlor.game.server.GameManager;
 
 import com.threerings.puzzle.data.Board;

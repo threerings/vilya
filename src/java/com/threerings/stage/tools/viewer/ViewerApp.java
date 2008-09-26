@@ -21,20 +21,21 @@
 
 package com.threerings.stage.tools.viewer;
 
+import java.io.IOException;
+
 import java.awt.DisplayMode;
 import java.awt.EventQueue;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 
-import java.io.IOException;
-
 import com.samskivert.swing.util.SwingUtil;
 
-import com.threerings.resource.ResourceManager;
 import com.threerings.util.KeyDispatcher;
 import com.threerings.util.KeyboardManager;
 import com.threerings.util.MessageManager;
+
+import com.threerings.resource.ResourceManager;
 
 import com.threerings.media.FrameManager;
 import com.threerings.media.IconManager;
@@ -42,11 +43,11 @@ import com.threerings.media.image.ColorPository;
 import com.threerings.media.image.ImageManager;
 import com.threerings.media.tile.bundle.BundledTileSetRepository;
 
-import com.threerings.cast.CharacterManager;
-import com.threerings.cast.bundle.BundledComponentRepository;
-import com.threerings.cast.ComponentRepository;
-
 import com.threerings.miso.tile.MisoTileManager;
+
+import com.threerings.cast.CharacterManager;
+import com.threerings.cast.ComponentRepository;
+import com.threerings.cast.bundle.BundledComponentRepository;
 
 import com.threerings.stage.util.StageContext;
 

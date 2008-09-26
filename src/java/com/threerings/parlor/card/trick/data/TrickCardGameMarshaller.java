@@ -21,10 +21,11 @@
 
 package com.threerings.parlor.card.trick.data;
 
-import com.threerings.parlor.card.data.Card;
-import com.threerings.parlor.card.trick.client.TrickCardGameService;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller;
+
+import com.threerings.parlor.card.data.Card;
+import com.threerings.parlor.card.trick.client.TrickCardGameService;
 
 /**
  * Provides the implementation of the {@link TrickCardGameService} interface

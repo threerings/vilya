@@ -22,6 +22,7 @@
 package com.threerings.whirled.util;
 
 import com.threerings.crowd.util.CrowdContext;
+
 import com.threerings.whirled.client.SceneDirector;
 
 /**

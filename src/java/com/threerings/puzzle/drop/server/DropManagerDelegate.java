@@ -21,11 +21,10 @@
 
 package com.threerings.puzzle.drop.server;
 
-import static com.threerings.puzzle.Log.log;
-
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.server.PlaceManager;
+
 import com.threerings.puzzle.data.Board;
 import com.threerings.puzzle.data.PuzzleCodes;
 import com.threerings.puzzle.drop.data.DropBoard;
@@ -36,6 +35,8 @@ import com.threerings.puzzle.drop.util.PieceDropLogic;
 import com.threerings.puzzle.drop.util.PieceDropper;
 import com.threerings.puzzle.server.PuzzleManager;
 import com.threerings.puzzle.server.PuzzleManagerDelegate;
+
+import static com.threerings.puzzle.Log.log;
 
 /**
  * Provides the necessary support for a puzzle game that involves a

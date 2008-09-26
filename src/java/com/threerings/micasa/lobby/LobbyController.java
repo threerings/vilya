@@ -23,13 +23,15 @@ package com.threerings.micasa.lobby;
 
 import com.threerings.util.Name;
 
-import com.threerings.crowd.data.PlaceConfig;
-import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.client.PlaceController;
 import com.threerings.crowd.client.PlaceView;
+import com.threerings.crowd.data.PlaceConfig;
+import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.util.CrowdContext;
 
-import com.threerings.parlor.client.*;
+import com.threerings.parlor.client.Invitation;
+import com.threerings.parlor.client.InvitationHandler;
+import com.threerings.parlor.client.InvitationResponseObserver;
 import com.threerings.parlor.game.data.GameConfig;
 
 import com.threerings.micasa.util.MiCasaContext;

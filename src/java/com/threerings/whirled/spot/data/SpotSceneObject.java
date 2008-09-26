@@ -22,6 +22,7 @@
 package com.threerings.whirled.spot.data;
 
 import com.threerings.presents.dobj.DSet;
+
 import com.threerings.whirled.data.SceneObject;
 
 /**

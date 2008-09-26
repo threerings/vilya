@@ -21,16 +21,18 @@
 
 package com.threerings.stage.tools.editor;
 
+import java.util.Iterator;
+
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+
 import javax.swing.event.MouseInputAdapter;
 
-import java.util.Iterator;
-
-import com.threerings.miso.util.MisoUtil;
 import com.threerings.util.DirectionCodes;
 import com.threerings.util.DirectionUtil;
+
+import com.threerings.miso.util.MisoUtil;
 
 import com.threerings.whirled.spot.data.Portal;
 import com.threerings.whirled.spot.tools.EditablePortal;

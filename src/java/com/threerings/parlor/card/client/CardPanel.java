@@ -21,16 +21,16 @@
 
 package com.threerings.parlor.card.client;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
 
 import javax.swing.event.MouseInputAdapter;
 
@@ -46,6 +46,7 @@ import com.threerings.media.sprite.Sprite;
 import com.threerings.media.util.LinePath;
 import com.threerings.media.util.Path;
 import com.threerings.media.util.PathSequence;
+
 import com.threerings.parlor.card.data.Card;
 import com.threerings.parlor.card.data.CardCodes;
 import com.threerings.parlor.card.data.Hand;

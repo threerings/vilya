@@ -22,6 +22,7 @@
 package com.threerings.parlor.game.data;
 
 import com.samskivert.util.StringUtil;
+
 import com.threerings.util.Name;
 
 import com.threerings.crowd.data.PlaceObject;

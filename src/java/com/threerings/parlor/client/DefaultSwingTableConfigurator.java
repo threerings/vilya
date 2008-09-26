@@ -23,7 +23,9 @@ package com.threerings.parlor.client;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+
 import com.samskivert.swing.SimpleSlider;
+
 import com.threerings.parlor.game.client.SwingGameConfigurator;
 
 /**

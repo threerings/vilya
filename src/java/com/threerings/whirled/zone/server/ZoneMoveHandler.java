@@ -32,7 +32,6 @@ import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.server.AbstractSceneMoveHandler;
 import com.threerings.whirled.server.SceneManager;
 import com.threerings.whirled.server.SceneRegistry;
-
 import com.threerings.whirled.zone.client.ZoneService;
 import com.threerings.whirled.zone.data.ZoneCodes;
 import com.threerings.whirled.zone.data.ZoneSummary;

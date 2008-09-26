@@ -25,6 +25,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 
 import com.threerings.media.sprite.FadableImageSprite;
+
 import com.threerings.parlor.card.data.Card;
 
 /**

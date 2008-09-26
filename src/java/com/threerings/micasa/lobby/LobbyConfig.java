@@ -21,16 +21,19 @@
 
 package com.threerings.micasa.lobby;
 
+import java.util.Properties;
+
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-import java.util.Properties;
 import com.samskivert.util.StringUtil;
 
 import com.threerings.crowd.client.PlaceController;
 import com.threerings.crowd.data.PlaceConfig;
-import com.threerings.micasa.util.MiCasaContext;
+
 import com.threerings.parlor.game.data.GameConfig;
+
+import com.threerings.micasa.util.MiCasaContext;
 
 public class LobbyConfig extends PlaceConfig
 {

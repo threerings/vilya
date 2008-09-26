@@ -22,6 +22,7 @@
 package com.threerings.puzzle.drop.data;
 
 import com.samskivert.util.StringUtil;
+
 import com.threerings.util.DirectionCodes;
 
 /**

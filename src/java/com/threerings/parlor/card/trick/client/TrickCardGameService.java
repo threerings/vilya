@@ -21,10 +21,10 @@
 
 package com.threerings.parlor.card.trick.client;
 
-import com.threerings.parlor.card.data.Card;
-
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
+
+import com.threerings.parlor.card.data.Card;
 
 /**
  * Service calls related to trick card games.

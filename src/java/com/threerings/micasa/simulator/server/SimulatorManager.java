@@ -26,6 +26,7 @@ import java.util.List;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+
 import com.threerings.util.Name;
 
 import com.threerings.presents.data.ClientObject;

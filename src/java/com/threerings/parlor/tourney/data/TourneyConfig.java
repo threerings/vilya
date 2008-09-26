@@ -22,6 +22,7 @@
 package com.threerings.parlor.tourney.data;
 
 import com.threerings.io.SimpleStreamableObject;
+
 import com.threerings.util.Name;
 
 /**

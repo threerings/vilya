@@ -26,15 +26,11 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-
-import java.awt.event.MouseEvent;
-
-import java.awt.geom.AffineTransform;
-
-import java.awt.image.BufferedImage;
-
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 
 import com.samskivert.swing.ScrollBox;
 import com.samskivert.swing.util.SwingUtil;

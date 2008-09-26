@@ -21,9 +21,9 @@
 
 package com.threerings.stats.data;
 
-import java.io.IOException;
-
 import java.util.Arrays;
+
+import java.io.IOException;
 
 import com.samskivert.util.ArrayUtil;
 import com.samskivert.util.StringUtil;

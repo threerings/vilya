@@ -21,8 +21,8 @@
 
 package com.threerings.parlor.data;
 
-import java.util.List;
 import java.util.HashSet;
+import java.util.List;
 
 import com.google.common.collect.Lists;
 
@@ -38,7 +38,6 @@ import com.threerings.presents.dobj.DSet;
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.OccupantInfo;
 
-import com.threerings.parlor.data.ParlorCodes;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.game.data.GameObject;
 

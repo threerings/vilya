@@ -21,24 +21,28 @@
 
 package com.threerings.stage.server;
 
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import java.awt.Point;
+import java.awt.Rectangle;
+
 import com.samskivert.util.HashIntMap;
-import com.threerings.media.util.AStarPathUtil;
-import com.threerings.media.util.MathUtil;
-import com.threerings.miso.data.ObjectInfo;
-import com.threerings.miso.util.MisoSceneMetrics;
-import com.threerings.miso.util.MisoUtil;
+
+import com.threerings.presents.data.ClientObject;
+import com.threerings.presents.server.InvocationException;
 
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceObject;
-import com.threerings.presents.data.ClientObject;
-import com.threerings.presents.server.InvocationException;
+
+import com.threerings.media.util.AStarPathUtil;
+import com.threerings.media.util.MathUtil;
+
+import com.threerings.miso.data.ObjectInfo;
+import com.threerings.miso.util.MisoSceneMetrics;
+import com.threerings.miso.util.MisoUtil;
 
 import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.spot.data.Cluster;

@@ -24,6 +24,7 @@ package com.threerings.whirled.spot.data;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.InvocationMarshaller;
+
 import com.threerings.whirled.client.SceneService;
 import com.threerings.whirled.data.SceneMarshaller;
 import com.threerings.whirled.spot.client.SpotService;

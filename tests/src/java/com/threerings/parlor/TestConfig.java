@@ -22,6 +22,7 @@
 package com.threerings.parlor;
 
 import com.threerings.crowd.client.PlaceController;
+
 import com.threerings.parlor.game.client.GameConfigurator;
 import com.threerings.parlor.game.data.GameConfig;
 

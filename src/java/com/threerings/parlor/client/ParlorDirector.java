@@ -26,6 +26,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import com.samskivert.util.HashIntMap;
+
 import com.threerings.util.Name;
 
 import com.threerings.presents.client.BasicDirector;

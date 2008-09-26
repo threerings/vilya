@@ -24,6 +24,7 @@ package com.threerings.puzzle.server;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
+
 import com.threerings.puzzle.data.Board;
 import com.threerings.puzzle.data.PuzzleGameMarshaller;
 

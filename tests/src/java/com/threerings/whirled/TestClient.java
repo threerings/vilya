@@ -23,7 +23,7 @@ package com.threerings.whirled;
 
 import com.threerings.presents.client.Client;
 
-import com.threerings.crowd.client.*;
+import com.threerings.crowd.client.LocationObserver;
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.util.CrowdContext;

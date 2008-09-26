@@ -21,14 +21,16 @@
 
 package com.threerings.parlor.server;
 
-import com.threerings.parlor.data.TableConfig;
-import com.threerings.parlor.data.TableMarshaller;
-import com.threerings.parlor.game.data.GameConfig;
+import com.threerings.util.Name;
+
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
-import com.threerings.util.Name;
+
+import com.threerings.parlor.data.TableConfig;
+import com.threerings.parlor.data.TableMarshaller;
+import com.threerings.parlor.game.data.GameConfig;
 
 /**
  * Dispatches requests to the {@link TableProvider}.

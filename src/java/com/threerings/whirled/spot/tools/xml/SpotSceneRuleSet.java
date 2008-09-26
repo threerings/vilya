@@ -23,17 +23,17 @@ package com.threerings.whirled.spot.tools.xml;
 
 import java.lang.reflect.Field;
 
-import com.samskivert.xml.SetPropertyFieldsRule;
-import com.samskivert.util.StringUtil;
-import com.samskivert.util.ValueMarshaller;
-
-import com.threerings.tools.xml.NestableRuleSet;
+import org.xml.sax.Attributes;
 
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.ObjectCreateRule;
 import org.apache.commons.digester.Rule;
 
-import org.xml.sax.Attributes;
+import com.samskivert.util.StringUtil;
+import com.samskivert.util.ValueMarshaller;
+import com.samskivert.xml.SetPropertyFieldsRule;
+
+import com.threerings.tools.xml.NestableRuleSet;
 
 import com.threerings.whirled.spot.data.Location;
 import com.threerings.whirled.spot.data.Portal;

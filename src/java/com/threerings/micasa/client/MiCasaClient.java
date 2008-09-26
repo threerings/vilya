@@ -21,24 +21,26 @@
 
 package com.threerings.micasa.client;
 
+import java.io.IOException;
+
 import java.awt.EventQueue;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
+
 import javax.swing.JPanel;
 
 import com.samskivert.util.Config;
 import com.samskivert.util.RunQueue;
+
 import com.threerings.util.MessageManager;
 
 import com.threerings.presents.client.Client;
 import com.threerings.presents.dobj.DObjectManager;
 
+import com.threerings.crowd.chat.client.ChatDirector;
 import com.threerings.crowd.client.LocationDirector;
 import com.threerings.crowd.client.OccupantDirector;
 import com.threerings.crowd.client.PlaceView;
-
-import com.threerings.crowd.chat.client.ChatDirector;
 
 import com.threerings.parlor.client.ParlorDirector;
 

@@ -21,14 +21,16 @@
 
 package com.threerings.stage.tools.editor;
 
-import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+
+import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
@@ -38,10 +40,10 @@ import com.threerings.media.tile.ImageProvider;
 import com.threerings.media.tile.SimpleCachingImageProvider;
 import com.threerings.media.tile.TileSet;
 import com.threerings.media.tile.TileSetIDBroker;
-
-import com.threerings.miso.tile.tools.xml.BaseTileSetRuleSet;
 import com.threerings.media.tile.tools.xml.ObjectTileSetRuleSet;
 import com.threerings.media.tile.tools.xml.XMLTileSetParser;
+
+import com.threerings.miso.tile.tools.xml.BaseTileSetRuleSet;
 
 import static com.threerings.stage.Log.log;
 

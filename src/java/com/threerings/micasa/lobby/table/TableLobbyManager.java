@@ -22,7 +22,9 @@
 package com.threerings.micasa.lobby.table;
 
 import com.threerings.crowd.data.PlaceObject;
+
 import com.threerings.parlor.server.TableManager;
+
 import com.threerings.micasa.lobby.LobbyManager;
 
 /**

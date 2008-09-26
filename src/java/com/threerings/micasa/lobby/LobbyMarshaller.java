@@ -21,10 +21,11 @@
 
 package com.threerings.micasa.lobby;
 
+import java.util.List;
+
 import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.dobj.InvocationResponseEvent;
-import java.util.List;
 
 /**
  * Provides the implementation of the {@link LobbyService} interface

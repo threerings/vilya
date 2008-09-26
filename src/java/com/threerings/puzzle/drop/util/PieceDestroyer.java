@@ -26,9 +26,9 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import com.threerings.puzzle.drop.data.DropBoard;
-import com.threerings.puzzle.drop.data.DropBoard.PieceOperation;
 import com.threerings.puzzle.drop.data.DropPieceCodes;
 import com.threerings.puzzle.drop.data.SegmentInfo;
+import com.threerings.puzzle.drop.data.DropBoard.PieceOperation;
 
 /**
  * Handles destroying contiguous piece segments in a drop board.

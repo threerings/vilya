@@ -21,9 +21,10 @@
 
 package com.threerings.puzzle.drop.data;
 
+import java.util.Arrays;
+
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.Arrays;
 
 import org.apache.commons.lang.StringUtils;
 

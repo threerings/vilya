@@ -21,12 +21,14 @@
 
 package com.threerings.parlor.data;
 
-import com.threerings.parlor.client.TableService;
-import com.threerings.parlor.game.data.GameConfig;
+import com.threerings.util.Name;
+
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.InvocationMarshaller;
-import com.threerings.util.Name;
+
+import com.threerings.parlor.client.TableService;
+import com.threerings.parlor.game.data.GameConfig;
 
 /**
  * Provides the implementation of the {@link TableService} interface

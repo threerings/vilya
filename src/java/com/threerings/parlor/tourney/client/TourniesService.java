@@ -21,10 +21,10 @@
 
 package com.threerings.parlor.tourney.client;
 
-import com.threerings.parlor.tourney.data.TourneyConfig;
-
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
+
+import com.threerings.parlor.tourney.data.TourneyConfig;
 
 /**
  * Provices services for creating/modifying tournies.

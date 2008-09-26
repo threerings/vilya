@@ -21,14 +21,14 @@
 
 package com.threerings.puzzle.drop.client;
 
+import java.util.Iterator;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
-
-import java.util.Iterator;
 
 import com.threerings.media.image.Mirage;
 import com.threerings.media.sprite.ImageSprite;
@@ -42,11 +42,10 @@ import com.threerings.parlor.media.ScoreAnimation;
 
 import com.threerings.puzzle.client.PuzzleBoardView;
 import com.threerings.puzzle.data.Board;
-import com.threerings.puzzle.util.PuzzleContext;
-
 import com.threerings.puzzle.drop.data.DropBoard;
 import com.threerings.puzzle.drop.data.DropConfig;
 import com.threerings.puzzle.drop.data.DropPieceCodes;
+import com.threerings.puzzle.util.PuzzleContext;
 
 import static com.threerings.puzzle.Log.log;
 

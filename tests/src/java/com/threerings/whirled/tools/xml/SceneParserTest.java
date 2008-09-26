@@ -21,10 +21,10 @@
 
 package com.threerings.whirled.tools.xml;
 
-import com.samskivert.test.TestUtil;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
+
+import com.samskivert.test.TestUtil;
 
 import com.threerings.whirled.data.SceneModel;
 

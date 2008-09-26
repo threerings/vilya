@@ -33,10 +33,12 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import com.samskivert.swing.HGroupLayout;
-import com.threerings.stage.data.StageScene;
-import com.threerings.stage.tools.editor.util.EditorContext;
+
 import com.threerings.whirled.spot.data.Portal;
 import com.threerings.whirled.spot.tools.EditablePortal;
+
+import com.threerings.stage.data.StageScene;
+import com.threerings.stage.tools.editor.util.EditorContext;
 
 /**
  * The <code>PortalDialog</code> is used to present the user with a dialog

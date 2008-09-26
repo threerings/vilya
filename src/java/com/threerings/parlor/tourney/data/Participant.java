@@ -21,10 +21,10 @@
 
 package com.threerings.parlor.tourney.data;
 
-import java.lang.Comparable;
+import com.threerings.io.SimpleStreamableObject;
 
 import com.threerings.util.Name;
-import com.threerings.io.SimpleStreamableObject;
+
 import com.threerings.presents.dobj.DSet;
 
 /**

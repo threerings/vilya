@@ -21,6 +21,8 @@
 
 package com.threerings.parlor.card.server;
 
+import com.threerings.presents.data.ClientObject;
+
 import com.threerings.crowd.data.OccupantInfo;
 import com.threerings.crowd.server.OccupantOp;
 
@@ -32,8 +34,6 @@ import com.threerings.parlor.card.data.Hand;
 import com.threerings.parlor.game.data.GameObject;
 import com.threerings.parlor.game.server.GameManager;
 import com.threerings.parlor.turn.server.TurnGameManager;
-
-import com.threerings.presents.data.ClientObject;
 
 /**
  * A manager class for card games.  Handles common functions like dealing

@@ -21,6 +21,11 @@
 
 package com.threerings.stage.tools.editor;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Image;
@@ -28,11 +33,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
@@ -63,7 +63,6 @@ import com.samskivert.util.QuickSort;
 import com.samskivert.util.StringUtil;
 
 import com.threerings.media.SafeScrollPane;
-
 import com.threerings.media.tile.TileManager;
 import com.threerings.media.tile.TileSet;
 import com.threerings.media.tile.TileSetRepository;

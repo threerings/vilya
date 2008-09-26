@@ -21,7 +21,8 @@
 
 package com.threerings.whirled;
 
-import com.threerings.crowd.client.*;
+import com.threerings.crowd.client.PlaceController;
+import com.threerings.crowd.client.PlaceView;
 import com.threerings.crowd.util.CrowdContext;
 
 public class TestController extends PlaceController

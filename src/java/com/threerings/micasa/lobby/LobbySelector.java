@@ -21,6 +21,10 @@
 
 package com.threerings.micasa.lobby;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -28,9 +32,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
@@ -39,6 +40,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 
 import com.threerings.crowd.data.PlaceObject;
+
 import com.threerings.micasa.util.MiCasaContext;
 
 import static com.threerings.micasa.Log.log;

@@ -21,13 +21,13 @@
 
 package com.threerings.stage.tools.viewer;
 
+import java.io.File;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GraphicsConfiguration;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-
-import java.io.File;
 
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
@@ -38,8 +38,9 @@ import javax.swing.filechooser.FileFilter;
 
 import com.samskivert.swing.util.MenuUtil;
 
-import com.threerings.cast.CharacterManager;
 import com.threerings.media.ManagedJFrame;
+
+import com.threerings.cast.CharacterManager;
 
 import com.threerings.whirled.spot.data.Location;
 import com.threerings.whirled.spot.data.Portal;

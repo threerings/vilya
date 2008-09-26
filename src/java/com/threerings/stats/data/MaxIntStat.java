@@ -21,8 +21,8 @@
 
 package com.threerings.stats.data;
 
-import java.io.IOException;
 import java.io.EOFException;
+import java.io.IOException;
 
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;

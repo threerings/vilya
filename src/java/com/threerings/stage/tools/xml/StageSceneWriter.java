@@ -28,14 +28,12 @@ import com.megginson.sax.DataWriter;
 
 import com.threerings.miso.tools.xml.SparseMisoSceneWriter;
 
+import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.spot.data.SpotSceneModel;
 import com.threerings.whirled.spot.tools.xml.SpotSceneWriter;
-
-import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.tools.xml.SceneWriter;
 
 import com.threerings.stage.data.StageMisoSceneModel;
-
 import com.threerings.stage.data.StageSceneModel;
 
 /**

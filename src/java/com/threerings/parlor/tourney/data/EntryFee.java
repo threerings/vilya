@@ -23,9 +23,9 @@ package com.threerings.parlor.tourney.data;
 
 import com.samskivert.util.ResultListener;
 
-import com.threerings.crowd.data.BodyObject;
-
 import com.threerings.io.SimpleStreamableObject;
+
+import com.threerings.crowd.data.BodyObject;
 
 /**
  * Extensible entry fee class that specifies entry requirements for a tourney.

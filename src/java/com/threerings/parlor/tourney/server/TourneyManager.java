@@ -22,22 +22,23 @@
 package com.threerings.parlor.tourney.server;
 
 import com.google.inject.Inject;
+
 import com.samskivert.util.Interval;
 import com.samskivert.util.ResultListener;
-
-import com.threerings.crowd.data.BodyObject;
-import com.threerings.crowd.server.BodyLocator;
-
-import com.threerings.parlor.tourney.data.Participant;
-import com.threerings.parlor.tourney.data.TourneyConfig;
-import com.threerings.parlor.tourney.data.TourneyCodes;
-import com.threerings.parlor.tourney.data.TourneyObject;
 
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.dobj.RootDObjectManager;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.presents.server.InvocationManager;
+
+import com.threerings.crowd.data.BodyObject;
+import com.threerings.crowd.server.BodyLocator;
+
+import com.threerings.parlor.tourney.data.Participant;
+import com.threerings.parlor.tourney.data.TourneyCodes;
+import com.threerings.parlor.tourney.data.TourneyConfig;
+import com.threerings.parlor.tourney.data.TourneyObject;
 
 /**
  * Controls a running tourney.

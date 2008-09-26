@@ -23,6 +23,7 @@ package com.threerings.whirled;
 
 import com.threerings.crowd.client.PlaceController;
 import com.threerings.crowd.data.PlaceConfig;
+
 import com.threerings.whirled.server.SceneManager;
 
 public class TestConfig extends PlaceConfig

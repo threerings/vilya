@@ -21,15 +21,16 @@
 
 package com.threerings.stage.util;
 
-import java.awt.Rectangle;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import java.awt.Rectangle;
+
 import com.google.common.collect.Lists;
 
 import com.samskivert.util.ListUtil;
+
 import com.threerings.util.DirectionCodes;
 import com.threerings.util.DirectionUtil;
 import com.threerings.util.MessageBundle;

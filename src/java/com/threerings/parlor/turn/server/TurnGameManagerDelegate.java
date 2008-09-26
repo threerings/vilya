@@ -21,16 +21,19 @@
 
 package com.threerings.parlor.turn.server;
 
-import static com.threerings.parlor.Log.log;
-
 import com.samskivert.util.RandomUtil;
+
+import com.threerings.util.Name;
+
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.server.PlaceManager;
+
 import com.threerings.parlor.game.server.GameManager;
 import com.threerings.parlor.game.server.GameManagerDelegate;
 import com.threerings.parlor.turn.data.TurnGameObject;
-import com.threerings.util.Name;
+
+import static com.threerings.parlor.Log.log;
 
 /**
  * Performs the server-side turn-based game processing for a turn based game.  Game managers which

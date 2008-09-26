@@ -23,12 +23,16 @@ package com.threerings.parlor;
 
 import com.threerings.util.Name;
 
-import com.threerings.presents.client.*;
+import com.threerings.presents.client.Client;
+
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.util.CrowdContext;
 
-import com.threerings.parlor.client.*;
-import com.threerings.parlor.game.data.*;
+import com.threerings.parlor.client.Invitation;
+import com.threerings.parlor.client.InvitationHandler;
+import com.threerings.parlor.client.InvitationResponseObserver;
+import com.threerings.parlor.client.ParlorDirector;
+import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.util.ParlorContext;
 
 import static com.threerings.parlor.Log.log;

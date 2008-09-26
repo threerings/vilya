@@ -22,6 +22,7 @@
 package com.threerings.whirled.zone.server;
 
 import com.threerings.crowd.data.BodyObject;
+
 import com.threerings.whirled.zone.data.ZoneSummary;
 import com.threerings.whirled.zone.data.ZonedBodyObject;
 

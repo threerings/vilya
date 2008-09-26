@@ -22,6 +22,7 @@
 package com.threerings.parlor.rating.util;
 
 import java.io.PrintStream;
+
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.LongBuffer;

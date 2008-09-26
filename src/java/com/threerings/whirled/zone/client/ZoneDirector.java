@@ -34,7 +34,6 @@ import com.threerings.whirled.client.SceneDirector;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.util.WhirledContext;
-
 import com.threerings.whirled.zone.data.ZoneSummary;
 import com.threerings.whirled.zone.util.ZoneUtil;
 

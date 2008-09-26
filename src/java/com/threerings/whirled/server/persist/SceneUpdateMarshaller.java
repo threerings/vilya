@@ -21,14 +21,13 @@
 
 package com.threerings.whirled.server.persist;
 
+import java.util.HashMap;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import java.util.HashMap;
-
 import com.samskivert.io.PersistenceException;
-
 import com.samskivert.util.HashIntMap;
 
 import com.threerings.io.ObjectInputStream;

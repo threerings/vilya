@@ -25,9 +25,14 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 
-import com.samskivert.swing.Controller;
 import com.samskivert.util.RandomUtil;
 
+import com.samskivert.swing.Controller;
+
+import com.threerings.media.sprite.PathObserver;
+import com.threerings.media.sprite.Sprite;
+import com.threerings.media.util.LineSegmentPath;
+import com.threerings.media.util.Path;
 import com.threerings.media.util.PerformanceMonitor;
 import com.threerings.media.util.PerformanceObserver;
 
@@ -36,14 +41,9 @@ import com.threerings.cast.CharacterManager;
 import com.threerings.cast.CharacterSprite;
 import com.threerings.cast.util.CastUtil;
 
-import com.threerings.media.sprite.PathObserver;
-import com.threerings.media.sprite.Sprite;
-import com.threerings.media.util.LineSegmentPath;
-import com.threerings.media.util.Path;
-
-import com.threerings.stage.client.StageScenePanel;
 import com.threerings.whirled.spot.data.Location;
 
+import com.threerings.stage.client.StageScenePanel;
 import com.threerings.stage.data.StageLocation;
 import com.threerings.stage.data.StageScene;
 import com.threerings.stage.util.StageContext;

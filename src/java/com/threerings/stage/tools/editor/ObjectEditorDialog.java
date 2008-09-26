@@ -30,12 +30,12 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 
-import com.samskivert.swing.HGroupLayout;
 import com.samskivert.util.StringUtil;
 
-import com.threerings.media.image.ColorPository.ColorRecord;
-import com.threerings.media.image.ColorPository;
+import com.samskivert.swing.HGroupLayout;
 
+import com.threerings.media.image.ColorPository;
+import com.threerings.media.image.ColorPository.ColorRecord;
 import com.threerings.media.tile.NoSuchTileSetException;
 import com.threerings.media.tile.RecolorableTileSet;
 import com.threerings.media.tile.TileSet;

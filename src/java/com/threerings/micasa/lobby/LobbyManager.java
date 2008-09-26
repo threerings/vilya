@@ -22,6 +22,7 @@
 package com.threerings.micasa.lobby;
 
 import java.util.Properties;
+
 import com.samskivert.util.StringUtil;
 
 import com.threerings.crowd.data.PlaceObject;

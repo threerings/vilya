@@ -21,13 +21,15 @@
 
 package com.threerings.stage.util;
 
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import java.awt.Point;
+import java.awt.Rectangle;
+
 import com.samskivert.util.SortableArrayList;
+
 import com.threerings.util.DirectionCodes;
 import com.threerings.util.DirectionUtil;
 

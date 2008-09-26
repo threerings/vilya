@@ -23,14 +23,15 @@ package com.threerings.stage.tools.editor;
 
 import com.samskivert.util.HashIntMap;
 
+import com.threerings.resource.ResourceManager;
+
+import com.threerings.media.image.ImageManager;
 import com.threerings.media.tile.NoSuchTileSetException;
 import com.threerings.media.tile.TileSet;
-import com.threerings.media.image.ImageManager;
 
-import com.threerings.miso.tile.FringeConfiguration;
 import com.threerings.miso.tile.BaseTileSet;
+import com.threerings.miso.tile.FringeConfiguration;
 import com.threerings.miso.tile.MisoTileManager;
-import com.threerings.resource.ResourceManager;
 
 /**
  * Extends the normal Miso Tile Manager to allow the use of a set of test tiles that can be used in

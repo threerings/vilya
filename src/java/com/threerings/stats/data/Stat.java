@@ -21,12 +21,14 @@
 
 package com.threerings.stats.data;
 
+import java.util.zip.CRC32;
+
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.zip.CRC32;
 
 import com.samskivert.util.HashIntMap;
 import com.samskivert.util.StringUtil;
+
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 

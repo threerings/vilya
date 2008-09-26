@@ -27,8 +27,9 @@ import java.awt.Graphics2D;
 
 import javax.swing.JComponent;
 
-import com.threerings.media.image.Mirage;
 import com.threerings.util.DirectionCodes;
+
+import com.threerings.media.image.Mirage;
 
 /**
  * The next block view displays an image representing the next drop block

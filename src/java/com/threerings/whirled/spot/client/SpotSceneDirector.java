@@ -45,13 +45,12 @@ import com.threerings.crowd.data.PlaceObject;
 import com.threerings.whirled.client.SceneDirector;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.ScenePlace;
-import com.threerings.whirled.util.WhirledContext;
-
 import com.threerings.whirled.spot.data.ClusteredBodyObject;
 import com.threerings.whirled.spot.data.Location;
 import com.threerings.whirled.spot.data.Portal;
 import com.threerings.whirled.spot.data.SpotCodes;
 import com.threerings.whirled.spot.data.SpotScene;
+import com.threerings.whirled.util.WhirledContext;
 
 import static com.threerings.whirled.spot.Log.log;
 

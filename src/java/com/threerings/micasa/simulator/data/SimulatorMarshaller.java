@@ -21,10 +21,12 @@
 
 package com.threerings.micasa.simulator.data;
 
-import com.threerings.micasa.simulator.client.SimulatorService;
-import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller;
+
+import com.threerings.parlor.game.data.GameConfig;
+
+import com.threerings.micasa.simulator.client.SimulatorService;
 
 /**
  * Provides the implementation of the {@link SimulatorService} interface

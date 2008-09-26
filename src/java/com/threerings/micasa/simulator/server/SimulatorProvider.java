@@ -25,6 +25,7 @@ import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationProvider;
 
 import com.threerings.crowd.data.BodyObject;
+
 import com.threerings.parlor.game.data.GameConfig;
 
 import static com.threerings.micasa.Log.log;

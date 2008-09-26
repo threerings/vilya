@@ -21,16 +21,18 @@
 
 package com.threerings.whirled.tools.xml;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 import com.megginson.sax.DataWriter;
+
 import com.threerings.tools.xml.NestableWriter;
 
 import com.threerings.whirled.data.AuxModel;

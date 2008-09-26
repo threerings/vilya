@@ -21,10 +21,11 @@
 
 package com.threerings.parlor.tourney.data;
 
-import com.threerings.parlor.tourney.client.TourniesService;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.InvocationMarshaller;
+
+import com.threerings.parlor.tourney.client.TourniesService;
 
 /**
  * Provides the implementation of the {@link TourniesService} interface

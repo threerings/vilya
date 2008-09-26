@@ -22,6 +22,7 @@
 package com.threerings.micasa.lobby.table;
 
 import javax.swing.JComponent;
+
 import com.threerings.micasa.lobby.LobbyConfig;
 import com.threerings.micasa.util.MiCasaContext;
 

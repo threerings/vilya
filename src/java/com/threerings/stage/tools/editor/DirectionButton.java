@@ -26,12 +26,13 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.AbstractButton;
 import javax.swing.DefaultButtonModel;
 
-import com.threerings.media.image.ColorUtil;
-
 import com.threerings.util.DirectionCodes;
+
+import com.threerings.media.image.ColorUtil;
 
 /**
  * A button that allows for selection from the compass directions.
