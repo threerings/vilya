@@ -78,6 +78,29 @@ public abstract class SwingGameConfigurator extends GameConfigurator
         _panel.add(control, cc);
     }
 
+    /**
+     * Add a control to the interface. This should be the standard way
+     * that configurator controls are added, but note also that external
+     * entities may add their own controls that are related to the game,
+     * but do not directly alter the game config, so that all the controls
+     * are added in a uniform manner and are well aligned.  This version adds
+     * a single component spanning the entire width.
+     */
+    public void addWideControl (JComponent control)
+    {
+        // Set up the constraints. There's really no point in saving
+        // these somewhere, as they're cloned anyway with every component
+        // insertion.
+        GridBagConstraints cc = new GridBagConstraints();
+        cc.gridx = 0;
+        cc.anchor = GridBagConstraints.NORTHWEST;
+        cc.insets = _controlInsets;
+        cc.gridwidth = GridBagConstraints.REMAINDER;
+
+        // add the components
+        _panel.add(control, cc);
+    }
+
     /** The panel on which the config options are placed. */
     protected JPanel _panel = new JPanel(new GridBagLayout());
 
