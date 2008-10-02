@@ -50,11 +50,6 @@ public abstract class GameWatcher<T extends GameObject>
         _gameobj.addListener(this);
     }
 
-    public T getGameObject ()
-    {
-        return _gameobj;
-    }
-
     public void attributeChanged (AttributeChangedEvent event)
     {
         if (event.getName().equals(GameObject.STATE)) {
