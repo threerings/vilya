@@ -29,31 +29,36 @@ import com.threerings.crowd.server.PlaceManager;
 import com.threerings.parlor.game.data.GameObject;
 
 /**
- * An abstract convenience class used server-side to keep an eye on a game and
- * perform a one-time game-over activity when the game ends.  Classes that care
- * to make use of the game watcher should create an instance with their newly
- * created {@link GameObject} and implement {@link #gameDidEnd}.
+ * An abstract convenience class used server-side to keep an eye on a game and perform a one-time
+ * game-over activity when the game ends. Classes that care to make use of the game watcher should
+ * create an instance with their newly created {@link GameObject} and implement
+ * {@link #gameDidEnd}.
  */
-public abstract class GameWatcher
+public abstract class GameWatcher<T extends GameObject>
     implements AttributeChangeListener
 {
     public void init (PlaceManager plmgr)
     {
-        init((GameObject)plmgr.getPlaceObject());
+        @SuppressWarnings("unchecked")
+        T gameobj = (T)plmgr.getPlaceObject();
+        init(gameobj);
     }
 
-    public void init (GameObject gameobj)
+    public void init (T gameobj)
     {
         _gameobj = gameobj;
         _gameobj.addListener(this);
     }
 
-    // from interface AttributeChangeListener
+    public T getGameObject ()
+    {
+        return _gameobj;
+    }
+
     public void attributeChanged (AttributeChangedEvent event)
     {
         if (event.getName().equals(GameObject.STATE)) {
-            // if we transitioned to a non-in-play state, the game has
-            // completed
+            // if we transitioned to a non-in-play state, the game has completed
             if (!_gameobj.isInPlay()) {
                 try {
                     gameDidEnd(_gameobj);
@@ -66,11 +71,11 @@ public abstract class GameWatcher
     }
 
     /**
-     * Called when the game ends to give derived classes a chance to engage in
-     * their game-over antics.
+     * Called when the game ends to give derived classes a chance to engage in their game-over
+     * antics.
      */
-    protected abstract void gameDidEnd (GameObject gameobj);
+    protected abstract void gameDidEnd (T gameobj);
 
     /** The game object we're observing. */
-    protected GameObject _gameobj;
+    protected T _gameobj;
 }
