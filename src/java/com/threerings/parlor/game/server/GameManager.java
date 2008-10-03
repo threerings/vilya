@@ -305,6 +305,16 @@ public class GameManager extends PlaceManager
     }
 
     /**
+     * Returns the name that should be shown in the client for the player with the specified index
+     * or null if no player exists at that index. This may be different than their username as
+     * returned by {@link #getPlayerName}, which is the player's unique name in the server.
+     */
+    public Name getPlayerDisplayName (int index)
+    {
+        return getPlayerName(index);
+    }
+
+    /**
      * Returns the player index of the given user in the game, or <code>-1</code> if the player is
      * not involved in the game.
      */
@@ -1168,7 +1178,7 @@ public class GameManager extends PlaceManager
     protected void announcePlayerGameOver (int pidx)
     {
         systemMessage(GAME_MESSAGE_BUNDLE,
-            MessageBundle.tcompose(getPlayerGameOverMessage(pidx), getPlayerName(pidx)));
+            MessageBundle.tcompose(getPlayerGameOverMessage(pidx), getPlayerDisplayName(pidx)));
     }
 
     /**
