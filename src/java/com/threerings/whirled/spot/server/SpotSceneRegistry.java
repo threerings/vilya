@@ -85,10 +85,10 @@ public class SpotSceneRegistry extends SceneRegistry
     public void sendClusterChatMessage (int sceneId, int speakerOid, Name speaker,
                                         String bundle, String message, byte mode)
     {
-        sendClusterChatMessage(sceneId, speakerOid, 
+        sendClusterChatMessage(sceneId, speakerOid,
                                new UserMessage(speaker, bundle, message, mode));
     }
-    
+
     /**
      * Sends a cluster chat notification to the specified location in the specified place object
      * originating with the specified speaker.
@@ -104,7 +104,7 @@ public class SpotSceneRegistry extends SceneRegistry
         SpotSceneManager smgr = (SpotSceneManager)getSceneManager(sceneId);
         if (smgr == null) {
             log.warning("User requested cluster chat in non-existent scene " +
-                        "[user=" + message.speaker + ", sceneId=" + sceneId + 
+                        "[user=" + message.speaker + ", sceneId=" + sceneId +
                         ", message=" + message + "].");
             return;
         }
@@ -223,7 +223,7 @@ public class SpotSceneRegistry extends SceneRegistry
             SpeakUtil.sendFeedback(source, MessageManager.GLOBAL_BUNDLE, errmsg);
         } else {
             sendClusterChatMessage(ScenePlace.getSceneId(source), source.getOid(),
-                                   source.getVisibleName(), null, message, mode);
+                                   source.getChatName(), null, message, mode);
         }
     }
 }
