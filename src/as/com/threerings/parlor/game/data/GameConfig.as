@@ -170,9 +170,9 @@ public /*abstract*/ class GameConfig extends PlaceConfig
     override public function readObject (ins :ObjectInputStream) :void
     {
         super.readObject(ins);
-        players = (ins.readObject() as TypedArray);
+        players = TypedArray(ins.readObject());
         rated = ins.readBoolean();
-        ais = (ins.readObject() as TypedArray);
+        ais = TypedArray(ins.readObject());
     }
 
     // from interface Streamable

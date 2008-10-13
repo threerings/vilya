@@ -240,10 +240,10 @@ public class Table
         tableId = ins.readInt();
         lobbyOid = ins.readInt();
         gameOid = ins.readInt();
-        players = (ins.readObject() as TypedArray);
-        watchers = (ins.readObject() as TypedArray);
-        config = (ins.readObject() as GameConfig);
-        tconfig = (ins.readObject() as TableConfig);
+        players = TypedArray(ins.readObject());
+        watchers = TypedArray(ins.readObject());
+        config = GameConfig(ins.readObject());
+        tconfig = TableConfig(ins.readObject());
     }
 
     // from Streamable

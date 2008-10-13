@@ -58,7 +58,7 @@ public class TableConfig extends SimpleStreamableObject
         super.readObject(ins);
         desiredPlayerCount = ins.readInt();
         minimumPlayerCount = ins.readInt();
-        teamMemberIndices = (ins.readObject() as TypedArray);
+        teamMemberIndices = TypedArray(ins.readObject());
         privateTable = ins.readBoolean();
     }
 

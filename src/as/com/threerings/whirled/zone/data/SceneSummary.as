@@ -66,8 +66,8 @@ public class SceneSummary
     {
         sceneId = ins.readInt();
         name = (ins.readField(String) as String);
-        neighbors = (ins.readObject() as TypedArray);
-        neighborDirs = (ins.readObject() as TypedArray);
+        neighbors = TypedArray(ins.readObject());
+        neighborDirs = TypedArray(ins.readObject());
     }
 
     // from interface Streamable

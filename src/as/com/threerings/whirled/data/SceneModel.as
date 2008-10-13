@@ -102,7 +102,7 @@ public class SceneModel extends SimpleStreamableObject
         sceneId = ins.readInt();
         name = (ins.readField(String) as String);
         version = ins.readInt();
-        auxModels = (ins.readObject() as TypedArray);
+        auxModels = TypedArray(ins.readObject());
     }
 
     // documentation inherited from interface Streamable

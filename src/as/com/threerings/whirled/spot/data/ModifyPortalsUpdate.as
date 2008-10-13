@@ -81,8 +81,8 @@ public class ModifyPortalsUpdate extends SceneUpdate
     override public function readObject (ins :ObjectInputStream) :void
     {
         super.readObject(ins);
-        portalsRemoved = (ins.readObject() as TypedArray);
-        portalsAdded = (ins.readObject() as TypedArray);
+        portalsRemoved = TypedArray(ins.readObject());
+        portalsAdded = TypedArray(ins.readObject());
     }
 
     // from interface Streamable

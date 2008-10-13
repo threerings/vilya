@@ -53,7 +53,7 @@ public class PlayerCard
     public function readObject (ins :ObjectInputStream) :void
     {
         pidx = ins.readInt();
-        card = (ins.readObject() as Card);
+        card = Card(ins.readObject());
     }
 
     // from interface Streamable

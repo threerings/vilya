@@ -75,7 +75,7 @@ public class SceneLocation extends SimpleStreamableObject
     {
         super.readObject(ins);
         bodyOid = ins.readInt();
-        loc = (ins.readObject() as Location);
+        loc = Location(ins.readObject());
     }
 
     // documentation inherited from superinterface Streamable

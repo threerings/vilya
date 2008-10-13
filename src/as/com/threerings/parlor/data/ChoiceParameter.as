@@ -32,7 +32,7 @@ public class ChoiceParameter extends Parameter
     override public function readObject (ins :ObjectInputStream) :void
     {
         super.readObject(ins);
-        choices = (ins.readObject() as TypedArray);
+        choices = TypedArray(ins.readObject());
         start = (ins.readField(String) as String);
     }
 

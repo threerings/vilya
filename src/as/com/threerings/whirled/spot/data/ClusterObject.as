@@ -75,7 +75,7 @@ public class ClusterObject extends DObject
     {
         super.readObject(ins);
 
-        occupants = (ins.readObject() as OidList);
+        occupants = OidList(ins.readObject());
     }
 }
 }

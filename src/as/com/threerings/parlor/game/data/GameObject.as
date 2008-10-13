@@ -427,7 +427,7 @@ public class GameObject extends PlaceObject
         state = ins.readInt();
         isRated = ins.readBoolean();
         isPrivate = ins.readBoolean();
-        players = (ins.readObject() as TypedArray);
+        players = TypedArray(ins.readObject());
         winners = (ins.readField(TypedArray.getJavaType(Boolean)) as TypedArray);
         sessionId = ins.readInt();
         playerStatus = (ins.readField(TypedArray.getJavaType(int)) as TypedArray);

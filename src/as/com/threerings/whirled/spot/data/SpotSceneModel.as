@@ -102,7 +102,7 @@ public class SpotSceneModel extends SimpleStreamableObject
     override public function readObject (ins :ObjectInputStream) :void
     {
         super.readObject(ins);
-        portals = (ins.readObject() as TypedArray);
+        portals = TypedArray(ins.readObject());
         defaultEntranceId = ins.readInt();
     }
 

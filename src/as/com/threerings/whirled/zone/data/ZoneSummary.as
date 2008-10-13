@@ -62,8 +62,8 @@ public class ZoneSummary extends SimpleStreamableObject
     {
         super.readObject(ins);
         zoneId = ins.readInt();
-        name = (ins.readObject() as Name);
-        scenes = (ins.readObject() as TypedArray);
+        name = Name(ins.readObject());
+        scenes = TypedArray(ins.readObject());
     }
 
     // from interface Streamable

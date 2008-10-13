@@ -158,8 +158,8 @@ public class SpotSceneObject extends SceneObject
     {
         super.readObject(ins);
 
-        occupantLocs = (ins.readObject() as DSet);
-        clusters = (ins.readObject() as DSet);
+        occupantLocs = DSet(ins.readObject());
+        clusters = DSet(ins.readObject());
     }
 }
 }

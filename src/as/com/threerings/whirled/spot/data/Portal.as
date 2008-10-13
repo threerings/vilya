@@ -127,7 +127,7 @@ public class Portal extends SimpleStreamableObject
     {
         super.readObject(ins);
         portalId = ins.readShort();
-        loc = (ins.readObject() as Location);
+        loc = Location(ins.readObject());
         targetSceneId = ins.readInt();
         targetPortalId = ins.readShort();
     }
