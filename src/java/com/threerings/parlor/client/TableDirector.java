@@ -39,6 +39,7 @@ import com.threerings.crowd.data.BodyObject;
 import com.threerings.parlor.data.Table;
 import com.threerings.parlor.data.TableConfig;
 import com.threerings.parlor.data.TableLobbyObject;
+import com.threerings.parlor.game.data.GameCodes;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.util.ParlorContext;
 
@@ -306,6 +307,7 @@ public class TableDirector extends BasicDirector
     public void requestFailed (String reason)
     {
         log.warning("Table action failed [reason=" + reason + "].");
+        _ctx.getChatDirector().displayFeedback(GameCodes.GAME_MESSAGE_BUNDLE, reason);
     }
 
     /**
