@@ -23,6 +23,7 @@ package com.threerings.parlor.card.data;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import com.threerings.util.StreamableArrayList;
 
@@ -40,7 +41,7 @@ public class Deck extends StreamableArrayList<Card>
     {
         reset(false);
     }
-    
+
     /**
      * Constructor.
      *
@@ -51,7 +52,7 @@ public class Deck extends StreamableArrayList<Card>
     {
         reset(includeJokers);
     }
-    
+
     /**
      * Resets the deck to its initial state: an unshuffled deck of
      * 52 or 54 cards, depending on whether the jokers are included.
@@ -62,19 +63,19 @@ public class Deck extends StreamableArrayList<Card>
     public void reset (boolean includeJokers)
     {
         clear();
-        
+
         for (int i = SPADES; i <= DIAMONDS; i++) {
             for (int j = 2; j <= ACE; j++) {
                 add(new Card(j, i));
             }
         }
-        
+
         if (includeJokers) {
             add(new Card(RED_JOKER, 3));
             add(new Card(BLACK_JOKER, 3));
         }
     }
-    
+
     /**
      * Shuffles the deck.
      */
@@ -82,7 +83,15 @@ public class Deck extends StreamableArrayList<Card>
     {
         Collections.shuffle(this);
     }
-    
+
+    /**
+     * Shuffles the deck.
+     */
+    public void shuffle (Random r)
+    {
+        Collections.shuffle(this, r);
+    }
+
     /**
      * Deals a hand of cards from the deck.
      *
@@ -95,19 +104,19 @@ public class Deck extends StreamableArrayList<Card>
         int dsize = size();
         if (dsize < size) {
             return null;
-            
+
         } else {
             Hand hand = new Hand();
-        
+
             // use a sublist view to manipulate the top of the deck
             List<Card> sublist = subList(dsize - size, dsize);
             hand.addAll(sublist);
             sublist.clear();
-            
+
             return hand;
         }
     }
-    
+
     /**
      * Returns a hand of cards to the deck.
      *
