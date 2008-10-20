@@ -79,6 +79,14 @@ public class Percentiler
             _min = in.asIntBuffer().get();
         }
 
+        // Un-break percentilers that have been stored with bogus data
+        if (_max < _min) {
+            log.warning("Percentiler initialized with bogus range. Coping.",
+                "min", _min, "max", _max);
+
+            _max = _min + 1;
+        }
+
         // compute our percentiles
         recomputePercentiles();
     }
@@ -107,17 +115,27 @@ public class Percentiler
         // if this value is outside our bounds, we need to redistribute our buckets
         if (value < _min || value > _max) {
             if (_fixedRange) {
-                log.warning("Recording value outside of initially fixed range", "min", _min,
-                    "max", _max, "value", value);
+                log.warning("Recording value outside of initially fixed range",
+                    "min", _min, "max", _max, "value", value);
                 _fixedRange = false;
             }
+
             // expand by 20% in the direction of either our new minimum or new maximum
             int newmin = (value < _min) ? (_max - (int)Math.ceil((_max - value) * 1.2f)) : _min;
             int newmax = (value > _max) ? (_min + (int)Math.ceil((value - _min) * 1.2f)) : _max;
 
+            if (newmin > _min || newmax < _max) {
+                log.warning("Grew our range in crazy ways?!",
+                    "value", value, "total", _total,
+                    "new", ("" + newmin + ":" + newmax),
+                    "old", ("" + _min + ":" + _max));
+            }
+
             if (logNewMax) {
-                log.info("Resizing [total=" + _total + ", new=" + newmin + ":" + newmax +
-                         ", old=" + _min + ":" + _max + "].");
+                log.info("Resizing",
+                    "value", value, "total", _total,
+                    "new", ("" + newmin + ":" + newmax),
+                    "old", ("" + _min + ":" + _max));
             }
 
             // create a new counts array and map the old array to the new
