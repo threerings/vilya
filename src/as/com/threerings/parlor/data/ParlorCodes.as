@@ -49,6 +49,9 @@ public class ParlorCodes extends InvocationCodes
     public static const NO_SUCH_TABLE :String = "m.no_such_table";
 
     /** An error code returned by the table services. */
+    public static const INVALID_TABLE_POSITION :String = "m.invalid_table_position";
+
+    /** An error code returned by the table services. */
     public static const MUST_BE_CREATOR :String = "m.must_be_creator";
 
     /** An error code returned by the table services. */

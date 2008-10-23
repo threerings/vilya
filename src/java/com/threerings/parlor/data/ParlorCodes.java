@@ -48,6 +48,9 @@ public interface ParlorCodes extends InvocationCodes
     public static final String NO_SUCH_TABLE = "m.no_such_table";
 
     /** An error code returned by the table services. */
+    public static final String INVALID_TABLE_POSITION = "m.invalid_table_position";
+
+    /** An error code returned by the table services. */
     public static final String MUST_BE_CREATOR = "m.must_be_creator";
 
     /** An error code returned by the table services. */
