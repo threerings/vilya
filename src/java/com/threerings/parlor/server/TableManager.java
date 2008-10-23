@@ -278,7 +278,7 @@ public class TableManager
         if (table == null) {
             throw new InvocationException(NO_SUCH_TABLE);
         } else if (starter.getOid() != table.bodyOids[0]) {
-            throw new InvocationException(INVALID_TABLE_POSITION);
+            throw new InvocationException(MUST_BE_CREATOR);
         } else if (!table.mayBeStarted()) {
             throw new InvocationException(INTERNAL_ERROR);
         }
@@ -302,10 +302,10 @@ public class TableManager
         int position = ListUtil.indexOf(table.players, target);
         if (position < 0) {
             throw new InvocationException(NOT_AT_TABLE);
-        } else if (booter.getOid() != table.bodyOids[0] ||
-                   booter.getOid() == table.bodyOids[position]) {
-            // Must be head of the table, and can't self-boot
-            throw new InvocationException(INVALID_TABLE_POSITION);
+        } else if (booter.getOid() != table.bodyOids[0]) {
+            throw new InvocationException(MUST_BE_CREATOR);
+        } else if (booter.getOid() == table.bodyOids[position]) {
+            throw new InvocationException(NO_SELF_BOOT);
         }
 
         // Remember to keep him banned

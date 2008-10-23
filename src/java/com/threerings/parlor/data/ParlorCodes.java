@@ -44,25 +44,27 @@ public interface ParlorCodes extends InvocationCodes
      * online at the time the invitation was received. */
     public static final String INVITEE_NOT_ONLINE = "m.invitee_not_online";
 
-    /** An error code returned when a user requests to join a table that doesn't exist. */
+    /** An error code returned by the table services. */
     public static final String NO_SUCH_TABLE = "m.no_such_table";
 
-    /** An error code returned when a user requests to join a table at a position that is not
-     * valid. */
-    public static final String INVALID_TABLE_POSITION = "m.invalid_table_position";
+    /** An error code returned by the table services. */
+    public static final String MUST_BE_CREATOR = "m.must_be_creator";
 
-    /** An error code returned when a user requests to join a table in a position that is already
-     * occupied. */
+    /** An error code returned by the table services. */
+    public static final String NO_SELF_BOOT = "m.no_self_boot";
+
+    /** An error code returned by the table services. */
     public static final String TABLE_POSITION_OCCUPIED = "m.table_position_occupied";
 
-    /** An error code returned when a user requests to create or join a table but they're already
-     * sitting at another table. */
+    /** An error code returned by the table services when a user requests to create or join a table
+     * but they're already sitting at another table. */
     public static final String ALREADY_AT_TABLE = "m.already_at_table";
 
-    /** An error code returned when a user requests to leave a table that they were not sitting at
-     * in the first place. */
+    /** An error code returned by the table services when a user requests to leave a table that
+     * they were not sitting at in the first place. */
     public static final String NOT_AT_TABLE = "m.not_at_table";
 
-    /** An error code returned when a user requests to join a table they've been banned from. */
+    /** An error code returned by the table services for a request to join a table that the
+     * requester been banned from. */
     public static final String BANNED_FROM_TABLE = "m.banned_from_table";
 }
