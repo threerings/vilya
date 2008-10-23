@@ -165,6 +165,18 @@ public class TableDirector extends BasicDirector
     }
 
     /**
+     * By default, failure is handled by reporting feedback via the chat director. Clients that
+     * require custom error handling can provide a function with the signature:
+     * <pre>
+     * function (cause :String) :void
+     * </pre>
+     */
+    public function setFailureHandler (handler :Function) :void
+    {
+        _failureHandler = handler;
+    }
+
+    /**
      * Sends a request to create a table with the specified game configuration. This user will
      * become the owner of this table and will be added to the first position in the table. The
      * response will be communicated via the {@link TableObserver} interface.
@@ -344,7 +356,11 @@ public class TableDirector extends BasicDirector
     // documentation inherited from interface
     public function requestFailed (reason :String) :void
     {
-        _pctx.getChatDirector().displayFeedback(_errorBundle, reason);
+        if (_failureHandler != null) {
+            _failureHandler(reason);
+        } else {
+            _pctx.getChatDirector().displayFeedback(_errorBundle, reason);
+        }
     }
 
     /**
@@ -405,5 +421,8 @@ public class TableDirector extends BasicDirector
 
     /** An array of entities that want to hear about when we stand up or sit down. */
     protected var _seatedObservers :ObserverList = new ObserverList();
+
+    /** A custom failure handler, or null. */
+    protected var _failureHandler :Function;
 }
 }
