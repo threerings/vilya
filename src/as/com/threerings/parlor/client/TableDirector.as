@@ -159,10 +159,10 @@ public class TableDirector extends BasicDirector
     /**
      * Returns the table this client is currently seated at, or null.
      */
-     public function getSeatedTable () :Table
-     {
-         return _ourTable;
-     }
+    public function getSeatedTable () :Table
+    {
+        return _ourTable;
+    }
 
     /**
      * Sends a request to create a table with the specified game configuration. This user will
