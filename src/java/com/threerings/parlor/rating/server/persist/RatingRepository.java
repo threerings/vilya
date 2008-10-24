@@ -26,8 +26,10 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -157,24 +159,49 @@ public class RatingRepository extends DepotRepository
     }
 
     /**
-     * Loads the percentile distribution associated with the specified game. null will never be
-     * returned, rather a blank percentiler will be created and returned.
+     * Loads the percentile distribution associated with the specified game and mode. null will
+     * never be returned, rather a blank percentiler will be created and returned.
      */
-    public Percentiler loadPercentile (int gameId)
+    public Percentiler loadPercentile (int gameId, int gameMode)
     {
-        PercentileRecord record = load(PercentileRecord.class, PercentileRecord.getKey(gameId));
+        PercentileRecord record = load(
+            PercentileRecord.class, PercentileRecord.getKey(gameId, gameMode));
         return (record == null) ? new Percentiler() : new Percentiler(record.data);
+    }
+
+    /**
+     * Loads all the percentile distributions associated with the specified game. The percentilers
+     * will be mapped by their game mode. The map may be zero size if the game has recorded no
+     * distributions.
+     */
+    public Map<Integer, Percentiler> loadPercentiles (int gameId)
+    {
+        Map<Integer, Percentiler> tilers = Maps.newHashMap();
+        for (PercentileRecord record : findAll(
+                 PercentileRecord.class, new Where(PercentileRecord.GAME_ID_C, gameId))) {
+            tilers.put(record.gameMode, new Percentiler(record.data));
+        }
+        return tilers;
     }
 
     /**
      * Writes the supplied percentiler's data out to the database.
      */
-    public void updatePercentile (int gameId, Percentiler tiler)
+    public void updatePercentile (int gameId, int gameMode, Percentiler tiler)
     {
         PercentileRecord record = new PercentileRecord();
         record.gameId = gameId;
+        record.gameMode = gameMode;
         record.data = tiler.toBytes();
         store(record);
+    }
+
+    /**
+     * Deletes all percentile records for the specified game.
+     */
+    public void deletePercentiles (int gameId)
+    {
+        deleteAll(PercentileRecord.class, new Where(PercentileRecord.GAME_ID_C, gameId));
     }
 
     @Override
