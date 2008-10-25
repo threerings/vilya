@@ -46,6 +46,9 @@ import com.threerings.parlor.util.ParlorContext;
 public class ParlorDirector extends BasicDirector
     implements ParlorReceiver
 {
+    // statically reference classes we require
+    ParlorMarshaller;
+
     /**
      * Constructs a parlor director and provides it with the parlor context that it can use to
      * access the client services that it needs to provide its own services. Only one parlor
@@ -61,9 +64,6 @@ public class ParlorDirector extends BasicDirector
 
         // register ourselves with the invocation director as a parlor notification receiver
         _pctx.getClient().getInvocationDirector().registerReceiver(new ParlorDecoder(this));
-
-        // ensure that the compiler includes these necessary symbols
-        var c :Class = ParlorMarshaller;
     }
 
     /**

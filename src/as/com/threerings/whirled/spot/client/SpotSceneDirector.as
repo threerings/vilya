@@ -65,6 +65,9 @@ public class SpotSceneDirector extends BasicDirector
 {
     private static const log :Log = Log.getLog(SpotSceneDirector);
 
+    // statically reference classes we require
+    SpotMarshaller;
+
     /**
      * Creates a new spot scene director with the specified context and which will cooperate with
      * the supplied scene director.
@@ -83,9 +86,6 @@ public class SpotSceneDirector extends BasicDirector
 
         // wire ourselves up to hear about leave place notifications
         locdir.addLocationObserver(new LocationAdapter(null, handleSceneChange, null));
-
-        // ensure that the compiler includes these necessary symbols
-        var c :Class = SpotMarshaller;
     }
 
     /**

@@ -69,6 +69,9 @@ public class SceneDirector extends BasicDirector
 {
     private static const log :Log = Log.getLog(SceneDirector);
 
+    // statically reference classes we require
+    SceneMarshaller;
+
     /**
      * Creates a new scene director with the specified context.
      *
@@ -101,9 +104,6 @@ public class SceneDirector extends BasicDirector
 
         // register for scene notifications
         _wctx.getClient().getInvocationDirector().registerReceiver(new SceneDecoder(this));
-
-        // ensure that the compiler includes these necessary symbols
-        var c :Class = SceneMarshaller;
     }
 
     /**
