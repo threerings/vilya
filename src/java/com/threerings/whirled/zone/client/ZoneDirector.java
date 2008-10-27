@@ -47,8 +47,7 @@ import static com.threerings.whirled.zone.Log.log;
  * which provides information on the zone which can be used to generate an overview map or similar.
  */
 public class ZoneDirector extends BasicDirector
-    implements ZoneReceiver, ZoneService.ZoneMoveListener,
-               SceneDirector.MoveHandler
+    implements ZoneReceiver, ZoneService.ZoneMoveListener, SceneDirector.MoveHandler
 {
     /**
      * Constructs a zone director with the supplied context, and delegate scene director (which the
@@ -63,8 +62,7 @@ public class ZoneDirector extends BasicDirector
         _scdir.setMoveHandler(this);
 
         // register for zone notifications
-        _ctx.getClient().getInvocationDirector().registerReceiver(
-            new ZoneDecoder(this));
+        _ctx.getClient().getInvocationDirector().registerReceiver(new ZoneDecoder(this));
     }
 
     /**
@@ -112,8 +110,8 @@ public class ZoneDirector extends BasicDirector
     {
         // make sure the zoneId and sceneId are valid
         if (zoneId < 0 || sceneId < 0) {
-            log.warning("Refusing moveTo(): invalid sceneId or zoneId " +
-                        "[zoneId=" + zoneId + ", sceneId=" + sceneId + "].");
+            log.warning("Refusing moveTo(): invalid sceneId or zoneId",
+                "zoneId", zoneId, "sceneId", sceneId);
             return false;
         }
 
@@ -227,13 +225,13 @@ public class ZoneDirector extends BasicDirector
         // just finish up what we're doing and assume that the repeated move request was the
         // spurious one as it would be in the case of lag causing rapid-fire repeat requests
         if (_scdir.movePending()) {
-            log.info("Dropping forced move because we have a move pending " +
-                     "[pend=" + _scdir.getPendingModel() + ", rzId=" + zoneId +
-                     ", rsId=" + sceneId + "].");
+            log.info("Dropping forced move because we have a move pending",
+                "pend", _scdir.getPendingModel(), "rzId", zoneId, "rsId", sceneId);
             return;
         }
 
-        log.info("Moving at request of server [zoneId=" + zoneId + ", sceneId=" + sceneId + "].");
+        log.info("Moving at request of server",
+            "zoneId", zoneId, "sceneId", sceneId);
         // clear out our old scene and place data
         _scdir.didLeaveScene();
         // move to the new zone and scene
@@ -272,8 +270,8 @@ public class ZoneDirector extends BasicDirector
                 }
 
             } catch (Throwable t) {
-                log.warning("Zone observer choked during notification [data=" + data +
-                            ", obs=" + obs + "].", t);
+                log.warning("Zone observer choked during notification",
+                    "data", data, "obs", obs, t);
             }
         }
     }
