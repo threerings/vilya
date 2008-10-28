@@ -66,7 +66,7 @@ public class Table
 
     /** An array of the usernames of the non-player occupants of this game. For FFA party games
      * this is all of a room's occupants and they are in fact players. */
-    public Name[] watchers = new Name[0];
+    public Name[] watchers = createPlayerNamesArray(0);
 
     /** The body oids of the players of this table, or null if a party game.  (This is not
      * propagated to remote instances.) */
@@ -107,7 +107,7 @@ public class Table
 
         // make room for the maximum number of players
         if (config.getMatchType() != GameConfig.PARTY) {
-            players = new Name[tconfig.desiredPlayerCount];
+            players = createPlayerNamesArray(tconfig.desiredPlayerCount);
             bodyOids = new int[players.length];
 
             // fill in information on the AIs
@@ -118,7 +118,7 @@ public class Table
             }
 
         } else {
-            players = new Name[0];
+            players = createPlayerNamesArray(0);
             bodyOids = new int[0];
         }
     }
@@ -163,12 +163,12 @@ public class Table
     {
         // seated party games need a spot for every seat
         if (GameConfig.SEATED_CONTINUOUS == config.getMatchType()) {
-            return new Name[tconfig.desiredPlayerCount];
+            return createPlayerNamesArray(tconfig.desiredPlayerCount);
         }
 
         // FFA party games have 0-length players array, and non-party games will have the players
         // who are ready-to-go for the game start.
-        Name[] plist = new Name[getOccupiedCount()];
+        Name[] plist = createPlayerNamesArray(getOccupiedCount());
         if (players != null) {
             for (int ii = 0, dex = 0; ii < players.length; ii++) {
                 if (players[ii] != null) {
@@ -351,7 +351,7 @@ public class Table
             }
             wlist.add(info.username);
         }
-        watchers = wlist.toArray(new Name[wlist.size()]);
+        watchers = wlist.toArray(createPlayerNamesArray(wlist.size()));
     }
 
     /**
@@ -451,6 +451,14 @@ public class Table
         buf.append(", gameOid=").append(gameOid);
         buf.append(", players=").append(StringUtil.toString(players));
         buf.append(", config=").append(config);
+    }
+
+    /**
+     * Creates a names array of the appropriate type.
+     */
+    protected Name[] createPlayerNamesArray (int length)
+    {
+        return new Name[length];
     }
 
     /** A counter for assigning table ids. */
