@@ -223,7 +223,7 @@ public class SpotSceneRegistry extends SceneRegistry
             SpeakUtil.sendFeedback(source, MessageManager.GLOBAL_BUNDLE, errmsg);
         } else {
             sendClusterChatMessage(ScenePlace.getSceneId(source), source.getOid(),
-                                   source.getChatName(), null, message, mode);
+                                   source.getVisibleName(), null, message, mode);
         }
     }
 }
