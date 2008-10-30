@@ -88,15 +88,13 @@ public class Table
      */
     public function getPlayers () :Array
     {
-        // create and populate the players array
-        var players :Array = new Array();
+        var parray :Array = new Array();
         for (var ii :int = 0; ii < players.length; ii++) {
             if (players[ii] != null) {
-                players.push(players[ii]);
+                parray.push(players[ii]);
             }
         }
-
-        return players;
+        return parray;
     }
 
     /**
