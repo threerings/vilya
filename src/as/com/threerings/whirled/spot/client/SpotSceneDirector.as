@@ -209,7 +209,7 @@ public class SpotSceneDirector extends BasicDirector
         }
 
         var sceneId :int = _scdir.getScene().getId();
-        log.info("Sending changeLocation request [scid=" + sceneId + ", loc=" + loc + "].");
+        // log.info("Sending changeLocation request [scid=" + sceneId + ", loc=" + loc + "].");
 
         _pendingLoc = (loc.clone() as Location);
         var clist :ConfirmAdapter = new ConfirmAdapter(
