@@ -21,7 +21,7 @@
 
 package com.threerings.whirled.spot.server;
 
-import com.threerings.whirled.server.WhirledClient;
+import com.threerings.whirled.server.WhirledSession;
 
 /**
  * Extends the Whirled client and handles the necessary notifications that
@@ -29,6 +29,6 @@ import com.threerings.whirled.server.WhirledClient;
  * they were occupying know that they didn't exit via a portal, but
  * instead just disappeared.
  */
-public class SpotClient extends WhirledClient
+public class SpotClient extends WhirledSession
 {
 }

@@ -26,7 +26,7 @@ import com.threerings.crowd.server.CrowdSession;
 /**
  * The client object used by client management on the Whirled server.
  */
-public class WhirledClient extends CrowdSession
+public class WhirledSession extends CrowdSession
 {
     // nothing needed at the moment
 }
