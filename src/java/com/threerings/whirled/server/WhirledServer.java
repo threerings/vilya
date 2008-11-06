@@ -28,7 +28,7 @@ import com.threerings.util.Name;
 import com.threerings.presents.net.AuthRequest;
 import com.threerings.presents.server.ClientFactory;
 import com.threerings.presents.server.ClientResolver;
-import com.threerings.presents.server.PresentsClient;
+import com.threerings.presents.server.PresentsSession;
 
 import com.threerings.crowd.server.CrowdServer;
 
@@ -55,7 +55,7 @@ public abstract class WhirledServer extends CrowdServer
 
         // configure the client to use our whirled client
         _clmgr.setClientFactory(new ClientFactory() {
-            public Class<? extends PresentsClient> getClientClass (AuthRequest areq) {
+            public Class<? extends PresentsSession> getClientClass (AuthRequest areq) {
                 return WhirledClient.class;
             }
             public Class<? extends ClientResolver> getClientResolverClass (Name username) {

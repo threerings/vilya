@@ -21,12 +21,12 @@
 
 package com.threerings.whirled.server;
 
-import com.threerings.crowd.server.CrowdClient;
+import com.threerings.crowd.server.CrowdSession;
 
 /**
  * The client object used by client management on the Whirled server.
  */
-public class WhirledClient extends CrowdClient
+public class WhirledClient extends CrowdSession
 {
     // nothing needed at the moment
 }

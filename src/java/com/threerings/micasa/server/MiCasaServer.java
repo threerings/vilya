@@ -30,7 +30,7 @@ import com.threerings.util.Name;
 import com.threerings.presents.net.AuthRequest;
 import com.threerings.presents.server.ClientFactory;
 import com.threerings.presents.server.ClientResolver;
-import com.threerings.presents.server.PresentsClient;
+import com.threerings.presents.server.PresentsSession;
 
 import com.threerings.crowd.server.CrowdServer;
 
@@ -65,8 +65,8 @@ public class MiCasaServer extends CrowdServer
 
         // configure the client manager to use our client class
         _clmgr.setClientFactory(new ClientFactory() {
-            public Class<? extends PresentsClient> getClientClass (AuthRequest areq) {
-                return MiCasaClient.class;
+            public Class<? extends PresentsSession> getClientClass (AuthRequest areq) {
+                return MiCasaSession.class;
             }
             public Class<? extends ClientResolver> getClientResolverClass (Name username) {
                 return ClientResolver.class;

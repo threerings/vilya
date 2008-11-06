@@ -25,23 +25,23 @@ import com.google.inject.Inject;
 
 import com.threerings.presents.net.BootstrapData;
 
-import com.threerings.crowd.server.CrowdClient;
+import com.threerings.crowd.server.CrowdSession;
 
 import com.threerings.micasa.data.MiCasaBootstrapData;
 import com.threerings.micasa.lobby.LobbyRegistry;
 
 /**
- * Extends the Crowd client and provides bootstrap data specific to the MiCasa services.
+ * Extends the Crowd session and provides bootstrap data specific to the MiCasa services.
  */
-public class MiCasaClient extends CrowdClient
+public class MiCasaSession extends CrowdSession
 {
-    @Override // from PresentsClient
+    @Override // from PresentsSession
     protected BootstrapData createBootstrapData ()
     {
         return new MiCasaBootstrapData();
     }
 
-    @Override // from PresentsClient
+    @Override // from PresentsSession
     protected void populateBootstrapData (BootstrapData data)
     {
         super.populateBootstrapData(data);
