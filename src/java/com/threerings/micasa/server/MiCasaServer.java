@@ -28,7 +28,7 @@ import com.google.inject.Injector;
 import com.threerings.util.Name;
 
 import com.threerings.presents.net.AuthRequest;
-import com.threerings.presents.server.ClientFactory;
+import com.threerings.presents.server.SessionFactory;
 import com.threerings.presents.server.ClientResolver;
 import com.threerings.presents.server.PresentsSession;
 
@@ -64,8 +64,8 @@ public class MiCasaServer extends CrowdServer
         super.init(injector);
 
         // configure the client manager to use our client class
-        _clmgr.setClientFactory(new ClientFactory() {
-            public Class<? extends PresentsSession> getClientClass (AuthRequest areq) {
+        _clmgr.setSessionFactory(new SessionFactory() {
+            public Class<? extends PresentsSession> getSessionClass (AuthRequest areq) {
                 return MiCasaSession.class;
             }
             public Class<? extends ClientResolver> getClientResolverClass (Name username) {

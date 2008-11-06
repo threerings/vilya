@@ -26,7 +26,7 @@ import com.google.inject.Injector;
 import com.threerings.util.Name;
 
 import com.threerings.presents.net.AuthRequest;
-import com.threerings.presents.server.ClientFactory;
+import com.threerings.presents.server.SessionFactory;
 import com.threerings.presents.server.ClientResolver;
 import com.threerings.presents.server.PresentsSession;
 
@@ -54,8 +54,8 @@ public abstract class WhirledServer extends CrowdServer
         super.init(injector);
 
         // configure the client to use our whirled client
-        _clmgr.setClientFactory(new ClientFactory() {
-            public Class<? extends PresentsSession> getClientClass (AuthRequest areq) {
+        _clmgr.setSessionFactory(new SessionFactory() {
+            public Class<? extends PresentsSession> getSessionClass (AuthRequest areq) {
                 return WhirledSession.class;
             }
             public Class<? extends ClientResolver> getClientResolverClass (Name username) {
