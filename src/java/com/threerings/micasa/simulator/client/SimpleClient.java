@@ -49,7 +49,7 @@ import com.threerings.micasa.client.MiCasaFrame;
 import com.threerings.micasa.util.MiCasaContext;
 
 public class SimpleClient
-    implements RunQueue, SimulatorClient
+    implements SimulatorClient
 {
     public SimpleClient (SimulatorFrame frame)
         throws IOException
@@ -58,7 +58,7 @@ public class SimpleClient
         _ctx = createContext();
 
         // create the handles on our various services
-        _client = new Client(null, this);
+        _client = new Client(null, RunQueue.AWT);
 
         // create our managers and directors
         _msgmgr = new MessageManager(getMessageManagerPrefix());
@@ -106,19 +106,6 @@ public class SimpleClient
     public ParlorContext getParlorContext ()
     {
         return _ctx;
-    }
-
-    // documentation inherited from interface RunQueue
-    public void postRunnable (Runnable run)
-    {
-        // queue it on up on the awt thread
-        EventQueue.invokeLater(run);
-    }
-
-    // documentation inherited from interface RunQueue
-    public boolean isDispatchThread ()
-    {
-        return EventQueue.isDispatchThread();
     }
 
     /**

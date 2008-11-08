@@ -53,7 +53,6 @@ import com.threerings.micasa.util.MiCasaContext;
  * extended context implementation.
  */
 public class MiCasaClient
-    implements RunQueue
 {
     /**
      * Initializes a new client and provides it with a frame in which to
@@ -122,7 +121,7 @@ public class MiCasaClient
         throws IOException
     {
         // create the handles on our various services
-        _client = new Client(null, this);
+        _client = new Client(null, RunQueue.AWT);
 
         // create our managers and directors
         _locdir = new LocationDirector(_ctx);
@@ -130,19 +129,6 @@ public class MiCasaClient
         _pardtr = new ParlorDirector(_ctx);
         _msgmgr = new MessageManager(MESSAGE_MANAGER_PREFIX);
         _chatdir = new ChatDirector(_ctx, _msgmgr, null);
-    }
-
-    // documentation inherited from interface RunQueue
-    public void postRunnable (Runnable run)
-    {
-        // queue it on up on the awt thread
-        EventQueue.invokeLater(run);
-    }
-
-    // documentation inherited from interface RunQueue
-    public boolean isDispatchThread ()
-    {
-        return EventQueue.isDispatchThread();
     }
 
     /**
