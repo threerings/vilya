@@ -23,7 +23,6 @@ package com.threerings.micasa.simulator.client;
 
 import java.io.IOException;
 
-import java.awt.EventQueue;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -182,4 +181,3 @@ public class SimpleClient
     protected ParlorDirector _pardtr;
     protected ChatDirector _chatdir;
 }
-

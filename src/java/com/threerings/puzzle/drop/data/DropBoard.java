@@ -132,7 +132,7 @@ public class DropBoard extends Board
         try {
             return _board[(row*_bwid) + col];
         } catch (Exception e) {
-            log.warning("Failed getting piece [col=" + col + ", row=" + row + "].", e);
+            log.warning("Failed getting piece", "col", col, "row", row, e);
             return -1;
         }
     }

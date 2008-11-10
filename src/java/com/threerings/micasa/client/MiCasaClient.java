@@ -23,7 +23,6 @@ package com.threerings.micasa.client;
 
 import java.io.IOException;
 
-import java.awt.EventQueue;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
