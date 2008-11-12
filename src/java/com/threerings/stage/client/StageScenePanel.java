@@ -75,14 +75,12 @@ import com.threerings.stage.util.StageSceneUtil;
 import static com.threerings.stage.Log.log;
 
 /**
- * Extends the basic Miso scene panel with Stage fun stuff like portals,
- * clusters and locations.
+ * Extends the basic Miso scene panel with Stage fun stuff like portals, clusters and locations.
  */
 public class StageScenePanel extends MisoScenePanel
     implements ControllerProvider, KeyListener, PlaceView
 {
-    /** An action command generated when the user clicks on a location
-     * within the scene. */
+    /** An action command generated when the user clicks on a location within the scene. */
     public static final String LOCATION_CLICKED = "LocationClicked";
 
     /** An action command generated when a cluster is clicked. */
@@ -149,7 +147,7 @@ public class StageScenePanel extends MisoScenePanel
             // we're so hosed that we don't even know what time it is
         }
     }
-    
+
     /**
      * Called when we have received a scene update from the server.
      */
@@ -158,9 +156,8 @@ public class StageScenePanel extends MisoScenePanel
         // recompute the portals as those may well have changed
         recomputePortals();
 
-        // we go aheand and completely replace our scene model which will
-        // reload the whole good goddamned business; it is a little
-        // shocking to the user, but it's guaranteed to work
+        // we go ahead and completely replace our scene model which will reload the whole good
+        // goddamned business; it is a little shocking to the user, but it's guaranteed to work
         refreshScene();
     }
 
@@ -231,7 +228,7 @@ public class StageScenePanel extends MisoScenePanel
             setShowFlags(SHOW_TIPS, true);
         }
     }
-    
+
     // documentation inherited from interface KeyListener
     public void keyReleased (KeyEvent e)
     {
@@ -282,8 +279,7 @@ public class StageScenePanel extends MisoScenePanel
                 Controller.postAction(this, CLUSTER_CLICKED, actarg);
             } else {
                 // post an action indicating that we've clicked on a location
-                Point lc = MisoUtil.screenToFull(
-                    _metrics, event.getX(), event.getY(), new Point());
+                Point lc = MisoUtil.screenToFull(_metrics, event.getX(), event.getY(), new Point());
                 Controller.postAction(this, LOCATION_CLICKED,
                                       new StageLocation(lc.x, lc.y, (byte)0));
             }
@@ -313,8 +309,7 @@ public class StageScenePanel extends MisoScenePanel
      */
     protected void clusterUpdated (Cluster cluster)
     {
-        // compute a screen rectangle that contains all possible "spots"
-        // in this cluster
+        // compute a screen rectangle that contains all possible "spots" in this cluster
         List<SceneLocation> spots = StageSceneUtil.getClusterLocs(cluster);
         Rectangle cbounds = null;
         for (int ii = 0, ll = spots.size(); ii < ll; ii++) {
@@ -337,12 +332,11 @@ public class StageScenePanel extends MisoScenePanel
     }
 
     /**
-     * Adds or updates the specified cluster in the view. Metrics will be
-     * created that allow the cluster to be rendered and hovered over.
+     * Adds or updates the specified cluster in the view. Metrics will be created that allow the
+     * cluster to be rendered and hovered over.
      *
      * @param cluster the cluster record to be added.
-     * @param bounds the screen coordinates that bound the occupants of
-     * the cluster.
+     * @param bounds the screen coordinates that bound the occupants of the cluster.
      */
     public void updateCluster (Cluster cluster, Rectangle bounds)
     {
@@ -350,8 +344,7 @@ public class StageScenePanel extends MisoScenePanel
         dirtyCluster(cluster);
 
         // compute the screen coordinate bounds of this cluster
-        Shape shape = new Ellipse2D.Float(
-            bounds.x, bounds.y, bounds.width, bounds.height);
+        Shape shape = new Ellipse2D.Float(bounds.x, bounds.y, bounds.width, bounds.height);
         _clusters.put(cluster, shape);
 
         // if the mouse is inside these bounds, we highlight this cluster
@@ -381,8 +374,7 @@ public class StageScenePanel extends MisoScenePanel
 
         dirtyCluster(shape);
         // clear out the hover object if this cluster was it
-        if (_hobject instanceof Cluster &&
-            ((Cluster)_hobject).clusterOid == clusterOid) {
+        if (_hobject instanceof Cluster && ((Cluster)_hobject).clusterOid == clusterOid) {
             _hobject = null;
         }
         return true;
@@ -431,8 +423,7 @@ public class StageScenePanel extends MisoScenePanel
             return null;
         }
 
-        // if the current hover object is a cluster, see if we're still in
-        // that cluster
+        // if the current hover object is a cluster, see if we're still in that cluster
         if (_hobject instanceof Cluster) {
             Cluster cluster = (Cluster)_hobject;
             if (containsPoint(cluster, mx, my)) {
@@ -451,8 +442,7 @@ public class StageScenePanel extends MisoScenePanel
     }
 
     /**
-     * Returns true if the specified cluster contains the supplied screen
-     * coordinate.
+     * Returns true if the specified cluster contains the supplied screen coordinate.
      */
     protected boolean containsPoint (Cluster cluster, int mx, int my)
     {
@@ -635,12 +625,11 @@ public class StageScenePanel extends MisoScenePanel
 
     /** The width of the portal icons. */
     protected static final int PORTAL_ICON_WIDTH = 48;
-    
+
     /** The height of the portal icons. */
     protected static final int PORTAL_ICON_HEIGHT = 48;
 
-    /** The distance within which the mouse must be from a location
-     * in order to highlight it. */
+    /** The distance within which the mouse must be from a location in order to highlight it. */
     protected static final int MAX_LOCATION_DIST = 25;
 
     /** The amount the stroke a cluster. */
@@ -663,7 +652,6 @@ public class StageScenePanel extends MisoScenePanel
     /** The alpha with which to render inactive portals. */
     protected static final Composite INACTIVE_PORTAL_ALPHA = HIGHLIGHT_ALPHA;
 
-    /** The number of pixels outside a cluster when we assume the mouse is
-     * "over" that cluster. */
+    /** The number of pixels outside a cluster when we assume the mouse is "over" that cluster. */
     protected static final int CLUSTER_SLOP = 25;
 }
