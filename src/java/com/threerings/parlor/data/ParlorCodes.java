@@ -70,4 +70,8 @@ public interface ParlorCodes extends InvocationCodes
     /** An error code returned by the table services for a request to join a table that the
      * requester been banned from. */
     public static final String BANNED_FROM_TABLE = "m.banned_from_table";
+
+    /** An error code returned by the table services when a user requests to leave a table for
+     * which the game is already in progress. */
+    public static final String GAME_ALREADY_STARTED = "m.game_already_started";
 }

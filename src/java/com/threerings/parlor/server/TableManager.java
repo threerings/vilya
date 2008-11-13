@@ -245,6 +245,11 @@ public class TableManager
             throw new InvocationException(NO_SUCH_TABLE);
         }
 
+        // if the table is in play, the user is not allowed to leave (he must leave the game)
+        if (table.inPlay()) {
+            throw new InvocationException(GAME_ALREADY_STARTED);
+        }
+
         // request that the user be removed from the table
         if (!table.clearPlayer(leaver.getVisibleName())) {
             throw new InvocationException(NOT_AT_TABLE);
