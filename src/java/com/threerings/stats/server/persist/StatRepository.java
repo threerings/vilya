@@ -18,17 +18,17 @@ import com.samskivert.io.ByteArrayOutInputStream;
 import com.samskivert.util.IntMap;
 import com.samskivert.util.IntMaps;
 
-import com.samskivert.jdbc.depot.DatabaseException;
-import com.samskivert.jdbc.depot.DepotRepository;
-import com.samskivert.jdbc.depot.DuplicateKeyException;
-import com.samskivert.jdbc.depot.Key;
-import com.samskivert.jdbc.depot.PersistenceContext;
-import com.samskivert.jdbc.depot.PersistentRecord;
-import com.samskivert.jdbc.depot.clause.FieldDefinition;
-import com.samskivert.jdbc.depot.clause.FromOverride;
-import com.samskivert.jdbc.depot.clause.QueryClause;
-import com.samskivert.jdbc.depot.clause.Where;
-import com.samskivert.jdbc.depot.expression.FunctionExp;
+import com.samskivert.depot.DatabaseException;
+import com.samskivert.depot.DepotRepository;
+import com.samskivert.depot.DuplicateKeyException;
+import com.samskivert.depot.Key;
+import com.samskivert.depot.PersistenceContext;
+import com.samskivert.depot.PersistentRecord;
+import com.samskivert.depot.clause.FieldDefinition;
+import com.samskivert.depot.clause.FromOverride;
+import com.samskivert.depot.clause.QueryClause;
+import com.samskivert.depot.clause.Where;
+import com.samskivert.depot.expression.FunctionExp;
 
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;

@@ -21,11 +21,11 @@
 
 package com.threerings.parlor.rating.server.persist;
 
-import com.samskivert.jdbc.depot.Key;
-import com.samskivert.jdbc.depot.PersistentRecord;
-import com.samskivert.jdbc.depot.annotation.Column;
-import com.samskivert.jdbc.depot.annotation.Id;
-import com.samskivert.jdbc.depot.expression.ColumnExp;
+import com.samskivert.depot.Key;
+import com.samskivert.depot.PersistentRecord;
+import com.samskivert.depot.annotation.Column;
+import com.samskivert.depot.annotation.Id;
+import com.samskivert.depot.expression.ColumnExp;
 
 import com.threerings.parlor.rating.util.Percentiler;
 

@@ -19,6 +19,7 @@
     <include name="asc.jar"/>
     <!-- these might be named lib-SNAPSHOT-0.0.jar or lib.jar -->
     <include name="samskivert*.jar"/>
+    <include name="depot*.jar"/>
     <include name="narya-base*.jar"/>
     <include name="narya-distrib*.jar"/>
     <include name="narya-tests*.jar"/>
