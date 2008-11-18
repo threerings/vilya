@@ -146,7 +146,7 @@ public class Percentiler
             for (int ii = 0; ii < BUCKET_COUNT; ii++) {
                 // determine the first new bucket that contains some or all of the old bucket
                 float obot = _min + odelta * ii;
-                int newidx = (int)Math.floor((obot - newmin) / ndelta);
+                int newidx = Math.min(BUCKET_COUNT-1, (int)Math.floor((obot - newmin) / ndelta));
 
                 // compute how much of this bucket (if any) spills over into the next bucket
                 float newoff = (float)Math.IEEEremainder(obot - newmin, ndelta);

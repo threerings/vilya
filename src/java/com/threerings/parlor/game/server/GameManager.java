@@ -408,7 +408,7 @@ public class GameManager extends PlaceManager
             if (_startmsgs == null) {
                 _startmsgs = Lists.newArrayList();
             }
-            _startmsgs.add(Tuple.create(msgbundle, msg));
+            _startmsgs.add(Tuple.newTuple(msgbundle, msg));
             return;
         }
 
