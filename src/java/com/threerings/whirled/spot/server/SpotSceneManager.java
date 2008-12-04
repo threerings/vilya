@@ -123,9 +123,9 @@ public class SpotSceneManager extends SceneManager
     }
 
     @Override
-    protected void gotSceneData ()
+    protected void gotSceneData (Object extras)
     {
-        super.gotSceneData();
+        super.gotSceneData(extras);
 
         // keep a casted reference around to our scene
         _sscene = (SpotScene)_scene;

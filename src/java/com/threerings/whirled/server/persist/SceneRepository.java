@@ -29,21 +29,18 @@ import com.threerings.whirled.util.NoSuchSceneException;
 import com.threerings.whirled.util.UpdateList;
 
 /**
- * The scene repository provides the basic interface for loading and
- * updating scene data. It is used by the scene registry and though more
- * scene related persistence services may be needed in a full-fledged
- * application, the scene repository only encapsulates those needed by the
- * scene registry and other services provided by the Whirled framework.
+ * The scene repository provides the basic interface for loading and updating scene data. It is
+ * used by the scene registry and though more scene related persistence services may be needed in a
+ * full-fledged application, the scene repository only encapsulates those needed by the scene
+ * registry and other services provided by the Whirled framework.
  */
 public interface SceneRepository
 {
     /**
      * Fetches the model for the scene with the specified scene id.
      *
-     * @exception PersistenceException thrown if an error occurs
-     * attempting to load the scene data.
-     * @exception NoSuchSceneException thrown if no scene exists with the
-     * specified scene id.
+     * @exception PersistenceException thrown if an error occurs attempting to load the scene data.
+     * @exception NoSuchSceneException thrown if no scene exists with the specified scene id.
      */
     public SceneModel loadSceneModel (int sceneId)
         throws PersistenceException, NoSuchSceneException;
@@ -51,22 +48,26 @@ public interface SceneRepository
     /**
      * Fetches the set of updates associated with the specified scene.
      *
-     * @exception PersistenceException thrown if an error occurs
-     * attempting to load the scene updates.
-     * @exception NoSuchSceneException thrown if no scene exists with the
-     * specified scene id.
+     * @exception PersistenceException thrown if an error occurs attempting to load the scene
+     * updates.
      */
     public UpdateList loadUpdates (int sceneId)
-        throws PersistenceException, NoSuchSceneException;
+        throws PersistenceException;
 
     /**
-     * Applise the supplied scene update to persistent representation of
-     * its associated scene, then stores the update persistently for
-     * future invocations of the server to load. <em>Note:</em> the scene
-     * update will have already been applied to the supplied scene model.
+     * Loads optional additional scene data. This data is loaded during the scene resolution
+     * process and made available to the scene manager via {@link SceneManager#gotSceneData}.
+     */
+    public Object loadExtras (int sceneId)
+        throws PersistenceException;
+
+    /**
+     * Applise the supplied scene update to persistent representation of its associated scene, then
+     * stores the update persistently for future invocations of the server to load. <em>Note:</em>
+     * the scene update will have already been applied to the supplied scene model.
      *
-     * @exception PersistenceException thrown if an error occurs
-     * attempting to apply the scene update.
+     * @exception PersistenceException thrown if an error occurs attempting to apply the scene
+     * update.
      */
     public void applyAndRecordUpdate (SceneModel model, SceneUpdate update)
         throws PersistenceException;

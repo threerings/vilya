@@ -168,21 +168,20 @@ public class SceneRegistry
         // otherwise we have to load the scene from the repository
         final int fsceneId = sceneId;
         _invoker.postUnit(new RepositoryUnit("resolveScene(" + sceneId + ")") {
-            @Override
-            public void invokePersist () throws Exception {
+            @Override public void invokePersist () throws Exception {
                 _model = _screp.loadSceneModel(fsceneId);
                 _updates = _screp.loadUpdates(fsceneId);
+                _extras = _screp.loadExtras(fsceneId);
             }
-            @Override
-            public void handleSuccess () {
-                processSuccessfulResolution(_model, _updates);
+            @Override public void handleSuccess () {
+                processSuccessfulResolution(_model, _updates, _extras);
             }
-            @Override
-            public void handleFailure (Exception error) {
+            @Override public void handleFailure (Exception error) {
                 processFailedResolution(fsceneId, error);
             }
             protected SceneModel _model;
             protected UpdateList _updates;
+            protected Object _extras;
         });
     }
 
@@ -240,7 +239,8 @@ public class SceneRegistry
     /**
      * Called when the scene resolution has completed successfully.
      */
-    protected void processSuccessfulResolution (SceneModel model, final UpdateList updates)
+    protected void processSuccessfulResolution (
+        SceneModel model, final UpdateList updates, final Object extras)
     {
         // now that the scene is loaded, we can create a scene manager for it. that will be
         // initialized by the place registry and when that is finally complete, then we can let our
@@ -253,7 +253,7 @@ public class SceneRegistry
             // now create our scene manager
             _plreg.createPlace(scene.getPlaceConfig(), new PlaceRegistry.PreStartupHook() {
                 public void invoke (PlaceManager pmgr) {
-                    ((SceneManager)pmgr).setSceneData(scene, updates, SceneRegistry.this);
+                    ((SceneManager)pmgr).setSceneData(scene, updates, extras, SceneRegistry.this);
                 }
             });
 

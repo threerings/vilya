@@ -205,9 +205,9 @@ public class StageSceneManager extends SpotSceneManager
     }
 
     @Override // documentation inherited
-    protected void gotSceneData ()
+    protected void gotSceneData (Object extras)
     {
-        super.gotSceneData();
+        super.gotSceneData(extras);
 
         // cast some scene related bits
         _sscene = (StageScene)_scene;

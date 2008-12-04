@@ -83,7 +83,7 @@ public class SceneManager extends PlaceManager
      * Called by the scene registry once the scene manager has been created (and initialized), but
      * before it is started up.
      */
-    protected void setSceneData (Scene scene, UpdateList updates, SceneRegistry screg)
+    protected void setSceneData (Scene scene, UpdateList updates, Object extras, SceneRegistry screg)
     {
         _scene = scene;
         _screg = screg;
@@ -99,15 +99,18 @@ public class SceneManager extends PlaceManager
         }
 
         // let derived classes react to the receipt of scene data
-        gotSceneData();
+        gotSceneData(extras);
     }
 
     /**
      * A method that can be overridden by derived classes to perform initialization processing
      * after we receive our scene information but before we're started up (and hence registered as
      * an active place).
+     *
+     * @param extras optional additional information supplied by the repository when the scene was
+     * loaded, or null if the repository provided no extras.
      */
-    protected void gotSceneData ()
+    protected void gotSceneData (Object extras)
     {
     }
 

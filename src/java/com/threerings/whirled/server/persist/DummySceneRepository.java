@@ -47,9 +47,16 @@ public class DummySceneRepository implements SceneRepository
 
     // documentation inherited from interface
     public UpdateList loadUpdates (int sceneId)
-        throws PersistenceException, NoSuchSceneException
+        throws PersistenceException
     {
         return new UpdateList();
+    }
+
+    // documentation inherited from interface
+    public Object loadExtras (int sceneId)
+        throws PersistenceException
+    {
+        return null;
     }
 
     // documentation inherited from interface
