@@ -58,7 +58,7 @@ public interface SceneRepository
      * Loads optional additional scene data. This data is loaded during the scene resolution
      * process and made available to the scene manager via {@link SceneManager#gotSceneData}.
      */
-    public Object loadExtras (int sceneId)
+    public Object loadExtras (int sceneId, SceneModel model)
         throws PersistenceException;
 
     /**

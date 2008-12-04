@@ -53,7 +53,7 @@ public class DummySceneRepository implements SceneRepository
     }
 
     // documentation inherited from interface
-    public Object loadExtras (int sceneId)
+    public Object loadExtras (int sceneId, SceneModel model)
         throws PersistenceException
     {
         return null;
