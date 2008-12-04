@@ -171,7 +171,7 @@ public class SceneRegistry
             @Override public void invokePersist () throws Exception {
                 _model = _screp.loadSceneModel(fsceneId);
                 _updates = _screp.loadUpdates(fsceneId);
-                _extras = _screp.loadExtras(fsceneId);
+                _extras = _screp.loadExtras(fsceneId, _model);
             }
             @Override public void handleSuccess () {
                 processSuccessfulResolution(_model, _updates, _extras);
