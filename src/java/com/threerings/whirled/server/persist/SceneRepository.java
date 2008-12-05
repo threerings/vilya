@@ -25,6 +25,7 @@ import com.samskivert.io.PersistenceException;
 
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.SceneUpdate;
+import com.threerings.whirled.server.SceneManager;
 import com.threerings.whirled.util.NoSuchSceneException;
 import com.threerings.whirled.util.UpdateList;
 
