@@ -112,6 +112,15 @@ public class SpotSceneManager extends SceneManager
     }
 
     @Override
+    public void bodyWillEnter (BodyObject body)
+    {
+        super.bodyWillEnter(body);
+
+        // assign this body a starting location in the scene
+        assignStartingLocation(body);
+    }
+
+    @Override
     protected void didStartup ()
     {
         // get a casted reference to our place object (we need to do this before calling
@@ -158,16 +167,6 @@ public class SpotSceneManager extends SceneManager
                 }
             }
         }
-    }
-
-    @Override
-    protected void insertOccupantInfo (OccupantInfo info, BodyObject body)
-    {
-        super.insertOccupantInfo(info, body);
-
-        // we don't actually populate their occupant info, but instead assign them their starting
-        // location in the scene
-        assignStartingLocation(body);
     }
 
     /**
