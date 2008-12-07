@@ -204,6 +204,14 @@ public class RatingRepository extends DepotRepository
         deleteAll(PercentileRecord.class, new Where(PercentileRecord.GAME_ID_C, gameId));
     }
 
+    /**
+     * Deletes the percentile record for the specified game and game mode.
+     */
+    public void deletePercentile (int gameId, int gameMode)
+    {
+        delete(PercentileRecord.class, PercentileRecord.getKey(gameId, gameMode));
+    }
+
     @Override
     protected void getManagedRecords (Set<Class<? extends PersistentRecord>> classes)
     {
