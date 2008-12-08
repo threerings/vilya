@@ -34,7 +34,6 @@ import com.threerings.presents.server.InvocationException;
 import com.threerings.crowd.chat.data.UserMessage;
 import com.threerings.crowd.chat.server.SpeakUtil;
 import com.threerings.crowd.data.BodyObject;
-import com.threerings.crowd.data.OccupantInfo;
 import com.threerings.crowd.server.PlaceRegistry;
 
 import com.threerings.whirled.server.SceneManager;
