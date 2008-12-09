@@ -121,7 +121,7 @@ public class StatRepository extends DepotRepository
                     updateStat(playerId, stats[ii], true);
                 }
             } catch (Exception e) {
-                log.warning("Error flushing modified stat [stat=" + stats[ii] + "].", e);
+                log.warning("Error flushing modified stat", "stat", stats[ii], e);
             }
         }
     }
@@ -138,8 +138,7 @@ public class StatRepository extends DepotRepository
             try {
                 code = assignStringCode(type, value);
             } catch (DatabaseException pe) {
-                log.warning("Failed to assign code [type=" + type +
-                        ", value=" + value + "].", pe);
+                log.warning("Failed to assign code", "type", type, "value", value, pe);
                 // at this point the database is probably totally hosed, so we can just punt here,
                 // and assume that this value will never be persisted
                 code = -1;
@@ -299,27 +298,23 @@ public class StatRepository extends DepotRepository
                 return code;
 
             } catch (DatabaseException pe) {
-                // if this is not a duplicate row exception, something is booched and we
-                // just fail
-
+                // if this is not a duplicate row exception, something is booched and we just fail
                 if (!(pe instanceof DuplicateKeyException)) {
                     throw pe;
                 }
 
-                // if it is a duplicate row exception, possibly someone inserted our value
-                // before we could, in which case we can just look up the new mapping
+                // if it is a duplicate row exception, possibly someone inserted our value before
+                // we could, in which case we can just look up the new mapping
                 StringCodeRecord record = load(
                     StringCodeRecord.class, StringCodeRecord.getKey(type.code(), value));
                 if (record != null) {
-                    log.info("Value collision assigning string code [type=" + type +
-                        ", value=" + value + "].");
+                    log.info("Value collision assigning string code", "type", type, "value", value);
                     return code;
                 }
 
-                // otherwise someone used the code we were trying to use and we just need
-                // to loop around and get the next highest code
-                log.info("Code collision assigning string code [type=" + type +
-                    ", value=" + value + "].");
+                // otherwise someone used the code we were trying to use and we just need to loop
+                // around and get the next highest code
+                log.info("Code collision assigning string code", "type", type, "value", value);
             }
         }
         throw new DatabaseException(
