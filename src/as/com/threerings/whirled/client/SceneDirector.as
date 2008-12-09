@@ -325,15 +325,11 @@ public class SceneDirector extends BasicDirector
         var pendingData :PendingData = _pendingData;
         // ship on over to the other server
         _wctx.getClient().moveToServer(hostname, ports, new ConfirmAdapter(
-            function (reason :String) :void { // failed
-                requestFailed(reason);
-            },
             function () :void { // succeeded
                 // resend our move request now that we're connected to the new server
                 _pendingData = pendingData;
                 sendMoveRequest();
-            }
-        ));
+            }, requestFailed));
     }
 
     // from interface SceneService_SceneMoveListener
