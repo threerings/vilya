@@ -165,6 +165,7 @@ public class StatRepository extends DepotRepository
             value = (map == null) ? null : map.get(code);
             if (value == null) {
                 log.warning("Missing reverse maping", "type", type, "code", code);
+                value = "__UNKNOWN:" + code + "__"; // we don't want to return null
             }
         }
         return value;
