@@ -34,6 +34,7 @@ import com.threerings.presents.server.InvocationException;
 import com.threerings.crowd.chat.data.UserMessage;
 import com.threerings.crowd.chat.server.SpeakUtil;
 import com.threerings.crowd.data.BodyObject;
+import com.threerings.crowd.data.OccupantInfo;
 import com.threerings.crowd.server.PlaceRegistry;
 
 import com.threerings.whirled.server.SceneManager;
@@ -111,15 +112,6 @@ public class SpotSceneManager extends SceneManager
     }
 
     @Override
-    public void bodyWillEnter (BodyObject body)
-    {
-        super.bodyWillEnter(body);
-
-        // assign this body a starting location in the scene
-        assignStartingLocation(body);
-    }
-
-    @Override
     protected void didStartup ()
     {
         // get a casted reference to our place object (we need to do this before calling
@@ -166,6 +158,16 @@ public class SpotSceneManager extends SceneManager
                 }
             }
         }
+    }
+
+    @Override
+    protected void addOccupantInfo (BodyObject body, OccupantInfo info)
+    {
+        // assign this body a starting location in the scene
+        assignStartingLocation(body);
+
+        // then call super, so we know that our info will be ready before bodyAdded is triggered
+        super.addOccupantInfo(body, info);
     }
 
     /**
