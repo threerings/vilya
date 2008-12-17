@@ -282,8 +282,7 @@ public class SpotSceneManager extends SceneManager
         if (!_ssobj.occupantLocs.contains(sloc)) {
             // complain if they don't already have a location configured
             log.warning("Changing loc for occupant without previous loc [where=" + where() +
-                        ", who=" + source.who() + ", nloc=" + loc + "].");
-            Thread.dumpStack();
+                        ", who=" + source.who() + ", nloc=" + loc + "].", new Exception());
             _ssobj.addToOccupantLocs(sloc);
         } else {
             _ssobj.updateOccupantLocs(sloc);
