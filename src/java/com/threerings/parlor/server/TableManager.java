@@ -344,10 +344,19 @@ public class TableManager
         }
 
         // remove the mapping by gameOid
-        _goidMap.remove(table.gameOid); // no-op if gameOid == 0
+        Table removed = _goidMap.remove(table.gameOid); // no-op if gameOid == 0
 
         // remove the table from the lobby object
         _tlobj.removeFromTables(table.tableId);
+
+        // remove the listener too so we do not get a request later on to update the occupants or
+        // unmap this table
+        if (removed != null) {
+            DObject gameObj = _omgr.getObject(table.gameOid);
+            if (gameObj != null) {
+                gameObj.removeListener(_gameListener);
+            }
+        }
     }
 
     /**
