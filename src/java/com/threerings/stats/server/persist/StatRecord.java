@@ -32,33 +32,11 @@ import com.samskivert.depot.expression.ColumnExp;
 public class StatRecord extends PersistentRecord
 {
     // AUTO-GENERATED: FIELDS START
-    /** The column identifier for the {@link #playerId} field. */
-    public static final String PLAYER_ID = "playerId";
-
-    /** The qualified column identifier for the {@link #playerId} field. */
-    public static final ColumnExp PLAYER_ID_C =
-        new ColumnExp(StatRecord.class, PLAYER_ID);
-
-    /** The column identifier for the {@link #statCode} field. */
-    public static final String STAT_CODE = "statCode";
-
-    /** The qualified column identifier for the {@link #statCode} field. */
-    public static final ColumnExp STAT_CODE_C =
-        new ColumnExp(StatRecord.class, STAT_CODE);
-
-    /** The column identifier for the {@link #statData} field. */
-    public static final String STAT_DATA = "statData";
-
-    /** The qualified column identifier for the {@link #statData} field. */
-    public static final ColumnExp STAT_DATA_C =
-        new ColumnExp(StatRecord.class, STAT_DATA);
-
-    /** The column identifier for the {@link #modCount} field. */
-    public static final String MOD_COUNT = "modCount";
-
-    /** The qualified column identifier for the {@link #modCount} field. */
-    public static final ColumnExp MOD_COUNT_C =
-        new ColumnExp(StatRecord.class, MOD_COUNT);
+    public static final Class<StatRecord> _R = StatRecord.class;
+    public static final ColumnExp PLAYER_ID = colexp(_R, "playerId");
+    public static final ColumnExp STAT_CODE = colexp(_R, "statCode");
+    public static final ColumnExp STAT_DATA = colexp(_R, "statData");
+    public static final ColumnExp MOD_COUNT = colexp(_R, "modCount");
     // AUTO-GENERATED: FIELDS END
 
     public static final int SCHEMA_VERSION = 4;
@@ -124,7 +102,7 @@ public class StatRecord extends PersistentRecord
     {
         return new Key<StatRecord>(
                 StatRecord.class,
-                new String[] { PLAYER_ID, STAT_CODE },
+                new ColumnExp[] { PLAYER_ID, STAT_CODE },
                 new Comparable[] { playerId, statCode });
     }
     // AUTO-GENERATED: METHODS END

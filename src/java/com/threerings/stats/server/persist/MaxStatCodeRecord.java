@@ -13,12 +13,8 @@ import com.samskivert.depot.expression.ColumnExp;
 public class MaxStatCodeRecord extends PersistentRecord {
 
     // AUTO-GENERATED: FIELDS START
-    /** The column identifier for the {@link #maxCode} field. */
-    public static final String MAX_CODE = "maxCode";
-
-    /** The qualified column identifier for the {@link #maxCode} field. */
-    public static final ColumnExp MAX_CODE_C =
-        new ColumnExp(MaxStatCodeRecord.class, MAX_CODE);
+    public static final Class<MaxStatCodeRecord> _R = MaxStatCodeRecord.class;
+    public static final ColumnExp MAX_CODE = colexp(_R, "maxCode");
     // AUTO-GENERATED: FIELDS END
 
     @Column

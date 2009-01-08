@@ -33,57 +33,25 @@ import com.samskivert.depot.annotation.Id;
 import com.samskivert.depot.annotation.Index;
 import com.samskivert.depot.expression.ColumnExp;
 
-@Entity(indices={
-    @Index(name="ixPlayerId", fields={ RatingRecord.PLAYER_ID })
-})
+@Entity
 public class RatingRecord extends PersistentRecord
 {
     // AUTO-GENERATED: FIELDS START
-    /** The column identifier for the {@link #gameId} field. */
-    public static final String GAME_ID = "gameId";
-
-    /** The qualified column identifier for the {@link #gameId} field. */
-    public static final ColumnExp GAME_ID_C =
-        new ColumnExp(RatingRecord.class, GAME_ID);
-
-    /** The column identifier for the {@link #playerId} field. */
-    public static final String PLAYER_ID = "playerId";
-
-    /** The qualified column identifier for the {@link #playerId} field. */
-    public static final ColumnExp PLAYER_ID_C =
-        new ColumnExp(RatingRecord.class, PLAYER_ID);
-
-    /** The column identifier for the {@link #rating} field. */
-    public static final String RATING = "rating";
-
-    /** The qualified column identifier for the {@link #rating} field. */
-    public static final ColumnExp RATING_C =
-        new ColumnExp(RatingRecord.class, RATING);
-
-    /** The column identifier for the {@link #experience} field. */
-    public static final String EXPERIENCE = "experience";
-
-    /** The qualified column identifier for the {@link #experience} field. */
-    public static final ColumnExp EXPERIENCE_C =
-        new ColumnExp(RatingRecord.class, EXPERIENCE);
-
-    /** The column identifier for the {@link #lastUpdated} field. */
-    public static final String LAST_UPDATED = "lastUpdated";
-
-    /** The qualified column identifier for the {@link #lastUpdated} field. */
-    public static final ColumnExp LAST_UPDATED_C =
-        new ColumnExp(RatingRecord.class, LAST_UPDATED);
+    public static final Class<RatingRecord> _R = RatingRecord.class;
+    public static final ColumnExp GAME_ID = colexp(_R, "gameId");
+    public static final ColumnExp PLAYER_ID = colexp(_R, "playerId");
+    public static final ColumnExp RATING = colexp(_R, "rating");
+    public static final ColumnExp EXPERIENCE = colexp(_R, "experience");
+    public static final ColumnExp LAST_UPDATED = colexp(_R, "lastUpdated");
     // AUTO-GENERATED: FIELDS END
 
     public static final int SCHEMA_VERSION = 3;
 
     /** The identifier of the game we're rating for. */
-    @Id
-    public int gameId;
+    @Id public int gameId;
 
     /** The identifier of the player we're rating. */
-    @Id
-    public int playerId;
+    @Id @Index public int playerId;
 
     /** The player's current rating. */
     public int rating;
@@ -132,7 +100,7 @@ public class RatingRecord extends PersistentRecord
     {
         return new Key<RatingRecord>(
                 RatingRecord.class,
-                new String[] { GAME_ID, PLAYER_ID },
+                new ColumnExp[] { GAME_ID, PLAYER_ID },
                 new Comparable[] { gameId, playerId });
     }
     // AUTO-GENERATED: METHODS END

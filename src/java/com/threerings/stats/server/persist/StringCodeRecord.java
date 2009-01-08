@@ -26,51 +26,46 @@ import com.samskivert.depot.PersistentRecord;
 import com.samskivert.depot.annotation.Column;
 import com.samskivert.depot.annotation.Entity;
 import com.samskivert.depot.annotation.Id;
-import com.samskivert.depot.annotation.UniqueConstraint;
+import com.samskivert.depot.annotation.Index;
 import com.samskivert.depot.expression.ColumnExp;
 
-@Entity(name="STRING_CODES", uniqueConstraints={
-    @UniqueConstraint(fieldNames={ StringCodeRecord.STAT_CODE, StringCodeRecord.VALUE }),
-    @UniqueConstraint(fieldNames={ StringCodeRecord.STAT_CODE, StringCodeRecord.CODE })})
+@Entity(name="STRING_CODES", indices={
+    @Index(name="statCodeValue", unique=true),
+    @Index(name="statCodeCode", unique=true)
+})
 public class StringCodeRecord extends PersistentRecord
 {
     // AUTO-GENERATED: FIELDS START
-    /** The column identifier for the {@link #statCode} field. */
-    public static final String STAT_CODE = "statCode";
-
-    /** The qualified column identifier for the {@link #statCode} field. */
-    public static final ColumnExp STAT_CODE_C =
-        new ColumnExp(StringCodeRecord.class, STAT_CODE);
-
-    /** The column identifier for the {@link #value} field. */
-    public static final String VALUE = "value";
-
-    /** The qualified column identifier for the {@link #value} field. */
-    public static final ColumnExp VALUE_C =
-        new ColumnExp(StringCodeRecord.class, VALUE);
-
-    /** The column identifier for the {@link #code} field. */
-    public static final String CODE = "code";
-
-    /** The qualified column identifier for the {@link #code} field. */
-    public static final ColumnExp CODE_C =
-        new ColumnExp(StringCodeRecord.class, CODE);
+    public static final Class<StringCodeRecord> _R = StringCodeRecord.class;
+    public static final ColumnExp STAT_CODE = colexp(_R, "statCode");
+    public static final ColumnExp VALUE = colexp(_R, "value");
+    public static final ColumnExp CODE = colexp(_R, "code");
     // AUTO-GENERATED: FIELDS END
 
     public static final int SCHEMA_VERSION = 2;
 
+    /** Defines the statCodeValue unique index. */
+    public static ColumnExp[] statCodeValue ()
+    {
+        return new ColumnExp[] { STAT_CODE, VALUE };
+    }
+
+    /** Defines the statCodeCode unique index. */
+    public static ColumnExp[] statCodeCode ()
+    {
+        return new ColumnExp[] { STAT_CODE, CODE };
+    }
+
     /** The code of the stat. */
-    @Id
-    @Column(name="STAT_CODE")
+    @Id @Column(name="STAT_CODE")
     public int statCode;
 
-    @Id
-    @Column(name="VALUE")
+    @Id @Column(name="VALUE")
     public String value;
-    
+
     @Column(name="CODE")
     public int code;
-    
+
     /**
      * An empty constructor for unmarshalling.
      */
@@ -99,7 +94,7 @@ public class StringCodeRecord extends PersistentRecord
     {
         return new Key<StringCodeRecord>(
                 StringCodeRecord.class,
-                new String[] { STAT_CODE, VALUE },
+                new ColumnExp[] { STAT_CODE, VALUE },
                 new Comparable[] { statCode, value });
     }
     // AUTO-GENERATED: METHODS END

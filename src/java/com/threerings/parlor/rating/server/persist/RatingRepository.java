@@ -85,8 +85,8 @@ public class RatingRepository extends DepotRepository
             return Collections.emptyList();
         }
         return findAll(RatingRecord.class,
-                       new Where(new And(new Equals(RatingRecord.GAME_ID_C, gameId),
-                                         new In(RatingRecord.PLAYER_ID_C, players))));
+                       new Where(new And(new Equals(RatingRecord.GAME_ID, gameId),
+                                         new In(RatingRecord.PLAYER_ID, players))));
     }
 
     /**
@@ -102,15 +102,15 @@ public class RatingRepository extends DepotRepository
         ArrayList<QueryClause> clauses = new ArrayList<QueryClause>();
         if (since > 0L) {
             Timestamp when = new Timestamp(System.currentTimeMillis() - since);
-            clauses.add(new Where(new And(new Equals(RatingRecord.PLAYER_ID_C, playerId),
-                                          new GreaterThan(RatingRecord.LAST_UPDATED_C, when))));
+            clauses.add(new Where(new And(new Equals(RatingRecord.PLAYER_ID, playerId),
+                                          new GreaterThan(RatingRecord.LAST_UPDATED, when))));
         } else {
-            clauses.add(new Where(RatingRecord.PLAYER_ID_C, playerId));
+            clauses.add(new Where(RatingRecord.PLAYER_ID, playerId));
         }
         if (count > 0) {
             clauses.add(new Limit(0, count));
         }
-        clauses.add(OrderBy.descending(RatingRecord.LAST_UPDATED_C));
+        clauses.add(OrderBy.descending(RatingRecord.LAST_UPDATED));
         return findAll(RatingRecord.class, clauses);
     }
 
@@ -126,17 +126,17 @@ public class RatingRepository extends DepotRepository
     public List<RatingRecord> getTopRatings (int gameId, int limit, long since, IntSet playerIds)
     {
         List<SQLExpression> where = Lists.newArrayList();
-        where.add(new Equals(RatingRecord.GAME_ID_C, gameId));
+        where.add(new Equals(RatingRecord.GAME_ID, gameId));
         if (since > 0L) {
-            where.add(new GreaterThan(RatingRecord.LAST_UPDATED_C,
+            where.add(new GreaterThan(RatingRecord.LAST_UPDATED,
                                       new Timestamp(System.currentTimeMillis() - since)));
         }
         if (playerIds != null) {
-            where.add(new In(RatingRecord.PLAYER_ID_C, playerIds));
+            where.add(new In(RatingRecord.PLAYER_ID, playerIds));
         }
 
         OrderBy ob = new OrderBy(
-            new SQLExpression[] { RatingRecord.RATING_C, RatingRecord.LAST_UPDATED_C },
+            new SQLExpression[] { RatingRecord.RATING, RatingRecord.LAST_UPDATED },
             new OrderBy.Order[] { OrderBy.Order.DESC, OrderBy.Order.DESC });
         return findAll(RatingRecord.class, new Where(new And(where)), new Limit(0, limit), ob);
     }
@@ -178,7 +178,7 @@ public class RatingRepository extends DepotRepository
     {
         Map<Integer, Percentiler> tilers = Maps.newHashMap();
         for (PercentileRecord record : findAll(
-                 PercentileRecord.class, new Where(PercentileRecord.GAME_ID_C, gameId))) {
+                 PercentileRecord.class, new Where(PercentileRecord.GAME_ID, gameId))) {
             tilers.put(record.gameMode, new Percentiler(record.data));
         }
         return tilers;
@@ -201,7 +201,7 @@ public class RatingRepository extends DepotRepository
      */
     public void deletePercentiles (int gameId)
     {
-        deleteAll(PercentileRecord.class, new Where(PercentileRecord.GAME_ID_C, gameId));
+        deleteAll(PercentileRecord.class, new Where(PercentileRecord.GAME_ID, gameId));
     }
 
     /**

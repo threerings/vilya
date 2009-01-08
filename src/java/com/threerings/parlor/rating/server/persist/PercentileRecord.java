@@ -35,26 +35,10 @@ import com.threerings.parlor.rating.util.Percentiler;
 public class PercentileRecord extends PersistentRecord
 {
     // AUTO-GENERATED: FIELDS START
-    /** The column identifier for the {@link #gameId} field. */
-    public static final String GAME_ID = "gameId";
-
-    /** The qualified column identifier for the {@link #gameId} field. */
-    public static final ColumnExp GAME_ID_C =
-        new ColumnExp(PercentileRecord.class, GAME_ID);
-
-    /** The column identifier for the {@link #gameMode} field. */
-    public static final String GAME_MODE = "gameMode";
-
-    /** The qualified column identifier for the {@link #gameMode} field. */
-    public static final ColumnExp GAME_MODE_C =
-        new ColumnExp(PercentileRecord.class, GAME_MODE);
-
-    /** The column identifier for the {@link #data} field. */
-    public static final String DATA = "data";
-
-    /** The qualified column identifier for the {@link #data} field. */
-    public static final ColumnExp DATA_C =
-        new ColumnExp(PercentileRecord.class, DATA);
+    public static final Class<PercentileRecord> _R = PercentileRecord.class;
+    public static final ColumnExp GAME_ID = colexp(_R, "gameId");
+    public static final ColumnExp GAME_MODE = colexp(_R, "gameMode");
+    public static final ColumnExp DATA = colexp(_R, "data");
     // AUTO-GENERATED: FIELDS END
 
     /** Increment this value to reflect changes to this object's schema. */
@@ -79,7 +63,7 @@ public class PercentileRecord extends PersistentRecord
     {
         return new Key<PercentileRecord>(
                 PercentileRecord.class,
-                new String[] { GAME_ID, GAME_MODE },
+                new ColumnExp[] { GAME_ID, GAME_MODE },
                 new Comparable[] { gameId, gameMode });
     }
     // AUTO-GENERATED: METHODS END

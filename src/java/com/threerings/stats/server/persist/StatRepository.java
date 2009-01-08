@@ -62,8 +62,8 @@ public class StatRepository extends DepotRepository
      */
     public <T extends Stat> T updateStat (int playerId, StatModifier<T> modifier)
     {
-        Where where = new Where(StatRecord.PLAYER_ID_C, playerId,
-                                StatRecord.STAT_CODE_C, modifier.getType().code());
+        Where where = new Where(StatRecord.PLAYER_ID, playerId,
+                                StatRecord.STAT_CODE, modifier.getType().code());
 
         for (int ii = 0; ii < MAX_UPDATE_TRIES; ii++) {
             StatRecord record = load(StatRecord.class, where); // TODO: force cache skip on ii > 0
@@ -91,7 +91,7 @@ public class StatRepository extends DepotRepository
     public ArrayList<Stat> loadStats (int playerId)
     {
         ArrayList<Stat> stats = new ArrayList<Stat>();
-        Where where = new Where(StatRecord.PLAYER_ID_C, playerId);
+        Where where = new Where(StatRecord.PLAYER_ID, playerId);
         for (StatRecord record : findAll(StatRecord.class, where)) {
             Stat stat = decodeStat(record.statCode, record.statData, record.modCount);
             if (stat != null) {
@@ -106,7 +106,7 @@ public class StatRepository extends DepotRepository
      */
     public void deleteStats (final int playerId)
     {
-        deleteAll(StatRecord.class, new Where(StatRecord.PLAYER_ID_C, playerId));
+        deleteAll(StatRecord.class, new Where(StatRecord.PLAYER_ID, playerId));
     }
 
     /**
@@ -243,9 +243,9 @@ public class StatRepository extends DepotRepository
         // update the row in the database only if it has the expected modCount
         int numRows = updatePartial(
             StatRecord.class,
-            new Where(StatRecord.PLAYER_ID_C, playerId,
-                      StatRecord.STAT_CODE_C, stat.getCode(),
-                      StatRecord.MOD_COUNT_C, stat.getModCount()),
+            new Where(StatRecord.PLAYER_ID, playerId,
+                      StatRecord.STAT_CODE, stat.getCode(),
+                      StatRecord.MOD_COUNT, stat.getModCount()),
             key,
             StatRecord.STAT_DATA, data, StatRecord.MOD_COUNT, nextModCount);
 
@@ -284,8 +284,8 @@ public class StatRepository extends DepotRepository
                 MaxStatCodeRecord.class,
                 new FromOverride(StringCodeRecord.class),
                 new FieldDefinition(MaxStatCodeRecord.MAX_CODE,
-                                    new FunctionExp("MAX", StringCodeRecord.CODE_C)),
-                new Where(StringCodeRecord.STAT_CODE_C, type.code()));
+                                    new FunctionExp("MAX", StringCodeRecord.CODE)),
+                new Where(StringCodeRecord.STAT_CODE, type.code()));
 
             int code = maxRecord != null ? maxRecord.maxCode + 1 : 1;
 
@@ -327,7 +327,7 @@ public class StatRepository extends DepotRepository
     {
         QueryClause[] clauses;
         if (type != null) {
-            clauses = new QueryClause[] { new Where(StringCodeRecord.STAT_CODE_C, type.code()) };
+            clauses = new QueryClause[] { new Where(StringCodeRecord.STAT_CODE, type.code()) };
         } else {
             clauses = new QueryClause[0];
         }
