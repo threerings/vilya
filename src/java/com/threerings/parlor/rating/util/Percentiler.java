@@ -411,8 +411,7 @@ public class Percentiler
         int idx = Math.round((value - _min) * BUCKET_COUNT / (_max - _min));
         idx = Math.min(idx, BUCKET_COUNT-1);
         if (idx < 0 || idx >= BUCKET_COUNT) {
-            log.warning("'" + value + "' caused bogus bucket index (" + idx + ") to be computed.");
-            Thread.dumpStack();
+            log.warning("Bogus bucket index, using 0", "value", value, "idx", idx, new Throwable());
             return 0;
         }
         return idx;
