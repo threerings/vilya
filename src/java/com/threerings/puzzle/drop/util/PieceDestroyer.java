@@ -37,29 +37,26 @@ public class PieceDestroyer
     implements DropPieceCodes
 {
     /**
-     * An interface to be implemented by specific puzzles to detail the
-     * parameters and methodology by which pieces are destroyed in the
-     * puzzle board.
+     * An interface to be implemented by specific puzzles to detail the parameters and methodology
+     * by which pieces are destroyed in the puzzle board.
      */
     public interface DestroyLogic
     {
         /**
-         * Returns the minimum length of a contiguously piece segment that
-         * should be destroyed.
+         * Returns the minimum length of a contiguously piece segment that should be destroyed.
          */
         public int getMinimumLength ();
 
         /**
-         * Returns whether piece <code>a</code> is equivalent to piece
-         * <code>b</code> for the purposes of including it in a contiguous
-         * piece segment to be destroyed.
+         * Returns whether piece <code>a</code> is equivalent to piece <code>b</code> for the
+         * purposes of including it in a contiguous piece segment to be destroyed.
          */
         public boolean isEquivalent (int a, int b);
     }
 
     /**
-     * Constructs a piece destroyer that destroys pieces as specified by
-     * the supplied destroy logic.
+     * Constructs a piece destroyer that destroys pieces as specified by the supplied destroy
+     * logic.
      */
     public PieceDestroyer (DestroyLogic logic)
     {
@@ -67,13 +64,11 @@ public class PieceDestroyer
     }
 
     /**
-     * Destroys all pieces in the given board that are in contiguous rows
-     * or columns of pieces, returning a list of {@link SegmentInfo}
-     * objects detailing the destroyed piece segments.  Note that a single
-     * list is used internally to gather the segment info, and so callers
-     * that care to modify the list should create their own copy; also,
-     * the pieces in the segments may overlap, i.e., two segments may
-     * contain the same piece.
+     * Destroys all pieces in the given board that are in contiguous rows or columns of pieces,
+     * returning a list of {@link SegmentInfo} objects detailing the destroyed piece segments.
+     * Note that a single list is used internally to gather the segment info, and so callers that
+     * care to modify the list should create their own copy; also, the pieces in the segments may
+     * overlap, i.e., two segments may contain the same piece.
      */
     public List<SegmentInfo> destroyPieces (DropBoard board, PieceOperation destroyOp)
     {
@@ -108,9 +103,8 @@ public class PieceDestroyer
     }
 
     /**
-     * Searches for a contiguously colored piece segment with the
-     * specified orientation and root coordinates in the supplied board
-     * and returns the length of the segment traversed.
+     * Searches for a contiguously colored piece segment with the specified orientation and root
+     * coordinates in the supplied board and returns the length of the segment traversed.
      */
     protected int findSegment (DropBoard board, int dir, int x, int y)
     {
@@ -124,8 +118,8 @@ public class PieceDestroyer
     }
 
     /**
-     * A piece operation that calculates the length of the contiguous
-     * piece segment to which it is applied.
+     * A piece operation that calculates the length of the contiguous piece segment to which it is
+     * applied.
      */
     protected class SegmentLengthOperation
         implements PieceOperation
@@ -133,22 +127,19 @@ public class PieceDestroyer
         /**
          * Resets the operation for application to a new piece segment.
          */
-        public void reset ()
-        {
+        public void reset () {
             _len = 0;
         }
 
         /**
          * Returns the length of the contiguous piece segment.
          */
-        public int getLength ()
-        {
+        public int getLength () {
             return _len;
         }
 
         // documentation inherited
-        public boolean execute (DropBoard board, int col, int row)
-        {
+        public boolean execute (DropBoard board, int col, int row) {
             int piece = board.getPiece(col, row);
             if (_len == 0) {
                 _len = 1;

@@ -24,11 +24,10 @@ package com.threerings.puzzle.drop.client;
 import java.awt.Rectangle;
 
 /**
- * The drop block sprite represents a block of multiple pieces that can be
- * rotated to any of the four cardinal compass directions.  As such, it
- * may span multiple columns or rows depending on its orientation.  The
- * block has a "central" piece around which it rotates, with the other
- * pieces referred to as "external" pieces.
+ * The drop block sprite represents a block of multiple pieces that can be rotated to any of the
+ * four cardinal compass directions. As such, it may span multiple columns or rows depending on
+ * its orientation. The block has a "central" piece around which it rotates, with the other pieces
+ * referred to as "external" pieces.
  */
 public class DropBlockSprite extends DropSprite
 {
@@ -41,8 +40,7 @@ public class DropBlockSprite extends DropSprite
      * @param orient the orientation of the sprite.
      * @param pieces the pieces displayed by the sprite.
      */
-    public DropBlockSprite (
-        DropBoardView view, int col, int row, int orient, int[] pieces)
+    public DropBlockSprite (DropBoardView view, int col, int row, int orient, int[] pieces)
     {
         super(view, col, row, pieces, 0);
 
@@ -60,8 +58,7 @@ public class DropBlockSprite extends DropSprite
      * @param renderOrder the rendering order of the sprite.
      */
     public DropBlockSprite (
-        DropBoardView view, int col, int row, int orient, int[] pieces,
-        int renderOrder)
+        DropBoardView view, int col, int row, int orient, int[] pieces, int renderOrder)
     {
         super(view, col, row, pieces, 0, renderOrder);
 
@@ -77,10 +74,9 @@ public class DropBlockSprite extends DropSprite
     }
 
     /**
-     * Returns an array of the row numbers containing the block pieces.
-     * The first index is the row of the central piece.  The array is
-     * cached and re-used internally and so the caller should make their
-     * own copy if they care to modify it.
+     * Returns an array of the row numbers containing the block pieces. The first index is the row
+     * of the central piece. The array is cached and re-used internally and so the caller should
+     * make their own copy if they care to modify it.
      */
     public int[] getRows ()
     {
@@ -88,10 +84,9 @@ public class DropBlockSprite extends DropSprite
     }
 
     /**
-     * Returns an array of the column numbers containing the block pieces.
-     * The first index is the column of the central piece.  The array is
-     * cached and re-used internally and so the caller should make their
-     * own copy if they care to modify it.
+     * Returns an array of the column numbers containing the block pieces. The first index is the
+     * column of the central piece. The array is cached and re-used internally and so the caller
+     * should make their own copy if they care to modify it.
      */
     public int[] getColumns ()
     {
@@ -99,9 +94,9 @@ public class DropBlockSprite extends DropSprite
     }
 
     /**
-     * Returns the bounds of the block in board piece coordinates.  The
-     * bounds rectangle is cached and re-used internally and so the caller
-     * should make their own copy if they care to modify it.
+     * Returns the bounds of the block in board piece coordinates. The bounds rectangle is cached
+     * and re-used internally and so the caller should make their own copy if they care to modify
+     * it.
      */
     public Rectangle getBoardBounds ()
     {
@@ -146,8 +141,8 @@ public class DropBlockSprite extends DropSprite
     }
 
     /**
-     * Updates the sprite image offset to reflect the direction in which
-     * the external piece is hanging.
+     * Updates the sprite image offset to reflect the direction in which the external piece is
+     * hanging.
      */
     @Override
     public void setOrientation (int orient)
@@ -194,8 +189,7 @@ public class DropBlockSprite extends DropSprite
     }
 
     /**
-     * Re-calculates the external piece position and bounds of the drop
-     * block.
+     * Re-calculates the external piece position and bounds of the drop block.
      */
     protected void updateDropInfo ()
     {
@@ -208,7 +202,7 @@ public class DropBlockSprite extends DropSprite
         _rows[1] = _erow;
         _cols[0] = _col;
         _cols[1] = _ecol;
-        
+
         // calculate the drop block board bounds
         int maxrow = Math.max(_row, _erow);
         int mincol = Math.min(_col, _ecol);
@@ -227,8 +221,8 @@ public class DropBlockSprite extends DropSprite
     }
 
     /**
-     * Returns the row the external piece is located in based on the
-     * current central piece location and sprite orientation.
+     * Returns the row the external piece is located in based on the current central piece
+     * location and sprite orientation.
      */
     protected int calculateExternalRow ()
     {
@@ -242,8 +236,8 @@ public class DropBlockSprite extends DropSprite
     }
 
     /**
-     * Returns the column the external piece is located in based on the
-     * current central piece location and sprite orientation.
+     * Returns the column the external piece is located in based on the current central piece
+     * location and sprite orientation.
      */
     protected int calculateExternalColumn ()
     {
@@ -256,8 +250,7 @@ public class DropBlockSprite extends DropSprite
         }
     }
 
-    /** How many times this sprite can be popped-up a row in a forgiving
-     * rotation. */
+    /** How many times this sprite can be popped-up a row in a forgiving rotation. */
     protected byte _popups = 2;
 
     /** The drop block bounds in board coordinates. */

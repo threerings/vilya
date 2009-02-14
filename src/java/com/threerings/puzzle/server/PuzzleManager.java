@@ -57,13 +57,12 @@ public abstract class PuzzleManager extends GameManager
      */
     public BoardSummary getBoardSummary (int pidx)
     {
-        return (_puzobj == null || _puzobj.summaries == null) ? null :
-            _puzobj.summaries[pidx];
+        return (_puzobj == null || _puzobj.summaries == null) ? null : _puzobj.summaries[pidx];
     }
 
     /**
      * Returns whether this puzzle cares to make use of per-player board summaries that are sent
-     * periodically to all users in the puzzle via {@link #sendStatusUpdate}.  The default
+     * periodically to all users in the puzzle via {@link #sendStatusUpdate}. The default
      * implementation returns <code>false</code>.
      */
     public boolean needsBoardSummaries ()
@@ -81,7 +80,7 @@ public abstract class PuzzleManager extends GameManager
     }
 
     /**
-     * Handles the server and client states being out of sync when in debug mode.  The default
+     * Handles the server and client states being out of sync when in debug mode. The default
      * implementation halts the server.
      */
     protected void handleBoardNotEqual ()
@@ -104,7 +103,7 @@ public abstract class PuzzleManager extends GameManager
     }
 
     /**
-     * Applies updateBoardSummary on all the players' boards.  AI board summaries should be updated
+     * Applies updateBoardSummary on all the players' boards. AI board summaries should be updated
      * by the AI logic.
      */
     public void updateBoardSummaries ()
@@ -207,9 +206,10 @@ public abstract class PuzzleManager extends GameManager
 
     /**
      * Returns the frequency with which puzzle status updates are broadcast to the players (which
-     * is accomplished via a call to {@link #sendStatusUpdate} which in turn calls {@link
-     * #updateStatus} wherein derived classes can participate in the status update).  Returning
-     * <code>O</code> (the default) indicates that a periodic status update is not desired.
+     * is accomplished via a call to {@link #sendStatusUpdate} which in turn calls
+     * {@link #updateStatus} wherein derived classes can participate in the status update).
+     * Returning <code>O</code> (the default) indicates that a periodic status update is not
+     * desired.
      */
     protected long getStatusInterval ()
     {
@@ -246,7 +246,7 @@ public abstract class PuzzleManager extends GameManager
     {
         _puzobj.startTransaction();
         try {
-            // Log.info("Updating status [game=" + _puzobj.which() + "].");
+            // log.info("Updating status", "game", _puzobj.which());
             updateStatus();
         } finally {
             _puzobj.commitTransaction();
@@ -255,9 +255,9 @@ public abstract class PuzzleManager extends GameManager
 
     /**
      * A puzzle periodically (default of once every 5 seconds but configurable by puzzle) updates
-     * status information that is visible to the user. Derived classes can override this method and
-     * effect their updates by generating events on the puzzle object and they will be packaged
-     * into the update transaction.
+     * status information that is visible to the user. Derived classes can override this method
+     * and effect their updates by generating events on the puzzle object and they will be
+     * packaged into the update transaction.
      */
     protected void updateStatus ()
     {
@@ -289,8 +289,8 @@ public abstract class PuzzleManager extends GameManager
     }
 
     /**
-     * Creates and initializes boards and board summaries (if desired per {@link
-     * #needsBoardSummaries}) for each player.
+     * Creates and initializes boards and board summaries (if desired per
+     * {@link #needsBoardSummaries}) for each player.
      */
     protected void initBoards ()
     {
@@ -314,8 +314,8 @@ public abstract class PuzzleManager extends GameManager
     }
 
     /**
-     * Returns whether this puzzle needs a board for the given player index.  The default
-     * implementation only creates boards for occupied player slots.  Derived classes may wish to
+     * Returns whether this puzzle needs a board for the given player index. The default
+     * implementation only creates boards for occupied player slots. Derived classes may wish to
      * override this method if they have specialized board needs, e.g., they need only a single
      * board for all players.
      */
@@ -356,8 +356,8 @@ public abstract class PuzzleManager extends GameManager
     }
 
     /**
-     * Applies progress updates received from the client. If puzzle debugging is enabled, this also
-     * compares the client board dumps provided along with each puzzle event.
+     * Applies progress updates received from the client. If puzzle debugging is enabled, this
+     * also compares the client board dumps provided along with each puzzle event.
      */
     protected void applyProgressEvents (int pidx, int[] gevents, Board[] states)
     {
@@ -376,8 +376,7 @@ public abstract class PuzzleManager extends GameManager
 
             // apply the event to the player's board
             if (!applyProgressEvent(pidx, gevent, cboard)) {
-                log.warning("Unknown event [puzzle=" + where() + ", pidx=" + pidx +
-                            ", event=" + gevent + "].");
+                log.warning("Unknown event", "puzzle", where(), "pidx", pidx, "event", gevent);
             }
 
             // maybe we are comparing boards afterwards
@@ -393,8 +392,8 @@ public abstract class PuzzleManager extends GameManager
     protected void compareBoards (int pidx, Board boardstate, int gevent, boolean before)
     {
         if (DEBUG_PUZZLE) {
-            log.info((before ? "About to apply " : "Just applied ") + "[game=" + _puzobj.which() +
-                     ", pidx=" + pidx + ", event=" + gevent + "].");
+            log.info((before ? "About to apply " : "Just applied "),
+                "game", _puzobj.which(), "pidx", pidx, "event", gevent);
         }
         if (boardstate == null) {
             if (DEBUG_PUZZLE) {
@@ -404,8 +403,8 @@ public abstract class PuzzleManager extends GameManager
         }
         boolean equal = _boards[pidx].equals(boardstate);
         if (!equal) {
-            log.warning("Client and server board states not equal! [game=" + _puzobj.which() +
-                        ", type=" + _puzobj.getClass().getName() + "].");
+            log.warning("Client and server board states not equal!",
+                "game", _puzobj.which(), "type", _puzobj.getClass().getName());
         }
         if (DEBUG_PUZZLE) {
             // if we're debugging, dump the board state every time we're about to apply an event
@@ -424,14 +423,14 @@ public abstract class PuzzleManager extends GameManager
     /**
      * Called by {@link #updateProgress} to give the server a chance to apply each game event
      * received from the client to the respective player's server-side board and, someday, confirm
-     * their validity.  Derived classes that make use of the progress updating functionality should
-     * be sure to override this method to perform their game-specific event application
-     * antics. They should first perform a call to super() to see if the event is handled there.
+     * their validity. Derived classes that make use of the progress updating functionality should
+     * be sure to override this method to perform their game-specific event application antics.
+     * They should first perform a call to super() to see if the event is handled there.
      *
      * @param pidx the player index that submitted the progress event.
      * @param gevent the progress event itself.
-     * @param cboard a snapshot of the board on the client iff the client has board syncing enabled
-     * (which is only enabled when debugging).
+     * @param cboard a snapshot of the board on the client iff the client has board syncing
+     * enabled (which is only enabled when debugging).
      *
      * @return true to indicate that the event was handled.
      */
@@ -441,7 +440,7 @@ public abstract class PuzzleManager extends GameManager
     }
 
     /**
-     * Overrides the game manager implementation to mark all active players as winners.  Derived
+     * Overrides the game manager implementation to mark all active players as winners. Derived
      * classes may wish to override this method in order to customize the winning conditions.
      */
     @Override
@@ -458,7 +457,7 @@ public abstract class PuzzleManager extends GameManager
     protected abstract Board newBoard (int pidx);
 
     /**
-     * Creates and returns a new board summary for the given board.  Puzzles that do not make use
+     * Creates and returns a new board summary for the given board. Puzzles that do not make use
      * of board summaries should implement this method and return <code>null</code>.
      */
     protected abstract BoardSummary newBoardSummary (Board board);
@@ -480,31 +479,30 @@ public abstract class PuzzleManager extends GameManager
         if (sessionId != _puzobj.sessionId) {
             // only warn if this isn't a straggling update from the previous session
             if (sessionId != _puzobj.sessionId-1) {
-                log.warning("Received progress update for invalid session, not applying " +
-                            "[game=" + _puzobj.which() + ", invalidSessionId=" + sessionId +
-                            ", sessionId=" + _puzobj.sessionId + "].");
+                log.warning("Received progress update for invalid session, not applying",
+                    "game", _puzobj.which(), "invalidSessionId", sessionId,
+                    "sessionId", _puzobj.sessionId);
             }
             return;
         }
 
         // if the game is over, we wing straggling updates
         if (!_puzobj.isInPlay()) {
-            log.debug("Ignoring straggling events", "game", _puzobj.which(), "who", caller.who(),
-                      "events", events);
+            log.debug("Ignoring straggling events",
+                "game", _puzobj.which(), "who", caller.who(), "events", events);
             return;
         }
 
         // determine the caller's player index in the game
         int pidx = IntListUtil.indexOf(_playerOids, caller.getOid());
         if (pidx == -1) {
-            log.warning("Received progress update for non-player?!", "game", _puzobj.which(),
-                        "who", caller.who(), "ploids", _playerOids);
+            log.warning("Received progress update for non-player?!",
+                "game", _puzobj.which(), "who", caller.who(), "ploids", _playerOids);
             return;
         }
 
-//         Log.info("Handling progress events [game=" + _puzobj.which() +
-//                  ", pidx=" + pidx + ", sessionId=" + sessionId +
-//                  ", count=" + events.length + "].");
+//        log.info("Handling progress events", "game", _puzobj.which(),
+//            "pidx", pidx + "sessionId", sessionId, "count", events.length);
 
         // note that we received a progress update from this player
         _lastProgress[pidx] = System.currentTimeMillis();
@@ -530,8 +528,8 @@ public abstract class PuzzleManager extends GameManager
     }
 
     /**
-     * Returns whether {@link #checkPlayerActivity} should be called periodically while the game is
-     * in play to make sure players are still active.
+     * Returns whether {@link #checkPlayerActivity} should be called periodically while the game
+     * is in play to make sure players are still active.
      */
     protected boolean checkForInactivity ()
     {
@@ -540,7 +538,7 @@ public abstract class PuzzleManager extends GameManager
 
     /**
      * Called periodically for each human player to give puzzles a chance to make sure all such
-     * players are engaging in reasonable levels of activity.  The default implementation does
+     * players are engaging in reasonable levels of activity. The default implementation does
      * naught.
      */
     protected void checkPlayerActivity (long tickStamp, int pidx)

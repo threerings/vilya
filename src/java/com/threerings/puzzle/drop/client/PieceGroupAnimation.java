@@ -34,8 +34,8 @@ import com.threerings.media.util.Path;
 import com.threerings.puzzle.drop.data.DropBoard;
 
 /**
- * Animates all the pieces on a puzzle board doing some sort of global
- * effect like all flying into place or out into the ether.
+ * Animates all the pieces on a puzzle board doing some sort of global effect like all flying into
+ * place or out into the ether.
  */
 public abstract class PieceGroupAnimation extends Animation
     implements PathObserver
@@ -80,8 +80,7 @@ public abstract class PieceGroupAnimation extends Animation
     {
         super.willStart(tickStamp);
 
-        // create an image sprite for every piece on the board and set
-        // them on their paths
+        // create an image sprite for every piece on the board and set them on their paths
         int width = _board.getWidth(), height = _board.getHeight();
         _sprites = new Sprite[width * height];
         for (int yy = 0; yy < height; yy++) {
@@ -98,9 +97,8 @@ public abstract class PieceGroupAnimation extends Animation
     }
 
     /**
-     * An animation must override this method to configure each sprite
-     * with a path, potentially a render order, and whatever other
-     * configurations are needed.
+     * An animation must override this method to configure each sprite with a path, potentially a
+     * render order, and whatever other configurations are needed.
      */
     protected abstract void configureSprite (Sprite sprite, int xx, int yy);
 

@@ -130,16 +130,14 @@ public abstract class PuzzleController extends GameController
     {
         super.setGameOver(gameOver);
 
-        // clear the action if we're informed that the game is over early
-        // by the client
+        // clear the action if we're informed that the game is over early by the client
         if (gameOver) {
             clearAction();
         }
     }
 
     /**
-     * Returns true if the puzzle has action, false if the action is
-     * cleared or it is suspended.
+     * Returns true if the puzzle has action, false if the action is cleared or it is suspended.
      */
     public boolean hasAction ()
     {
@@ -209,9 +207,8 @@ public abstract class PuzzleController extends GameController
     }
 
     /**
-     * Derived classes should override this and return false if their
-     * action should not be paused when the user switches control to the
-     * chat area.
+     * Derived classes should override this and return false if their action should not be paused
+     * when the user switches control to the chat area.
      */
     protected boolean supportsActionPause ()
     {
@@ -297,9 +294,9 @@ public abstract class PuzzleController extends GameController
     }
 
     /**
-     * Puzzles that do not have "action" that starts and stops (via {@link
-     * #startAction} and {@link #clearAction}) when the puzzle starts and
-     * stops can override this method and return false.
+     * Puzzles that do not have "action" that starts and stops (via {@link #startAction} and
+     * {@link #clearAction}) when the puzzle starts and stops can override this method and return
+     * false.
      */
     protected boolean isActionPuzzle ()
     {
@@ -307,11 +304,10 @@ public abstract class PuzzleController extends GameController
     }
 
     /**
-     * Indicates whether the action should start immediately as a result
-     * of {@link GameController#gameDidStart} being called. If a puzzle wishes to do
-     * some beginning of the game fun stuff, like display a tutorial
-     * screen, they can veto the action start and then start it themselves
-     * later.
+     * Indicates whether the action should start immediately as a result of
+     * {@link GameController#gameDidStart} being called. If a puzzle wishes to do some beginning
+     * of the game fun stuff, like display a tutorial screen, they can veto the action start and
+     * then start it themselves later.
      */
     protected boolean startActionImmediately ()
     {
@@ -327,28 +323,25 @@ public abstract class PuzzleController extends GameController
         if (name.equals(PuzzleObject.STATE)) {
             switch (event.getIntValue()) {
             case PuzzleObject.IN_PLAY:
-                // we have to postpone all game starting activity until the
-                // current action has ended; only after all the animations have
-                // been completed will everything be in a state fit for
-                // starting back up again
+                // we have to postpone all game starting activity until the current action has
+                // ended; only after all the animations have been completed will everything be in a
+                // state fit for starting back up again
                 fireWhenActionCleared(new ClearPender() {
                     public int actionCleared () {
                         // do the standard game did start business
                         gameDidStart();
                         // we don't always start the action immediately
-                        return startActionImmediately() ?
-                            RESTART_ACTION : CARE_NOT;
+                        return startActionImmediately() ? RESTART_ACTION : CARE_NOT;
                     }
                 });
                 break;
 
             case PuzzleObject.GAME_OVER:
-                // similarly we haev to postpone game ending activity until
-                // the current action has ended
-                // clean up and clear out
+                // similarly we haev to postpone game ending activity until the current action has
+                // ended clean up and clear out
                 clearAction();
-                // wait until the action is cleared before we roll down to our
-                // delegates and do all that business
+                // wait until the action is cleared before we roll down to our delegates and do all
+                // that business
                 fireWhenActionCleared(new ClearPender() {
                     public int actionCleared () {
                         gameDidEnd();
@@ -390,12 +383,10 @@ public abstract class PuzzleController extends GameController
     }
 
     /**
-     * Derived classes should override this method and do whatever is
-     * necessary to start up the action for their puzzle. This could be
-     * called when the user is already in the "room" and the game starts,
-     * or immediately upon entering the room if the game is already
-     * started (for example if they disconnected and reconnected to a game
-     * already in progress).
+     * Derived classes should override this method and do whatever is necessary to start up the
+     * action for their puzzle. This could be called when the user is already in the "room" and
+     * the game starts, or immediately upon entering the room if the game is already started (for
+     * example if they disconnected and reconnected to a game already in progress).
      */
     protected void startAction ()
     {
@@ -413,23 +404,22 @@ public abstract class PuzzleController extends GameController
 
         // refuse to start the action if it's already going
         if (_astate != ACTION_CLEARED) {
-            log.warning("Action state inappropriate for startAction() " +
-                        "[astate=" + _astate + "].");
+            log.warning("Action state inappropriate for startAction()", "astate", _astate);
             Thread.dumpStack();
             return;
         }
 
         if (isChatting() && supportsActionPause()) {
-            log.info("Not starting action, player is chatting in a puzzle " +
-                     "that supports pausing the action.");
+            log.info(
+                "Not starting action, player is chatting in a puzzle that supports pausing the action.");
             return;
         }
 
         log.debug("Starting puzzle action.");
 
-        // register the game progress updater; it may already be updated
-        // because we can cycle through clearing the action and starting
-        // it again before the updater gets a chance to unregister itself
+        // register the game progress updater; it may already be updated because we can cycle
+        // through clearing the action and starting it again before the updater gets a chance to
+        // unregister itself
         if (!_pctx.getFrameManager().isRegisteredFrameParticipant(_updater)) {
             _pctx.getFrameManager().registerFrameParticipant(_updater);
         }
@@ -440,8 +430,8 @@ public abstract class PuzzleController extends GameController
         // let our panel know what's up
         _panel.startAction();
 
-        // and if we're not currently chatting, set the puzzle to grab
-        // keys and for the chatbox to look disabled
+        // and if we're not currently chatting, set the puzzle to grab keys and for the chatbox to
+        // look disabled
         if (!isChatting()) {
             _panel.setPuzzleGrabsKeys(true);
         }
@@ -456,11 +446,10 @@ public abstract class PuzzleController extends GameController
     }
 
     /**
-     * If it is not known whether the puzzle board view has finished
-     * animating its final bits after a previous call to {@link
-     * #clearAction}, this method should be used instead of {@link
-     * #startAction} as it will wait until the action is confirmedly over
-     * before starting it anew.
+     * If it is not known whether the puzzle board view has finished animating its final bits
+     * after a previous call to {@link #clearAction}, this method should be used instead of
+     * {@link #startAction} as it will wait until the action is confirmedly over before starting
+     * it anew.
      */
     protected void safeStartAction ()
     {
@@ -477,14 +466,12 @@ public abstract class PuzzleController extends GameController
     }
 
     /**
-     * Called when the game has ended or when it is going to reset and
-     * when the client leaves the game "room". This method does not always
-     * immediately clear the action, but may mark the clear as pending if
-     * the action cannot yet be cleared (as indicated by {@link
-     * #canClearAction}). The action will eventually be cleared which will
-     * result in a call to {@link #actuallyClearAction} which is what
-     * derived classes should override to do their action clearing
-     * business.
+     * Called when the game has ended or when it is going to reset and when the client leaves the
+     * game "room". This method does not always immediately clear the action, but may mark the
+     * clear as pending if the action cannot yet be cleared (as indicated by
+     * {@link #canClearAction}). The action will eventually be cleared which will result in a call
+     * to {@link #actuallyClearAction} which is what derived classes should override to do their
+     * action clearing business.
      */
     protected void clearAction ()
     {
@@ -500,35 +487,31 @@ public abstract class PuzzleController extends GameController
 
         log.debug("Attempting to clear puzzle action.");
 
-        // put ourselves into a pending clear state and attempt to clear
-        // the action
+        // put ourselves into a pending clear state and attempt to clear the action
         _astate = CLEAR_PENDING;
         maybeClearAction();
     }
 
     /**
-     * This method is called by the {@link PuzzleBoardView} when all
-     * action on the board has finished.
+     * This method is called by the {@link PuzzleBoardView} when all action on the board has
+     * finished.
      */
     protected void boardActionCleared ()
     {
-        // if we have a clear pending, this could be the trigger that
-        // allows us to clear our action
+        // if we have a clear pending, this could be the trigger that allows us to clear our action
         maybeClearAction();
     }
 
     /**
-     * Queues up code to be invoked when the action is completely cleared
-     * (including all remaining interesting sprites and animations on the
-     * puzzle board).
+     * Queues up code to be invoked when the action is completely cleared (including all remaining
+     * interesting sprites and animations on the puzzle board).
      */
     protected void fireWhenActionCleared (ClearPender pender)
     {
         // if the action is already ended, fire this pender immediately
         if (_astate == ACTION_CLEARED) {
             if (pender.actionCleared() == ClearPender.RESTART_ACTION) {
-                log.debug("Restarting action at behest of pender " +
-                          pender + ".");
+                log.debug("Restarting action at behest of pender " + pender + ".");
                 startAction();
             }
 
@@ -539,14 +522,12 @@ public abstract class PuzzleController extends GameController
     }
 
     /**
-     * Returns whether or not it is safe to clear the action. The default
-     * behavior is to not allow the action to be cleared until all
-     * interesting sprites and animations in the board view have finished.
-     * If derived classes or delegates wish to postpone the clearing of
-     * the action, they can return false from this method, but they must
-     * then be sure to call {@link #maybeClearAction} when whatever
-     * condition that caused them to desire to postpone action clearing
-     * has finally been satisfied.
+     * Returns whether or not it is safe to clear the action. The default behavior is to not allow
+     * the action to be cleared until all interesting sprites and animations in the board view
+     * have finished. If derived classes or delegates wish to postpone the clearing of the action,
+     * they can return false from this method, but they must then be sure to call
+     * {@link #maybeClearAction} when whatever condition that caused them to desire to postpone
+     * action clearing has finally been satisfied.
      */
     protected boolean canClearAction ()
     {
@@ -561,8 +542,7 @@ public abstract class PuzzleController extends GameController
         applyToDelegates(new DelegateOp(PuzzleControllerDelegate.class) {
             @Override
             public void apply (PlaceControllerDelegate delegate) {
-                canClear[0] = canClear[0] &&
-                    ((PuzzleControllerDelegate)delegate).canClearAction();
+                canClear[0] = canClear[0] && ((PuzzleControllerDelegate)delegate).canClearAction();
             }
         });
 
@@ -570,27 +550,23 @@ public abstract class PuzzleController extends GameController
     }
 
     /**
-     * Called to effect the actual clearing of our action if we've
-     * received some asynchronous trigger that indicates that it may well
-     * be safe now to clear the action.
+     * Called to effect the actual clearing of our action if we've received some asynchronous
+     * trigger that indicates that it may well be safe now to clear the action.
      */
     protected void maybeClearAction ()
     {
         if (_astate == CLEAR_PENDING && canClearAction()) {
             actuallyClearAction();
-//         } else {
-//             Log.info("Not clearing action [astate=" + _astate +
-//                      ", canClear=" + canClearAction() + "].");
+//        } else {
+//            log.info("Not clearing action", "astate", _astate, "canClear", canClearAction());
         }
     }
 
     /**
-     * Performs the actual process of clearing the action for this puzzle.
-     * This is only called after it is known to be safe to clear the
-     * action. Derived classes can override this method and clear out
-     * anything that is not needed while the puzzle's "action" is not
-     * going (timers, etc.). Anything that is cleared out here should be
-     * recreated in {@link #startAction}.
+     * Performs the actual process of clearing the action for this puzzle. This is only called
+     * after it is known to be safe to clear the action. Derived classes can override this method
+     * and clear out anything that is not needed while the puzzle's "action" is not going (timers,
+     * etc.). Anything that is cleared out here should be recreated in {@link #startAction}.
      */
     protected void actuallyClearAction ()
     {
@@ -635,16 +611,15 @@ public abstract class PuzzleController extends GameController
         });
         _clearPenders.clear();
 
-        // if there are no refusals and at least one restart request, go
-        // ahead and restart the action now
+        // if there are no refusals and at least one restart request, go ahead and restart the
+        // action now
         if (results[1] == 0 && results[0] > 0) {
             startAction();
         }
     }
 
     /**
-     * Called when the action was actually cleared, but before the action
-     * obsevers are notified.
+     * Called when the action was actually cleared, but before the action observers are notified.
      */
     protected void actionWasCleared ()
     {
@@ -665,10 +640,9 @@ public abstract class PuzzleController extends GameController
     }
 
     /**
-     * Returns the delay in milliseconds between sending each progress
-     * update event to the server.  Derived classes may wish to override
-     * this to send their progress updates more or less frequently than
-     * the default.
+     * Returns the delay in milliseconds between sending each progress update event to the server.
+     * Derived classes may wish to override this to send their progress updates more or less
+     * frequently than the default.
      */
     protected long getProgressInterval ()
     {
@@ -680,8 +654,8 @@ public abstract class PuzzleController extends GameController
      */
     protected void generateNewBoard ()
     {
-        // wait for any animations or sprites in the board to finish their
-        // business before setting the board into place
+        // wait for any animations or sprites in the board to finish their business before setting
+        // the board into place
         fireWhenActionCleared(new ClearPender() {
             public int actionCleared () {
                 // update the player board
@@ -709,8 +683,8 @@ public abstract class PuzzleController extends GameController
     }
 
     /**
-     * Returns the number of progress events currently queued up for
-     * sending to the server with the next progress update.
+     * Returns the number of progress events currently queued up for sending to the server with
+     * the next progress update.
      */
     public int getEventCount ()
     {
@@ -718,8 +692,8 @@ public abstract class PuzzleController extends GameController
     }
 
     /**
-     * Are we syncing boards for this puzzle?
-     * By default, we defer to the PuzzlePanel and its runtime config.
+     * Are we syncing boards for this puzzle? By default, we defer to the PuzzlePanel and its
+     * runtime config.
      */
     protected boolean isSyncingBoards ()
     {
@@ -727,17 +701,15 @@ public abstract class PuzzleController extends GameController
     }
 
     /**
-     * Adds the given progress event and a snapshot of the supplied board
-     * state to the set of progress events and associated board states for
-     * later transmission to the server.
+     * Adds the given progress event and a snapshot of the supplied board state to the set of
+     * progress events and associated board states for later transmission to the server.
      */
     public void addProgressEvent (int event, Board board)
     {
         // make sure they don't queue things up at strange times
         if (_puzobj.state != PuzzleObject.IN_PLAY) {
-            log.warning("Rejecting progress event; game not in play " +
-                        "[puzobj=" + _puzobj.which() +
-                        ", event=" + event + "].");
+            log.warning("Rejecting progress event; game not in play",
+                "puzobj", _puzobj.which(), "event", event);
             return;
         }
 
@@ -745,16 +717,16 @@ public abstract class PuzzleController extends GameController
         if (isSyncingBoards()) {
             _states.add((board == null) ? null : (Board)board.clone());
             if (board == null) {
-                log.warning("Added progress event with no associated board " +
-                            "state, server will not be able to ensure " +
-                            "board state synchronization.");
+                log.warning(
+                    "Added progress event with no associated board state, " +
+                    "server will not be able to ensure board state synchronization.");
             }
         }
     }
 
     /**
-     * Sends the server a game progress update with the list of events, as
-     * well as board states if {@link PuzzlePanel#isSyncingBoards} is true.
+     * Sends the server a game progress update with the list of events, as well as board states if
+     * {@link PuzzlePanel#isSyncingBoards} is true.
      */
     public void sendProgressUpdate ()
     {
@@ -768,11 +740,11 @@ public abstract class PuzzleController extends GameController
         int[] events = CollectionUtil.toIntArray(_events);
         _events.clear();
 
-//        Log.info("Sending progress [session=" + _puzobj.sessionId +
-//                 ", events=" + StringUtil.toString(events) + "].");
+//        log.info("Sending progress", "session", _puzobj.sessionId,
+//            "events", StringUtil.toString(events));
 
-        // create an array of the board states that correspond with those
-        // events (if state syncing is enabled)
+        // create an array of the board states that correspond with those events (if state syncing
+        // is enabled)
         int numStates = _states.size();
         if (numStates == size) { // ie, if we have a board to match every event
             Board[] states = new Board[numStates];
@@ -812,8 +784,7 @@ public abstract class PuzzleController extends GameController
      */
     class Unpauser extends MouseHijacker
     {
-        public Unpauser (PuzzlePanel panel)
-        {
+        public Unpauser (PuzzlePanel panel) {
             super(panel.getBoardView());
             _panel = panel;
             panel.addMouseListener(_clicker);
@@ -821,8 +792,7 @@ public abstract class PuzzleController extends GameController
         }
 
         @Override
-        public Component release ()
-        {
+        public Component release () {
             _panel.removeMouseListener(_clicker);
             _panel.getBoardView().removeMouseListener(_clicker);
             return super.release();
@@ -838,22 +808,21 @@ public abstract class PuzzleController extends GameController
         protected PuzzlePanel _panel;
     }
 
-    /** A special frame participant that handles the sending of puzzle
-     * progress updates. We can't just
-     * register an interval for this because sometimes the clock goes
-     * backwards in time in windows and our intervals don't get called for
-     * a long period of time which causes the server to think the client
-     * is disconnected or cheating and resign them from the puzzle. God
-     * bless you, Microsoft. */
+    /**
+     * A special frame participant that handles the sending of puzzle progress updates. We can't
+     * just register an interval for this because sometimes the clock goes backwards in time in
+     * windows and our intervals don't get called for a long period of time which causes the
+     * server to think the client is disconnected or cheating and resign them from the puzzle. God
+     * bless you, Microsoft.
+     */
     protected class Updater implements FrameParticipant
     {
         public void tick (long tickStamp) {
             if (_astate == ACTION_CLEARED) {
-                // remove ourselves as the action is now cleared; we can't
-                // do this in actuallyClearAction() because that might get
-                // called during the PuzzlePanel's frame tick and it's
-                // only safe to remove yourself during a tick(), not
-                // another frame participant
+                // remove ourselves as the action is now cleared; we can't do this in
+                // actuallyClearAction() because that might get called during the PuzzlePanel's
+                // frame tick and it's only safe to remove yourself during a tick(), not another
+                // frame participant
                 _pctx.getFrameManager().removeFrameParticipant(_updater);
 
             } else if (tickStamp - _lastProgressTick > getProgressInterval()) {
@@ -952,8 +921,7 @@ public abstract class PuzzleController extends GameController
             if (keycode == KeyEvent.VK_ESCAPE || keycode == KeyEvent.VK_PAUSE) {
                 setChatting(!isChatting());
 
-            // pressing P also to pause (but not unpause),
-            // and only if it has not been reassigned
+            // pressing P also to pause (but not unpause), and only if it has not been reassigned
             } else if (keycode == KeyEvent.VK_P && !isChatting() &&
                     !_panel._xlate.hasCommand(KeyEvent.VK_P)) {
                 setChatting(true);

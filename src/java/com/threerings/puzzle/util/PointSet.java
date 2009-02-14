@@ -28,14 +28,13 @@ import java.awt.Point;
 import static com.threerings.puzzle.Log.log;
 
 /**
- * The point set class provides an efficient implementation of a set
- * containing two-dimensional point values as <code>(x, y)</code>.
+ * The point set class provides an efficient implementation of a set containing two-dimensional
+ * point values as <code>(x, y)</code>.
  */
 public class PointSet
 {
     /**
-     * Creates a point set that can contain points within the given range
-     * of values.
+     * Creates a point set that can contain points within the given range of values.
      *
      * @param rangeX the maximum x-axis range.
      * @param rangeY the maximum y-axis range.
@@ -48,8 +47,7 @@ public class PointSet
     }
 
     /**
-     * Adds a point to the set and returns whether the point was already
-     * present in the set.
+     * Adds a point to the set and returns whether the point was already present in the set.
      *
      * @param x the point x-coordinate.
      * @param y the point y-coordinate.
@@ -122,10 +120,9 @@ public class PointSet
     }
 
     /**
-     * Returns an iterator that iterates over the points in this set,
-     * returning them as {@link Point} objects.  Note that the iterator
-     * uses a single point object internally, and so callers should create
-     * their own copy of the point if they plan to do something fancy with
+     * Returns an iterator that iterates over the points in this set, returning them as
+     * {@link Point} objects. Note that the iterator uses a single point object internally, and so
+     * callers should create their own copy of the point if they plan to do something fancy with
      * it.
      *
      * @return the iterator over the set's points.
@@ -136,8 +133,7 @@ public class PointSet
     }
 
     /**
-     * Removes the given point from the set and returns whether the point
-     * was present in the set.
+     * Removes the given point from the set and returns whether the point was present in the set.
      *
      * @param x the point x-coordinate.
      * @param y the point y-coordinate.

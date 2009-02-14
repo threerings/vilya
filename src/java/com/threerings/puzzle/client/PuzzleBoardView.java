@@ -86,10 +86,9 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
     }
 
     /**
-     * Provides the board view with a reference to its controller so that
-     * it may communicate directly rather than by posting actions up the
-     * interface hierarchy which sometimes fails if the puzzle board view
-     * is hidden before we get a chance to post our actions.
+     * Provides the board view with a reference to its controller so that it may communicate
+     * directly rather than by posting actions up the interface hierarchy which sometimes fails if
+     * the puzzle board view is hidden before we get a chance to post our actions.
      */
     public void setController (PuzzleController pctrl)
     {
@@ -105,9 +104,8 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
     }
 
     /**
-     * Set whether this puzzle is paused or not.
-     * If paused, a label will be displayed with the component's font,
-     * which may be set with setFont().
+     * Set whether this puzzle is paused or not. If paused, a label will be displayed with the
+     * component's font, which may be set with setFont().
      */
     @Override
     public void setPaused (boolean paused)
@@ -118,8 +116,7 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
                 PuzzleCodes.PUZZLE_MESSAGE_BUNDLE).xlate(pmsg);
             // create a label using our component's standard font
             _pauseLabel = new Label(pmsg, Label.BOLD | Label.OUTLINE,
-                                    Color.WHITE, Color.BLACK,
-                                    getFont());
+                                    Color.WHITE, Color.BLACK, getFont());
             _pauseLabel.setTargetWidth(_bounds.width);
             _pauseLabel.layout(this);
         } else {
@@ -129,11 +126,10 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
     }
 
     /**
-     * Adds the given animation to the set of animations currently present
-     * on the board.  The animation will be added to a list of action
-     * animations whose count can be queried with {@link
-     * #getActionAnimationCount}. The animation will automatically be
-     * removed from the action list when it completes.
+     * Adds the given animation to the set of animations currently present on the board. The
+     * animation will be added to a list of action animations whose count can be queried with
+     * {@link #getActionAnimationCount}. The animation will automatically be removed from the
+     * action list when it completes.
      */
     public void addActionAnimation (Animation anim)
     {
@@ -172,11 +168,10 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
     }
 
     /**
-     * Adds the given sprite to the set of sprites currently present on
-     * the board.  The sprite will be added to a list of action sprites
-     * whose count can be queried with {@link #getActionSpriteCount}.  Callers
-     * should be sure to remove the sprite when their work with it is done
-     * via {@link #removeSprite}.
+     * Adds the given sprite to the set of sprites currently present on the board. The sprite will
+     * be added to a list of action sprites whose count can be queried with
+     * {@link #getActionSpriteCount}. Callers should be sure to remove the sprite when their work
+     * with it is done via {@link #removeSprite}.
      */
     public void addActionSprite (Sprite sprite)
     {
@@ -253,15 +248,16 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
                 return StringUtil.shortClassName(obj);
             }
         };
-        log.info("Board contents [board=" + StringUtil.shortClassName(this) +
-                 ", sprites=" + StringUtil.listToString(_actionSprites, fmt) +
-                 ", anims=" + StringUtil.listToString(_actionAnims, fmt) +
-                 "].");
+        log.info("Board contents",
+            "board", StringUtil.shortClassName(this),
+            "sprites", StringUtil.listToString(_actionSprites, fmt),
+            "anims", StringUtil.listToString(_actionAnims, fmt));
+
     }
 
     /**
-     * Creates and returns an animation displaying the given string with
-     * the specified parameters, floating it a short distance up the view.
+     * Creates and returns an animation displaying the given string with the specified parameters,
+     * floating it a short distance up the view.
      *
      * @param score the score text to display.
      * @param color the color of the text.
@@ -276,9 +272,8 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
     }
 
     /**
-     * Creates a score animation, allowing derived classes to use custom
-     * animations that are customized following a call to
-     * {@link #createScoreAnimation(String,Color,Font,int,int)}.
+     * Creates a score animation, allowing derived classes to use custom animations that are
+     * customized following a call to {@link #createScoreAnimation(String,Color,Font,int,int)}.
      */
     protected ScoreAnimation createScoreAnimation (Label label, int x, int y)
     {
@@ -286,10 +281,9 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
     }
 
     /**
-     * Positions the supplied animation so as to avoid any active
-     * animations previously registered with this method, and adds the
-     * animation to the list of animations to be avoided by any future
-     * avoid animations.
+     * Positions the supplied animation so as to avoid any active animations previously registered
+     * with this method, and adds the animation to the list of animations to be avoided by any
+     * future avoid animations.
      */
     public void trackAvoidAnimation (Animation anim)
     {
@@ -341,8 +335,8 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
     }
 
     /**
-     * Fires a {@link #ACTION_CLEARED} command iff we have no remaining
-     * interesting sprites or animations.
+     * Fires a {@link #ACTION_CLEARED} command if we have no remaining interesting sprites or
+     * animations.
      */
     protected void maybeFireCleared ()
     {
@@ -351,10 +345,9 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
                      getActionCount() + ":" + isShowing());
         }
         if (getActionCount() == 0) {
-            // we're probably in the middle of a tick() in an
-            // animationDidFinish() call and we want everyone to finish
-            // processing their business before we go clearing the action,
-            // so we queue this up to be run after the tick is complete
+            // we're probably in the middle of a tick() in an animationDidFinish() call and we want
+            // everyone to finish processing their business before we go clearing the action, so we
+            // queue this up to be run after the tick is complete
             _ctx.getClient().getRunQueue().postRunnable(new Runnable() {
                 public void run () {
                     _pctrl.boardActionCleared();
@@ -364,9 +357,8 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
     }
 
     /**
-     * Renders the board contents to the given graphics context.
-     * Sub-classes should implement this method to draw all of their
-     * game-specific business.
+     * Renders the board contents to the given graphics context. Sub-classes should implement this
+     * method to draw all of their game-specific business.
      */
     protected abstract void renderBoard (Graphics2D gfx, Rectangle dirty);
 

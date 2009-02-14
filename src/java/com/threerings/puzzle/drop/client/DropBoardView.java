@@ -108,11 +108,9 @@ public abstract class DropBoardView extends PuzzleBoardView
     }
 
     /**
-     * Called by the {@link DropSprite} to populate <code>pos</code> with
-     * the screen coordinates in pixels at which a piece at <code>(col,
-     * row)</code> in the board should be drawn.  Derived classes may wish
-     * to override this method to allow specialised positioning of
-     * sprites.
+     * Called by the {@link DropSprite} to populate <code>pos</code> with the screen coordinates
+     * in pixels at which a piece at <code>(col, row)</code> in the board should be drawn. Derived
+     * classes may wish to override this method to allow specialised positioning of sprites.
      */
     public void getPiecePosition (int col, int row, Point pos)
     {
@@ -120,10 +118,9 @@ public abstract class DropBoardView extends PuzzleBoardView
     }
 
     /**
-     * Called by the {@link DropSprite} to get the dimensions of the area
-     * that will be occupied by rendering a piece segment of the given
-     * orientation and length whose bottom-leftmost corner is at
-     * <code>(col, row)</code>.
+     * Called by the {@link DropSprite} to get the dimensions of the area that will be occupied by
+     * rendering a piece segment of the given orientation and length whose bottom-leftmost corner
+     * is at <code>(col, row)</code>.
      */
     public Dimension getPieceSegmentSize (int col, int row, int orient, int len)
     {
@@ -141,8 +138,7 @@ public abstract class DropBoardView extends PuzzleBoardView
     public void createPiece (int piece, int sx, int sy)
     {
         if (sx < 0 || sy < 0 || sx >= _bwid || sy >= _bhei) {
-            log.warning("Requested to create piece in invalid location " +
-                        "[sx=" + sx + ", sy=" + sy + "].");
+            log.warning("Requested to create piece in invalid location", "sx", sx, "sy", sy);
             Thread.dumpStack();
             return;
         }
@@ -150,11 +146,10 @@ public abstract class DropBoardView extends PuzzleBoardView
     }
 
     /**
-     * Refreshes the piece sprite at the specified location, if no sprite
-     * exists at the location, one will be created. <em>Note:</em> this
-     * method assumes the default {@link ImageSprite} is being used to
-     * display pieces. If {@link #createPieceSprite} is overridden to
-     * return a non-ImageSprite, this method must also be customized.
+     * Refreshes the piece sprite at the specified location, if no sprite exists at the location,
+     * one will be created. <em>Note:</em> this method assumes the default {@link ImageSprite} is
+     * being used to display pieces. If {@link #createPieceSprite} is overridden to return a
+     * non-ImageSprite, this method must also be customized.
      */
     public void updatePiece (int sx, int sy)
     {
@@ -162,17 +157,15 @@ public abstract class DropBoardView extends PuzzleBoardView
     }
 
     /**
-     * Updates the piece sprite at the specified location, if no sprite
-     * exists at the location, one will be created. <em>Note:</em> this
-     * method assumes the default {@link ImageSprite} is being used to
-     * display pieces. If {@link #createPieceSprite} is overridden to
-     * return a non-ImageSprite, this method must also be customized.
+     * Updates the piece sprite at the specified location, if no sprite exists at the location,
+     * one will be created. <em>Note:</em> this method assumes the default {@link ImageSprite} is
+     * being used to display pieces. If {@link #createPieceSprite} is overridden to return a
+     * non-ImageSprite, this method must also be customized.
      */
     public void updatePiece (int piece, int sx, int sy)
     {
         if (sx < 0 || sy < 0 || sx >= _bwid || sy >= _bhei) {
-            log.warning("Requested to update piece in invalid location " +
-                        "[sx=" + sx + ", sy=" + sy + "].");
+            log.warning("Requested to update piece in invalid location", "sx", sx, "sy", sy);
             Thread.dumpStack();
             return;
         }
@@ -192,8 +185,8 @@ public abstract class DropBoardView extends PuzzleBoardView
                              long duration)
     {
         if (tx < 0 || ty < 0 || tx >= _bwid || ty >= _bhei) {
-            log.warning("Requested to create and move piece to invalid " +
-                        "location [tx=" + tx + ", ty=" + ty + "].");
+            log.warning("Requested to create and move piece to invalid location",
+                "tx", tx, "ty", ty);
             Thread.dumpStack();
             return;
         }
@@ -211,11 +204,10 @@ public abstract class DropBoardView extends PuzzleBoardView
     }
 
     /**
-     * Instructs the view to move the piece at the specified starting
-     * position to the specified destination position. There must be a
-     * sprite at the starting position, if there is a sprite at the
-     * destination position, it must also be moved immediately following
-     * this call (as in the case of a swap) to avoid badness.
+     * Instructs the view to move the piece at the specified starting position to the specified
+     * destination position. There must be a sprite at the starting position, if there is a sprite
+     * at the destination position, it must also be moved immediately following this call (as in
+     * the case of a swap) to avoid badness.
      *
      * @return the piece sprite that is being moved.
      */
@@ -224,8 +216,7 @@ public abstract class DropBoardView extends PuzzleBoardView
         int spos = sy * _bwid + sx;
         Sprite piece = _pieces[spos];
         if (piece == null) {
-            log.warning("Missing source sprite for drop [sx=" + sx +
-                        ", sy=" + sy + ", tx=" + tx + ", ty=" + ty + "].");
+            log.warning("Missing source sprite for drop", "sx", sx, "sy", sy, "tx", tx, "ty", ty);
             return null;
         }
         _pieces[spos] = null;
@@ -236,8 +227,8 @@ public abstract class DropBoardView extends PuzzleBoardView
     /**
      * A helper function for moving pieces into place.
      */
-    protected void movePiece (Sprite piece, final int sx, final int sy,
-                              final int tx, final int ty, long duration)
+    protected void movePiece (
+        Sprite piece, final int sx, final int sy, final int tx, final int ty, long duration)
     {
         final Exception where = new Exception();
 
@@ -247,9 +238,8 @@ public abstract class DropBoardView extends PuzzleBoardView
         if (sx == tx && sy == ty) {
             int tpos = ty * _bwid + tx;
             if (_pieces[tpos] != null) {
-                log.warning("Zoiks! Asked to add a piece where we already " +
-                            "have one [sx=" + sx + ", sy=" + sy +
-                            ", tx=" + tx + ", ty=" + ty + "].", where);
+                log.warning("Zoiks! Asked to add a piece where we already have one",
+                    "sx", sx, "sy", sy, "tx", tx, "ty", ty, where);
             }
             _pieces[tpos] = piece;
             piece.setLocation(start.x, start.y);
@@ -268,9 +258,8 @@ public abstract class DropBoardView extends PuzzleBoardView
             public void pathCompleted (Sprite sprite, Path path, long when) {
                 sprite.removeSpriteObserver(this);
                 if (_pieces[tpos] != null) {
-                    log.warning("Oh god, we're dropping onto another piece " +
-                                "[sx=" + sx + ", sy=" + sy +
-                                ", tx=" + tx + ", ty=" + ty + "].", where);
+                    log.warning("Oh god, we're dropping onto another piece",
+                        "sx", sx, "sy", sy, "tx", tx + "ty", ty, where);
                     return;
                 }
                 _pieces[tpos] = sprite;
@@ -285,9 +274,8 @@ public abstract class DropBoardView extends PuzzleBoardView
     }
 
     /**
-     * Called when a piece is finished moving into its requested position.
-     * Derived classes may wish to take this opportunity to play a sound
-     * or whatnot.
+     * Called when a piece is finished moving into its requested position. Derived classes may
+     * wish to take this opportunity to play a sound or whatnot.
      */
     protected void pieceArrived (long tickStamp, Sprite sprite, int px, int py)
     {
@@ -295,9 +283,9 @@ public abstract class DropBoardView extends PuzzleBoardView
     }
 
     /**
-     * Returns true if the piece that is supposed to be at the specified
-     * coordinates is not yet there but is actually en route to that
-     * location (due to a call to {@link #movePiece(Sprite,int,int,int,int,long)}).
+     * Returns true if the piece that is supposed to be at the specified coordinates is not yet
+     * there but is actually en route to that location (due to a call to
+     * {@link #movePiece(Sprite,int,int,int,int,long)}).
      */
     protected boolean isMoving (int px, int py)
     {
@@ -305,10 +293,9 @@ public abstract class DropBoardView extends PuzzleBoardView
     }
 
     /**
-     * Returns the image used to display the given piece at coordinates
-     * <code>(0, 0)</code> with an orientation of {@link #NORTH}.  This
-     * serves as a convenience routine for those puzzles that don't bother
-     * rendering their pieces differently when placed at different board
+     * Returns the image used to display the given piece at coordinates <code>(0, 0)</code> with
+     * an orientation of {@link #NORTH}. This serves as a convenience routine for those puzzles
+     * that don't bother rendering their pieces differently when placed at different board
      * coordinates or in different orientations.
      */
     public Mirage getPieceImage (int piece)
@@ -317,11 +304,10 @@ public abstract class DropBoardView extends PuzzleBoardView
     }
 
     /**
-     * Returns the image used to display the given piece at the specified
-     * column and row with the given orientation.
+     * Returns the image used to display the given piece at the specified column and row with the
+     * given orientation.
      */
-    public abstract Mirage getPieceImage (
-        int piece, int col, int row, int orient);
+    public abstract Mirage getPieceImage (int piece, int col, int row, int orient);
 
     @Override
     public void setBoard (Board board)
@@ -356,8 +342,7 @@ public abstract class DropBoardView extends PuzzleBoardView
         _pieces = new Sprite[width * height];
         for (int yy = 0; yy < height; yy++) {
             for (int xx = 0; xx < width; xx++) {
-                Sprite piece = createPieceSprite(
-                    _dboard.getPiece(xx, yy), xx, yy);
+                Sprite piece = createPieceSprite(_dboard.getPiece(xx, yy), xx, yy);
                 if (piece != null) {
                     int ppos = yy * width + xx;
                     getPiecePosition(xx, yy, spos);
@@ -403,8 +388,7 @@ public abstract class DropBoardView extends PuzzleBoardView
     }
 
     /**
-     * Creates a new drop sprite used to animate the given pieces falling
-     * in the specified column.
+     * Creates a new drop sprite used to animate the given pieces falling in the specified column.
      */
     public DropSprite createPieces (int col, int row, int[] pieces, int dist)
     {
@@ -412,9 +396,8 @@ public abstract class DropBoardView extends PuzzleBoardView
     }
 
     /**
-     * Dirties the rectangle encompassing the segment with the given
-     * direction and length whose bottom-leftmost corner is at <code>(col,
-     * row)</code>.
+     * Dirties the rectangle encompassing the segment with the given direction and length whose
+     * bottom-leftmost corner is at <code>(col, row)</code>.
      */
     public void dirtySegment (int dir, int col, int row, int len)
     {
@@ -425,9 +408,8 @@ public abstract class DropBoardView extends PuzzleBoardView
     }
 
     /**
-     * Creates and returns an animation showing the specified score
-     * floating up the view, with the label initially centered within the
-     * view.
+     * Creates and returns an animation showing the specified score floating up the view, with the
+     * label initially centered within the view.
      *
      * @param score the score text to display.
      * @param color the color of the text.
@@ -436,63 +418,57 @@ public abstract class DropBoardView extends PuzzleBoardView
     public ScoreAnimation createScoreAnimation (
         String score, Color color, Font font)
     {
-        return createScoreAnimation(
-            score, color, font, 0, _bhei - 1, _bwid, _bhei);
+        return createScoreAnimation(score, color, font, 0, _bhei - 1, _bwid, _bhei);
     }
 
     /**
-     * Creates and returns an animation showing the specified score
-     * floating up the view.
+     * Creates and returns an animation showing the specified score floating up the view.
      *
      * @param score the score text to display.
      * @param color the color of the text.
      * @param font the font to use.
-     * @param x the left coordinate in board coordinates of the rectangle
-     * within which the score is to be centered.
-     * @param y the bottom coordinate in board coordinates of the
-     * rectangle within which the score is to be centered.
-     * @param width the width in board coordinates of the rectangle within
-     * which the score is to be centered.
-     * @param height the height in board coordinates of the rectangle
-     * within which the score is to be centered.
+     * @param x the left coordinate in board coordinates of the rectangle within which the score
+     * is to be centered.
+     * @param y the bottom coordinate in board coordinates of the rectangle within which the score
+     * is to be centered.
+     * @param width the width in board coordinates of the rectangle within which the score is to
+     * be centered.
+     * @param height the height in board coordinates of the rectangle within which the score is to
+     * be centered.
      */
-    public ScoreAnimation createScoreAnimation (String score, Color color,
-                                                Font font, int x, int y,
-                                                int width, int height)
+    public ScoreAnimation createScoreAnimation (
+        String score, Color color, Font font, int x, int y, int width, int height)
     {
         // create the score animation
-        ScoreAnimation anim =
-            createScoreAnimation(score, color, font, x, y);
+        ScoreAnimation anim = createScoreAnimation(score, color, font, x, y);
 
         // position the label within the specified rectangle
         Dimension lsize = anim.getLabel().getSize();
         Point pos = new Point();
-        centerRectInBoardRect(
-            x, y, width, height, lsize.width, lsize.height, pos);
+        centerRectInBoardRect(x, y, width, height, lsize.width, lsize.height, pos);
         anim.setLocation(pos.x, pos.y);
 
         return anim;
     }
 
     /**
-     * Creates the sprite that is used to display the specified piece. If
-     * the piece represents no piece, this method should return null.
+     * Creates the sprite that is used to display the specified piece. If the piece represents no
+     * piece, this method should return null.
      */
     protected Sprite createPieceSprite (int piece, int px, int py)
     {
         if (piece == PIECE_NONE) {
             return null;
         }
-        ImageSprite sprite = new ImageSprite(
-            getPieceImage(piece, px, py, NORTH));
+        ImageSprite sprite = new ImageSprite(getPieceImage(piece, px, py, NORTH));
         sprite.setRenderOrder(-1);
         return sprite;
     }
 
     /**
-     * Populates <code>pos</code> with the most appropriate screen
-     * coordinates to center a rectangle of the given width and height (in
-     * pixels) within the specified rectangle (in board coordinates).
+     * Populates <code>pos</code> with the most appropriate screen coordinates to center a
+     * rectangle of the given width and height (in pixels) within the specified rectangle (in
+     * board coordinates).
      *
      * @param bx the bounding rectangle's left board coordinate.
      * @param by the bounding rectangle's bottom board coordinate.
@@ -500,8 +476,7 @@ public abstract class DropBoardView extends PuzzleBoardView
      * @param bhei the bounding rectangle's height in board coordinates.
      * @param rwid the width of the rectangle to position in pixels.
      * @param rhei the height of the rectangle to position in pixels.
-     * @param pos the point to populate with the rectangle's final
-     * position.
+     * @param pos the point to populate with the rectangle's final position.
      */
     protected void centerRectInBoardRect (
         int bx, int by, int bwid, int bhei, int rwid, int rhei, Point pos)
@@ -515,10 +490,9 @@ public abstract class DropBoardView extends PuzzleBoardView
     }
 
     /**
-     * Rotates the given drop block sprite to the specified orientation,
-     * updating the image as necessary.  Derived classes that make use of
-     * block dropping functionality should override this method to do the
-     * right thing.
+     * Rotates the given drop block sprite to the specified orientation, updating the image as
+     * necessary. Derived classes that make use of block dropping functionality should override
+     * this method to do the right thing.
      */
     public void rotateDropBlock (DropBlockSprite sprite, int orient)
     {
@@ -543,9 +517,8 @@ public abstract class DropBoardView extends PuzzleBoardView
     }
 
     /**
-     * Renders the row of rising pieces to the given graphics context.
-     * Sub-classes that make use of board rising functionality should
-     * override this method to draw the rising piece row.
+     * Renders the row of rising pieces to the given graphics context. Sub-classes that make use
+     * of board rising functionality should override this method to draw the rising piece row.
      */
     protected void renderRisingPieces (Graphics2D gfx, Rectangle dirtyRect)
     {

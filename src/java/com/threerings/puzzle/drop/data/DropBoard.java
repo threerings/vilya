@@ -257,8 +257,7 @@ public class DropBoard extends Board
     {
         int px = cols[0], py = rows[0];
 
-//         Log.info("Starting rotation [px=" + px + ", py=" + py +
-//                  ", orient=" + orient + ", pctdone=" + pctdone + "].");
+//         log.info("Starting rotation", "px", px, "py", py, "orient", orient, "pctdone", pctdone);
 
         // try rotating the block in the given direction through all four possible orientations
         for (int ii = 0; ii < 4; ii++) {
@@ -285,16 +284,12 @@ public class DropBoard extends Board
             }
 
             // try each of three coercions: nothing, one left, one right
-            for (int c = 0; c < COERCE_DX.length; c++) {
-                int cx = COERCE_DX[c];
+            for (int cx : COERCE_DX) {
                 // check if our hypothetical new coordinates are empty
                 if (isBlockEmpty(ox + cx, oy, ORIENT_WIDTHS[oidx], ORIENT_HEIGHTS[oidx])) {
-//                     Log.info(
-//                         "Block is empty [ox=" + ox + ", cx=" + cx +
-//                         ", oy=" + oy + ", oidx=" + oidx +
-//                         ", orient=" + DirectionUtil.toShortString(orient) +
-//                         ", owid=" + ORIENT_WIDTHS[oidx] +
-//                         ", ohei=" + ORIENT_HEIGHTS[oidx] + "].");
+//                    log.info("Block is empty", "ox", ox + "cx", cx, "oy", oy, "oidx", oidx,
+//                        "orient", DirectionUtil.toShortString(orient), "owid", ORIENT_WIDTHS[oidx],
+//                        "ohei", ORIENT_HEIGHTS[oidx]);
                     return new int[] { orient, px + cx, py, 0 };
                 }
             }
@@ -304,13 +299,10 @@ public class DropBoard extends Board
             if (canPopup && rtype == RADIAL_ROTATION && orient == SOUTH) {
                 // check if our hypothetical new coordinates are empty
                 if (isBlockEmpty(ox, oy - 1, ORIENT_WIDTHS[oidx], ORIENT_HEIGHTS[oidx])) {
-//                     Log.info(
-//                         "Popped-up block is empty [ox=" + ox +
-//                         ", oy=" + (oy - 1) + ", oidx=" + oidx +
-//                         ", orient=" + DirectionUtil.toShortString(orient) +
-//                         ", owid=" + ORIENT_WIDTHS[oidx] +
-//                         ", ohei=" + ORIENT_HEIGHTS[oidx] +
-//                         ", bhei=" + _bhei + "].");
+//                    log.info("Popped-up block is empty",
+//                        "ox", ox, "oy", (oy - 1), "oidx", oidx,
+ //                       "orient", DirectionUtil.toShortString(orient), "owid", ORIENT_WIDTHS[oidx],
+  //                      "ohei", ORIENT_HEIGHTS[oidx], "bhei", _bhei);
                     return new int[] { orient, px, py - 1, 1 };
                 }
             }
@@ -325,8 +317,9 @@ public class DropBoard extends Board
 
     /**
      * Returns a {@link Point} object containing the coordinates to place the bottom-left of the
-     * given block at after moving it the given distance on the x- and y-axes, or <code>null</code>
-     * if the move is not valid.  Note that only the final block position is checked.
+     * given block at after moving it the given distance on the x- and y-axes, or
+     * <code>null</code> if the move is not valid. Note that only the final block position is
+     * checked.
      *
      * @param col the leftmost column of the block.
      * @param row the bottommost row of the block.
@@ -424,8 +417,8 @@ public class DropBoard extends Board
             return true;
 
         } else {
-            log.warning("Attempt to set piece outside board bounds " +
-                        "[col=" + col + ", row=" + row + ", p=" + piece + "].");
+            log.warning("Attempt to set piece outside board bounds",
+                "col", col, "row", row, "p", piece);
             return false;
         }
     }
@@ -451,8 +444,8 @@ public class DropBoard extends Board
      * @param len the length of the segment in pieces.
      * @param piece the piece to set in the segment.
      *
-     * @return false if the segment was only partially applied because some pieces were outside the
-     * bounds of the board, true if it was completely applied.
+     * @return false if the segment was only partially applied because some pieces were outside
+     * the bounds of the board, true if it was completely applied.
      */
     public boolean setSegment (int dir, int col, int row, int len, int piece)
     {
@@ -492,8 +485,8 @@ public class DropBoard extends Board
     }
 
     /**
-     * Applies a specified {@link PieceOperation} to all pieces in a row or column segment starting
-     * at the specified coordinates and of the specified length in the board.
+     * Applies a specified {@link PieceOperation} to all pieces in a row or column segment
+     * starting at the specified coordinates and of the specified length in the board.
      *
      * @param dir the direction to iterate in; one of {@link #HORIZONTAL} or {@link #VERTICAL}.
      * @param col the starting leftmost column of the segment.
@@ -685,8 +678,8 @@ public class DropBoard extends Board
     {
         int size = (_bwid*_bhei);
         if (board.length < size) {
-            log.warning("Attempt to set board with invalid data size " +
-                        "[len=" + board.length + ", expected=" + size + "].");
+            log.warning("Attempt to set board with invalid data size",
+                "len", board.length, "expected", size);
             return;
         }
 
@@ -724,16 +717,14 @@ public class DropBoard extends Board
         /**
          * Sets the array of pieces to be placed in the board segment.
          */
-        public void init (int dir, int[] pieces)
-        {
+        public void init (int dir, int[] pieces) {
             _dir = dir;
             _pieces = pieces;
             _idx = (dir == HORIZONTAL) ? _pieces.length - 1 : 0;
         }
 
         // documentation inherited
-        public boolean execute (DropBoard board, int col, int row)
-        {
+        public boolean execute (DropBoard board, int col, int row) {
             if (_dir == HORIZONTAL) {
                 board.setPiece(col, row, _pieces[_idx--]);
             } else {
@@ -758,8 +749,7 @@ public class DropBoard extends Board
         /**
          * Sets the piece to be placed in the board segment.
          */
-        public void init (int piece)
-        {
+        public void init (int piece) {
             _piece = piece;
             _error = false;
         }
@@ -768,14 +758,12 @@ public class DropBoard extends Board
          * Returns true if we attempted to set a piece outside the bounds of the board during the
          * course of our operation.
          */
-        public boolean getError ()
-        {
+        public boolean getError () {
             return _error;
         }
 
         // documentation inherited
-        public boolean execute (DropBoard board, int col, int row)
-        {
+        public boolean execute (DropBoard board, int col, int row) {
             if (!board.setPiece(col, row, _piece)) {
                 _error = true;
             }

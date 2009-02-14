@@ -32,8 +32,7 @@ import com.threerings.util.DirectionCodes;
 import com.threerings.media.image.Mirage;
 
 /**
- * The next block view displays an image representing the next drop block
- * to appear in the game.
+ * The next block view displays an image representing the next drop block to appear in the game.
  */
 public class NextBlockView extends JComponent
     implements DirectionCodes
@@ -74,8 +73,8 @@ public class NextBlockView extends JComponent
             int xpos = (_orient == VERTICAL) ? 0 : (size.width - _pwid);
             int ypos = (_orient == VERTICAL) ? (size.height - _phei) : 0;
 
-            for (int ii = 0; ii < _pieces.length; ii++) {
-                Mirage image = _view.getPieceImage(_pieces[ii]);
+            for (int _piece : _pieces) {
+                Mirage image = _view.getPieceImage(_piece);
                 image.paint(gfx, xpos, ypos);
                 if (_orient == VERTICAL) {
                     ypos -= _phei;
@@ -103,7 +102,6 @@ public class NextBlockView extends JComponent
     /** The piece dimensions in pixels. */
     protected int _pwid, _phei;
 
-    /** The view orientation; one of {@link #HORIZONTAL} or {@link
-     * #VERTICAL}. */
+    /** The view orientation; one of {@link #HORIZONTAL} or {@link #VERTICAL}. */
     protected int _orient;
 }

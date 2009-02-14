@@ -41,8 +41,8 @@ public class DropBoardSummary extends BoardSummary
     }
 
     /**
-     * Constructs a drop board summary that retrieves board information
-     * from the supplied board when summarizing.
+     * Constructs a drop board summary that retrieves board information from the supplied board
+     * when summarizing.
      */
     public DropBoardSummary (Board board)
     {
@@ -50,8 +50,8 @@ public class DropBoardSummary extends BoardSummary
     }
 
     /**
-     * Returns the column number of the column within the given column
-     * range that contains the most pieces.
+     * Returns the column number of the column within the given column range that contains the
+     * most pieces.
      */
     public int getHighestColumn (int startx, int endx)
     {

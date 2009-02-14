@@ -34,8 +34,7 @@ import com.threerings.puzzle.util.PuzzleGameUtil;
 public class DropGameUtil
 {
     /**
-     * Returns a key translator configured with mappings suitable for a
-     * drop puzzle game.
+     * Returns a key translator configured with mappings suitable for a drop puzzle game.
      */
     public static KeyTranslatorImpl getKeyTranslator ()
     {
@@ -44,21 +43,15 @@ public class DropGameUtil
 
         // add all press key mappings
         xlate.addPressCommand(KeyEvent.VK_LEFT,
-                              DropControllerDelegate.MOVE_BLOCK_LEFT,
-                              MOVE_RATE, MOVE_DELAY);
+                              DropControllerDelegate.MOVE_BLOCK_LEFT, MOVE_RATE, MOVE_DELAY);
         xlate.addPressCommand(KeyEvent.VK_RIGHT,
-                              DropControllerDelegate.MOVE_BLOCK_RIGHT,
-                              MOVE_RATE, MOVE_DELAY);
-        xlate.addPressCommand(KeyEvent.VK_UP,
-                              DropControllerDelegate.ROTATE_BLOCK_CCW, 0);
-        xlate.addPressCommand(KeyEvent.VK_DOWN,
-                              DropControllerDelegate.ROTATE_BLOCK_CW, 0);
-        xlate.addPressCommand(KeyEvent.VK_SPACE,
-                              DropControllerDelegate.START_DROP_BLOCK, 0);
+                              DropControllerDelegate.MOVE_BLOCK_RIGHT, MOVE_RATE, MOVE_DELAY);
+        xlate.addPressCommand(KeyEvent.VK_UP, DropControllerDelegate.ROTATE_BLOCK_CCW, 0);
+        xlate.addPressCommand(KeyEvent.VK_DOWN, DropControllerDelegate.ROTATE_BLOCK_CW, 0);
+        xlate.addPressCommand(KeyEvent.VK_SPACE, DropControllerDelegate.START_DROP_BLOCK, 0);
 
         // add all release key mappings
-        xlate.addReleaseCommand(KeyEvent.VK_SPACE,
-                                DropControllerDelegate.END_DROP_BLOCK);
+        xlate.addReleaseCommand(KeyEvent.VK_SPACE, DropControllerDelegate.END_DROP_BLOCK);
 
         return xlate;
     }

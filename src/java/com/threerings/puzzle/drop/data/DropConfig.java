@@ -22,8 +22,7 @@
 package com.threerings.puzzle.drop.data;
 
 /**
- * Provides access to the configuration information for a drop puzzle
- * game.
+ * Provides access to the configuration information for a drop puzzle game.
  */
 public interface DropConfig
 {

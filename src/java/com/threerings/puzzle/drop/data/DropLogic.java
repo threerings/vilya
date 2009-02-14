@@ -22,20 +22,18 @@
 package com.threerings.puzzle.drop.data;
 
 /**
- * Describes the features and configuration desired for a given drop
- * puzzle game.
+ * Describes the features and configuration desired for a given drop puzzle game.
  */
 public interface DropLogic
 {
     /**
-     * Returns whether the puzzle game would like to make use of the
-     * manipulable block dropping functionality.
+     * Returns whether the puzzle game would like to make use of the manipulable block dropping
+     * functionality.
      */
     public boolean useBlockDropping ();
 
     /**
-     * Returns whether the puzzle game would like to make use of the
-     * rising board functionality.
+     * Returns whether the puzzle game would like to make use of the rising board functionality.
      */
     public boolean useBoardRising ();
 }

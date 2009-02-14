@@ -34,8 +34,8 @@ import com.threerings.media.image.Mirage;
 import com.threerings.media.sprite.Sprite;
 
 /**
- * The drop sprite is a sprite that displays one or more pieces falling
- * toward the bottom of the board.
+ * The drop sprite is a sprite that displays one or more pieces falling toward the bottom of the
+ * board.
  */
 public class DropSprite extends Sprite
 {
@@ -48,8 +48,7 @@ public class DropSprite extends Sprite
      * @param pieces the pieces displayed by the sprite.
      * @param dist the distance the sprite is to drop in rows.
      */
-    public DropSprite (
-        DropBoardView view, int col, int row, int[] pieces, int dist)
+    public DropSprite (DropBoardView view, int col, int row, int[] pieces, int dist)
     {
         this(view, col, row, pieces, dist, -1);
     }
@@ -65,8 +64,7 @@ public class DropSprite extends Sprite
      * @param renderOrder the render order.
      */
     public DropSprite (
-        DropBoardView view, int col, int row, int[] pieces, int dist,
-        int renderOrder)
+        DropBoardView view, int col, int row, int[] pieces, int dist, int renderOrder)
     {
         _view = view;
         _col = col;
@@ -188,11 +186,9 @@ public class DropSprite extends Sprite
     }
 
     /**
-     * Sets the velocity of this sprite.  The time at which the current
-     * row was entered is modified so that the sprite position will remain
-     * the same when calculated using the new velocity since the piece
-     * sprite may have its velocity modified in the middle of a row
-     * traversal.
+     * Sets the velocity of this sprite. The time at which the current row was entered is modified
+     * so that the sprite position will remain the same when calculated using the new velocity
+     * since the piece sprite may have its velocity modified in the middle of a row traversal.
      */
     public void setVelocity (float velocity)
     {
@@ -235,15 +231,14 @@ public class DropSprite extends Sprite
             _stopstamp = 0;
 
         } else {
-            // we're continuing a previous drop, so make use of any
-            // previously existing time
+            // we're continuing a previous drop, so make use of any previously existing time
             _rowstamp = _endstamp;
         }
     }
 
     /**
-     * Returns true if this drop sprite is dropping, false if it has been
-     * {@link #stop}ped or has not yet been {@link #drop}ped.
+     * Returns true if this drop sprite is dropping, false if it has been {@link #stop}ped or has
+     * not yet been {@link #drop}ped.
      */
     public boolean isDropping ()
     {
@@ -257,33 +252,29 @@ public class DropSprite extends Sprite
     {
         if (_stopstamp == 0) {
             _stopstamp = _view.getTimeStamp();
-            // Log.info("Stopped piece [piece=" + this + "].");
+            // log.info("Stopped piece", "piece", this);
         }
     }
 
     /**
-     * Puts the drop sprite into (or takes it out of) bouncing
-     * mode. Bouncing mode is used to put the sprite into limbo after it
-     * lands but before we commit the landing, giving the user a last
-     * moment change move or rotate the piece. While the sprite is
-     * "bouncing" it will be rendered one pixel below it's at rest state.
+     * Puts the drop sprite into (or takes it out of) bouncing mode. Bouncing mode is used to put
+     * the sprite into limbo after it lands but before we commit the landing, giving the user a
+     * last moment change move or rotate the piece. While the sprite is "bouncing" it will be
+     * rendered one pixel below it's at rest state.
      */
     public void setBouncing (boolean bouncing)
     {
         _bouncing = bouncing;
         if (_bouncing) {
-            // if we've activated bouncing, shift the sprite slightly to
-            // illustrate its new state
+            // if we've activated bouncing, shift the sprite slightly to illustrate its new state
             shiftForBounce();
 
-            // to prevent funny business in the event that we were a long
-            // ways past the end of the row when we landed, we warp the
-            // sprite back to the exact point of landing for the purposes
-            // of the bounce and any subsequent antics
+            // to prevent funny business in the event that we were a long ways past the end of the
+            // row when we landed, we warp the sprite back to the exact point of landing for the
+            // purposes of the bounce and any subsequent antics
             _endstamp = _rowstamp = _view.getTimeStamp();
 
-//             Log.info("Adjusted rowstap due to bounce " +
-//                      "[time=" + _endstamp + "].");
+//             log.info("Adjusted rowstap due to bounce", "time", _endstamp);
         }
     }
 
@@ -296,8 +287,7 @@ public class DropSprite extends Sprite
     }
 
     /**
-     * Updates the sprite's location to illustrate that it is currently in
-     * the "bouncing" state.
+     * Updates the sprite's location to illustrate that it is currently in the "bouncing" state.
      */
     protected void shiftForBounce ()
     {
@@ -311,15 +301,13 @@ public class DropSprite extends Sprite
     }
 
     /**
-     * Returns a value between <code>0.0</code> and <code>1.0</code>
-     * representing how far the piece has moved toward the next row
-     * as of the given time stamp.
+     * Returns a value between <code>0.0</code> and <code>1.0</code> representing how far the
+     * piece has moved toward the next row as of the given time stamp.
      */
     public float getPercentDone (long timestamp)
     {
-        // if we've never been ticked and so haven't yet initialized our
-        // row start timestamp, just let the caller know that we've not
-        // traversed our row at all
+        // if we've never been ticked and so haven't yet initialized our row start timestamp, just
+        // let the caller know that we've not traversed our row at all
         if (_rowstamp == 0) {
             return 0.0f;
         }
@@ -328,10 +316,9 @@ public class DropSprite extends Sprite
         float travpix = msecs * _vel;
         float pctdone = (travpix / _unit);
 
-//         Log.info("getPercentDone [timestamp=" + timestamp +
-//                  ", rowstamp=" + _rowstamp + ", msecs=" + msecs +
-//                  ", travpix=" + travpix + ", pctdone=" + pctdone +
-//                  ", vel=" + _vel + "].");
+//         log.info("getPercentDone",
+//             "timestamp", timestamp, "rowstamp", _rowstamp, "msecs", msecs, "travpix", travpix,
+//             "pctdone", pctdone, "vel", _vel);
 
         return pctdone;
     }
@@ -352,8 +339,7 @@ public class DropSprite extends Sprite
             // ask the board for the render position of this piece
             _view.getPiecePosition(pcol, prow, _renderPos);
             // draw the piece image
-            paintPieceImage(gfx, ii, pcol, prow, _orient,
-                            _renderPos.x + dx, _renderPos.y + dy);
+            paintPieceImage(gfx, ii, pcol, prow, _orient, _renderPos.x + dx, _renderPos.y + dy);
             // increment the target column and row
             pcol += incx;
             prow += incy;
@@ -363,8 +349,8 @@ public class DropSprite extends Sprite
     /**
      * Paints the specified piece with the supplied parameters.
      */
-    protected void paintPieceImage (Graphics2D gfx, int pieceidx,
-                                    int col, int row, int orient, int x, int y)
+    protected void paintPieceImage (
+        Graphics2D gfx, int pieceidx, int col, int row, int orient, int x, int y)
     {
         Mirage image = _view.getPieceImage(_pieces[pieceidx], col, row, orient);
         image.paint(gfx, x, y);
@@ -415,9 +401,8 @@ public class DropSprite extends Sprite
         int nx = _srcPos.x + (int)((_destPos.x - _srcPos.x) * pctdone);
         int ny = _srcPos.y + (int)((_destPos.y - _srcPos.y) * pctdone);
 
-//         Log.info("Drop sprite tick [dist=" + _dist + ", pctdone=" + pctdone +
-//                  ", row=" + _row + ", col=" + _col +
-//                  ", nx=" + nx + ", ny=" + ny + "].");
+//        log.info("Drop sprite tick",
+//            "dist", _dist, "pctdone", pctdone, "row", _row, "col", _col, "nx", nx, "ny", ny);
 
         // only update the sprite's location if it actually moved
         if (_ox != nx || _oy != ny) {
@@ -431,8 +416,8 @@ public class DropSprite extends Sprite
     }
 
     /**
-     * Called when the sprite has finished traversing its current row to
-     * advance its board coordinates to the next row.
+     * Called when the sprite has finished traversing its current row to advance its board
+     * coordinates to the next row.
      */
     protected void advancePosition ()
     {
@@ -480,21 +465,18 @@ public class DropSprite extends Sprite
     }
 
     /**
-     * Updates the bounds for this sprite based on the sprite display
-     * dimensions in the view.
+     * Updates the bounds for this sprite based on the sprite display dimensions in the view.
      */
     protected void updateBounds ()
     {
-        Dimension size = _view.getPieceSegmentSize(
-            _col, _row, _orient, _pieces.length);
+        Dimension size = _view.getPieceSegmentSize(_col, _row, _orient, _pieces.length);
         _bounds.width = size.width;
         _bounds.height = size.height;
     }
 
     /**
-     * Adjusts our render origin such that our location is not in the
-     * upper left of the sprite's rendered image but is in fact offset by
-     * some number of rows and columns.
+     * Adjusts our render origin such that our location is not in the upper left of the sprite's
+     * rendered image but is in fact offset by some number of rows and columns.
      */
     protected void updateRenderOffset ()
     {
@@ -505,19 +487,16 @@ public class DropSprite extends Sprite
     /** Used to dispatch {@link DropSpriteObserver#pieceMoved}. */
     protected static class PieceMovedOp implements ObserverList.ObserverOp<Object>
     {
-        public PieceMovedOp (DropSprite sprite, long when, int col, int row)
-        {
+        public PieceMovedOp (DropSprite sprite, long when, int col, int row) {
             _sprite = sprite;
             _when = when;
             _col = col;
             _row = row;
         }
 
-        public boolean apply (Object observer)
-        {
+        public boolean apply (Object observer) {
             if (observer instanceof DropSpriteObserver) {
-                ((DropSpriteObserver)observer).pieceMoved(
-                    _sprite, _when, _col, _row);
+                ((DropSpriteObserver)observer).pieceMoved(_sprite, _when, _col, _row);
             }
             return true;
         }
@@ -545,16 +524,14 @@ public class DropSprite extends Sprite
     /** The unit distance the sprite moves to reach the next row. */
     protected int _unit;
 
-    /** The screen coordinates of the top-left of the row currently
-     * occupied by the sprite. */
+    /** The screen coordinates of the top-left of the row currently occupied by the sprite. */
     protected Point _srcPos = new Point();
 
-    /** The screen coordinates of the top-left of the row toward which the
-     * sprite is falling. */
+    /** The screen coordinates of the top-left of the row toward which the sprite is falling. */
     protected Point _destPos = new Point();
 
-    /** The piece render position; used as working data when determining
-     * where to render each piece in the sprite. */
+    /** The piece render position; used as working data when determining where to render each piece
+     * in the sprite. */
     protected Point _renderPos = new Point();
 
     /** The number of rows remaining to drop. */
@@ -572,8 +549,7 @@ public class DropSprite extends Sprite
     /** The pieces this sprite is displaying. */
     protected int[] _pieces;
 
-    /** Indicates that the drop sprite is bouncing; see {@link
-     * #setBouncing}. */
+    /** Indicates that the drop sprite is bouncing; see {@link #setBouncing}. */
     protected boolean _bouncing;
 
     // used to compute the column and row increment while rendering the

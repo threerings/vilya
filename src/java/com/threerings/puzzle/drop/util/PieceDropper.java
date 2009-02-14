@@ -54,16 +54,14 @@ public class PieceDropper
         /**
          * Constructs a piece drop info object.
          */
-        public PieceDropInfo (int col, int row, int dist)
-        {
+        public PieceDropInfo (int col, int row, int dist) {
             this.col = col;
             this.row = row;
             this.dist = dist;
         }
 
         @Override
-        public String toString ()
-        {
+        public String toString () {
             return StringUtil.fieldsToString(this);
         }
     }
@@ -78,8 +76,8 @@ public class PieceDropper
     }
 
     /**
-     * Constructs a piece dropper that uses the supplied piece drop logic
-     * to specialise itself for a particular puzzle.
+     * Constructs a piece dropper that uses the supplied piece drop logic to specialize itself for
+     * a particular puzzle.
      */
     public PieceDropper (PieceDropLogic logic)
     {
@@ -87,8 +85,8 @@ public class PieceDropper
     }
 
     /**
-     * Effects any drops possible on the supplied board (modifying the
-     * board in the progress) and notifying the supplied drop observer of those drops.
+     * Effects any drops possible on the supplied board (modifying the board in the progress) and
+     * notifying the supplied drop observer of those drops.
      *
      * @return the number of pieces dropped.
      */
@@ -135,8 +133,8 @@ public class PieceDropper
     }
 
     /**
-     * Computes and effects the drop for the specified piece and any
-     * associated attached pieces. The supplied observer is notified of all drops.
+     * Computes and effects the drop for the specified piece and any associated attached pieces.
+     * The supplied observer is notified of all drops.
      */
     protected int dropPieces (DropBoard board, int xx, int yy, DropObserver drobs)
     {
@@ -153,8 +151,8 @@ public class PieceDropper
             int end = _logic.getConstrainedEdge(board, xx, yy, RIGHT);
             int bwid = board.getWidth();
             if (start < 0 || end >= bwid) {
-                log.warning("Board reported bogus constrained edge " +
-                            "[x=" + xx + ", y=" + yy + ", start=" + start + ", end=" + end + "].");
+                log.warning("Board reported bogus constrained edge",
+                    "x", xx, "y", yy, "start", start, "end", end);
                 board.dump();
                 start = Math.max(start, 0);
                 end = Math.min(end, bwid);
@@ -169,8 +167,7 @@ public class PieceDropper
                 return 0;
             }
 
-            // scoot along the bottom edge of the block, noting the drop
-            // for each column
+            // scoot along the bottom edge of the block, noting the drop for each column
             for (int xpos = start; xpos <= end; xpos++) {
                 piece = board.getPiece(xpos, yy);
                 drop(board, piece, xpos, yy, yy + dist, drobs);
@@ -191,8 +188,8 @@ public class PieceDropper
     }
 
     /** Helpy helper function. */
-    protected final void drop (DropBoard board, int piece,
-                               int xx, int yy, int ty, DropObserver drobs)
+    protected final void drop (
+        DropBoard board, int piece, int xx, int yy, int ty, DropObserver drobs)
     {
         // don't try to clear things out if we're filling in from off-board
         if (yy >= 0) {

@@ -27,8 +27,7 @@ package com.threerings.puzzle.drop.client;
 public interface DropSpriteObserver
 {
     /**
-     * Called when the drop sprite has moved completely to the specified
-     * board coordinates.
+     * Called when the drop sprite has moved completely to the specified board coordinates.
      */
     public void pieceMoved (DropSprite sprite, long when, int col, int row);
 }

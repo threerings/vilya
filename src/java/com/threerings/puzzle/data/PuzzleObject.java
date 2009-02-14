@@ -24,10 +24,9 @@ package com.threerings.puzzle.data;
 import com.threerings.parlor.game.data.GameObject;
 
 /**
- * Extends the basic {@link GameObject} to add individual player
- * status. Puzzle games typically contain numerous players that may be
- * knocked out of the game while the overall game continues on, thereby
- * necessitating this second level of game status.
+ * Extends the basic {@link GameObject} to add individual player status. Puzzle games typically
+ * contain numerous players that may be knocked out of the game while the overall game continues
+ * on, thereby necessitating this second level of game status.
  */
 public class PuzzleObject extends GameObject
     implements PuzzleCodes
@@ -52,8 +51,8 @@ public class PuzzleObject extends GameObject
     /** The puzzle difficulty level. */
     public int difficulty;
 
-    /** Summaries of the boards of all players in this puzzle (may be null
-     * if the puzzle doesn't support individual player boards). */
+    /** Summaries of the boards of all players in this puzzle (may be null if the puzzle doesn't
+     * support individual player boards). */
     public BoardSummary[] summaries;
 
     /** The seed used to germinate the boards. */

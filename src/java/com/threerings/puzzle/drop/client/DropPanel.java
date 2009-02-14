@@ -24,8 +24,8 @@ package com.threerings.puzzle.drop.client;
 import com.threerings.puzzle.data.BoardSummary;
 
 /**
- * Puzzles using the drop services need implement this interface to
- * display drop puzzle related information.
+ * Puzzles using the drop services need implement this interface to display drop puzzle related
+ * information.
  */
 public interface DropPanel
 {

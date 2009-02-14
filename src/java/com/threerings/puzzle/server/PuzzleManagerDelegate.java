@@ -26,8 +26,8 @@ import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.parlor.game.server.GameManagerDelegate;
 
 /**
- * Extends the {@link GameManagerDelegate} mechanism with puzzle manager specific methods (of which
- * there are currently none).
+ * Extends the {@link GameManagerDelegate} mechanism with puzzle manager specific methods (of
+ * which there are currently none).
  */
 public class PuzzleManagerDelegate extends GameManagerDelegate
 {

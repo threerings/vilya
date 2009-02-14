@@ -100,8 +100,7 @@ public class PlayerStatusView extends JPanel
     @Override
     public String toString ()
     {
-        return "[user=" + _username + ", pidx=" + _pidx +
-            ", status=" + _status + "]";
+        return "[user=" + _username + ", pidx=" + _pidx + ", status=" + _status + "]";
     }
 
     /** The game object associated with this view. */

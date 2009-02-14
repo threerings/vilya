@@ -31,10 +31,9 @@ import com.threerings.puzzle.data.PuzzleGameCodes;
 import com.threerings.puzzle.data.PuzzleObject;
 
 /**
- * A base class for puzzle controller delegates. Provides access to some
- * delegated puzzle controller methods ({@link #startAction}, {@link
- * #clearAction}, etc.) and provides a casted reference to the puzzle
- * object.
+ * A base class for puzzle controller delegates. Provides access to some delegated puzzle
+ * controller methods ({@link #startAction}, {@link #clearAction}, etc.) and provides a casted
+ * reference to the puzzle object.
  */
 public class PuzzleControllerDelegate extends GameControllerDelegate
     implements PuzzleCodes, PuzzleGameCodes
@@ -90,23 +89,20 @@ public class PuzzleControllerDelegate extends GameControllerDelegate
     }
 
     /**
-     * Derived classes should override this method and do whatever is
-     * necessary to start up the action for their puzzle. This could be
-     * called when the user is already in the "room" and the game starts,
-     * or immediately upon entering the room if the game is already
-     * started (for example if they disconnected and reconnected to a game
-     * already in progress).
+     * Derived classes should override this method and do whatever is necessary to start up the
+     * action for their puzzle. This could be called when the user is already in the "room" and
+     * the game starts, or immediately upon entering the room if the game is already started (for
+     * example if they disconnected and reconnected to a game already in progress).
      */
     protected void startAction ()
     {
     }
 
     /**
-     * Delegates that wish to postpone action clearing can override this
-     * method to return false until such time as the action can be
-     * cleared. They must, however, call {@link #maybeClearAction} when
-     * conditions become such that they would once again allow action to
-     * be cleared.
+     * Delegates that wish to postpone action clearing can override this method to return false
+     * until such time as the action can be cleared. They must, however, call
+     * {@link #maybeClearAction} when conditions become such that they would once again allow
+     * action to be cleared.
      */
     protected boolean canClearAction ()
     {
@@ -114,9 +110,8 @@ public class PuzzleControllerDelegate extends GameControllerDelegate
     }
 
     /**
-     * Calls {@link PuzzleController#maybeClearAction}, preserving its
-     * protected access but making the method available to all
-     * PuzzleControllerDelegate derivations.
+     * Calls {@link PuzzleController#maybeClearAction}, preserving its protected access but making
+     * the method available to all PuzzleControllerDelegate derivations.
      */
     protected void maybeClearAction ()
     {
@@ -124,20 +119,17 @@ public class PuzzleControllerDelegate extends GameControllerDelegate
     }
 
     /**
-     * Puzzles should override this method and clear out any action on the
-     * board and generally clean up anything that was going on because the
-     * game was in play. This is called when the game has ended or when it
-     * is going to reset and when the client leaves the game "room".
-     * Anything that is cleared out here should be recreated in {@link
-     * #startAction}.
+     * Puzzles should override this method and clear out any action on the board and generally
+     * clean up anything that was going on because the game was in play. This is called when the
+     * game has ended or when it is going to reset and when the client leaves the game "room".
+     * Anything that is cleared out here should be recreated in {@link #startAction}.
      */
     protected void clearAction ()
     {
     }
 
     /**
-     * Called when the puzzle controller sets up a new board for the
-     * player.
+     * Called when the puzzle controller sets up a new board for the player.
      *
      * @param board the newly initialized and ready-to-go board.
      */

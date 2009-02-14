@@ -37,8 +37,8 @@ public abstract class Board
     public abstract void dump ();
 
     /**
-     * Outputs a string representation of the board contents, interlaced
-     * with the supplied comparison board.
+     * Outputs a string representation of the board contents, interlaced with the supplied
+     * comparison board.
      */
     public abstract void dumpAndCompare (Board other);
 
@@ -60,8 +60,7 @@ public abstract class Board
     }
 
     /**
-     * Sets the seed in the board's random number generator and calls
-     * {@link #populate}.
+     * Sets the seed in the board's random number generator and calls {@link #populate}.
      */
     public void initializeSeed (long seed)
     {
@@ -70,8 +69,8 @@ public abstract class Board
     }
 
     /**
-     * Returns the random number generator used by the board to generate
-     * random numbers for our puzzles.
+     * Returns the random number generator used by the board to generate random numbers for our
+     * puzzles.
      */
     public Random getRandom ()
     {
@@ -79,8 +78,8 @@ public abstract class Board
     }
 
     /**
-     * Called after the seed is set in the board to give derived classes a
-     * chance to do things like populating the board with random pieces.
+     * Called after the seed is set in the board to give derived classes a chance to do things
+     * like populating the board with random pieces.
      */
     protected void populate ()
     {
@@ -90,29 +89,25 @@ public abstract class Board
     protected static class BoardRandom extends Random
         implements Cloneable
     {
-        public BoardRandom (long seed)
-        {
+        public BoardRandom (long seed) {
             super(0L);
             setSeed(seed);
         }
 
         @Override
-        public synchronized void setSeed (long seed)
-        {
+        public synchronized void setSeed (long seed) {
             _seed = (seed ^ multiplier) & mask;
         }
 
         @Override
-        synchronized protected int next (int bits)
-        {
+        synchronized protected int next (int bits) {
             long nextseed = (_seed * multiplier + addend) & mask;
             _seed = nextseed;
             return (int)(nextseed >>> (48 - bits));
         }
 
         @Override
-        public void nextBytes (byte[] bytes)
-        {
+        public void nextBytes (byte[] bytes) {
             unimplemented();
         }
 
@@ -123,8 +118,7 @@ public abstract class Board
         // nextFloat()
 
         @Override
-        public int nextInt (int n)
-        {
+        public int nextInt (int n) {
             if (n <= 0) {
                 throw new IllegalArgumentException("n must be positive");
             }
@@ -142,15 +136,13 @@ public abstract class Board
         }
 
         @Override
-        public double nextDouble ()
-        {
+        public double nextDouble () {
             long l = ((long)(next(26)) << 27) + next(27);
             return l / (double)(1L << 53);
         }
 
         @Override
-        public synchronized double nextGaussian ()
-        {
+        public synchronized double nextGaussian () {
             if (_haveNextNextGaussian) {
                 _haveNextNextGaussian = false;
                 return _nextNextGaussian;
@@ -170,8 +162,7 @@ public abstract class Board
         }
 
         @Override
-        public Object clone ()
-        {
+        public Object clone () {
             try {
                 return super.clone();
             } catch (CloneNotSupportedException cnse) {
@@ -180,14 +171,12 @@ public abstract class Board
         }
 
         /**
-         * I suppose I could copy all the methods from Random, then we
-         * wouldn't need this..
+         * I suppose I could copy all the methods from Random, then we wouldn't need this..
          */
         private final void unimplemented ()
         {
             throw new RuntimeException(
-                "The Random method you attempted to call " +
-                "has not been implemented by BoardRandom.");
+                "The Random method you attempted to call has not been implemented by BoardRandom.");
         }
 
         /** The internal state related to generating random numbers. */

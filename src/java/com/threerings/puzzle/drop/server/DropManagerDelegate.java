@@ -39,25 +39,21 @@ import com.threerings.puzzle.server.PuzzleManagerDelegate;
 import static com.threerings.puzzle.Log.log;
 
 /**
- * Provides the necessary support for a puzzle game that involves a
- * two-dimensional board containing pieces, with new pieces either falling
- * into the board as a "drop block", or rising into the bottom of the
- * board in new piece rows, groups of blocks can be "broken" and garbage
- * can be sent to other players' boards as a result. This is implemented
- * as a delegate so that the natural hierarchy need not be twisted to
- * differentiate between puzzles that use piece dropping and those that
- * don't. Because we have need to structure our hierarchy around things
- * like whether a puzzle is a duty puzzle, this becomes necessary.
+ * Provides the necessary support for a puzzle game that involves a two-dimensional board
+ * containing pieces, with new pieces either falling into the board as a "drop block", or rising
+ * into the bottom of the board in new piece rows, groups of blocks can be "broken" and garbage
+ * can be sent to other players' boards as a result. This is implemented as a delegate so that the
+ * natural hierarchy need not be twisted to differentiate between puzzles that use piece dropping
+ * and those that don't. Because we have need to structure our hierarchy around things like
+ * whether a puzzle is a duty puzzle, this becomes necessary.
  *
- * <p> A puzzle game using these services will then need to extend this
- * delegate, implementing the necessary methods to customize it for the
- * particulars of their game and then register it with their game manager
- * via {@link PlaceManager#addDelegate}.
+ * <p> A puzzle game using these services will then need to extend this delegate, implementing the
+ * necessary methods to customize it for the particulars of their game and then register it with
+ * their game manager via {@link PlaceManager#addDelegate}.
  *
- * <p> It also keeps track of, for each player, board level information,
- * and player game status.  Miscellaneous utility routines are provided
- * for checking things like whether the game is over, whether a player is
- * still active in the game, and so forth.
+ * <p> It also keeps track of, for each player, board level information, and player game status.
+ * Miscellaneous utility routines are provided for checking things like whether the game is over,
+ * whether a player is still active in the game, and so forth.
  *
  * <p> Derived classes are likely to want to override {@link #getPieceDropLogic}.
  */
@@ -82,9 +78,8 @@ public abstract class DropManagerDelegate extends PuzzleManagerDelegate
         _usedrop = logic.useBlockDropping();
         _userise = logic.useBoardRising();
         if (_usedrop && _userise) {
-            log.warning("Can't use dropping blocks and board rising "+
-                        "functionality simultaneously in a drop puzzle game! " +
-                        "Falling back to straight dropping.");
+            log.warning("Can't use dropping blocks and board rising functionality simultaneously " +
+                        "in a drop puzzle game! Falling back to straight dropping.");
             _userise = false;
         }
     }
@@ -129,8 +124,8 @@ public abstract class DropManagerDelegate extends PuzzleManagerDelegate
     }
 
     /**
-     * Drops any pieces that need dropping on the given player's board and
-     * returns whether any pieces were dropped.
+     * Drops any pieces that need dropping on the given player's board and returns whether any
+     * pieces were dropped.
      */
     protected boolean dropPieces (DropBoard board)
     {
@@ -153,10 +148,9 @@ public abstract class DropManagerDelegate extends PuzzleManagerDelegate
         return new PieceDropper(logic);
     }
 
-
     /**
-     * This method should be called by derived classes whenever the player
-     * successfully places a drop block.
+     * This method should be called by derived classes whenever the player successfully places a
+     * drop block.
      */
     protected void placedBlock (int pidx)
     {
@@ -177,11 +171,11 @@ public abstract class DropManagerDelegate extends PuzzleManagerDelegate
     /** The board dimensions in pieces. */
     protected int _bwid, _bhei;
 
-    /** The piece dropper used to drop pieces in the board if the puzzle
-     * chooses to make use of piece dropping functionality. */
+    /** The piece dropper used to drop pieces in the board if the puzzle chooses to make use of
+     * piece dropping functionality. */
     protected PieceDropper _dropper;
 
-    /** Used to limit the maximum number of board update loops permitted
-     * before assuming something's gone horribly awry and aborting. */
+    /** Used to limit the maximum number of board update loops permitted before assuming something's
+     *  gone horribly awry and aborting. */
     protected static final int MAX_UPDATE_LOOPS = 100;
 }

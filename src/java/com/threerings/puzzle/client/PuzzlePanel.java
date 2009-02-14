@@ -45,10 +45,9 @@ import com.threerings.puzzle.util.PuzzleContext;
 import static com.threerings.puzzle.Log.log;
 
 /**
- * The puzzle panel class should be extended by classes that provide a
- * view for a puzzle game.  The {@link PuzzleController} calls these
- * methods as necessary to perform its duties in managing the logical
- * actions of a puzzle game.
+ * The puzzle panel class should be extended by classes that provide a view for a puzzle game. The
+ * {@link PuzzleController} calls these methods as necessary to perform its duties in managing the
+ * logical actions of a puzzle game.
  */
 public abstract class PuzzlePanel extends JPanel
     implements PlaceView, ControllerProvider, PuzzleCodes, PuzzleGameCodes
@@ -83,8 +82,7 @@ public abstract class PuzzlePanel extends JPanel
     {
         super.addNotify();
 
-        // leave the keyboard manager disabled to start, and set things up
-        // for chatting
+        // leave the keyboard manager disabled to start, and set things up for chatting
         setPuzzleGrabsKeys(false);
     }
 
@@ -98,20 +96,18 @@ public abstract class PuzzlePanel extends JPanel
     }
 
     /**
-     * Temporarily replaces the puzzle board display with the supplied
-     * overlay panel.  The panel can be removed and the board display
-     * restored by calling {@link #popOverlayPanel}.
+     * Temporarily replaces the puzzle board display with the supplied overlay panel. The panel
+     * can be removed and the board display restored by calling {@link #popOverlayPanel}.
      *
-     * @return true if the specified panel will be displayed, false if it
-     * was not able to be pushed because another overlay panel is already
-     * pushed onto the primary panel.
+     * @return true if the specified panel will be displayed, false if it was not able to be
+     * pushed because another overlay panel is already pushed onto the primary panel.
      */
     public boolean pushOverlayPanel (JPanel opanel)
     {
         // bail if we've already got an overlay
         if (_opanel != null) {
-            log.info("Refusing to push overlay panel, we've already got one " +
-                     "[opanel=" + _opanel + ", npanel=" + opanel + "].");
+            log.info("Refusing to push overlay panel, we've already got one",
+                "opanel", _opanel, "npanel", opanel);
             return false;
         }
 
@@ -150,8 +146,8 @@ public abstract class PuzzlePanel extends JPanel
     }
 
     /**
-     * Initializes the puzzle panel with the puzzle config of the puzzle
-     * whose user interface is being displayed by the panel
+     * Initializes the puzzle panel with the puzzle config of the puzzle whose user interface is
+     * being displayed by the panel
      */
     public void init (GameConfig config)
     {
@@ -160,8 +156,7 @@ public abstract class PuzzlePanel extends JPanel
     }
 
     /**
-     * Sets whether this panel receives events periodically from a robot
-     * player.
+     * Sets whether this panel receives events periodically from a robot player.
      */
     public void setRobotPlayer (boolean isrobot)
     {
@@ -175,8 +170,7 @@ public abstract class PuzzlePanel extends JPanel
     }
 
     /**
-     * Sets whether the puzzle grabs keys or if they should go to the chat
-     * window.
+     * Sets whether the puzzle grabs keys or if they should go to the chat window.
      */
     public void setPuzzleGrabsKeys (boolean puzgrabs)
     {
@@ -211,9 +205,8 @@ public abstract class PuzzlePanel extends JPanel
     }
 
     /**
-     * Creates a robot player using the default RobotPlayer.  Derived
-     * classes can override to make use of more advanced robots adapted to
-     * specific puzzles.
+     * Creates a robot player using the default RobotPlayer. Derived classes can override to make
+     * use of more advanced robots adapted to specific puzzles.
      */
     protected RobotPlayer createRobotPlayer ()
     {
@@ -221,25 +214,23 @@ public abstract class PuzzlePanel extends JPanel
     }
 
     /**
-     * Creates the puzzle board view that will be used to display the main
-     * puzzle interface. This is called when the puzzle panel is
-     * constructed. The derived panel will still be responsible for adding
-     * the board to the interface hierarchy.
+     * Creates the puzzle board view that will be used to display the main puzzle interface. This
+     * is called when the puzzle panel is constructed. The derived panel will still be responsible
+     * for adding the board to the interface hierarchy.
      */
     protected abstract PuzzleBoardView createBoardView (PuzzleContext ctx);
 
     /**
-     * Creates the main panel used to display the puzzle and its various
-     * in-game accoutrements (next block views, player status displays,
-     * etc.)  This is called when the puzzle panel is constructed.  The
-     * derived panel is responsible for making sure that the board view is
+     * Creates the main panel used to display the puzzle and its various in-game accoutrements
+     * (next block views, player status displays, etc.) This is called when the puzzle panel is
+     * constructed. The derived panel is responsible for making sure that the board view is
      * present in the board panel.
      */
     protected abstract JPanel createBoardPanel (PuzzleContext ctx);
 
     /**
-     * Returns a key translator with the desired key to controller command
-     * mappings desired for this puzzle.
+     * Returns a key translator with the desired key to controller command mappings desired for
+     * this puzzle.
      */
     protected abstract KeyTranslator getKeyTranslator ();
 

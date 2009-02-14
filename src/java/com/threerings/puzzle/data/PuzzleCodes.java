@@ -34,10 +34,9 @@ public interface PuzzleCodes extends InvocationCodes
     /** The default puzzle difficulty level. */
     public static final int DEFAULT_DIFFICULTY = 2;
 
-    /** Whether to enable debug logging and assertions for puzzles. Note
-     * that enabling this may result in the server or client exiting
-     * unexpectedly if certain error conditions arise in order to
-     * facilitate debugging, and so this should never be enabled in any
-     * environment even remotely resembling production. */
+    /** Whether to enable debug logging and assertions for puzzles. Note that enabling this may
+     * result in the server or client exiting unexpectedly if certain error conditions arise in
+     * order to facilitate debugging, and so this should never be enabled in any environment even
+     * remotely resembling production. */
     public static final boolean DEBUG_PUZZLE = false;
 }

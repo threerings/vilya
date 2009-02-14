@@ -22,9 +22,9 @@
 package com.threerings.puzzle.data;
 
 /**
- * Contains codes used by the puzzle game client implementations. This
- * differs from {@link PuzzleCodes} as that is related to the puzzle
- * services which span the client and the server.
+ * Contains codes used by the puzzle game client implementations. This differs from
+ * {@link PuzzleCodes} as that is related to the puzzle services which span the client and the
+ * server.
  */
 public interface PuzzleGameCodes
 {

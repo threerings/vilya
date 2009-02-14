@@ -53,14 +53,13 @@ import com.threerings.puzzle.util.PuzzleContext;
 import static com.threerings.puzzle.Log.log;
 
 /**
- * Games that wish to make use of the drop puzzle services will need to
- * create an extension of this delegate class, customizing it for their
- * particular game and then adding it via {@link PlaceController#addDelegate}.
+ * Games that wish to make use of the drop puzzle services will need to create an extension of
+ * this delegate class, customizing it for their particular game and then adding it via
+ * {@link PlaceController#addDelegate}.
  *
- * <p> It handles logical actions for a puzzle game that generally
- * consists of a two-dimensional board containing pieces, with new pieces
- * either falling into the board as a "drop block", or rising into the
- * bottom of the board in new piece rows.
+ * <p> It handles logical actions for a puzzle game that generally consists of a two-dimensional
+ * board containing pieces, with new pieces either falling into the board as a "drop block", or
+ * rising into the bottom of the board in new piece rows.
  *
  * <p> Derived classes must implement {@link #getPieceVelocity} and {@link #evolveBoard}.
  *
@@ -95,8 +94,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     public static final String RAISE_ROW = "raise_row";
 
     /**
-     * Creates a delegate with the specified drop game logic and
-     * controller.
+     * Creates a delegate with the specified drop game logic and controller.
      */
     public DropControllerDelegate (PuzzleController ctrl, DropLogic logic)
     {
@@ -141,8 +139,8 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     }
 
     /**
-     * Returns the speed with which the next board row should rise into
-     * place, in pixels per millisecond.
+     * Returns the speed with which the next board row should rise into place, in pixels per
+     * millisecond.
      */
     protected float getRiseVelocity ()
     {
@@ -166,7 +164,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     {
         super.startAction();
 
-//         Log.info("Starting drop action");
+//         log.info("Starting drop action");
 
         // add ourselves as a frame participant
         _ctx.getFrameManager().registerFrameParticipant(this);
@@ -181,17 +179,15 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
         // it on its merry way once more
         if (_blocksprite != null) {
             long delta = _dview.getTimeStamp() - _blockStamp;
-            log.info("Restarting drop sprite [delta=" + delta + "].");
+            log.info("Restarting drop sprite", "delta", delta);
             _blocksprite.fastForward(delta);
             _blockStamp = 0L;
             _dview.addSprite(_blocksprite);
 
-            // if we cleared the action while the drop sprite was
-            // bouncing, we need to land the block to get things going
-            // again
+            // if we cleared the action while the drop sprite was bouncing, we need to land the
+            // block to get things going again
             if (_blocksprite.isBouncing()) {
-                log.info("Ended on a bounce, landing the block and " +
-                         "starting things up.");
+                log.info("Ended on a bounce, landing the block and starting things up.");
                 checkBlockLanded("bounced", true, true);
             }
         }
@@ -210,16 +206,15 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     }
 
     /**
-     * Clears out all of the action in the board; removes any drop block
-     * sprites, any pieces rising in the board, and resets the animation
-     * timestamps.
+     * Clears out all of the action in the board; removes any drop block sprites, any pieces
+     * rising in the board, and resets the animation timestamps.
      */
     @Override
     protected void clearAction ()
     {
         super.clearAction();
 
-//         Log.info("Clearing drop action.");
+//         log.info("Clearing drop action.");
 
         // do away with the bounce interval
         _bounceStamp = 0;
@@ -310,8 +305,8 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
         }
 
         if (handled && _blocksprite != null) {
-            // land the block if it's been placed on something solid as a
-            // result of one of the above actions
+            // land the block if it's been placed on something solid as a result of one of the
+            // above actions
             String source = "fiddled [cmd=" + cmd + "]";
             if (checkBlockLanded(source, false, false)) {
                 startBounceTimer(source);
@@ -335,19 +330,17 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
         int row = _blocksprite.getRow(), col = _blocksprite.getColumn();
         int dx = (dir == LEFT) ? -1 : 1;
 
-        // if the sprite has made it to the bottom of the board then we
-        // don't want to allow it to "virtually" fall any further because
-        // of the bounce interval
+        // if the sprite has made it to the bottom of the board then we don't want to allow it to
+        // "virtually" fall any further because of the bounce interval
          float pctdone = (row >= (_bhei - 1)) ? 0 :
              _blocksprite.getPercentDone(_dview.getTimeStamp());
 
         // get the drop block position resulting from the move
-        Point pos = _dboard.getForgivingMove(
-            bb.x, bb.y, bb.width, bb.height, dx, 0, pctdone);
+        Point pos = _dboard.getForgivingMove(bb.x, bb.y, bb.width, bb.height, dx, 0, pctdone);
         if (pos != null) {
             int frow = row + (pos.y - bb.y);
             int fcol = col + (pos.x - bb.x);
-            // Log.info("Valid move [row=" + frow + ", col=" + col + "].");
+            // log.info("Valid move", "row", frow, "col", col);
             _blocksprite.setBoardLocation(frow, fcol);
         }
     }
@@ -364,9 +357,8 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
         // gather information regarding the attempted rotation
         int[] rows = _blocksprite.getRows();
         int[] cols = _blocksprite.getColumns();
-        // if the sprite has made it to the bottom of the board then we
-        // don't want to allow it to "virtually" fall any further because
-        // of the bounce interval
+        // if the sprite has made it to the bottom of the board then we don't want to allow it to
+        // "virtually" fall any further because of the bounce interval
         float pctdone = (rows[0] >= (_bhei - 1)) ? 0 :
             _blocksprite.getPercentDone(_dview.getTimeStamp());
 
@@ -375,10 +367,9 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
             rows, cols, _blocksprite.getOrientation(), dir,
             getRotationType(), pctdone, _blocksprite.canPopup());
         if (info != null) {
-//             Log.info("Found valid rotation " +
-//                      "[orient=" + DirectionUtil.toShortString(info[0]) +
-//                      ", col=" + info[1] + ", row=" + info[2] +
-//                      ", blocksprite=" + _blocksprite + "].");
+//             log.info("Found valid rotation",
+//                 "orient", DirectionUtil.toShortString(info[0]), "col", info[1], "row", info[2],
+//                 "blocksprite", _blocksprite);
 
             // update the piece image
             _dview.rotateDropBlock(_blocksprite, info[0]);
@@ -396,16 +387,16 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     }
 
     /**
-     * Called when the drop block has rotated in the specified direction
-     * to allow derived classes to engage in any game-specific antics.
+     * Called when the drop block has rotated in the specified direction to allow derived classes
+     * to engage in any game-specific antics.
      */
     protected void blockDidRotate (int dir)
     {
     }
 
     /**
-     * Returns the rotation type used by this drop game. Either {@link
-     * DropBoard#RADIAL_ROTATION} or {@link DropBoard#INPLACE_ROTATION}.
+     * Returns the rotation type used by this drop game. Either {@link DropBoard#RADIAL_ROTATION}
+     * or {@link DropBoard#INPLACE_ROTATION}.
      */
     protected int getRotationType ()
     {
@@ -421,7 +412,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
 
         // only allow changing the piece velocity if we're not bouncing
         if (_blocksprite != null && _bounceStamp == 0) {
-            // Log.info("Updating drop block velocity [fast=" + fast + "].");
+            // log.info("Updating drop block velocity", "fast", fast);
             _blocksprite.setVelocity(getPieceVelocity(fast));
         }
     }
@@ -437,13 +428,11 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     protected void dropNextBlock ()
     {
         if (_blocksprite != null || !_ctrl.hasAction()) {
-            log.info("Not dropping block [bs=" + (_blocksprite != null) +
-                     ", action=" + _ctrl.hasAction() + "].");
+            log.info("Not dropping block", "bs", _blocksprite != null, "action", _ctrl.hasAction());
             return;
         }
 
-        // determine whether or not the game should be ended because we
-        // can't drop the next block
+        // determine whether or not the game should be ended because we can't drop the next block
         if (checkDropEndsGame()) {
             return;
         }
@@ -476,12 +465,10 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     }
 
     /**
-     * Called by {@link #dropNextBlock} to determine whether the game
-     * should be ended rather than dropping the next block because the
-     * board is filled and a new block cannot enter. If true is returned,
-     * the drop controller assumes that the derived class will have ended
-     * or reset the game as appropriate and will simply abandon its
-     * attempt to drop the next block.
+     * Called by {@link #dropNextBlock} to determine whether the game should be ended rather than
+     * dropping the next block because the board is filled and a new block cannot enter. If true
+     * is returned, the drop controller assumes that the derived class will have ended or reset
+     * the game as appropriate and will simply abandon its attempt to drop the next block.
      */
     protected boolean checkDropEndsGame ()
     {
@@ -489,9 +476,9 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     }
 
     /**
-     * Called only for block-dropping puzzles when it's time to create the
-     * next drop block.  Returns the drop block sprite if it was
-     * successfully created, or <code>null</code> if it was not.
+     * Called only for block-dropping puzzles when it's time to create the next drop block.
+     * Returns the drop block sprite if it was successfully created, or <code>null</code> if it
+     * was not.
      */
     protected DropBlockSprite createNextBlock ()
     {
@@ -510,8 +497,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     /**
      * Called when a drop sprite posts a piece moved event.
      */
-    protected void handleDropSpriteMoved (
-        DropSprite sprite, long when, int col, int row)
+    protected void handleDropSpriteMoved (DropSprite sprite, long when, int col, int row)
     {
         if (sprite instanceof DropBlockSprite) {
             if (checkBlockLanded("piece-moved", false, true)) {
@@ -538,9 +524,8 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     }
 
     /**
-     * Applies the pieces in the given sprite to the specified column and
-     * row in the board.  Called when a drop sprite has finished
-     * traversing its entire distance.
+     * Applies the pieces in the given sprite to the specified column and row in the board. Called
+     * when a drop sprite has finished traversing its entire distance.
      */
     protected void applyDropSprite (DropSprite sprite, int col, int row)
     {
@@ -551,17 +536,16 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
         for (int dy = 0; dy < pieces.length; dy++) {
             // pieces outside the board are discarded
             if (row - dy >= 0) {
-                // note: vertical segments are applied counting downwards
-                // from the starting row toward row zero
+                // note: vertical segments are applied counting downwards from the starting row
+                // toward row zero
                 _dview.createPiece(pieces[dy], col, row - dy);
             }
         }
     }
 
     /**
-     * Called to determine whether it is safe to evolve the board. The
-     * default implementation does not allow board evolution if there are
-     * sprites or animations active on the board.
+     * Called to determine whether it is safe to evolve the board. The default implementation does
+     * not allow board evolution if there are sprites or animations active on the board.
      */
     protected boolean canEvolveBoard ()
     {
@@ -569,24 +553,21 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     }
 
     /**
-     * Evolves the board to an unchanging state. If the board is in a
-     * state where pieces should react with one another to cause changes
-     * to the board state (such as piece dropping via {@link #dropPieces},
-     * piece destruction, and/or piece joining), this is where that
-     * process should be effected.
+     * Evolves the board to an unchanging state. If the board is in a state where pieces should
+     * react with one another to cause changes to the board state (such as piece dropping via
+     * {@link #dropPieces}, piece destruction, and/or piece joining), this is where that process
+     * should be effected.
      *
-     * <p> When no further evolution is possible and the board has
-     * stabilized this method should return false to indicate that such
-     * action should be taken. That will result in a follow-up call to
-     * {@link #boardDidStabilize} (assuming that the action was not
-     * cleared prior to the final stabilization of the board).
+     * <p> When no further evolution is possible and the board has stabilized this method should
+     * return false to indicate that such action should be taken. That will result in a follow-up
+     * call to {@link #boardDidStabilize} (assuming that the action was not cleared prior to the
+     * final stabilization of the board).
      */
     protected abstract boolean evolveBoard ();
 
     /**
-     * Derived classes should call this method whenever they change some
-     * board state that will require board evolution to restabilize the
-     * board.
+     * Derived classes should call this method whenever they change some board state that will
+     * require board evolution to restabilize the board.
      */
     protected void unstabilizeBoard ()
     {
@@ -594,11 +575,10 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     }
 
     /**
-     * Called when the board has been fully evolved and is once again
-     * stable. The default implementation updates the player's local board
-     * summary and drops the next block into the board, but derived
-     * classes may wish to perform custom actions if they don't use drop
-     * blocks or have other requirements.
+     * Called when the board has been fully evolved and is once again stable. The default
+     * implementation updates the player's local board summary and drops the next block into the
+     * board, but derived classes may wish to perform custom actions if they don't use drop blocks
+     * or have other requirements.
      */
     protected void boardDidStabilize ()
     {
@@ -607,10 +587,9 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     }
 
     /**
-     * Updates the player's own local board summary to reflect the local
-     * copy of the player's board which is likely to be more up to date
-     * than the server-side board from which all other player board
-     * summaries originate.
+     * Updates the player's own local board summary to reflect the local copy of the player's
+     * board which is likely to be more up to date than the server-side board from which all other
+     * player board summaries originate.
      */
     public void updateSelfSummary ()
     {
@@ -624,9 +603,8 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     }
 
     /**
-     * Called when an animation finishes doing its business.  Derived
-     * classes may wish to override this method but should be sure to call
-     * <code>super.animationDidFinish()</code>.
+     * Called when an animation finishes doing its business. Derived classes may wish to override
+     * this method but should be sure to call <code>super.animationDidFinish()</code>.
      */
     protected void animationDidFinish (Animation anim)
     {
@@ -634,17 +612,16 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     }
 
     /**
-     * Checks whether the drop block can continue dropping and lands its
-     * pieces if not.  Returns whether at least one piece of the block has
-     * landed; note that the other piece may need subsequent dropping.
+     * Checks whether the drop block can continue dropping and lands its pieces if not. Returns
+     * whether at least one piece of the block has landed; note that the other piece may need
+     * subsequent dropping.
      *
-     * @param commit if true, the block landing is committed, if false, it
-     * is only checked, not committed.
-     * @param atTop whether the block sprite is to be treated as being at
-     * the top of its current row.
+     * @param commit if true, the block landing is committed, if false, it is only checked, not
+     * committed.
+     * @param atTop whether the block sprite is to be treated as being at the top of its current
+     * row.
      */
-    protected boolean checkBlockLanded (
-        String source, boolean commit, boolean atTop)
+    protected boolean checkBlockLanded (String source, boolean commit, boolean atTop)
     {
         if (_blocksprite == null) {
             return true;
@@ -659,25 +636,20 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
         float pctdone = (atTop) ? 0.0f :
             _blocksprite.getPercentDone(_dview.getTimeStamp());
 
-//         Log.info("Checking landed [source=" + source +
-//                  ", bounceRow=" + _bounceRow +
-//                  ", rows=" + StringUtil.toString(rows) +
-//                  ", cols=" + StringUtil.toString(cols) +
-//                  ", orient=" + DirectionUtil.toShortString(
-//                      _blocksprite.getOrientation()) +
-//                  ", commit=" + commit + ", pctdone=" + pctdone + "].");
+//        log.info("Checking landed",
+//            "source", source, "bounceRow", _bounceRow, "rows", rows, "cols", cols,
+//            "orient", DirectionUtil.toShortString(_blocksprite.getOrientation()),
+//            "commit", commit, "pctdone", pctdone);
 
         if (_dboard.isValidDrop(rows, cols, pctdone)) {
             if (commit) {
-                log.info("Not valid drop [source=" + source +
-                         ", commit=" + commit + ", atTop=" + atTop +
-                         ", pctdone=" + pctdone + "].");
+                log.info("Not valid drop",
+                    "source", source, "commit", commit, "atTop", atTop, "pctdone", pctdone);
             }
             return false;
         }
 
-        // if we're committing the landing, remove the sprite and update
-        // the board and all that
+        // if we're committing the landing, remove the sprite and update the board and all that
         if (commit) {
             // give sub-classes a chance to do any pre-landing business
             blockWillLand();
@@ -689,23 +661,18 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
                 if (rows[ii] >= 0) {
                     int col = cols[ii], row = rows[ii];
 
-                    // sanity-check the block to make sure it's located in
-                    // a valid position, and that we aren't somehow
-                    // overwriting an existing piece
+                    // sanity-check the block to make sure it's located in a valid position, and
+                    // that we aren't somehow overwriting an existing piece
                     if (col < 0 || col >= _bwid || row >= _bhei) {
-                        log.warning("Placing drop block piece outside board " +
-                                    "bounds!? [x=" + col + ", y=" + row +
-                                    ", pidx=" + ii +
-                                    ", blocksprite=" + _blocksprite + "].");
+                        log.warning("Placing drop block piece outside board bounds!?",
+                            "x", col, "y", row, "pidx", ii, "blocksprite", _blocksprite);
                         error = true;
 
                     } else {
                         int cpiece = _dboard.getPiece(col, row);
                         if (cpiece != PIECE_NONE) {
-                            log.warning("Placing drop block piece onto " +
-                                        "occupied board position!? [x=" + col +
-                                        ", y=" + row + ", pidx=" + ii +
-                                        ", blocksprite=" + _blocksprite + "].");
+                            log.warning("Placing drop block piece onto occupied board position!?",
+                                "x", col, "y", row, "pidx", ii, "blocksprite", _blocksprite);
                             error = true;
                         }
                     }
@@ -736,10 +703,9 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     }
 
     /**
-     * Called only for block-dropping puzzles when the drop block is about
-     * to land on something.  Derived classes may wish to override this
-     * method to perform game-specific actions such as queueing up a
-     * "block placed" progress event.
+     * Called only for block-dropping puzzles when the drop block is about to land on something.
+     * Derived classes may wish to override this method to perform game-specific actions such as
+     * queueing up a "block placed" progress event.
      */
     protected void blockWillLand ()
     {
@@ -747,9 +713,8 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     }
 
     /**
-     * Called only for block-dropping puzzles when the drop block lands on
-     * something.  Derived classes may wish to override this method to
-     * perform any game-specific actions.
+     * Called only for block-dropping puzzles when the drop block lands on something. Derived
+     * classes may wish to override this method to perform any game-specific actions.
      */
     protected void blockDidLand ()
     {
@@ -757,19 +722,16 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     }
 
     /**
-     * Called when a block lands. We give the user a smidgen of time to
-     * continue to fiddle with the block before we actually land it. If
-     * the block is still landed when the bounce timer expires, we commit
-     * the landing, otherwise we let the block keep falling.
+     * Called when a block lands. We give the user a smidgen of time to continue to fiddle with
+     * the block before we actually land it. If the block is still landed when the bounce timer
+     * expires, we commit the landing, otherwise we let the block keep falling.
      */
     protected void startBounceTimer (String source)
     {
         int bounceRow = IntListUtil.getMaxValue(_blocksprite.getRows());
-//         Log.info("startBounceTimer [source=" + source +
-//                  ", bounceStamp=" + _bounceStamp +
-//                  ", time=" + _dview.getTimeStamp() +
-//                  ", bounceRow=" + _bounceRow +
-//                  ", nbounceRow=" + bounceRow + "].");
+//         log.info("startBounceTimer",
+//             "source", source, "bounceStamp", _bounceStamp, "time", _dview.getTimeStamp(),
+//             "bounceRow", _bounceRow, "nbounceRow", bounceRow);
 
         // forcibly land the block if we bounce twice at the same row
         if (_bounceStamp == 0 && _bounceRow == bounceRow) {
@@ -779,26 +741,23 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
             return;
         }
 
-        // if the bounce "timer" is already started, the user probably did
-        // something like rotate the piece while it was bouncing (which is
-        // why we give them the bounce interval), so we don't reset
+        // if the bounce "timer" is already started, the user probably did something like rotate
+        // the piece while it was bouncing (which is why we give them the bounce interval), so we
+        // don't reset
         if (_bounceStamp == 0) {
-            // slow the piece down so that it doesn't fly past the
-            // coordinates at which it's potentially landing; we have to
-            // do this before we tell the sprite that it's bouncing
-            // because changing the velocity fiddles with the rowstamp and
-            // we're going to reset the rowstamp when we tell the sprite
-            // that it's bouncing
+            // slow the piece down so that it doesn't fly past the coordinates at which it's
+            // potentially landing; we have to do this before we tell the sprite that it's bouncing
+            // because changing the velocity fiddles with the rowstamp and we're going to reset the
+            // rowstamp when we tell the sprite that it's bouncing
             _blocksprite.setVelocity(getPieceVelocity(false));
 
-            // set up our bounce interval (it depends on the current piece
-            // velocity and so must be set at the time we bounce)
+            // set up our bounce interval (it depends on the current piece velocity and so must be
+            // set at the time we bounce)
             _bounceInterval = (int)
                 ((_dview.getPieceHeight() * BOUNCE_FRACTION) /
                  getPieceVelocity(false));
-//             Log.info("bounceInterval=" + _bounceInterval +
-//                      ", phei=" + _dview.getPieceHeight() +
-//                      ", vel=" + getPieceVelocity(false));
+//             log.info("bounce", "bounceInterval", _bounceInterval,
+//                 "phei", _dview.getPieceHeight(), "vel", getPieceVelocity(false));
 
             // make a note of the time we started bouncing
             _bounceStamp = _dview.getTimeStamp();
@@ -812,15 +771,13 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     }
 
     /**
-     * Called when the bounce timer expires. Herein we either commit the
-     * landing of a block if it is still landed or let it keep falling if
-     * it is no longer landed.
-    */
+     * Called when the bounce timer expires. Herein we either commit the landing of a block if it
+     * is still landed or let it keep falling if it is no longer landed.
+     */
     protected void bounceTimerExpired ()
     {
-//         Log.info("bounceTimerExpired [bounceStamp=" + _bounceStamp +
-//                  ", time=" + _dview.getTimeStamp() +
-//                  ", bounceRow=" + _bounceRow + "].");
+//         log.info("bounceTimerExpired",
+//             "bounceStamp", _bounceStamp, "time", _dview.getTimeStamp(), "bounceRow", _bounceRow);
 
         // make sure we weren't cancelled for some reason
         if (_bounceStamp != 0) {
@@ -836,11 +793,10 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     }
 
     /**
-     * Drops any pieces that need dropping and returns whether any pieces
-     * were dropped.  Derived classes that would like to drop their pieces
-     * should include a call to this method in their {@link #evolveBoard}
-     * implementation, and must also override {@link #getPieceDropLogic}
-     * to provide their game-specific piece dropper implementation.
+     * Drops any pieces that need dropping and returns whether any pieces were dropped. Derived
+     * classes that would like to drop their pieces should include a call to this method in their
+     * {@link #evolveBoard} implementation, and must also override {@link #getPieceDropLogic} to
+     * provide their game-specific piece dropper implementation.
      */
     protected boolean dropPieces ()
     {
@@ -848,8 +804,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
             public void pieceDropped (
                 int piece, int sx, int sy, int dx, int dy) {
                 float vel = getPieceVelocity(true) * 1.5f;
-                long duration = (long)(_dview.getPieceHeight() *
-                                       Math.abs(dy-sy) / vel);
+                long duration = (long)(_dview.getPieceHeight() * Math.abs(dy-sy) / vel);
                 if (sy < 0) {
                     _dview.createPiece(piece, sx, sy, dx, dy, duration);
                 } else {
@@ -861,10 +816,9 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     }
 
     /**
-     * Returns the piece drop logic used to drop any pieces that need
-     * dropping in the board.  Derived classes that intend to make use of
-     * {@link #dropPieces} must implement this method and return a
-     * reference to their game-specific piece dropper implementation.
+     * Returns the piece drop logic used to drop any pieces that need dropping in the board.
+     * Derived classes that intend to make use of {@link #dropPieces} must implement this method
+     * and return a reference to their game-specific piece dropper implementation.
      */
     protected PieceDropLogic getPieceDropLogic ()
     {
@@ -893,24 +847,24 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
             bounceTimerExpired();
         }
 
-        // if we can't evolve the board because it doesn't need evolving
-        // or things are going on, we stop here
+        // if we can't evolve the board because it doesn't need evolving or things are going on,
+        // we stop here
         if (_stable || !canEvolveBoard()) {
             return;
         }
 
-        // if we do not evolve the board in any way, let the derived class
-        // know that the board stabilized so that they can drop in a new
-        // piece if they like or take whatever other action is appropriate
+        // if we do not evolve the board in any way, let the derived class know that the board
+        // stabilized so that they can drop in a new piece if they like or take whatever other
+        // action is appropriate
         boolean evolving = evolveBoard();
         boolean debug = false;
         if (debug) {
-            log.info("Evolved board [evolving=" + evolving + "].");
+            log.info("Evolved board", "evolving", evolving);
         }
 
-        // if we're no longer evolving and the action has not ended, go
-        // ahead and let our derived class know that the board has
-        // stabilized so that it can drop in the next piece or somesuch
+        // if we're no longer evolving and the action has not ended, go ahead and let our derived
+        // class know that the board has stabilized so that it can drop in the next piece or
+        // somesuch
         if (!evolving) {
             // no evolving again until someone destabilizes the board
             _stable = true;
@@ -921,8 +875,8 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
             }
             boardDidStabilize();
 
-            // ensure that if we have been postponing action due to board
-            // evolution, that it will now be cleared
+            // ensure that if we have been postponing action due to board evolution, that it will
+            // now be cleared
             if (!_ctrl.hasAction()) {
                 if (debug) {
                     log.info("Maybe clearing action.");
@@ -971,8 +925,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     {
         // don't overwrite an existing zip
         if (_zipstamp == 0) {
-            // if we're paused, inherit the pause time, otherwise use the
-            // current time
+            // if we're paused, inherit the pause time, otherwise use the current time
             if (_rpstamp != 0) {
                 _zipstamp = _rpstamp;
             } else {
@@ -982,8 +935,8 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     }
 
     /**
-     * Called periodically on the frame tick.  Raises the board row based
-     * on the time since the current row traversal began.
+     * Called periodically on the frame tick. Raises the board row based on the time since the
+     * current row traversal began.
      */
     /*
     protected void raiseBoard (long tickStamp)
@@ -1040,10 +993,9 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
         _dview.setRiseOffset(ypos);
 
         if (rose) {
-            // check to see if this means doom and defeat (even though the
-            // game might be over, we still want to advance the piece
-            // packet one last time and do the last rise so that the
-            // server can tell that we kicked the proverbial bucket)
+            // check to see if this means doom and defeat (even though the game might be over, we
+            // still want to advance the piece packet one last time and do the last rise so that
+            // the server can tell that we kicked the proverbial bucket)
             boolean canRise = checkCanRise();
 
             // apply the rising row pieces to the board
@@ -1062,23 +1014,21 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
                 unstabilizeBoard();
 
             } else {
-                log.debug("Sticking fork in it [risers=" +
-                          StringUtil.toString(pieces) + ".");
+                log.debug("Sticking fork in it", "risers",  pieces);
 
                 // let the controller know that we're done for
                 _ctrl.resetGame();
             }
         }
 
-//         Log.info("Board rise [msecs=" + msecs + ", roff=" + ypos +
-//                  ", pctdone=" + pctdone + ", zipsecs=" + zipsecs + "].");
+//         log.info("Board rise",
+//             "msecs", msecs, "roff", ypos, "pctdone", pctdone, "zipsecs", zipsecs);
     }
     */
 
     /**
-     * Called to determine whether or not rising a new row into the board
-     * is legal. The default implementation will return false if the top
-     * row of the board contains any pieces.
+     * Called to determine whether or not rising a new row into the board is legal. The default
+     * implementation will return false if the top row of the board contains any pieces.
      */
     protected boolean checkCanRise ()
     {
@@ -1086,10 +1036,9 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     }
 
     /**
-     * Called only for board-rising puzzles before effecting the rising of
-     * the board by one row.  Derived classes may wish to override this
-     * method to add any desired behaviour, but should be sure to call
-     * <code>super.boardWillRise()</code>.
+     * Called only for board-rising puzzles before effecting the rising of the board by one row.
+     * Derived classes may wish to override this method to add any desired behaviour, but should
+     * be sure to call <code>super.boardWillRise()</code>.
      */
     protected void boardWillRise ()
     {
@@ -1097,17 +1046,16 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     }
 
     /**
-     * Called only for board-rising puzzles when the board has finished
-     * rising one row.  Derived classes may wish to override this method
-     * to add any desired behaviour, but should be sure to call
-     * <code>super.boardDidRise()</code>.
+     * Called only for board-rising puzzles when the board has finished rising one row. Derived
+     * classes may wish to override this method to add any desired behaviour, but should be sure
+     * to call <code>super.boardDidRise()</code>.
      */
     protected void boardDidRise ()
     {
         // nothing for now
     }
 
-    /** The yohoho context. */
+    /** The puzzle context. */
     protected PuzzleContext _ctx;
 
     /** Our puzzle controller. */
@@ -1143,8 +1091,8 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     /** The drop block sprite associated with the landing block, if any. */
     protected DropBlockSprite _blocksprite;
 
-    /** The piece dropper used to drop pieces in the board if the puzzle
-     * chooses to make use of piece dropping functionality. */
+    /** The piece dropper used to drop pieces in the board if the puzzle chooses to make use of
+     * piece dropping functionality. */
     protected PieceDropper _dropper;
 
     /** The time at which the board rise was paused. */
@@ -1168,8 +1116,8 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     /** The row at which we last bounced, or {@link Integer#MIN_VALUE}. */
     protected int _bounceRow;
 
-    /** The timestamp used to keep track of when the drop block was
-     * removed so that we can fast-forward it when restored. */
+    /** The timestamp used to keep track of when the drop block was removed so that we can
+     * fast-forward it when restored. */
     protected long _blockStamp;
 
     /** Whether the drop blocks are currently dropping quickly. */
@@ -1191,8 +1139,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
         }
     };
 
-    /** A piece operation that will update piece sprites as board
-     * positions are updated. */
+    /** A piece operation that will update piece sprites as board positions are updated. */
     protected DropBoard.PieceOperation _updateBoardOp =
         new DropBoard.PieceOperation() {
         public boolean execute (DropBoard board, int col, int row) {
@@ -1210,7 +1157,6 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     /** The delay in milliseconds between board rising intervals. */
     protected static final long RISE_INTERVAL = 50L;
 
-    /** Defines the distance of a piece that we allow to bounce before we
-     * land it. */
+    /** Defines the distance of a piece that we allow to bounce before we land it. */
     protected static final float BOUNCE_FRACTION = 0.125f;
 }

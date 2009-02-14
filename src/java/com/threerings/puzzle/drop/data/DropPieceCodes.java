@@ -24,8 +24,7 @@ package com.threerings.puzzle.drop.data;
 import com.threerings.util.DirectionCodes;
 
 /**
- * The drop piece codes interface contains constants common to the drop
- * game package.
+ * The drop piece codes interface contains constants common to the drop game package.
  */
 public interface DropPieceCodes extends DirectionCodes
 {

@@ -27,12 +27,11 @@ public class DropBoardUtil
     implements DirectionCodes
 {
     /**
-     * Returns the orientation resulting from rotating the block in the
-     * given direction the specified number of times.
+     * Returns the orientation resulting from rotating the block in the given direction the
+     * specified number of times.
      *
      * @param orient the current orientation.
-     * @param dir the direction to rotate in; one of <code>CW</code> or
-     * <code>CCW</code>.
+     * @param dir the direction to rotate in; one of <code>CW</code> or <code>CCW</code>.
      * @param count the number of rotations to perform.
      *
      * @return the rotated orientation.
@@ -46,12 +45,10 @@ public class DropBoardUtil
     }
 
     /**
-     * Returns the orientation resulting from rotating the block in
-     * the given direction.
+     * Returns the orientation resulting from rotating the block in the given direction.
      *
      * @param orient the current orientation.
-     * @param dir the direction to rotate in; one of <code>CW</code> or
-     * <code>CCW</code>.
+     * @param dir the direction to rotate in; one of <code>CW</code> or <code>CCW</code>.
      *
      * @return the rotated orientation.
      */
