@@ -83,7 +83,6 @@ public class Percentiler
         if (_max < _min) {
             log.warning("Percentiler initialized with bogus range. Coping.",
                 "min", _min, "max", _max);
-
             _max = _min + 1;
         }
 
@@ -125,17 +124,13 @@ public class Percentiler
             int newmax = (value > _max) ? (_min + (int)Math.ceil((value - _min) * 1.2f)) : _max;
 
             if (newmin > _min || newmax < _max) {
-                log.warning("Grew our range in crazy ways?!",
-                    "value", value, "total", _total,
-                    "new", ("" + newmin + ":" + newmax),
-                    "old", ("" + _min + ":" + _max));
+                log.warning("Grew our range in crazy ways?!", "value", value, "total", _total,
+                            "new", ("" + newmin + ":" + newmax), "old", ("" + _min + ":" + _max));
             }
 
             if (logNewMax) {
-                log.info("Resizing",
-                    "value", value, "total", _total,
-                    "new", ("" + newmin + ":" + newmax),
-                    "old", ("" + _min + ":" + _max));
+                log.info("Resizing", "value", value, "total", _total,
+                         "new", ("" + newmin + ":" + newmax), "old", ("" + _min + ":" + _max));
             }
 
             // create a new counts array and map the old array to the new
@@ -411,7 +406,8 @@ public class Percentiler
         int idx = Math.round((value - _min) * BUCKET_COUNT / (_max - _min));
         idx = Math.min(idx, BUCKET_COUNT-1);
         if (idx < 0 || idx >= BUCKET_COUNT) {
-            log.warning("Bogus bucket index, using 0", "value", value, "idx", idx, new Throwable());
+            log.warning("Bogus bucket index, using 0", "value", value, "max", _max, "min", _min,
+                        "idx", idx, new Throwable());
             return 0;
         }
         return idx;
