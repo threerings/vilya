@@ -42,13 +42,11 @@ public class StatRecord extends PersistentRecord
     public static final int SCHEMA_VERSION = 4;
 
     /** The identifier of the player this is a stat for. */
-    @Id
-    @Column(name="PLAYER_ID")
+    @Id @Column(name="PLAYER_ID")
     public int playerId;
 
     /** The code of the stat. */
-    @Id
-    @Column(name="STAT_CODE")
+    @Id @Column(name="STAT_CODE")
     public int statCode;
 
     /** The data associated with the stat. */

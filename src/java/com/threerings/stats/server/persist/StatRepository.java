@@ -4,6 +4,7 @@
 package com.threerings.stats.server.persist;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,6 +25,7 @@ import com.samskivert.depot.DuplicateKeyException;
 import com.samskivert.depot.Key;
 import com.samskivert.depot.PersistenceContext;
 import com.samskivert.depot.PersistentRecord;
+import com.samskivert.depot.operator.Conditionals;
 import com.samskivert.depot.clause.FieldDefinition;
 import com.samskivert.depot.clause.FromOverride;
 import com.samskivert.depot.clause.QueryClause;
@@ -178,6 +180,15 @@ public class StatRepository extends DepotRepository
     {
         int ocode = _stringToCode.get(type).remove(value);
         _codeToString.get(type).remove(ocode);
+    }
+
+    /**
+     * Deletes all data associated with the supplied players.
+     */
+    public void purgePlayers (Collection<Integer> playerIds)
+    {
+        deleteAll(StatRecord.class,
+                  new Where(new Conditionals.In(StatRecord.PLAYER_ID, playerIds)));
     }
 
     /**
