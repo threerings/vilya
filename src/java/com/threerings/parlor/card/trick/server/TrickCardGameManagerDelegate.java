@@ -32,10 +32,13 @@ import com.threerings.util.Name;
 
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.dobj.DObject;
+import com.threerings.presents.dobj.RootDObjectManager;
+import com.threerings.presents.server.InvocationManager;
 
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.data.PlaceObject;
+import com.threerings.crowd.server.PlaceManager;
 
 import com.threerings.parlor.card.data.Card;
 import com.threerings.parlor.card.data.CardGameObject;
@@ -63,6 +66,27 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
      */
     @Deprecated public TrickCardGameManagerDelegate (CardGameManager manager)
     {
+    }
+
+    @Override
+    public void init (PlaceManager plmgr, RootDObjectManager omgr, InvocationManager invmgr)
+    {
+        super.init(plmgr, omgr, invmgr);
+
+        // Create these intervals HERE after the _omgr is actually initialized.
+        _turnTimeoutInterval = new Interval(_omgr) {
+            @Override
+            public void expired () {
+                _turnTimedOut = true;
+                turnTimedOut();
+            }
+        };
+        _endTrickInterval = new Interval(_omgr) {
+            @Override
+            public void expired () {
+                endTrick();
+            }
+        };
     }
 
     @Override
@@ -566,21 +590,10 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
     }
 
     /** The all-purpose turn timeout interval.  */
-    protected Interval _turnTimeoutInterval = new Interval(_omgr) {
-        @Override
-        public void expired () {
-            _turnTimedOut = true;
-            turnTimedOut();
-        }
-    };
+    protected Interval _turnTimeoutInterval;
 
     /** Calls {@link #endTrick} upon expiration. */
-    protected Interval _endTrickInterval = new Interval(_omgr) {
-        @Override
-        public void expired () {
-            endTrick();
-        }
-    };
+    protected Interval _endTrickInterval;
 
     /** The card game manager. */
     protected CardGameManager _cgmgr;
