@@ -39,7 +39,7 @@ public interface CardGameReceiver extends InvocationReceiver
      * @param hand the received hand
      */
     public void receivedHand (int oid, Hand hand);
-    
+
     /**
      * Dispatched to the client when it has received a set of cards
      * from another player.
@@ -48,7 +48,7 @@ public interface CardGameReceiver extends InvocationReceiver
      * @param cards the cards received
      */
     public void receivedCardsFromPlayer (int plidx, Card[] cards);
-    
+
     /**
      * Dispatched to the client when the server has forced it to send
      * a set of cards to another player.
@@ -57,7 +57,7 @@ public interface CardGameReceiver extends InvocationReceiver
      * @param cards the cards sent
      */
     public void sentCardsToPlayer (int plidx, Card[] cards);
-    
+
     /**
      * Dispatched to the client when a set of cards is transferred between
      * two other players in the game.

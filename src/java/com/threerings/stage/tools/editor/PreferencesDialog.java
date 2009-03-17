@@ -102,7 +102,7 @@ public class PreferencesDialog extends JInternalFrame
     {
         JFileChooser chooser;
 
-        // figure out which 
+        // figure out which
         File f = new File(button.getText());
         if (!f.exists()) {
             chooser = new JFileChooser();

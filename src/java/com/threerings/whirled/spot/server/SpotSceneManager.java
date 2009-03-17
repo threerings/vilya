@@ -208,7 +208,7 @@ public class SpotSceneManager extends SceneManager
     {
         return new SceneLocation(entry.getOppLocation(), body.getOid());
     }
-    
+
     /**
      * Move the specified body to the default portal, if possible.
      */
@@ -400,11 +400,11 @@ public class SpotSceneManager extends SceneManager
     {
         handleClusterMessageRequest(sourceOid, new UserMessage(source, bundle, message, mode));
     }
-    
+
     /**
      * Called by the {@link SpotProvider} when we receive a cluster message request.
      */
-    protected void handleClusterMessageRequest (int sourceOid, UserMessage message) 
+    protected void handleClusterMessageRequest (int sourceOid, UserMessage message)
     {
         ClusterRecord clrec = getCluster(sourceOid);
         if (clrec == null) {

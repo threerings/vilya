@@ -26,7 +26,7 @@ import com.threerings.io.SimpleStreamableObject;
 import com.threerings.util.Name;
 
 /**
- * Stores tournament configuration data. 
+ * Stores tournament configuration data.
  */
 public class TourneyConfig extends SimpleStreamableObject
 {

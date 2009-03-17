@@ -39,7 +39,7 @@ public interface TrickCardGameService extends InvocationService
      * @param cards the cards to send
      */
     public void sendCardsToPlayer (Client client, int toidx, Card[] cards);
-    
+
     /**
      * Plays a card in the trick.
      *
@@ -49,7 +49,7 @@ public interface TrickCardGameService extends InvocationService
      * that the request is for the current trick
      */
     public void playCard (Client client, Card card, int handSize);
-    
+
     /**
      * A request for a rematch.
      *

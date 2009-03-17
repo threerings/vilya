@@ -25,8 +25,7 @@ import com.threerings.parlor.card.client.CardGameController;
 import com.threerings.parlor.turn.client.TurnGameControllerDelegate;
 
 /**
- * A card game controller delegate for trick-based card games, such as
- * Spades and Hearts.
+ * A card game controller delegate for trick-based card games, such as Spades and Hearts.
  */
 public class TrickCardGameControllerDelegate
     extends TurnGameControllerDelegate
@@ -36,13 +35,12 @@ public class TrickCardGameControllerDelegate
      *
      * @param controller the game controller
      */
-    public TrickCardGameControllerDelegate (CardGameController
-        controller)
+    public TrickCardGameControllerDelegate (CardGameController controller)
     {
         super(controller);
         _cgctrl = controller;
     }
-    
+
     /** The card game controller. */
     protected CardGameController _cgctrl;
 }

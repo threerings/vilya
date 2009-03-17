@@ -36,7 +36,7 @@ public interface StageSceneService extends InvocationService
      */
     public void addObject (Client client, ObjectInfo info,
                            ConfirmListener listener);
-    
+
     /**
      * Requests to remove the supplied objects from the current scene.
      */

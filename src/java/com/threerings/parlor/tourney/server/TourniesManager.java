@@ -73,7 +73,7 @@ public abstract class TourniesManager
     }
 
     // from interface TourniesService
-    public void createTourney (ClientObject caller, TourneyConfig config, 
+    public void createTourney (ClientObject caller, TourneyConfig config,
             final InvocationService.ResultListener listener)
         throws InvocationException
     {

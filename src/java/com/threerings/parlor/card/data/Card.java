@@ -35,7 +35,7 @@ public class Card implements DSet.Entry, Comparable<Card>, CardCodes
      */
     public Card ()
     {}
-    
+
     /**
      * Creates a new card.
      *
@@ -46,10 +46,10 @@ public class Card implements DSet.Entry, Comparable<Card>, CardCodes
     {
         _value = (byte)((suit << 5) | number);
     }
-    
+
     /**
-     * Returns the value of the card, either from 2 to 11 or
-     * KING, QUEEN, JACK, ACE, RED_JOKER, or BLACK_JOKER.
+     * Returns the value of the card, either from 2 to 11 or KING, QUEEN, JACK, ACE, RED_JOKER, or
+     * BLACK_JOKER.
      *
      * @return the value of the card
      */
@@ -57,10 +57,10 @@ public class Card implements DSet.Entry, Comparable<Card>, CardCodes
     {
         return (_value & 0x1F);
     }
-    
+
     /**
-     * Returns the suit of the card: SPADES, HEARTS, DIAMONDS, or
-     * CLUBS.  If the card is the joker, the suit is undefined.
+     * Returns the suit of the card: SPADES, HEARTS, DIAMONDS, or CLUBS. If the card is the joker,
+     * the suit is undefined.
      *
      * @return the suit of the card
      */
@@ -68,7 +68,7 @@ public class Card implements DSet.Entry, Comparable<Card>, CardCodes
     {
         return (_value >> 5);
     }
-    
+
     /**
      * Checks whether the card is a number card (2 to 10).
      *
@@ -77,10 +77,10 @@ public class Card implements DSet.Entry, Comparable<Card>, CardCodes
     public boolean isNumber ()
     {
         int number = getNumber();
-        
+
         return number >= 2 && number <= 10;
     }
-    
+
     /**
      * Checks whether the card is a face card (KING, QUEEN, or JACK).
      *
@@ -89,10 +89,10 @@ public class Card implements DSet.Entry, Comparable<Card>, CardCodes
     public boolean isFace ()
     {
         int number = getNumber();
-        
+
         return number == KING || number == QUEEN || number == JACK;
     }
-    
+
     /**
      * Checks whether the card is an ace.
      *
@@ -102,7 +102,7 @@ public class Card implements DSet.Entry, Comparable<Card>, CardCodes
     {
         return getNumber() == ACE;
     }
-    
+
     /**
      * Checks whether the card is a joker.
      *
@@ -111,41 +111,41 @@ public class Card implements DSet.Entry, Comparable<Card>, CardCodes
     public boolean isJoker ()
     {
         int number = getNumber();
-        
+
         return number == RED_JOKER || number == BLACK_JOKER;
     }
-    
+
     /**
-     * Checks whether or not this card is valid.  The no-arg public
-     * constructor for deserialization creates an invalid card.
+     * Checks whether or not this card is valid. The no-arg public constructor for deserialization
+     * creates an invalid card.
      *
      * @return true if this card is valid, false if not
      */
     public boolean isValid ()
     {
         int number = getNumber(), suit = getSuit();
-        
+
         return number == RED_JOKER || number == BLACK_JOKER ||
                (number >= 2 && number <= ACE &&
                 suit >= SPADES && suit <= DIAMONDS);
     }
-    
+
     // Documentation inherited.
     public Comparable<?> getKey ()
     {
         if (_key == null) {
             _key = Byte.valueOf(_value);
         }
-        
+
         return _key;
     }
-    
+
     @Override
     public int hashCode ()
     {
         return _value;
     }
-    
+
     @Override
     public boolean equals (Object other)
     {
@@ -156,21 +156,20 @@ public class Card implements DSet.Entry, Comparable<Card>, CardCodes
             return false;
         }
     }
-    
+
     /**
-     * Compares this card to another.  The card order is the same as the
-     * initial deck ordering: two through ten, jack, queen, king, ace for
-     * spades, hearts, clubs, and diamonds, then the red joker and the
-     * black joker.
+     * Compares this card to another. The card order is the same as the initial deck ordering: two
+     * through ten, jack, queen, king, ace for spades, hearts, clubs, and diamonds, then the red
+     * joker and the black joker.
      *
      * @param other the other card to compare this to
-     * @return -1, 0, or +1, depending on whether this card is less than,
-     * equal to, or greater than the other card
+     * @return -1, 0, or +1, depending on whether this card is less than, equal to, or greater
+     * than the other card
      */
     public int compareTo (Card other)
     {
         int otherValue = other._value;
-        
+
         if (_value > otherValue) {
             return +1;
         } else if(_value < otherValue) {
@@ -179,12 +178,12 @@ public class Card implements DSet.Entry, Comparable<Card>, CardCodes
             return 0;
         }
     }
-    
+
     @Override
     public String toString ()
     {
         int number = getNumber();
-        
+
         if (number == RED_JOKER) {
             return "RJ";
         }
@@ -193,7 +192,7 @@ public class Card implements DSet.Entry, Comparable<Card>, CardCodes
         }
         else {
             StringBuilder sb = new StringBuilder();
-            
+
             if (number >= 2 && number <= 9) {
                 sb.append(Integer.toString(number));
             }
@@ -207,7 +206,7 @@ public class Card implements DSet.Entry, Comparable<Card>, CardCodes
                     default: sb.append('?'); break;
                 }
             }
-            
+
             switch (getSuit()) {
                 case SPADES: sb.append('s'); break;
                 case HEARTS: sb.append('h'); break;
@@ -215,14 +214,14 @@ public class Card implements DSet.Entry, Comparable<Card>, CardCodes
                 case DIAMONDS: sb.append('d'); break;
                 default: sb.append('?'); break;
             }
-            
+
             return sb.toString();
         }
     }
-    
+
     /** The number of the card. */
     protected byte _value;
-    
+
     /** The comparison key. */
     @ActionScript(omit=true)
     protected transient Byte _key;

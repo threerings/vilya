@@ -35,7 +35,7 @@ public interface CardSpriteObserver
      * @param me the mouse event associated with the drag
      */
     public void cardSpriteClicked (CardSprite sprite, MouseEvent me);
-    
+
     /**
      * Notifies the observer that the user moved the mouse pointer onto
      * a card sprite.
@@ -44,7 +44,7 @@ public interface CardSpriteObserver
      * @param me the mouse event associated with the entrance
      */
     public void cardSpriteEntered (CardSprite sprite, MouseEvent me);
-    
+
     /**
      * Notifies the observer that the user moved the mouse pointer off of
      * a card sprite.
@@ -53,7 +53,7 @@ public interface CardSpriteObserver
      * @param me the mouse event associated with the exit
      */
     public void cardSpriteExited (CardSprite sprite, MouseEvent me);
-    
+
     /**
      * Notifies the observer that the user dragged a card sprite to a new
      * location.

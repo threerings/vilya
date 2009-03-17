@@ -82,7 +82,7 @@ public interface StageContext
      * Returns a reference to the colorization repository.
      */
     public ColorPository getColorPository ();
-    
+
     /**
      * Translates the specified message using the default bundle.
      */

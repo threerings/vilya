@@ -65,7 +65,7 @@ public class PlacementConstraints
         _tilemgr = tilemgr;
         _scene = scene;
         _mmodel = StageMisoSceneModel.getSceneModel(scene.getSceneModel());
-        
+
         // add all the objects in the scene
         StageMisoSceneModel.ObjectVisitor visitor =
             new StageMisoSceneModel.ObjectVisitor() {
@@ -81,7 +81,7 @@ public class PlacementConstraints
         };
         _mmodel.visitObjects(visitor);
     }
-    
+
     /**
      * Determines whether the constraints allow the specified object to be
      * added to the scene.
@@ -95,7 +95,7 @@ public class PlacementConstraints
         return allowModifyObjects(new ObjectInfo[] { info },
             new ObjectInfo[0]);
     }
-    
+
     /**
      * Adds the specified object through the constraints.
      */
@@ -107,7 +107,7 @@ public class PlacementConstraints
             _objectData.put(info, data);
         }
     }
-    
+
     /**
      * Determines whether the constraints allow the specified object to be
      * removed from the scene.
@@ -121,7 +121,7 @@ public class PlacementConstraints
         return allowModifyObjects(new ObjectInfo[0],
             new ObjectInfo[] { info });
     }
-    
+
     /**
      * Removes the specified object through the constraints.
      */
@@ -130,7 +130,7 @@ public class PlacementConstraints
         _scene.removeObject(info);
         _objectData.remove(info);
     }
-    
+
     /**
      * Determines whether the constraints allow the specified objects to be
      * added and removed simultaneously.
@@ -149,12 +149,12 @@ public class PlacementConstraints
                 return INTERNAL_ERROR;
             }
         }
-        
+
         ObjectData[] removedData = getObjectDataFromInfo(removed);
         if (removedData == null) {
             return INTERNAL_ERROR;
         }
-        
+
         return allowModifyObjects(addedData, removedData);
     }
 
@@ -178,7 +178,7 @@ public class PlacementConstraints
         }
         return data;
     }
-    
+
     /**
      * Determines whether the constraints allow the specified objects to be
      * added and removed simultaneously.  Subclasses that wish to define
@@ -192,62 +192,62 @@ public class PlacementConstraints
         ObjectData[] removed)
     {
         DirectionHeight dirheight = new DirectionHeight();
-        
+
         for (int i = 0; i < added.length; i++) {
             if (added[i].tile.hasConstraint(ObjectTileSet.ON_SURFACE) &&
                 !isOnSurface(added[i], added, removed)) {
                 return MessageBundle.qualify(STAGE_MESSAGE_BUNDLE,
                     "m.not_on_surface");
             }
-            
+
             int dir = getConstraintDirection(added[i], ObjectTileSet.ON_WALL);
             if (dir != NONE && !isOnWall(added[i], added, removed, dir)) {
                 return MessageBundle.qualify(STAGE_MESSAGE_BUNDLE,
                     "m.not_on_wall");
             }
-            
+
             if (getConstraintDirectionHeight(added[i], ObjectTileSet.ATTACH,
                     dirheight) && !isAttached(added[i], added, removed,
                         dirheight.dir, dirheight.low)) {
                 return MessageBundle.qualify(STAGE_MESSAGE_BUNDLE,
                     "m.not_attached");
             }
-            
+
             dir = getConstraintDirection(added[i], ObjectTileSet.SPACE);
             if (dir != NONE && !hasSpace(added[i], added, removed, dir)) {
                 return MessageBundle.qualify(STAGE_MESSAGE_BUNDLE,
                     "m.no_space");
             }
-            
+
             if (hasSpaceConstrainedAdjacent(added[i], added, removed)) {
                 return MessageBundle.qualify(STAGE_MESSAGE_BUNDLE,
                     "m.no_space_adj");
             }
         }
-        
+
         for (int i = 0; i < removed.length; i++) {
             if (removed[i].tile.hasConstraint(ObjectTileSet.SURFACE) &&
                 hasOnSurface(removed[i], added, removed)) {
                 return MessageBundle.qualify(STAGE_MESSAGE_BUNDLE,
                     "m.has_on_surface");
             }
-            
+
             int dir = getConstraintDirection(removed[i], ObjectTileSet.WALL);
             if (dir != NONE) {
                 if (hasOnWall(removed[i], added, removed, dir)) {
                     return MessageBundle.qualify(STAGE_MESSAGE_BUNDLE,
                         "m.has_on_wall");
-                
+
                 } else if (hasAttached(removed[i], added, removed, dir)) {
                     return MessageBundle.qualify(STAGE_MESSAGE_BUNDLE,
                         "m.has_attached");
                 }
             }
         }
-        
+
         return null;
     }
-    
+
     /**
      * Determines whether the specified surface has anything on it that won't
      * be held up if the surface is removed.
@@ -265,7 +265,7 @@ public class PlacementConstraints
         }
         return false;
     }
-    
+
     /**
      * Determines whether the specified wall has anything on it that won't be
      * held up if the wall is removed.
@@ -283,7 +283,7 @@ public class PlacementConstraints
         }
         return false;
     }
-    
+
     /**
      * Determines whether the specified wall has anything attached to it that
      * won't be held up if the wall is removed.
@@ -292,7 +292,7 @@ public class PlacementConstraints
         ObjectData[] removed, int dir)
     {
         DirectionHeight dirheight = new DirectionHeight();
-        
+
         List<ObjectData> objects = getObjectData(getAdjacentEdge(data.bounds,
             DirectionUtil.getOpposite(dir)), added, removed);
         for (int i = 0, size = objects.size(); i < size; i++) {
@@ -305,7 +305,7 @@ public class PlacementConstraints
         }
         return false;
     }
-    
+
     /**
      * Verifies that the objects adjacent to the given object will still have
      * their space constraints met if the object is added.
@@ -316,7 +316,7 @@ public class PlacementConstraints
         Rectangle r = data.bounds;
         // grow the ObjectData bounds 1 square in each direction
         _constrainRect.setBounds(r.x - 1, r.y - 1, r.width + 2, r.height + 2);
-        
+
         List<ObjectData> objects = getObjectData(_constrainRect, added, removed);
         for (int i = 0, size = objects.size(); i < size; i++) {
             ObjectData odata = objects.get(i);
@@ -327,7 +327,7 @@ public class PlacementConstraints
         }
         return false;
     }
-    
+
     /**
      * Determines whether the specified object has empty space in the specified
      * direction.
@@ -338,7 +338,7 @@ public class PlacementConstraints
         return getObjectData(getAdjacentEdge(data.bounds, dir), added,
             removed).size() == 0;
     }
-    
+
     /**
      * Determines whether the specified object is on a surface.
      */
@@ -348,7 +348,7 @@ public class PlacementConstraints
         return isCovered(data.bounds, added, removed, ObjectTileSet.SURFACE,
             null);
     }
-    
+
     /**
      * Determines whether the specified object is on a wall facing the
      * specified direction.
@@ -359,7 +359,7 @@ public class PlacementConstraints
         return isCovered(data.bounds, added, removed,
             getDirectionalConstraint(ObjectTileSet.WALL, dir), null);
     }
-    
+
     /**
      * Determines whether the specified object is attached to another object in
      * the specified direction and at the specified height.
@@ -371,7 +371,7 @@ public class PlacementConstraints
             getDirectionalConstraint(ObjectTileSet.WALL, dir), low ?
             getDirectionalConstraint(ObjectTileSet.WALL, dir, true) : null);
     }
-    
+
     /**
      * Given a rectangle, determines whether all of the tiles within
      * the rectangle intersect an object.  If the constraint parameter is
@@ -402,7 +402,7 @@ public class PlacementConstraints
         }
         return true;
     }
-    
+
     /**
      * Creates and returns a rectangle that covers the specified rectangle's
      * adjacent edge (the squares one tile beyond the bounds) in the specified
@@ -413,23 +413,23 @@ public class PlacementConstraints
         switch (dir) {
             case NORTH:
                 return new Rectangle(rect.x - 1, rect.y, 1, rect.height);
-                
+
             case EAST:
                 return new Rectangle(rect.x, rect.y - 1, rect.width, 1);
-                
+
             case SOUTH:
                 return new Rectangle(rect.x + rect.width, rect.y, 1,
                     rect.height);
-  
+
             case WEST:
                 return new Rectangle(rect.x, rect.y + rect.height,
                     rect.width, 1);
-                
+
             default:
                 return null;
         }
     }
-    
+
     /**
      * Returns the direction in which the specified object is constrained by
      * appending "[NESW]" to the given constraint prefix.  Returns
@@ -441,7 +441,7 @@ public class PlacementConstraints
         return getConstraintDirectionHeight(data, prefix, dirheight) ?
             dirheight.dir : NONE;
     }
-    
+
     /**
      * Populates the supplied {@link DirectionHeight} object with the direction
      * and height of the constraint identified by the given prefix.
@@ -456,7 +456,7 @@ public class PlacementConstraints
         if (constraints == null) {
             return false;
         }
-        
+
         for (int i = 0; i < constraints.length; i++) {
             if (constraints[i].startsWith(prefix)) {
                 int fromidx = prefix.length(),
@@ -470,7 +470,7 @@ public class PlacementConstraints
         }
         return false;
     }
-    
+
     /**
      * Given a constraint prefix and a direction, returns the directional
      * constraint.
@@ -479,7 +479,7 @@ public class PlacementConstraints
     {
         return getDirectionalConstraint(prefix, dir, false);
     }
-    
+
     /**
      * Given a constraint prefix, direction, and height, returns the
      * directional constraint.
@@ -490,7 +490,7 @@ public class PlacementConstraints
         return prefix + DirectionUtil.toShortString(dir) +
             (low ? ObjectTileSet.LOW : "");
     }
-    
+
     /**
      * Finds all objects whose bounds intersect the given rectangle and
      * returns a list containing their {@link ObjectData} elements.
@@ -502,7 +502,7 @@ public class PlacementConstraints
         ObjectData[] removed)
     {
         List<ObjectData> list = Lists.newArrayList();
-        
+
         for (Iterator<ObjectData> it = _objectData.values().iterator(); it.hasNext(); ) {
             ObjectData data = it.next();
             if (rect.intersects(data.bounds) && !ListUtil.contains(removed,
@@ -510,16 +510,16 @@ public class PlacementConstraints
                 list.add(data);
             }
         }
-        
+
         for (int i = 0; i < added.length; i++) {
             if (rect.intersects(added[i].bounds)) {
                 list.add(added[i]);
             }
         }
-        
+
         return list;
     }
-    
+
     /**
      * Using the tile manager, computes and returns the specified object's
      * data.
@@ -532,42 +532,42 @@ public class PlacementConstraints
                 tile.getBaseHeight());
             bounds.translate(1 - bounds.width, 1 - bounds.height);
             return new ObjectData(bounds, tile);
-            
+
         } catch (Exception e) {
             log.warning("Error retrieving tile for object [info=" + info + "].", e);
             return null;
         }
     }
-    
+
     /** Contains information about an object used in checking constraints. */
     protected class ObjectData
     {
         public Rectangle bounds;
         public ObjectTile tile;
-        
+
         public ObjectData (Rectangle bounds, ObjectTile tile)
         {
             this.bounds = bounds;
             this.tile = tile;
         }
     }
-    
+
     /** Contains the direction and height of a constraint. */
     protected class DirectionHeight
     {
         public int dir;
         public boolean low;
     }
-    
+
     /** The tile manager to use for object dimensions and constraints. */
     protected TileManager _tilemgr;
-    
+
     /** The scene being checked for constraints. */
     protected StageScene _scene;
-    
+
     /** The Miso scene model. */
     protected StageMisoSceneModel _mmodel;
-    
+
     /** For all objects in the scene, maps {@link ObjectInfo}s to
      * {@link ObjectData}s. */
     protected HashMap<ObjectInfo,ObjectData> _objectData = new HashMap<ObjectInfo,ObjectData>();

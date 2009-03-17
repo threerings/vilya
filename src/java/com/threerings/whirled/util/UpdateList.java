@@ -78,7 +78,7 @@ public class UpdateList
         if (_updates.size() == 0 || _updates.get(0).getSceneVersion() > fromVersion) {
             return null;
         }
-        
+
         List<SceneUpdate> updates = Lists.newArrayList();
         for (SceneUpdate update : _updates) {
             if (update.getSceneVersion() >= fromVersion) {

@@ -87,7 +87,7 @@ public class ObjectEditorDialog extends EditorDialog
     /**
      * Prepare the dialog for display. This method should be called before <code>display()</code>
      * is called.
-     * 
+     *
      * @param scobj the object to edit.
      */
     public void prepare (SceneObject scobj)

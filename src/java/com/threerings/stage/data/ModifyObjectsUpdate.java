@@ -34,10 +34,10 @@ public class ModifyObjectsUpdate extends SceneUpdate
 {
     /** The objects added to the scene (or <code>null</code> for none). */
     public ObjectInfo[] added;
-    
+
     /** The objects removed from the scene (or <code>null</code> for none). */
     public ObjectInfo[] removed;
-    
+
     /**
      * Initializes this update with all necessary data.
      *

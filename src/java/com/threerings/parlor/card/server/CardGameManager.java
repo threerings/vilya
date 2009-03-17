@@ -36,8 +36,8 @@ import com.threerings.parlor.game.server.GameManager;
 import com.threerings.parlor.turn.server.TurnGameManager;
 
 /**
- * A manager class for card games.  Handles common functions like dealing
- * hands of cards to all players.
+ * A manager class for card games. Handles common functions like dealing hands of cards to all
+ * players.
  */
 public class CardGameManager extends GameManager
     implements TurnGameManager, CardCodes
@@ -48,15 +48,15 @@ public class CardGameManager extends GameManager
         super.didStartup();
         _cardgameobj = (CardGameObject)_gameobj;
     }
-    
+
     // Documentation inherited.
     public void turnWillStart ()
     {}
-    
+
     // Documentation inherited.
     public void turnDidStart ()
     {}
-    
+
     // Documentation inherited.
     public void turnDidEnd ()
     {}
@@ -72,9 +72,8 @@ public class CardGameManager extends GameManager
     }
 
     /**
-     * This should be called to start a rematched game. It just starts the
-     * current game anew, but provides a mechanism for derived classes to
-     * do special things when there is a rematch.
+     * This should be called to start a rematched game. It just starts the current game anew, but
+     * provides a mechanism for derived classes to do special things when there is a rematch.
      */
     public void rematchGame ()
     {
@@ -86,10 +85,9 @@ public class CardGameManager extends GameManager
     }
 
     /**
-     * Derived classes can override this method and take any action needed
-     * prior to a game rematch. If the rematch needs to be vetoed for any
-     * reason, they can return false from this method and the rematch will
-     * be aborted.
+     * Derived classes can override this method and take any action needed prior to a game
+     * rematch. If the rematch needs to be vetoed for any reason, they can return false from this
+     * method and the rematch will be aborted.
      */
     protected boolean gameWillRematch ()
     {
@@ -97,14 +95,13 @@ public class CardGameManager extends GameManager
     }
 
     /**
-     * Deals a hand of cards to the player at the specified index from
-     * the given Deck.
+     * Deals a hand of cards to the player at the specified index from the given Deck.
      *
      * @param deck the deck from which to deal
      * @param size the size of the hand to deal
      * @param playerIndex the index of the target player
-     * @return the hand dealt to the player, or null if the deal
-     * was canceled because the deck did not contain enough cards
+     * @return the hand dealt to the player, or null if the deal was canceled because the deck did
+     * not contain enough cards
      */
     public Hand dealHand (Deck deck, int size, int playerIndex)
     {
@@ -122,16 +119,14 @@ public class CardGameManager extends GameManager
             return hand;
         }
     }
-    
+
     /**
-     * Deals a hand of cards to each player from the specified
-     * Deck.
+     * Deals a hand of cards to each player from the specified Deck.
      *
      * @param deck the deck from which to deal
      * @param size the size of the hands to deal
-     * @return the array of hands dealt to each player, or null if
-     * the deal was canceled because the deck did not contain enough
-     * cards
+     * @return the array of hands dealt to each player, or null if the deal was canceled because
+     * the deck did not contain enough cards
      */
     public Hand[] dealHands (Deck deck, int size)
     {
@@ -140,20 +135,18 @@ public class CardGameManager extends GameManager
 
         } else {
             Hand[] hands = new Hand[_playerCount];
-            
+
             for (int i=0;i<_playerCount;i++) {
-                hands[i] = dealHand(deck, size, i);   
+                hands[i] = dealHand(deck, size, i);
             }
-            
+
             return hands;
         }
     }
 
     /**
-     * Gets the player index of the specified client object, or -1
-     * if the client object does not represent a player. If the game has ended,
-     * looks through the players of the now-ended game.
-     *
+     * Gets the player index of the specified client object, or -1 if the client object does not
+     * represent a player. If the game has ended, looks through the players of the now-ended game.
      */
     public int getPlayerIndex (ClientObject client)
     {
@@ -167,21 +160,21 @@ public class CardGameManager extends GameManager
         }
         return -1;
     }
-    
+
     /**
-     * Returns the client object corresponding to the specified player index,
-     * or null if the position is not occupied by a player.
+     * Returns the client object corresponding to the specified player index, or null if the
+     * position is not occupied by a player.
      */
     public ClientObject getClientObject (int pidx)
     {
         if (_playerOids[pidx] != 0) {
             return (ClientObject)_omgr.getObject(_playerOids[pidx]);
-        
+
         } else {
             return null;
         }
     }
-    
+
     /**
      * Sends a set of cards from one player to another.
      *
@@ -197,51 +190,47 @@ public class CardGameManager extends GameManager
         if (fromClient != null) {
             CardGameSender.sentCardsToPlayer(fromClient, toPlayerIdx, cards);
         }
-        
+
         // Notify the receiver with the cards
         ClientObject toClient = getClientObject(toPlayerIdx);
         if (toClient != null) {
             CardGameSender.sendCardsFromPlayer(toClient, fromPlayerIdx,
                 cards);
         }
-        
+
         // and everybody else in the room other than the sender and the
         // receiver with the number of cards sent
         notifyCardsTransferred(fromPlayerIdx, toPlayerIdx, cards.length);
     }
-    
+
     /**
-     * Sends sets of cards between players simultaneously.  Each player is
-     * guaranteed to receive the notification of cards received after the
-     * notification of cards sent.  The length of the arrays passed must
-     * be equal to the player count.
+     * Sends sets of cards between players simultaneously. Each player is guaranteed to receive
+     * the notification of cards received after the notification of cards sent. The length of the
+     * arrays passed must be equal to the player count.
      *
-     * @param toPlayerIndices for each player, the index of the player to
-     * transfer cards to
+     * @param toPlayerIndices for each player, the index of the player to transfer cards to
      * @param cards for each player, the cards to transfer
      */
-    public void transferCardsBetweenPlayers (int[] toPlayerIndices,
-        Card[][] cards)
+    public void transferCardsBetweenPlayers (int[] toPlayerIndices, Card[][] cards)
     {
         // Send all removal notices
-        for (int i = 0; i < _playerCount; i++) {
-            ClientObject fromClient = getClientObject(i);
+        for (int ii = 0; ii < _playerCount; ii++) {
+            ClientObject fromClient = getClientObject(ii);
             if (fromClient != null) {
-                CardGameSender.sentCardsToPlayer(fromClient,
-                    toPlayerIndices[i], cards[i]);
+                CardGameSender.sentCardsToPlayer(fromClient, toPlayerIndices[ii], cards[ii]);
             }
         }
-        
+
         // Send all addition notices and notify everyone else
-        for (int i = 0; i < _playerCount; i++) {
-            ClientObject toClient = getClientObject(toPlayerIndices[i]);
+        for (int ii = 0; ii < _playerCount; ii++) {
+            ClientObject toClient = getClientObject(toPlayerIndices[ii]);
             if (toClient != null) {
-                CardGameSender.sendCardsFromPlayer(toClient, i, cards[i]);
+                CardGameSender.sendCardsFromPlayer(toClient, ii, cards[ii]);
             }
-            notifyCardsTransferred(i, toPlayerIndices[i], cards[i].length);
+            notifyCardsTransferred(ii, toPlayerIndices[ii], cards[ii].length);
         }
     }
-    
+
     /**
      * Notifies everyone in the room (other than the sender and the receiver) that a set of cards
      * have been transferred.
@@ -250,8 +239,8 @@ public class CardGameManager extends GameManager
      * @param toPlayerIdx the index of the player receiving the cards
      * @param cards the number of cards sent
      */
-    protected void notifyCardsTransferred (final int fromPlayerIdx,
-        final int toPlayerIdx, final int cards)
+    protected void notifyCardsTransferred (
+        final int fromPlayerIdx, final int toPlayerIdx, final int cards)
     {
         final int senderOid = _playerOids[fromPlayerIdx],
             receiverOid = _playerOids[toPlayerIdx];
@@ -269,7 +258,7 @@ public class CardGameManager extends GameManager
         };
         applyToOccupants(op);
     }
-    
+
     /** The card game object. */
     protected CardGameObject _cardgameobj;
 

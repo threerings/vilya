@@ -24,7 +24,7 @@ package com.threerings.parlor.tourney.data;
 import com.threerings.io.SimpleStreamableObject;
 
 /**
- * Extensible class that specifies the prize for a tourney. 
+ * Extensible class that specifies the prize for a tourney.
  */
 public abstract class Prize extends SimpleStreamableObject
 {

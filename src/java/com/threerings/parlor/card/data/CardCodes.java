@@ -30,31 +30,31 @@ public interface CardCodes extends InvocationCodes
 {
     /** The suit of spades. */
     public static final int SPADES = 0;
-    
+
     /** The suit of hearts. */
     public static final int HEARTS = 1;
-    
+
     /** The suit of clubs. */
     public static final int CLUBS = 2;
-    
+
     /** The suit of diamonds. */
     public static final int DIAMONDS = 3;
-    
+
     /** The number of the jack. */
     public static final int JACK = 11;
-    
+
     /** The number of the queen. */
     public static final int QUEEN = 12;
-    
+
     /** The number of the king. */
     public static final int KING = 13;
-    
+
     /** The number of the ace. */
     public static final int ACE = 14;
-    
+
     /** The number of the red joker. */
     public static final int RED_JOKER = 15;
-    
+
     /** The number of the black joker. */
     public static final int BLACK_JOKER = 16;
 }

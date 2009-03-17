@@ -303,7 +303,7 @@ public class TableManager
         } else if ( ! _allowBooting) {
             throw new InvocationException(INTERNAL_ERROR);
         }
-        
+
         int position = ListUtil.indexOf(table.players, target);
         if (position < 0) {
             throw new InvocationException(NOT_AT_TABLE);

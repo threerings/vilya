@@ -30,16 +30,16 @@ public class PlayerCard implements Streamable
 {
     /** The index of the player. */
     public int pidx;
-    
+
     /** The card that the player played. */
     public Card card;
-    
+
     /**
      * No-argument constructor for deserialization.
      */
     public PlayerCard ()
     {}
-    
+
     /**
      * Creates a new player card.
      *

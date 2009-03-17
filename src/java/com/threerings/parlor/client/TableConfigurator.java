@@ -81,7 +81,7 @@ public abstract class TableConfigurator
     }
 
     /**
-     * If true, the TableConfigurator is empty, which doesn't mean that 
+     * If true, the TableConfigurator is empty, which doesn't mean that
      * it will not return a TableConfig object (for it must), but rather
      * that there are no user-editable options being presented in the
      * config interface.

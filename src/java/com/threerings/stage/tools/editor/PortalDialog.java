@@ -55,7 +55,7 @@ public class PortalDialog extends EditorDialog
     {
         super("Edit Portal", ctx, panel);
     }
-    
+
     @Override
     public void addComponents(JComponent top){
         // add the dialog instruction text

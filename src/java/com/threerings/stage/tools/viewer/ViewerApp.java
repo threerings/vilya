@@ -167,7 +167,7 @@ public class ViewerApp
         public KeyDispatcher getKeyDispatcher () {
             return null;
         }
-        
+
         // documentation inherited from interface
         public String xlate (String message) {
             return message;

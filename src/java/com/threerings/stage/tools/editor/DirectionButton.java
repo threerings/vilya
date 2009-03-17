@@ -82,7 +82,7 @@ public class DirectionButton extends AbstractButton
                 repaint();
             }
 
-                    
+
         });
     }
 
@@ -180,7 +180,7 @@ public class DirectionButton extends AbstractButton
             double rads = Math.PI * 2 * ii / num;
 
             // 0 radians specifies EAST, so we offset
-            int dir = (ii + DirectionCodes.EAST) % num; 
+            int dir = (ii + DirectionCodes.EAST) % num;
 
             _coords[dir][0] = mid + ((int) (mid * Math.cos(rads)));
             _coords[dir][1] = mid + ((int) (mid * Math.sin(rads)));

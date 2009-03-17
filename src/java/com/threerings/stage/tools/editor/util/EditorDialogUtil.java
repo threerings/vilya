@@ -91,7 +91,7 @@ public class EditorDialogUtil
         center(parent, dialog);
         parent.getLayeredPane().add(dialog, JLayeredPane.POPUP_LAYER);
         dialog.setVisible(true);
-    }        
+    }
 
     /**
      * Removes the supplied dialog from its parent container, but does not

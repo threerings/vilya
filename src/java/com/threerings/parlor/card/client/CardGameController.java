@@ -34,8 +34,7 @@ import com.threerings.parlor.turn.client.TurnGameController;
 import static com.threerings.parlor.card.Log.log;
 
 /**
- * A controller class for card games.  Handles common functions like
- * accepting dealt hands.
+ * A controller class for card games. Handles common functions like accepting dealt hands.
  */
 public abstract class CardGameController extends GameController
     implements TurnGameController, CardCodes, CardGameReceiver
@@ -50,8 +49,7 @@ public abstract class CardGameController extends GameController
             Thread.dumpStack();
         }
 
-        _ctx.getClient().getInvocationDirector().registerReceiver(
-            new CardGameDecoder(this));
+        _ctx.getClient().getInvocationDirector().registerReceiver(new CardGameDecoder(this));
 
         super.willEnterPlace(plobj);
     }
@@ -61,8 +59,7 @@ public abstract class CardGameController extends GameController
     {
         super.didLeavePlace(plobj);
 
-        _ctx.getClient().getInvocationDirector().unregisterReceiver(
-            CardGameDecoder.RECEIVER_CODE);
+        _ctx.getClient().getInvocationDirector().unregisterReceiver(CardGameDecoder.RECEIVER_CODE);
     }
 
     // Documentation inherited.
@@ -80,8 +77,8 @@ public abstract class CardGameController extends GameController
     }
 
     /**
-     * Called when the server deals the client a new hand of cards.  Default
-     * implementation does nothing.
+     * Called when the server deals the client a new hand of cards. Default implementation does
+     * nothing.
      *
      * @param hand the hand dealt to the user
      */
@@ -89,8 +86,8 @@ public abstract class CardGameController extends GameController
     {}
 
     /**
-     * Dispatched to the client when it has received a set of cards
-     * from another player.  Default implementation does nothing.
+     * Dispatched to the client when it has received a set of cards from another player. Default
+     * implementation does nothing.
      *
      * @param plidx the index of the player providing the cards
      * @param cards the cards received
@@ -99,9 +96,8 @@ public abstract class CardGameController extends GameController
     {}
 
     /**
-     * Dispatched to the client when the server has forced it to send
-     * a set of cards to another player.  Default implementation does
-     * nothing.
+     * Dispatched to the client when the server has forced it to send a set of cards to another
+     * player. Default implementation does nothing.
      *
      * @param plidx the index of the player to which the cards were sent
      * @param cards the cards sent
@@ -110,8 +106,8 @@ public abstract class CardGameController extends GameController
     {}
 
     /**
-     * Dispatched to the client when a set of cards is transferred between
-     * two other players in the game.  Default implementation does nothing.
+     * Dispatched to the client when a set of cards is transferred between two other players in
+     * the game. Default implementation does nothing.
      *
      * @param fromidx the index of the player sending the cards
      * @param toidx the index of the player receiving the cards

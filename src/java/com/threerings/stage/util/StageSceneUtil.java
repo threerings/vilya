@@ -66,7 +66,7 @@ public class StageSceneUtil
      * should use the object's orientation.
      */
     public static final int OBJECT_ORIENTATION = -1;
-    
+
     /**
      * Returns the scene metrics we use to do our calculations.
      */
@@ -87,7 +87,7 @@ public class StageSceneUtil
     /**
      * Does the necessary jiggery pokery to figure out where the specified object's associated
      * location is.
-     * 
+     *
      * @param orient - the orientation to use in the returned location, or
      * {@link #OBJECT_ORIENTATION} if the object's orientation should be used
      */
@@ -100,7 +100,7 @@ public class StageSceneUtil
     /**
      * Does the necessary jiggery pokery to figure out where the specified object's associated
      * location is.
-     * 
+     *
      * @param tilemgr a tile manager that can be used to look up the tile information.
      * @param tileId the fully qualified tile id of the object tile.
      * @param tx the object's x tile coordinate.
@@ -114,7 +114,7 @@ public class StageSceneUtil
     /**
      * Does the necessary jiggery pokery to figure out where the specified object's associated
      * location is.
-     * 
+     *
      * @param tilemgr a tile manager that can be used to look up the tile information.
      * @param tileId the fully qualified tile id of the object tile.
      * @param tx the object's x tile coordinate.
@@ -335,7 +335,7 @@ public class StageSceneUtil
      * will be used to override the "natural" orientation of the spot
      * which is facing toward the footprint.
      *
-     * @return the closest spot to the 
+     * @return the closest spot to the
      */
     public static StageLocation findStandingSpot (
         Rectangle foot, int dist, AStarPathUtil.TraversalPred pred,
