@@ -397,21 +397,20 @@ public abstract class PuzzleController extends GameController
 
         // refuse to start the action if our puzzle view is hidden
         if (_pidx != -1 && !_panel.getBoardView().isShowing()) {
-            log.warning("Refusing to start action on hidden puzzle.");
-            Thread.dumpStack();
+            log.warning("Refusing to start action on hidden puzzle.", new Exception());
             return;
         }
 
         // refuse to start the action if it's already going
         if (_astate != ACTION_CLEARED) {
-            log.warning("Action state inappropriate for startAction()", "astate", _astate);
-            Thread.dumpStack();
+            log.warning("Action state inappropriate for startAction()", "astate", _astate,
+                        new Exception());
             return;
         }
 
         if (isChatting() && supportsActionPause()) {
-            log.info(
-                "Not starting action, player is chatting in a puzzle that supports pausing the action.");
+            log.info("Not starting action, player is chatting in a puzzle that supports " +
+                     "pausing the action.");
             return;
         }
 

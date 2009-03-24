@@ -138,8 +138,8 @@ public abstract class DropBoardView extends PuzzleBoardView
     public void createPiece (int piece, int sx, int sy)
     {
         if (sx < 0 || sy < 0 || sx >= _bwid || sy >= _bhei) {
-            log.warning("Requested to create piece in invalid location", "sx", sx, "sy", sy);
-            Thread.dumpStack();
+            log.warning("Requested to create piece in invalid location", "sx", sx, "sy", sy,
+                        new Exception());
             return;
         }
         createPiece(piece, sx, sy, sx, sy, 0L);
@@ -165,8 +165,8 @@ public abstract class DropBoardView extends PuzzleBoardView
     public void updatePiece (int piece, int sx, int sy)
     {
         if (sx < 0 || sy < 0 || sx >= _bwid || sy >= _bhei) {
-            log.warning("Requested to update piece in invalid location", "sx", sx, "sy", sy);
-            Thread.dumpStack();
+            log.warning("Requested to update piece in invalid location", "sx", sx, "sy", sy,
+                        new Exception());
             return;
         }
         int spos = sy * _bwid + sx;
@@ -186,8 +186,7 @@ public abstract class DropBoardView extends PuzzleBoardView
     {
         if (tx < 0 || ty < 0 || tx >= _bwid || ty >= _bhei) {
             log.warning("Requested to create and move piece to invalid location",
-                "tx", tx, "ty", ty);
-            Thread.dumpStack();
+                        "tx", tx, "ty", ty, new Exception());
             return;
         }
         Sprite sprite = createPieceSprite(piece, sx, sy);

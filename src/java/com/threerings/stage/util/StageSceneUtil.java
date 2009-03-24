@@ -270,8 +270,7 @@ public class StageSceneUtil
         double radius = (double)fwid/2;
         int clidx = cluster.width-2;
         if (clidx >= CLUSTER_METRICS.length/2 || clidx < 0) {
-            log.warning("Requested locs from invalid cluster " + cluster + ".");
-            Thread.dumpStack();
+            log.warning("Requested locs from invalid cluster " + cluster + ".", new Exception());
             return list;
         }
 

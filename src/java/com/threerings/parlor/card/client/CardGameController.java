@@ -44,9 +44,8 @@ public abstract class CardGameController extends GameController
     {
         if (_ctx.getClient().getClientObject().receivers.containsKey(
                 CardGameDecoder.RECEIVER_CODE)) {
-            log.warning("Yuh oh, we already have a card game receiver " +
-                "registered and are trying for another...!");
-            Thread.dumpStack();
+            log.warning("Yuh oh, we already have a card game receiver registered and are trying " +
+                        "for another...!", new Exception());
         }
 
         _ctx.getClient().getInvocationDirector().registerReceiver(new CardGameDecoder(this));
