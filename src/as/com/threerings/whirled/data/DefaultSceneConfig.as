@@ -22,17 +22,14 @@
 package com.threerings.whirled.data {
 
 import com.threerings.crowd.data.PlaceConfig;
-import com.threerings.whirled.client.SceneController;
 
 /**
- * The default scene config simply causes the default scene manager and
- * controller to be created. A user of the Whirled services would most
- * likely extend the default scene config.
+ * The default scene config simply causes the default scene manager and controller to be created. A
+ * user of the Whirled services would most likely extend the default scene config.
  *
- * <p> Note that this place config won't even work on the client side
- * because it instantiates a {@link SceneController} which is an abstract
- * class. It is used only for testing the server side and as a placeholder
- * in case standard scene configuration information is one day needed.
+ * <p> Note that this place config won't even work on the client side because it instantiates a
+ * SceneController which is an abstract class. It is used only for testing the server side and as a
+ * placeholder in case standard scene configuration information is one day needed.
  */
 public class DefaultSceneConfig extends PlaceConfig
 {

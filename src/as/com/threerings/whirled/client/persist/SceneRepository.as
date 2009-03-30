@@ -24,11 +24,9 @@ package com.threerings.whirled.client.persist {
 import flash.errors.IOError;
 
 import com.threerings.whirled.data.SceneModel;
-import com.threerings.whirled.util.NoSuchSceneError;
 
 /**
- * The scene repository provides access to a persistent repository of
- * scene information.
+ * The scene repository provides access to a persistent repository of scene information.
  *
  * @see SceneModel
  */
@@ -37,30 +35,26 @@ public interface SceneRepository
     /**
      * Fetches the model for the scene with the specified id.
      *
-     * @exception IOException thrown if an error occurs attempting to load
-     * the scene data.
-     * @exception NoSuchSceneException thrown if no scene exists with the
-     * specified scene id.
+     * @exception IOError thrown if an error occurs attempting to load the scene data.
+     * @exception NoSuchSceneError thrown if no scene exists with the specified scene id.
      */
     function loadSceneModel (sceneId :int) :SceneModel;
-        //throws IOException, NoSuchSceneException;
+        //throws IOError, NoSuchSceneError;
 
     /**
      * Updates or inserts this scene model as appropriate.
      *
-     * @exception IOException thrown if an error occurs attempting to
-     * access the repository.
+     * @exception IOError thrown if an error occurs attempting to access the repository.
      */
     function storeSceneModel (model :SceneModel) :void;
-        //throws IOException;
+        //throws IOError;
 
     /**
      * Deletes the specified scene model from the repository.
      *
-     * @exception IOException thrown if an error occurs attempting to
-     * access the repository.
+     * @exception IOError thrown if an error occurs attempting to access the repository.
      */
     function deleteSceneModel (sceneId :int) :void;
-        //throws IOException;
+        //throws IOError;
 }
 }
