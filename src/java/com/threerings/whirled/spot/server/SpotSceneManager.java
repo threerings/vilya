@@ -147,8 +147,7 @@ public class SpotSceneManager extends SceneManager
         while (cliter.hasNext()) {
             ClusterRecord clrec = cliter.next();
             if (clrec.containsKey(bodyOid)) {
-                log.info("Pruning departed body from cluster [boid=" + bodyOid +
-                         ", cluster=" + clrec + "].");
+                log.info("Pruning departed body from cluster", "boid", bodyOid, "cluster", clrec);
                 clrec.removeBody(bodyOid);
                 if (clrec.size() == 0) {
                     // if we just removed the last body, destroy the cluster, need to use the
@@ -180,16 +179,15 @@ public class SpotSceneManager extends SceneManager
         if (from != null && from.targetPortalId != -1) {
             entry = _sscene.getPortal(from.targetPortalId);
             if (entry == null) {
-                log.warning("Body mapped at invalid portal [where=" + where() +
-                            ", who=" + body.who() + ", from=" + from + "].");
+                log.warning("Body mapped at invalid portal",
+                    "where", where(), "who", body.who(), "from", from);
                 entry = _sscene.getDefaultEntrance();
             }
         } else {
             entry = _sscene.getDefaultEntrance();
         }
 
-//         Log.debug("Positioning entering body [who=" + body.who() +
-//                   ", where=" + entry.getOppLocation() + "].");
+//        log.debug("Positioning entering body", "who", body.who(), "where", entry.getOppLocation());
 
         // create a scene location for them located on the entrance portal but facing the opposite
         // direction
@@ -216,8 +214,8 @@ public class SpotSceneManager extends SceneManager
     {
         SpotScene scene = (SpotScene)getScene();
         if (scene == null) {
-            log.warning("No scene in moveBodyToDefaultPortal()? [who=" + body.who() +
-                        ", where=" + where() + "].");
+            log.warning("No scene in moveBodyToDefaultPortal()?",
+                "who", body.who(), "where", where());
             return;
         }
 
@@ -225,8 +223,8 @@ public class SpotSceneManager extends SceneManager
             Location eloc = scene.getDefaultEntrance().getLocation();
             handleChangeLoc(body, eloc);
         } catch (InvocationException ie) {
-            log.warning("Could not move user to default portal [where=" + where() +
-                        ", who=" + body.who() + ", error=" + ie + "].");
+            log.warning("Could not move user to default portal",
+                "where", where(), "who", body.who(), "error", ie);
         }
     }
 
@@ -245,8 +243,8 @@ public class SpotSceneManager extends SceneManager
     {
         // make sure they are in our scene
         if (!_ssobj.occupants.contains(source.getOid())) {
-            log.warning("Refusing change loc from non-scene occupant [where=" + where() +
-                        ", who=" + source.who() + ", loc=" + loc + "].");
+            log.warning("Refusing change loc from non-scene occupant",
+                "where", where(), "who", source.who(), "loc", loc);
             throw new InvocationException(INTERNAL_ERROR);
         }
 
@@ -281,8 +279,8 @@ public class SpotSceneManager extends SceneManager
         SceneLocation sloc = new SceneLocation(loc, source.getOid());
         if (!_ssobj.occupantLocs.contains(sloc)) {
             // complain if they don't already have a location configured
-            log.warning("Changing loc for occupant without previous loc [where=" + where() +
-                        ", who=" + source.who() + ", nloc=" + loc + "].", new Exception());
+            log.warning("Changing loc for occupant without previous loc",
+                "where", where(), "who", source.who(), "nloc", loc, new Exception());
             _ssobj.addToOccupantLocs(sloc);
         } else {
             _ssobj.updateOccupantLocs(sloc);
@@ -313,17 +311,17 @@ public class SpotSceneManager extends SceneManager
         // otherwise see if they sent us the user's oid
         DObject tobj = _omgr.getObject(targetOid);
         if (!(tobj instanceof BodyObject)) {
-            log.info("Can't join cluster, missing target [creator=" + joiner.who() +
-                     ", targetOid=" + targetOid + "].");
+            log.info("Can't join cluster, missing target",
+                "creator", joiner.who(), "targetOid", targetOid);
             throw new InvocationException(NO_SUCH_CLUSTER);
         }
 
         // make sure we're in the same scene as said user
         BodyObject friend = (BodyObject)tobj;
         if (friend.getPlaceOid() != joiner.getPlaceOid()) {
-            log.info("Refusing cluster join from non-proximate user [joiner=" + joiner.who() +
-                     ", jloc=" + joiner.location + ", target=" + friend.who() +
-                     ", tloc=" + friend.location + "].");
+            log.info("Refusing cluster join from non-proximate user",
+                "joiner", joiner.who(), "jloc", joiner.location, "target", friend.who(),
+                "tloc", friend.location);
             throw new InvocationException(NO_SUCH_CLUSTER);
         }
 
@@ -338,7 +336,7 @@ public class SpotSceneManager extends SceneManager
         checkCanCluster(joiner, friend);
 
         // otherwise we create a new cluster and add our charter members!
-//         Log.debug("Creating cluster [starter=" + joiner.who() + ", tgt=" + friend.who() + "].");
+//        log.debug("Creating cluster", "starter", joiner.who(), "tgt", friend.who());
         clrec = createClusterRecord();
         clrec.addBody(friend);
         clrec.addBody(joiner);
@@ -395,8 +393,8 @@ public class SpotSceneManager extends SceneManager
      * Called by the {@link SpotProvider} when we receive a cluster speak request.
      */
     @Deprecated
-    protected void handleClusterSpeakRequest (int sourceOid, Name source, String bundle,
-                                              String message, byte mode)
+    protected void handleClusterSpeakRequest (
+        int sourceOid, Name source, String bundle, String message, byte mode)
     {
         handleClusterMessageRequest(sourceOid, new UserMessage(source, bundle, message, mode));
     }
@@ -408,9 +406,9 @@ public class SpotSceneManager extends SceneManager
     {
         ClusterRecord clrec = getCluster(sourceOid);
         if (clrec == null) {
-            log.warning("Non-clustered user requested cluster speak [where=" + where() +
-                        ", chatter=" + message.speaker + " (" + sourceOid + "), " +
-                        "msg=" + message + "].");
+            log.warning("Non-clustered user requested cluster speak",
+                "where", where(), "chatter", (message.speaker + " (" + sourceOid + ")"),
+                "msg", message);
         } else {
             SpeakUtil.sendMessage(clrec.getClusterObject(), message);
         }
@@ -473,8 +471,8 @@ public class SpotSceneManager extends SceneManager
             throws InvocationException
         {
             if (!(body instanceof ClusteredBodyObject)) {
-                log.warning("Refusing to add non-clustered body to cluster [cloid=" +
-                            _clobj.getOid() + ", size=" + size() + ", who=" + body.who() + "].");
+                log.warning("Refusing to add non-clustered body to cluster",
+                    "cloid", _clobj.getOid(), "size", size(), "who", body.who());
                 throw new InvocationException(INTERNAL_ERROR);
             }
 
@@ -511,7 +509,7 @@ public class SpotSceneManager extends SceneManager
                 _ssobj.commitTransaction();
             }
 
-//             Log.debug("Added " + body.who() + " to "+ this + ".");
+//             log.debug("Added " + body.who() + " to "+ this + ".");
             return true;
         }
 
@@ -519,8 +517,8 @@ public class SpotSceneManager extends SceneManager
         {
             BodyObject body = (BodyObject)remove(bodyOid);
             if (body == null) {
-                log.warning("Requested to remove unknown body from cluster [cloid=" +
-                            _clobj.getOid() + ", size=" + size() + ", who=" + bodyOid + "].");
+                log.warning("Requested to remove unknown body from cluster",
+                    "cloid", _clobj.getOid(), "size", size(), "who", bodyOid);
                 return;
             }
 
@@ -547,7 +545,7 @@ public class SpotSceneManager extends SceneManager
                 }
             }
 
-//             Log.debug("Removed " + bodyOid + " from "+ this + ".");
+//             log.debug("Removed " + bodyOid + " from "+ this + ".");
 
         }
 
@@ -569,7 +567,7 @@ public class SpotSceneManager extends SceneManager
 
         protected void destroy (boolean doRemoval)
         {
-//             Log.debug("Cluster empty, going away [cloid=" + _clobj.getOid() + "].");
+//             log.debug("Cluster empty, going away", "cloid", _clobj.getOid());
             _ssobj.removeFromClusters(_cluster.getKey());
 
             // if we've also been requested to remove ourself from the clusters list, do that
@@ -593,5 +591,5 @@ public class SpotSceneManager extends SceneManager
     protected HashIntMap<ClusterRecord> _clusters = new HashIntMap<ClusterRecord>();
 
     /** A mapping of entering bodies to portal ids. */
-    protected HashMap<Integer,Portal> _enterers = new HashMap<Integer,Portal>();
+    protected HashMap<Integer, Portal> _enterers = new HashMap<Integer, Portal>();
 }

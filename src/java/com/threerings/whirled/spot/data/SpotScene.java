@@ -24,14 +24,13 @@ package com.threerings.whirled.spot.data;
 import java.util.Iterator;
 
 /**
- * Makes available the spot scene information that the server needs to do
- * its business.
+ * Makes available the spot scene information that the server needs to do its business.
  */
 public interface SpotScene
 {
     /**
-     * Returns a {@link Portal} object for the portal with the specified
-     * id or null if no portal exists with that id.
+     * Returns a {@link Portal} object for the portal with the specified id or null if no portal
+     * exists with that id.
      */
     public Portal getPortal (int portalId);
 
@@ -46,24 +45,21 @@ public interface SpotScene
     public Iterator<Portal> getPortals ();
 
     /**
-     * Returns the portal id that should be assigned to the next portal
-     * added to this scene.
+     * Returns the portal id that should be assigned to the next portal added to this scene.
      */
     public short getNextPortalId ();
 
     /**
-     * Returns the portal that represents the default entrance to this
-     * scene. If a body enters the scene at logon time rather than
-     * entering from some other scene, this is the portal at which they
-     * would appear.
+     * Returns the portal that represents the default entrance to this scene. If a body enters the
+     * scene at logon time rather than entering from some other scene, this is the portal at which
+     * they would appear.
      */
     public Portal getDefaultEntrance ();
 
     /**
-     * Adds a portal to this scene, immediately making the requisite
-     * modifications to the underlying scene model. The portal id should
-     * have already been assigned using the value obtained from {@link
-     * #getNextPortalId}.
+     * Adds a portal to this scene, immediately making the requisite modifications to the
+     * underlying scene model. The portal id should have already been assigned using the value
+     * obtained from {@link #getNextPortalId}.
      */
     public void addPortal (Portal portal);
 
@@ -73,8 +69,8 @@ public interface SpotScene
     public void removePortal (Portal portal);
 
     /**
-     * Sets the default entrance in this scene, immediately making the
-     * requisite modifications to the underlying scene model.
+     * Sets the default entrance in this scene, immediately making the requisite modifications to
+     * the underlying scene model.
      */
     public void setDefaultEntrance (Portal portal);
 }

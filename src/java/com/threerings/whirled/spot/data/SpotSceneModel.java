@@ -30,10 +30,9 @@ import com.threerings.whirled.data.AuxModel;
 import com.threerings.whirled.data.SceneModel;
 
 /**
- * The spot scene model extends the standard scene model with information
- * on portals. Portals are referenced by an identifier, unique within the
- * scene and unchanging, so that portals can stably reference the target
- * portal in the scene to which they connect.
+ * The spot scene model extends the standard scene model with information on portals. Portals are
+ * referenced by an identifier, unique within the scene and unchanging, so that portals can stably
+ * reference the target portal in the scene to which they connect.
  */
 public class SpotSceneModel extends SimpleStreamableObject
     implements AuxModel
@@ -41,9 +40,8 @@ public class SpotSceneModel extends SimpleStreamableObject
     /** An array containing all portals in this scene. */
     public Portal[] portals = new Portal[0];
 
-    /** The portal id of the default entrance to this scene. If a body
-     * enters the scene without coming from another scene, this is the
-     * portal at which they would appear. */
+    /** The portal id of the default entrance to this scene. If a body enters the scene without
+     * coming from another scene, this is the portal at which they would appear. */
     public int defaultEntranceId = -1;
 
     /**
@@ -79,16 +77,15 @@ public class SpotSceneModel extends SimpleStreamableObject
     }
 
     /**
-     * Locates and returns the {@link SpotSceneModel} among the auxiliary
-     * scene models associated with the supplied scene
-     * model. <code>null</code> is returned if no spot scene model could
+     * Locates and returns the {@link SpotSceneModel} among the auxiliary scene models associated
+     * with the supplied scene model. <code>null</code> is returned if no spot scene model could
      * be found.
      */
     public static SpotSceneModel getSceneModel (SceneModel model)
     {
-        for (int ii = 0; ii < model.auxModels.length; ii++) {
-            if (model.auxModels[ii] instanceof SpotSceneModel) {
-                return (SpotSceneModel)model.auxModels[ii];
+        for (AuxModel auxModel : model.auxModels) {
+            if (auxModel instanceof SpotSceneModel) {
+                return (SpotSceneModel)auxModel;
             }
         }
         return null;

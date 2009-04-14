@@ -34,8 +34,7 @@ public class SpotSceneImpl
     implements SpotScene
 {
     /**
-     * Creates an instance that will obtain data from the supplied spot
-     * scene model.
+     * Creates an instance that will obtain data from the supplied spot scene model.
      */
     public SpotSceneImpl (SpotSceneModel smodel)
     {
@@ -46,8 +45,7 @@ public class SpotSceneImpl
     protected void readPortals ()
     {
         _portals.clear();
-        for (int ii = 0, ll = _smodel.portals.length; ii < ll; ii++) {
-            Portal port = _smodel.portals[ii];
+        for (Portal port : _smodel.portals) {
             _portals.put(port.portalId, port);
         }
     }
@@ -103,8 +101,7 @@ public class SpotSceneImpl
     public void addPortal (Portal portal)
     {
         if (portal.portalId <= 0) {
-            log.warning("Refusing to add zero-id portal " +
-                        "[scene=" + this + ", portal=" + portal + "].");
+            log.warning("Refusing to add zero-id portal", "scene", this, "portal", portal);
             return;
         }
 
@@ -140,8 +137,8 @@ public class SpotSceneImpl
     }
 
     /**
-     * This should be called if a scene update was received that caused
-     * our underlying scene model to change.
+     * This should be called if a scene update was received that caused our underlying scene model
+     * to change.
      */
     public void updateReceived ()
     {
@@ -154,7 +151,7 @@ public class SpotSceneImpl
     /** A mapping from portal id to portal. */
     protected HashIntMap<Portal> _portals = new HashIntMap<Portal>();
 
-    /** We don't allow more than ~32k portals in a scene. Things would
-     * slow down *way* before we got there. */
+    /** We don't allow more than ~32k portals in a scene. Things would slow down *way* before we
+     * got there. */
     protected static final int MAX_PORTAL_ID = Short.MAX_VALUE;
 }
