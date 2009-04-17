@@ -48,7 +48,7 @@
     <!-- make sure the dobject class files are all compiled -->
     <javac srcdir="src/java" destdir="${classes.dir}" includeAntRuntime="false"
            debug="on" optimize="${build.optimize}" deprecation="on"
-           source="1.6" target="1.5">
+           source="1.5" target="1.5">
       <classpath refid="classpath"/>
       <include name="**/*Object.java"/>
     </javac>
@@ -66,7 +66,7 @@
     <!-- make sure the service class files are all compiled -->
     <javac srcdir="src/java" destdir="${classes.dir}" includeAntRuntime="false"
            debug="on" optimize="${build.optimize}" deprecation="on"
-           source="1.6" target="1.5">
+           source="1.5" target="1.5">
       <classpath refid="classpath"/>
       <include name="**/*Service.java"/>
       <exclude name="**/InvocationService.java"/>
@@ -102,7 +102,7 @@
     <!-- make sure the receiver class files are all compiled -->
     <javac srcdir="src/java" destdir="${classes.dir}" includeAntRuntime="false"
            debug="on" optimize="${build.optimize}" deprecation="on"
-           source="1.6" target="1.5">
+           source="1.5" target="1.5">
       <classpath refid="classpath"/>
       <include name="**/*Receiver.java"/>
       <exclude name="**/InvocationReceiver.java"/>
@@ -185,7 +185,7 @@
   <target name="compile" depends="check-available,prepare">
     <javac srcdir="src/java" destdir="${classes.dir}" includeAntRuntime="false"
            debug="on" optimize="{$build.optimize}" deprecation="on"
-           source="1.6" target="1.5">
+           source="1.5" target="1.5">
       <classpath refid="classpath"/>
       <exclude name="com/threerings/**/tools/xml/**" unless="build.xml"/>
       <exclude name="com/threerings/**/tools/editor/**" unless="build.xml"/>
