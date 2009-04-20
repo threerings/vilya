@@ -254,14 +254,7 @@ public class StageSceneManager extends SpotSceneManager
         _ssobj = (StageSceneObject)_plobj;
 
         // register and fill in our stage scene service
-        _ssobj.setStageSceneService(_invmgr.registerDispatcher(new StageSceneDispatcher(this)));
-    }
-
-    @Override // documentation inherited
-    protected void didShutdown ()
-    {
-        super.didShutdown();
-        _invmgr.clearDispatcher(_ssobj.stageSceneService);
+        _ssobj.setStageSceneService(addDispatcher(new StageSceneDispatcher(this)));
     }
 
     @Override // documentation inherited

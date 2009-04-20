@@ -157,7 +157,7 @@ public abstract class PuzzleManager extends GameManager
         _puzobj = (PuzzleObject)_gameobj;
 
         // create and fill in our game service object
-        _puzobj.setPuzzleGameService(_invmgr.registerDispatcher(new PuzzleGameDispatcher(this)));
+        _puzobj.setPuzzleGameService(addDispatcher(new PuzzleGameDispatcher(this)));
     }
 
     @Override
@@ -350,9 +350,6 @@ public abstract class PuzzleManager extends GameManager
             _statusInterval.cancel();
             _statusInterval = null;
         }
-
-        // clear out our service registration
-        _invmgr.clearDispatcher(_puzobj.puzzleGameService);
     }
 
     /**

@@ -104,16 +104,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
         _deck = new Deck();
         _trickCardGame = (TrickCardGameObject)plobj;
         _cardGame = (CardGameObject)plobj;
-        _trickCardGame.setTrickCardGameService(
-            _invmgr.registerDispatcher(new TrickCardGameDispatcher(this)));
-    }
-
-    @Override
-    public void didShutdown ()
-    {
-        super.didShutdown();
-
-        _invmgr.clearDispatcher(_trickCardGame.getTrickCardGameService());
+        _trickCardGame.setTrickCardGameService(addDispatcher(new TrickCardGameDispatcher(this)));
     }
 
     @Override
