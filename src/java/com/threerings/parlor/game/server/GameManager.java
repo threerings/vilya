@@ -51,6 +51,7 @@ import com.threerings.parlor.game.data.GameAI;
 import com.threerings.parlor.game.data.GameCodes;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.game.data.GameObject;
+import com.threerings.parlor.game.data.UserIdentifier;
 import com.threerings.parlor.server.ParlorSender;
 import com.threerings.parlor.server.PlayManager;
 
@@ -66,18 +67,6 @@ import static com.threerings.parlor.Log.log;
 public class GameManager extends PlaceManager
     implements ParlorCodes, GameCodes, PlayManager
 {
-    /**
-     * An interface for identifying users. A larger system using the Parlor game services can
-     * enable user identification by passing a UserIdentifier to
-     * {@link GameManager#setUserIdentifier}.
-     */
-    public interface UserIdentifier
-    {
-        /** Returns the persistent user id for the specified player, or 0 if they're not a valid
-         * user, or a guest, or something like that (for whom we'll track no persistent data). */
-        public int getUserId (BodyObject bodyObj);
-    }
-
     /**
      * Configures a means by which the Parlor game services can map users to a persistent user id
      * for things like per-game cookies and ratings.
