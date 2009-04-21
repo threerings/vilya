@@ -330,11 +330,11 @@ public class GameManager extends PlaceManager
     }
 
     /**
-     * Returns the persistent user id for the supplied body.
+     * Returns the persistent user id for the supplied player name.
      */
-    public int getPlayerPersistentId (BodyObject bobj)
+    public int getPlayerPersistentId (Name name)
     {
-        return (bobj == null) ? 0 : _userIder.getUserId(bobj);
+        return _userIder.getUserId(name);
     }
 
     /**
@@ -1385,7 +1385,7 @@ public class GameManager extends PlaceManager
 
     /** Used to map users to persistent integer identifiers. */
     protected static UserIdentifier _userIder = new UserIdentifier() {
-        public int getUserId (BodyObject bodyObj) {
+        public int getUserId (Name name) {
             return 0; // by default no one has persistent info
         }
     };
