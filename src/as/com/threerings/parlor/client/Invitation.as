@@ -175,11 +175,8 @@ public class Invitation
             }
 
         } catch (e :Error) {
-            var log :Log = Log.getLog(this);
-            log.warning("Invitation response observer choked on response " +
-                        "[code=" + code + ", arg=" + arg +
-                        ", invite=" + this + "].");
-            log.logStackTrace(e);
+            Log.getLog(this).warning("Invitation response observer choked on response",
+                "code", code, "arg", arg, "invite", this, e);
         }
 
         // unless the invitation was countered, we can remove it from the

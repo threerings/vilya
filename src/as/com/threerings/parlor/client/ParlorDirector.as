@@ -139,7 +139,7 @@ public class ParlorDirector extends BasicDirector
     // documentation inherited from interface
     public function gameIsReady (gameOid :int) :void
     {
-        _log.info("Handling game ready [goid=" + gameOid + "].");
+        _log.info("Handling game ready", "goid", gameOid);
 
         // see what our observers have to say about it
         var handled :Boolean = false;
@@ -170,8 +170,7 @@ public class ParlorDirector extends BasicDirector
             _handler.invitationReceived(invite);
 
         } catch (err :Error) {
-            _log.warning("Invitation handler choked on invite notification " + invite + ".");
-            _log.logStackTrace(err);
+            _log.warning("Invitation handler choked on invite notification", "invite", invite, err);
         }
     }
 
@@ -181,8 +180,8 @@ public class ParlorDirector extends BasicDirector
         // look up the invitation record for this invitation
         var invite :Invitation = (_pendingInvites.get(remoteId) as Invitation);
         if (invite == null) {
-            _log.warning("Have no record of invitation for which we received a response?! " +
-                         "[remoteId=" + remoteId + ", code=" + code + ", arg=" + arg + "].");
+            _log.warning("Have no record of invitation for which we received a response?!",
+                "remoteId", remoteId, "code", code, "arg", arg);
         } else {
             invite.receivedResponse(code, arg);
         }

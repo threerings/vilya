@@ -185,15 +185,15 @@ public class TableDirector extends BasicDirector
     {
         // if we're already in a table, refuse the request
         if (_ourTable != null) {
-            log.warning("Ignoring request to create table as we're " +
-                        "already in a table [table=" + _ourTable + "].");
+            log.warning("Ignoring request to create table as we're already in a table",
+                "table", _ourTable);
             return;
         }
 
         // make sure we're currently in a place
         if (_tlobj == null) {
-            log.warning("Requested to create a table but we're not " +
-                        "currently in a place [config=" + config + "].");
+            log.warning("Requested to create a table but we're not currently in a place",
+                "config", config);
             return;
         }
 
@@ -209,20 +209,20 @@ public class TableDirector extends BasicDirector
     {
         // if we're already in a table, refuse the request
         if (_ourTable != null) {
-            log.warning("Ignoring request to join table as we're " +
-                        "already in a table [table=" + _ourTable + "].");
+            log.warning("Ignoring request to join table as we're already in a table",
+                "table", _ourTable);
             return;
         }
 
         // make sure we're currently in a place
         if (_tlobj == null) {
-            log.warning("Requested to join a table but we're not " +
-                        "currently in a place [tableId=" + tableId + "].");
+            log.warning("Requested to join a table but we're not currently in a place",
+                "tableId", tableId);
             return;
         }
 
         // issue the join request
-        log.info("Joining table [tid=" + tableId + ", pos=" + position + "].");
+        log.info("Joining table", "tid", tableId, "pos", position);
         _tlobj.getTableService().joinTable(_pctx.getClient(), tableId, position, this);
     }
 
@@ -234,8 +234,8 @@ public class TableDirector extends BasicDirector
     {
         // make sure we're currently in a place
         if (_tlobj == null) {
-            log.warning("Requested to leave a table but we're not " +
-                        "currently in a place [tableId=" + tableId + "].");
+            log.warning("Requested to leave a table but we're not currently in a place",
+                "tableId", tableId);
             return;
         }
 
@@ -250,8 +250,8 @@ public class TableDirector extends BasicDirector
     public function startTableNow (tableId :int) :void
     {
         if (_tlobj == null) {
-            log.warning("Requested to start a table but we're not " +
-                        "currently in a place [tableId=" + tableId + "].");
+            log.warning("Requested to start a table but we're not currently in a place",
+                "tableId", tableId);
             return;
         }
 
@@ -264,8 +264,8 @@ public class TableDirector extends BasicDirector
     public function bootPlayer (tableId :int, target :Name) :void
     {
         if (_tlobj == null) {
-            log.warning("Requesting to boot a player from a table we're not currently in " +
-                        "[tableId=" + tableId + ", target=" + target + "].");
+            log.warning("Requesting to boot a player from a table we're not currently in",
+                "tableId", tableId, "target", target);
             return;
         }
 
@@ -336,13 +336,13 @@ public class TableDirector extends BasicDirector
         var tableId :int = int(result);
         if (_tlobj == null) {
             // we've left, it's none of our concern anymore
-            log.info("Table created, but no lobby. [tableId=" + tableId + "].");
+            log.info("Table created, but no lobby.", "tableId", tableId);
             return;
         }
 
         var table :Table = (_tlobj.getTables().get(tableId) as Table);
         if (table == null) {
-            log.warning("Table created, but where is it? [tableId=" + tableId + "]");
+            log.warning("Table created, but where is it?", "tableId", tableId);
             return;
         }
 
