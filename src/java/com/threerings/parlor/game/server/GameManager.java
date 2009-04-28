@@ -338,6 +338,14 @@ public class GameManager extends PlaceManager
     }
 
     /**
+     * Convenience for getting the persistent id from a body.
+     */
+    public int getPlayerPersistentId (BodyObject body)
+    {
+        return getPlayerPersistentId(body.getVisibleName());
+    }
+
+    /**
      * Returns the number of players in the game.
      */
     public int getPlayerCount ()
