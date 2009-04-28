@@ -174,10 +174,9 @@ public /*abstract*/ class GameController extends PlaceController
      *
      * @param spec a Name or OccupantInfo.
      */
-    public function getPlayerPersistentId (spec :*) :int
+    public function getPlayerPersistentId (name :Name) :int
     {
-        return (_userIder == null) ? 0 :
-            _userIder.getUserId((spec is OccupantInfo) ? OccupantInfo(spec).username : Name(spec));
+        return (_userIder == null) ? 0 : _userIder.getUserId(name);
     }
 
     /**
