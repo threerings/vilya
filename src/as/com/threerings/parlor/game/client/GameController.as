@@ -178,6 +178,14 @@ public /*abstract*/ class GameController extends PlaceController
     }
 
     /**
+     * Returns the persistent user id for the supplied occupant info.
+     */
+    public function getPlayerPersistentId (occInfo :OccupantInfo) :int
+    {
+        return getPlayerPersistentId(occInfo.username);
+    }
+
+    /**
      * Returns the unique identifier for the current gameplay session.
      */
     public function getSessionId () :int
