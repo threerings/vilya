@@ -29,7 +29,6 @@ import com.threerings.presents.dobj.AttributeChangedEvent;
 
 import com.threerings.crowd.client.PlaceController;
 import com.threerings.crowd.data.BodyObject;
-import com.threerings.crowd.data.OccupantInfo;
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.util.CrowdContext;
@@ -176,14 +175,6 @@ public /*abstract*/ class GameController extends PlaceController
     public function nameToId (name :Name) :int
     {
         return (_userIder == null) ? 0 : _userIder.getUserId(name);
-    }
-
-    /**
-     * Returns the persistent user id for the supplied occupant info.
-     */
-    public function infoToId (occInfo :OccupantInfo) :int
-    {
-        return nameToId(occInfo.username);
     }
 
     /**
