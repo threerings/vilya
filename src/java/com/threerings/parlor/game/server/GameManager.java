@@ -85,6 +85,14 @@ public class GameManager extends PlaceManager
     }
 
     /**
+     * Returns the unique numeric identifier for our managed game. See {@link GameConfig#getGameId}.
+     */
+    public int getGameId ()
+    {
+        return getGameConfig().getGameId();
+    }
+
+    /**
      * A convenience method for getting the game type.
      */
     public int getMatchType ()
