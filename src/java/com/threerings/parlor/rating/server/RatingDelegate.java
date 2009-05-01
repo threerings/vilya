@@ -36,6 +36,7 @@ import com.samskivert.util.StringUtil;
 import com.samskivert.jdbc.RepositoryUnit;
 
 import com.threerings.util.Name;
+import com.threerings.util.TimeUtil;
 
 import com.threerings.presents.annotation.MainInvoker;
 
@@ -114,7 +115,7 @@ public abstract class RatingDelegate extends GameManagerDelegate
         }
 
         // note the time at which we started
-        _startStamp = (int)(System.currentTimeMillis() / 1000);
+        _startStamp = System.currentTimeMillis();
 
         // this contains the persistent player id for each position in a seated table game
         _playerIds = new int[_gmgr.getPlayerSlots()];
@@ -147,7 +148,7 @@ public abstract class RatingDelegate extends GameManagerDelegate
         }
 
         // don't update ratings if the game did not run long enough
-        int gameSecs = (int) (System.currentTimeMillis()/1000 - _startStamp);
+        int gameSecs = TimeUtil.elapsedSeconds(_startStamp, System.currentTimeMillis());
         if (gameSecs < minimumRatedDuration()) {
             return;
         }
@@ -443,7 +444,7 @@ public abstract class RatingDelegate extends GameManagerDelegate
     protected IntMap<Rating> _ratings = IntMaps.newHashIntMap();
 
     /** A timestamp set at the beginning of the game, used to calculate its duration. */
-    protected int _startStamp;
+    protected long _startStamp;
 
     // our dependencies
     @Inject protected RatingRepository _repo;
