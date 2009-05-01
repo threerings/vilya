@@ -166,18 +166,16 @@ public class TableManager
             notePlayerAdded(table, creator);
         }
 
-        // stick the table into the table lobby object
-        if (shouldPublish(table)) {
-            _tlobj.addToTables(table);
-        }
-
-        // also stick it into our tables tables
+        // stick the table into our tables tables
         _tables.put(table.tableId, table);
 
         // if the table has only one seat, start the game immediately
         if (table.shouldBeStarted()) {
             createGame(table);
         }
+
+        // wire our table into our bits
+        tableCreated(table);
 
         return table;
     }
@@ -333,6 +331,19 @@ public class TableManager
         }
         table.clearPlayerPos(position);
         updateTable(table);
+    }
+
+    /**
+     * Puts a newly created table into our internal tables and publishes it to the lobby object.
+     * Can also be overridden by custom managers that want to react to table creation.
+     */
+    protected void tableCreated (Table table)
+        throws InvocationException
+    {
+        // publish the table in the lobby object if desired
+        if (shouldPublish(table)) {
+            _tlobj.addToTables(table);
+        }
     }
 
     /**
