@@ -159,7 +159,9 @@ public class TableManager
         }
 
         // stick the table into the table lobby object
-        _tlobj.addToTables(table);
+        if (shouldPublish(table)) {
+            _tlobj.addToTables(table);
+        }
 
         // also stick it into our tables tables
         _tables.put(table.tableId, table);
@@ -226,7 +228,7 @@ public class TableManager
         }
 
         // update the table in the lobby
-        _tlobj.updateTables(table);
+        updateTable(table);
 
         // there is normally no success response. the client will see
         // themselves show up in the table that they joined
@@ -266,7 +268,7 @@ public class TableManager
         if (table.isEmpty()) {
             purgeTable(table);
         } else {
-            _tlobj.updateTables(table);
+            updateTable(table);
         }
 
         // there is normally no success response. the client will see
@@ -322,8 +324,7 @@ public class TableManager
                         ", table=" + table + "].");
         }
         table.clearPlayerPos(position);
-
-        _tlobj.updateTables(table);
+        updateTable(table);
     }
 
     /**
@@ -346,8 +347,11 @@ public class TableManager
         // remove the mapping by gameOid
         Table removed = _goidMap.remove(table.gameOid); // no-op if gameOid == 0
 
-        // remove the table from the lobby object
-        _tlobj.removeFromTables(table.tableId);
+        // remove the table from the lobby object (the table may not have been published if a
+        // derived class decided it was not worth publishing, see shouldPublish())
+        if (_tlobj.getTables().containsKey(table.tableId)) {
+            _tlobj.removeFromTables(table.tableId);
+        }
 
         // remove the listener too so we do not get a request later on to update the occupants or
         // unmap this table
@@ -460,7 +464,12 @@ public class TableManager
         gameobj.addListener(_gameListener);
 
         // and then update the lobby object that contains the table
-        _tlobj.updateTables(table);
+        if (shouldPublish(table)) {
+            updateTable(table);
+        } else if (_tlobj.getTables().containsKey(table.tableId)) {
+            // or remove it if the table is no longer "interesting"
+            _tlobj.removeFromTables(table.tableId);
+        }
     }
 
     /**
@@ -501,7 +510,7 @@ public class TableManager
         // update this table's occupants information and update the table
         GameObject gameObj = (GameObject)_omgr.getObject(gameOid);
         table.updateOccupants(gameObj);
-        _tlobj.updateTables(table);
+        updateTable(table);
     }
 
     /**
@@ -523,12 +532,30 @@ public class TableManager
             return;
         }
 
-        // either update or delete the table depending on whether or not we just removed the last
-        // player
+        // update or delete the table depending on whether or not we just removed the last player
         if (pender.isEmpty()) {
             purgeTable(pender);
         } else {
-            _tlobj.updateTables(pender);
+            updateTable(pender);
+        }
+    }
+
+    /**
+     * Derived classes can override this method to filter certain tables from being published in
+     * the lobby object. Such tables are probably unwatchable and unjoinable and thus just take up
+     * space in the lobby object for no good reason. This will be checked when the table is first
+     * created and when the table's game transitions to in-play.
+     */
+    protected boolean shouldPublish (Table table)
+    {
+        return true; // we publish all tables by default
+    }
+
+    protected void updateTable (Table table)
+    {
+        // the table may not have been published, see shouldPublish()
+        if (_tlobj.getTables().containsKey(table.tableId)) {
+            _tlobj.updateTables(table);
         }
     }
 
