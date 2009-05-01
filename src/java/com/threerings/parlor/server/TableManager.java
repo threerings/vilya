@@ -334,11 +334,10 @@ public class TableManager
     }
 
     /**
-     * Puts a newly created table into our internal tables and publishes it to the lobby object.
-     * Can also be overridden by custom managers that want to react to table creation.
+     * Publishes a newly created table to the lobby object. Can also be overridden by custom
+     * managers that want to react to table creation.
      */
     protected void tableCreated (Table table)
-        throws InvocationException
     {
         // publish the table in the lobby object if desired
         if (shouldPublish(table)) {
