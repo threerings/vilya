@@ -21,7 +21,7 @@
 
 package com.threerings.parlor.rating.util;
 
-import java.io.PrintStream;
+import java.io.PrintWriter;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -211,7 +211,13 @@ public class Percentiler
      */
     public int getPercentile (float value)
     {
-        return _percentile[toBucketIndex(value)];
+        if (value < _min) {
+            return 0;
+        } else if (value > _max) {
+            return 100;
+        } else {
+            return _percentile[toBucketIndex(value)];
+        }
     }
 
     /**
@@ -330,7 +336,7 @@ public class Percentiler
     /**
      * Dumps out our data in a format that can be used to generate a gnuplot.
      */
-    public void dumpGnuPlot (PrintStream out)
+    public void dumpGnuPlot (PrintWriter out)
     {
         float delta = (_max - _min) / (float)BUCKET_COUNT;
         for (int ii = 0; ii < BUCKET_COUNT; ii++) {
@@ -341,7 +347,7 @@ public class Percentiler
     /**
      * Dumps a text representation of this percentiler to the supplied print stream.
      */
-    public void dump (PrintStream out)
+    public void dump (PrintWriter out)
     {
         // obtain our maximum count
         int max = 0;
