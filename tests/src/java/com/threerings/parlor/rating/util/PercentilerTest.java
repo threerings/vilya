@@ -21,23 +21,52 @@
 
 package com.threerings.parlor.rating.util;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Random;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.*; 
 
 /**
  * Tests the {@link Percentiler} class.
  */
-public class PercentilerTest extends TestCase
+public class PercentilerTest
 {
-    public PercentilerTest ()
+    @Test public void testTiler ()
     {
-        super(PercentilerTest.class.getName());
+        Percentiler tiler = createGaussian();
+
+        // check some basic stuff
+        assertTrue(tiler.getMinScore() < tiler.getMaxScore());
+
+        // dump the tiler
+        StringWriter out = new StringWriter();
+        tiler.dump(new PrintWriter(out));
+        String run1 = out.toString();
+
+        // serialize, unserialize and dump again
+        Percentiler t2 = new Percentiler(tiler.toBytes());
+        out = new StringWriter();
+        t2.dump(new PrintWriter(out));
+        String run2 = out.toString();
+
+        // should be equal
+        assertEquals(run1, run2);
     }
 
-    @Override
-    public void runTest ()
+    @Test public void testGetPercentile ()
+    {
+        Percentiler tiler = createGaussian();
+
+        assertEquals(0, tiler.getPercentile(tiler.getMinScore()));
+        assertEquals(0, tiler.getPercentile(tiler.getMinScore()-1));
+        assertEquals(100, tiler.getPercentile(tiler.getMaxScore()));
+        assertEquals(100, tiler.getPercentile(tiler.getMaxScore()+1));
+    }
+
+    protected Percentiler createGaussian ()
     {
         // create a percentiler
         Percentiler tiler = new Percentiler();
@@ -45,27 +74,9 @@ public class PercentilerTest extends TestCase
 
         // add some random values
         for (int ii = 0; ii < 500; ii++) {
-            tiler.recordValue((float)rando.nextGaussian() + 5.0f);
+            tiler.recordValue((float)rando.nextGaussian() + 5.0f, false);
         }
         tiler.recomputePercentiles();
-
-        // now dump the tiler
-        tiler.dump(System.out);
-
-        // serialize and unserialize
-        Percentiler t2 = new Percentiler(tiler.toBytes());
-        // and dump again
-        t2.dump(System.out);
-    }
-
-    public static Test suite ()
-    {
-        return new PercentilerTest();
-    }
-
-    public static void main (String[] args)
-    {
-        PercentilerTest test = new PercentilerTest();
-        test.runTest();
+        return tiler;
     }
 }
