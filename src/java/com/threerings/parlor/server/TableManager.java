@@ -89,6 +89,14 @@ public class TableManager
     }
 
     /**
+     * Returns the number of tables being managed currently.
+     */
+    public int getTableCount ()
+    {
+        return _tables.size();
+    }
+
+    /**
      * This must be called when the table manager is no longer needed.
      */
     public void shutdown ()
