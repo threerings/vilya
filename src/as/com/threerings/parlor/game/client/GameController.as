@@ -63,6 +63,14 @@ public /*abstract*/ class GameController extends PlaceController
     }
 
     /**
+     * Returns the persistent user id for the supplied player name.
+     */
+    public static function nameToId (name :Name) :int
+    {
+        return (_userIder == null) ? 0 : _userIder.getUserId(name);
+    }
+
+    /**
      * Initializes this game controller with the game configuration that
      * was established during the match making process. Derived classes
      * may want to override this method to initialize themselves with
@@ -167,14 +175,6 @@ public /*abstract*/ class GameController extends PlaceController
 
         // end the game until we receive a new board
         setGameOver(true);
-    }
-
-    /**
-     * Returns the persistent user id for the supplied player name.
-     */
-    public function nameToId (name :Name) :int
-    {
-        return (_userIder == null) ? 0 : _userIder.getUserId(name);
     }
 
     /**
