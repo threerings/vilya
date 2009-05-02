@@ -5,11 +5,21 @@ package com.threerings.parlor.game.data {
 
 import com.threerings.util.Name;
 
-public interface UserIdentifier
+public class UserIdentifier
 {
     /**
-     * Returns the id of the specified user, or 0 if they're not valid.
+     * Get the user id for the specified user, or 0 if they're not valid.
      */
-    function getUserId (name :Name) :int;
+    public static function getUserId (name :Name) :int
+    {
+        return (_userIder == null) ? 0 : _userIder(name);
+    }
+
+    public static function setIder (userIder :Function) :void
+    {
+        _userIder = userIder;
+    }
+
+    protected static var _userIder :Function;
 }
 }

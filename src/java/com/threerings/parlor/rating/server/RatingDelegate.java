@@ -127,7 +127,7 @@ public abstract class RatingDelegate extends GameManagerDelegate
             BodyObject bobj = (BodyObject)_omgr.getObject(_gobj.occupants.get(ii));
             int pidx = _gmgr.getPlayerIndex(bobj.getVisibleName());
             if (pidx != -1) {
-                _playerIds[pidx] = _gmgr.getPlayerPersistentId(bobj.getVisibleName());
+                _playerIds[pidx] = _gmgr.getPlayerPersistentId(bobj);
             }
             Rating rating = maybeCreateRating(bobj);
             if (rating != null) {
@@ -169,7 +169,7 @@ public abstract class RatingDelegate extends GameManagerDelegate
     protected Rating maybeCreateRating (BodyObject bobj)
     {
         // if this occupant is not a player (or not ratable), skip 'em
-        int playerId = _gmgr.getPlayerPersistentId(bobj.getVisibleName());
+        int playerId = _gmgr.getPlayerPersistentId(bobj);
         if (playerId == 0) {
             return null;
         }

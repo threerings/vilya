@@ -67,15 +67,6 @@ public class GameManager extends PlaceManager
     implements ParlorCodes, GameCodes, PlayManager
 {
     /**
-     * Configures a means by which the Parlor game services can map users to a persistent user id
-     * for things like per-game cookies and ratings.
-     */
-    public static void setUserIdentifier (UserIdentifier userIder)
-    {
-        _userIder = userIder;
-    }
-
-    /**
      * Returns the configuration object for the game being managed by this manager.
      */
     public GameConfig getGameConfig ()
@@ -339,7 +330,7 @@ public class GameManager extends PlaceManager
      */
     public int getPlayerPersistentId (Name name)
     {
-        return _userIder.getUserId(name);
+        return UserIdentifier.getUserId(name);
     }
 
     /**
@@ -1391,13 +1382,6 @@ public class GameManager extends PlaceManager
 
     /** The interval for the AI tick. */
     protected Interval _aiTicker;
-
-    /** Used to map users to persistent integer identifiers. */
-    protected static UserIdentifier _userIder = new UserIdentifier() {
-        public int getUserId (Name name) {
-            return 0; // by default no one has persistent info
-        }
-    };
 
     /** The default value returned by {@link #getNoShowTime}. */
     protected static final long DEFAULT_NOSHOW_DELAY = 30 * 1000L;

@@ -36,7 +36,6 @@ import com.threerings.crowd.util.CrowdContext;
 import com.threerings.parlor.game.data.GameCodes;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.game.data.GameObject;
-import com.threerings.parlor.game.data.UserIdentifier;
 import com.threerings.parlor.util.ParlorContext;
 
 /**
@@ -53,22 +52,6 @@ public /*abstract*/ class GameController extends PlaceController
     implements AttributeChangeListener
 {
     protected static const log :Log = Log.getLog(GameController);
-
-    /**
-     * Configures a means for identifying users persistently.
-     */
-    public static function setUserIdentifier (userIder :UserIdentifier) :void
-    {
-        _userIder = userIder;
-    }
-
-    /**
-     * Returns the persistent user id for the supplied player name.
-     */
-    public static function nameToId (name :Name) :int
-    {
-        return (_userIder == null) ? 0 : _userIder.getUserId(name);
-    }
 
     /**
      * Initializes this game controller with the game configuration that
@@ -339,8 +322,5 @@ public /*abstract*/ class GameController extends PlaceController
      * the client knows the game is over before the server has
      * transitioned the game object accordingly. */
     protected var _gameOver :Boolean;
-
-    /** Used to map users to persistent integer identifiers. */
-    protected static var _userIder :UserIdentifier;
 }
 }
