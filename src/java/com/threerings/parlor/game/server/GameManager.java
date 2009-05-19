@@ -36,9 +36,9 @@ import com.threerings.util.MessageBundle;
 import com.threerings.util.Name;
 
 import com.threerings.presents.data.ClientObject;
-import com.threerings.presents.dobj.AttributeChangeListener;
 import com.threerings.presents.dobj.AttributeChangedEvent;
 import com.threerings.presents.dobj.DObject;
+import com.threerings.presents.dobj.NamedAttributeListener;
 
 import com.threerings.crowd.chat.server.SpeakUtil;
 import com.threerings.crowd.data.BodyObject;
@@ -1334,12 +1334,11 @@ public class GameManager extends PlaceManager
     }
 
     /** Listens for game state changes. */
-    protected AttributeChangeListener _stateListener = new AttributeChangeListener() {
-        public void attributeChanged (AttributeChangedEvent event) {
-            if (event.getName().equals(GameObject.STATE)) {
-                stateDidChange(_committedState = event.getIntValue(),
-                               ((Integer)event.getOldValue()).intValue());
-            }
+    protected NamedAttributeListener _stateListener = new NamedAttributeListener(GameObject.STATE) {
+        @Override
+        public void namedAttributeChanged (AttributeChangedEvent event) {
+            stateDidChange(_committedState = event.getIntValue(),
+                           ((Integer)event.getOldValue()).intValue());
         }
     };
 

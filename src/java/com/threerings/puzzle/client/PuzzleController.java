@@ -42,6 +42,7 @@ import com.threerings.presents.dobj.AttributeChangeListener;
 import com.threerings.presents.dobj.AttributeChangedEvent;
 import com.threerings.presents.dobj.ElementUpdateListener;
 import com.threerings.presents.dobj.ElementUpdatedEvent;
+import com.threerings.presents.dobj.NamedAttributeListener;
 
 import com.threerings.crowd.client.PlaceControllerDelegate;
 import com.threerings.crowd.data.PlaceObject;
@@ -868,12 +869,10 @@ public abstract class PuzzleController extends GameController
     };
 
     /** Listens for various attribute changes. */
-    protected AttributeChangeListener _mlist = new AttributeChangeListener() {
-        public void attributeChanged (AttributeChangedEvent event) {
-            String name = event.getName();
-            if (name.equals(PuzzleObject.SEED)) {
-                generateNewBoard();
-            }
+    protected AttributeChangeListener _mlist = new NamedAttributeListener(PuzzleObject.SEED) {
+        @Override
+        public void namedAttributeChanged (AttributeChangedEvent event) {
+            generateNewBoard();
         }
     };
 
