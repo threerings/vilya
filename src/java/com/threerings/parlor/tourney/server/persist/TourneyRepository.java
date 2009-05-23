@@ -30,6 +30,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -146,7 +147,7 @@ public class TourneyRepository extends JORARepository
         throws PersistenceException
     {
         ArrayList<TourneyRecord> recordList = loadAll(_ttable, "");
-        ArrayList<TourneyConfig> configList = new ArrayList<TourneyConfig>(recordList.size());
+        ArrayList<TourneyConfig> configList = Lists.newArrayListWithCapacity(recordList.size());
         for (TourneyRecord record : recordList) {
             configList.add(record.getTourneyConfig());
         }

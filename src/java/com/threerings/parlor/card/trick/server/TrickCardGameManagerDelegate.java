@@ -21,9 +21,10 @@
 
 package com.threerings.parlor.card.trick.server;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import com.samskivert.util.ArrayUtil;
 import com.samskivert.util.Interval;
@@ -451,7 +452,7 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
      */
     protected Card pickRandomPlayableCard (Hand hand)
     {
-        List<Card> playableCards = new ArrayList<Card>();
+        List<Card> playableCards = Lists.newArrayList();
         for (int i = 0; i < hand.size(); i++) {
             Card card = hand.get(i);
             if (_trickCardGame.isCardPlayable(hand, card)) {

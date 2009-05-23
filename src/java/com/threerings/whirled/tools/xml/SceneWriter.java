@@ -21,7 +21,6 @@
 
 package com.threerings.whirled.tools.xml;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import java.io.File;
@@ -31,6 +30,7 @@ import java.io.IOException;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
+import com.google.common.collect.Maps;
 import com.megginson.sax.DataWriter;
 
 import com.threerings.tools.xml.NestableWriter;
@@ -108,8 +108,7 @@ public class SceneWriter
         throws SAXException
     {
         // write out our auxiliary scene models
-        for (int ii = 0; ii < model.auxModels.length; ii++) {
-            AuxModel amodel = model.auxModels[ii];
+        for (AuxModel amodel : model.auxModels) {
             NestableWriter awriter = _auxers.get(amodel.getClass());
             if (awriter != null) {
                 awriter.write(amodel, writer);
@@ -120,5 +119,5 @@ public class SceneWriter
         }
     }
 
-    protected Map<Class<?>, NestableWriter> _auxers = new HashMap<Class<?>, NestableWriter>();
+    protected Map<Class<?>, NestableWriter> _auxers = Maps.newHashMap();
 }

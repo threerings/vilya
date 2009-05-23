@@ -23,6 +23,8 @@ package com.threerings.whirled.zone.client;
 
 import java.util.ArrayList;
 
+import com.google.common.collect.Lists;
+
 import com.samskivert.util.ResultListener;
 
 import com.threerings.presents.client.BasicDirector;
@@ -289,7 +291,7 @@ public class ZoneDirector extends BasicDirector
     protected ZoneSummary _summary;
 
     /** Our zone observer list. */
-    protected ArrayList<ZoneObserver> _observers = new ArrayList<ZoneObserver>();
+    protected ArrayList<ZoneObserver> _observers = Lists.newArrayList();
 
     /** Our previous zone id. */
     protected int _previousZoneId = -1;

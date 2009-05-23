@@ -27,6 +27,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import com.google.common.collect.Maps;
+
 import com.samskivert.io.PersistenceException;
 import com.samskivert.util.HashIntMap;
 
@@ -166,7 +168,7 @@ public class SceneUpdateMarshaller
     protected HashIntMap<Class<?>> _typeToClass = new HashIntMap<Class<?>>();
 
     /** The table mapping update classes to types. */
-    protected HashMap<Class<?>,Integer> _classToType = new HashMap<Class<?>,Integer>();
+    protected HashMap<Class<?>, Integer> _classToType = Maps.newHashMap();
 
     /** A counter used in assigning update types to classes. */
     protected int _nextType = 0;

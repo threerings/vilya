@@ -11,6 +11,7 @@ import java.util.Set;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -92,7 +93,7 @@ public class StatRepository extends DepotRepository
      */
     public ArrayList<Stat> loadStats (int playerId)
     {
-        ArrayList<Stat> stats = new ArrayList<Stat>();
+        ArrayList<Stat> stats = Lists.newArrayList();
         Where where = new Where(StatRecord.PLAYER_ID, playerId);
         for (StatRecord record : findAll(StatRecord.class, where)) {
             Stat stat = decodeStat(record.statCode, record.statData, record.modCount);
@@ -117,13 +118,13 @@ public class StatRepository extends DepotRepository
      */
     public void writeModified (int playerId, Stat[] stats)
     {
-        for (int ii = 0; ii < stats.length; ii++) {
+        for (Stat stat : stats) {
             try {
-                if (stats[ii].getType().isPersistent() && stats[ii].isModified()) {
-                    updateStat(playerId, stats[ii], true);
+                if (stat.getType().isPersistent() && stat.isModified()) {
+                    updateStat(playerId, stat, true);
                 }
             } catch (Exception e) {
-                log.warning("Error flushing modified stat", "stat", stats[ii], e);
+                log.warning("Error flushing modified stat", "stat", stat, e);
             }
         }
     }

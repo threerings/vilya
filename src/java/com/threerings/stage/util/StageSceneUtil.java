@@ -21,12 +21,13 @@
 
 package com.threerings.stage.util;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+
+import com.google.common.collect.Lists;
 
 import com.samskivert.util.SortableArrayList;
 
@@ -247,7 +248,7 @@ public class StageSceneUtil
      */
     public static List<SceneLocation> getClusterLocs (Cluster cluster)
     {
-        List<SceneLocation> list = new ArrayList<SceneLocation>();
+        List<SceneLocation> list = Lists.newArrayList();
 
         // convert our tile coordinates into a cartesian coordinate system
         // with units equal to one fine coordinate in size

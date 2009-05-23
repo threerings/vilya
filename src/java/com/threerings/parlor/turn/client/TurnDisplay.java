@@ -31,6 +31,8 @@ import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.google.common.collect.Maps;
+
 import com.samskivert.swing.util.SwingUtil;
 
 import com.threerings.util.Name;
@@ -213,7 +215,7 @@ public class TurnDisplay extends JPanel
     protected TurnGameObject _turnObj;
 
     /** A mapping of the labels currently associated with each player. */
-    protected HashMap<Name,JLabel> _labels = new HashMap<Name,JLabel>();
+    protected HashMap<Name,JLabel> _labels = Maps.newHashMap();
 
     /** The game-specified player icons. */
     protected Icon[] _playerIcons;

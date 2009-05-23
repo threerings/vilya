@@ -21,7 +21,6 @@
 
 package com.threerings.micasa.lobby;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +37,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JPanel;
+
+import com.google.common.collect.Maps;
 
 import com.threerings.crowd.data.PlaceObject;
 
@@ -119,8 +120,8 @@ public class LobbySelector extends JPanel
     public void gotCategories (String[] categories)
     {
         // append these to our "unselected" item
-        for (int i = 0; i < categories.length; i++) {
-            _combo.addItem(categories[i]);
+        for (String categorie : categories) {
+            _combo.addItem(categorie);
         }
     }
 
@@ -222,7 +223,7 @@ public class LobbySelector extends JPanel
     protected JComboBox _combo;
     protected JList _loblist;
 
-    protected Map<String, DefaultListModel> _catlists = new HashMap<String, DefaultListModel>();
+    protected Map<String, DefaultListModel> _catlists = Maps.newHashMap();
     protected String _pendingCategory;
 
     protected static final String CAT_FIRST_ITEM = "<categories...>";

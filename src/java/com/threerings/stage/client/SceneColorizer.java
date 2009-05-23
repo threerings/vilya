@@ -21,9 +21,10 @@
 
 package com.threerings.stage.client;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import com.google.common.collect.Maps;
 
 import com.threerings.media.image.ColorPository;
 import com.threerings.media.image.Colorization;
@@ -145,5 +146,5 @@ public class SceneColorizer implements TileSet.Colorizer
     protected StageScene _scene;
 
     /** Contains our colorization class information. */
-    protected Map<String, int[]> _cids = new HashMap<String, int[]>();
+    protected Map<String, int[]> _cids = Maps.newHashMap();
 }

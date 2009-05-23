@@ -56,6 +56,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import com.samskivert.util.HashIntMap;
@@ -362,26 +363,24 @@ public class TileInfoPanel extends JSplitPane
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
         root.removeAllChildren();
 
-        ArrayList<TreePath> expand = new ArrayList<TreePath>();
+        ArrayList<TreePath> expand = Lists.newArrayList();
 
         // add all the elements in the base layer
         DefaultMutableTreeNode base = new DefaultMutableTreeNode("Base Layer");
         root.add(base);
-        addNodes(base, getSortedTileSets(EditorModel.BASE_LAYER),
-                 "", 0, expand);
+        addNodes(base, getSortedTileSets(EditorModel.BASE_LAYER), "", 0, expand);
 
         // add all the elements in the object layer
         DefaultMutableTreeNode obj = new DefaultMutableTreeNode("Object Layer");
         root.add(obj);
-        addNodes(obj, getSortedTileSets(EditorModel.OBJECT_LAYER),
-                 "", 0, expand);
+        addNodes(obj, getSortedTileSets(EditorModel.OBJECT_LAYER), "", 0, expand);
 
         // notify the JTree that we've put some brand new branches on it.
         model.reload();
 
         // expand our container categories
-        for (Iterator<TreePath> iter = expand.iterator(); iter.hasNext(); ) {
-            _tsettree.expandPath(iter.next());
+        for (TreePath treePath : expand) {
+            _tsettree.expandPath(treePath);
         }
 
         // now select the previously selected item, or the first...

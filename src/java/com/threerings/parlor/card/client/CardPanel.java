@@ -34,6 +34,8 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.event.MouseInputAdapter;
 
+import com.google.common.collect.Lists;
+
 import com.samskivert.util.ObserverList;
 import com.samskivert.util.Predicate;
 import com.samskivert.util.QuickSort;
@@ -259,8 +261,8 @@ public abstract class CardPanel extends VirtualMediaPanel
     public void clearHandSelection ()
     {
         CardSprite[] sprites = getSelectedHandSprites();
-        for (int i = 0; i < sprites.length; i++) {
-            deselectHandSprite(sprites[i]);
+        for (CardSprite sprite : sprites) {
+            deselectHandSprite(sprite);
         }
     }
 
@@ -394,11 +396,11 @@ public abstract class CardPanel extends VirtualMediaPanel
     {
         // fly each sprite over, removing it from the hand immediately and from the board when it
         // finishes its path
-        for (int i = 0; i < cards.length; i++) {
-            removeFromHand(cards[i]);
+        for (CardSprite card : cards) {
+            removeFromHand(card);
             LinePath flight = new LinePath(dest, flightDuration);
-            cards[i].addSpriteObserver(_pathEndRemover);
-            cards[i].moveAndFadeOut(flight, flightDuration, fadePortion);
+            card.addSpriteObserver(_pathEndRemover);
+            card.moveAndFadeOut(flight, flightDuration, fadePortion);
         }
 
         // adjust the hand to cover the hole
@@ -433,21 +435,21 @@ public abstract class CardPanel extends VirtualMediaPanel
 
         // then set the layers and fly the cards in
         int size = _handSprites.size();
-        for (int i = 0; i < sprites.length; i++) {
-            int idx = _handSprites.indexOf(sprites[i]);
-            sprites[i].setLocation(src.x, src.y);
-            sprites[i].setRenderOrder(idx);
-            sprites[i].addSpriteObserver(_handSpriteObserver);
-            addSprite(sprites[i]);
+        for (CardSprite sprite : sprites) {
+            int idx = _handSprites.indexOf(sprite);
+            sprite.setLocation(src.x, src.y);
+            sprite.setRenderOrder(idx);
+            sprite.addSpriteObserver(_handSpriteObserver);
+            addSprite(sprite);
 
             // create a path sequence containing flight, pause, and drop
-            ArrayList<Path> paths = new ArrayList<Path>();
+            ArrayList<Path> paths = Lists.newArrayList();
             Point hp2 = new Point(getHandX(size, idx), _handLocation.y),
                 hp1 = new Point(hp2.x, hp2.y - _selectedCardOffset);
             paths.add(new LinePath(hp1, flightDuration));
             paths.add(new LinePath(hp1, pauseDuration));
             paths.add(new LinePath(hp2, dropDuration));
-            sprites[i].moveAndFadeIn(new PathSequence(paths), flightDuration +
+            sprite.moveAndFadeIn(new PathSequence(paths), flightDuration +
                                      pauseDuration + dropDuration, fadePortion);
         }
     }
@@ -587,11 +589,11 @@ public abstract class CardPanel extends VirtualMediaPanel
     public void flyFromBoard (CardSprite[] cards, Point dest, long flightDuration,
                               float fadePortion)
     {
-        for (int i = 0; i < cards.length; i++) {
+        for (CardSprite card : cards) {
             LinePath flight = new LinePath(dest, flightDuration);
-            cards[i].addSpriteObserver(_pathEndRemover);
-            cards[i].moveAndFadeOut(flight, flightDuration, fadePortion);
-            _boardSprites.remove(cards[i]);
+            card.addSpriteObserver(_pathEndRemover);
+            card.moveAndFadeOut(flight, flightDuration, fadePortion);
+            _boardSprites.remove(card);
         }
     }
 
@@ -608,13 +610,13 @@ public abstract class CardPanel extends VirtualMediaPanel
     public void flyFromBoard (CardSprite[] cards, Point dest1, Point dest2, long flightDuration,
                               float fadePortion)
     {
-        for (int i = 0; i < cards.length; i++) {
+        for (CardSprite card : cards) {
             PathSequence flight = new PathSequence(
                 new LinePath(dest1, flightDuration/2),
                 new LinePath(dest1, dest2, flightDuration/2));
-            cards[i].addSpriteObserver(_pathEndRemover);
-            cards[i].moveAndFadeOut(flight, flightDuration, fadePortion);
-            _boardSprites.remove(cards[i]);
+            card.addSpriteObserver(_pathEndRemover);
+            card.moveAndFadeOut(flight, flightDuration, fadePortion);
+            _boardSprites.remove(card);
         }
     }
 
@@ -1072,11 +1074,10 @@ public abstract class CardPanel extends VirtualMediaPanel
     protected CardSprite _activeCardSprite;
 
     /** The sprites for cards within the hand. */
-    protected ArrayList<CardSprite> _handSprites = new ArrayList<CardSprite>();
+    protected ArrayList<CardSprite> _handSprites = Lists.newArrayList();
 
     /** The sprites for cards within the hand that have been selected. */
-    protected ArrayList<CardSprite> _selectedHandSprites =
-        new ArrayList<CardSprite>();
+    protected ArrayList<CardSprite> _selectedHandSprites = Lists.newArrayList();
 
     /** The current selection mode for the hand. */
     protected int _handSelectionMode;
@@ -1103,7 +1104,7 @@ public abstract class CardPanel extends VirtualMediaPanel
     protected int _selectedCardOffset;
 
     /** The sprites for cards on the board. */
-    protected ArrayList<CardSprite> _boardSprites = new ArrayList<CardSprite>();
+    protected ArrayList<CardSprite> _boardSprites = Lists.newArrayList();
 
     /** The hand sprite observer instance. */
     protected HandSpriteObserver _handSpriteObserver = new HandSpriteObserver();

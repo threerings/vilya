@@ -21,10 +21,11 @@
 
 package com.threerings.parlor.util;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import java.awt.Component;
+
+import com.google.common.collect.Lists;
 
 import com.samskivert.util.CollectionUtil;
 import com.samskivert.util.Interval;
@@ -118,10 +119,10 @@ public class RobotPlayer extends Interval
     protected long _robotDelay = DEFAULT_ROBOT_DELAY;
 
     /** The list of available key press action commands. */
-    protected List<String> _press = new ArrayList<String>();
+    protected List<String> _press = Lists.newArrayList();
 
     /** The list of available key release action commands. */
-    protected List<String> _release = new ArrayList<String>();
+    protected List<String> _release = Lists.newArrayList();
 
     /** The key translator that describes available keys and commands. */
     protected KeyTranslator _xlate;

@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import com.samskivert.util.ArrayIntSet;
 import com.samskivert.util.ListUtil;
@@ -129,8 +130,8 @@ public class Table
     @ActionScript(omit=true)
     public boolean isEmpty ()
     {
-        for (int i = 0; i < bodyOids.length; i++) {
-            if (bodyOids[i] != 0) {
+        for (int bodyOid : bodyOids) {
+            if (bodyOid != 0) {
                 return false;
             }
         }
@@ -144,8 +145,8 @@ public class Table
     {
         int count = 0;
         if (players != null) {
-            for (int ii = 0; ii < players.length; ii++) {
-                if (players[ii] != null) {
+            for (Name player : players) {
+                if (player != null) {
                     count++;
                 }
             }
@@ -270,7 +271,7 @@ public class Table
     public void addBannedUser (Name player)
     {
         if (_bannedUsers == null) {
-            _bannedUsers = new HashSet<Name>();
+            _bannedUsers = Sets.newHashSet();
         }
 
         _bannedUsers.add(player);
@@ -373,10 +374,10 @@ public class Table
         } else {
             // for a team game, make sure each team has the minimum players
             int[][] teams = tconfig.teamMemberIndices;
-            for (int ii=0; ii < teams.length; ii++) {
+            for (int[] team : teams) {
                 int teamCount = 0;
-                for (int jj=0; jj < teams[ii].length; jj++) {
-                    if (players[teams[ii][jj]] != null) {
+                for (int jj=0; jj < team.length; jj++) {
+                    if (players[team[jj]] != null) {
                         teamCount++;
                     }
                 }

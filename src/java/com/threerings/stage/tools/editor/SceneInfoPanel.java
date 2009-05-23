@@ -38,6 +38,8 @@ import javax.swing.JTextField;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
+import com.google.common.collect.Sets;
+
 import com.samskivert.util.Collections;
 import com.samskivert.util.ComparableArrayList;
 
@@ -45,6 +47,7 @@ import com.samskivert.swing.GroupLayout;
 import com.samskivert.swing.HGroupLayout;
 
 import com.threerings.media.image.ColorPository;
+import com.threerings.media.image.ColorPository.ColorRecord;
 import com.threerings.media.tile.NoSuchTileSetException;
 import com.threerings.media.tile.RecolorableTileSet;
 import com.threerings.media.tile.TileManager;
@@ -170,7 +173,7 @@ public class SceneInfoPanel extends JPanel
     {
         // add all possible colorization names to the list
         final TileManager tilemgr = _ctx.getTileManager();
-        final HashSet<String> set = new HashSet<String>();
+        final HashSet<String> set = Sets.newHashSet();
         StageMisoSceneModel msmodel = StageMisoSceneModel.getSceneModel(
             _scene.getSceneModel());
         msmodel.visitObjects(new ObjectVisitor() {
@@ -189,8 +192,8 @@ public class SceneInfoPanel extends JPanel
                     return;
                 }
                 if (zations != null) {
-                    for (int ii=0; ii < zations.length; ii++) {
-                        set.add(zations[ii]);
+                    for (String zation : zations) {
+                        set.add(zation);
                     }
                 }
             }
@@ -234,10 +237,10 @@ public class SceneInfoPanel extends JPanel
 
             ColorPository.ColorRecord[] colors = cpos.enumerateColors(cclass);
             ComparableArrayList<String> list = new ComparableArrayList<String>();
-            for (int ii=0; ii < colors.length; ii++) {
-                list.insertSorted(colors[ii].name);
-                if (colors[ii].colorId == pick) {
-                    choice = colors[ii].name;
+            for (ColorRecord color : colors) {
+                list.insertSorted(color.name);
+                if (color.colorId == pick) {
+                    choice = color.name;
                 }
             }
 
@@ -268,9 +271,9 @@ public class SceneInfoPanel extends JPanel
         Object selected = _colorIds.getSelectedItem();
         int pick = -1;
 
-        for (int ii=0; ii < colors.length; ii++) {
-            if (colors[ii].name.equals(selected)) {
-                pick = colors[ii].colorId;
+        for (ColorRecord color : colors) {
+            if (color.name.equals(selected)) {
+                pick = color.colorId;
                 break;
             }
         }

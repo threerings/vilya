@@ -21,7 +21,6 @@
 
 package com.threerings.puzzle.client;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import java.awt.Color;
@@ -30,6 +29,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+
+import com.google.common.collect.Lists;
 
 import com.samskivert.util.StringUtil;
 
@@ -375,10 +376,10 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
     protected Rectangle _bounds;
 
     /** The action animations on the board. */
-    protected List<Animation> _actionAnims = new ArrayList<Animation>();
+    protected List<Animation> _actionAnims = Lists.newArrayList();
 
     /** The action sprites on the board. */
-    protected List<Sprite> _actionSprites = new ArrayList<Sprite>();
+    protected List<Sprite> _actionSprites = Lists.newArrayList();
 
     /** Prevents certain animations from overlapping others. */
     protected AnimationArranger _avoidArranger;

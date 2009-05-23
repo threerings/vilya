@@ -22,12 +22,12 @@
 package com.threerings.stage.util;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import java.awt.Rectangle;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import com.samskivert.util.ListUtil;
 
@@ -225,20 +225,20 @@ public class PlacementConstraints
             }
         }
 
-        for (int i = 0; i < removed.length; i++) {
-            if (removed[i].tile.hasConstraint(ObjectTileSet.SURFACE) &&
-                hasOnSurface(removed[i], added, removed)) {
+        for (ObjectData element : removed) {
+            if (element.tile.hasConstraint(ObjectTileSet.SURFACE) &&
+                hasOnSurface(element, added, removed)) {
                 return MessageBundle.qualify(STAGE_MESSAGE_BUNDLE,
                     "m.has_on_surface");
             }
 
-            int dir = getConstraintDirection(removed[i], ObjectTileSet.WALL);
+            int dir = getConstraintDirection(element, ObjectTileSet.WALL);
             if (dir != NONE) {
-                if (hasOnWall(removed[i], added, removed, dir)) {
+                if (hasOnWall(element, added, removed, dir)) {
                     return MessageBundle.qualify(STAGE_MESSAGE_BUNDLE,
                         "m.has_on_wall");
 
-                } else if (hasAttached(removed[i], added, removed, dir)) {
+                } else if (hasAttached(element, added, removed, dir)) {
                     return MessageBundle.qualify(STAGE_MESSAGE_BUNDLE,
                         "m.has_attached");
                 }
@@ -457,14 +457,14 @@ public class PlacementConstraints
             return false;
         }
 
-        for (int i = 0; i < constraints.length; i++) {
-            if (constraints[i].startsWith(prefix)) {
+        for (String constraint : constraints) {
+            if (constraint.startsWith(prefix)) {
                 int fromidx = prefix.length(),
-                    toidx = constraints[i].indexOf('_', fromidx);
+                    toidx = constraint.indexOf('_', fromidx);
                 dirheight.dir = DirectionUtil.fromShortString(toidx == -1 ?
-                    constraints[i].substring(fromidx) :
-                    constraints[i].substring(fromidx, toidx));
-                dirheight.low = constraints[i].endsWith(ObjectTileSet.LOW);
+                    constraint.substring(fromidx) :
+                    constraint.substring(fromidx, toidx));
+                dirheight.low = constraint.endsWith(ObjectTileSet.LOW);
                 return true;
             }
         }
@@ -503,17 +503,16 @@ public class PlacementConstraints
     {
         List<ObjectData> list = Lists.newArrayList();
 
-        for (Iterator<ObjectData> it = _objectData.values().iterator(); it.hasNext(); ) {
-            ObjectData data = it.next();
+        for (ObjectData data : _objectData.values()) {
             if (rect.intersects(data.bounds) && !ListUtil.contains(removed,
                     data)) {
                 list.add(data);
             }
         }
 
-        for (int i = 0; i < added.length; i++) {
-            if (rect.intersects(added[i].bounds)) {
-                list.add(added[i]);
+        for (ObjectData element : added) {
+            if (rect.intersects(element.bounds)) {
+                list.add(element);
             }
         }
 
@@ -568,9 +567,8 @@ public class PlacementConstraints
     /** The Miso scene model. */
     protected StageMisoSceneModel _mmodel;
 
-    /** For all objects in the scene, maps {@link ObjectInfo}s to
-     * {@link ObjectData}s. */
-    protected HashMap<ObjectInfo,ObjectData> _objectData = new HashMap<ObjectInfo,ObjectData>();
+    /** For all objects in the scene, maps {@link ObjectInfo}s to {@link ObjectData}s. */
+    protected HashMap<ObjectInfo, ObjectData> _objectData = Maps.newHashMap();
 
     /** One rectangle we'll re-use for all constraints ops. */
     protected static final Rectangle _constrainRect = new Rectangle();

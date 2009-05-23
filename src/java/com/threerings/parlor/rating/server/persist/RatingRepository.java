@@ -99,7 +99,7 @@ public class RatingRepository extends DepotRepository
      */
     public List<RatingRecord> getRatings (int playerId, long since, int count)
     {
-        ArrayList<QueryClause> clauses = new ArrayList<QueryClause>();
+        ArrayList<QueryClause> clauses = Lists.newArrayList();
         if (since > 0L) {
             Timestamp when = new Timestamp(System.currentTimeMillis() - since);
             clauses.add(new Where(new And(new Equals(RatingRecord.PLAYER_ID, playerId),

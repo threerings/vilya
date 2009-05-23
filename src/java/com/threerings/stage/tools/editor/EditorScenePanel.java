@@ -1167,7 +1167,7 @@ public class EditorScenePanel extends StageScenePanel
     protected SceneObject _pscobj;
 
     /** A list of things that will do some extra painting for us. */
-    protected ArrayList<ExtrasPainter> _extras = new ArrayList<ExtrasPainter>();
+    protected ArrayList<ExtrasPainter> _extras = Lists.newArrayList();
 
     /** The dialog providing portal edit functionality. */
     protected PortalDialog _dialogPortal;

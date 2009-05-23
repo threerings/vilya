@@ -21,7 +21,6 @@
 
 package com.threerings.stage.tools.editor;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -33,6 +32,8 @@ import java.io.IOException;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
+
+import com.google.common.collect.Maps;
 
 import com.samskivert.util.HashIntMap;
 
@@ -110,8 +111,8 @@ public class TestTileLoader implements TileSetIDBroker
                 return f.isDirectory();
             }
         });
-        for (int ii=0; ii < subdirs.length; ii++) {
-            loadTestTilesFromDir(subdirs[ii], sets);
+        for (File subdir : subdirs) {
+            loadTestTilesFromDir(subdir, sets);
         }
 
         // now look for the xml file
@@ -121,10 +122,10 @@ public class TestTileLoader implements TileSetIDBroker
             }
         });
 
-        for (int ii=0; ii < xml.length; ii++) {
-            File xmlfile = new File(directory, xml[ii]);
+        for (String element : xml) {
+            File xmlfile = new File(directory, element);
 
-            Map<String, TileSet> tiles = new HashMap<String, TileSet>();
+            Map<String, TileSet> tiles = Maps.newHashMap();
             try {
                 _parser.loadTileSets(xmlfile, tiles);
             } catch (IOException ioe) {
@@ -179,7 +180,7 @@ public class TestTileLoader implements TileSetIDBroker
     protected int _fakeID = Short.MAX_VALUE;
 
     /** A mapping of pathname -> tileset id. */
-    protected Map<String, Integer> _idmap = new HashMap<String, Integer>();
+    protected Map<String, Integer> _idmap = Maps.newHashMap();
 
     /** Our xml parser. */
     protected XMLTileSetParser _parser;

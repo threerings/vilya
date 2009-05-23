@@ -24,6 +24,8 @@ package com.threerings.whirled.spot.server;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.google.common.collect.Maps;
+
 import com.samskivert.util.HashIntMap;
 
 import com.threerings.util.Name;
@@ -591,5 +593,5 @@ public class SpotSceneManager extends SceneManager
     protected HashIntMap<ClusterRecord> _clusters = new HashIntMap<ClusterRecord>();
 
     /** A mapping of entering bodies to portal ids. */
-    protected HashMap<Integer, Portal> _enterers = new HashMap<Integer, Portal>();
+    protected HashMap<Integer, Portal> _enterers = Maps.newHashMap();
 }

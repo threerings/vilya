@@ -24,6 +24,8 @@ package com.threerings.stage.data;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.google.common.collect.Lists;
+
 import com.threerings.crowd.data.PlaceConfig;
 
 import com.threerings.miso.data.ObjectInfo;
@@ -223,5 +225,5 @@ public class StageScene extends SceneImpl
     protected SpotSceneImpl _sdelegate;
 
     /** A list of all interesting scene objects. */
-    protected ArrayList<ObjectInfo> _objects = new ArrayList<ObjectInfo>();
+    protected ArrayList<ObjectInfo> _objects = Lists.newArrayList();
 }

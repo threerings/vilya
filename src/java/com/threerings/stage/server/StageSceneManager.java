@@ -29,6 +29,9 @@ import java.util.List;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
 import com.samskivert.util.HashIntMap;
 
 import com.threerings.presents.data.ClientObject;
@@ -819,14 +822,14 @@ public class StageSceneManager extends SpotSceneManager
 
     /** Rectangles describing the footprints (in tile coordinates) of all
      * of our scene objects. */
-    protected ArrayList<Rectangle> _footprints = new ArrayList<Rectangle>();
+    protected ArrayList<Rectangle> _footprints = Lists.newArrayList();
 
     /** Rectangles containing a "footprint" for the users that aren't in
      * any clusters. */
     protected HashIntMap<Rectangle> _loners = new HashIntMap<Rectangle>();
 
     /** Contains the (tile) coordinates of all of our portals. */
-    protected HashSet<Point> _plocs = new HashSet<Point>();
+    protected HashSet<Point> _plocs = Sets.newHashSet();
 
     /** The dimensions of a cluster with the specified number of
      * occupants. */

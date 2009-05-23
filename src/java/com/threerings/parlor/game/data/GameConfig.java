@@ -21,8 +21,9 @@
 
 package com.threerings.parlor.game.data;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import com.threerings.util.Name;
 
@@ -121,7 +122,7 @@ public abstract class GameConfig extends PlaceConfig
      */
     public List<String> getDescription ()
     {
-        return new ArrayList<String>(); // nothing by default
+        return Lists.newArrayList(); // nothing by default
     }
 
     /**
