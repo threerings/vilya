@@ -55,9 +55,9 @@ public class StageMisoSceneModel extends SparseMisoSceneModel
      */
     public static StageMisoSceneModel getSceneModel (SceneModel model)
     {
-        for (int ii = 0; ii < model.auxModels.length; ii++) {
-            if (model.auxModels[ii] instanceof StageMisoSceneModel) {
-                return (StageMisoSceneModel)model.auxModels[ii];
+        for (AuxModel auxModel : model.auxModels) {
+            if (auxModel instanceof StageMisoSceneModel) {
+                return (StageMisoSceneModel)auxModel;
             }
         }
         return null;

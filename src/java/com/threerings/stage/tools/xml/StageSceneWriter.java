@@ -66,11 +66,11 @@ public class StageSceneWriter extends SceneWriter
         if (sscene.defaultColors != null) {
             writer.startElement("zations");
             int[] keys = sscene.defaultColors.getKeys();
-            for (int ii=0, nn=keys.length; ii < nn; ii++) {
-                int value = sscene.defaultColors.get(keys[ii]);
+            for (int key : keys) {
+                int value = sscene.defaultColors.get(key);
                 AttributesImpl attrs = new AttributesImpl();
                 attrs.addAttribute("", "classId", "", "",
-                                   String.valueOf(keys[ii]));
+                                   String.valueOf(key));
                 attrs.addAttribute("", "colorId", "", "",
                                    String.valueOf(value));
                 writer.emptyElement("", "zation", "", attrs);

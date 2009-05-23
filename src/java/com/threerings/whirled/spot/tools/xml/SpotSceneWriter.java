@@ -31,6 +31,7 @@ import com.megginson.sax.DataWriter;
 import com.threerings.tools.xml.NestableWriter;
 
 import com.threerings.whirled.spot.data.Location;
+import com.threerings.whirled.spot.data.Portal;
 import com.threerings.whirled.spot.data.SpotSceneModel;
 import com.threerings.whirled.spot.tools.EditablePortal;
 
@@ -70,8 +71,8 @@ public class SpotSceneWriter
         throws SAXException
     {
         // write out the portal info
-        for (int ii = 0; ii < model.portals.length; ii++) {
-            EditablePortal port = (EditablePortal)model.portals[ii];
+        for (Portal portal : model.portals) {
+            EditablePortal port = (EditablePortal)portal;
             AttributesImpl attrs = new AttributesImpl();
             attrs.addAttribute("", "portalId", "", "",
                                String.valueOf(port.portalId));
@@ -90,13 +91,13 @@ public class SpotSceneWriter
         // more sophisticated could be done
         Class<?> clazz = portalLoc.getClass();
         Field[] fields = clazz.getFields();
-        for (int ii=0; ii < fields.length; ii++) {
+        for (Field field : fields) {
             try {
-                attrs.addAttribute("", fields[ii].getName(), "", "",
-                    String.valueOf(fields[ii].get(portalLoc)));
+                attrs.addAttribute("", field.getName(), "", "",
+                    String.valueOf(field.get(portalLoc)));
             } catch (IllegalAccessException iae) {
                 log.warning("Unable to write portal field, skipping " +
-                    "[field=" + fields[ii].getName() + ", e=" + iae + "].");
+                    "[field=" + field.getName() + ", e=" + iae + "].");
             }
         }
     }

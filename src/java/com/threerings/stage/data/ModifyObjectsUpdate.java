@@ -63,15 +63,15 @@ public class ModifyObjectsUpdate extends SceneUpdate
 
         // wipe out the objects that need to go
         if (removed != null) {
-            for (int ii = 0; ii < removed.length; ii++) {
-                mmodel.removeObject(removed[ii]);
+            for (ObjectInfo element : removed) {
+                mmodel.removeObject(element);
             }
         }
 
         // add the new objects
         if (added != null) {
-            for (int ii = 0; ii < added.length; ii++) {
-                mmodel.addObject(added[ii]);
+            for (ObjectInfo element : added) {
+                mmodel.addObject(element);
             }
         }
     }

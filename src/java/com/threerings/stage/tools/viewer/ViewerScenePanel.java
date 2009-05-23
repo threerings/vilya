@@ -64,10 +64,8 @@ public class ViewerScenePanel extends StageScenePanel
         _charmgr = charmgr;
 
         // create the character descriptors
-        _descUser = CastUtil.getRandomDescriptor(
-            "female", ctx.getComponentRepository());
-        _descDecoy = CastUtil.getRandomDescriptor(
-            "male", ctx.getComponentRepository());
+        _descUser = CastUtil.getRandomDescriptor("female", ctx.getComponentRepository());
+        _descDecoy = CastUtil.getRandomDescriptor("male", ctx.getComponentRepository());
 
         // create the manipulable sprite
         _sprite = createSprite(_descUser);
@@ -87,8 +85,8 @@ public class ViewerScenePanel extends StageScenePanel
         _sprite.setLocation(defpos.x, defpos.y);
 
         if (_decoys != null) {
-            for (int ii = 0; ii < _decoys.length; ii++) {
-                _decoys[ii].setLocation(defpos.x, defpos.y);
+            for (CharacterSprite decoy : _decoys) {
+                decoy.setLocation(defpos.x, defpos.y);
             }
             createDecoyPaths();
         }
@@ -144,9 +142,9 @@ public class ViewerScenePanel extends StageScenePanel
     protected void createDecoyPaths ()
     {
         if (_decoys != null) {
-            for (int ii = 0; ii < _decoys.length; ii++) {
-                if (_decoys[ii] != null) {
-                    createRandomPath(_decoys[ii]);
+            for (CharacterSprite decoy : _decoys) {
+                if (decoy != null) {
+                    createRandomPath(decoy);
                 }
             }
         }
@@ -177,8 +175,8 @@ public class ViewerScenePanel extends StageScenePanel
 
         case MouseEvent.BUTTON2_MASK:
             if (_decoys != null) {
-                for (int ii = 0; ii < _decoys.length; ii++) {
-                    createPath(_decoys[ii], x, y);
+                for (CharacterSprite decoy : _decoys) {
+                    createPath(decoy, x, y);
                 }
             }
             break;

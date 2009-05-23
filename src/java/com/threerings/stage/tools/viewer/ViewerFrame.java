@@ -162,8 +162,7 @@ public class ViewerFrame extends ManagedJFrame
                 SpotSceneModel ssmodel = SpotSceneModel.getSceneModel(model);
                 Location defloc = null;
                 // find the default entrance to this scene
-                for (int ii = 0; ii < ssmodel.portals.length; ii++) {
-                    Portal port = ssmodel.portals[ii];
+                for (Portal port : ssmodel.portals) {
                     if (port.portalId == ssmodel.defaultEntranceId) {
                         defloc = port.getOppLocation();
                         break;

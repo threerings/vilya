@@ -114,8 +114,8 @@ public class LobbyRegistry
         if (lmgrs == null || lmgrs.length == 0) {
             log.warning("No lobbies specified in config file (via '" + LOBIDS_KEY + "' parameter).");
         } else {
-            for (int i = 0; i < lmgrs.length; i++) {
-                loadLobby(lmgrs[i]);
+            for (String lmgr : lmgrs) {
+                loadLobby(lmgr);
             }
         }
     }

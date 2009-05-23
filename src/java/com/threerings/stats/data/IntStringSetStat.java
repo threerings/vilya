@@ -36,8 +36,8 @@ public class IntStringSetStat extends StringSetStat
         throws IOException
     {
         out.writeInt(_values.length);
-        for (int ii = 0; ii < _values.length; ii++) {
-            out.writeInt(aux.getStringCode(_type, _values[ii]));
+        for (String value : _values) {
+            out.writeInt(aux.getStringCode(_type, value));
         }
     }
 

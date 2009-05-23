@@ -36,8 +36,8 @@ public class ByteStringSetStat extends StringSetStat
         throws IOException
     {
         out.writeByte(_values.length);
-        for (int ii = 0; ii < _values.length; ii++) {
-            out.writeByte((byte)aux.getStringCode(_type, _values[ii]));
+        for (String value : _values) {
+            out.writeByte((byte)aux.getStringCode(_type, value));
         }
     }
 

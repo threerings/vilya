@@ -376,8 +376,8 @@ public class Table
             int[][] teams = tconfig.teamMemberIndices;
             for (int[] team : teams) {
                 int teamCount = 0;
-                for (int jj=0; jj < team.length; jj++) {
-                    if (players[team[jj]] != null) {
+                for (int element : team) {
+                    if (players[element] != null) {
                         teamCount++;
                     }
                 }

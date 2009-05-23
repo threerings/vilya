@@ -36,8 +36,8 @@ public class ShortStringSetStat extends StringSetStat
         throws IOException
     {
         out.writeShort(_values.length);
-        for (int ii = 0; ii < _values.length; ii++) {
-            out.writeShort((short)aux.getStringCode(_type, _values[ii]));
+        for (String value : _values) {
+            out.writeShort((short)aux.getStringCode(_type, value));
         }
     }
 
