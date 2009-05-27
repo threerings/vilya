@@ -34,10 +34,10 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.event.MouseInputAdapter;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
 import com.samskivert.util.ObserverList;
-import com.samskivert.util.Predicate;
 import com.samskivert.util.QuickSort;
 
 import com.threerings.media.FrameManager;
@@ -745,7 +745,7 @@ public abstract class CardPanel extends VirtualMediaPanel
     protected boolean isSelectable (CardSprite sprite)
     {
         return _handSelectionMode != NONE &&
-            (_handSelectionPredicate == null || _handSelectionPredicate.isMatch(sprite));
+            (_handSelectionPredicate == null || _handSelectionPredicate.apply(sprite));
     }
 
     /**
@@ -761,7 +761,7 @@ public abstract class CardPanel extends VirtualMediaPanel
 
         // otherwise, look for a sprite that fits the predicate and isn't the parameter
         for (CardSprite cs : _handSprites) {
-            if (cs != sprite && _handSelectionPredicate.isMatch(cs)) {
+            if (cs != sprite && _handSelectionPredicate.apply(cs)) {
                 return false;
             }
         }
