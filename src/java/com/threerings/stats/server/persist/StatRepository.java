@@ -26,12 +26,12 @@ import com.samskivert.depot.DuplicateKeyException;
 import com.samskivert.depot.Key;
 import com.samskivert.depot.PersistenceContext;
 import com.samskivert.depot.PersistentRecord;
-import com.samskivert.depot.operator.Conditionals;
 import com.samskivert.depot.clause.FieldDefinition;
 import com.samskivert.depot.clause.FromOverride;
 import com.samskivert.depot.clause.QueryClause;
 import com.samskivert.depot.clause.Where;
 import com.samskivert.depot.expression.FunctionExp;
+import com.samskivert.depot.operator.In;
 
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
@@ -188,8 +188,7 @@ public class StatRepository extends DepotRepository
      */
     public void purgePlayers (Collection<Integer> playerIds)
     {
-        deleteAll(StatRecord.class,
-                  new Where(new Conditionals.In(StatRecord.PLAYER_ID, playerIds)));
+        deleteAll(StatRecord.class, new Where(new In(StatRecord.PLAYER_ID, playerIds)));
     }
 
     /**
