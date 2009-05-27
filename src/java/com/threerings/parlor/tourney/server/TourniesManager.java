@@ -31,12 +31,12 @@ import com.google.inject.Singleton;
 
 import com.samskivert.io.PersistenceException;
 import com.samskivert.util.Interval;
+import com.samskivert.util.Lifecycle;
 
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.dobj.RootDObjectManager;
 import com.threerings.presents.server.InvocationException;
-import com.threerings.presents.server.LifecycleManager;
 
 import com.threerings.parlor.tourney.data.TourneyConfig;
 import com.threerings.parlor.tourney.server.persist.TourneyRepository;
@@ -48,14 +48,14 @@ import static com.threerings.parlor.Log.log;
  */
 @Singleton
 public abstract class TourniesManager
-    implements TourniesProvider, LifecycleManager.Component
+    implements TourniesProvider, Lifecycle.Component
 {
-    @Inject public TourniesManager (LifecycleManager lifemgr)
+    @Inject public TourniesManager (Lifecycle cycle)
     {
-        lifemgr.addComponent(this);
+        cycle.addComponent(this);
     }
 
-    // from interface LifecycleManager.Component
+    // from interface Lifecycle.Component
     public void init ()
     {
         loadTourneyConfigs();
@@ -68,7 +68,7 @@ public abstract class TourniesManager
         _interval.schedule(getIntervalDelay(), true);
     }
 
-    // from interface LifecycleManager.Component
+    // from interface Lifecycle.Component
     public void shutdown ()
     {
         _interval.cancel();
