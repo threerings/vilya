@@ -36,37 +36,39 @@ import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.dobj.RootDObjectManager;
 import com.threerings.presents.server.InvocationException;
-import com.threerings.presents.server.ShutdownManager;
+import com.threerings.presents.server.LifecycleManager;
 
 import com.threerings.parlor.tourney.data.TourneyConfig;
 import com.threerings.parlor.tourney.server.persist.TourneyRepository;
+
+import static com.threerings.parlor.Log.log;
 
 /**
  * An extensible tournament manager.
  */
 @Singleton
 public abstract class TourniesManager
-    implements TourniesProvider, ShutdownManager.Shutdowner
+    implements TourniesProvider, LifecycleManager.Component
 {
-    /**
-     * Initializes the tournies manager and starts its periodic update task.
-     */
-    public void init (Injector injector)
-        throws PersistenceException
+    @Inject public TourniesManager (LifecycleManager lifemgr)
+    {
+        lifemgr.addComponent(this);
+    }
+
+    // from interface LifecycleManager.Component
+    public void init ()
     {
         loadTourneyConfigs();
 
-        _injector = injector;
         _interval = new Interval(_omgr) {
-            @Override
-            public void expired () {
+            @Override public void expired () {
                 updateTournies();
             }
         };
         _interval.schedule(getIntervalDelay(), true);
     }
 
-    // from interface ShutdownManager.Shutdowner
+    // from interface LifecycleManager.Component
     public void shutdown ()
     {
         _interval.cancel();
@@ -78,11 +80,6 @@ public abstract class TourniesManager
         throws InvocationException
     {
         makeTourney(config, listener);
-    }
-
-    protected TourniesManager (ShutdownManager shutmgr)
-    {
-        shutmgr.registerShutdowner(this);
     }
 
     /**
@@ -113,11 +110,14 @@ public abstract class TourniesManager
      * Load all the tournament configuration information stored in the repository.
      */
     protected void loadTourneyConfigs ()
-        throws PersistenceException
     {
-        ArrayList<TourneyConfig> tournies = _tournrep.loadTournies();
-        for (TourneyConfig config : tournies) {
-            makeTourney(config, null);
+        try {
+            ArrayList<TourneyConfig> tournies = _tournrep.loadTournies();
+            for (TourneyConfig config : tournies) {
+                makeTourney(config, null);
+            }
+        } catch (PersistenceException pe) {
+            log.warning("Failed to load tourney configurations.", pe);
         }
     }
 
@@ -139,9 +139,6 @@ public abstract class TourniesManager
      */
     protected abstract long getIntervalDelay ();
 
-    /** Used to resolve dependencies in the {@link TourneyManager}s that we create. */
-    protected Injector _injector;
-
     /** The interval which updates loaded tournies. */
     protected Interval _interval;
 
@@ -152,6 +149,7 @@ public abstract class TourniesManager
     protected Map<Comparable<?>, TourneyManager> _tourneys = Maps.newHashMap();
 
     // our dependencies
+    @Inject protected Injector _injector;
     @Inject protected RootDObjectManager _omgr;
     @Inject protected TourneyRepository _tournrep;
 }
