@@ -155,7 +155,7 @@ public class RatingRepository extends DepotRepository
      */
     public void deleteRating (int gameId, int playerId)
     {
-        delete(RatingRecord.class, RatingRecord.getKey(gameId, playerId));
+        delete(RatingRecord.getKey(gameId, playerId));
     }
 
     /**
@@ -209,7 +209,7 @@ public class RatingRepository extends DepotRepository
      */
     public void deletePercentile (int gameId, int gameMode)
     {
-        delete(PercentileRecord.class, PercentileRecord.getKey(gameId, gameMode));
+        delete(PercentileRecord.getKey(gameId, gameMode));
     }
 
     @Override
