@@ -71,7 +71,7 @@ public class RatingRepository extends DepotRepository
      */
     public RatingRecord getRating (int gameId, int playerId)
     {
-        return load(RatingRecord.class, RatingRecord.getKey(gameId, playerId));
+        return load(RatingRecord.getKey(gameId, playerId));
     }
 
     /**
@@ -164,8 +164,7 @@ public class RatingRepository extends DepotRepository
      */
     public Percentiler loadPercentile (int gameId, int gameMode)
     {
-        PercentileRecord record = load(
-            PercentileRecord.class, PercentileRecord.getKey(gameId, gameMode));
+        PercentileRecord record = load(PercentileRecord.getKey(gameId, gameMode));
         return (record == null) ? new Percentiler() : new Percentiler(record.data);
     }
 
