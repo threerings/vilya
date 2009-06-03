@@ -146,7 +146,7 @@ public class TableManager
         try {
             table = _tableClass.newInstance();
         } catch (Exception e) {
-            log.warning("Table.newInstance() failed [class=" + _tableClass + ", e=" + e + "].");
+            log.warning("Table.newInstance() failed", "class", _tableClass, e);
             throw new InvocationException(INTERNAL_ERROR);
         }
         table.init(_dobj.getOid(), tableConfig, config);
@@ -156,8 +156,8 @@ public class TableManager
             int cpos = (config.ais == null) ? 0 : config.ais.length;
             String error = table.setPlayer(cpos, creator);
             if (error != null) {
-                log.warning("Unable to add creator to position zero of table!? [table=" + table +
-                            ", creator=" + creator + ", error=" + error + "].");
+                log.warning("Unable to add creator to position zero of table!?",
+                   "table", table, "creator", creator, "error", error);
                 // bail out now and abort the table creation process
                 throw new InvocationException(error);
             }
@@ -191,8 +191,8 @@ public class TableManager
         // in which they are requesting to create a table
         if (_dobj instanceof PlaceObject &&
             !((PlaceObject)_dobj).occupants.contains(creator.getOid())) {
-            log.warning("Requested to create a table in a place not occupied by the creator " +
-                        "[creator=" + creator + ", ploid=" + _dobj.getOid() + "].");
+            log.warning("Requested to create a table in a place not occupied by the creator",
+                "creator", creator, "ploid", _dobj.getOid());
             throw new InvocationException(INTERNAL_ERROR);
         }
 
@@ -265,8 +265,8 @@ public class TableManager
 
         // remove the mapping from this user to the table
         if (null == notePlayerRemoved(leaver.getOid(), leaver)) {
-            log.warning("No body to table mapping to clear? [leaver=" + leaver.who() +
-                        ", table=" + table + "].");
+            log.warning("No body to table mapping to clear?",
+                "leaver", leaver.who(), "table", table);
         }
 
         // either update or delete the table depending on whether or not we just removed the last
@@ -326,8 +326,8 @@ public class TableManager
 
         // Remove the player from the table
         if (notePlayerRemoved(table.bodyOids[position]) == null) {
-            log.warning("No body to table mapping to clear? [position=" + position +
-                        ", table=" + table + "].");
+            log.warning("No body to table mapping to clear?",
+               "position", position, "table", table);
         }
         table.clearPlayerPos(position);
         updateTableInLobby(table);
@@ -425,7 +425,7 @@ public class TableManager
             return gobj.getOid();
 
         } catch (Throwable t) {
-            log.warning("Failed to create manager for game [config=" + table.config + "]: " + t);
+            log.warning("Failed to create manager for game", "config", table.config, t);
             throw new InvocationException(INTERNAL_ERROR);
         }
     }
@@ -503,7 +503,7 @@ public class TableManager
         if (table != null) {
             purgeTable(table);
         } else {
-            log.warning("Requested to unmap table that wasn't mapped [gameOid=" + gameOid + "].");
+            log.warning("Requested to unmap table that wasn't mapped", "gameOid", gameOid);
         }
     }
 
@@ -519,7 +519,7 @@ public class TableManager
 
         Table table = _goidMap.get(gameOid);
         if (table == null) {
-            log.warning("Unable to find table for running game [gameOid=" + gameOid + "].");
+            log.warning("Unable to find table for running game", "gameOid", gameOid);
             return;
         }
 
@@ -543,8 +543,8 @@ public class TableManager
 
         // remove this player from the table
         if (!pender.clearPlayerByOid(bodyOid)) {
-            log.warning("Attempt to remove body from mapped table failed [table=" + pender +
-                        ", bodyOid=" + bodyOid + "].");
+            log.warning("Attempt to remove body from mapped table failed",
+                "table", pender, "bodyOid", bodyOid);
             return;
         }
 
