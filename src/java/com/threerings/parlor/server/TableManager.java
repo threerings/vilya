@@ -234,7 +234,7 @@ public class TableManager
         }
 
         // update the table in the lobby
-        updateTable(table);
+        updateTableInLobby(table);
 
         // there is normally no success response. the client will see
         // themselves show up in the table that they joined
@@ -274,7 +274,7 @@ public class TableManager
         if (table.isEmpty()) {
             purgeTable(table);
         } else {
-            updateTable(table);
+            updateTableInLobby(table);
         }
 
         // there is normally no success response. the client will see
@@ -330,7 +330,7 @@ public class TableManager
                         ", table=" + table + "].");
         }
         table.clearPlayerPos(position);
-        updateTable(table);
+        updateTableInLobby(table);
     }
 
     /**
@@ -341,7 +341,7 @@ public class TableManager
     {
         // publish the table in the lobby object if desired
         if (shouldPublish(table)) {
-            _tlobj.addToTables(table);
+            addTableToLobby(table);
         }
     }
 
@@ -367,9 +367,7 @@ public class TableManager
 
         // remove the table from the lobby object (the table may not have been published if a
         // derived class decided it was not worth publishing, see shouldPublish())
-        if (_tlobj.getTables().containsKey(table.tableId)) {
-            _tlobj.removeFromTables(table.tableId);
-        }
+        removeTableFromLobby(table.tableId);
 
         // remove the listener too so we do not get a request later on to update the occupants or
         // unmap this table
@@ -483,10 +481,10 @@ public class TableManager
 
         // and then update the lobby object that contains the table
         if (shouldPublish(table)) {
-            updateTable(table);
-        } else if (_tlobj.getTables().containsKey(table.tableId)) {
+            updateTableInLobby(table);
+        } else {
             // or remove it if the table is no longer "interesting"
-            _tlobj.removeFromTables(table.tableId);
+            removeTableFromLobby(table.tableId);
         }
     }
 
@@ -528,7 +526,7 @@ public class TableManager
         // update this table's occupants information and update the table
         GameObject gameObj = (GameObject)_omgr.getObject(gameOid);
         table.updateOccupants(gameObj);
-        updateTable(table);
+        updateTableInLobby(table);
     }
 
     /**
@@ -554,7 +552,7 @@ public class TableManager
         if (pender.isEmpty()) {
             purgeTable(pender);
         } else {
-            updateTable(pender);
+            updateTableInLobby(pender);
         }
     }
 
@@ -569,11 +567,33 @@ public class TableManager
         return true; // we publish all tables by default
     }
 
-    protected void updateTable (Table table)
+    /**
+     * Add the table to the lobby object, <b>after it has already been validated as being
+     * publishable</b>. 
+     */
+    protected void addTableToLobby (Table table)
+    {
+        _tlobj.addToTables(table);
+    }
+
+    /**
+     * Safely update the table in the lobby, if it's there.
+     */
+    protected void updateTableInLobby (Table table)
     {
         // the table may not have been published, see shouldPublish()
         if (_tlobj.getTables().containsKey(table.tableId)) {
             _tlobj.updateTables(table);
+        }
+    }
+
+    /**
+     * Safely remove the table from the lobby. Broken out for overriding.
+     */
+    protected void removeTableFromLobby (Integer tableId)
+    {
+        if (_tlobj.getTables().containsKey(tableId)) {
+            _tlobj.removeFromTables(tableId);
         }
     }
 
