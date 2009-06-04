@@ -25,6 +25,8 @@ import com.samskivert.util.IntMap;
 import com.samskivert.util.IntMaps;
 import com.samskivert.util.ListUtil;
 
+import com.google.common.base.Preconditions;
+
 import com.threerings.util.Name;
 
 import com.threerings.presents.data.ClientObject;
@@ -76,9 +78,21 @@ public class TableManager
         _invmgr = invmgr;
         _plreg = plreg;
 
+        if (tableObject != null) {
+            setTableObject(tableObject);
+        }
+    }
+
+    /**
+     * Initialize the TableLobbyObject. Do not call this more than once.
+     */
+    public void setTableObject (DObject tableObject)
+    {
+        Preconditions.checkState((_tlobj == null), "Already got one!");
+
         // set up our object references
         _tlobj = (TableLobbyObject)tableObject;
-        _tlobj.setTableService(invmgr.registerDispatcher(new TableDispatcher(this)));
+        _tlobj.setTableService(_invmgr.registerDispatcher(new TableDispatcher(this)));
         _dobj = tableObject;
 
         // if our table is in a "place" add ourselves as a listener so that we can tell if a user
