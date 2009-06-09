@@ -213,11 +213,11 @@ public class RatingRepository extends DepotRepository
     }
 
     /**
-     * Deletes all rating records for the specified player.
+     * Deletes all rating records for the specified players.
      */
-    public void purgePlayer (int playerId)
+    public void purgePlayers (Set<Integer> playerIds)
     {
-        deleteAll(RatingRecord.class, new Where(RatingRecord.PLAYER_ID, playerId), null);
+        deleteAll(RatingRecord.class, new Where(new In(RatingRecord.PLAYER_ID, playerIds)), null);
     }
 
     @Override
