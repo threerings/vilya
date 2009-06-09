@@ -196,19 +196,28 @@ public class RatingRepository extends DepotRepository
     }
 
     /**
-     * Deletes all percentile records for the specified game.
-     */
-    public void deletePercentiles (int gameId)
-    {
-        deleteAll(PercentileRecord.class, new Where(PercentileRecord.GAME_ID, gameId));
-    }
-
-    /**
      * Deletes the percentile record for the specified game and game mode.
      */
     public void deletePercentile (int gameId, int gameMode)
     {
         delete(PercentileRecord.getKey(gameId, gameMode));
+    }
+
+    /**
+     * Deletes all rating and percentile records for the specified game.
+     */
+    public void purgeGame (int gameId)
+    {
+        deleteAll(RatingRecord.class, new Where(RatingRecord.GAME_ID, gameId), null);
+        deleteAll(PercentileRecord.class, new Where(PercentileRecord.GAME_ID, gameId), null);
+    }
+
+    /**
+     * Deletes all rating records for the specified player.
+     */
+    public void purgePlayer (int playerId)
+    {
+        deleteAll(RatingRecord.class, new Where(RatingRecord.PLAYER_ID, playerId), null);
     }
 
     @Override
