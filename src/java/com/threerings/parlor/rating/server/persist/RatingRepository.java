@@ -24,6 +24,7 @@ package com.threerings.parlor.rating.server.persist;
 import java.sql.Timestamp;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -215,7 +216,7 @@ public class RatingRepository extends DepotRepository
     /**
      * Deletes all rating records for the specified players.
      */
-    public void purgePlayers (Set<Integer> playerIds)
+    public void purgePlayers (Collection<Integer> playerIds)
     {
         deleteAll(RatingRecord.class, new Where(new In(RatingRecord.PLAYER_ID, playerIds)), null);
     }
