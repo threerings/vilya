@@ -46,9 +46,6 @@ import com.samskivert.depot.clause.QueryClause;
 import com.samskivert.depot.clause.Where;
 import com.samskivert.depot.expression.SQLExpression;
 import com.samskivert.depot.operator.And;
-import com.samskivert.depot.operator.Equals;
-import com.samskivert.depot.operator.GreaterThan;
-import com.samskivert.depot.operator.In;
 
 import com.threerings.parlor.rating.util.Percentiler;
 
@@ -86,8 +83,8 @@ public class RatingRepository extends DepotRepository
             return Collections.emptyList();
         }
         return findAll(RatingRecord.class,
-                       new Where(new And(new Equals(RatingRecord.GAME_ID, gameId),
-                                         new In(RatingRecord.PLAYER_ID, players))));
+                       new Where(new And(RatingRecord.GAME_ID.eq(gameId),
+                                         RatingRecord.PLAYER_ID.in(players))));
     }
 
     /**
@@ -103,8 +100,8 @@ public class RatingRepository extends DepotRepository
         ArrayList<QueryClause> clauses = Lists.newArrayList();
         if (since > 0L) {
             Timestamp when = new Timestamp(System.currentTimeMillis() - since);
-            clauses.add(new Where(new And(new Equals(RatingRecord.PLAYER_ID, playerId),
-                                          new GreaterThan(RatingRecord.LAST_UPDATED, when))));
+            clauses.add(new Where(new And(RatingRecord.PLAYER_ID.eq(playerId),
+                                          RatingRecord.LAST_UPDATED.greaterThan(when))));
         } else {
             clauses.add(new Where(RatingRecord.PLAYER_ID, playerId));
         }
@@ -127,13 +124,13 @@ public class RatingRepository extends DepotRepository
     public List<RatingRecord> getTopRatings (int gameId, int limit, long since, IntSet playerIds)
     {
         List<SQLExpression> where = Lists.newArrayList();
-        where.add(new Equals(RatingRecord.GAME_ID, gameId));
+        where.add(RatingRecord.GAME_ID.eq(gameId));
         if (since > 0L) {
-            where.add(new GreaterThan(RatingRecord.LAST_UPDATED,
-                                      new Timestamp(System.currentTimeMillis() - since)));
+            where.add(RatingRecord.LAST_UPDATED.greaterThan(
+                          new Timestamp(System.currentTimeMillis() - since)));
         }
         if (playerIds != null) {
-            where.add(new In(RatingRecord.PLAYER_ID, playerIds));
+            where.add(RatingRecord.PLAYER_ID.in(playerIds));
         }
 
         OrderBy ob = new OrderBy(
@@ -218,7 +215,7 @@ public class RatingRepository extends DepotRepository
      */
     public void purgePlayers (Collection<Integer> playerIds)
     {
-        deleteAll(RatingRecord.class, new Where(new In(RatingRecord.PLAYER_ID, playerIds)), null);
+        deleteAll(RatingRecord.class, new Where(RatingRecord.PLAYER_ID.in(playerIds)), null);
     }
 
     @Override
