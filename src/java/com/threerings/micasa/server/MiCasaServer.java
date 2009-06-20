@@ -64,7 +64,7 @@ public class MiCasaServer extends CrowdServer
         super.init(injector);
 
         // configure the client manager to use our client class
-        _clmgr.setSessionFactory(new SessionFactory() {
+        _clmgr.setDefaultSessionFactory(new SessionFactory() {
             public Class<? extends PresentsSession> getSessionClass (AuthRequest areq) {
                 return MiCasaSession.class;
             }
