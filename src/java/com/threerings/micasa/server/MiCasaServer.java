@@ -65,10 +65,10 @@ public class MiCasaServer extends CrowdServer
 
         // configure the client manager to use our client class
         _clmgr.setDefaultSessionFactory(new SessionFactory() {
-            public Class<? extends PresentsSession> getSessionClass (AuthRequest areq) {
+            @Override public Class<? extends PresentsSession> getSessionClass (AuthRequest areq) {
                 return MiCasaSession.class;
             }
-            public Class<? extends ClientResolver> getClientResolverClass (Name username) {
+            @Override public Class<? extends ClientResolver> getClientResolverClass (Name username) {
                 return ClientResolver.class;
             }
         });

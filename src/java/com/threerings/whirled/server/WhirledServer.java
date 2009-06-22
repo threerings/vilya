@@ -55,9 +55,10 @@ public abstract class WhirledServer extends CrowdServer
 
         // configure the client to use our whirled client
         _clmgr.setDefaultSessionFactory(new SessionFactory() {
-            public Class<? extends PresentsSession> getSessionClass (AuthRequest areq) {
+            @Override public Class<? extends PresentsSession> getSessionClass (AuthRequest areq) {
                 return WhirledSession.class;
             }
+            @Override
             public Class<? extends ClientResolver> getClientResolverClass (Name username) {
                 return ClientResolver.class;
             }
