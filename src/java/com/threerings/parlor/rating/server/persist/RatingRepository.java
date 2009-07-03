@@ -35,9 +35,12 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import com.samskivert.util.IntMap;
+import com.samskivert.util.IntMaps;
 import com.samskivert.util.IntSet;
 
 import com.samskivert.depot.DepotRepository;
+import com.samskivert.depot.Ops;
 import com.samskivert.depot.PersistenceContext;
 import com.samskivert.depot.PersistentRecord;
 import com.samskivert.depot.clause.Limit;
@@ -216,6 +219,41 @@ public class RatingRepository extends DepotRepository
     public void purgePlayers (Collection<Integer> playerIds)
     {
         deleteAll(RatingRecord.class, new Where(RatingRecord.PLAYER_ID.in(playerIds)), null);
+    }
+
+    /**
+     * Load the most recently entered rating for each of a collection of players. The search may
+     * be limited to only negative or positive id's since applications may use the sign to indicate
+     * game mode.
+     * @param sign if < 0, load ratings with negative game id; if > 0, positive; if == 0, all. 
+     */
+    public Collection<RatingRecord> getMostRecentRatings (
+        Collection<Integer> playerIds, int gameIdSign)
+    {
+        // TODO: Implement "distinct" in depot. Here's the query I'd like to do:
+        //
+        //     select distinct on ("playerId") * from "RatingRecord" where "playerId" in (...)
+        //     and "gameId" < 0 order by "playerId" desc, "lastUpdated" desc;
+        //
+        // (The ordering by playerId seems to only be required to satisfy the distinct request).
+        // Without distinct, I must load all ratings and throw out all but the first. They're not
+        // that big, but still.
+
+        List<SQLExpression> conditions = Lists.newArrayList();
+        conditions.add(RatingRecord.PLAYER_ID.in(playerIds));
+        if (gameIdSign != 0) {
+            conditions.add(gameIdSign < 0 ?
+                RatingRecord.GAME_ID.lessThan(0) : RatingRecord.GAME_ID.greaterThan(0));
+        }
+        IntMap<RatingRecord> ratings = IntMaps.newHashIntMap();
+        for (RatingRecord record : findAll(RatingRecord.class, new Where(Ops.and(conditions)),
+            OrderBy.descending(RatingRecord.LAST_UPDATED))) {
+            if (ratings.containsKey(record.playerId)) {
+                continue;
+            }
+            ratings.put(record.playerId, record);
+        }
+        return ratings.values();
     }
 
     @Override
