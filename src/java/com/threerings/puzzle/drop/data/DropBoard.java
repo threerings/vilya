@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import org.apache.commons.lang.StringUtils;
+import com.samskivert.util.StringUtil;
 
 import com.threerings.puzzle.data.Board;
 import com.threerings.puzzle.drop.client.DropControllerDelegate;
@@ -557,7 +557,7 @@ public class DropBoard extends Board
                         str += "|" + formatPiece(opiece);
                     }
                 }
-                buf.append(StringUtils.rightPad(str, padwid));
+                buf.append(StringUtil.pad(str, padwid));
             }
             System.err.println(buf.toString());
         }
