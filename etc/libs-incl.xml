@@ -7,10 +7,8 @@
     <include name="commons-logging.jar"/>
     <include name="google-collect.jar"/>
     <include name="guice.jar"/>
-    <include name="javassist.jar"/>
     <include name="junit4.jar"/>
     <include name="retroweaver-all-1.2.2.jar"/>
-    <include name="velocity-1.5-dev.jar"/>
     <include name="xml-writer.jar"/>
     <include name="flexTasks.jar"/>
     <include name="asc.jar"/>
@@ -20,6 +18,7 @@
     <include name="narya-base*.jar"/>
     <include name="narya-distrib*.jar"/>
     <include name="narya-tests*.jar"/>
+    <include name="narya-tools*.jar"/>
     <include name="nenya-cast*.jar"/>
     <include name="nenya-media*.jar"/>
     <include name="nenya-miso*.jar"/>
