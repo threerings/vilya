@@ -30,7 +30,6 @@ import com.google.inject.Injector;
 import com.google.inject.Singleton;
 
 import com.samskivert.io.PersistenceException;
-import com.samskivert.util.Interval;
 import com.samskivert.util.Lifecycle;
 
 import com.threerings.presents.client.InvocationService;
@@ -48,7 +47,7 @@ import static com.threerings.parlor.Log.log;
  */
 @Singleton
 public abstract class TourniesManager
-    implements TourniesProvider, Lifecycle.Component
+    implements TourniesProvider, Lifecycle.InitComponent
 {
     @Inject public TourniesManager (Lifecycle cycle)
     {
@@ -60,18 +59,11 @@ public abstract class TourniesManager
     {
         loadTourneyConfigs();
 
-        _interval = new Interval(_omgr) {
-            @Override public void expired () {
+        _omgr.newInterval(new Runnable() {
+            public void run () {
                 updateTournies();
             }
-        };
-        _interval.schedule(getIntervalDelay(), true);
-    }
-
-    // from interface Lifecycle.Component
-    public void shutdown ()
-    {
-        _interval.cancel();
+        }).schedule(getIntervalDelay(), true);
     }
 
     // from interface TourniesService
@@ -138,9 +130,6 @@ public abstract class TourniesManager
      * Returns the tourney interval delay in milliseconds.
      */
     protected abstract long getIntervalDelay ();
-
-    /** The interval which updates loaded tournies. */
-    protected Interval _interval;
 
     /** Count to provide a unique key to tournies as they're created. */
     protected int _tourneyCount;

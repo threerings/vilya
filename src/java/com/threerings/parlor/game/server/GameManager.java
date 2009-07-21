@@ -783,13 +783,11 @@ public class GameManager extends PlaceManager
         _gameconfig = (GameConfig)_config;
 
         // start up our tick interval
-        _tickInterval = new Interval(_omgr) {
-            @Override
-            public void expired () {
+        _tickInterval = _omgr.newInterval(new Runnable() {
+            public void run () {
                 tick(System.currentTimeMillis());
             }
-        };
-        _tickInterval.schedule(TICK_DELAY, true);
+        }).schedule(TICK_DELAY, true);
 
         // configure our AIs
         for (int ii = 0; ii < _gameconfig.ais.length; ii++) {
@@ -1115,13 +1113,11 @@ public class GameManager extends PlaceManager
     protected void startAITicker ()
     {
         if (_aiTicker == null) {
-            _aiTicker = new Interval(_omgr) {
-                @Override
-                public void expired () {
+            _aiTicker = _omgr.newInterval(new Runnable() {
+                public void run () {
                     tickAIs();
                 }
-            };
-            _aiTicker.schedule(AI_TICK_DELAY, true);
+            }).schedule(AI_TICK_DELAY, true);
         }
     }
 
@@ -1272,6 +1268,7 @@ public class GameManager extends PlaceManager
     protected void gameWasCancelled ()
     {
         // nothing to do by default
+        stopAITicker();
     }
 
     /**
