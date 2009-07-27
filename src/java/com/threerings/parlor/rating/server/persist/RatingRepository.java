@@ -225,10 +225,22 @@ public class RatingRepository extends DepotRepository
      * Load the most recently entered rating for each of a collection of players. The search may
      * be limited to only negative or positive id's since applications may use the sign to indicate
      * game mode.
-     * @param sign if < 0, load ratings with negative game id; if > 0, positive; if == 0, all. 
+     * @param gameIdSign if non-zero, limits the search to game ids of matching sign
      */
     public Collection<RatingRecord> getMostRecentRatings (
         Collection<Integer> playerIds, int gameIdSign)
+    {
+        return getMostRecentRatings(playerIds, null, gameIdSign);
+    }
+
+    /**
+     * Load the most recently entered rating for each of a collection of players. The search may
+     * be limited to a specific collection of games.
+     * @param gameIds if not null, limits the search to the specific game ids
+     * @param gameIdSign if non-zero, limits the search to game ids of matching sign
+     */
+    public Collection<RatingRecord> getMostRecentRatings (
+        Collection<Integer> playerIds, Collection<Integer> gameIds, int gameIdSign)
     {
         // TODO: Implement "distinct" in depot. Here's the query I'd like to do:
         //
@@ -241,6 +253,9 @@ public class RatingRepository extends DepotRepository
 
         List<SQLExpression> conditions = Lists.newArrayList();
         conditions.add(RatingRecord.PLAYER_ID.in(playerIds));
+        if (gameIds != null) {
+            conditions.add(RatingRecord.GAME_ID.in(gameIds));
+        }
         if (gameIdSign != 0) {
             conditions.add(gameIdSign < 0 ?
                 RatingRecord.GAME_ID.lessThan(0) : RatingRecord.GAME_ID.greaterThan(0));
