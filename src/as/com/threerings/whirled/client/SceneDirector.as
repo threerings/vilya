@@ -466,7 +466,7 @@ public class SceneDirector extends BasicDirector
 
         // issue a moveTo request
         log.info("Issuing moveTo(" + _pendingData.sceneId + ", " + sceneVers + ").");
-        _sservice.moveTo(_wctx.getClient(), _pendingData.sceneId, sceneVers, this);
+        _sservice.moveTo(_pendingData.sceneId, sceneVers, this);
     }
 
     /**

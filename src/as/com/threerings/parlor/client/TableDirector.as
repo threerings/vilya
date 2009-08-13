@@ -198,7 +198,7 @@ public class TableDirector extends BasicDirector
         }
 
         // go ahead and issue the create request
-        _tlobj.getTableService().createTable(_pctx.getClient(), tableConfig, config, this);
+        _tlobj.getTableService().createTable(tableConfig, config, this);
     }
 
     /**
@@ -223,7 +223,7 @@ public class TableDirector extends BasicDirector
 
         // issue the join request
         log.info("Joining table", "tid", tableId, "pos", position);
-        _tlobj.getTableService().joinTable(_pctx.getClient(), tableId, position, this);
+        _tlobj.getTableService().joinTable(tableId, position, this);
     }
 
     /**
@@ -240,7 +240,7 @@ public class TableDirector extends BasicDirector
         }
 
         // issue the leave request
-        _tlobj.getTableService().leaveTable(_pctx.getClient(), tableId, this);
+        _tlobj.getTableService().leaveTable(tableId, this);
     }
 
     /**
@@ -255,7 +255,7 @@ public class TableDirector extends BasicDirector
             return;
         }
 
-        _tlobj.getTableService().startTableNow(_ctx.getClient(), tableId, this);
+        _tlobj.getTableService().startTableNow(tableId, this);
     }
 
     /**
@@ -269,7 +269,7 @@ public class TableDirector extends BasicDirector
             return;
         }
 
-        _tlobj.getTableService().bootPlayer(_ctx.getClient(), tableId, target, this);
+        _tlobj.getTableService().bootPlayer(tableId, target, this);
     }
 
     // documentation inherited

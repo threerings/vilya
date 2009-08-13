@@ -111,7 +111,7 @@ public class ParlorDirector extends BasicDirector
         // create the invitation record
         var invite :Invitation = new Invitation(_pctx, _pservice, invitee, config, observer);
         // submit the invitation request to the server
-        _pservice.invite(_pctx.getClient(), invitee, config, invite);
+        _pservice.invite(invitee, config, invite);
         // and return the invitation to the caller
         return invite;
     }
@@ -125,7 +125,7 @@ public class ParlorDirector extends BasicDirector
     public function startSolitaire (
         config :GameConfig, listener :InvocationService_ConfirmListener) :void
     {
-        _pservice.startSolitaire(_pctx.getClient(), config, listener);
+        _pservice.startSolitaire(config, listener);
     }
 
     // documentation inherited

@@ -33,15 +33,15 @@ import com.threerings.whirled.spot.data.Location;
 public interface SpotService extends InvocationService
 {
     // from Java interface SpotService
-    function changeLocation (arg1 :Client, arg2 :int, arg3 :Location, arg4 :InvocationService_ConfirmListener) :void;
+    function changeLocation (arg1 :int, arg2 :Location, arg3 :InvocationService_ConfirmListener) :void;
 
     // from Java interface SpotService
-    function clusterSpeak (arg1 :Client, arg2 :String, arg3 :int) :void;
+    function clusterSpeak (arg1 :String, arg2 :int) :void;
 
     // from Java interface SpotService
-    function joinCluster (arg1 :Client, arg2 :int, arg3 :InvocationService_ConfirmListener) :void;
+    function joinCluster (arg1 :int, arg2 :InvocationService_ConfirmListener) :void;
 
     // from Java interface SpotService
-    function traversePortal (arg1 :Client, arg2 :int, arg3 :int, arg4 :int, arg5 :SceneService_SceneMoveListener) :void;
+    function traversePortal (arg1 :int, arg2 :int, arg3 :int, arg4 :SceneService_SceneMoveListener) :void;
 }
 }

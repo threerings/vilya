@@ -46,12 +46,12 @@ public class TableMarshaller extends InvocationMarshaller
     public static const BOOT_PLAYER :int = 1;
 
     // from interface TableService
-    public function bootPlayer (arg1 :Client, arg2 :int, arg3 :Name, arg4 :InvocationService_InvocationListener) :void
+    public function bootPlayer (arg1 :int, arg2 :Name, arg3 :InvocationService_InvocationListener) :void
     {
-        var listener4 :InvocationMarshaller_ListenerMarshaller = new InvocationMarshaller_ListenerMarshaller();
-        listener4.listener = arg4;
-        sendRequest(arg1, BOOT_PLAYER, [
-            Integer.valueOf(arg2), arg3, listener4
+        var listener3 :InvocationMarshaller_ListenerMarshaller = new InvocationMarshaller_ListenerMarshaller();
+        listener3.listener = arg3;
+        sendRequest(BOOT_PLAYER, [
+            Integer.valueOf(arg1), arg2, listener3
         ]);
     }
 
@@ -59,12 +59,12 @@ public class TableMarshaller extends InvocationMarshaller
     public static const CREATE_TABLE :int = 2;
 
     // from interface TableService
-    public function createTable (arg1 :Client, arg2 :TableConfig, arg3 :GameConfig, arg4 :InvocationService_ResultListener) :void
+    public function createTable (arg1 :TableConfig, arg2 :GameConfig, arg3 :InvocationService_ResultListener) :void
     {
-        var listener4 :InvocationMarshaller_ResultMarshaller = new InvocationMarshaller_ResultMarshaller();
-        listener4.listener = arg4;
-        sendRequest(arg1, CREATE_TABLE, [
-            arg2, arg3, listener4
+        var listener3 :InvocationMarshaller_ResultMarshaller = new InvocationMarshaller_ResultMarshaller();
+        listener3.listener = arg3;
+        sendRequest(CREATE_TABLE, [
+            arg1, arg2, listener3
         ]);
     }
 
@@ -72,12 +72,12 @@ public class TableMarshaller extends InvocationMarshaller
     public static const JOIN_TABLE :int = 3;
 
     // from interface TableService
-    public function joinTable (arg1 :Client, arg2 :int, arg3 :int, arg4 :InvocationService_InvocationListener) :void
+    public function joinTable (arg1 :int, arg2 :int, arg3 :InvocationService_InvocationListener) :void
     {
-        var listener4 :InvocationMarshaller_ListenerMarshaller = new InvocationMarshaller_ListenerMarshaller();
-        listener4.listener = arg4;
-        sendRequest(arg1, JOIN_TABLE, [
-            Integer.valueOf(arg2), Integer.valueOf(arg3), listener4
+        var listener3 :InvocationMarshaller_ListenerMarshaller = new InvocationMarshaller_ListenerMarshaller();
+        listener3.listener = arg3;
+        sendRequest(JOIN_TABLE, [
+            Integer.valueOf(arg1), Integer.valueOf(arg2), listener3
         ]);
     }
 
@@ -85,12 +85,12 @@ public class TableMarshaller extends InvocationMarshaller
     public static const LEAVE_TABLE :int = 4;
 
     // from interface TableService
-    public function leaveTable (arg1 :Client, arg2 :int, arg3 :InvocationService_InvocationListener) :void
+    public function leaveTable (arg1 :int, arg2 :InvocationService_InvocationListener) :void
     {
-        var listener3 :InvocationMarshaller_ListenerMarshaller = new InvocationMarshaller_ListenerMarshaller();
-        listener3.listener = arg3;
-        sendRequest(arg1, LEAVE_TABLE, [
-            Integer.valueOf(arg2), listener3
+        var listener2 :InvocationMarshaller_ListenerMarshaller = new InvocationMarshaller_ListenerMarshaller();
+        listener2.listener = arg2;
+        sendRequest(LEAVE_TABLE, [
+            Integer.valueOf(arg1), listener2
         ]);
     }
 
@@ -98,12 +98,12 @@ public class TableMarshaller extends InvocationMarshaller
     public static const START_TABLE_NOW :int = 5;
 
     // from interface TableService
-    public function startTableNow (arg1 :Client, arg2 :int, arg3 :InvocationService_InvocationListener) :void
+    public function startTableNow (arg1 :int, arg2 :InvocationService_InvocationListener) :void
     {
-        var listener3 :InvocationMarshaller_ListenerMarshaller = new InvocationMarshaller_ListenerMarshaller();
-        listener3.listener = arg3;
-        sendRequest(arg1, START_TABLE_NOW, [
-            Integer.valueOf(arg2), listener3
+        var listener2 :InvocationMarshaller_ListenerMarshaller = new InvocationMarshaller_ListenerMarshaller();
+        listener2.listener = arg2;
+        sendRequest(START_TABLE_NOW, [
+            Integer.valueOf(arg1), listener2
         ]);
     }
 }

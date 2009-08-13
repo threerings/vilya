@@ -45,12 +45,12 @@ public class SpotMarshaller extends InvocationMarshaller
     public static const CHANGE_LOCATION :int = 1;
 
     // from interface SpotService
-    public function changeLocation (arg1 :Client, arg2 :int, arg3 :Location, arg4 :InvocationService_ConfirmListener) :void
+    public function changeLocation (arg1 :int, arg2 :Location, arg3 :InvocationService_ConfirmListener) :void
     {
-        var listener4 :InvocationMarshaller_ConfirmMarshaller = new InvocationMarshaller_ConfirmMarshaller();
-        listener4.listener = arg4;
-        sendRequest(arg1, CHANGE_LOCATION, [
-            Integer.valueOf(arg2), arg3, listener4
+        var listener3 :InvocationMarshaller_ConfirmMarshaller = new InvocationMarshaller_ConfirmMarshaller();
+        listener3.listener = arg3;
+        sendRequest(CHANGE_LOCATION, [
+            Integer.valueOf(arg1), arg2, listener3
         ]);
     }
 
@@ -58,10 +58,10 @@ public class SpotMarshaller extends InvocationMarshaller
     public static const CLUSTER_SPEAK :int = 2;
 
     // from interface SpotService
-    public function clusterSpeak (arg1 :Client, arg2 :String, arg3 :int) :void
+    public function clusterSpeak (arg1 :String, arg2 :int) :void
     {
-        sendRequest(arg1, CLUSTER_SPEAK, [
-            arg2, Byte.valueOf(arg3)
+        sendRequest(CLUSTER_SPEAK, [
+            arg1, Byte.valueOf(arg2)
         ]);
     }
 
@@ -69,12 +69,12 @@ public class SpotMarshaller extends InvocationMarshaller
     public static const JOIN_CLUSTER :int = 3;
 
     // from interface SpotService
-    public function joinCluster (arg1 :Client, arg2 :int, arg3 :InvocationService_ConfirmListener) :void
+    public function joinCluster (arg1 :int, arg2 :InvocationService_ConfirmListener) :void
     {
-        var listener3 :InvocationMarshaller_ConfirmMarshaller = new InvocationMarshaller_ConfirmMarshaller();
-        listener3.listener = arg3;
-        sendRequest(arg1, JOIN_CLUSTER, [
-            Integer.valueOf(arg2), listener3
+        var listener2 :InvocationMarshaller_ConfirmMarshaller = new InvocationMarshaller_ConfirmMarshaller();
+        listener2.listener = arg2;
+        sendRequest(JOIN_CLUSTER, [
+            Integer.valueOf(arg1), listener2
         ]);
     }
 
@@ -82,12 +82,12 @@ public class SpotMarshaller extends InvocationMarshaller
     public static const TRAVERSE_PORTAL :int = 4;
 
     // from interface SpotService
-    public function traversePortal (arg1 :Client, arg2 :int, arg3 :int, arg4 :int, arg5 :SceneService_SceneMoveListener) :void
+    public function traversePortal (arg1 :int, arg2 :int, arg3 :int, arg4 :SceneService_SceneMoveListener) :void
     {
-        var listener5 :SceneMarshaller_SceneMoveMarshaller = new SceneMarshaller_SceneMoveMarshaller();
-        listener5.listener = arg5;
-        sendRequest(arg1, TRAVERSE_PORTAL, [
-            Integer.valueOf(arg2), Integer.valueOf(arg3), Integer.valueOf(arg4), listener5
+        var listener4 :SceneMarshaller_SceneMoveMarshaller = new SceneMarshaller_SceneMoveMarshaller();
+        listener4.listener = arg4;
+        sendRequest(TRAVERSE_PORTAL, [
+            Integer.valueOf(arg1), Integer.valueOf(arg2), Integer.valueOf(arg3), listener4
         ]);
     }
 }

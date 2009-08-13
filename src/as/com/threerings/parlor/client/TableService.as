@@ -35,18 +35,18 @@ import com.threerings.util.Name;
 public interface TableService extends InvocationService
 {
     // from Java interface TableService
-    function bootPlayer (arg1 :Client, arg2 :int, arg3 :Name, arg4 :InvocationService_InvocationListener) :void;
+    function bootPlayer (arg1 :int, arg2 :Name, arg3 :InvocationService_InvocationListener) :void;
 
     // from Java interface TableService
-    function createTable (arg1 :Client, arg2 :TableConfig, arg3 :GameConfig, arg4 :InvocationService_ResultListener) :void;
+    function createTable (arg1 :TableConfig, arg2 :GameConfig, arg3 :InvocationService_ResultListener) :void;
 
     // from Java interface TableService
-    function joinTable (arg1 :Client, arg2 :int, arg3 :int, arg4 :InvocationService_InvocationListener) :void;
+    function joinTable (arg1 :int, arg2 :int, arg3 :InvocationService_InvocationListener) :void;
 
     // from Java interface TableService
-    function leaveTable (arg1 :Client, arg2 :int, arg3 :InvocationService_InvocationListener) :void;
+    function leaveTable (arg1 :int, arg2 :InvocationService_InvocationListener) :void;
 
     // from Java interface TableService
-    function startTableNow (arg1 :Client, arg2 :int, arg3 :InvocationService_InvocationListener) :void;
+    function startTableNow (arg1 :int, arg2 :InvocationService_InvocationListener) :void;
 }
 }

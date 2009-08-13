@@ -159,7 +159,7 @@ public class SpotSceneDirector extends BasicDirector
 
         // issue a traversePortal request
         log.info("Issuing traversePortal(" + sceneId + ", " + dest + ", " + sceneVer + ").");
-        _sservice.traversePortal(_wctx.getClient(), sceneId, portalId, sceneVer, _scdir);
+        _sservice.traversePortal(sceneId, portalId, sceneVer, _scdir);
         return true;
     }
 
@@ -226,7 +226,7 @@ public class SpotSceneDirector extends BasicDirector
                     listener.requestFailed(new Error(reason));
                 }
             });
-        _sservice.changeLocation(_wctx.getClient(), sceneId, loc, clist);
+        _sservice.changeLocation(sceneId, loc, clist);
     }
 
     /**
@@ -251,7 +251,7 @@ public class SpotSceneDirector extends BasicDirector
 
         log.info("Joining cluster [friend=" + froid + "].");
 
-        _sservice.joinCluster(_wctx.getClient(), froid, new ConfirmAdapter(
+        _sservice.joinCluster(froid, new ConfirmAdapter(
             function () :void {
                 if (listener != null) {
                     listener.requestCompleted(null);
@@ -291,7 +291,7 @@ public class SpotSceneDirector extends BasicDirector
 
         message = _chatdir.filter(message, null, true);
         if (message != null) {
-            _sservice.clusterSpeak(_wctx.getClient(), message, mode);
+            _sservice.clusterSpeak(message, mode);
         }
         return true;
     }

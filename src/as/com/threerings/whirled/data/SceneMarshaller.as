@@ -41,12 +41,12 @@ public class SceneMarshaller extends InvocationMarshaller
     public static const MOVE_TO :int = 1;
 
     // from interface SceneService
-    public function moveTo (arg1 :Client, arg2 :int, arg3 :int, arg4 :SceneService_SceneMoveListener) :void
+    public function moveTo (arg1 :int, arg2 :int, arg3 :SceneService_SceneMoveListener) :void
     {
-        var listener4 :SceneMarshaller_SceneMoveMarshaller = new SceneMarshaller_SceneMoveMarshaller();
-        listener4.listener = arg4;
-        sendRequest(arg1, MOVE_TO, [
-            Integer.valueOf(arg2), Integer.valueOf(arg3), listener4
+        var listener3 :SceneMarshaller_SceneMoveMarshaller = new SceneMarshaller_SceneMoveMarshaller();
+        listener3.listener = arg3;
+        sendRequest(MOVE_TO, [
+            Integer.valueOf(arg1), Integer.valueOf(arg2), listener3
         ]);
     }
 }

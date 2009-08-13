@@ -34,15 +34,15 @@ import com.threerings.util.Name;
 public interface ParlorService extends InvocationService
 {
     // from Java interface ParlorService
-    function cancel (arg1 :Client, arg2 :int, arg3 :InvocationService_InvocationListener) :void;
+    function cancel (arg1 :int, arg2 :InvocationService_InvocationListener) :void;
 
     // from Java interface ParlorService
-    function invite (arg1 :Client, arg2 :Name, arg3 :GameConfig, arg4 :ParlorService_InviteListener) :void;
+    function invite (arg1 :Name, arg2 :GameConfig, arg3 :ParlorService_InviteListener) :void;
 
     // from Java interface ParlorService
-    function respond (arg1 :Client, arg2 :int, arg3 :int, arg4 :Object, arg5 :InvocationService_InvocationListener) :void;
+    function respond (arg1 :int, arg2 :int, arg3 :Object, arg4 :InvocationService_InvocationListener) :void;
 
     // from Java interface ParlorService
-    function startSolitaire (arg1 :Client, arg2 :GameConfig, arg3 :InvocationService_ConfirmListener) :void;
+    function startSolitaire (arg1 :GameConfig, arg2 :InvocationService_ConfirmListener) :void;
 }
 }

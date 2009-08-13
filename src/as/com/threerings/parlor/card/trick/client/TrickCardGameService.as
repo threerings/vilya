@@ -32,12 +32,12 @@ import com.threerings.presents.client.InvocationService;
 public interface TrickCardGameService extends InvocationService
 {
     // from Java interface TrickCardGameService
-    function playCard (arg1 :Client, arg2 :Card, arg3 :int) :void;
+    function playCard (arg1 :Card, arg2 :int) :void;
 
     // from Java interface TrickCardGameService
-    function requestRematch (arg1 :Client) :void;
+    function requestRematch () :void;
 
     // from Java interface TrickCardGameService
-    function sendCardsToPlayer (arg1 :Client, arg2 :int, arg3 :TypedArray /* of class com.threerings.parlor.card.data.Card */) :void;
+    function sendCardsToPlayer (arg1 :int, arg2 :TypedArray /* of class com.threerings.parlor.card.data.Card */) :void;
 }
 }

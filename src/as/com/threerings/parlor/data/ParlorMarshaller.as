@@ -47,12 +47,12 @@ public class ParlorMarshaller extends InvocationMarshaller
     public static const CANCEL :int = 1;
 
     // from interface ParlorService
-    public function cancel (arg1 :Client, arg2 :int, arg3 :InvocationService_InvocationListener) :void
+    public function cancel (arg1 :int, arg2 :InvocationService_InvocationListener) :void
     {
-        var listener3 :InvocationMarshaller_ListenerMarshaller = new InvocationMarshaller_ListenerMarshaller();
-        listener3.listener = arg3;
-        sendRequest(arg1, CANCEL, [
-            Integer.valueOf(arg2), listener3
+        var listener2 :InvocationMarshaller_ListenerMarshaller = new InvocationMarshaller_ListenerMarshaller();
+        listener2.listener = arg2;
+        sendRequest(CANCEL, [
+            Integer.valueOf(arg1), listener2
         ]);
     }
 
@@ -60,12 +60,12 @@ public class ParlorMarshaller extends InvocationMarshaller
     public static const INVITE :int = 2;
 
     // from interface ParlorService
-    public function invite (arg1 :Client, arg2 :Name, arg3 :GameConfig, arg4 :ParlorService_InviteListener) :void
+    public function invite (arg1 :Name, arg2 :GameConfig, arg3 :ParlorService_InviteListener) :void
     {
-        var listener4 :ParlorMarshaller_InviteMarshaller = new ParlorMarshaller_InviteMarshaller();
-        listener4.listener = arg4;
-        sendRequest(arg1, INVITE, [
-            arg2, arg3, listener4
+        var listener3 :ParlorMarshaller_InviteMarshaller = new ParlorMarshaller_InviteMarshaller();
+        listener3.listener = arg3;
+        sendRequest(INVITE, [
+            arg1, arg2, listener3
         ]);
     }
 
@@ -73,12 +73,12 @@ public class ParlorMarshaller extends InvocationMarshaller
     public static const RESPOND :int = 3;
 
     // from interface ParlorService
-    public function respond (arg1 :Client, arg2 :int, arg3 :int, arg4 :Object, arg5 :InvocationService_InvocationListener) :void
+    public function respond (arg1 :int, arg2 :int, arg3 :Object, arg4 :InvocationService_InvocationListener) :void
     {
-        var listener5 :InvocationMarshaller_ListenerMarshaller = new InvocationMarshaller_ListenerMarshaller();
-        listener5.listener = arg5;
-        sendRequest(arg1, RESPOND, [
-            Integer.valueOf(arg2), Integer.valueOf(arg3), arg4, listener5
+        var listener4 :InvocationMarshaller_ListenerMarshaller = new InvocationMarshaller_ListenerMarshaller();
+        listener4.listener = arg4;
+        sendRequest(RESPOND, [
+            Integer.valueOf(arg1), Integer.valueOf(arg2), arg3, listener4
         ]);
     }
 
@@ -86,12 +86,12 @@ public class ParlorMarshaller extends InvocationMarshaller
     public static const START_SOLITAIRE :int = 4;
 
     // from interface ParlorService
-    public function startSolitaire (arg1 :Client, arg2 :GameConfig, arg3 :InvocationService_ConfirmListener) :void
+    public function startSolitaire (arg1 :GameConfig, arg2 :InvocationService_ConfirmListener) :void
     {
-        var listener3 :InvocationMarshaller_ConfirmMarshaller = new InvocationMarshaller_ConfirmMarshaller();
-        listener3.listener = arg3;
-        sendRequest(arg1, START_SOLITAIRE, [
-            arg2, listener3
+        var listener2 :InvocationMarshaller_ConfirmMarshaller = new InvocationMarshaller_ConfirmMarshaller();
+        listener2.listener = arg2;
+        sendRequest(START_SOLITAIRE, [
+            arg1, listener2
         ]);
     }
 }

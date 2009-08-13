@@ -42,10 +42,10 @@ public class TrickCardGameMarshaller extends InvocationMarshaller
     public static const PLAY_CARD :int = 1;
 
     // from interface TrickCardGameService
-    public function playCard (arg1 :Client, arg2 :Card, arg3 :int) :void
+    public function playCard (arg1 :Card, arg2 :int) :void
     {
-        sendRequest(arg1, PLAY_CARD, [
-            arg2, Integer.valueOf(arg3)
+        sendRequest(PLAY_CARD, [
+            arg1, Integer.valueOf(arg2)
         ]);
     }
 
@@ -53,9 +53,9 @@ public class TrickCardGameMarshaller extends InvocationMarshaller
     public static const REQUEST_REMATCH :int = 2;
 
     // from interface TrickCardGameService
-    public function requestRematch (arg1 :Client) :void
+    public function requestRematch () :void
     {
-        sendRequest(arg1, REQUEST_REMATCH, [
+        sendRequest(REQUEST_REMATCH, [
             
         ]);
     }
@@ -64,10 +64,10 @@ public class TrickCardGameMarshaller extends InvocationMarshaller
     public static const SEND_CARDS_TO_PLAYER :int = 3;
 
     // from interface TrickCardGameService
-    public function sendCardsToPlayer (arg1 :Client, arg2 :int, arg3 :TypedArray /* of class com.threerings.parlor.card.data.Card */) :void
+    public function sendCardsToPlayer (arg1 :int, arg2 :TypedArray /* of class com.threerings.parlor.card.data.Card */) :void
     {
-        sendRequest(arg1, SEND_CARDS_TO_PLAYER, [
-            Integer.valueOf(arg2), arg3
+        sendRequest(SEND_CARDS_TO_PLAYER, [
+            Integer.valueOf(arg1), arg2
         ]);
     }
 }

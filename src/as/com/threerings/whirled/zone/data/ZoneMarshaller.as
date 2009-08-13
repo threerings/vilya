@@ -41,12 +41,12 @@ public class ZoneMarshaller extends InvocationMarshaller
     public static const MOVE_TO :int = 1;
 
     // from interface ZoneService
-    public function moveTo (arg1 :Client, arg2 :int, arg3 :int, arg4 :int, arg5 :ZoneService_ZoneMoveListener) :void
+    public function moveTo (arg1 :int, arg2 :int, arg3 :int, arg4 :ZoneService_ZoneMoveListener) :void
     {
-        var listener5 :ZoneMarshaller_ZoneMoveMarshaller = new ZoneMarshaller_ZoneMoveMarshaller();
-        listener5.listener = arg5;
-        sendRequest(arg1, MOVE_TO, [
-            Integer.valueOf(arg2), Integer.valueOf(arg3), Integer.valueOf(arg4), listener5
+        var listener4 :ZoneMarshaller_ZoneMoveMarshaller = new ZoneMarshaller_ZoneMoveMarshaller();
+        listener4.listener = arg4;
+        sendRequest(MOVE_TO, [
+            Integer.valueOf(arg1), Integer.valueOf(arg2), Integer.valueOf(arg3), listener4
         ]);
     }
 }

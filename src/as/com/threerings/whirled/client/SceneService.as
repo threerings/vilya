@@ -30,6 +30,6 @@ import com.threerings.presents.client.InvocationService;
 public interface SceneService extends InvocationService
 {
     // from Java interface SceneService
-    function moveTo (arg1 :Client, arg2 :int, arg3 :int, arg4 :SceneService_SceneMoveListener) :void;
+    function moveTo (arg1 :int, arg2 :int, arg3 :SceneService_SceneMoveListener) :void;
 }
 }
