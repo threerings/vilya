@@ -892,7 +892,7 @@ public abstract class CardPanel extends VirtualMediaPanel
                 sprite.setLocation(sprite.getX(), getHandY(sprite));
             }
         }
-    };
+    }
 
     /** Listens for mouse interactions with cards. */
     protected class CardListener extends MouseInputAdapter

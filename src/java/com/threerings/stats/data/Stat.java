@@ -59,7 +59,7 @@ public abstract class Stat
 
         /** Returns true if this stat is persisted between sessions. */
         public boolean isPersistent ();
-    };
+    }
 
     /** Provides auxilliary information to statistics during the persisting process. */
     public static interface AuxDataSource

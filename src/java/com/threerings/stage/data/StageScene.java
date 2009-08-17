@@ -30,7 +30,6 @@ import com.threerings.crowd.data.PlaceConfig;
 
 import com.threerings.miso.data.ObjectInfo;
 
-import com.threerings.whirled.data.Scene;
 import com.threerings.whirled.data.SceneImpl;
 import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.spot.data.Portal;
@@ -44,7 +43,7 @@ import static com.threerings.stage.Log.log;
  * The implementation of the Stage scene interface.
  */
 public class StageScene extends SceneImpl
-    implements Scene, SpotScene, Cloneable
+    implements SpotScene, Cloneable
 {
     /**
      * Creates an instance that will obtain data from the supplied scene

@@ -37,7 +37,6 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 
@@ -87,7 +86,7 @@ import static com.threerings.stage.Log.log;
  * locations and creating portals.
  */
 public class EditorScenePanel extends StageScenePanel
-    implements EditorModelListener, KeyListener, ChangeListener
+    implements EditorModelListener, ChangeListener
 {
     /**
      * Constructs the editor scene view panel.
@@ -1186,7 +1185,7 @@ public class EditorScenePanel extends StageScenePanel
         _locTri.addPoint(-3, -3);
         _locTri.addPoint(3, -3);
         _locTri.addPoint(0, 3);
-    };
+    }
 
     /** The stroke object used to draw highlighted tiles and coordinates. */
     protected static final Stroke HIGHLIGHT_STROKE = new BasicStroke(2);
