@@ -135,13 +135,13 @@ public class SceneDirector extends BasicDirector
     {
         // make sure the sceneId is valid
         if (sceneId < 0) {
-            log.warning("Refusing moveTo(): invalid sceneId " + sceneId + ".");
+            log.warning("Refusing moveTo(): invalid sceneId", "sceneId", sceneId);
             return false;
         }
 
         // sanity-check the destination scene id
         if (sceneId == _sceneId) {
-            log.warning("Refusing request to move to the same scene [sceneId=" + sceneId + "].");
+            log.warning("Refusing request to move to the same scene", "sceneId", sceneId);
             return false;
         }
 
@@ -174,13 +174,13 @@ public class SceneDirector extends BasicDirector
         // complain if we're over-writing a pending request
         if (_pendingData != null) {
             if (refuse) {
-                log.warning("Refusing moveTo; We have a request outstanding " +
-                            "[psid=" + _pendingData.sceneId + ", nsid=" + sceneId + "].");
+                log.warning("Refusing moveTo; We have a request outstanding",
+                    "psid", _pendingData.sceneId, "nsid", sceneId);
                 return false;
 
             } else {
-                log.warning("Overriding stale moveTo request [psid=" + _pendingData.sceneId +
-                            ", nsid=" + sceneId + "].");
+                log.warning("Overriding stale moveTo request",
+                    "psid", _pendingData.sceneId, "nsid", sceneId);
             }
         }
 
@@ -221,8 +221,8 @@ public class SceneDirector extends BasicDirector
 
         // make the pending scene the active scene
         if (_pendingData == null) {
-            log.warning("Aiya! Scene move succeeded but we have no pending data! " +
-                        "[prevId=" + _previousSceneId + "].");
+            log.warning("Aiya! Scene move succeeded but we have no pending data!",
+                "prevId", _previousSceneId);
             return;
         }
         _sceneId = _pendingData.sceneId;
@@ -235,7 +235,7 @@ public class SceneDirector extends BasicDirector
 
         // complain if we didn't find a scene
         if (_model == null) {
-            log.warning("Aiya! Unable to load scene [sid=" + _sceneId + ", plid=" + placeId + "].");
+            log.warning("Aiya! Unable to load scene", "sid", _sceneId, "plid", placeId);
             return;
         }
 
@@ -247,8 +247,7 @@ public class SceneDirector extends BasicDirector
     public function moveSucceededWithUpdates (
         placeId :int, config :PlaceConfig, updates :TypedArray) :void
     {
-        log.info("Got updates [placeId=" + placeId + ", config=" + config +
-                 ", updates=" + updates + "].");
+        log.info("Got updates", "placeId", placeId, "config", config, "updates", updates);
 
         // apply the updates to our cached scene
         var model :SceneModel = loadSceneModel(_pendingData.sceneId);
@@ -257,8 +256,8 @@ public class SceneDirector extends BasicDirector
             try {
                 update.validate(model);
             } catch (ise :IllegalOperationError) {
-                log.warning("Scene update failed validation [model=" + model +
-                            ", update=" + update + ", error=" + ise.message + "].");
+                log.warning("Scene update failed validation",
+                    "model", model, "update", update, "error", ise.message);
                 failure = true;
                 break;
             }
@@ -266,9 +265,7 @@ public class SceneDirector extends BasicDirector
             try {
                 update.apply(model);
             } catch (e :Error) {
-                log.warning("Failure applying scene update [model=" + model +
-                            ", update=" + update + "].");
-                log.logStackTrace(e);
+                log.warning("Failure applying scene update", "model", model, "update", update, e);
                 failure = true;
                 break;
             }
@@ -279,9 +276,8 @@ public class SceneDirector extends BasicDirector
             try {
                 _screp.deleteSceneModel(_pendingData.sceneId);
             } catch (ioe :IOError) {
-                log.warning("Failure removing booched scene model " +
-                            "[sceneId=" + _pendingData.sceneId + "].");
-                log.logStackTrace(ioe);
+                log.warning("Failure removing booched scene model",
+                    "sceneId", _pendingData.sceneId, ioe);
             }
 
             // act as if the scene move failed, though we'll be in a funny state because the server
@@ -302,8 +298,9 @@ public class SceneDirector extends BasicDirector
     public function moveSucceededWithScene (
         placeId :int, config :PlaceConfig, model :SceneModel) :void
     {
-        log.info("Got updated scene model [placeId=" + placeId + ", config=" + config +
-                 ", scene=" + model.sceneId + "/" + model.name + "/" + model.version + "].");
+        log.info("Got updated scene model",
+            "placeId", placeId, "config", config,
+            "scene", model.sceneId + "/" + model.name + "/" + model.version);
 
         // update the model in the repository
         persistSceneModel(model);
@@ -318,8 +315,7 @@ public class SceneDirector extends BasicDirector
     // from interface SceneService_SceneMoveListener
     public function moveRequiresServerSwitch (hostname :String, ports :TypedArray) :void
     {
-        log.info("Scene switch requires server switch [host=" + hostname +
-                 ", ports=" + ports + "].");
+        log.info("Scene switch requires server switch", "host", hostname, "ports", ports);
         // keep track of our current pending data because it will be cleared when we log off of
         // this server and onto the next one
         var pendingData :PendingData = _pendingData;
@@ -389,7 +385,7 @@ public class SceneDirector extends BasicDirector
     // documentation inherited from interface
     public function forcedMove (sceneId :int) :void
     {
-        log.info("Moving at request of server [sceneId=" + sceneId + "].");
+        log.info("Moving at request of server", "sceneId", sceneId);
 
         // clear out our old scene and place data
         didLeaveScene();
@@ -405,9 +401,8 @@ public class SceneDirector extends BasicDirector
     {
         if (_moveHandler != null) {
             log.warning("Requested to set move handler, but we've already got one. The " +
-                        "conflicting entities will likely need to perform more sophisticated " +
-                        "coordination to deal with failures. [old=" + _moveHandler +
-                        ", new=" + handler + "].");
+                "conflicting entities will likely need to perform more sophisticated " +
+                "coordination to deal with failures.", "old", _moveHandler, "new", handler);
 
         } else {
             _moveHandler = handler;
@@ -514,7 +509,7 @@ public class SceneDirector extends BasicDirector
 
             } catch (ioe :IOError) {
                 // complain first, then return null
-                log.warning("Error loading scene [scid=" + sceneId + ", error=" + ioe + "].");
+                log.warning("Error loading scene", "scid", sceneId, "error", ioe);
             }
         }
 
@@ -529,9 +524,8 @@ public class SceneDirector extends BasicDirector
         try {
             _screp.storeSceneModel(model);
         } catch (ioe :IOError) {
-            log.warning("Failed to update repository with updated scene [sceneId=" + model.sceneId +
-                        ", nvers=" + model.version + "].");
-            log.logStackTrace(ioe);
+            log.warning("Failed to update repository with updated scene",
+                "sceneId", model.sceneId, "nvers", model.version, ioe);
         }
     }
 
