@@ -24,8 +24,8 @@ package com.threerings.whirled.client {
 import flash.errors.IOError;
 import flash.errors.IllegalOperationError;
 
-import com.threerings.util.HashMap;
 import com.threerings.util.Log;
+import com.threerings.util.LRUHashMap;
 import com.threerings.util.ResultListener;
 
 import com.threerings.io.TypedArray;
@@ -558,7 +558,7 @@ public class SceneDirector extends BasicDirector
     protected var _fact :SceneFactory;
 
     /** A cache of scene model information. */
-    protected var _scache :HashMap = new HashMap(); // TODO: LRUHashMap(5)
+    protected var _scache :LRUHashMap = new LRUHashMap(5);
 
     /** The display scene object for the scene we currently occupy. */
     protected var _scene :Scene;
