@@ -24,6 +24,7 @@
     <include name="nenya-miso*.jar"/>
     <include name="nenya-rsrc*.jar"/>
     <!-- ActionScript dependencies -->
+    <include name="ooolib*.swc"/>
     <include name="naryalib*.swc"/>
     <include name="nenyalib*.swc"/>
     <!-- Thane dependencies -->
