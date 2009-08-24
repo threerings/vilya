@@ -25,7 +25,8 @@ import flash.errors.IOError;
 import flash.errors.IllegalOperationError;
 
 import com.threerings.util.Log;
-import com.threerings.util.LRUHashMap;
+import com.threerings.util.Map;
+import com.threerings.util.Maps;
 import com.threerings.util.ResultListener;
 
 import com.threerings.io.TypedArray;
@@ -558,7 +559,7 @@ public class SceneDirector extends BasicDirector
     protected var _fact :SceneFactory;
 
     /** A cache of scene model information. */
-    protected var _scache :LRUHashMap = new LRUHashMap(5);
+    protected var _scache :Map = Maps.newLRIMap(5, Maps.newMapOf(int));
 
     /** The display scene object for the scene we currently occupy. */
     protected var _scene :Scene;

@@ -23,7 +23,8 @@ package com.threerings.whirled.spot.data {
 
 import com.threerings.util.ArrayIterator;
 import com.threerings.util.Iterator;
-import com.threerings.util.HashMap;
+import com.threerings.util.Map;
+import com.threerings.util.Maps;
 import com.threerings.util.Log;
 
 /**
@@ -147,7 +148,7 @@ public class SpotSceneImpl
     protected var _smodel :SpotSceneModel;
 
     /** A mapping from portal id to portal. */
-    protected var _portals :HashMap = new HashMap();
+    protected var _portals :Map = Maps.newMapOf(int);
 
     /** We don't allow more than ~32k portals in a scene. Things would
      * slow down *way* before we got there. */

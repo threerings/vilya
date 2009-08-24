@@ -22,7 +22,8 @@
 package com.threerings.parlor.client {
 
 import com.threerings.util.ArrayUtil;
-import com.threerings.util.HashMap;
+import com.threerings.util.Map;
+import com.threerings.util.Maps;
 import com.threerings.util.Log;
 import com.threerings.util.Name;
 
@@ -236,7 +237,7 @@ public class ParlorDirector extends BasicDirector
 
     /** A table of acknowledged (but not yet accepted or refused) invitation requests, keyed on
      * invitation id. */
-    protected var _pendingInvites :HashMap = new HashMap();
+    protected var _pendingInvites :Map = Maps.newMapOf(int);
 
     /** We notify the entities on this list when we get a game ready notification. */
     protected var _grobs :Array = new Array();
