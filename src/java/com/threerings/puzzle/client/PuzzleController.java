@@ -338,7 +338,7 @@ public abstract class PuzzleController extends GameController
                 break;
 
             case PuzzleObject.GAME_OVER:
-                // similarly we haev to postpone game ending activity until the current action has
+                // similarly we have to postpone game ending activity until the current action has
                 // ended clean up and clear out
                 clearAction();
                 // wait until the action is cleared before we roll down to our delegates and do all

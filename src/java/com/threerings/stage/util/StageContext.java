@@ -12,7 +12,7 @@
 //
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public
@@ -27,7 +27,6 @@ import com.threerings.util.MessageManager;
 
 import com.threerings.resource.ResourceManager;
 
-import com.threerings.media.FrameManager;
 import com.threerings.media.image.ColorPository;
 import com.threerings.media.image.ImageManager;
 
@@ -36,60 +35,53 @@ import com.threerings.miso.util.MisoContext;
 import com.threerings.cast.ComponentRepository;
 
 /**
- * A context that provides for the myriad requirements of the Stage
- * system.
+ * A context that provides for the myriad requirements of the Stage system.
  */
 public interface StageContext
     extends MisoContext
 {
     /**
-     * Returns the frame manager driving our interface.
+     * Returns the resource manager via which all client resources are loaded.
      */
-    public FrameManager getFrameManager ();
-
-    /**
-     * Returns the resource manager via which all client resources are
-     * loaded.
-     */
-    public ResourceManager getResourceManager ();
+    ResourceManager getResourceManager ();
 
     /**
      * Access to the image manager.
      */
-    public ImageManager getImageManager ();
+    ImageManager getImageManager ();
 
     /**
      * Provides access to the key dispatcher.
      */
-    public KeyDispatcher getKeyDispatcher ();
+    KeyDispatcher getKeyDispatcher ();
 
     /**
      * Returns a reference to the message manager used by the client.
      */
-    public MessageManager getMessageManager ();
+    MessageManager getMessageManager ();
 
     /**
      * Returns a reference to the keyboard manager.
      */
-    public KeyboardManager getKeyboardManager();
+    KeyboardManager getKeyboardManager ();
 
     /**
      * Returns the component repository in use by this client.
      */
-    public ComponentRepository getComponentRepository ();
+    ComponentRepository getComponentRepository ();
 
     /**
      * Returns a reference to the colorization repository.
      */
-    public ColorPository getColorPository ();
+    ColorPository getColorPository ();
 
     /**
      * Translates the specified message using the default bundle.
      */
-    public String xlate (String message);
+    String xlate (String message);
 
     /**
      * Translates the specified message using the specified bundle.
      */
-    public String xlate (String bundle, String message);
+    String xlate (String bundle, String message);
 }
