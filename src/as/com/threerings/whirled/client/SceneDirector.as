@@ -559,7 +559,7 @@ public class SceneDirector extends BasicDirector
     protected var _fact :SceneFactory;
 
     /** A cache of scene model information. */
-    protected var _scache :Map = Maps.newBuilder(int).makeLRI(5).build();
+    protected var _scache :Map = Maps.newBuilder(int).makeLR(5).build();
 
     /** The display scene object for the scene we currently occupy. */
     protected var _scene :Scene;
