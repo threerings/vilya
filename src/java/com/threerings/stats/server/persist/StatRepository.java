@@ -23,6 +23,7 @@ import com.samskivert.util.IntMaps;
 import com.samskivert.depot.DatabaseException;
 import com.samskivert.depot.DepotRepository;
 import com.samskivert.depot.DuplicateKeyException;
+import com.samskivert.depot.Funs;
 import com.samskivert.depot.Key;
 import com.samskivert.depot.PersistenceContext;
 import com.samskivert.depot.PersistentRecord;
@@ -30,8 +31,6 @@ import com.samskivert.depot.clause.FieldDefinition;
 import com.samskivert.depot.clause.FromOverride;
 import com.samskivert.depot.clause.QueryClause;
 import com.samskivert.depot.clause.Where;
-import com.samskivert.depot.expression.FunctionExp;
-
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 
@@ -293,8 +292,7 @@ public class StatRepository extends DepotRepository
             MaxStatCodeRecord maxRecord = load(
                 MaxStatCodeRecord.class,
                 new FromOverride(StringCodeRecord.class),
-                new FieldDefinition(MaxStatCodeRecord.MAX_CODE,
-                                    new FunctionExp("MAX", StringCodeRecord.CODE)),
+                new FieldDefinition(MaxStatCodeRecord.MAX_CODE, Funs.max(StringCodeRecord.CODE)),
                 new Where(StringCodeRecord.STAT_CODE, type.code()));
 
             int code = maxRecord != null ? maxRecord.maxCode + 1 : 1;
