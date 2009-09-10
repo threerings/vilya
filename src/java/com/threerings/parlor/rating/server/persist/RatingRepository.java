@@ -102,7 +102,7 @@ public class RatingRepository extends DepotRepository
         ArrayList<QueryClause> clauses = Lists.newArrayList();
         if (since > 0L) {
             Timestamp when = new Timestamp(System.currentTimeMillis() - since);
-            clauses.add(new Where(new And(RatingRecord.PLAYER_ID.eq(playerId),
+            clauses.add(new Where(Ops.and(RatingRecord.PLAYER_ID.eq(playerId),
                                           RatingRecord.LAST_UPDATED.greaterThan(when))));
         } else {
             clauses.add(new Where(RatingRecord.PLAYER_ID, playerId));
@@ -138,7 +138,7 @@ public class RatingRepository extends DepotRepository
         OrderBy ob = new OrderBy(
             new SQLExpression[] { RatingRecord.RATING, RatingRecord.LAST_UPDATED },
             new OrderBy.Order[] { OrderBy.Order.DESC, OrderBy.Order.DESC });
-        return findAll(RatingRecord.class, new Where(new And(where)), new Limit(0, limit), ob);
+        return findAll(RatingRecord.class, new Where(Ops.and(where)), new Limit(0, limit), ob);
     }
 
     /**
