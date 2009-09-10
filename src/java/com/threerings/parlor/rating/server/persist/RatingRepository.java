@@ -48,7 +48,6 @@ import com.samskivert.depot.clause.OrderBy;
 import com.samskivert.depot.clause.QueryClause;
 import com.samskivert.depot.clause.Where;
 import com.samskivert.depot.expression.SQLExpression;
-import com.samskivert.depot.operator.And;
 
 import com.threerings.parlor.rating.util.Percentiler;
 
@@ -86,7 +85,7 @@ public class RatingRepository extends DepotRepository
             return Collections.emptyList();
         }
         return findAll(RatingRecord.class,
-                       new Where(new And(RatingRecord.GAME_ID.eq(gameId),
+                       new Where(Ops.and(RatingRecord.GAME_ID.eq(gameId),
                                          RatingRecord.PLAYER_ID.in(players))));
     }
 
