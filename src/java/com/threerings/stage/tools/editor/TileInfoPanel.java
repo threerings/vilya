@@ -56,6 +56,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -690,6 +691,12 @@ public class TileInfoPanel extends JSplitPane
                 return ((tsr.layer == layer) && (tsr.tileSetId == tileSetId));
             }
             return false;
+        }
+
+        @Override
+        public int hashCode ()
+        {
+            return Objects.hashCode(layer, tileSetId);
         }
     }
 

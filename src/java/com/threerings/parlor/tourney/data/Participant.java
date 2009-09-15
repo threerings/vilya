@@ -58,6 +58,12 @@ public class Participant extends SimpleStreamableObject
     }
 
     @Override
+    public int hashCode ()
+    {
+    	return username.hashCode();
+    }
+
+    @Override
     public String toString ()
     {
         return username.toString();
