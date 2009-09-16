@@ -23,9 +23,9 @@ package com.threerings.parlor.game.data {
 
 import com.threerings.util.ArrayUtil;
 import com.threerings.util.Integer;
+import com.threerings.util.Joiner;
 import com.threerings.util.langBoolean;
 import com.threerings.util.Name;
-import com.threerings.util.StringBuilder;
 
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
@@ -230,11 +230,10 @@ public class GameObject extends PlaceObject
         return playerStatus == PLAYER_IN_PLAY;
     }
 
-    override protected function whichBuf (buf :StringBuilder) :void
+    override protected function whichJoiner (j :Joiner) :void
     {
-        super.whichBuf(buf);
-        buf.append("(").append(players.join()).append(")");
-        buf.append(":").append(state);
+        super.whichJoiner(j);
+        j.addArgs("(" + players.join() + ")", state);
     }
 
 //    // AUTO-GENERATED: METHODS START

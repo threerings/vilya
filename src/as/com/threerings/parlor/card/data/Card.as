@@ -28,7 +28,7 @@ import com.threerings.util.Byte;
 import com.threerings.util.Comparable;
 import com.threerings.util.Hashable;
 import com.threerings.util.Integer;
-import com.threerings.util.StringBuilder;
+import com.threerings.util.Joiner;
 
 import com.threerings.presents.dobj.DSet;
 import com.threerings.presents.dobj.DSet_Entry;
@@ -168,30 +168,7 @@ public class Card
             return "BJ";
 
         } else {
-            var sb : StringBuilder = new StringBuilder();
-            if (number >= 2 && number <= 9) {
-                sb.append(number);
-
-            } else {
-                switch (number) {
-                    case 10: sb.append('T'); break;
-                    case CardCodes.JACK: sb.append('J'); break;
-                    case CardCodes.QUEEN: sb.append('Q'); break;
-                    case CardCodes.KING: sb.append('K'); break;
-                    case CardCodes.ACE: sb.append('A'); break;
-                    default: sb.append('?'); break;
-                }
-            }
-
-            switch (getSuit()) {
-                case CardCodes.SPADES: sb.append('s'); break;
-                case CardCodes.HEARTS: sb.append('h'); break;
-                case CardCodes.CLUBS: sb.append('c'); break;
-                case CardCodes.DIAMONDS: sb.append('d'); break;
-                default: sb.append('?'); break;
-            }
-
-            return sb.toString();
+            return rankToString(number) + suitToString(getSuit());
         }
     }
 
@@ -237,6 +214,32 @@ public class Card
     public function writeObject (out :ObjectOutputStream) :void
     {
         out.writeByte(_value);
+    }
+
+    protected function rankToString (rank :int) :String
+    {
+        if (rank >= 2 && rank <= 9) {
+            return String(rank);
+        }
+        switch (rank) {
+        case 10: return "T";
+        case CardCodes.JACK: return "J";
+        case CardCodes.QUEEN: return "Q";
+        case CardCodes.KING: return "K";
+        case CardCodes.ACE: return "A";
+        }
+        return "?";
+    }
+
+    protected function suitToString (suit :int) :String
+    {
+        switch (suit) {
+        case CardCodes.SPADES: return "s";
+        case CardCodes.HEARTS: return "h";
+        case CardCodes.CLUBS: return "c";
+        case CardCodes.DIAMONDS: return "d";
+        }
+        return "?";
     }
 
     /** The number of the card. */

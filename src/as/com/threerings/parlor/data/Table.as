@@ -24,8 +24,8 @@ package com.threerings.parlor.data {
 import com.threerings.util.ArrayUtil;
 import com.threerings.util.ClassUtil;
 import com.threerings.util.Hashable;
+import com.threerings.util.Joiner;
 import com.threerings.util.Name;
-import com.threerings.util.StringBuilder;
 
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
@@ -218,12 +218,9 @@ public class Table
      */
     public function toString () :String
     {
-        var buf :StringBuilder = new StringBuilder();
-        buf.append(ClassUtil.shortClassName(this));
-        buf.append(" [");
-        toStringBuilder(buf);
-        buf.append("]");
-        return buf.toString();
+        var j :Joiner = Joiner.createFor(this);
+        toStringJoiner(j);
+        return j.toString();
     }
 
     // documentation inherited
@@ -259,14 +256,10 @@ public class Table
     /**
      * Helper method for toString, ripe for overrideability.
      */
-    protected function toStringBuilder (buf :StringBuilder) :void
+    protected function toStringJoiner (j :Joiner) :void
     {
-        buf.append("tableId=").append(tableId);
-        buf.append(", lobbyOid=").append(lobbyOid);
-        buf.append(", gameOid=").append(gameOid);
-        buf.append(", players=").append(players == null ? "<null?>" : players.join());
-        buf.append(", watchers=").append(watchers == null ? "<null?>" : watchers.join());
-        buf.append(", config=").append(config);
+        j.add("tableId", tableId, "lobbyOid", lobbyOid, "gameOid", gameOid,
+            "players", players, "watchers", watchers, "config", config);
     }
 
     /** A counter for assigning table ids. */

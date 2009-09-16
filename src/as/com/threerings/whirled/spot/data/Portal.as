@@ -24,7 +24,7 @@ package com.threerings.whirled.spot.data {
 import com.threerings.util.ClassUtil;
 import com.threerings.util.Cloneable;
 import com.threerings.util.Hashable;
-import com.threerings.util.StringBuilder;
+import com.threerings.util.Joiner;
 
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
@@ -143,11 +143,10 @@ public class Portal extends SimpleStreamableObject
     }
 
     // from SimpleStreamableObject
-    override protected function toStringBuilder (buf :StringBuilder): void
+    override protected function toStringJoiner (j :Joiner): void
     {
-        buf.append("id=").append(portalId);
-        buf.append(", destScene=").append(targetSceneId);
-        buf.append(", loc=").append(loc);
+        // no super
+        j.add("id", portalId, "destScene", targetSceneId, "loc", loc);
     }
 }
 }

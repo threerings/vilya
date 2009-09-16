@@ -23,7 +23,7 @@ package com.threerings.whirled.data {
 
 import flash.errors.IllegalOperationError;
 
-import com.threerings.util.StringBuilder;
+import com.threerings.util.Joiner;
 
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
@@ -83,9 +83,9 @@ public class SceneUpdate
      */
     public function toString () :String
     {
-        var buf :StringBuilder = new StringBuilder("[");
-        toStringBuilder(buf);
-        return buf.append("]").toString();
+        var j :Joiner = Joiner.createFor(this);
+        toStringJoiner(j);
+        return j.toString();
     }
 
     /**
@@ -149,10 +149,9 @@ public class SceneUpdate
      * An extensible mechanism for generating a string representation of
      * this instance.
      */
-    protected function toStringBuilder (buf :StringBuilder) :void
+    protected function toStringJoiner (j :Joiner) :void
     {
-        buf.append("sceneId=").append(_targetId);
-        buf.append(", version=").append(_targetVersion);
+        j.add("sceneId", _targetId, "version", _targetVersion);
     }
 
     /** The version number of the scene on which we operate. */
