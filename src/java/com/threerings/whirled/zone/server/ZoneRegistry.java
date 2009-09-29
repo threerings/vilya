@@ -171,8 +171,18 @@ public class ZoneRegistry
         }
 
         // resolve the zone and move the user
-        zmgr.resolveZone(zoneId, new ZoneMoveHandler(_locman, zmgr, _screg, (BodyObject)caller,
-                                                     sceneId, sceneVer, listener));
+        zmgr.resolveZone(zoneId, createZoneMoveHandler(
+            zmgr, (BodyObject)caller, sceneId, sceneVer, listener));
+    }
+
+    /**
+     * Creates a handler to handle the described zone movement.
+     */
+    protected ZoneMoveHandler createZoneMoveHandler (
+        ZoneManager zmgr, BodyObject body, int sceneId, int sceneVer,
+        ZoneService.ZoneMoveListener listener)
+    {
+        return new ZoneMoveHandler(_locman, zmgr, _screg, body, sceneId, sceneVer, listener);
     }
 
     /** A table of zone managers. */

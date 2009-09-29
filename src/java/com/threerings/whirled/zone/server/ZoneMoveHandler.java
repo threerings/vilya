@@ -68,7 +68,7 @@ public class ZoneMoveHandler extends AbstractSceneMoveHandler
         _summary = summary;
 
         // now resolve the target scene
-        _screg.resolveScene(_sceneId, this);
+        resolveScene();
     }
 
     // from interface ZoneManager.ResolutionListener
@@ -110,6 +110,14 @@ public class ZoneMoveHandler extends AbstractSceneMoveHandler
 
         // let the zone manager know that someone just came on in
         _zmgr.bodyDidEnterZone(_body, _summary.zoneId);
+    }
+
+    /**
+     * Begins the process of resolving the target scene.
+     */
+    protected void resolveScene ()
+    {
+        _screg.resolveScene(_sceneId, this);
     }
 
     protected ZoneManager _zmgr;
