@@ -783,11 +783,11 @@ public class GameManager extends PlaceManager
         _gameconfig = (GameConfig)_config;
 
         // start up our tick interval
-        _tickInterval = _omgr.newInterval(new Runnable() {
+        (_tickInterval = _omgr.newInterval(new Runnable() {
             public void run () {
                 tick(System.currentTimeMillis());
             }
-        }).schedule(TICK_DELAY, true);
+        })).schedule(TICK_DELAY, true);
 
         // configure our AIs
         for (int ii = 0; ii < _gameconfig.ais.length; ii++) {
@@ -841,13 +841,12 @@ public class GameManager extends PlaceManager
 
         // start up a no-show timer if needed
         if (needsNoShowTimer()) {
-            _noShowInterval = new Interval(_omgr) {
+            (_noShowInterval = new Interval(_omgr) {
                 @Override
                 public void expired () {
                     checkForNoShows();
                 }
-            };
-            _noShowInterval.schedule(getNoShowTime());
+            }).schedule(getNoShowTime());
         }
     }
 
@@ -1113,11 +1112,11 @@ public class GameManager extends PlaceManager
     protected void startAITicker ()
     {
         if (_aiTicker == null) {
-            _aiTicker = _omgr.newInterval(new Runnable() {
+            (_aiTicker = _omgr.newInterval(new Runnable() {
                 public void run () {
                     tickAIs();
                 }
-            }).schedule(AI_TICK_DELAY, true);
+            })).schedule(AI_TICK_DELAY, true);
         }
     }
 
