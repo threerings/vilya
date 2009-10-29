@@ -27,7 +27,6 @@ import com.samskivert.util.StringUtil;
 
 import com.samskivert.depot.Key;
 import com.samskivert.depot.PersistentRecord;
-import com.samskivert.depot.annotation.Column;
 import com.samskivert.depot.annotation.Entity;
 import com.samskivert.depot.annotation.Id;
 import com.samskivert.depot.annotation.Index;
@@ -45,7 +44,7 @@ public class RatingRecord extends PersistentRecord
     public static final ColumnExp LAST_UPDATED = colexp(_R, "lastUpdated");
     // AUTO-GENERATED: FIELDS END
 
-    public static final int SCHEMA_VERSION = 3;
+    public static final int SCHEMA_VERSION = 4;
 
     /** The identifier of the game we're rating for. */
     @Id public int gameId;
@@ -60,7 +59,6 @@ public class RatingRecord extends PersistentRecord
     public int experience;
 
     /** The last time this rating was updated. */
-    @Column(type="TIMESTAMP", defaultValue="CURRENT_TIMESTAMP")
     public Timestamp lastUpdated;
 
     /**
