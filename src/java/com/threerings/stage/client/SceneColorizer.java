@@ -83,7 +83,10 @@ public class SceneColorizer implements TileSet.Colorizer
                 switch (index) {
                 case 0: colorId = oinfo.getPrimaryZation(); break;
                 case 1: colorId = oinfo.getSecondaryZation(); break;
+                case 2: colorId = oinfo.getTertiaryZation(); break;
+                case 3: colorId = oinfo.getQuaternaryZation(); break;
                 }
+
                 if (colorId == 0) {
                     return SceneColorizer.this.getColorization(index, zation);
                 } else {
@@ -104,6 +107,7 @@ public class SceneColorizer implements TileSet.Colorizer
                 return c;
             }
         }
+
         return _cpos.getColorization(zation, getColorId(zation));
     }
 

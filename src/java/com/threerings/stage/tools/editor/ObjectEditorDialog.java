@@ -80,6 +80,8 @@ public class ObjectEditorDialog extends EditorDialog
         zations.add(new JLabel("Colorizations:"));
         zations.add(_primary = new JComboBox(NO_CHOICES));
         zations.add(_secondary = new JComboBox(NO_CHOICES));
+        zations.add(_tertiary = new JComboBox(NO_CHOICES));
+        zations.add(_quaternary = new JComboBox(NO_CHOICES));
         panel.add(zations);
 
     }
@@ -116,6 +118,8 @@ public class ObjectEditorDialog extends EditorDialog
         // if the object supports colorizations, configure those
         Object[] pzations = null;
         Object[] szations = null;
+        Object[] tzations = null;
+        Object[] qzations = null;
         if (tset != null) {
             String[] zations = null;
             if (tset instanceof RecolorableTileSet) {
@@ -124,10 +128,14 @@ public class ObjectEditorDialog extends EditorDialog
             if (zations != null) {
                 pzations = computeZations(zations, 0);
                 szations = computeZations(zations, 1);
+                tzations = computeZations(zations, 2);
+                qzations = computeZations(zations, 3);
             }
         }
         configureZations(_primary, pzations, _scobj.info.getPrimaryZation());
         configureZations(_secondary, szations, _scobj.info.getSecondaryZation());
+        configureZations(_tertiary, tzations, _scobj.info.getTertiaryZation());
+        configureZations(_quaternary, qzations, _scobj.info.getQuaternaryZation());
 
         // select the text edit field and focus it
         _action.setCaretPosition(0);
@@ -173,7 +181,6 @@ public class ObjectEditorDialog extends EditorDialog
     @Override
     public void accepted ()
     {
-
         _scobj.info.action = _action.getText();
         byte prio = (byte)_priority.getValue();
         if (prio != _scobj.getPriority()) {
@@ -183,7 +190,9 @@ public class ObjectEditorDialog extends EditorDialog
         int ozations = _scobj.info.zations;
         ZationChoice pchoice = (ZationChoice)_primary.getSelectedItem();
         ZationChoice schoice = (ZationChoice)_secondary.getSelectedItem();
-        _scobj.info.setZations(pchoice.colorId, schoice.colorId);
+        ZationChoice tchoice = (ZationChoice)_tertiary.getSelectedItem();
+        ZationChoice qchoice = (ZationChoice)_quaternary.getSelectedItem();
+        _scobj.info.setZations(pchoice.colorId, schoice.colorId, tchoice.colorId, qchoice.colorId);
         if (ozations != _scobj.info.zations) {
             _scobj.refreshObjectTile(_panel);
         }
@@ -202,12 +211,12 @@ public class ObjectEditorDialog extends EditorDialog
     protected static class ZationChoice
         implements Comparable<ZationChoice>
     {
-        public short colorId;
+        public byte colorId;
         public String name;
 
         public ZationChoice (int colorId, String name)
         {
-            this.colorId = (short)colorId;
+            this.colorId = (byte)colorId;
             this.name = name;
         }
 
@@ -226,7 +235,7 @@ public class ObjectEditorDialog extends EditorDialog
     protected JTextField _action;
     protected JSlider _priority;
     protected SceneObject _scobj;
-    protected JComboBox _primary, _secondary;
+    protected JComboBox _primary, _secondary, _tertiary, _quaternary;
 
     protected static final ZationChoice[] NO_CHOICES = new ZationChoice[] { new ZationChoice(0,
         "none") };
