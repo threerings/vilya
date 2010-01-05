@@ -30,6 +30,8 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 
+import com.samskivert.util.Comparators;
+import com.samskivert.util.ObjectUtil;
 import com.samskivert.util.StringUtil;
 
 import com.samskivert.swing.HGroupLayout;
@@ -83,7 +85,6 @@ public class ObjectEditorDialog extends EditorDialog
         zations.add(_tertiary = new JComboBox(NO_CHOICES));
         zations.add(_quaternary = new JComboBox(NO_CHOICES));
         panel.add(zations);
-
     }
 
     /**
@@ -154,7 +155,7 @@ public class ObjectEditorDialog extends EditorDialog
             return null;
         }
         Object[] czations = new Object[crecs.length + 1];
-        czations[0] = new ZationChoice(0, "none");
+        czations[0] = new ZationChoice(0, "<none>");
         for (int ii = 0; ii < crecs.length; ii++) {
             czations[ii + 1] = new ZationChoice(crecs[ii].colorId, crecs[ii].name);
         }
@@ -204,7 +205,6 @@ public class ObjectEditorDialog extends EditorDialog
     public void cancelled ()
     {
         _panel.objectEditorDismissed();
-
     }
 
     /** Used to display colorization choices. */
@@ -214,20 +214,19 @@ public class ObjectEditorDialog extends EditorDialog
         public byte colorId;
         public String name;
 
-        public ZationChoice (int colorId, String name)
-        {
+        public ZationChoice (int colorId, String name) {
             this.colorId = (byte)colorId;
             this.name = name;
         }
 
-        public int compareTo (ZationChoice other)
-        {
-            return colorId - other.colorId;
+        public int compareTo (ZationChoice that) {
+            return Comparators.combine(
+                ObjectUtil.compareTo(this.name, that.name),
+                Comparators.compare(this.colorId, that.colorId));
         }
 
         @Override
-        public String toString ()
-        {
+        public String toString () {
             return name;
         }
     }
@@ -238,5 +237,5 @@ public class ObjectEditorDialog extends EditorDialog
     protected JComboBox _primary, _secondary, _tertiary, _quaternary;
 
     protected static final ZationChoice[] NO_CHOICES = new ZationChoice[] { new ZationChoice(0,
-        "none") };
+        "<none>") };
 }
