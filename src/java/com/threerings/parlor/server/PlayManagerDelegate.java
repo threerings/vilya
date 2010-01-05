@@ -2,7 +2,7 @@
 // $Id: GameManagerDelegate.java 487 2007-11-10 04:41:44Z mdb $
 //
 // Vilya library - tools for developing networked games
-// Copyright (C) 2002-2007 Three Rings Design, Inc., All Rights Reserved
+// Copyright (C) 2002-2010 Three Rings Design, Inc., All Rights Reserved
 // http://www.threerings.net/code/vilya/
 //
 // This library is free software; you can redistribute it and/or modify it
