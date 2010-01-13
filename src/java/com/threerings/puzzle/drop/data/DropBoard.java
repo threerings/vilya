@@ -687,7 +687,7 @@ public class DropBoard extends Board
     }
 
     @Override
-    public Object clone ()
+    public DropBoard clone ()
     {
         DropBoard board = (DropBoard)super.clone();
         board._board = _board.clone();

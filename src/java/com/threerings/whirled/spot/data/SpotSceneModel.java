@@ -64,14 +64,14 @@ public class SpotSceneModel extends SimpleStreamableObject
     }
 
     @Override
-    public Object clone ()
+    public SpotSceneModel clone ()
         throws CloneNotSupportedException
     {
         SpotSceneModel model = (SpotSceneModel)super.clone();
         // clone our portals individually
         model.portals = new Portal[portals.length];
         for (int ii = 0, ll = portals.length; ii < ll; ii++) {
-            model.portals[ii] = (Portal)portals[ii].clone();
+            model.portals[ii] = portals[ii].clone();
         }
         return model;
     }

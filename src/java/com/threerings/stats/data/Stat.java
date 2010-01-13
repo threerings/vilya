@@ -194,12 +194,12 @@ public abstract class Stat
     }
 
     @Override
-    public Object clone ()
+    public Stat clone ()
     {
         try {
-            return super.clone();
-        } catch (Exception e) {
-            throw new RuntimeException("Clone failed", e);
+            return (Stat) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(e);
         }
     }
 

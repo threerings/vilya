@@ -61,13 +61,13 @@ public class SceneModel extends SimpleStreamableObject
     }
 
     @Override
-    public Object clone ()
+    public SceneModel clone ()
         throws CloneNotSupportedException
     {
         SceneModel model = (SceneModel)super.clone();
         model.auxModels = new AuxModel[auxModels.length];
         for (int ii = 0; ii < auxModels.length; ii++) {
-            model.auxModels[ii] = (AuxModel)auxModels[ii].clone();
+            model.auxModels[ii] = auxModels[ii].clone();
         }
         return model;
     }

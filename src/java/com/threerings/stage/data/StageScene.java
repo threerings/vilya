@@ -153,7 +153,7 @@ public class StageScene extends SceneImpl
     }
 
     @Override
-    public Object clone ()
+    public StageScene clone ()
         throws CloneNotSupportedException
     {
         // create a new scene with a clone of our model

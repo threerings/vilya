@@ -48,14 +48,14 @@ public abstract class Board
     public abstract boolean equals (Board other);
 
     @Override
-    public Object clone ()
+    public Board clone ()
     {
         try {
             Board board = (Board)super.clone();
-            board._rando = (BoardRandom)_rando.clone();
+            board._rando = _rando.clone();
             return board;
         } catch (CloneNotSupportedException cnse) {
-            throw new RuntimeException(cnse);
+            throw new AssertionError(cnse);
         }
     }
 
@@ -162,11 +162,11 @@ public abstract class Board
         }
 
         @Override
-        public Object clone () {
+        public BoardRandom clone () {
             try {
-                return super.clone();
+                return (BoardRandom) super.clone();
             } catch (CloneNotSupportedException cnse) {
-                throw new RuntimeException(cnse);
+                throw new AssertionError(cnse);
             }
         }
 

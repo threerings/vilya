@@ -420,7 +420,7 @@ public abstract class RatingDelegate extends GameManagerDelegate
                 modified = false;
                 return rating;
             } catch (CloneNotSupportedException cnse) {
-                throw new RuntimeException(cnse);
+                throw new AssertionError(cnse);
             }
         }
 

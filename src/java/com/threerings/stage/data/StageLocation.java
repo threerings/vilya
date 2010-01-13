@@ -74,7 +74,7 @@ public class StageLocation extends SimpleStreamableObject
     // documentation inherited from interface Location
     public Location getOpposite ()
     {
-        StageLocation opp = (StageLocation) clone();
+        StageLocation opp = clone();
         opp.orient = (byte) DirectionUtil.getOpposite(orient);
         return opp;
     }
@@ -113,12 +113,12 @@ public class StageLocation extends SimpleStreamableObject
     }
 
     @Override
-    public Object clone ()
+    public StageLocation clone ()
     {
         try {
-            return super.clone();
+            return (StageLocation) super.clone();
         } catch (CloneNotSupportedException cnse) {
-            throw new RuntimeException(cnse);
+            throw new AssertionError(cnse);
         }
     }
 }

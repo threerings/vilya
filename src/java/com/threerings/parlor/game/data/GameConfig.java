@@ -151,12 +151,12 @@ public abstract class GameConfig extends PlaceConfig
     }
 
     @Override
-    public Object clone ()
+    public GameConfig clone ()
     {
         try {
-            return super.clone();
+            return (GameConfig) super.clone();
         } catch (CloneNotSupportedException cnse) {
-            throw new RuntimeException(cnse);
+            throw new AssertionError(cnse);
         }
     }
 }

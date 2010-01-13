@@ -31,6 +31,6 @@ public interface AuxModel extends Streamable, Cloneable
     /**
      * Creates a clone of this auxiliary model.
      */
-    public Object clone ()
+    public AuxModel clone ()
         throws CloneNotSupportedException;
 }

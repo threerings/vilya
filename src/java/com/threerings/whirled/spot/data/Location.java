@@ -51,5 +51,5 @@ public interface Location extends Streamable, Cloneable
     /**
      * Locations are cloneable.
      */
-    public Object clone ();
+    public Location clone ();
 }

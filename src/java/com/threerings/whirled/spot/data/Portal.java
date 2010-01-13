@@ -57,7 +57,7 @@ public class Portal extends SimpleStreamableObject
      */
     public Location getLocation ()
     {
-        return (Location) loc.clone();
+        return loc.clone();
     }
 
     /**
@@ -85,12 +85,12 @@ public class Portal extends SimpleStreamableObject
     }
 
     @Override
-    public Object clone ()
+    public Portal clone ()
     {
         try {
-            return super.clone();
+            return (Portal) super.clone();
         } catch (CloneNotSupportedException cnse) {
-            throw new RuntimeException(cnse);
+            throw new AssertionError(cnse);
         }
     }
 
