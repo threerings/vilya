@@ -212,7 +212,7 @@ public class SpotSceneDirector extends BasicDirector
         int sceneId = _scdir.getScene().getId();
         log.info("Sending changeLocation request", "scid", sceneId, "loc", loc);
 
-        _pendingLoc = (Location)loc.clone();
+        _pendingLoc = loc.clone();
         ConfirmListener clist = new ConfirmListener() {
             public void requestProcessed () {
                 _location = _pendingLoc;

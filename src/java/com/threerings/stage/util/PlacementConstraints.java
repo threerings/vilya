@@ -75,7 +75,7 @@ public class PlacementConstraints
                     // clone the map key, as the visit method reuses a
                     // single ObjectInfo instance for uninteresting objects
                     // in a section
-                    _objectData.put((ObjectInfo)info.clone(), data);
+                    _objectData.put(info.clone(), data);
                 }
             }
         };

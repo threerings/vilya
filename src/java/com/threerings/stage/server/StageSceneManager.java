@@ -412,7 +412,7 @@ public class StageSceneManager extends SpotSceneManager
         int minDistance)
     {
         MisoSceneMetrics metrics = StageSceneUtil.getMetrics();
-        StageLocation sloc = (StageLocation)base.clone();
+        StageLocation sloc = base.clone();
         int tx = MisoUtil.fullToTile(sloc.x), ty = MisoUtil.fullToTile(sloc.y);
         int oidx = sloc.orient/2;
         int lidx = (oidx+3)%4; // rotate to the left
