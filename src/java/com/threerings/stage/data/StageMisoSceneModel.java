@@ -22,7 +22,6 @@
 package com.threerings.stage.data;
 
 import com.threerings.miso.data.SparseMisoSceneModel;
-
 import com.threerings.whirled.data.AuxModel;
 import com.threerings.whirled.data.SceneModel;
 
@@ -78,5 +77,11 @@ public class StageMisoSceneModel extends SparseMisoSceneModel
     public Section getSection (int key)
     {
         return _sections.get(key);
+    }
+
+    @Override
+    public StageMisoSceneModel clone ()
+    {
+        return (StageMisoSceneModel)super.clone();
     }
 }
