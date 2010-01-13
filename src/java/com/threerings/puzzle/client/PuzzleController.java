@@ -715,7 +715,7 @@ public abstract class PuzzleController extends GameController
 
         _events.add(Integer.valueOf(event));
         if (isSyncingBoards()) {
-            _states.add((board == null) ? null : (Board)board.clone());
+            _states.add((board == null) ? null : board.clone());
             if (board == null) {
                 log.warning(
                     "Added progress event with no associated board state, " +
