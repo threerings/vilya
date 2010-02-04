@@ -119,7 +119,7 @@ public class TableLobbyObject extends LobbyObject
     public void setTableSet (DSet<Table> value)
     {
         requestAttributeChange(TABLE_SET, value, this.tableSet);
-        DSet<Table> clone = (value == null) ? null : value.typedClone();
+        DSet<Table> clone = (value == null) ? null : value.clone();
         this.tableSet = clone;
     }
 

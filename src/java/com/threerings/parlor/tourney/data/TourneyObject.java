@@ -184,7 +184,7 @@ public class TourneyObject extends DObject
     public void setParticipants (DSet<Participant> value)
     {
         requestAttributeChange(PARTICIPANTS, value, this.participants);
-        DSet<Participant> clone = (value == null) ? null : value.typedClone();
+        DSet<Participant> clone = (value == null) ? null : value.clone();
         this.participants = clone;
     }
     // AUTO-GENERATED: METHODS END
