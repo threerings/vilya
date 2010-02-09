@@ -85,6 +85,40 @@ public abstract class Board
     {
     }
 
+    /**
+     * Allows puzzles to add extra noise to their random number generators based on the specific
+     * events sent from the client to make it more difficult for a hacked client to predict things
+     * such as piece generation.
+     *
+     * @param pidx the player index that submitted the progress event.
+     * @param gevent the progress event itself.
+     */
+    public void seedFromEvent (int pidx, int gevent)
+    {
+        if (isSeedingEvent(pidx, gevent)) {
+            _rando.next(getSeedForEvent(pidx, gevent));
+        }
+    }
+
+    /**
+     * Returns whether this event is the sort of thing we should use to generate extra noise on
+     * our random number generator.
+     */
+    protected boolean isSeedingEvent (int pidx, int gevent)
+    {
+        return false; // By default, nothing is
+    }
+
+    /**
+     * Returns a number of bits to read off the random number generator for this event.
+     * Subclasses can replace this with something that better understands the formats of its
+     * particular events if desired.
+     */
+    protected int getSeedForEvent (int pidx, int gevent)
+    {
+        return (pidx ^ gevent) % 7;
+    }
+
     /** Used to generate random numbers. */
     protected static class BoardRandom extends Random
         implements Cloneable

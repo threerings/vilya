@@ -371,6 +371,8 @@ public abstract class PuzzleManager extends GameManager
                 compareBoards(pidx, cboard, gevent, before);
             }
 
+            _boards[pidx].seedFromEvent(pidx, gevent);
+
             // apply the event to the player's board
             if (!applyProgressEvent(pidx, gevent, cboard)) {
                 log.warning("Unknown event", "puzzle", where(), "pidx", pidx, "event", gevent);
@@ -426,7 +428,7 @@ public abstract class PuzzleManager extends GameManager
      *
      * @param pidx the player index that submitted the progress event.
      * @param gevent the progress event itself.
-     * @param cboard a snapshot of the board on the client iff the client has board syncing
+     * @param cboard a snapshot of the board on the client if the client has board syncing
      * enabled (which is only enabled when debugging).
      *
      * @return true to indicate that the event was handled.
