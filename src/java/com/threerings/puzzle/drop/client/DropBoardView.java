@@ -110,7 +110,7 @@ public abstract class DropBoardView extends PuzzleBoardView
     /**
      * Called by the {@link DropSprite} to populate <code>pos</code> with the screen coordinates
      * in pixels at which a piece at <code>(col, row)</code> in the board should be drawn. Derived
-     * classes may wish to override this method to allow specialised positioning of sprites.
+     * classes may wish to override this method to allow specialized positioning of sprites.
      */
     public void getPiecePosition (int col, int row, Point pos)
     {
@@ -165,14 +165,13 @@ public abstract class DropBoardView extends PuzzleBoardView
     public void updatePiece (int piece, int sx, int sy)
     {
         if (sx < 0 || sy < 0 || sx >= _bwid || sy >= _bhei) {
-            log.warning("Requested to update piece in invalid location", "sx", sx, "sy", sy,
-                        new Exception());
+            log.warning("Requested to update piece in invalid location",
+                "sx", sx, "sy", sy, new Exception());
             return;
         }
         int spos = sy * _bwid + sx;
         if (_pieces[spos] != null) {
-            ((ImageSprite)_pieces[spos]).setMirage(
-                getPieceImage(piece, sx, sy, NORTH));
+            ((ImageSprite)_pieces[spos]).setMirage(getPieceImage(piece, sx, sy, NORTH));
         } else {
             createPiece(piece, sx, sy);
         }
@@ -181,12 +180,11 @@ public abstract class DropBoardView extends PuzzleBoardView
     /**
      * Creates a new piece sprite and moves it into position on the board.
      */
-    public void createPiece (int piece, int sx, int sy, int tx, int ty,
-                             long duration)
+    public void createPiece (int piece, int sx, int sy, int tx, int ty, long duration)
     {
         if (tx < 0 || ty < 0 || tx >= _bwid || ty >= _bhei) {
             log.warning("Requested to create and move piece to invalid location",
-                        "tx", tx, "ty", ty, new Exception());
+                "tx", tx, "ty", ty, new Exception());
             return;
         }
         Sprite sprite = createPieceSprite(piece, sx, sy);
@@ -414,8 +412,7 @@ public abstract class DropBoardView extends PuzzleBoardView
      * @param color the color of the text.
      * @param font the font.
      */
-    public ScoreAnimation createScoreAnimation (
-        String score, Color color, Font font)
+    public ScoreAnimation createScoreAnimation (String score, Color color, Font font)
     {
         return createScoreAnimation(score, color, font, 0, _bhei - 1, _bwid, _bhei);
     }

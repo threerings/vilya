@@ -310,7 +310,7 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
     protected void renderBackground (Graphics2D gfx, Rectangle dirty)
     {
         gfx.setColor(getBackground());
-          gfx.fill(dirty);
+        gfx.fill(dirty);
     }
 
     @Override
@@ -342,8 +342,7 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
     protected void maybeFireCleared ()
     {
         if (DEBUG_ACTION) {
-            log.info("Maybe firing cleared " +
-                     getActionCount() + ":" + isShowing());
+            log.info("Maybe firing cleared " + getActionCount() + ":" + isShowing());
         }
         if (getActionCount() == 0) {
             // we're probably in the middle of a tick() in an animationDidFinish() call and we want
