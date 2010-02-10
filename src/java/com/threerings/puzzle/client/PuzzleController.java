@@ -764,10 +764,9 @@ public abstract class PuzzleController extends GameController
     }
 
     /**
-     * Called when a player is knocked out of the game to give the puzzle
-     * a chance to perform any post-knockout actions that may be desired.
-     * Derived classes may wish to override this method but should be sure
-     * to call <code>super.playerKnockedOut()</code>.
+     * Called when a player is knocked out of the game to give the puzzle a chance to perform any
+     * post-knockout actions that may be desired. Derived classes may wish to override this method
+     * but should be sure to call <code>super.playerKnockedOut()</code>.
      */
     protected void playerKnockedOut (final int pidx)
     {
@@ -781,8 +780,7 @@ public abstract class PuzzleController extends GameController
     }
 
     /**
-     * Catches clicks an unpauses, without passing the click through
-     * to the puzzle.
+     * Catches clicks an unpauses, without passing the click through to the puzzle.
      */
     class Unpauser extends MouseHijacker
     {
@@ -914,8 +912,7 @@ public abstract class PuzzleController extends GameController
     /** A key listener that currently just toggles pause in the puzzle. */
     protected KeyListener _globalKeyListener = new KeyAdapter() {
         @Override
-        public void keyReleased (KeyEvent e)
-        {
+        public void keyReleased (KeyEvent e) {
             int keycode = e.getKeyCode();
             // toggle chatting (pause)
             if (keycode == KeyEvent.VK_ESCAPE || keycode == KeyEvent.VK_PAUSE) {
