@@ -32,7 +32,7 @@ public abstract class StringSetStat extends SetStat<String>
     /**
      * Returns the number of Strings in this set.
      */
-    @Override // from SetStat
+    @Override
     public int size ()
     {
         return _values.length;
@@ -41,7 +41,7 @@ public abstract class StringSetStat extends SetStat<String>
     /**
      * Returns true if the specified string is contained in this set.
      */
-    @Override // from SetStat
+    @Override
     public boolean contains (String key)
     {
         if (key == null) {
@@ -56,7 +56,7 @@ public abstract class StringSetStat extends SetStat<String>
      * @return true if the string was newly added, false if it was already
      * contained in the set.
      */
-    @Override // from SetStat
+    @Override
     public boolean add (String key)
     {
         if (key == null) {
@@ -86,7 +86,7 @@ public abstract class StringSetStat extends SetStat<String>
         return _values;
     }
 
-    @Override // documentation inherited
+    @Override
     public String valueToString ()
     {
         return StringUtil.toString(_values);

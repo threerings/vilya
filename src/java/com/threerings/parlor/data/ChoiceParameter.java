@@ -25,13 +25,13 @@ public class ChoiceParameter extends Parameter
         return "m.choice_" + choices[index];
     }
 
-    @Override @ActionScript(omit=true) // documentation inherited
+    @Override @ActionScript(omit=true)
     public String getLabel ()
     {
         return "m.choice_" + ident;
     }
 
-    @Override // documentation inherited
+    @Override
     public Object getDefaultValue ()
     {
         return start;

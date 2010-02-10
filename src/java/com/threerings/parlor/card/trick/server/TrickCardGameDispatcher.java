@@ -42,13 +42,13 @@ public class TrickCardGameDispatcher extends InvocationDispatcher<TrickCardGameM
         this.provider = provider;
     }
 
-    @Override // documentation inherited
+    @Override
     public TrickCardGameMarshaller createMarshaller ()
     {
         return new TrickCardGameMarshaller();
     }
 
-    @Override // documentation inherited
+    @Override
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
         throws InvocationException

@@ -19,13 +19,13 @@ public class RangeParameter extends Parameter
     /** The starting value for this parameter. */
     public int start;
 
-    @Override @ActionScript(omit=true) // documentation inherited
+    @Override @ActionScript(omit=true)
     public String getLabel ()
     {
         return "m.range_" + ident;
     }
 
-    @Override // documentation inherited
+    @Override
     public Object getDefaultValue ()
     {
         return start;

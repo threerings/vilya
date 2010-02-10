@@ -44,13 +44,13 @@ public class StageSceneDispatcher extends InvocationDispatcher<StageSceneMarshal
         this.provider = provider;
     }
 
-    @Override // documentation inherited
+    @Override
     public StageSceneMarshaller createMarshaller ()
     {
         return new StageSceneMarshaller();
     }
 
-    @Override // documentation inherited
+    @Override
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
         throws InvocationException

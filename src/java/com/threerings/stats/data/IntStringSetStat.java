@@ -31,7 +31,7 @@ import com.threerings.io.ObjectOutputStream;
  */
 public class IntStringSetStat extends StringSetStat
 {
-    @Override // documentation inherited
+    @Override
     public void persistTo (ObjectOutputStream out, AuxDataSource aux)
         throws IOException
     {
@@ -41,7 +41,7 @@ public class IntStringSetStat extends StringSetStat
         }
     }
 
-    @Override // documentation inherited
+    @Override
     public void unpersistFrom (ObjectInputStream in, AuxDataSource aux)
         throws IOException, ClassNotFoundException
     {

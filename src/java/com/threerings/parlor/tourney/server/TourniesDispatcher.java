@@ -43,13 +43,13 @@ public class TourniesDispatcher extends InvocationDispatcher<TourniesMarshaller>
         this.provider = provider;
     }
 
-    @Override // documentation inherited
+    @Override
     public TourniesMarshaller createMarshaller ()
     {
         return new TourniesMarshaller();
     }
 
-    @Override // documentation inherited
+    @Override
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
         throws InvocationException

@@ -68,20 +68,20 @@ public class IntArrayStat extends Stat
         setModified(true);
     }
 
-    @Override // documentation inherited
+    @Override
     public String valueToString ()
     {
         return StringUtil.toString(_value);
     }
 
-    @Override // documentation inherited
+    @Override
     public void persistTo (ObjectOutputStream out, AuxDataSource aux)
         throws IOException
     {
         out.writeObject(_value);
     }
 
-    @Override // documentation inherited
+    @Override
     public void unpersistFrom (ObjectInputStream in, AuxDataSource aux)
         throws IOException, ClassNotFoundException
     {

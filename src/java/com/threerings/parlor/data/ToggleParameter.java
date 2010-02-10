@@ -13,13 +13,13 @@ public class ToggleParameter extends Parameter
     /** The starting state for this parameter. */
     public boolean start;
 
-    @Override @ActionScript(omit=true) // documentation inherited
+    @Override @ActionScript(omit=true)
     public String getLabel ()
     {
         return "m.toggle_" + ident;
     }
 
-    @Override // documentation inherited
+    @Override
     public Object getDefaultValue ()
     {
         return start;

@@ -44,7 +44,7 @@ public class EditorTileManager extends MisoTileManager
         super(rmgr, imgr);
     }
 
-    @Override //Documentation inherited
+    @Override
     public TileSet getTileSet (int tileSetId)
         throws NoSuchTileSetException
     {

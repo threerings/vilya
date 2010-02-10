@@ -154,7 +154,7 @@ public class TourneyRepository extends JORARepository
         return configList;
     }
 
-    @Override // documentation inherited
+    @Override
     protected void migrateSchema (Connection conn, DatabaseLiaison liaison)
         throws SQLException, PersistenceException
     {
@@ -164,7 +164,7 @@ public class TourneyRepository extends JORARepository
         }, "");
     }
 
-    @Override // documentation inherited
+    @Override
     protected void createTables ()
     {
         _ttable = new Table<TourneyRecord>(TourneyRecord.class, "TOURNEYS", "TOURNEY_ID", true);

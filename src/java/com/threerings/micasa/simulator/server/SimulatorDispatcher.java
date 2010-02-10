@@ -43,13 +43,13 @@ public class SimulatorDispatcher extends InvocationDispatcher<SimulatorMarshalle
         this.provider = provider;
     }
 
-    @Override // documentation inherited
+    @Override
     public SimulatorMarshaller createMarshaller ()
     {
         return new SimulatorMarshaller();
     }
 
-    @Override // documentation inherited
+    @Override
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
         throws InvocationException

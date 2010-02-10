@@ -31,7 +31,7 @@ import com.threerings.io.ObjectOutputStream;
  */
 public class ByteByteStringMapStat extends StringMapStat
 {
-    @Override // documentation inherited
+    @Override
     public void persistTo (ObjectOutputStream out, AuxDataSource aux)
         throws IOException
     {
@@ -42,7 +42,7 @@ public class ByteByteStringMapStat extends StringMapStat
         }
     }
 
-    @Override // documentation inherited
+    @Override
     public void unpersistFrom (ObjectInputStream in, AuxDataSource aux)
         throws IOException, ClassNotFoundException
     {
@@ -54,7 +54,7 @@ public class ByteByteStringMapStat extends StringMapStat
         }
     }
 
-    @Override // from StringMapStat
+    @Override
     protected int getMaxValue ()
     {
         return Byte.MAX_VALUE;

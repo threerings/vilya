@@ -45,8 +45,8 @@ public class ScoreAnimation extends FloatingTextAnimation
     }
 
     /**
-     * Constructs a score animation for the given score value centered at the given
-     * coordinates. The animation will float up the screen for 30 pixels.
+     * Constructs a score animation for the given score value centered at the given coordinates.
+     * The animation will float up the screen for 30 pixels.
      */
     public ScoreAnimation (Label label, int x, int y, long floatPeriod)
     {

@@ -39,13 +39,13 @@ public class LobbyDispatcher extends InvocationDispatcher<LobbyMarshaller>
         this.provider = provider;
     }
 
-    @Override // documentation inherited
+    @Override
     public LobbyMarshaller createMarshaller ()
     {
         return new LobbyMarshaller();
     }
 
-    @Override // documentation inherited
+    @Override
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
         throws InvocationException

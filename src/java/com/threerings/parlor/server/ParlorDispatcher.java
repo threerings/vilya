@@ -46,13 +46,13 @@ public class ParlorDispatcher extends InvocationDispatcher<ParlorMarshaller>
         this.provider = provider;
     }
 
-    @Override // documentation inherited
+    @Override
     public ParlorMarshaller createMarshaller ()
     {
         return new ParlorMarshaller();
     }
 
-    @Override // documentation inherited
+    @Override
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
         throws InvocationException

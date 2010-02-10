@@ -42,13 +42,13 @@ public class PuzzleGameDispatcher extends InvocationDispatcher<PuzzleGameMarshal
         this.provider = provider;
     }
 
-    @Override // documentation inherited
+    @Override
     public PuzzleGameMarshaller createMarshaller ()
     {
         return new PuzzleGameMarshaller();
     }
 
-    @Override // documentation inherited
+    @Override
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
         throws InvocationException

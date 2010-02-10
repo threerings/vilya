@@ -46,13 +46,13 @@ public class TableDispatcher extends InvocationDispatcher<TableMarshaller>
         this.provider = provider;
     }
 
-    @Override // documentation inherited
+    @Override
     public TableMarshaller createMarshaller ()
     {
         return new TableMarshaller();
     }
 
-    @Override // documentation inherited
+    @Override
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
         throws InvocationException

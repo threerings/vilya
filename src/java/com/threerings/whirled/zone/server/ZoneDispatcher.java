@@ -42,13 +42,13 @@ public class ZoneDispatcher extends InvocationDispatcher<ZoneMarshaller>
         this.provider = provider;
     }
 
-    @Override // documentation inherited
+    @Override
     public ZoneMarshaller createMarshaller ()
     {
         return new ZoneMarshaller();
     }
 
-    @Override // documentation inherited
+    @Override
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
         throws InvocationException

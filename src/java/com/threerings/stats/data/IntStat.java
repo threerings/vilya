@@ -64,20 +64,20 @@ public class IntStat extends Stat
         return setValue(_value + delta);
     }
 
-    @Override // documentation inherited
+    @Override
     public String valueToString ()
     {
         return String.valueOf(_value);
     }
 
-    @Override // documentation inherited
+    @Override
     public void persistTo (ObjectOutputStream out, AuxDataSource aux)
         throws IOException
     {
         out.writeInt(_value);
     }
 
-    @Override // documentation inherited
+    @Override
     public void unpersistFrom (ObjectInputStream in, AuxDataSource aux)
         throws IOException, ClassNotFoundException
     {

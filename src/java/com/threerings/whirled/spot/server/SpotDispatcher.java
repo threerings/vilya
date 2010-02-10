@@ -44,13 +44,13 @@ public class SpotDispatcher extends InvocationDispatcher<SpotMarshaller>
         this.provider = provider;
     }
 
-    @Override // documentation inherited
+    @Override
     public SpotMarshaller createMarshaller ()
     {
         return new SpotMarshaller();
     }
 
-    @Override // documentation inherited
+    @Override
     public void dispatchRequest (
         ClientObject source, int methodId, Object[] args)
         throws InvocationException
