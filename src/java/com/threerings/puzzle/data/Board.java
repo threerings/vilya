@@ -96,7 +96,9 @@ public abstract class Board
     public void seedFromEvent (int pidx, int gevent)
     {
         if (isSeedingEvent(pidx, gevent)) {
-            _rando.next(getSeedForEvent(pidx, gevent));
+            for (int ii = 0, jj = getSeedForEvent(pidx, gevent); ii < jj; ii++) {
+                _rando.next(0);
+            }
         }
     }
 
