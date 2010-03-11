@@ -1151,23 +1151,32 @@ public class EditorScenePanel extends StageScenePanel
         }
     }
 
-    protected class UndoStack extends LinkedList<MisoSceneModel>
+    protected class UndoStack
     {
         public void preserve () {
-            addFirst(_model.clone());
+            _list.addFirst(_model.clone());
 
-            if (size() > MAX_UNDO_SIZE) {
-                removeLast();
+            if (_list.size() > MAX_UNDO_SIZE) {
+                _list.removeLast();
             }
         }
 
         public void rollback () {
-            if (size() > 0) {
-                _model = removeFirst();
-                _blocks.clear();
+            if (_list.size() > 0) {
+                _model = _list.removeFirst();
                 refreshScene();
             }
         }
+
+        public int size () {
+            return _list.size();
+        }
+
+        public void clear () {
+            _list.clear();
+        }
+
+        LinkedList<MisoSceneModel> _list = Lists.newLinkedList();
     }
 
     protected static final int MAX_UNDO_SIZE = 20;
