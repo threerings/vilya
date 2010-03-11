@@ -72,7 +72,7 @@ public class EditorFrame extends ManagedJFrame
     {
         _writer = writer;
         // treat a closing window as a request to quit
-        addWindowListener(new WindowAdapter () {
+        addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing (WindowEvent e) {
                 handleQuit(null);
@@ -96,7 +96,7 @@ public class EditorFrame extends ManagedJFrame
                 System.getProperty("user.dir"));
         }
         _chooser = (target == null) ? new JFileChooser() : new JFileChooser(target);
-        _chooser.setFileFilter(new FileFilter () {
+        _chooser.setFileFilter(new FileFilter() {
             @Override public boolean accept (File f) {
                 return (f.isDirectory() || f.getName().endsWith(".xml"));
             }
@@ -272,6 +272,14 @@ public class EditorFrame extends ManagedJFrame
         accel = KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK);
         MenuUtil.addMenuItem(menuActions, "Update mini view",
                              KeyEvent.VK_M, accel, this, "updateMiniView");
+
+        accel = KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK);
+        MenuUtil.addMenuItem(menuActions, "Undo",
+            KeyEvent.VK_Z, accel, this, "undo");
+
+        accel = KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK);
+        MenuUtil.addMenuItem(menuActions, "Redo",
+            KeyEvent.VK_Y, accel, this, "redo");
     }
 
     protected void setScene (StageScene scene)
@@ -492,6 +500,16 @@ public class EditorFrame extends ManagedJFrame
     public void updateMiniView (ActionEvent evt)
     {
         _scrollBox.updateView();
+    }
+
+    public void undo (ActionEvent evt)
+    {
+        _svpanel.undo();
+    }
+
+    public void redo (ActionEvent evt)
+    {
+        _svpanel.redo();
     }
 
     /**

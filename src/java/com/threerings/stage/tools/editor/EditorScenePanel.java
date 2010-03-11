@@ -23,6 +23,7 @@ package com.threerings.stage.tools.editor;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import java.awt.AlphaComposite;
@@ -220,6 +221,8 @@ public class EditorScenePanel extends StageScenePanel
      */
     protected void placeTile (int x, int y)
     {
+        markCheckpoint();
+
         Rectangle drag = clearTileSelectRegion(x, y);
 
         // sanity check
@@ -250,6 +253,8 @@ public class EditorScenePanel extends StageScenePanel
      */
     protected void deleteTile (int x, int y)
     {
+        markCheckpoint();
+
         Rectangle drag = clearTileSelectRegion(x, y);
         log.info("Deleting " + drag);
 
@@ -301,6 +306,8 @@ public class EditorScenePanel extends StageScenePanel
      */
     protected void editTile (int x, int y)
     {
+        markCheckpoint();
+
         // bail if we're not hovering over a scene object
         if (_hobject == null || !(_hobject instanceof SceneObject)) {
             return;
@@ -332,6 +339,8 @@ public class EditorScenePanel extends StageScenePanel
      */
     protected void editPortal (EditablePortal portal)
     {
+        markCheckpoint();
+
         // create our portal dialog if we haven't yet
         if (_dialogPortal == null) {
             _dialogPortal = new PortalDialog(_ctx, this);
@@ -397,6 +406,8 @@ public class EditorScenePanel extends StageScenePanel
             break;
 
         case EditorModel.ACTION_PLACE_PORTAL:
+            markCheckpoint();
+
             Point fcoords = getFullCoords(mx, my);
             // mouse button three is delete
             if (event.getButton() == MouseEvent.BUTTON3) {
@@ -939,7 +950,7 @@ public class EditorScenePanel extends StageScenePanel
     /**
      * Paint the specified StageLocation
      */
-    protected void paintLocation(Graphics2D gfx, StageLocation loc, Color color, boolean highlight)
+    protected void paintLocation (Graphics2D gfx, StageLocation loc, Color color, boolean highlight)
     {
         // get the portal's center coordinate
         Point spos = new Point();
@@ -1118,6 +1129,49 @@ public class EditorScenePanel extends StageScenePanel
         }
     }
 
+    protected void markCheckpoint ()
+    {
+        _undo.preserve();
+        _redo.clear();
+    }
+
+    public void undo ()
+    {
+        if (_undo.size() > 0) {
+            _redo.preserve();
+            _undo.rollback();
+        }
+    }
+
+    public void redo ()
+    {
+        if (_redo.size() > 0) {
+            _undo.preserve();
+            _redo.rollback();
+        }
+    }
+
+    protected class UndoStack extends LinkedList<MisoSceneModel>
+    {
+        public void preserve () {
+            addFirst(_model.clone());
+
+            if (size() > MAX_UNDO_SIZE) {
+                removeLast();
+            }
+        }
+
+        public void rollback () {
+            if (size() > 0) {
+                _model = removeFirst();
+                _blocks.clear();
+                refreshScene();
+            }
+        }
+    }
+
+    protected static final int MAX_UNDO_SIZE = 20;
+
     /** Provides access to stuff. */
     protected EditorContext _ctx;
 
@@ -1176,6 +1230,9 @@ public class EditorScenePanel extends StageScenePanel
 
     /** The object currently being edited by the object editor dialog. */
     protected SceneObject _eobject;
+
+    protected UndoStack _undo = new UndoStack();
+    protected UndoStack _redo = new UndoStack();
 
     /** The triangle used to render a portal on-screen. */
     protected static Polygon _locTri;
