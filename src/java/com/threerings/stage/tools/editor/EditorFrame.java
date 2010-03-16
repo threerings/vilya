@@ -55,8 +55,10 @@ import com.threerings.media.ManagedJFrame;
 
 import com.threerings.miso.tile.BaseTileSet;
 
+import com.threerings.whirled.data.AuxModel;
 import com.threerings.whirled.tools.xml.SceneParser;
 
+import com.threerings.stage.data.StageMisoSceneModel;
 import com.threerings.stage.data.StageScene;
 import com.threerings.stage.data.StageSceneModel;
 import com.threerings.stage.tools.editor.util.EditorContext;
@@ -67,6 +69,7 @@ import com.threerings.stage.tools.xml.StageSceneWriter;
 import static com.threerings.stage.Log.log;
 
 public class EditorFrame extends ManagedJFrame
+    implements EditorScenePanel.SceneModelListener
 {
     public EditorFrame (StageSceneWriter writer)
     {
@@ -191,7 +194,7 @@ public class EditorFrame extends ManagedJFrame
      */
     protected EditorScenePanel createScenePanel ()
     {
-        return new EditorScenePanel(_ctx, this, _model);
+        return new EditorScenePanel(_ctx, this, _model, this);
     }
 
     /**
@@ -304,6 +307,16 @@ public class EditorFrame extends ManagedJFrame
 
         } catch (Exception e) {
             log.warning("Unable to set blank scene.", e);
+        }
+    }
+
+    public void setMisoSceneModel (StageMisoSceneModel model)
+    {
+        AuxModel[] models = _scene.getSceneModel().auxModels;
+        for (int ii = 0; ii < models.length; ii++) {
+            if (models[ii] instanceof StageMisoSceneModel) {
+                models[ii] = model;
+            }
         }
     }
 

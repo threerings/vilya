@@ -89,12 +89,20 @@ import static com.threerings.stage.Log.log;
 public class EditorScenePanel extends StageScenePanel
     implements EditorModelListener, ChangeListener
 {
+    public interface SceneModelListener
+    {
+        public void setMisoSceneModel (StageMisoSceneModel sceneModel);
+    }
+
     /**
      * Constructs the editor scene view panel.
      */
-    public EditorScenePanel (EditorContext ctx, JFrame frame, EditorModel model)
+    public EditorScenePanel (EditorContext ctx, JFrame frame, EditorModel model,
+        SceneModelListener sceneListener)
     {
         super(ctx, new Controller() { });
+
+        _sceneListener = sceneListener;
 
         // keep these around for later
         _ctx = ctx;
@@ -1164,6 +1172,7 @@ public class EditorScenePanel extends StageScenePanel
         public void rollback () {
             if (_list.size() > 0) {
                 _model = _list.removeFirst();
+                _sceneListener.setMisoSceneModel((StageMisoSceneModel)_model);
                 refreshScene();
             }
         }
@@ -1242,6 +1251,8 @@ public class EditorScenePanel extends StageScenePanel
 
     protected UndoStack _undo = new UndoStack();
     protected UndoStack _redo = new UndoStack();
+
+    protected SceneModelListener _sceneListener;
 
     /** The triangle used to render a portal on-screen. */
     protected static Polygon _locTri;
