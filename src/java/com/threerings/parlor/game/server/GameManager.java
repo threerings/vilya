@@ -874,6 +874,10 @@ public class GameManager extends PlaceManager
             _gameobj.isActivePlayer(pidx)) {
             // end the player's game if they bail on an in-progress game
             endPlayerGame(pidx);
+        } else if (pidx != -1 && _gameobj.state == GameObject.PRE_GAME) {
+            // Don't need to stop their game, since it isn't going, but DO need to register that
+            //  they've left the building.
+            _playerOids[pidx] = 0;
         }
 
         // then complete the bodyLeft() processing which may result in a call to placeBecameEmpty()
