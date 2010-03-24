@@ -98,10 +98,10 @@ public class StatRecord extends PersistentRecord
      */
     public static Key<StatRecord> getKey (int playerId, int statCode)
     {
-        return new Key<StatRecord>(
-                StatRecord.class,
-                new ColumnExp[] { PLAYER_ID, STAT_CODE },
-                new Comparable[] { playerId, statCode });
+        return newKey(_R, playerId, statCode);
     }
+
+    /** Register the key fields in an order matching the getKey() factory. */
+    static { registerKeyFields(PLAYER_ID, STAT_CODE); }
     // AUTO-GENERATED: METHODS END
 }

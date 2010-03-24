@@ -96,10 +96,10 @@ public class RatingRecord extends PersistentRecord
      */
     public static Key<RatingRecord> getKey (int gameId, int playerId)
     {
-        return new Key<RatingRecord>(
-                RatingRecord.class,
-                new ColumnExp[] { GAME_ID, PLAYER_ID },
-                new Comparable[] { gameId, playerId });
+        return newKey(_R, gameId, playerId);
     }
+
+    /** Register the key fields in an order matching the getKey() factory. */
+    static { registerKeyFields(GAME_ID, PLAYER_ID); }
     // AUTO-GENERATED: METHODS END
 }

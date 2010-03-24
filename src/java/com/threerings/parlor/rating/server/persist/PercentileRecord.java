@@ -61,10 +61,10 @@ public class PercentileRecord extends PersistentRecord
      */
     public static Key<PercentileRecord> getKey (int gameId, int gameMode)
     {
-        return new Key<PercentileRecord>(
-                PercentileRecord.class,
-                new ColumnExp[] { GAME_ID, GAME_MODE },
-                new Comparable[] { gameId, gameMode });
+        return newKey(_R, gameId, gameMode);
     }
+
+    /** Register the key fields in an order matching the getKey() factory. */
+    static { registerKeyFields(GAME_ID, GAME_MODE); }
     // AUTO-GENERATED: METHODS END
 }

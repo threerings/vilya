@@ -92,10 +92,10 @@ public class StringCodeRecord extends PersistentRecord
      */
     public static Key<StringCodeRecord> getKey (int statCode, String value)
     {
-        return new Key<StringCodeRecord>(
-                StringCodeRecord.class,
-                new ColumnExp[] { STAT_CODE, VALUE },
-                new Comparable[] { statCode, value });
+        return newKey(_R, statCode, value);
     }
+
+    /** Register the key fields in an order matching the getKey() factory. */
+    static { registerKeyFields(STAT_CODE, VALUE); }
     // AUTO-GENERATED: METHODS END
 }
