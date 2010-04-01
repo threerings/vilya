@@ -25,8 +25,6 @@ import java.awt.Rectangle;
 
 import com.samskivert.util.StringUtil;
 
-import com.threerings.io.Streamable;
-
 import com.threerings.util.ActionScript;
 
 import com.threerings.presents.dobj.DSet;
@@ -35,7 +33,7 @@ import com.threerings.presents.dobj.DSet;
  * Contains information on clusters.
  */
 public class Cluster extends Rectangle
-    implements DSet.Entry, Streamable
+    implements DSet.Entry
 {
     /** A unique identifier for this cluster (also the distributed object
      * id of the cluster chat object). */
