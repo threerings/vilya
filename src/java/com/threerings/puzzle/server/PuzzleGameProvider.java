@@ -21,15 +21,18 @@
 
 package com.threerings.puzzle.server;
 
+import javax.annotation.Generated;
+
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationProvider;
-
 import com.threerings.puzzle.client.PuzzleGameService;
 import com.threerings.puzzle.data.Board;
 
 /**
  * Defines the server-side of the {@link PuzzleGameService}.
  */
+@Generated(value={"com.threerings.presents.tools.GenServiceTask"},
+           comments="Derived from PuzzleGameService.java.")
 public interface PuzzleGameProvider extends InvocationProvider
 {
     /**

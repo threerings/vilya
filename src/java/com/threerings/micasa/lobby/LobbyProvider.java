@@ -21,6 +21,8 @@
 
 package com.threerings.micasa.lobby;
 
+import javax.annotation.Generated;
+
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.presents.server.InvocationProvider;
@@ -28,6 +30,8 @@ import com.threerings.presents.server.InvocationProvider;
 /**
  * Defines the server-side of the {@link LobbyService}.
  */
+@Generated(value={"com.threerings.presents.tools.GenServiceTask"},
+           comments="Derived from LobbyService.java.")
 public interface LobbyProvider extends InvocationProvider
 {
     /**

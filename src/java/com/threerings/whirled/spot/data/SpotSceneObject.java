@@ -21,6 +21,7 @@
 
 package com.threerings.whirled.spot.data;
 
+import javax.annotation.Generated;
 import com.threerings.presents.dobj.DSet;
 
 import com.threerings.whirled.data.SceneObject;
@@ -32,9 +33,11 @@ public class SpotSceneObject extends SceneObject
 {
     // AUTO-GENERATED: FIELDS START
     /** The field name of the <code>occupantLocs</code> field. */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public static final String OCCUPANT_LOCS = "occupantLocs";
 
     /** The field name of the <code>clusters</code> field. */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public static final String CLUSTERS = "clusters";
     // AUTO-GENERATED: FIELDS END
 
@@ -51,6 +54,7 @@ public class SpotSceneObject extends SceneObject
      * <code>occupantLocs</code> set. The set will not change until the event is
      * actually propagated through the system.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void addToOccupantLocs (SceneLocation elem)
     {
         requestEntryAdd(OCCUPANT_LOCS, occupantLocs, elem);
@@ -61,6 +65,7 @@ public class SpotSceneObject extends SceneObject
      * the <code>occupantLocs</code> set. The set will not change until the
      * event is actually propagated through the system.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void removeFromOccupantLocs (Comparable<?> key)
     {
         requestEntryRemove(OCCUPANT_LOCS, occupantLocs, key);
@@ -71,6 +76,7 @@ public class SpotSceneObject extends SceneObject
      * <code>occupantLocs</code> set. The set will not change until the event is
      * actually propagated through the system.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void updateOccupantLocs (SceneLocation elem)
     {
         requestEntryUpdate(OCCUPANT_LOCS, occupantLocs, elem);
@@ -86,6 +92,7 @@ public class SpotSceneObject extends SceneObject
      * change. Proxied copies of this object (on clients) will apply the
      * value change when they received the attribute changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setOccupantLocs (DSet<SceneLocation> value)
     {
         requestAttributeChange(OCCUPANT_LOCS, value, this.occupantLocs);
@@ -98,6 +105,7 @@ public class SpotSceneObject extends SceneObject
      * <code>clusters</code> set. The set will not change until the event is
      * actually propagated through the system.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void addToClusters (Cluster elem)
     {
         requestEntryAdd(CLUSTERS, clusters, elem);
@@ -108,6 +116,7 @@ public class SpotSceneObject extends SceneObject
      * the <code>clusters</code> set. The set will not change until the
      * event is actually propagated through the system.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void removeFromClusters (Comparable<?> key)
     {
         requestEntryRemove(CLUSTERS, clusters, key);
@@ -118,6 +127,7 @@ public class SpotSceneObject extends SceneObject
      * <code>clusters</code> set. The set will not change until the event is
      * actually propagated through the system.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void updateClusters (Cluster elem)
     {
         requestEntryUpdate(CLUSTERS, clusters, elem);
@@ -133,6 +143,7 @@ public class SpotSceneObject extends SceneObject
      * change. Proxied copies of this object (on clients) will apply the
      * value change when they received the attribute changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setClusters (DSet<Cluster> value)
     {
         requestAttributeChange(CLUSTERS, value, this.clusters);

@@ -21,16 +21,19 @@
 
 package com.threerings.parlor.tourney.server;
 
+import javax.annotation.Generated;
+
+import com.threerings.parlor.tourney.client.TourneyService;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.presents.server.InvocationProvider;
 
-import com.threerings.parlor.tourney.client.TourneyService;
-
 /**
  * Defines the server-side of the {@link TourneyService}.
  */
+@Generated(value={"com.threerings.presents.tools.GenServiceTask"},
+           comments="Derived from TourneyService.java.")
 public interface TourneyProvider extends InvocationProvider
 {
     /**

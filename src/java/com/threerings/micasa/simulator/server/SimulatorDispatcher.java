@@ -21,17 +21,19 @@
 
 package com.threerings.micasa.simulator.server;
 
+import javax.annotation.Generated;
+
+import com.threerings.micasa.simulator.data.SimulatorMarshaller;
+import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
 
-import com.threerings.parlor.game.data.GameConfig;
-
-import com.threerings.micasa.simulator.data.SimulatorMarshaller;
-
 /**
  * Dispatches requests to the {@link SimulatorProvider}.
  */
+@Generated(value={"com.threerings.presents.tools.GenServiceTask"},
+           comments="Derived from SimulatorService.java.")
 public class SimulatorDispatcher extends InvocationDispatcher<SimulatorMarshaller>
 {
     /**

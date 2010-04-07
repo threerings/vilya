@@ -21,6 +21,7 @@
 
 package com.threerings.whirled.data;
 
+import javax.annotation.Generated;
 import com.threerings.crowd.data.PlaceObject;
 
 public class SceneObject extends PlaceObject

@@ -21,11 +21,12 @@
 
 package com.threerings.whirled.spot.server;
 
+import javax.annotation.Generated;
+
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.presents.server.InvocationProvider;
-
 import com.threerings.whirled.client.SceneService;
 import com.threerings.whirled.spot.client.SpotService;
 import com.threerings.whirled.spot.data.Location;
@@ -33,6 +34,8 @@ import com.threerings.whirled.spot.data.Location;
 /**
  * Defines the server-side of the {@link SpotService}.
  */
+@Generated(value={"com.threerings.presents.tools.GenServiceTask"},
+           comments="Derived from SpotService.java.")
 public interface SpotProvider extends InvocationProvider
 {
     /**

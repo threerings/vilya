@@ -21,6 +21,7 @@
 
 package com.threerings.stage.data;
 
+import javax.annotation.Generated;
 import com.threerings.whirled.spot.data.SpotSceneObject;
 
 /**
@@ -31,12 +32,15 @@ public class StageSceneObject extends SpotSceneObject
 {
     // AUTO-GENERATED: FIELDS START
     /** The field name of the <code>stageSceneService</code> field. */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public static final String STAGE_SCENE_SERVICE = "stageSceneService";
 
     /** The field name of the <code>lightLevel</code> field. */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public static final String LIGHT_LEVEL = "lightLevel";
 
     /** The field name of the <code>lightShade</code> field. */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public static final String LIGHT_SHADE = "lightShade";
     // AUTO-GENERATED: FIELDS END
 
@@ -58,6 +62,7 @@ public class StageSceneObject extends SpotSceneObject
      * clients) will apply the value change when they received the
      * attribute changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setStageSceneService (StageSceneMarshaller value)
     {
         StageSceneMarshaller ovalue = this.stageSceneService;
@@ -74,6 +79,7 @@ public class StageSceneObject extends SpotSceneObject
      * clients) will apply the value change when they received the
      * attribute changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setLightLevel (float value)
     {
         float ovalue = this.lightLevel;
@@ -90,6 +96,7 @@ public class StageSceneObject extends SpotSceneObject
      * clients) will apply the value change when they received the
      * attribute changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setLightShade (int value)
     {
         int ovalue = this.lightShade;

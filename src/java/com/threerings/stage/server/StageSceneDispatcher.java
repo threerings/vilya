@@ -21,18 +21,20 @@
 
 package com.threerings.stage.server;
 
+import javax.annotation.Generated;
+
+import com.threerings.miso.data.ObjectInfo;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
-
-import com.threerings.miso.data.ObjectInfo;
-
 import com.threerings.stage.data.StageSceneMarshaller;
 
 /**
  * Dispatches requests to the {@link StageSceneProvider}.
  */
+@Generated(value={"com.threerings.presents.tools.GenServiceTask"},
+           comments="Derived from StageSceneService.java.")
 public class StageSceneDispatcher extends InvocationDispatcher<StageSceneMarshaller>
 {
     /**

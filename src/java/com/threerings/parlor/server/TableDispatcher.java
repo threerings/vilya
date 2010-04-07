@@ -21,20 +21,22 @@
 
 package com.threerings.parlor.server;
 
-import com.threerings.util.Name;
-
-import com.threerings.presents.client.InvocationService;
-import com.threerings.presents.data.ClientObject;
-import com.threerings.presents.server.InvocationDispatcher;
-import com.threerings.presents.server.InvocationException;
+import javax.annotation.Generated;
 
 import com.threerings.parlor.data.TableConfig;
 import com.threerings.parlor.data.TableMarshaller;
 import com.threerings.parlor.game.data.GameConfig;
+import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.data.ClientObject;
+import com.threerings.presents.server.InvocationDispatcher;
+import com.threerings.presents.server.InvocationException;
+import com.threerings.util.Name;
 
 /**
  * Dispatches requests to the {@link TableProvider}.
  */
+@Generated(value={"com.threerings.presents.tools.GenServiceTask"},
+           comments="Derived from TableService.java.")
 public class TableDispatcher extends InvocationDispatcher<TableMarshaller>
 {
     /**

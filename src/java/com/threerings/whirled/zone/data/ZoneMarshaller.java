@@ -21,12 +21,12 @@
 
 package com.threerings.whirled.zone.data;
 
+import javax.annotation.Generated;
+
+import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.dobj.InvocationResponseEvent;
-
-import com.threerings.crowd.data.PlaceConfig;
-
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.zone.client.ZoneService;
@@ -38,6 +38,8 @@ import com.threerings.whirled.zone.client.ZoneService;
  * interfaces that marshall the response arguments and deliver them back
  * to the requesting client.
  */
+@Generated(value={"com.threerings.presents.tools.GenServiceTask"},
+           comments="Derived from ZoneService.java.")
 public class ZoneMarshaller extends InvocationMarshaller
     implements ZoneService
 {

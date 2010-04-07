@@ -21,14 +21,14 @@
 
 package com.threerings.parlor.data;
 
-import com.threerings.util.Name;
-
-import com.threerings.presents.client.Client;
-import com.threerings.presents.client.InvocationService;
-import com.threerings.presents.data.InvocationMarshaller;
+import javax.annotation.Generated;
 
 import com.threerings.parlor.client.TableService;
 import com.threerings.parlor.game.data.GameConfig;
+import com.threerings.presents.client.Client;
+import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.data.InvocationMarshaller;
+import com.threerings.util.Name;
 
 /**
  * Provides the implementation of the {@link TableService} interface
@@ -37,6 +37,8 @@ import com.threerings.parlor.game.data.GameConfig;
  * interfaces that marshall the response arguments and deliver them back
  * to the requesting client.
  */
+@Generated(value={"com.threerings.presents.tools.GenServiceTask"},
+           comments="Derived from TableService.java.")
 public class TableMarshaller extends InvocationMarshaller
     implements TableService
 {

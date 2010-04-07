@@ -21,11 +21,12 @@
 
 package com.threerings.micasa.lobby;
 
-import java.util.List;
+import javax.annotation.Generated;
 
 import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.dobj.InvocationResponseEvent;
+import java.util.List;
 
 /**
  * Provides the implementation of the {@link LobbyService} interface
@@ -34,6 +35,8 @@ import com.threerings.presents.dobj.InvocationResponseEvent;
  * interfaces that marshall the response arguments and deliver them back
  * to the requesting client.
  */
+@Generated(value={"com.threerings.presents.tools.GenServiceTask"},
+           comments="Derived from LobbyService.java.")
 public class LobbyMarshaller extends InvocationMarshaller
     implements LobbyService
 {

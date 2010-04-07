@@ -21,6 +21,7 @@
 
 package com.threerings.parlor.game.data;
 
+import javax.annotation.Generated;
 import com.samskivert.util.StringUtil;
 
 import com.threerings.util.Name;
@@ -39,24 +40,31 @@ public class GameObject extends PlaceObject
 {
     // AUTO-GENERATED: FIELDS START
     /** The field name of the <code>state</code> field. */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public static final String STATE = "state";
 
     /** The field name of the <code>isRated</code> field. */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public static final String IS_RATED = "isRated";
 
     /** The field name of the <code>isPrivate</code> field. */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public static final String IS_PRIVATE = "isPrivate";
 
     /** The field name of the <code>players</code> field. */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public static final String PLAYERS = "players";
 
     /** The field name of the <code>winners</code> field. */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public static final String WINNERS = "winners";
 
     /** The field name of the <code>sessionId</code> field. */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public static final String SESSION_ID = "sessionId";
 
     /** The field name of the <code>playerStatus</code> field. */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public static final String PLAYER_STATUS = "playerStatus";
     // AUTO-GENERATED: FIELDS END
 
@@ -256,6 +264,7 @@ public class GameObject extends PlaceObject
      * clients) will apply the value change when they received the
      * attribute changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setState (int value)
     {
         int ovalue = this.state;
@@ -272,6 +281,7 @@ public class GameObject extends PlaceObject
      * clients) will apply the value change when they received the
      * attribute changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setIsRated (boolean value)
     {
         boolean ovalue = this.isRated;
@@ -288,6 +298,7 @@ public class GameObject extends PlaceObject
      * clients) will apply the value change when they received the
      * attribute changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setIsPrivate (boolean value)
     {
         boolean ovalue = this.isPrivate;
@@ -304,6 +315,7 @@ public class GameObject extends PlaceObject
      * clients) will apply the value change when they received the
      * attribute changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setPlayers (Name[] value)
     {
         Name[] ovalue = this.players;
@@ -321,6 +333,7 @@ public class GameObject extends PlaceObject
      * will apply the value change when they received the attribute
      * changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setPlayersAt (Name value, int index)
     {
         Name ovalue = this.players[index];
@@ -337,6 +350,7 @@ public class GameObject extends PlaceObject
      * clients) will apply the value change when they received the
      * attribute changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setWinners (boolean[] value)
     {
         boolean[] ovalue = this.winners;
@@ -354,6 +368,7 @@ public class GameObject extends PlaceObject
      * will apply the value change when they received the attribute
      * changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setWinnersAt (boolean value, int index)
     {
         boolean ovalue = this.winners[index];
@@ -370,6 +385,7 @@ public class GameObject extends PlaceObject
      * clients) will apply the value change when they received the
      * attribute changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setSessionId (int value)
     {
         int ovalue = this.sessionId;
@@ -386,6 +402,7 @@ public class GameObject extends PlaceObject
      * clients) will apply the value change when they received the
      * attribute changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setPlayerStatus (int[] value)
     {
         int[] ovalue = this.playerStatus;
@@ -403,6 +420,7 @@ public class GameObject extends PlaceObject
      * will apply the value change when they received the attribute
      * changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setPlayerStatusAt (int value, int index)
     {
         int ovalue = this.playerStatus[index];

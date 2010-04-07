@@ -21,11 +21,12 @@
 
 package com.threerings.parlor.tourney.data;
 
+import javax.annotation.Generated;
+
+import com.threerings.parlor.tourney.client.TourniesService;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.InvocationMarshaller;
-
-import com.threerings.parlor.tourney.client.TourniesService;
 
 /**
  * Provides the implementation of the {@link TourniesService} interface
@@ -34,6 +35,8 @@ import com.threerings.parlor.tourney.client.TourniesService;
  * interfaces that marshall the response arguments and deliver them back
  * to the requesting client.
  */
+@Generated(value={"com.threerings.presents.tools.GenServiceTask"},
+           comments="Derived from TourniesService.java.")
 public class TourniesMarshaller extends InvocationMarshaller
     implements TourniesService
 {

@@ -21,10 +21,9 @@
 
 package com.threerings.parlor.card.client;
 
-import com.threerings.presents.client.InvocationDecoder;
-
 import com.threerings.parlor.card.data.Card;
 import com.threerings.parlor.card.data.Hand;
+import com.threerings.presents.client.InvocationDecoder;
 
 /**
  * Dispatches calls to a {@link CardGameReceiver} instance.

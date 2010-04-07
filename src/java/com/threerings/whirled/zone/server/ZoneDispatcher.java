@@ -21,16 +21,19 @@
 
 package com.threerings.whirled.zone.server;
 
+import javax.annotation.Generated;
+
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
-
 import com.threerings.whirled.zone.client.ZoneService;
 import com.threerings.whirled.zone.data.ZoneMarshaller;
 
 /**
  * Dispatches requests to the {@link ZoneProvider}.
  */
+@Generated(value={"com.threerings.presents.tools.GenServiceTask"},
+           comments="Derived from ZoneService.java.")
 public class ZoneDispatcher extends InvocationDispatcher<ZoneMarshaller>
 {
     /**

@@ -21,10 +21,11 @@
 
 package com.threerings.whirled.spot.data;
 
+import javax.annotation.Generated;
+
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.InvocationMarshaller;
-
 import com.threerings.whirled.client.SceneService;
 import com.threerings.whirled.data.SceneMarshaller;
 import com.threerings.whirled.spot.client.SpotService;
@@ -36,6 +37,8 @@ import com.threerings.whirled.spot.client.SpotService;
  * interfaces that marshall the response arguments and deliver them back
  * to the requesting client.
  */
+@Generated(value={"com.threerings.presents.tools.GenServiceTask"},
+           comments="Derived from SpotService.java.")
 public class SpotMarshaller extends InvocationMarshaller
     implements SpotService
 {

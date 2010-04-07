@@ -21,12 +21,12 @@
 
 package com.threerings.micasa.simulator.data;
 
-import com.threerings.presents.client.Client;
-import com.threerings.presents.data.InvocationMarshaller;
-
-import com.threerings.parlor.game.data.GameConfig;
+import javax.annotation.Generated;
 
 import com.threerings.micasa.simulator.client.SimulatorService;
+import com.threerings.parlor.game.data.GameConfig;
+import com.threerings.presents.client.Client;
+import com.threerings.presents.data.InvocationMarshaller;
 
 /**
  * Provides the implementation of the {@link SimulatorService} interface
@@ -35,6 +35,8 @@ import com.threerings.micasa.simulator.client.SimulatorService;
  * interfaces that marshall the response arguments and deliver them back
  * to the requesting client.
  */
+@Generated(value={"com.threerings.presents.tools.GenServiceTask"},
+           comments="Derived from SimulatorService.java.")
 public class SimulatorMarshaller extends InvocationMarshaller
     implements SimulatorService
 {

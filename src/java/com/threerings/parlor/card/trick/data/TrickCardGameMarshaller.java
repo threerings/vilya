@@ -21,11 +21,12 @@
 
 package com.threerings.parlor.card.trick.data;
 
-import com.threerings.presents.client.Client;
-import com.threerings.presents.data.InvocationMarshaller;
+import javax.annotation.Generated;
 
 import com.threerings.parlor.card.data.Card;
 import com.threerings.parlor.card.trick.client.TrickCardGameService;
+import com.threerings.presents.client.Client;
+import com.threerings.presents.data.InvocationMarshaller;
 
 /**
  * Provides the implementation of the {@link TrickCardGameService} interface
@@ -34,6 +35,8 @@ import com.threerings.parlor.card.trick.client.TrickCardGameService;
  * interfaces that marshall the response arguments and deliver them back
  * to the requesting client.
  */
+@Generated(value={"com.threerings.presents.tools.GenServiceTask"},
+           comments="Derived from TrickCardGameService.java.")
 public class TrickCardGameMarshaller extends InvocationMarshaller
     implements TrickCardGameService
 {

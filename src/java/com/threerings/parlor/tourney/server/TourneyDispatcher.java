@@ -21,16 +21,19 @@
 
 package com.threerings.parlor.tourney.server;
 
+import javax.annotation.Generated;
+
+import com.threerings.parlor.tourney.data.TourneyMarshaller;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
 
-import com.threerings.parlor.tourney.data.TourneyMarshaller;
-
 /**
  * Dispatches requests to the {@link TourneyProvider}.
  */
+@Generated(value={"com.threerings.presents.tools.GenServiceTask"},
+           comments="Derived from TourneyService.java.")
 public class TourneyDispatcher extends InvocationDispatcher<TourneyMarshaller>
 {
     /**

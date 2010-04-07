@@ -21,15 +21,18 @@
 
 package com.threerings.whirled.server;
 
+import javax.annotation.Generated;
+
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationException;
 import com.threerings.presents.server.InvocationProvider;
-
 import com.threerings.whirled.client.SceneService;
 
 /**
  * Defines the server-side of the {@link SceneService}.
  */
+@Generated(value={"com.threerings.presents.tools.GenServiceTask"},
+           comments="Derived from SceneService.java.")
 public interface SceneProvider extends InvocationProvider
 {
     /**

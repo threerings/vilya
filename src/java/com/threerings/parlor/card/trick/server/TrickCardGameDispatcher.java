@@ -21,16 +21,19 @@
 
 package com.threerings.parlor.card.trick.server;
 
+import javax.annotation.Generated;
+
+import com.threerings.parlor.card.data.Card;
+import com.threerings.parlor.card.trick.data.TrickCardGameMarshaller;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
 
-import com.threerings.parlor.card.data.Card;
-import com.threerings.parlor.card.trick.data.TrickCardGameMarshaller;
-
 /**
  * Dispatches requests to the {@link TrickCardGameProvider}.
  */
+@Generated(value={"com.threerings.presents.tools.GenServiceTask"},
+           comments="Derived from TrickCardGameService.java.")
 public class TrickCardGameDispatcher extends InvocationDispatcher<TrickCardGameMarshaller>
 {
     /**

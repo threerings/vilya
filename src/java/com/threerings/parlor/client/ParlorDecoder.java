@@ -21,11 +21,9 @@
 
 package com.threerings.parlor.client;
 
-import com.threerings.util.Name;
-
-import com.threerings.presents.client.InvocationDecoder;
-
 import com.threerings.parlor.game.data.GameConfig;
+import com.threerings.presents.client.InvocationDecoder;
+import com.threerings.util.Name;
 
 /**
  * Dispatches calls to a {@link ParlorReceiver} instance.

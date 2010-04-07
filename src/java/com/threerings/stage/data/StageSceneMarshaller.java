@@ -21,12 +21,12 @@
 
 package com.threerings.stage.data;
 
+import javax.annotation.Generated;
+
+import com.threerings.miso.data.ObjectInfo;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.InvocationMarshaller;
-
-import com.threerings.miso.data.ObjectInfo;
-
 import com.threerings.stage.client.StageSceneService;
 
 /**
@@ -36,6 +36,8 @@ import com.threerings.stage.client.StageSceneService;
  * interfaces that marshall the response arguments and deliver them back
  * to the requesting client.
  */
+@Generated(value={"com.threerings.presents.tools.GenServiceTask"},
+           comments="Derived from StageSceneService.java.")
 public class StageSceneMarshaller extends InvocationMarshaller
     implements StageSceneService
 {

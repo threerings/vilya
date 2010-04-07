@@ -21,6 +21,7 @@
 
 package com.threerings.puzzle.data;
 
+import javax.annotation.Generated;
 import com.threerings.parlor.game.data.GameObject;
 
 /**
@@ -33,15 +34,19 @@ public class PuzzleObject extends GameObject
 {
     // AUTO-GENERATED: FIELDS START
     /** The field name of the <code>puzzleGameService</code> field. */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public static final String PUZZLE_GAME_SERVICE = "puzzleGameService";
 
     /** The field name of the <code>difficulty</code> field. */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public static final String DIFFICULTY = "difficulty";
 
     /** The field name of the <code>summaries</code> field. */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public static final String SUMMARIES = "summaries";
 
     /** The field name of the <code>seed</code> field. */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public static final String SEED = "seed";
     // AUTO-GENERATED: FIELDS END
 
@@ -67,6 +72,7 @@ public class PuzzleObject extends GameObject
      * clients) will apply the value change when they received the
      * attribute changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setPuzzleGameService (PuzzleGameMarshaller value)
     {
         PuzzleGameMarshaller ovalue = this.puzzleGameService;
@@ -83,6 +89,7 @@ public class PuzzleObject extends GameObject
      * clients) will apply the value change when they received the
      * attribute changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setDifficulty (int value)
     {
         int ovalue = this.difficulty;
@@ -99,6 +106,7 @@ public class PuzzleObject extends GameObject
      * clients) will apply the value change when they received the
      * attribute changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setSummaries (BoardSummary[] value)
     {
         BoardSummary[] ovalue = this.summaries;
@@ -116,6 +124,7 @@ public class PuzzleObject extends GameObject
      * will apply the value change when they received the attribute
      * changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setSummariesAt (BoardSummary value, int index)
     {
         BoardSummary ovalue = this.summaries[index];
@@ -132,6 +141,7 @@ public class PuzzleObject extends GameObject
      * clients) will apply the value change when they received the
      * attribute changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setSeed (long value)
     {
         long ovalue = this.seed;

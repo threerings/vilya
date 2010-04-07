@@ -21,16 +21,19 @@
 
 package com.threerings.whirled.server;
 
+import javax.annotation.Generated;
+
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
-
 import com.threerings.whirled.client.SceneService;
 import com.threerings.whirled.data.SceneMarshaller;
 
 /**
  * Dispatches requests to the {@link SceneProvider}.
  */
+@Generated(value={"com.threerings.presents.tools.GenServiceTask"},
+           comments="Derived from SceneService.java.")
 public class SceneDispatcher extends InvocationDispatcher<SceneMarshaller>
 {
     /**

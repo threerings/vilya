@@ -21,15 +21,15 @@
 
 package com.threerings.parlor.data;
 
-import com.threerings.util.Name;
+import javax.annotation.Generated;
 
+import com.threerings.parlor.client.ParlorService;
+import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.dobj.InvocationResponseEvent;
-
-import com.threerings.parlor.client.ParlorService;
-import com.threerings.parlor.game.data.GameConfig;
+import com.threerings.util.Name;
 
 /**
  * Provides the implementation of the {@link ParlorService} interface
@@ -38,6 +38,8 @@ import com.threerings.parlor.game.data.GameConfig;
  * interfaces that marshall the response arguments and deliver them back
  * to the requesting client.
  */
+@Generated(value={"com.threerings.presents.tools.GenServiceTask"},
+           comments="Derived from ParlorService.java.")
 public class ParlorMarshaller extends InvocationMarshaller
     implements ParlorService
 {

@@ -21,6 +21,7 @@
 
 package com.threerings.whirled.spot.data;
 
+import javax.annotation.Generated;
 import com.threerings.presents.dobj.DObject;
 import com.threerings.presents.dobj.OidList;
 
@@ -34,6 +35,7 @@ public class ClusterObject extends DObject
 {
     // AUTO-GENERATED: FIELDS START
     /** The field name of the <code>occupants</code> field. */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public static final String OCCUPANTS = "occupants";
     // AUTO-GENERATED: FIELDS END
 
@@ -56,6 +58,7 @@ public class ClusterObject extends DObject
      * oid list. The list will not change until the event is actually
      * propagated through the system.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void addToOccupants (int oid)
     {
         requestOidAdd(OCCUPANTS, oid);
@@ -66,6 +69,7 @@ public class ClusterObject extends DObject
      * <code>occupants</code> oid list. The list will not change until the
      * event is actually propagated through the system.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void removeFromOccupants (int oid)
     {
         requestOidRemove(OCCUPANTS, oid);

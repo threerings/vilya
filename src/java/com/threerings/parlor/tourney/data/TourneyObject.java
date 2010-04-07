@@ -21,6 +21,7 @@
 
 package com.threerings.parlor.tourney.data;
 
+import javax.annotation.Generated;
 import com.threerings.presents.dobj.DObject;
 import com.threerings.presents.dobj.DSet;
 
@@ -31,18 +32,23 @@ public class TourneyObject extends DObject
 {
     // AUTO-GENERATED: FIELDS START
     /** The field name of the <code>state</code> field. */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public static final String STATE = "state";
 
     /** The field name of the <code>config</code> field. */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public static final String CONFIG = "config";
 
     /** The field name of the <code>startsIn</code> field. */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public static final String STARTS_IN = "startsIn";
 
     /** The field name of the <code>tourneyService</code> field. */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public static final String TOURNEY_SERVICE = "tourneyService";
 
     /** The field name of the <code>participants</code> field. */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public static final String PARTICIPANTS = "participants";
     // AUTO-GENERATED: FIELDS END
 
@@ -85,6 +91,7 @@ public class TourneyObject extends DObject
      * clients) will apply the value change when they received the
      * attribute changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setState (int value)
     {
         int ovalue = this.state;
@@ -101,6 +108,7 @@ public class TourneyObject extends DObject
      * clients) will apply the value change when they received the
      * attribute changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setConfig (TourneyConfig value)
     {
         TourneyConfig ovalue = this.config;
@@ -117,6 +125,7 @@ public class TourneyObject extends DObject
      * clients) will apply the value change when they received the
      * attribute changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setStartsIn (int value)
     {
         int ovalue = this.startsIn;
@@ -133,6 +142,7 @@ public class TourneyObject extends DObject
      * clients) will apply the value change when they received the
      * attribute changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setTourneyService (TourneyMarshaller value)
     {
         TourneyMarshaller ovalue = this.tourneyService;
@@ -146,6 +156,7 @@ public class TourneyObject extends DObject
      * <code>participants</code> set. The set will not change until the event is
      * actually propagated through the system.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void addToParticipants (Participant elem)
     {
         requestEntryAdd(PARTICIPANTS, participants, elem);
@@ -156,6 +167,7 @@ public class TourneyObject extends DObject
      * the <code>participants</code> set. The set will not change until the
      * event is actually propagated through the system.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void removeFromParticipants (Comparable<?> key)
     {
         requestEntryRemove(PARTICIPANTS, participants, key);
@@ -166,6 +178,7 @@ public class TourneyObject extends DObject
      * <code>participants</code> set. The set will not change until the event is
      * actually propagated through the system.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void updateParticipants (Participant elem)
     {
         requestEntryUpdate(PARTICIPANTS, participants, elem);
@@ -181,6 +194,7 @@ public class TourneyObject extends DObject
      * change. Proxied copies of this object (on clients) will apply the
      * value change when they received the attribute changed notification.
      */
+    @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void setParticipants (DSet<Participant> value)
     {
         requestAttributeChange(PARTICIPANTS, value, this.participants);

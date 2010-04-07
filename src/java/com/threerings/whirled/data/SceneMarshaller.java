@@ -21,12 +21,12 @@
 
 package com.threerings.whirled.data;
 
+import javax.annotation.Generated;
+
+import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.dobj.InvocationResponseEvent;
-
-import com.threerings.crowd.data.PlaceConfig;
-
 import com.threerings.whirled.client.SceneService;
 
 /**
@@ -36,6 +36,8 @@ import com.threerings.whirled.client.SceneService;
  * interfaces that marshall the response arguments and deliver them back
  * to the requesting client.
  */
+@Generated(value={"com.threerings.presents.tools.GenServiceTask"},
+           comments="Derived from SceneService.java.")
 public class SceneMarshaller extends InvocationMarshaller
     implements SceneService
 {

@@ -21,9 +21,10 @@
 
 package com.threerings.puzzle.data;
 
+import javax.annotation.Generated;
+
 import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller;
-
 import com.threerings.puzzle.client.PuzzleGameService;
 
 /**
@@ -33,6 +34,8 @@ import com.threerings.puzzle.client.PuzzleGameService;
  * interfaces that marshall the response arguments and deliver them back
  * to the requesting client.
  */
+@Generated(value={"com.threerings.presents.tools.GenServiceTask"},
+           comments="Derived from PuzzleGameService.java.")
 public class PuzzleGameMarshaller extends InvocationMarshaller
     implements PuzzleGameService
 {
