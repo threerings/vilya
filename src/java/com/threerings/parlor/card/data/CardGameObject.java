@@ -21,7 +21,6 @@
 
 package com.threerings.parlor.card.data;
 
-import javax.annotation.Generated;
 import com.threerings.parlor.game.data.GameObject;
 
 /**

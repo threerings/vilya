@@ -21,7 +21,6 @@
 
 package com.threerings.micasa.lobby;
 
-import javax.annotation.Generated;
 import com.threerings.crowd.data.PlaceObject;
 
 /**

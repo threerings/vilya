@@ -583,7 +583,7 @@ public class TableManager
 
     /**
      * Add the table to the lobby object, <b>after it has already been validated as being
-     * publishable</b>. 
+     * publishable</b>.
      */
     protected void addTableToLobby (Table table)
     {
