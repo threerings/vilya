@@ -7,6 +7,7 @@
     <include name="commons-logging.jar"/>
     <include name="guava.jar"/>
     <include name="guice.jar"/>
+    <include name="jsr250-api.jar"/>
     <include name="junit4.jar"/>
     <include name="retroweaver-all-1.2.2.jar"/>
     <include name="xml-writer.jar"/>
