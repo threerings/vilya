@@ -240,7 +240,7 @@
       <exclude name="**/InvocationService.java"/>
     </javac>
     <!-- generate our services that have no ActionScript counterpart -->
-    <genservice header="lib/SOURCE_HEADER" classpathref="classpath">
+    <genservice header="lib/SOURCE_HEADER" asroot="src/as" classpathref="classpath">
       <fileset dir="src/java">
         <include name="**/stage/client/*Service.java"/>
         <include name="**/puzzle/client/*Service.java"/>
