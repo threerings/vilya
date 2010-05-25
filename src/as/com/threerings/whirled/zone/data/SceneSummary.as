@@ -66,8 +66,8 @@ public class SceneSummary
     {
         sceneId = ins.readInt();
         name = (ins.readField(String) as String);
-        neighbors = TypedArray(ins.readObject());
-        neighborDirs = TypedArray(ins.readObject());
+        neighbors = TypedArray(ins.readField(TypedArray.getJavaType(int)));
+        neighborDirs = TypedArray(ins.readField(TypedArray.getJavaType(int)));
     }
 
     // from interface Streamable
@@ -75,8 +75,8 @@ public class SceneSummary
     {
         out.writeInt(sceneId);
         out.writeField(name);
-        out.writeObject(neighbors);
-        out.writeObject(neighborDirs);
+        out.writeField(neighbors);
+        out.writeField(neighborDirs);
     }
 }
 }

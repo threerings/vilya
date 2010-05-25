@@ -173,7 +173,7 @@ public class SceneDirector extends BasicDirector
         var refuse :Boolean = _locdir.checkRepeatMove();
 
         // complain if we're over-writing a pending request
-        if (_pendingData != null) {
+        if (movePending()) {
             if (refuse) {
                 log.warning("Refusing moveTo; We have a request outstanding",
                     "psid", _pendingData.sceneId, "nsid", sceneId);
@@ -383,9 +383,26 @@ public class SceneDirector extends BasicDirector
         clearScene();
     }
 
+    /**
+     * Returns true if there is a pending move request.
+     */
+    public function movePending () :Boolean
+    {
+        return (_pendingData != null);
+    }
+
     // documentation inherited from interface
     public function forcedMove (sceneId :int) :void
     {
+        // if we're in the middle of a move, we can't abort it or we will screw everything up, so
+        // just finish up what we're doing and assume that the repeated move request was the
+        // spurious one as it would be in the case of lag causing rapid-fire repeat requests
+        if (movePending()) {
+            log.info("Dropping forced move because we have a move pending",
+                "pendId", _pendingData.sceneId, "reqId", sceneId);
+            return;
+        }
+
         log.info("Moving at request of server", "sceneId", sceneId);
 
         // clear out our old scene and place data
