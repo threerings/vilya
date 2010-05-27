@@ -34,6 +34,9 @@ public interface ZoneService_ZoneMoveListener
     extends InvocationService_InvocationListener
 {
     // from Java ZoneService_ZoneMoveListener
+    function moveRequiresServerSwitch (arg1 :String, arg2 :TypedArray /* of int */) :void
+
+    // from Java ZoneService_ZoneMoveListener
     function moveSucceeded (arg1 :int, arg2 :PlaceConfig, arg3 :ZoneSummary) :void
 
     // from Java ZoneService_ZoneMoveListener

@@ -33,19 +33,27 @@ import com.threerings.whirled.zone.client.ZoneService_ZoneMoveListener;
 public class ZoneMarshaller_ZoneMoveMarshaller
     extends InvocationMarshaller_ListenerMarshaller
 {
+    /** The method id used to dispatch <code>moveRequiresServerSwitch</code> responses. */
+    public static const MOVE_REQUIRES_SERVER_SWITCH :int = 1;
+
     /** The method id used to dispatch <code>moveSucceeded</code> responses. */
-    public static const MOVE_SUCCEEDED :int = 1;
+    public static const MOVE_SUCCEEDED :int = 2;
 
     /** The method id used to dispatch <code>moveSucceededWithScene</code> responses. */
-    public static const MOVE_SUCCEEDED_WITH_SCENE :int = 2;
+    public static const MOVE_SUCCEEDED_WITH_SCENE :int = 3;
 
     /** The method id used to dispatch <code>moveSucceededWithUpdates</code> responses. */
-    public static const MOVE_SUCCEEDED_WITH_UPDATES :int = 3;
+    public static const MOVE_SUCCEEDED_WITH_UPDATES :int = 4;
 
     // from InvocationMarshaller_ListenerMarshaller
     override public function dispatchResponse (methodId :int, args :Array) :void
     {
         switch (methodId) {
+        case MOVE_REQUIRES_SERVER_SWITCH:
+            (listener as ZoneService_ZoneMoveListener).moveRequiresServerSwitch(
+                (args[0] as String), (args[1] as TypedArray /* of int */));
+            return;
+
         case MOVE_SUCCEEDED:
             (listener as ZoneService_ZoneMoveListener).moveSucceeded(
                 (args[0] as int), (args[1] as PlaceConfig), (args[2] as ZoneSummary));

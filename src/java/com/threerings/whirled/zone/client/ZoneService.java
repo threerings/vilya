@@ -56,6 +56,12 @@ public interface ZoneService extends InvocationService
          */
         public void moveSucceededWithScene (
             int placeId, PlaceConfig config, ZoneSummary summary, SceneModel model);
+
+        /**
+         * Indicates that the client must switch to the specified server and reissue its move
+         * request in order to relocate to its desired zone.
+         */
+        public void moveRequiresServerSwitch (String hostname, int[] ports);
     }
 
     /**

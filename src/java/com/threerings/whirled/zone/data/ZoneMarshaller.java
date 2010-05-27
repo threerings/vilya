@@ -49,9 +49,22 @@ public class ZoneMarshaller extends InvocationMarshaller
     public static class ZoneMoveMarshaller extends ListenerMarshaller
         implements ZoneMoveListener
     {
+        /** The method id used to dispatch {@link #moveRequiresServerSwitch}
+         * responses. */
+        public static final int MOVE_REQUIRES_SERVER_SWITCH = 1;
+
+        // from interface ZoneMoveMarshaller
+        public void moveRequiresServerSwitch (String arg1, int[] arg2)
+        {
+            _invId = null;
+            omgr.postEvent(new InvocationResponseEvent(
+                               callerOid, requestId, MOVE_REQUIRES_SERVER_SWITCH,
+                               new Object[] { arg1, arg2 }, transport));
+        }
+
         /** The method id used to dispatch {@link #moveSucceeded}
          * responses. */
-        public static final int MOVE_SUCCEEDED = 1;
+        public static final int MOVE_SUCCEEDED = 2;
 
         // from interface ZoneMoveMarshaller
         public void moveSucceeded (int arg1, PlaceConfig arg2, ZoneSummary arg3)
@@ -64,7 +77,7 @@ public class ZoneMarshaller extends InvocationMarshaller
 
         /** The method id used to dispatch {@link #moveSucceededWithScene}
          * responses. */
-        public static final int MOVE_SUCCEEDED_WITH_SCENE = 2;
+        public static final int MOVE_SUCCEEDED_WITH_SCENE = 3;
 
         // from interface ZoneMoveMarshaller
         public void moveSucceededWithScene (int arg1, PlaceConfig arg2, ZoneSummary arg3, SceneModel arg4)
@@ -77,7 +90,7 @@ public class ZoneMarshaller extends InvocationMarshaller
 
         /** The method id used to dispatch {@link #moveSucceededWithUpdates}
          * responses. */
-        public static final int MOVE_SUCCEEDED_WITH_UPDATES = 3;
+        public static final int MOVE_SUCCEEDED_WITH_UPDATES = 4;
 
         // from interface ZoneMoveMarshaller
         public void moveSucceededWithUpdates (int arg1, PlaceConfig arg2, ZoneSummary arg3, SceneUpdate[] arg4)
@@ -92,6 +105,11 @@ public class ZoneMarshaller extends InvocationMarshaller
         public void dispatchResponse (int methodId, Object[] args)
         {
             switch (methodId) {
+            case MOVE_REQUIRES_SERVER_SWITCH:
+                ((ZoneMoveListener)listener).moveRequiresServerSwitch(
+                    (String)args[0], (int[])args[1]);
+                return;
+
             case MOVE_SUCCEEDED:
                 ((ZoneMoveListener)listener).moveSucceeded(
                     ((Integer)args[0]).intValue(), (PlaceConfig)args[1], (ZoneSummary)args[2]);

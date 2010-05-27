@@ -129,22 +129,31 @@ public class ZoneDirector extends BasicDirector
             return false;
         }
 
+        _pendingZoneId = zoneId;
+
+        sendMoveRequest();
+        return true;
+    }
+
+    protected void sendMoveRequest ()
+    {
         // let our zone observers know that we're attempting to switch zones
-        notifyObservers(Integer.valueOf(zoneId));
+        notifyObservers(Integer.valueOf(_pendingZoneId));
 
         // check the version of our cached copy of the scene to which we're requesting to move; if
         // we were unable to load it, assume a cached version of zero
         int sceneVers = 0;
+        int sceneId = -1;
         SceneModel pendingModel = _scdir.getPendingModel();
         if (pendingModel != null) {
             sceneVers = pendingModel.version;
+            sceneId = pendingModel.sceneId;
         }
 
         // issue a moveTo request
-        log.info("Issuing zoned moveTo(" + ZoneUtil.toString(zoneId) +
+        log.info("Issuing zoned moveTo(" + ZoneUtil.toString(_pendingZoneId) +
                  ", " + sceneId + ", " + sceneVers + ").");
-        _zservice.moveTo(_ctx.getClient(), zoneId, sceneId, sceneVers, this);
-        return true;
+        _zservice.moveTo(_ctx.getClient(), _pendingZoneId, + sceneId, sceneVers, this);
     }
 
     @Override
@@ -164,6 +173,21 @@ public class ZoneDirector extends BasicDirector
         _previousZoneId = -1;
     }
 
+    // from interface SceneService.SceneMoveListener
+    public void moveRequiresServerSwitch (String hostname, int[] ports)
+    {
+        // ship on over to the other server
+        _ctx.getClient().moveToServer(hostname, ports, new ZoneService.ConfirmListener() {
+            public void requestProcessed () {
+                // resend our move request now that we're connected to the new server
+                sendMoveRequest();
+            }
+            public void requestFailed (String reason) {
+                ZoneDirector.this.requestFailed(reason);
+            }
+        });
+    }
+
     // from interface ZoneService.ZoneMoveListener
     public void moveSucceeded (int placeId, PlaceConfig config, ZoneSummary summary)
     {
@@ -174,6 +198,9 @@ public class ZoneDirector extends BasicDirector
 
         // keep track of the summary
         _summary = summary;
+
+        // We're not heading there any more.
+        _pendingZoneId = -1;
 
         // pass the rest off to the standard scene transition code
         _scdir.moveSucceeded(placeId, config);
@@ -189,6 +216,9 @@ public class ZoneDirector extends BasicDirector
         // keep track of the summary
         _summary = summary;
 
+        // We're not heading there any more.
+        _pendingZoneId = -1;
+
         // pass the rest off to the standard scene transition code
         _scdir.moveSucceededWithUpdates(placeId, config, updates);
 
@@ -202,6 +232,9 @@ public class ZoneDirector extends BasicDirector
     {
         // keep track of the summary
         _summary = summary;
+
+        // We're not heading there any more.
+        _pendingZoneId = -1;
 
         // pass the rest off to the standard scene transition code
         _scdir.moveSucceededWithScene(placeId, config, model);
@@ -246,6 +279,9 @@ public class ZoneDirector extends BasicDirector
         if (_summary != null) {
             return; // if we're currently somewhere, just stay there
         }
+
+        // Not gonna get there, so clear it.
+        _pendingZoneId = -1;
 
         // otherwise if we were previously in a zone/scene, try going back there
         if (_previousZoneId != -1) {
@@ -295,4 +331,7 @@ public class ZoneDirector extends BasicDirector
 
     /** Our previous zone id. */
     protected int _previousZoneId = -1;
+
+    /** Where we're headed. */
+    protected int _pendingZoneId = -1;
 }
