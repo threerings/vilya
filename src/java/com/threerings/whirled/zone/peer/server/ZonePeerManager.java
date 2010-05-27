@@ -43,6 +43,7 @@ public abstract class ZonePeerManager extends CrowdPeerManager
     public Tuple<String, HostedZone> getZoneHost (final int zoneId)
     {
         return lookupNodeDatum(new NodeFunc<Tuple<String, HostedZone>>() {
+            @Override
             public Tuple<String, HostedZone> apply (ZoneNodeObject nodeobj) {
                 HostedZone info = nodeobj.hostedZones.get(zoneId);
                 return (info == null) ? null : Tuple.newTuple(nodeobj.nodeName, info);

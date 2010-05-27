@@ -69,6 +69,7 @@ public abstract class PeeredZoneRegistry extends ZoneRegistry
         _peerMgr = peerMgr;
     }
 
+    @Override
     public void registerZoneManager (byte zoneType, ZoneManager manager)
     {
         if (!(manager instanceof PeeredZoneManager)) {
