@@ -242,6 +242,7 @@
     <!-- generate our services that have no ActionScript counterpart -->
     <genservice header="lib/SOURCE_HEADER" classpathref="classpath">
       <fileset dir="src/java">
+        <include name="**/stage/client/*Service.java"/>
         <include name="**/puzzle/client/*Service.java"/>
         <include name="**/micasa/simulator/client/*Service.java"/>
         <include name="**/micasa/lobby/*Service.java"/>
@@ -253,6 +254,7 @@
     <genservice header="lib/SOURCE_HEADER" asroot="src/as" classpathref="classpath">
       <fileset dir="src/java">
         <include name="**/client/*Service.java"/>
+        <exclude name="**/stage/client/*Service.java"/>
         <exclude name="**/puzzle/client/*Service.java"/>
         <exclude name="**/micasa/simulator/client/*Service.java"/>
         <exclude name="**/parlor/tourney/client/*Service.java"/>
