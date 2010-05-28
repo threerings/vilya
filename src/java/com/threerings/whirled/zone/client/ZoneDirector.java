@@ -143,17 +143,16 @@ public class ZoneDirector extends BasicDirector
         // check the version of our cached copy of the scene to which we're requesting to move; if
         // we were unable to load it, assume a cached version of zero
         int sceneVers = 0;
-        int sceneId = -1;
+        int sceneId = _scdir.getPendingSceneId();
         SceneModel pendingModel = _scdir.getPendingModel();
         if (pendingModel != null) {
             sceneVers = pendingModel.version;
-            sceneId = pendingModel.sceneId;
         }
 
         // issue a moveTo request
         log.info("Issuing zoned moveTo(" + ZoneUtil.toString(_pendingZoneId) +
                  ", " + sceneId + ", " + sceneVers + ").");
-        _zservice.moveTo(_ctx.getClient(), _pendingZoneId, + sceneId, sceneVers, this);
+        _zservice.moveTo(_ctx.getClient(), _pendingZoneId, sceneId, sceneVers, this);
     }
 
     @Override

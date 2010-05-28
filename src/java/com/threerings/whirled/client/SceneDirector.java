@@ -208,6 +208,15 @@ public class SceneDirector extends BasicDirector
         return _pendingModel;
     }
 
+    /**
+     * Returns the scene id set in preparation for a scene transition.  As with
+     * {@link #getPendingModel}, this is for cooperating directors.
+     */
+    public int getPendingSceneId ()
+    {
+        return _pendingSceneId;
+    }
+
     // from interface SceneService.SceneMoveListener
     public void moveSucceeded (int placeId, PlaceConfig config)
     {
