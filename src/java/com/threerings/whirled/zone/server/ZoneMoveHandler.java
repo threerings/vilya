@@ -97,8 +97,11 @@ public class ZoneMoveHandler extends AbstractSceneMoveHandler
         // check to see if they need a newer version of the scene data
         ZoneService.ZoneMoveListener listener = (ZoneService.ZoneMoveListener)_listener;
         SceneModel model = scmgr.getScene().getSceneModel();
-        if (_version < model.version) {
-            SceneUpdate[] updates = scmgr.getUpdates(_version);
+        if (_version != model.version) {
+            SceneUpdate[] updates = null;
+            if (_version < model.version) {
+                updates = scmgr.getUpdates(_version);
+            }
             if (updates != null) {
                 listener.moveSucceededWithUpdates(ploid, config, _summary, updates);
             } else {
