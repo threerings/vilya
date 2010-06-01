@@ -131,55 +131,73 @@ public abstract class PeeredZoneRegistry extends ZoneRegistry
                 listener.zoneOnNode(nodeInfo); // somewhere else, pass the buck
             }
             return;
-        }
 
+        } else {
+            resolveNewZone(zoneId, listener);
+        }
+    }
+
+    /**
+     * Resolve a zone that's not yet hosted.
+     */
+    protected void resolveNewZone (final int zoneId, final PeerZoneResolutionListener listener)
+    {
         // otherwise the zone is not resolved here nor there; so we claim the zone by acquiring a
         // distributed lock and then resolve it locally
         _peerMgr.acquireLock(ZonePeerManager.getZoneLock(zoneId), new ResultListener<String>() {
             public void requestCompleted (String nodeName) {
-                if (_peerMgr.getNodeObject().nodeName.equals(nodeName)) {
-                    log.debug("Got lock, resolving zone", "zoneId", zoneId);
-                    resolveZone(zoneId, new ResolutionListener() {
-                        public void zoneWasResolved (ZoneSummary zonesum) {
-                            releaseLock();
-                            _peerMgr.zoneDidStartup(zonesum.zoneId, zonesum.name);
-                            PeerZoneShutdownListener shutdowner = new PeerZoneShutdownListener() {
-                                public void zoneDidShutdown (int zoneId) {
-                                    _peerMgr.zoneDidShutdown(zoneId);
-                                }
-                            };
-                            getZoneManager(zonesum.zoneId).setShutdownListener(
-                                zonesum.zoneId, shutdowner);
-                            listener.zoneWasResolved(zonesum);
-                        }
-                        public void zoneFailedToResolve (int zoneId, Exception reason) {
-                            releaseLock();
-                            listener.zoneFailedToResolve(zoneId, reason);
-                        }
-                        protected void releaseLock () {
-                            _peerMgr.releaseLock(ZonePeerManager.getZoneLock(zoneId),
-                                new ResultListener.NOOP<String>());
-                        }
-                    });
-
-                } else {
-                    // we didn't get the lock, so let's see what happened by re-checking
-                    Tuple<String, HostedZone> nodeInfo = _peerMgr.getZoneHost(zoneId);
-                    if (nodeName == null || nodeInfo == null || !nodeName.equals(nodeInfo.left)) {
-                        log.warning("Zone resolved on wacked-out node?",
-                            "zoneId", zoneId, "nodeName", nodeName, "nodeInfo", nodeInfo);
-                        listener.zoneFailedToResolve(zoneId,
-                            new Exception("Zone on bogus host node"));
-                    } else {
-                        listener.zoneOnNode(nodeInfo); // somewhere else
-                    }
-                }
+                resolveZoneForNode(zoneId, nodeName, listener);
             }
             public void requestFailed (Exception cause) {
                 log.warning("Failed to acquire zone resolution lock", "id", zoneId, cause);
                 listener.zoneFailedToResolve(zoneId, cause);
             }
         });
+    }
+
+    /**
+     * Resolve a zone that's hosted or to-be-hosted on a zone.
+     */
+    protected void resolveZoneForNode (final int zoneId, String nodeName,
+        final PeerZoneResolutionListener listener)
+    {
+        if (_peerMgr.getNodeObject().nodeName.equals(nodeName)) {
+            log.debug("Got lock, resolving zone", "zoneId", zoneId);
+            resolveZone(zoneId, new ResolutionListener() {
+                public void zoneWasResolved (ZoneSummary zonesum) {
+                    releaseLock();
+                    _peerMgr.zoneDidStartup(zonesum.zoneId, zonesum.name);
+                    PeerZoneShutdownListener shutdowner = new PeerZoneShutdownListener() {
+                        public void zoneDidShutdown (int zoneId) {
+                            _peerMgr.zoneDidShutdown(zoneId);
+                        }
+                    };
+                    getZoneManager(zonesum.zoneId).setShutdownListener(
+                        zonesum.zoneId, shutdowner);
+                    listener.zoneWasResolved(zonesum);
+                }
+                public void zoneFailedToResolve (int zoneId, Exception reason) {
+                    releaseLock();
+                    listener.zoneFailedToResolve(zoneId, reason);
+                }
+                protected void releaseLock () {
+                    _peerMgr.releaseLock(ZonePeerManager.getZoneLock(zoneId),
+                        new ResultListener.NOOP<String>());
+                }
+            });
+
+        } else {
+            // we didn't get the lock, so let's see what happened by re-checking
+            Tuple<String, HostedZone> nodeInfo = _peerMgr.getZoneHost(zoneId);
+            if (nodeName == null || nodeInfo == null || !nodeName.equals(nodeInfo.left)) {
+                log.warning("Zone resolved on wacked-out node?",
+                    "zoneId", zoneId, "nodeName", nodeName, "nodeInfo", nodeInfo);
+                listener.zoneFailedToResolve(zoneId,
+                    new Exception("Zone on bogus host node"));
+            } else {
+                listener.zoneOnNode(nodeInfo); // somewhere else
+            }
+        }
     }
 
     /**
