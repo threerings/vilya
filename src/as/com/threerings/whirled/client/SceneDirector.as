@@ -208,6 +208,15 @@ public class SceneDirector extends BasicDirector
         return _pendingData == null ? null : _pendingData.model;
     }
 
+    /**
+     * Returns the scene id set in preparation for a scene transition.  As with
+     * {@link #getPendingModel}, this is for cooperating directors.
+     */
+    public function getPendingSceneId () :int
+    {
+        return _pendingData.sceneId;
+    }
+
     // from interface SceneService_SceneMoveListener
     public function moveSucceeded (placeId :int, config :PlaceConfig) :void
     {

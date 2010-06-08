@@ -113,7 +113,7 @@ public class ZoneDirector extends BasicDirector
         // check the version of our cached copy of the scene to which we're requesting to move; if
         // we were unable to load it, assume a cached version of zero
         var sceneVers :int = 0;
-        var sceneId :int = -1;
+        var sceneId :int = _scdir.getPendingSceneId();
         var pendingModel :SceneModel = _scdir.getPendingModel();
         if (pendingModel != null) {
             sceneVers = pendingModel.version;
