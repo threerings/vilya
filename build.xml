@@ -42,9 +42,18 @@
     <copy todir="${deploy.dir}/lib" flatten="true">
       <fileset refid="${lib.name}.libs"/>
     </copy>
-    <!-- defines our various presents ant tasks -->
-    <taskdef resource="com/threerings/presents/tools.properties"
-             classpath="${deploy.dir}/lib/narya-tools.jar"/>
+  </target>
+
+  <!-- makes sure our tools are compiled and defines the ant tasks -->
+  <target name="preptools" depends="prepare">
+    <javac srcdir="src/java" destdir="${classes.dir}" includeAntRuntime="false"
+           debug="on" optimize="{$build.optimize}" deprecation="on" source="1.5" target="1.5">
+      <classpath refid="classpath"/>
+      <compilerarg value="-Xlint"/>
+      <compilerarg value="-Xlint:-serial"/>
+      <include name="com/threerings/presents/tools/**"/>
+    </javac>
+    <taskdef resource="com/threerings/presents/tools.properties" classpathref="classpath"/>
   </target>
 
   <!-- cleans out the intermediate build files -->
@@ -198,7 +207,7 @@
   </target>
 
   <!-- generates fields for persistent record classes -->
-  <target name="genrecord" depends="prepare">
+  <target name="genrecord" depends="preptools">
     <taskdef name="grecord" classname="com.samskivert.depot.tools.GenRecordTask"
              classpathref="classpath"/>
     <!-- make sure the record class files are all compiled -->
@@ -214,7 +223,7 @@
   </target>
 
   <!-- generates additional methods for distributed object classes -->
-  <target name="gendobj" depends="prepare"> 
+  <target name="gendobj" depends="preptools"> 
     <!-- make sure the dobject class files are all compiled -->
     <javac srcdir="src/java" destdir="${classes.dir}" includeAntRuntime="false"
            debug="on" optimize="${build.optimize}" deprecation="on"
@@ -230,7 +239,7 @@
 
   <!-- generates marshaller and dispatcher classes for all invocation -->
   <!-- service declarations -->
-  <target name="genservice" depends="prepare"> 
+  <target name="genservice" depends="preptools"> 
     <!-- make sure the service class files are all compiled -->
     <javac srcdir="src/java" destdir="${classes.dir}" includeAntRuntime="false"
            debug="on" optimize="${build.optimize}" deprecation="on"
@@ -264,7 +273,7 @@
 
   <!-- generates sender and decoder classes for all invocation -->
   <!-- receiver declarations -->
-  <target name="genreceiver" depends="prepare">
+  <target name="genreceiver" depends="preptools">
     <!-- make sure the receiver class files are all compiled -->
     <javac srcdir="src/java" destdir="${classes.dir}" includeAntRuntime="false"
            debug="on" optimize="${build.optimize}" deprecation="on"
@@ -280,8 +289,8 @@
     </genreceiver>
   </target>
 
-  <!-- adds readField and writeField methods to Stremable classes -->
-  <target name="procstream" depends="prepare">
+  <!-- adds readField and writeField methods to Streamable classes -->
+  <target name="procstream" depends="preptools">
     <!-- now instrument the associated files -->
     <instream outdir="${classes.dir}">
       <path refid="classpath"/>
@@ -290,7 +299,7 @@
   </target>
 
   <!-- generates ActionScript versions of our Streamable classes -->
-  <target name="genascript" depends="prepare">
+  <target name="genascript" depends="preptools">
     <!-- now generate the associated files -->
     <genascript header="lib/SOURCE_HEADER" asroot="src/as">
       <fileset dir="src/java">
@@ -302,6 +311,7 @@
         <include name="**/whirled/data/*.java"/>
         <include name="**/whirled/**/data/*.java"/>
         <exclude name="**/whirled/spot/data/Cluster.java"/> <!-- fiddly bits -->
+        <include name="**/stage/data/*.java"/>
       </fileset>
     </genascript>
   </target>
