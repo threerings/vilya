@@ -21,6 +21,8 @@
 
 package com.threerings.stage.tools.xml;
 
+import java.util.Map;
+
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -65,14 +67,12 @@ public class StageSceneWriter extends SceneWriter
         StageSceneModel sscene = (StageSceneModel)scene;
         if (sscene.defaultColors != null) {
             writer.startElement("zations");
-            int[] keys = sscene.defaultColors.getKeys();
-            for (int key : keys) {
-                int value = sscene.defaultColors.get(key);
+            for (Map.Entry<Integer, Integer> entry : sscene.defaultColors.entrySet()) {
                 AttributesImpl attrs = new AttributesImpl();
                 attrs.addAttribute("", "classId", "", "",
-                                   String.valueOf(key));
+                                   String.valueOf(entry.getKey()));
                 attrs.addAttribute("", "colorId", "", "",
-                                   String.valueOf(value));
+                                   String.valueOf(entry.getValue()));
                 writer.emptyElement("", "zation", "", attrs);
             }
             writer.endElement("zations");

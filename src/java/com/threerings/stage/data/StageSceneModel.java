@@ -21,7 +21,7 @@
 
 package com.threerings.stage.data;
 
-import com.threerings.util.StreamableIntIntMap;
+import com.threerings.util.StreamableHashMap;
 
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.spot.data.SpotSceneModel;
@@ -44,7 +44,7 @@ public class StageSceneModel extends SceneModel
 
     /** If non-null, contains default colorizations to use for objects
      * that do not have colorizations defined. */
-    public StreamableIntIntMap defaultColors;
+    public StreamableHashMap<Integer, Integer> defaultColors;
 
     /**
      * Get the default color to use for the specified colorization
@@ -74,7 +74,7 @@ public class StageSceneModel extends SceneModel
 
         } else {
             if (defaultColors == null) {
-                defaultColors = new StreamableIntIntMap();
+                defaultColors = StreamableHashMap.newMap();
             }
             defaultColors.put(classId, colorId);
         }
