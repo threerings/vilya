@@ -53,7 +53,10 @@ public class StageSceneModel extends SceneModel
     public int getDefaultColor (int classId)
     {
         if (defaultColors != null) {
-            return defaultColors.get(classId);
+            Integer result = defaultColors.get(classId);
+            if (result != null) {
+                return result;
+            }
         }
         return -1;
     }
