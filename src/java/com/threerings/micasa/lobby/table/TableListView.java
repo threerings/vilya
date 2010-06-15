@@ -252,8 +252,8 @@ public class TableListView extends JPanel
     {
         // first check the match list
         int ccount = _matchList.getComponentCount();
-        for (int i = 0; i < ccount; i++) {
-            TableItem child = (TableItem)_matchList.getComponent(i);
+        for (int ii = 0; ii < ccount; ii++) {
+            TableItem child = (TableItem)_matchList.getComponent(ii);
             if (child.table.tableId == tableId) {
                 return child;
             }
@@ -261,8 +261,8 @@ public class TableListView extends JPanel
 
         // then the inplay list
         ccount = _playList.getComponentCount();
-        for (int i = 0; i < ccount; i++) {
-            TableItem child = (TableItem)_playList.getComponent(i);
+        for (int ii = 0; ii < ccount; ii++) {
+            TableItem child = (TableItem)_playList.getComponent(ii);
             if (child.table.tableId == tableId) {
                 return child;
             }

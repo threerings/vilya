@@ -91,16 +91,16 @@ public class TableItem
         gbc.weightx = 1.0;
         gbc.insets = new Insets(2, 0, 2, 0);
         _seats = new JButton[bcount];
-        for (int i = 0; i < bcount; i++) {
+        for (int ii = 0; ii < bcount; ii++) {
             // create the button
-            _seats[i] = new JButton(JOIN_LABEL);
-            _seats[i].addActionListener(this);
+            _seats[ii] = new JButton(JOIN_LABEL);
+            _seats[ii].addActionListener(this);
 
             // if we're on the left
-            if (i % 2 == 0) {
+            if (ii % 2 == 0) {
                 // if we're the last seat, then we've got an odd number
                 // and need to center this final seat
-                if (i == bcount-1) {
+                if (ii == bcount-1) {
                     gbc.gridwidth = GridBagConstraints.REMAINDER;
                 } else {
                     gbc.gridwidth = 1;
@@ -111,16 +111,16 @@ public class TableItem
             }
 
             // adjust the insets of our last element
-            if (i == bcount-1) {
+            if (ii == bcount-1) {
                 gbc.insets = new Insets(2, 0, 4, 0);
             }
 
             // and add the button with the configured constraints
-            add(_seats[i], gbc);
+            add(_seats[ii], gbc);
 
             // if we just added the first button, add the "go" button
             // right after it
-            if (i == 0) {
+            if (ii == 0) {
                 _goButton = new JButton("Go");
                 _goButton.setActionCommand("go");
                 _goButton.addActionListener(this);
@@ -147,21 +147,21 @@ public class TableItem
 
         // now enable and label the buttons accordingly
         int slength = _seats.length;
-        for (int i = 0; i < slength; i++) {
-            if (table.players[i] == null) {
-                _seats[i].setText(JOIN_LABEL);
-                _seats[i].setEnabled(!isSeated);
-                _seats[i].setActionCommand("join");
+        for (int ii = 0; ii < slength; ii++) {
+            if (table.players[ii] == null) {
+                _seats[ii].setText(JOIN_LABEL);
+                _seats[ii].setEnabled(!isSeated);
+                _seats[ii].setActionCommand("join");
 
-            } else if (table.players[i].equals(_self) &&
+            } else if (table.players[ii].equals(_self) &&
                        !table.inPlay()) {
-                _seats[i].setText(LEAVE_LABEL);
-                _seats[i].setEnabled(true);
-                _seats[i].setActionCommand("leave");
+                _seats[ii].setText(LEAVE_LABEL);
+                _seats[ii].setEnabled(true);
+                _seats[ii].setActionCommand("leave");
 
             } else {
-                _seats[i].setText(table.players[i].toString());
-                _seats[i].setEnabled(false);
+                _seats[ii].setText(table.players[ii].toString());
+                _seats[ii].setEnabled(false);
             }
         }
 
@@ -186,9 +186,9 @@ public class TableItem
         if (cmd.equals("join")) {
             // figure out what position this button is in
             int position = -1;
-            for (int i = 0; i < _seats.length; i++) {
-                if (_seats[i] == event.getSource()) {
-                    position = i;
+            for (int ii = 0; ii < _seats.length; ii++) {
+                if (_seats[ii] == event.getSource()) {
+                    position = ii;
                     break;
                 }
             }

@@ -175,8 +175,8 @@ public class TrickCardGameUtil
     public static PlayerCard getHighestInLeadSuit (PlayerCard[] cardsPlayed, int trumpSuit)
     {
         PlayerCard highest = cardsPlayed[0];
-        for (int i = 1; i < cardsPlayed.length; i++) {
-            PlayerCard other = cardsPlayed[i];
+        for (int ii = 1; ii < cardsPlayed.length; ii++) {
+            PlayerCard other = cardsPlayed[ii];
             if ((other.card.getSuit() == highest.card.getSuit() &&
                     other.card.compareTo(highest.card) > 0) ||
                 (other.card.getSuit() == trumpSuit && highest.card.getSuit() != trumpSuit)) {

@@ -143,9 +143,9 @@ public class PlacementConstraints
         ObjectInfo[] removed)
     {
         ObjectData[] addedData = new ObjectData[added.length];
-        for (int i = 0; i < added.length; i++) {
-            addedData[i] = createObjectData(added[i]);
-            if (addedData[i] == null) {
+        for (int ii = 0; ii < added.length; ii++) {
+            addedData[ii] = createObjectData(added[ii]);
+            if (addedData[ii] == null) {
                 return INTERNAL_ERROR;
             }
         }
@@ -193,33 +193,33 @@ public class PlacementConstraints
     {
         DirectionType dirtype = new DirectionType();
 
-        for (int i = 0; i < added.length; i++) {
-            if (added[i].tile.hasConstraint(ObjectTileSet.ON_SURFACE) &&
-                !isOnSurface(added[i], added, removed)) {
+        for (int ii = 0; ii < added.length; ii++) {
+            if (added[ii].tile.hasConstraint(ObjectTileSet.ON_SURFACE) &&
+                !isOnSurface(added[ii], added, removed)) {
                 return MessageBundle.qualify(STAGE_MESSAGE_BUNDLE,
                     "m.not_on_surface");
             }
 
-            if (getConstraintDirectionType(added[i], ObjectTileSet.ON_WALL,
-                dirtype) && !isOnWall(added[i], added, removed, dirtype.dir, dirtype.type)) {
+            if (getConstraintDirectionType(added[ii], ObjectTileSet.ON_WALL,
+                dirtype) && !isOnWall(added[ii], added, removed, dirtype.dir, dirtype.type)) {
                 return MessageBundle.qualify(STAGE_MESSAGE_BUNDLE,
                     "m.not_on_wall");
             }
 
-            if (getConstraintDirectionType(added[i], ObjectTileSet.ATTACH,
-                    dirtype) && !isAttached(added[i], added, removed,
+            if (getConstraintDirectionType(added[ii], ObjectTileSet.ATTACH,
+                    dirtype) && !isAttached(added[ii], added, removed,
                         dirtype.dir, dirtype.type)) {
                 return MessageBundle.qualify(STAGE_MESSAGE_BUNDLE,
                     "m.not_attached");
             }
 
-            int dir = getConstraintDirection(added[i], ObjectTileSet.SPACE);
-            if (dir != NONE && !hasSpace(added[i], added, removed, dir)) {
+            int dir = getConstraintDirection(added[ii], ObjectTileSet.SPACE);
+            if (dir != NONE && !hasSpace(added[ii], added, removed, dir)) {
                 return MessageBundle.qualify(STAGE_MESSAGE_BUNDLE,
                     "m.no_space");
             }
 
-            if (hasSpaceConstrainedAdjacent(added[i], added, removed)) {
+            if (hasSpaceConstrainedAdjacent(added[ii], added, removed)) {
                 return MessageBundle.qualify(STAGE_MESSAGE_BUNDLE,
                     "m.no_space_adj");
             }
@@ -256,8 +256,8 @@ public class PlacementConstraints
         ObjectData[] removed)
     {
         List<ObjectData> objects = getObjectData(data.bounds, added, removed);
-        for (int i = 0, size = objects.size(); i < size; i++) {
-            ObjectData odata = objects.get(i);
+        for (int ii = 0, size = objects.size(); ii < size; ii++) {
+            ObjectData odata = objects.get(ii);
             if (odata.tile.hasConstraint(ObjectTileSet.ON_SURFACE) &&
                 !isOnSurface(odata, added, removed)) {
                 return true;
@@ -276,8 +276,8 @@ public class PlacementConstraints
         DirectionType dirtype = new DirectionType();
 
         List<ObjectData> objects = getObjectData(data.bounds, added, removed);
-        for (int i = 0, size = objects.size(); i < size; i++) {
-            ObjectData odata = objects.get(i);
+        for (int ii = 0, size = objects.size(); ii < size; ii++) {
+            ObjectData odata = objects.get(ii);
             if (getConstraintDirectionType(odata, ObjectTileSet.ON_WALL,
                 dirtype) && !isAttached(odata, added, removed,
                     dirtype.dir, dirtype.type)) {
@@ -298,8 +298,8 @@ public class PlacementConstraints
 
         List<ObjectData> objects = getObjectData(getAdjacentEdge(data.bounds,
             DirectionUtil.getOpposite(dir)), added, removed);
-        for (int i = 0, size = objects.size(); i < size; i++) {
-            ObjectData odata = objects.get(i);
+        for (int ii = 0, size = objects.size(); ii < size; ii++) {
+            ObjectData odata = objects.get(ii);
             if (getConstraintDirectionType(odata, ObjectTileSet.ATTACH,
                     dirtype) && !isAttached(odata, added, removed,
                         dirtype.dir, dirtype.type)) {
@@ -321,8 +321,8 @@ public class PlacementConstraints
         _constrainRect.setBounds(r.x - 1, r.y - 1, r.width + 2, r.height + 2);
 
         List<ObjectData> objects = getObjectData(_constrainRect, added, removed);
-        for (int i = 0, size = objects.size(); i < size; i++) {
-            ObjectData odata = objects.get(i);
+        for (int ii = 0, size = objects.size(); ii < size; ii++) {
+            ObjectData odata = objects.get(ii);
             int dir = getConstraintDirection(odata, ObjectTileSet.SPACE);
             if (dir != NONE && !hasSpace(odata, added, removed, dir)) {
                 return true;
@@ -389,8 +389,8 @@ public class PlacementConstraints
         for (int y = rect.y, ymax = rect.y + rect.height; y < ymax; y++) {
             for (int x = rect.x, xmax = rect.x + rect.width; x < xmax; x++) {
                 boolean covered = false;
-                for (int i = 0, size = objects.size(); i < size; i++) {
-                    ObjectData data = objects.get(i);
+                for (int ii = 0, size = objects.size(); ii < size; ii++) {
+                    ObjectData data = objects.get(ii);
                     if (data.bounds.contains(x, y) && (constraint == null ||
                             data.tile.hasConstraint(constraint) ||
                             (altstraint != null &&

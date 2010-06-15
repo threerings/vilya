@@ -140,8 +140,8 @@ public class ParlorDirector extends BasicDirector
 
         // see what our observers have to say about it
         boolean handled = false;
-        for (int i = 0; i < _grobs.size(); i++) {
-            GameReadyObserver grob = _grobs.get(i);
+        for (int ii = 0; ii < _grobs.size(); ii++) {
+            GameReadyObserver grob = _grobs.get(ii);
             handled = grob.receivedGameReady(gameOid) || handled;
         }
 

@@ -114,12 +114,11 @@ public abstract class SpotSceneRuleSet implements NestableRuleSet
             Location loc = portal.loc;
             Class<?> locClass = loc.getClass();
 
-            // iterate over the attributes, setting public fields where
-            // applicable
-            for (int i = 0; i < attrs.getLength(); i++) {
-                String lname = attrs.getLocalName(i);
+            // iterate over the attributes, setting public fields where applicable
+            for (int ii = 0; ii < attrs.getLength(); ii++) {
+                String lname = attrs.getLocalName(ii);
                 if (StringUtil.isBlank(lname)) {
-                    lname = attrs.getQName(i);
+                    lname = attrs.getQName(ii);
                 }
 
                 // look for a public field with this lname
@@ -145,7 +144,7 @@ public abstract class SpotSceneRuleSet implements NestableRuleSet
                 }
 
                 // convert the value into the appropriate object type
-                String valstr = attrs.getValue(i);
+                String valstr = attrs.getValue(ii);
                 // use the value marshaller to parse the
                 // property based on the type of the target object field
                 Object value = ValueMarshaller.unmarshal(

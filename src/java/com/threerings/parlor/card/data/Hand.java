@@ -59,8 +59,8 @@ public class Hand extends StreamableArrayList<Card>
     @ActionScript(name="containsAllCards")
     public boolean containsAll (Card[] cards)
     {
-        for (int i = 0; i < cards.length; i++) {
-            if (!contains(cards[i])) {
+        for (int ii = 0; ii < cards.length; ii++) {
+            if (!contains(cards[ii])) {
                 return false;
             }
         }
@@ -76,8 +76,8 @@ public class Hand extends StreamableArrayList<Card>
     public int getSuitMemberCount (int suit)
     {
         int len = size(), members = 0;
-        for (int i = 0; i < len; i++) {
-            if (get(i).getSuit() == suit) {
+        for (int ii = 0; ii < len; ii++) {
+            if (get(ii).getSuit() == suit) {
                 members++;
             }
         }

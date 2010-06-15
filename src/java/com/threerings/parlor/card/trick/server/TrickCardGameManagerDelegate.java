@@ -453,8 +453,8 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
     protected Card pickRandomPlayableCard (Hand hand)
     {
         List<Card> playableCards = Lists.newArrayList();
-        for (int i = 0; i < hand.size(); i++) {
-            Card card = hand.get(i);
+        for (int ii = 0; ii < hand.size(); ii++) {
+            Card card = hand.get(ii);
             if (_trickCardGame.isCardPlayable(hand, card)) {
                 playableCards.add(card);
             }

@@ -287,9 +287,9 @@ public class Table
     public boolean clearPlayer (Name username)
     {
         if (players != null) {
-            for (int i = 0; i < players.length; i++) {
-                if (username.equals(players[i])) {
-                    clearPlayerPos(i);
+            for (int ii = 0; ii < players.length; ii++) {
+                if (username.equals(players[ii])) {
+                    clearPlayerPos(ii);
                     return true;
                 }
             }
@@ -308,9 +308,9 @@ public class Table
     public boolean clearPlayerByOid (int bodyOid)
     {
         if (bodyOids != null) {
-            for (int i = 0; i < bodyOids.length; i++) {
-                if (bodyOid == bodyOids[i]) {
-                    clearPlayerPos(i);
+            for (int ii = 0; ii < bodyOids.length; ii++) {
+                if (bodyOid == bodyOids[ii]) {
+                    clearPlayerPos(ii);
                     return true;
                 }
             }

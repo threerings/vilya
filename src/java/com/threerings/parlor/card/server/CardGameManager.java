@@ -136,8 +136,8 @@ public class CardGameManager extends GameManager
         } else {
             Hand[] hands = new Hand[_playerCount];
 
-            for (int i=0;i<_playerCount;i++) {
-                hands[i] = dealHand(deck, size, i);
+            for (int ii = 0; ii < _playerCount; ii++) {
+                hands[ii] = dealHand(deck, size, ii);
             }
 
             return hands;
@@ -153,7 +153,7 @@ public class CardGameManager extends GameManager
         int[] oids = (_gameobj.state == GameObject.GAME_OVER) ? _oldPlayerOids : _playerOids;
         int oid = client.getOid();
 
-        for (int ii=0; ii < oids.length; ii++) {
+        for (int ii = 0; ii < oids.length; ii++) {
             if (oids[ii] == oid) {
                 return ii;
             }

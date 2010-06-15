@@ -84,9 +84,9 @@ public class Deck extends StreamableArrayList
     {
         clear();
 
-        for (var i :int = CardCodes.SPADES; i <= CardCodes.DIAMONDS; i++) {
-            for (var j :int = 2; j <= CardCodes.ACE; j++) {
-                add(new Card(j, i));
+        for (var ii :int = CardCodes.SPADES; ii <= CardCodes.DIAMONDS; ii++) {
+            for (var jj :int = 2; jj <= CardCodes.ACE; jj++) {
+                add(new Card(jj, ii));
             }
         }
 

@@ -296,8 +296,8 @@ public abstract class CardPanel extends VirtualMediaPanel
 
         // create the sprites
         int size = hand.size();
-        for (int i = 0; i < size; i++) {
-            CardSprite cs = new CardSprite(this, hand.get(i));
+        for (int ii = 0; ii < size; ii++) {
+            CardSprite cs = new CardSprite(this, hand.get(ii));
             _handSprites.add(cs);
         }
 
@@ -308,13 +308,13 @@ public abstract class CardPanel extends VirtualMediaPanel
 
         // fade them in at proper locations and layers
         long cardDuration = fadeDuration / size;
-        for (int i = 0; i < size; i++) {
-            CardSprite cs = _handSprites.get(i);
-            cs.setLocation(getHandX(size, i), _handLocation.y);
-            cs.setRenderOrder(i);
+        for (int ii = 0; ii < size; ii++) {
+            CardSprite cs = _handSprites.get(ii);
+            cs.setLocation(getHandX(size, ii), _handLocation.y);
+            cs.setRenderOrder(ii);
             cs.addSpriteObserver(_handSpriteObserver);
             addSprite(cs);
-            cs.fadeIn(i * cardDuration, cardDuration);
+            cs.fadeIn(ii * cardDuration, cardDuration);
         }
 
         // make sure we have the right card sprite active
@@ -331,7 +331,7 @@ public abstract class CardPanel extends VirtualMediaPanel
     {
         // fill hand will null entries to signify unknown cards
         Hand hand = new Hand();
-        for (int i = 0; i < size; i++) {
+        for (int ii = 0; ii < size; ii++) {
             hand.add(null);
         }
         setHand(hand, fadeDuration);
@@ -351,9 +351,9 @@ public abstract class CardPanel extends VirtualMediaPanel
 
         // set the sprites
         int len = Math.min(_handSprites.size(), hand.size());
-        for (int i = 0; i < len; i++) {
-            CardSprite cs = _handSprites.get(i);
-            cs.setCard(hand.get(i));
+        for (int ii = 0; ii < len; ii++) {
+            CardSprite cs = _handSprites.get(ii);
+            cs.setCard(hand.get(ii));
         }
     }
 
@@ -425,9 +425,9 @@ public abstract class CardPanel extends VirtualMediaPanel
     {
         // first create the sprites and add them to the list
         CardSprite[] sprites = new CardSprite[cards.length];
-        for (int i = 0; i < cards.length; i++) {
-            sprites[i] = new CardSprite(this, cards[i]);
-            _handSprites.add(sprites[i]);
+        for (int ii = 0; ii < cards.length; ii++) {
+            sprites[ii] = new CardSprite(this, cards[ii]);
+            _handSprites.add(sprites[ii]);
         }
 
         // settle the hand
@@ -468,10 +468,10 @@ public abstract class CardPanel extends VirtualMediaPanel
     public void flyAcross (Card[] cards, Point src, Point dest, long flightDuration,
                            long cardDelay, float fadePortion)
     {
-        for (int i = 0; i < cards.length; i++) {
+        for (int ii = 0; ii < cards.length; ii++) {
             // add on top of all board sprites
-            CardSprite cs = new CardSprite(this, cards[i]);
-            cs.setRenderOrder(getHighestBoardLayer() + 1 + i);
+            CardSprite cs = new CardSprite(this, cards[ii]);
+            cs.setRenderOrder(getHighestBoardLayer() + 1 + ii);
             cs.setLocation(src.x, src.y);
             addSprite(cs);
 
@@ -479,8 +479,8 @@ public abstract class CardPanel extends VirtualMediaPanel
             Path path;
             long pathDuration;
             LinePath flight = new LinePath(dest, flightDuration);
-            if (i > 0) {
-                long delayDuration = cardDelay * i;
+            if (ii > 0) {
+                long delayDuration = cardDelay * ii;
                 LinePath delay = new LinePath(src, delayDuration);
                 path = new PathSequence(delay, flight);
                 pathDuration = delayDuration + flightDuration;
@@ -626,8 +626,8 @@ public abstract class CardPanel extends VirtualMediaPanel
      */
     protected CardSprite getCardSprite (List<CardSprite> list, Card card)
     {
-        for (int i = 0; i < list.size(); i++) {
-            CardSprite cs = list.get(i);
+        for (int ii = 0; ii < list.size(); ii++) {
+            CardSprite cs = list.get(ii);
             if (card.equals(cs.getCard())) {
                 return cs;
             }
@@ -664,16 +664,16 @@ public abstract class CardPanel extends VirtualMediaPanel
 
         // Move each card to its proper position (and, optionally, layer)
         int size = _handSprites.size();
-        for (int i = 0; i < size; i++) {
-            CardSprite cs = _handSprites.get(i);
+        for (int ii = 0; ii < size; ii++) {
+            CardSprite cs = _handSprites.get(ii);
             if (!isManaged(cs)) {
                 continue;
             }
             if (updateLayers) {
-                cs.setRenderOrder(i);
+                cs.setRenderOrder(ii);
             }
             LinePath adjust = new LinePath(
-                new Point(getHandX(size, i), _handLocation.y), adjustDuration);
+                new Point(getHandX(size, ii), _handLocation.y), adjustDuration);
             cs.move(adjust);
         }
     }
@@ -697,8 +697,8 @@ public abstract class CardPanel extends VirtualMediaPanel
         updateActiveCardSprite();
 
         int size = _handSprites.size();
-        for (int i = 0; i < size; i++) {
-            CardSprite cs = _handSprites.get(i);
+        for (int ii = 0; ii < size; ii++) {
+            CardSprite cs = _handSprites.get(ii);
             if (!cs.isMoving()) {
                 cs.setLocation(cs.getX(), getHandY(cs));
             }
@@ -781,8 +781,8 @@ public abstract class CardPanel extends VirtualMediaPanel
 
         // lower them just enough
         int size = _boardSprites.size(), adjustment = layer - highest;
-        for (int i = 0; i < size; i++) {
-            CardSprite cs = _boardSprites.get(i);
+        for (int ii = 0; ii < size; ii++) {
+            CardSprite cs = _boardSprites.get(ii);
             cs.setRenderOrder(cs.getRenderOrder() + adjustment);
         }
     }
@@ -795,8 +795,8 @@ public abstract class CardPanel extends VirtualMediaPanel
         // must be at least zero, because that's the lowest number we can push the sprites down to
         // (the layer of the first card in the hand)
         int size = _boardSprites.size(), highest = 0;
-        for (int i = 0; i < size; i++) {
-            highest = Math.max(highest, _boardSprites.get(i).getRenderOrder());
+        for (int ii = 0; ii < size; ii++) {
+            highest = Math.max(highest, _boardSprites.get(ii).getRenderOrder());
         }
         return highest;
     }

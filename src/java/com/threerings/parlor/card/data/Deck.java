@@ -64,9 +64,9 @@ public class Deck extends StreamableArrayList<Card>
     {
         clear();
 
-        for (int i = SPADES; i <= DIAMONDS; i++) {
+        for (int ii = SPADES; ii <= DIAMONDS; ii++) {
             for (int j = 2; j <= ACE; j++) {
-                add(new Card(j, i));
+                add(new Card(j, ii));
             }
         }
 

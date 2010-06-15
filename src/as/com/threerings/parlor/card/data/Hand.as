@@ -42,8 +42,8 @@ public class Hand extends StreamableArrayList
     public function getSuitMemberCount (suit :int) :int
     {
         var members :int = 0;
-        for (var i :int = 0; i < length; i++) {
-            if ((get(i) as Card).getSuit() == suit) {
+        for (var ii :int = 0; ii < length; ii++) {
+            if ((get(ii) as Card).getSuit() == suit) {
                 members++;
             }
         }
@@ -71,8 +71,8 @@ public class Hand extends StreamableArrayList
      */
     public function containsAllCards (cards :Array) :Boolean
     {
-        for (var i :int = 0; i < cards.length; i++) {
-            if (!contains(cards[i])) {
+        for (var ii :int = 0; ii < cards.length; ii++) {
+            if (!contains(cards[ii])) {
                 return false;
             }
         }
@@ -84,8 +84,8 @@ public class Hand extends StreamableArrayList
      */
     public function removeAllCards (cards :Array) :void
     {
-        for (var i :int = 0; i < cards.length; i++) {
-            remove(cards[i]);
+        for (var ii :int = 0; ii < cards.length; ii++) {
+            remove(cards[ii]);
         }
     }
 }
