@@ -44,8 +44,7 @@ import com.threerings.whirled.zone.util.ZoneUtil;
 import static com.threerings.whirled.zone.Log.log;
 
 /**
- * The zone registry takes care of mapping zone requests to the appropriate registered zone
- * manager.
+ * The zone registry takes care of mapping zone requests to the appropriate registered zone manager.
  */
 @Singleton
 public class ZoneRegistry
@@ -69,8 +68,8 @@ public class ZoneRegistry
     {
         ZoneManager old = _managers.get(zoneType);
         if (old != null) {
-            log.warning("Zone manager already registered with requested type [type=" + zoneType +
-                        ", old=" + old + ", new=" + manager + "].");
+            log.warning("Zone manager already registered with requested type",
+                "type", zoneType, "old", old, "new", manager);
         } else {
             _managers.put(zoneType, manager);
         }
@@ -88,11 +87,11 @@ public class ZoneRegistry
 
     /**
      * Ejects the specified body from their current scene and sends them a request to move to the
-     * specified new zone and scene. This is the zone-equivalent to {@link
-     * LocationProvider#moveTo}.
+     * specified new zone and scene. This is the zone-equivalent to
+     * {@link LocationProvider#moveTo}.
      *
-     * @return null if the user was forcibly moved, or a string indicating the reason for denial of
-     * departure of their current zone (from {@link ZoneManager#ratifyBodyExit}).
+     * @return null if the user was forcibly moved, or a string indicating the reason for denial
+     * of departure of their current zone (from {@link ZoneManager#ratifyBodyExit}).
      */
     public String moveBody (ZonedBodyObject source, int zoneId, int sceneId)
     {
@@ -146,8 +145,8 @@ public class ZoneRegistry
         throws InvocationException
     {
         if (!(caller instanceof ZonedBodyObject)) {
-            log.warning("Request to switch zones by non-ZonedBodyObject " +
-                        "[clobj=" + caller.getClass() + "].");
+            log.warning("Request to switch zones by non-ZonedBodyObject",
+                "clobj", caller.getClass());
             throw new InvocationException(ZoneCodes.INTERNAL_ERROR);
         }
 
@@ -165,8 +164,8 @@ public class ZoneRegistry
         // look up the zone manager for the zone
         ZoneManager zmgr = getZoneManager(zoneId);
         if (zmgr == null) {
-            log.warning("Requested to enter a zone for which we have no manager " +
-                        "[user=" + body.who() + ", zoneId=" + zoneId + "].");
+            log.warning("Requested to enter a zone for which we have no manager",
+                "user", body.who(), "zoneId", zoneId);
             throw new InvocationException(ZoneCodes.NO_SUCH_ZONE);
         }
 
