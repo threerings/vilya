@@ -22,6 +22,7 @@ package com.threerings.stage.client {
 
 import com.threerings.crowd.client.PlaceView;
 import com.threerings.crowd.util.CrowdContext;
+import com.threerings.miso.util.MisoSceneMetrics;
 import com.threerings.stage.data.StageLocation;
 import com.threerings.stage.util.StageContext;
 import com.threerings.util.Log;
@@ -52,7 +53,7 @@ public class StageSceneController extends SpotSceneController
 
     override protected function createPlaceView (ctx :CrowdContext) :PlaceView
     {
-        return new StageScenePanel(StageContext(ctx), this);
+        return new StageScenePanel(StageContext(ctx), this, new MisoSceneMetrics());
     }
 
     override protected function sceneUpdated (update :SceneUpdate) :void

@@ -27,6 +27,7 @@ import com.threerings.whirled.data.SceneModel;
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 import com.threerings.miso.data.SparseMisoSceneModel_Section;
+import com.threerings.util.Integer;
 import com.threerings.stage.data.StageMisoSceneModel;
 
 /**
@@ -75,7 +76,7 @@ public class StageMisoSceneModel extends SparseMisoSceneModel
     /**
      * Returns the section key for the specified tile coordinate.
      */
-    public function getSectionKey (x :int, y :int) :int
+    public function getSectionKey (x :int, y :int) :Integer
     {
         return key(x, y);
     }
