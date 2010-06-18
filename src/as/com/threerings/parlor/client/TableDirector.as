@@ -64,8 +64,6 @@ import com.threerings.parlor.util.ParlorContext;
 public class TableDirector extends BasicDirector
     implements SetListener, InvocationService_ResultListener
 {
-    protected static const log :Log = Log.getLog(TableDirector);
-
     /**
      * Creates a new table director to manage tables with the specified observer which will receive
      * callbacks when interesting table related things happen.
@@ -424,5 +422,7 @@ public class TableDirector extends BasicDirector
 
     /** A custom failure handler, or null. */
     protected var _failureHandler :Function;
+
+    private static const log :Log = Log.getLog(TableDirector);
 }
 }

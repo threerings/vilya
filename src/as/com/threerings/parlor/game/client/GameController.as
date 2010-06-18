@@ -51,8 +51,6 @@ import com.threerings.parlor.util.ParlorContext;
 public /*abstract*/ class GameController extends PlaceController
     implements AttributeChangeListener
 {
-    protected static const log :Log = Log.getLog(GameController);
-
     /**
      * Initializes this game controller with the game configuration that
      * was established during the match making process. Derived classes
@@ -322,5 +320,7 @@ public /*abstract*/ class GameController extends PlaceController
      * the client knows the game is over before the server has
      * transitioned the game object accordingly. */
     protected var _gameOver :Boolean;
+
+    private static const log :Log = Log.getLog(GameController);
 }
 }
