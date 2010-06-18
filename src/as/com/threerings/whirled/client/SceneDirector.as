@@ -214,7 +214,7 @@ public class SceneDirector extends BasicDirector
      */
     public function getPendingSceneId () :int
     {
-        return _pendingData.sceneId;
+        return _pendingData == null ? -1 : _pendingData.sceneId;
     }
 
     // from interface SceneService_SceneMoveListener
