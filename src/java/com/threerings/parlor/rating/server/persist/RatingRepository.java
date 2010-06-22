@@ -37,8 +37,6 @@ import com.google.inject.Singleton;
 
 import com.samskivert.util.IntMap;
 import com.samskivert.util.IntMaps;
-import com.samskivert.util.IntSet;
-
 import com.samskivert.depot.DepotRepository;
 import com.samskivert.depot.Ops;
 import com.samskivert.depot.PersistenceContext;
@@ -123,7 +121,8 @@ public class RatingRepository extends DepotRepository
      * results. Supply zero to omit this filter.
      * @param playerIds an optional list of player ids to which to limit the top-rankings search.
      */
-    public List<RatingRecord> getTopRatings (int gameId, int limit, long since, IntSet playerIds)
+    public List<RatingRecord> getTopRatings (
+        int gameId, int limit, long since, Set<Integer> playerIds)
     {
         List<SQLExpression> where = Lists.newArrayList();
         where.add(RatingRecord.GAME_ID.eq(gameId));
