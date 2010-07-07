@@ -21,9 +21,14 @@
 package com.threerings.stage.client {
 
 import com.threerings.util.Controller;
+import com.threerings.util.Log;
 import com.threerings.whirled.data.SceneUpdate;
+import com.threerings.media.tile.Colorizer;
 import com.threerings.miso.client.MisoScenePanel;
+import com.threerings.miso.data.ObjectInfo;
 import com.threerings.miso.util.MisoSceneMetrics;
+import com.threerings.stage.data.StageMisoSceneModel;
+import com.threerings.stage.data.StageScene;
 import com.threerings.stage.util.StageContext;
 
 /**
@@ -31,14 +36,50 @@ import com.threerings.stage.util.StageContext;
  */
 public class StageScenePanel extends MisoScenePanel
 {
+    private var log :Log = Log.getLog(StageScenePanel);
+
     public function StageScenePanel (ctx :StageContext, ctrl :Controller, metrics :MisoSceneMetrics)
     {
         super(ctx, metrics);
+        _sCtx = ctx;
+    }
+
+    public function setScene (scene :StageScene) :void
+    {
+        _scene = scene;
+        if (_scene != null) {
+            _rizer = new SceneColorizer(_sCtx.getColorPository(), _scene);
+            recomputePortals();
+            setSceneModel(StageMisoSceneModel.getSceneModel(scene.getSceneModel()));
+        } else {
+            log.warning("Zoiks! We can't display a null scene!");
+            // TODO: display something to the user letting them know that
+            // we're so hosed that we don't even know what time it is
+        }
+    }
+
+    public function recomputePortals () :void
+    {
+        // TODO
     }
 
     public function sceneUpdated (update :SceneUpdate) :void
     {
         // TODO
     }
+
+    protected override function getColorizer (oinfo :ObjectInfo) :Colorizer
+    {
+        return _rizer.getColorizer(oinfo);
+    }
+
+    /** The scene we're presenting in our panel. */
+    protected var _scene :StageScene;
+
+    /** Used to recolor any tiles in our scene. */
+    protected var _rizer :SceneColorizer;
+
+    /** Our appropriately-cast stage client context. */
+    protected var _sCtx :StageContext;
 }
 }

@@ -1,5 +1,6 @@
 package com.threerings.stage.util {
 
+import com.threerings.media.image.ColorPository;
 import com.threerings.miso.util.MisoContext;
 
 /**
@@ -8,6 +9,9 @@ import com.threerings.miso.util.MisoContext;
  */
 public interface StageContext extends MisoContext
 {
-
+    /**
+     * Returns a reference to the colorization repository.
+     */
+    function getColorPository () :ColorPository;
 }
 }

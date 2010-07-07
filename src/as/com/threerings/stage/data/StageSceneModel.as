@@ -25,6 +25,7 @@ import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 
 import com.threerings.stage.data.StageSceneModel;
+import com.threerings.util.Integer;
 import com.threerings.util.StreamableHashMap;
 import com.threerings.whirled.spot.data.SpotSceneModel;
 import com.threerings.whirled.data.SceneModel;
@@ -88,7 +89,7 @@ public class StageSceneModel extends SceneModel
     public function getDefaultColor (classId :int) :int
     {
         if (defaultColors != null) {
-            return defaultColors.get(classId);
+            return defaultColors.get(new Integer(classId));
         }
         return -1;
     }
