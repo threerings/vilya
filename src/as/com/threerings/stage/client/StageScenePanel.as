@@ -68,7 +68,7 @@ public class StageScenePanel extends MisoScenePanel
         // TODO
     }
 
-    protected override function getColorizer (oinfo :ObjectInfo) :Colorizer
+    override public function getColorizer (oinfo :ObjectInfo) :Colorizer
     {
         return _rizer.getColorizer(oinfo);
     }
