@@ -97,9 +97,7 @@ public class SceneImpl implements Scene
             update.apply(_model);
         } catch (e :Error) {
             var log :Log = Log.getLog(this);
-            log.warning("Error applying update [scene=" + this +
-                        ", update=" + update + "].");
-            log.logStackTrace(e);
+            log.warning("Error applying update", "scene", this, "update", update, e);
         }
     }
 
