@@ -22,6 +22,7 @@
 package com.threerings.stage.tools.editor;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -30,8 +31,9 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 
-import com.samskivert.util.Comparators;
-import com.samskivert.util.ObjectUtil;
+import com.google.common.collect.ComparisonChain;
+import com.google.common.collect.Ordering;
+
 import com.samskivert.util.StringUtil;
 
 import com.samskivert.swing.HGroupLayout;
@@ -220,15 +222,18 @@ public class ObjectEditorDialog extends EditorDialog
         }
 
         public int compareTo (ZationChoice that) {
-            return Comparators.combine(
-                ObjectUtil.compareTo(this.name, that.name),
-                Comparators.compare(this.colorId, that.colorId));
+            return ComparisonChain.start()
+                .compare(this.name, that.name, NULLS_OK)
+                .compare(this.colorId, that.colorId)
+                .result();
         }
 
         @Override
         public String toString () {
             return name;
         }
+
+        protected static final Comparator<String> NULLS_OK = Ordering.natural().nullsFirst();
     }
 
     protected JTextField _action;
