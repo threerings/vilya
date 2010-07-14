@@ -25,9 +25,9 @@ import java.util.List;
 
 import java.awt.Component;
 
+import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 
-import com.samskivert.util.CollectionUtil;
 import com.samskivert.util.Interval;
 import com.samskivert.util.RandomUtil;
 
@@ -57,8 +57,8 @@ public class RobotPlayer extends Interval
         _xlate = xlate;
 
         // build the list of available commands
-        CollectionUtil.addAll(_press, _xlate.enumeratePressCommands());
-        CollectionUtil.addAll(_release, _xlate.enumerateReleaseCommands());
+        Iterators.addAll(_press, _xlate.enumeratePressCommands());
+        Iterators.addAll(_release, _xlate.enumerateReleaseCommands());
     }
 
     /**
