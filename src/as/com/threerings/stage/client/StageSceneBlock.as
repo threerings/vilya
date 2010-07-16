@@ -64,12 +64,8 @@ public class StageSceneBlock extends SceneBlock
                 continue;
             }
 
-            trace("MST loc: " + StageLocation(portal.loc).x + "," + StageLocation(portal.loc).y);
-
             var fineX :int = StageLocation(portal.loc).x - FULL_TILE_FACTOR * x;
             var fineY :int = StageLocation(portal.loc).y - FULL_TILE_FACTOR * y;
-
-            trace("MST part: " + fineX + "," + fineY);
 
             // Grab the portal image, and center it.
             var portalSprite :IsoSprite = new IsoSprite();
@@ -80,7 +76,6 @@ public class StageSceneBlock extends SceneBlock
 
             portalSprite.sprites = [img];
             portalSprite.setSize(1, 1, 1);
-            trace("MST Adding portal: " + x + "," + y);
             portalSprite.moveTo(x, y, 0);
 
             if (_portSprites == null) {
