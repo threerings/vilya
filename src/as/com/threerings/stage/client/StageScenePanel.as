@@ -20,16 +20,24 @@
 
 package com.threerings.stage.client {
 
+import flash.display.DisplayObject;
+
 import com.threerings.util.Controller;
+import com.threerings.util.Iterator;
 import com.threerings.util.Log;
 import com.threerings.whirled.data.SceneUpdate;
+import com.threerings.whirled.spot.data.Portal;
 import com.threerings.media.tile.Colorizer;
+import com.threerings.media.tile.Tile;
 import com.threerings.miso.client.MisoScenePanel;
+import com.threerings.miso.client.SceneBlock;
 import com.threerings.miso.data.ObjectInfo;
 import com.threerings.miso.util.MisoSceneMetrics;
 import com.threerings.stage.data.StageMisoSceneModel;
 import com.threerings.stage.data.StageScene;
 import com.threerings.stage.util.StageContext;
+
+import as3isolib.display.scene.IsoScene;
 
 /**
  * Eventually responsible for rendering a stage scene - but for now it's a stub.
@@ -42,6 +50,9 @@ public class StageScenePanel extends MisoScenePanel
     {
         super(ctx, metrics);
         _sCtx = ctx;
+
+        _portalScene = new IsoScene();
+        _isoView.addScene(_portalScene);
     }
 
     public function setScene (scene :StageScene) :void
@@ -63,15 +74,36 @@ public class StageScenePanel extends MisoScenePanel
         // TODO
     }
 
+    override protected function resolutionComplete () :void
+    {
+        super.resolutionComplete();
+        _portalScene.render();
+    }
+
+
+    override protected function createSceneBlock (blockKey :int) :SceneBlock
+    {
+        return new StageSceneBlock(blockKey, _objScene, _portalScene, _isoView, _metrics,
+            _scene);
+    }
+
     public function sceneUpdated (update :SceneUpdate) :void
     {
         // TODO
+    }
+
+    public function getPortalImage (dir :int) :DisplayObject
+    {
+        throw new Error("abstract");
     }
 
     override public function getColorizer (oinfo :ObjectInfo) :Colorizer
     {
         return _rizer.getColorizer(oinfo);
     }
+
+
+    protected var _portalScene :IsoScene
 
     /** The scene we're presenting in our panel. */
     protected var _scene :StageScene;
