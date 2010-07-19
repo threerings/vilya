@@ -21,8 +21,7 @@
 
 package com.threerings.stage.tools.editor;
 
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.TreeSet;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,7 +39,6 @@ import javax.swing.event.PopupMenuListener;
 
 import com.google.common.collect.Sets;
 
-import com.samskivert.util.Collections;
 import com.samskivert.util.ComparableArrayList;
 
 import com.samskivert.swing.GroupLayout;
@@ -173,7 +171,7 @@ public class SceneInfoPanel extends JPanel
     {
         // add all possible colorization names to the list
         final TileManager tilemgr = _ctx.getTileManager();
-        final HashSet<String> set = Sets.newHashSet();
+        final TreeSet<String> set = Sets.newTreeSet();
         StageMisoSceneModel msmodel = StageMisoSceneModel.getSceneModel(
             _scene.getSceneModel());
         msmodel.visitObjects(new ObjectVisitor() {
@@ -203,9 +201,8 @@ public class SceneInfoPanel extends JPanel
         DefaultComboBoxModel model =
             (DefaultComboBoxModel) _colorClasses.getModel();
         model.removeAllElements();
-        for (Iterator<String> itr = Collections.getSortedIterator(set);
-                itr.hasNext(); ) {
-            model.addElement(itr.next());
+        for (String zation : set) {
+            model.addElement(zation);
         }
         if (selected != null) {
             _colorClasses.setSelectedItem(selected);
