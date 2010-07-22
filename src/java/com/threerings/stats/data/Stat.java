@@ -175,7 +175,7 @@ public abstract class Stat
     @Override
     public String toString ()
     {
-        StringBuffer buf = new StringBuffer(StringUtil.toUSLowerCase(_type.name()));
+        StringBuilder buf = new StringBuilder(StringUtil.toUSLowerCase(_type.name()));
         buf.append("=").append(valueToString());
         buf.append("(").append(_modCount).append(")");
         return buf.toString();

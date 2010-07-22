@@ -93,7 +93,7 @@ public abstract class StringMapStat extends Stat
     @Override
     public String valueToString ()
     {
-        StringBuffer buf = new StringBuffer("[");
+        StringBuilder buf = new StringBuilder("[");
         for (int ii = 0; ii < _keys.length; ii++) {
             if (ii > 0) {
                 buf.append(", ");
