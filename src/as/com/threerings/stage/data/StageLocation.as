@@ -48,6 +48,13 @@ public class StageLocation extends SimpleStreamableObject
     /** The user's orientation (defined by {@link DirectionCodes}). */
     public var orient :int;
 
+    public function StageLocation (x :int = 0, y :int = 0, orient :int = 0)
+    {
+        this.x = x;
+        this.y = y;
+        this.orient = orient;
+    }
+
     /**
      * Computes a reasonable hashcode for location instances.
      */

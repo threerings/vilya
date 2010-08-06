@@ -24,6 +24,7 @@ import flash.display.DisplayObject;
 import com.threerings.miso.client.MisoScenePanel;
 import com.threerings.miso.util.MisoContext;
 import com.threerings.miso.util.MisoSceneMetrics;
+import com.threerings.miso.util.MisoUtil;
 import com.threerings.miso.client.SceneBlock;
 import com.threerings.miso.data.MisoSceneModel;
 import com.threerings.util.Iterator;
@@ -47,8 +48,8 @@ public class StageSceneBlock extends SceneBlock
         _portalScene = portalScene;
     }
 
-    override public function resolve (ctx :MisoContext, model :MisoSceneModel, panel :MisoScenePanel,
-        completeCallback :Function) :void
+    override public function resolve (ctx :MisoContext, model :MisoSceneModel,
+        panel :MisoScenePanel, completeCallback :Function) :void
     {
         _tryingPortals = true;
         super.resolve(ctx, model, panel, completeCallback);
@@ -58,14 +59,14 @@ public class StageSceneBlock extends SceneBlock
         var iter :Iterator = _spotScene.getPortals();
         while (iter.hasNext()) {
             var portal :Portal = Portal(iter.next());
-            var x :int = fullToTile(StageLocation(portal.loc).x);
-            var y :int = fullToTile(StageLocation(portal.loc).y);
+            var x :int = MisoUtil.fullToTile(StageLocation(portal.loc).x);
+            var y :int = MisoUtil.fullToTile(StageLocation(portal.loc).y);
             if (x < bx || x > bx + BLOCK_SIZE || y < by || y > by + BLOCK_SIZE) {
                 continue;
             }
 
-            var fineX :int = StageLocation(portal.loc).x - FULL_TILE_FACTOR * x;
-            var fineY :int = StageLocation(portal.loc).y - FULL_TILE_FACTOR * y;
+            var fineX :int = MisoUtil.fullToFine(StageLocation(portal.loc).x);
+            var fineY :int = MisoUtil.fullToFine(StageLocation(portal.loc).y);
 
             // Grab the portal image, and center it.
             var portalSprite :IsoSprite = new IsoSprite();
@@ -111,13 +112,6 @@ public class StageSceneBlock extends SceneBlock
             super.maybeLoaded();
         }
     }
-
-    protected function fullToTile (fullCoord :int) :int
-    {
-        return MathUtil.floorDiv(fullCoord, FULL_TILE_FACTOR);
-    }
-
-    protected static const FULL_TILE_FACTOR :int = 100;
 
     protected var _spotScene :SpotScene;
 
