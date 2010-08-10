@@ -180,8 +180,10 @@ public class CrowdStageScenePanel extends StageScenePanel
         // if they're within one screen diagonal of us, they're proximate
         var myLoc :StageLocation = StageLocation(mySceneLoc.loc);
         var loc :StageLocation = StageLocation(sceneLoc.loc);
-        var pos :Point = _isoView.isoToLocal(new Pt(loc.x, loc.y, 0));
-        var myPos :Point = _isoView.isoToLocal(new Pt(myLoc.x, myLoc.y, 0));
+        var pos :Point = _isoView.isoToLocal(new Pt(MisoUtil.fullToTile(loc.x),
+            MisoUtil.fullToTile(loc.y), 0));
+        var myPos :Point = _isoView.isoToLocal(new Pt(MisoUtil.fullToTile(myLoc.x),
+            MisoUtil.fullToTile(myLoc.y), 0));
         return int(MathUtil.distance(pos.x, pos.y, myPos.x, myPos.y)) < _proxrad;
     }
 
@@ -662,7 +664,10 @@ public class CrowdStageScenePanel extends StageScenePanel
 
     protected function occupantEntryUpdated (event :EntryUpdatedEvent) :void
     {
-        occupantMoved(SceneLocation(event.getOldEntry()), SceneLocation(event.getEntry()), true);
+        if (event.getName() == SpotSceneObject.OCCUPANT_LOCS) {
+            occupantMoved(SceneLocation(event.getOldEntry()),
+                SceneLocation(event.getEntry()), true);
+        }
     }
 
     protected var _occupantListener :SetListener = new SetAdapter(null, occupantEntryUpdated, null);
