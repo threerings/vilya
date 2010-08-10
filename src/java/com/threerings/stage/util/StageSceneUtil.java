@@ -34,6 +34,7 @@ import com.samskivert.util.SortableArrayList;
 import com.threerings.util.DirectionCodes;
 import com.threerings.util.DirectionUtil;
 
+import com.threerings.media.tile.BaseSizableTileSet;
 import com.threerings.media.tile.TileManager;
 import com.threerings.media.tile.TileUtil;
 import com.threerings.media.tile.TrimmedObjectTileSet;
@@ -149,8 +150,7 @@ public class StageSceneUtil
             return new StageLocation(opos.x, opos.y, (byte)orient);
 
         } catch (Exception e) {
-            log.warning("Unable to look up object tile for scene object " +
-                        "[tileId=" + tileId + ", error=" + e + "].");
+            log.warning("Unable to look up object tile for scene object", "tileId", tileId, e);
         }
         return null;
     }
@@ -201,8 +201,7 @@ public class StageSceneUtil
         try {
             int tsid = TileUtil.getTileSetId(tileId);
             int tidx = TileUtil.getTileIndex(tileId);
-            TrimmedObjectTileSet tset = (TrimmedObjectTileSet)
-                tilemgr.getTileSet(tsid);
+            BaseSizableTileSet tset = (BaseSizableTileSet)tilemgr.getTileSet(tsid);
             if (tset == null) {
                 return false;
             }
@@ -213,8 +212,7 @@ public class StageSceneUtil
             return true;
 
         } catch (Exception e) {
-            log.warning("Unable to look up object tile for scene object " +
-                        "[tileId=" + tileId + ", error=" + e + "].");
+            log.warning("Unable to look up object tile for scene object", "tileId", tileId, e);
             return false;
         }
     }
@@ -237,8 +235,7 @@ public class StageSceneUtil
             return tset.getPassability()[tidx];
 
         } catch (Exception e) {
-            log.warning("Unable to look up base tile [tileId=" + tileId +
-                        ", error=" + e + "].");
+            log.warning("Unable to look up base tile", "tileId", tileId, e);
             return true;
         }
     }
