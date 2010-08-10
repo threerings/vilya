@@ -19,19 +19,32 @@
 
 package com.threerings.stage.client {
 
+import flash.display.DisplayObject;
+import flash.display.Sprite;
+
 import com.threerings.miso.util.MisoSceneMetrics;
 import com.threerings.miso.util.MisoUtil;
 import com.threerings.stage.data.StageLocation;
 
-import as3isolib.display.primitive.IsoBox;
+import as3isolib.display.IsoSprite;
+import as3isolib.graphics.SolidColorFill;
 
-public class CharacterIsoSprite extends IsoBox
+public class CharacterIsoSprite extends IsoSprite
 {
-    public function CharacterIsoSprite (bodyOid :int, metrics :MisoSceneMetrics)
+    public function CharacterIsoSprite (bodyOid :int, metrics :MisoSceneMetrics,
+        disp :DisplayObject)
     {
         _metrics = metrics;
         _bodyOid = bodyOid;
         setSize(1, 1, 2);
+
+        // We wrap the sprite so we can shift it where we need it.  Components like to line up
+        //  to the middle of a tile and as3isolib likes to line up to the back of a tile.
+        var wrapper :Sprite = new Sprite();
+        wrapper.y = _metrics.tilehhei;
+        wrapper.addChild(disp);
+
+        sprites = [wrapper];
     }
 
     public function isMoving () :Boolean

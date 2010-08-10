@@ -19,6 +19,8 @@
 
 package com.threerings.stage.client {
 
+import flash.display.DisplayObject;
+
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
@@ -569,7 +571,12 @@ public class CrowdStageScenePanel extends StageScenePanel
 
     protected function createSprite (info :OccupantInfo) :CharacterIsoSprite
     {
-        return new CharacterIsoSprite(info.getBodyOid(), _metrics);
+        return new CharacterIsoSprite(info.getBodyOid(), _metrics, createCharacter(info));
+    }
+
+    protected function createCharacter (info :OccupantInfo) :DisplayObject
+    {
+        throw new Error("abstract");
     }
 
     protected function getSprite (bodyOid :int) :CharacterIsoSprite
