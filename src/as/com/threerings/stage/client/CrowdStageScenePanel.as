@@ -20,6 +20,7 @@
 package com.threerings.stage.client {
 
 import flash.geom.Point;
+import flash.geom.Rectangle;
 
 import flash.events.MouseEvent;
 
@@ -71,6 +72,8 @@ public class CrowdStageScenePanel extends StageScenePanel
         _proxrad = int(Math.max(_proxrad, Math.sqrt(_isoView.size.x*_isoView.size.x +
             _isoView.size.y*_isoView.size.y)));
         recomputeProximate();
+
+        _vbounds = new Rectangle(0, 0, _isoView.size.x, _isoView.size.y);
     }
 
     override public function willEnterPlace (plObj :PlaceObject) :void
@@ -285,7 +288,7 @@ public class CrowdStageScenePanel extends StageScenePanel
         if (!isProximateToLoc(nloc)) {
             if (sprite != null) {
                 // if they are visible, walk them to their new location
-                if (true/*TODO Path _vbounds.intersects(sprite.getBounds())*/) {
+                if (_vbounds.intersects(sprite.screenBounds)) {
                     moveSpriteToLoc(sprite, nloc.loc);
                 }
                 // now queue them up for removal on arrival as appropriate
@@ -357,6 +360,8 @@ public class CrowdStageScenePanel extends StageScenePanel
     {
         var cx :int = sprite.x;
         var cy :int = sprite.y;
+        var nx :int = MisoUtil.fullToTile(loc.x);
+        var ny :int = MisoUtil.fullToTile(loc.y);
 
         // if this panel is not yet showing, warp the sprite directly
         if (!visible) {
@@ -367,8 +372,8 @@ public class CrowdStageScenePanel extends StageScenePanel
 
         // if the source and destination are both offscreen, warp the
         // sprite to where they are going
-        // TODO Path boolean endsOff = !_vbounds.contains(nx, ny);
-        if (false /*TODO Path!_vbounds.intersects(sprite.getBounds()) && endsOff*/) {
+        var endsOff :Boolean = !_vbounds.contains(nx, ny);
+        if (!_vbounds.intersects(sprite.screenBounds) && endsOff) {
             sprite.cancelMove();
             sprite.placeAtLoc(loc);
             return true;
@@ -376,12 +381,12 @@ public class CrowdStageScenePanel extends StageScenePanel
 
         // if we are obviously warping (i.e. we moved a great distance),
         // just blink into position and attempt to do so cleanly
-        //TODO Path int dx = Math.abs(nx - (_vbounds.x + _vbounds.width/2));
-        //TODO Path int dy = Math.abs(ny - (_vbounds.y + _vbounds.height/2));
-        if (sprite == _selfSprite/*TODO Path (dx > 2*_vbounds.width || dy > 2*_vbounds.height) &&
-              (sprite == _selfSprite)*/) {
-            //TODO Path log.info("Warp-a-saurus! " + StringUtil.toString(_vbounds) +
-            //TODO Path         " -> " + StringUtil.toCoordsString(loc.x, loc.y));
+        var dx :int = Math.abs(nx - (_vbounds.x + _vbounds.width/2));
+        var dy :int = Math.abs(ny - (_vbounds.y + _vbounds.height/2));
+        if ((dx > 2*_vbounds.width || dy > 2*_vbounds.height) &&
+              (sprite == _selfSprite)) {
+            log.info("Warp-a-saurus! " + StringUtil.toString(_vbounds) +
+                " -> " + StringUtil.toCoordsString(loc.x, loc.y));
             sprite.cancelMove();
             sprite.placeAtLoc(loc);
 
@@ -694,6 +699,8 @@ public class CrowdStageScenePanel extends StageScenePanel
     protected var _proxrad :int = 100;
 
     protected var _scObj :StageSceneObject;
+
+    protected var _vbounds :Rectangle;
 
     /** Our sprite path velocity. */
     // if we had more frames, maybe we could only update their
