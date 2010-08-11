@@ -179,7 +179,7 @@ public class LobbyRegistry
      * Returns an array containing the category identifiers of all the categories in which lobbies
      * have been registered with the registry.
      *
-     * @param requester the body object of the client requesting the cateogory list (which can be
+     * @param requester the body object of the client requesting the category list (which can be
      * used to filter the list based on their capabilities).
      */
     public String[] getCategories (BodyObject requester)
