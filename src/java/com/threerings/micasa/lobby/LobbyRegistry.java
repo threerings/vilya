@@ -246,7 +246,7 @@ public class LobbyRegistry
             _lobbies.put(category, catlist);
         }
         catlist.add(record);
-        log.info("Registered lobby [cat=" + category + ", record=" + record + "].");
+        log.info("Registered lobby", "cat", category, "record", record);
     }
 
     @Inject protected PlaceRegistry _plreg;

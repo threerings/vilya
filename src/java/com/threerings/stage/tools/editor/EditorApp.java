@@ -180,7 +180,7 @@ public class EditorApp implements Runnable
 
         _ctx = new EditorContextImpl();
 
-            // initialize the frame with the now-prepared context
+        // initialize the frame with the now-prepared context
         _frame.init(_ctx, target);
 
         // wire up our runtime adjustment editor
