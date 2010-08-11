@@ -22,6 +22,7 @@ package com.threerings.stage.client {
 import flash.display.DisplayObject;
 import flash.display.Sprite;
 
+import com.threerings.miso.client.Tickable;
 import com.threerings.miso.util.MisoSceneMetrics;
 import com.threerings.miso.util.MisoUtil;
 import com.threerings.stage.data.StageLocation;
@@ -44,7 +45,16 @@ public class CharacterIsoSprite extends IsoSprite
         wrapper.y = _metrics.tilehhei;
         wrapper.addChild(disp);
 
+        _character = disp;
+
         sprites = [wrapper];
+    }
+
+    public function tick (tickStamp :int) :void
+    {
+        if (_character is Tickable) {
+            Tickable(_character).tick(tickStamp);
+        }
     }
 
     public function isMoving () :Boolean
@@ -77,5 +87,7 @@ public class CharacterIsoSprite extends IsoSprite
     protected var _bodyOid :int;
 
     protected var _metrics :MisoSceneMetrics;
+
+    protected var _character :DisplayObject;
 }
 }

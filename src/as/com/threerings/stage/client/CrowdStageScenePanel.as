@@ -24,6 +24,7 @@ import flash.display.DisplayObject;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
+import flash.events.Event;
 import flash.events.MouseEvent;
 
 import com.threerings.crowd.client.OccupantObserver;
@@ -52,13 +53,14 @@ import com.threerings.presents.dobj.EntryUpdatedEvent;
 import com.threerings.presents.dobj.SetAdapter;
 import com.threerings.presents.dobj.SetListener;
 
+import com.threerings.miso.client.Tickable;
 import com.threerings.miso.util.MisoSceneMetrics;
 import com.threerings.miso.util.MisoUtil;
 
 import as3isolib.geom.Pt;
 
 public class CrowdStageScenePanel extends StageScenePanel
-    implements OccupantObserver
+    implements OccupantObserver, Tickable
 {
     private var log :Log = Log.getLog(CrowdStageScenePanel);
 
@@ -76,6 +78,25 @@ public class CrowdStageScenePanel extends StageScenePanel
         recomputeProximate();
 
         _vbounds = new Rectangle(0, 0, _isoView.size.x, _isoView.size.y);
+
+        addEventListener(Event.ADDED_TO_STAGE, addedToStage);
+        addEventListener(Event.REMOVED_FROM_STAGE, removedFromStage);
+    }
+
+    /**
+     * Handles Event.ADDED_TO_STAGE.
+     */
+    protected function addedToStage (event :Event) :void
+    {
+        _ctx.getTicker().registerTickable(this);
+    }
+
+    /**
+     * Handles Event.REMOVED_FROM_STAGE.
+     */
+    protected function removedFromStage (event :Event) :void
+    {
+        _ctx.getTicker().removeTickable(this);
     }
 
     override public function willEnterPlace (plObj :PlaceObject) :void
@@ -85,6 +106,13 @@ public class CrowdStageScenePanel extends StageScenePanel
         plObj.addListener(_occupantListener);
         _cCtx.getOccupantDirector().addOccupantObserver(this);
         updateDisplayForScene();
+    }
+
+    public function tick (tickStamp :int) :void
+    {
+        _sprites.forEach(function (key :int, sprite :CharacterIsoSprite) :void {
+            sprite.tick(tickStamp);
+        });
     }
 
     protected function updateDisplayForScene () :void
