@@ -207,7 +207,7 @@ public class LobbyRegistry
      */
     public void getLobbies (ClientObject caller, String category, LobbiesListener listener)
     {
-        List<Lobby> target = new StreamableArrayList<Lobby>();
+        List<Lobby> target = StreamableArrayList.newList();
         List<Lobby> list = _lobbies.get(category);
         if (list != null) {
             target.addAll(list);
