@@ -31,6 +31,7 @@ import com.threerings.crowd.client.OccupantObserver;
 
 import com.threerings.crowd.data.OccupantInfo;
 import com.threerings.crowd.data.PlaceObject;
+import com.threerings.media.Tickable;
 import com.threerings.util.Controller;
 import com.threerings.util.Integer;
 import com.threerings.util.Iterator;
@@ -53,7 +54,6 @@ import com.threerings.presents.dobj.EntryUpdatedEvent;
 import com.threerings.presents.dobj.SetAdapter;
 import com.threerings.presents.dobj.SetListener;
 
-import com.threerings.miso.client.Tickable;
 import com.threerings.miso.util.MisoSceneMetrics;
 import com.threerings.miso.util.MisoUtil;
 

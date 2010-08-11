@@ -22,7 +22,7 @@ package com.threerings.stage.client {
 import flash.display.DisplayObject;
 import flash.display.Sprite;
 
-import com.threerings.miso.client.Tickable;
+import com.threerings.media.Tickable;
 import com.threerings.miso.util.MisoSceneMetrics;
 import com.threerings.miso.util.MisoUtil;
 import com.threerings.stage.data.StageLocation;
