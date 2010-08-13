@@ -79,25 +79,6 @@ public class CrowdStageScenePanel extends StageScenePanel
         _proxrad = int(Math.max(_proxrad, Math.sqrt(_isoView.size.x*_isoView.size.x +
             _isoView.size.y*_isoView.size.y)));
         recomputeProximate();
-
-        addEventListener(Event.ADDED_TO_STAGE, addedToStage);
-        addEventListener(Event.REMOVED_FROM_STAGE, removedFromStage);
-    }
-
-    /**
-     * Handles Event.ADDED_TO_STAGE.
-     */
-    protected function addedToStage (event :Event) :void
-    {
-        _ctx.getTicker().registerTickable(this);
-    }
-
-    /**
-     * Handles Event.REMOVED_FROM_STAGE.
-     */
-    protected function removedFromStage (event :Event) :void
-    {
-        _ctx.getTicker().removeTickable(this);
     }
 
     override public function willEnterPlace (plObj :PlaceObject) :void
@@ -109,8 +90,9 @@ public class CrowdStageScenePanel extends StageScenePanel
         updateDisplayForScene();
     }
 
-    public function tick (tickStamp :int) :void
+    override public function tick (tickStamp :int) :void
     {
+        super.tick(tickStamp);
         _sprites.forEach(function (key :int, sprite :CharacterIsoSprite) :void {
             sprite.tick(tickStamp);
         });
@@ -128,15 +110,23 @@ public class CrowdStageScenePanel extends StageScenePanel
 
         // start out with the view centered on our sprite so that we
         // resolve the appropriate scene blocks from the get go
-        centerView();
+        centerView(true, false);
     }
 
-    protected function centerView () :void
+    protected function centerView (immediate :Boolean, optional :Boolean) :void
     {
         if (_selfSprite != null) {
             var viewPt :Point =
                 _isoView.isoToLocal(new Pt(_selfSprite.x, _selfSprite.y, _selfSprite.z));
-            moveBy(new Point(viewPt.x - _isoView.width / 2, viewPt.y - _isoView.height / 2));
+
+            var dx :int = viewPt.x - _isoView.width / 2;
+            var dy :int = viewPt.y - _isoView.height / 2;
+
+            // Unless we've forced it, if we'd move less than a quarter screen, don't bother.
+            if (!optional || Math.abs(dx) > _isoView.width / 4 ||
+                    Math.abs(dy) > _isoView.height / 4) {
+                moveBy(new Point(dx, dy), immediate);
+            }
         }
     }
 
@@ -424,7 +414,7 @@ public class CrowdStageScenePanel extends StageScenePanel
             sprite.placeAtLoc(loc);
 
             // delay repaint until we resolve our new blocks
-            centerView();
+            centerView(true, false);
             return true;
         }
 
@@ -656,7 +646,7 @@ public class CrowdStageScenePanel extends StageScenePanel
         } finally {
             // keep track of the last time we came to rest
             if (sprite == _selfSprite) {
-                centerView();
+                centerView(false, true);
                 _centerStamp = tickStamp;
             }
         }
