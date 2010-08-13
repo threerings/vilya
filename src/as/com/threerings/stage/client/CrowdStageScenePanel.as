@@ -27,11 +27,14 @@ import flash.geom.Rectangle;
 import flash.events.Event;
 import flash.events.MouseEvent;
 
+import com.threerings.cast.CharacterSprite;
 import com.threerings.crowd.client.OccupantObserver;
 
 import com.threerings.crowd.data.OccupantInfo;
 import com.threerings.crowd.data.PlaceObject;
 import com.threerings.media.Tickable;
+import com.threerings.media.util.LineSegmentPath;
+import com.threerings.media.util.Path;
 import com.threerings.util.Controller;
 import com.threerings.util.Integer;
 import com.threerings.util.Iterator;
@@ -76,8 +79,6 @@ public class CrowdStageScenePanel extends StageScenePanel
         _proxrad = int(Math.max(_proxrad, Math.sqrt(_isoView.size.x*_isoView.size.x +
             _isoView.size.y*_isoView.size.y)));
         recomputeProximate();
-
-        _vbounds = new Rectangle(0, 0, _isoView.size.x, _isoView.size.y);
 
         addEventListener(Event.ADDED_TO_STAGE, addedToStage);
         addEventListener(Event.REMOVED_FROM_STAGE, removedFromStage);
@@ -318,7 +319,7 @@ public class CrowdStageScenePanel extends StageScenePanel
         if (!isProximateToLoc(nloc)) {
             if (sprite != null) {
                 // if they are visible, walk them to their new location
-                if (_vbounds.intersects(sprite.screenBounds)) {
+                if (_vbounds.intersects(sprite.getBounds(_isoView))) {
                     moveSpriteToLoc(sprite, nloc.loc);
                 }
                 // now queue them up for removal on arrival as appropriate
@@ -402,8 +403,9 @@ public class CrowdStageScenePanel extends StageScenePanel
 
         // if the source and destination are both offscreen, warp the
         // sprite to where they are going
-        var endsOff :Boolean = !_vbounds.contains(nx, ny);
-        if (!_vbounds.intersects(sprite.screenBounds) && endsOff) {
+        var sc :Point = _isoView.isoToLocal(new Pt(nx, ny, 0));
+        var endsOff :Boolean = !_vbounds.contains(sc.x, sc.y);
+        if (!_vbounds.intersects(sprite.getBounds(_isoView)) && endsOff) {
             sprite.cancelMove();
             sprite.placeAtLoc(loc);
             return true;
@@ -417,6 +419,7 @@ public class CrowdStageScenePanel extends StageScenePanel
               (sprite == _selfSprite)) {
             log.info("Warp-a-saurus! " + StringUtil.toString(_vbounds) +
                 " -> " + StringUtil.toCoordsString(loc.x, loc.y));
+
             sprite.cancelMove();
             sprite.placeAtLoc(loc);
 
@@ -427,11 +430,12 @@ public class CrowdStageScenePanel extends StageScenePanel
 
         // if we made it this far, we can actually try to compute a path
         // for this sprite; if the end of the path is off-screen, allow "partial" paths
-        var path :Object = null;//TODO Path TilePath = TilePath(getPath(yocs, nx, ny, endsOff));
+        var path :LineSegmentPath = LineSegmentPath(getPath(sprite, nx, ny, endsOff));
         if (path == null) {
-            /*TODO Path log.info("Unable to compute path from " +
+            log.info("Unable to compute path from " +
                      StringUtil.toCoordsString(cx, cy) + " to " +
-                     StringUtil.toCoordsString(loc.x, loc.y) + "; warping.");*/
+                     StringUtil.toCoordsString(nx, ny) + "; warping.");
+
             sprite.cancelMove();
             sprite.placeAtLoc(loc);
             return true;
@@ -534,9 +538,6 @@ public class CrowdStageScenePanel extends StageScenePanel
                 displayFeedback("m.cant_get_there");
             }
 
-            // TODO Path - remove this
-            changeLocation(loc);
-
             return;
         }
 
@@ -586,12 +587,13 @@ public class CrowdStageScenePanel extends StageScenePanel
     protected function checkWalkToLoc (loc :StageLocation) :int
     {
         // obtain the screen coordinates of the location
-        var sc :Point = _isoView.isoToLocal(new Pt(loc.x, loc.y, 0));
+        var lx :int = MisoUtil.fullToTile(loc.x);
+        var ly :int = MisoUtil.fullToTile(loc.y);
+
         var us :CharacterIsoSprite = getSprite(myOid());
         if (us != null) {
-            //TODO Path var path :TilePath = TilePath(getPath(us, loc.x, loc.y, false));
-            //TODO Path return (path == null) ? -1 : path.getFinalOrientation();
-            return -1;
+            var path :LineSegmentPath = LineSegmentPath(getPath(us, lx, ly, false));
+            return (path == null) ? -1 : path.getFinalOrientation();
         } else {
             return -1;
         }
@@ -602,7 +604,7 @@ public class CrowdStageScenePanel extends StageScenePanel
         return new CharacterIsoSprite(info.getBodyOid(), _metrics, createCharacter(info));
     }
 
-    protected function createCharacter (info :OccupantInfo) :DisplayObject
+    protected function createCharacter (info :OccupantInfo) :CharacterSprite
     {
         throw new Error("abstract");
     }
@@ -735,12 +737,10 @@ public class CrowdStageScenePanel extends StageScenePanel
 
     protected var _scObj :StageSceneObject;
 
-    protected var _vbounds :Rectangle;
-
     /** Our sprite path velocity. */
     // if we had more frames, maybe we could only update their
     // location when their frame changed. Alas, we do not.
-    protected static const SPRITE_PATH_VELOCITY :Number = 0.1;
+    protected static const SPRITE_PATH_VELOCITY :Number = 0.0025;
 }
 }
 

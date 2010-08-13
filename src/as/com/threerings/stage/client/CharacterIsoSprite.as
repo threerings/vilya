@@ -22,7 +22,11 @@ package com.threerings.stage.client {
 import flash.display.DisplayObject;
 import flash.display.Sprite;
 
+import com.threerings.cast.CharacterSprite;
+import com.threerings.util.DirectionCodes;
 import com.threerings.media.Tickable;
+import com.threerings.media.util.Path;
+import com.threerings.media.util.Pathable;
 import com.threerings.miso.util.MisoSceneMetrics;
 import com.threerings.miso.util.MisoUtil;
 import com.threerings.stage.data.StageLocation;
@@ -31,35 +35,43 @@ import as3isolib.display.IsoSprite;
 import as3isolib.graphics.SolidColorFill;
 
 public class CharacterIsoSprite extends IsoSprite
+    implements Pathable
 {
     public function CharacterIsoSprite (bodyOid :int, metrics :MisoSceneMetrics,
-        disp :DisplayObject)
+        charSprite :CharacterSprite)
     {
         _metrics = metrics;
         _bodyOid = bodyOid;
         setSize(1, 1, 2);
 
+        usePreciseValues = true;
+
         // We wrap the sprite so we can shift it where we need it.  Components like to line up
         //  to the middle of a tile and as3isolib likes to line up to the back of a tile.
         var wrapper :Sprite = new Sprite();
         wrapper.y = _metrics.tilehhei;
-        wrapper.addChild(disp);
+        wrapper.addChild(charSprite);
 
-        _character = disp;
+        _character = charSprite;
 
         sprites = [wrapper];
     }
 
     public function tick (tickStamp :int) :void
     {
-        if (_character is Tickable) {
-            Tickable(_character).tick(tickStamp);
+        if (_path != null) {
+            if (_pathStamp == 0) {
+                _pathStamp = tickStamp
+                _path.init(this, _pathStamp);
+            }
+            _path.tick(this, tickStamp);
         }
+        _character.tick(tickStamp);
     }
 
     public function isMoving () :Boolean
     {
-        return false; //TODO Path
+        return _path != null;
     }
 
     public function getBodyOid () :int
@@ -69,25 +81,97 @@ public class CharacterIsoSprite extends IsoSprite
 
     public function placeAtLoc (loc :StageLocation) :void
     {
-        moveTo(MisoUtil.fullToTile(loc.x), MisoUtil.fullToTile(loc.y), 0);
-        // TODO Components - handle orientation
+        setLocation(MisoUtil.fullToTile(loc.x), MisoUtil.fullToTile(loc.y));
+        setOrientation(loc.orient);
+    }
+
+    public function getX () :Number
+    {
+        return x;
+    }
+
+    public function getY () :Number
+    {
+        return y;
+    }
+
+    public function setLocation (x :Number, y :Number) :void
+    {
+        moveTo(x, y, 0);
         render();
     }
 
-    public function move (path :Object /*TODO Path */) :void
+    public function setOrientation (orient :int) :void
     {
-        // TODO Path
+        _character.setOrientation(toIsoOrient(orient));
+        render();
+    }
+
+    public function toIsoOrient (orient :int) :int
+    {
+        if (orient == DirectionCodes.NONE) {
+            return orient;
+        } else {
+            return (orient + 2) % 8;
+        }
+    }
+
+    public function fromIsoOrient (orient :int) :int
+    {
+        if (orient == DirectionCodes.NONE) {
+            return orient;
+        } else {
+            return (orient + 6) % 8;
+        }
+    }
+
+    public function getOrientation () :int
+    {
+        return fromIsoOrient(_character.getOrientation());
+    }
+
+    public function pathBeginning () :void
+    {
+        _character.pathBeginning();
+    }
+
+    public function pathCompleted (timestamp :int) :void
+    {
+        _character.pathCompleted(timestamp);
+        _path = null;
+    }
+
+    public function move (path :Path) :void
+    {
+        // if there's a previous path, let it know that it's going away
+        cancelMove();
+
+        // save off this path
+        _path = path;
+
+        // we'll initialize it on our next tick thanks to a zero path stamp
+        _pathStamp = 0;
     }
 
     public function cancelMove () :void
     {
-        // TODO Path
+        if (_path != null) {
+            var oldpath :Path = _path;
+            _path = null;
+            oldpath.wasRemoved(this);
+        }
     }
 
     protected var _bodyOid :int;
 
     protected var _metrics :MisoSceneMetrics;
 
-    protected var _character :DisplayObject;
+    protected var _character :CharacterSprite;
+
+    /** Path we're currently following, if any. */
+    protected var _path :Path;
+
+    /** The time we started moving on our path. */
+    protected var _pathStamp :int;
 }
 }
