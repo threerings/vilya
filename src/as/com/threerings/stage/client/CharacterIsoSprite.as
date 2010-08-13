@@ -138,7 +138,17 @@ public class CharacterIsoSprite extends IsoSprite
     public function pathCompleted (timestamp :int) :void
     {
         _character.pathCompleted(timestamp);
+        var opath :Path = _path;
         _path = null;
+
+        for each (var listener :Function in _pathCompleteListeners) {
+            listener(this, opath, timestamp);
+        }
+    }
+
+    public function addPathCompleteListener (listener :Function) :void
+    {
+        _pathCompleteListeners.push(listener);
     }
 
     public function move (path :Path) :void
@@ -173,5 +183,8 @@ public class CharacterIsoSprite extends IsoSprite
 
     /** The time we started moving on our path. */
     protected var _pathStamp :int;
+
+    /** Anyone who cares when our path finishes. */
+    protected var _pathCompleteListeners :Array = [];
 }
 }

@@ -490,6 +490,7 @@ public class CrowdStageScenePanel extends StageScenePanel
 
         _objScene.addChild(sprite);
         _sprites.put(info.getBodyOid(), sprite);
+        sprite.addPathCompleteListener(pathCompleted);
 
         if (sprite.getBodyOid() == myOid()) {
             _selfSprite = sprite;
@@ -655,6 +656,7 @@ public class CrowdStageScenePanel extends StageScenePanel
         } finally {
             // keep track of the last time we came to rest
             if (sprite == _selfSprite) {
+                centerView();
                 _centerStamp = tickStamp;
             }
         }
@@ -710,6 +712,11 @@ public class CrowdStageScenePanel extends StageScenePanel
             occupantMoved(SceneLocation(event.getOldEntry()),
                 SceneLocation(event.getEntry()), true);
         }
+    }
+
+    protected function pathCompleted (sprite :CharacterIsoSprite, path :Path, when :int) :void
+    {
+        handleSpriteArrived(sprite, when);
     }
 
     protected var _occupantListener :SetListener = new SetAdapter(null, occupantEntryUpdated, null);
