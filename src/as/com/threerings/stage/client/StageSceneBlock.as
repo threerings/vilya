@@ -61,7 +61,7 @@ public class StageSceneBlock extends SceneBlock
             var portal :Portal = Portal(iter.next());
             var x :int = MisoUtil.fullToTile(StageLocation(portal.loc).x);
             var y :int = MisoUtil.fullToTile(StageLocation(portal.loc).y);
-            if (x < bx || x > bx + BLOCK_SIZE || y < by || y > by + BLOCK_SIZE) {
+            if (x < bx || x >= bx + BLOCK_SIZE || y < by || y >= by + BLOCK_SIZE) {
                 continue;
             }
 
@@ -69,15 +69,11 @@ public class StageSceneBlock extends SceneBlock
             var fineY :int = MisoUtil.fullToFine(StageLocation(portal.loc).y);
 
             // Grab the portal image, and center it.
-            var portalSprite :IsoSprite = new IsoSprite();
             var img :DisplayObject =
                 StageScenePanel(panel).getPortalImage(StageLocation(portal.loc).orient);
             img.x = -img.width/2 + int(_metrics.finehwid * (fineX - fineY));
             img.y = -img.height/2 + int(_metrics.finehhei * (fineX + fineY));
-
-            portalSprite.sprites = [img];
-            portalSprite.setSize(1, 1, 1);
-            portalSprite.moveTo(x, y, 0);
+            var portalSprite :PortalIsoSprite = new PortalIsoSprite(img, x, y);
 
             if (_portSprites == null) {
                 _portSprites = [];
