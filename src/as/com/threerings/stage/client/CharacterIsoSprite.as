@@ -27,15 +27,17 @@ import com.threerings.util.DirectionCodes;
 import com.threerings.media.Tickable;
 import com.threerings.media.util.Path;
 import com.threerings.media.util.Pathable;
+import com.threerings.miso.client.PriorityIsoDisplayObject;
 import com.threerings.miso.util.MisoSceneMetrics;
 import com.threerings.miso.util.MisoUtil;
 import com.threerings.stage.data.StageLocation;
 
 import as3isolib.display.IsoSprite;
+import as3isolib.display.scene.IsoScene;
 import as3isolib.graphics.SolidColorFill;
 
 public class CharacterIsoSprite extends IsoSprite
-    implements Pathable
+    implements Pathable, PriorityIsoDisplayObject
 {
     public function CharacterIsoSprite (bodyOid :int, metrics :MisoSceneMetrics,
         charSprite :CharacterSprite)
@@ -55,6 +57,8 @@ public class CharacterIsoSprite extends IsoSprite
         _character = charSprite;
 
         sprites = [wrapper];
+
+        autoUpdate = true;
     }
 
     public function tick (tickStamp :int) :void
@@ -64,7 +68,9 @@ public class CharacterIsoSprite extends IsoSprite
                 _pathStamp = tickStamp
                 _path.init(this, _pathStamp);
             }
-            _path.tick(this, tickStamp);
+            if (_path != null) {
+                _path.tick(this, tickStamp);
+            }
         }
         _character.tick(tickStamp);
     }
@@ -98,13 +104,11 @@ public class CharacterIsoSprite extends IsoSprite
     public function setLocation (x :Number, y :Number) :void
     {
         moveTo(x, y, 0);
-        render();
     }
 
     public function setOrientation (orient :int) :void
     {
         _character.setOrientation(toIsoOrient(orient));
-        render();
     }
 
     public function toIsoOrient (orient :int) :int
@@ -170,6 +174,16 @@ public class CharacterIsoSprite extends IsoSprite
             _path = null;
             oldpath.wasRemoved(this);
         }
+    }
+
+    public function getPriority () :int
+    {
+        return 0;
+    }
+
+    public function hitTest (stageX :int, stageY :int) :Boolean
+    {
+        return _character == null ? false : _character.hitTest(stageX, stageY);
     }
 
     protected var _bodyOid :int;
