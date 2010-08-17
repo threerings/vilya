@@ -57,8 +57,6 @@ public class CharacterIsoSprite extends IsoSprite
         _character = charSprite;
 
         sprites = [wrapper];
-
-        autoUpdate = true;
     }
 
     public function tick (tickStamp :int) :void

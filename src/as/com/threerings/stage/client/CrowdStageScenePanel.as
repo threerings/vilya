@@ -93,9 +93,16 @@ public class CrowdStageScenePanel extends StageScenePanel
     override public function tick (tickStamp :int) :void
     {
         super.tick(tickStamp);
+        var shouldRender :Boolean = false;
         _sprites.forEach(function (key :int, sprite :CharacterIsoSprite) :void {
             sprite.tick(tickStamp);
+            shouldRender ||= sprite.isInvalidated;
         });
+
+        // TODO - partial scene rerenders would be useful here...
+        if (shouldRender) {
+            _objScene.render();
+        }
     }
 
     protected function updateDisplayForScene () :void
