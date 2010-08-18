@@ -501,11 +501,21 @@ public class CrowdStageScenePanel extends StageScenePanel
         var viewPt :Point = _isoView.globalToLocal(new Point(event.stageX, event.stageY));
         var iso :Point = _isoView.localToIso(new Point(viewPt.x, viewPt.y));
 
+        if (hobject is CharacterIsoSprite) {
+            handleSpriteClicked(CharacterIsoSprite(hobject));
+            return true;
+        }
+
         // Move ourselves to the spot clicked.
         handleLocationClicked(new StageLocation(MisoUtil.tileToFull(iso.x),
             MisoUtil.tileToFull(iso.y), 0));
 
         return true;
+    }
+
+    protected function handleSpriteClicked (sprite :CharacterIsoSprite) :void
+    {
+        // Nothing by default.
     }
 
     protected function displayFeedback (msg :String) :void
