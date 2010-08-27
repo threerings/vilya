@@ -83,7 +83,7 @@ public abstract class RatingDelegate extends GameManagerDelegate
         // if the game is in play and this is a player, load their ratings
         BodyObject occupant = (BodyObject)_omgr.getObject(bodyOid);
         if (shouldRateGame() && _gobj.isInPlay() && isPlayer(occupant)) {
-            Rating rating = maybeCreateRating(occupant);
+            PlayerRating rating = maybeCreateRating(occupant);
             if (rating != null) {
                 loadRatings(Collections.singleton(rating));
             }
@@ -96,7 +96,7 @@ public abstract class RatingDelegate extends GameManagerDelegate
         super.bodyLeft(bodyOid);
 
         // flush this player's rating if its modified
-        for (Rating rating : _ratings.values()) {
+        for (PlayerRating rating : _ratings.values()) {
             if (rating.playerOid == bodyOid && rating.modified) {
                 saveRatings(Collections.singleton(rating.cloneForSave()));
                 break;
@@ -122,14 +122,14 @@ public abstract class RatingDelegate extends GameManagerDelegate
 
         // load up the ratings for all players in this game; also make a note of the persistent
         // player id of each player position for seated table games
-        List<Rating> toLoad = Lists.newArrayList();
+        List<PlayerRating> toLoad = Lists.newArrayList();
         for (int ii = 0, ll = _gobj.occupants.size(); ii < ll; ii++) {
             BodyObject bobj = (BodyObject)_omgr.getObject(_gobj.occupants.get(ii));
             int pidx = _gmgr.getPlayerIndex(bobj.getVisibleName());
             if (pidx != -1) {
                 _playerIds[pidx] = _gmgr.getPlayerPersistentId(bobj);
             }
-            Rating rating = maybeCreateRating(bobj);
+            PlayerRating rating = maybeCreateRating(bobj);
             if (rating != null) {
                 toLoad.add(rating);
             }
@@ -157,8 +157,8 @@ public abstract class RatingDelegate extends GameManagerDelegate
         updateRatings();
 
         // any players who are no longer in the room need their ratings flushed immediately
-        List<Rating> flushes = Lists.newArrayList();
-        for (Rating rating : _ratings.values()) {
+        List<PlayerRating> flushes = Lists.newArrayList();
+        for (PlayerRating rating : _ratings.values()) {
             if (rating.modified && !_gobj.occupants.contains(rating.playerOid)) {
                 flushes.add(rating.cloneForSave());
             }
@@ -166,7 +166,7 @@ public abstract class RatingDelegate extends GameManagerDelegate
         saveRatings(flushes);
     }
 
-    protected Rating maybeCreateRating (BodyObject bobj)
+    protected PlayerRating maybeCreateRating (BodyObject bobj)
     {
         // if this occupant is not a player (or not ratable), skip 'em
         int playerId = _gmgr.getPlayerPersistentId(bobj);
@@ -174,18 +174,18 @@ public abstract class RatingDelegate extends GameManagerDelegate
             return null;
         }
         // if this player's ratings are already loaded and their oids match, no need to reload
-        Rating orating = _ratings.get(playerId);
+        PlayerRating orating = _ratings.get(playerId);
         if (orating != null && orating.playerOid == bobj.getOid()) {
             return null;
         }
-        return new Rating(bobj, playerId);
+        return new PlayerRating(bobj, playerId);
     }
 
     /**
      * Loads up rating information for the specified set of player ids and stores them in the
      * {@link #_ratings} table.
      */
-    protected void loadRatings (final Collection<Rating> ratings)
+    protected void loadRatings (final Collection<PlayerRating> ratings)
     {
         if (ratings.size() == 0) {
             return;
@@ -195,15 +195,15 @@ public abstract class RatingDelegate extends GameManagerDelegate
         _invoker.postUnit(new RepositoryUnit("loadRatings(" + gameId + ")") {
             @Override public void invokePersist () throws Exception {
                 // map the records by player id so that we can correlate with the db results
-                IntMap<Rating> map = IntMaps.newHashIntMap();
-                for (Rating rating : ratings) {
+                IntMap<PlayerRating> map = IntMaps.newHashIntMap();
+                for (PlayerRating rating : ratings) {
                     map.put(rating.playerId, rating);
                 }
 
                 // load up the ratings data from the database, update the records
                 Integer[] playerIds = map.keySet().toArray(new Integer[map.size()]);
                 for (RatingRecord record : _repo.getRatings(gameId, playerIds)) {
-                    Rating rating = map.get(record.playerId);
+                    PlayerRating rating = map.get(record.playerId);
                     if (rating != null) {
                         rating.rating = record.rating;
                         rating.experience = record.experience;
@@ -213,14 +213,14 @@ public abstract class RatingDelegate extends GameManagerDelegate
 
             @Override public void handleSuccess () {
                 // stuff our populated records into the _ratings mapping
-                for (Rating rating : ratings) {
+                for (PlayerRating rating : ratings) {
                     _ratings.put(rating.playerId, rating);
                 }
             }
         });
     }
 
-    protected void saveRatings (final Collection<Rating> ratings)
+    protected void saveRatings (final Collection<PlayerRating> ratings)
     {
         if (ratings.size() == 0) {
             return;
@@ -229,14 +229,14 @@ public abstract class RatingDelegate extends GameManagerDelegate
         final int gameId = getGameId();
         _invoker.postUnit(new RepositoryUnit("saveRatings(" + gameId + ")") {
             @Override public void invokePersist () throws Exception {
-                for (Rating rating : ratings) {
+                for (PlayerRating rating : ratings) {
                     _repo.setRating(gameId, rating.playerId, rating.rating, rating.experience);
                 }
             }
 
             @Override public void handleSuccess () {
                 // let subclasses publish the new ratings if they so desire
-                for (Rating rating : ratings) {
+                for (PlayerRating rating : ratings) {
                     updateRatingInMemory(gameId, rating);
                 }
             }
@@ -255,95 +255,27 @@ public abstract class RatingDelegate extends GameManagerDelegate
             return;
         }
 
+        PlayerRating[] ratings = new PlayerRating[_ratings.size()];
+        for (int ii = 0; ii < ratings.length; ii++) {
+            ratings[ii] = _ratings.get(_playerIds[ii]);
+        }
+
         // compute the update ratings for all players
         int[] nratings = new int[_playerIds.length];
-        for (int ii = 0; ii < nratings.length; ii ++) {
-            nratings[ii] = computeRating(ii);
+        for (int ii = 0; ii < nratings.length; ii++) {
+            float W = _gobj.isDraw() ? 0.5f : _gobj.isWinner(ii) ? 1f : 0f;
+            nratings[ii] = Rating.computeRating(ratings, ii, W);
         }
 
         // and write them back to their rating records
         for (int ii = 0; ii < nratings.length; ii++) {
-            Rating rating = _ratings.get(_playerIds[ii]);
+            PlayerRating rating = ratings[ii];
             if (rating != null && nratings[ii] > 0) {
                 rating.rating = nratings[ii];
                 rating.experience++;
                 rating.modified = true;
             }
         }
-    }
-
-    /**
-     * Computes a player's updated rating using a modified version of the FIDE/ELO system.
-     *
-     * <p> The rating adjustment is computed for the player versus each opponent individually and
-     * these adjustments are summed and scaled by one over the number of opponents to create the
-     * final rating adjustment, which is then added to the player's previous rating and bounded to
-     * the rating range. <em>Note:</em> provisional players (those with experience of less than 20)
-     * will be treated as having, at most, the default rating when used as an opponent in
-     * calculations for a non-provisional player.
-     *
-     * @return the player's updated rating or -1 if none of the opponents could be applicably rated
-     * against this player.
-     */
-    protected int computeRating (int pidx)
-    {
-        float totDeltaR = 0; // the total delta rating
-        int opponents = 0;
-
-        Rating prating = _ratings.get(_playerIds[pidx]);
-        if (prating == null) {
-            // be robust
-            log.warning("Computing ratings for unknown player [where=" + where() +
-                        ", pidx=" + pidx + "].");
-            return -1;
-        }
-
-        for (int ii = 0; ii < _playerIds.length; ii++) {
-            Rating orating = _ratings.get(_playerIds[ii]);
-            // we don't care how we did against ourselves, or against guests...
-            if (pidx == ii || orating == null) {
-                continue;
-            }
-
-            // if we are non-provisional, and the opponent is provisional, we max the opponent out
-            // at the default rating to avoid potentially inflating a real rating with one that has
-            // a lot of uncertainty
-            int opprat = orating.rating;
-            if (prating.experience >= 20 && orating.experience < 20) {
-                opprat = Math.min(opprat, DEFAULT_RATING);
-            }
-
-            // calculate K, the score multiplier constant
-            int K;
-            if (prating.experience < 20) {
-                K = 64;
-            } else if (prating.rating < 2100) {
-                K = 32; // experience >= 20
-            } else if (prating.rating < 2400) {
-                K = 24; // experience >= 20 && rating >= 2100
-            } else {
-                K = 16; // experience >= 20 && rating >= 2400
-            }
-
-            // calculate W, the win value representing the actual result of the game
-            float W = _gobj.isDraw() ? 0.5f : _gobj.isWinner(pidx) ? 1f : 0f;
-            // calculate We, the expected win value given the players' respective ratings
-            float dR = opprat - prating.rating;
-            float We = 1.0f / (float)(Math.pow(10.0f, (dR / 400.0f)) + 1);
-
-            // update the total rating adjustment with the value for this opponent
-            totDeltaR += K * (W - We);
-            opponents++;
-        }
-
-        // if we have no valid opponents, we cannot compute a rating;
-        if (opponents == 0) {
-            return -1;
-        }
-
-        // return the updated and clamped rating
-        int nrat = Math.round(prating.rating + totDeltaR/opponents);
-        return MathUtil.bound(MINIMUM_RATING, nrat, MAXIMUM_RATING);
     }
 
     /**
@@ -372,12 +304,12 @@ public abstract class RatingDelegate extends GameManagerDelegate
      *
      * This method is called on the dobj thread.
      */
-    protected abstract void updateRatingInMemory (int gameId, Rating rating);
+    protected abstract void updateRatingInMemory (int gameId, PlayerRating rating);
 
     /**
      * Encapsulates the rating/experience tuple representing a player's rating for a game.
      */
-    protected static class Rating
+    protected static class PlayerRating extends Rating
         implements Cloneable
     {
         /** The oid of the rated player. */
@@ -389,19 +321,13 @@ public abstract class RatingDelegate extends GameManagerDelegate
         /** The id of the rated player. */
         public int playerId;
 
-        /** The player's rating for our game. */
-        public int rating;
-
-        /** The number of times the player's played our game. */
-        public int experience;
-
         /** Whether or not this rating needs to be written back to the database. */
         public boolean modified;
 
         /**
-         * Sets up a new {@link Rating} object with default values.
+         * Sets up a new {@link PlayerRating} object with default values.
          */
-        public Rating (BodyObject player, int playerId)
+        public PlayerRating (BodyObject player, int playerId)
         {
             this.playerOid = player.getOid();
             this.playerName = player.getVisibleName();
@@ -413,21 +339,15 @@ public abstract class RatingDelegate extends GameManagerDelegate
         /**
          * Duplicates this rating and clears its modified status.
          */
-        public Rating cloneForSave ()
+        public PlayerRating cloneForSave ()
         {
             try {
-                Rating rating = (Rating)this.clone();
+                PlayerRating rating = (PlayerRating)this.clone();
                 modified = false;
                 return rating;
             } catch (CloneNotSupportedException cnse) {
                 throw new AssertionError(cnse);
             }
-        }
-
-        @Override
-        public String toString ()
-        {
-            return StringUtil.fieldsToString(this);
         }
     }
 
@@ -441,7 +361,7 @@ public abstract class RatingDelegate extends GameManagerDelegate
     protected int[] _playerIds;
 
     /** The ratings for each player as they were at the beginning of the game. */
-    protected IntMap<Rating> _ratings = IntMaps.newHashIntMap();
+    protected IntMap<PlayerRating> _ratings = IntMaps.newHashIntMap();
 
     /** A timestamp set at the beginning of the game, used to calculate its duration. */
     protected long _startStamp;
