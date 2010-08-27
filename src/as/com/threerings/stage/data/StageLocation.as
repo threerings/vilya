@@ -66,7 +66,11 @@ public class StageLocation extends SimpleStreamableObject
 
     public function clone () :Object
     {
-        return (ClassUtil.newInstance(this) as StageLocation);
+        var newLoc :StageLocation = (ClassUtil.newInstance(this) as StageLocation);
+        newLoc.x = x;
+        newLoc.y = y;
+        newLoc.orient = orient;
+        return newLoc;
     }
 
     /**
