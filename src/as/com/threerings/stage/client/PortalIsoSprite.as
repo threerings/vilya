@@ -28,21 +28,28 @@ import flash.geom.Point;
 import as3isolib.display.IsoSprite;
 
 import com.threerings.miso.client.PriorityIsoDisplayObject;
+import com.threerings.whirled.spot.data.Portal;
 
 public class PortalIsoSprite extends IsoSprite
     implements PriorityIsoDisplayObject
 {
-    public function PortalIsoSprite (img :DisplayObject, x :int, y :int)
+    public function PortalIsoSprite (img :DisplayObject, x :int, y :int, portal :Portal)
     {
         sprites = [img];
         setSize(1, 1, 1);
         moveTo(x, y, 0);
         setRaised(false);
+        _portal = portal;
     }
 
     public function getPriority () :int
     {
         return 0;
+    }
+
+    public function getPortal () :Portal
+    {
+        return _portal;
     }
 
     public function hitTest (stageX :int, stageY :int) :Boolean
@@ -68,5 +75,7 @@ public class PortalIsoSprite extends IsoSprite
     {
         sprites[0].alpha = (raised ? 1.0 : 0.5);
     }
+
+    protected var _portal :Portal;
 }
 }

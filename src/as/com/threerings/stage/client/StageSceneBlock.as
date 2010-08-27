@@ -73,7 +73,7 @@ public class StageSceneBlock extends SceneBlock
                 StageScenePanel(panel).getPortalImage(StageLocation(portal.loc).orient);
             img.x = -img.width/2 + int(_metrics.finehwid * (fineX - fineY));
             img.y = -img.height/2 + int(_metrics.finehhei * (fineX + fineY));
-            var portalSprite :PortalIsoSprite = new PortalIsoSprite(img, x, y);
+            var portalSprite :PortalIsoSprite = new PortalIsoSprite(img, x, y, portal);
 
             if (_portSprites == null) {
                 _portSprites = [];

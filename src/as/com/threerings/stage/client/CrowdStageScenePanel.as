@@ -504,13 +504,47 @@ public class CrowdStageScenePanel extends StageScenePanel
         if (hobject is CharacterIsoSprite) {
             handleSpriteClicked(CharacterIsoSprite(hobject));
             return true;
-        }
+        } else if (hobject is PortalIsoSprite) {
+            handlePortalClicked(PortalIsoSprite(hobject).getPortal());
+            return true;
+        } 
 
         // Move ourselves to the spot clicked.
         handleLocationClicked(new StageLocation(MisoUtil.tileToFull(iso.x),
             MisoUtil.tileToFull(iso.y), 0));
 
         return true;
+    }
+
+    public function handlePortalClicked (portal :Portal) :void
+    {
+        // if the portal goes to the same scene, we do some special stuff
+        if (portal.targetSceneId == _scene.getId()) {
+            var tport :Portal = _scene.getPortal(portal.targetPortalId);
+            if (tport == null) {
+                log.warning("Requested to warp via bogus portal? " + portal);
+                return;
+            }
+
+            // start walking there and issue a request to walk there to
+            // let everyone else know that we're walking there
+            var ploc :StageLocation = StageLocation(portal.getLocation());
+            moveSprite(_selfSprite, ploc);
+            changeLocation(ploc);
+
+            // when we arrive at the first portal, issue a request to "warp" to the other one
+            addArrivalListener(
+                myOid(), ploc, function (sprite :CharacterIsoSprite, sloc :Location) :void {
+                    changeLocation(StageLocation(tport.getOppLocation()));
+                });
+            return;
+        }
+
+        // otherwise, traverse the portal like a civilized pirate: start
+        // walking toward it, and immediately issue the traversal request
+        log.info("Traversing " + portal + " from " + _scene.getId() + ".");
+        moveSprite(_selfSprite, StageLocation(portal.getLocation()));
+        traversePortal(portal);
     }
 
     protected function handleSpriteClicked (sprite :CharacterIsoSprite) :void
@@ -555,6 +589,11 @@ public class CrowdStageScenePanel extends StageScenePanel
     }
 
     protected function changeLocation (loc :StageLocation) :void
+    {
+        throw new Error("abstract");
+    }
+
+    protected function traversePortal (portal :Portal) :void
     {
         throw new Error("abstract");
     }
