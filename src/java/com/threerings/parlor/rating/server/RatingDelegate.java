@@ -31,8 +31,6 @@ import com.google.inject.Inject;
 import com.samskivert.util.IntMap;
 import com.samskivert.util.IntMaps;
 import com.samskivert.util.Invoker;
-import com.samskivert.util.StringUtil;
-
 import com.samskivert.jdbc.RepositoryUnit;
 
 import com.threerings.util.Name;
@@ -44,16 +42,12 @@ import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.crowd.data.PlaceObject;
 
-import com.threerings.media.util.MathUtil;
-
 import com.threerings.parlor.game.data.GameObject;
 import com.threerings.parlor.game.server.GameManager;
 import com.threerings.parlor.game.server.GameManagerDelegate;
 import com.threerings.parlor.rating.data.RatingCodes;
 import com.threerings.parlor.rating.server.persist.RatingRecord;
 import com.threerings.parlor.rating.server.persist.RatingRepository;
-
-import static com.threerings.parlor.Log.log;
 
 /**
  * Rates players after each game and handles persisting the results.
