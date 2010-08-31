@@ -664,6 +664,7 @@ public class CrowdStageScenePanel extends StageScenePanel
     protected function removeSprite (sprite :CharacterIsoSprite) :void
     {
         _sprites.remove(sprite.getBodyOid());
+        _objScene.removeChild(sprite);
     }
 
     protected function handleSpriteArrived (sprite :CharacterIsoSprite, tickStamp :int) :void
