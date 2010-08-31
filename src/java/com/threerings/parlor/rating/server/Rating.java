@@ -35,16 +35,10 @@ public class Rating
     implements RatingCodes
 {
     /** The player's rating for our game. */
-    public int rating;
+    public int rating = DEFAULT_RATING;
 
     /** The number of times the player's played our game. */
     public int experience;
-
-    public Rating ()
-    {
-        this.rating = DEFAULT_RATING;
-        this.experience = 0;
-    }
 
     /**
      * Computes a player's updated rating using a modified version of the

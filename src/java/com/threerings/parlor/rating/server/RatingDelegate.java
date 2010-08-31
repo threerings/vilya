@@ -326,8 +326,6 @@ public abstract class RatingDelegate extends GameManagerDelegate
             this.playerOid = player.getOid();
             this.playerName = player.getVisibleName();
             this.playerId = playerId;
-            this.rating = DEFAULT_RATING;
-            this.experience = 0;
         }
 
         /**
