@@ -11,6 +11,7 @@ import com.threerings.presents.client.ConfirmAdapter;
 
 import com.threerings.crowd.data.PlaceConfig;
 
+import com.threerings.whirled.client.PendingData;
 import com.threerings.whirled.client.SceneDirector;
 import com.threerings.whirled.client.SceneDirector_MoveHandler;
 import com.threerings.whirled.data.SceneModel;
@@ -201,8 +202,14 @@ public class ZoneDirector extends BasicDirector
     {
         log.info("Zone switch requires server switch", "host", hostname, "ports", ports);
         // ship on over to the other server
+
+        // keep track of our current pending data because it will be cleared when we log off of
+        // this server and onto the next one
+        var restorePending :Function = _scdir.getPendingDataRestoreFunc();
+
         _wCtx.getClient().moveToServer(hostname, ports, new ConfirmAdapter(
             function () :void { // succeeded
+                restorePending();
                 sendMoveRequest();
             }, requestFailed));
     }

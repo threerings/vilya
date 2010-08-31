@@ -199,6 +199,20 @@ public class SceneDirector extends BasicDirector
     }
 
     /**
+     * Returns a function that may be used to restore the scene director's pendingData to its
+     *  current state.  This is primarily useful if you know something (such as a logoff) is about
+     *  to happen and you want to ensure you can restore the pending data after re-login.
+     */
+    public function getPendingDataRestoreFunc () :Function
+    {
+        var pendingData :PendingData = _pendingData;
+
+        return function () :void {
+            _pendingData = pendingData;
+        }
+    }
+
+    /**
      * Returns the model loaded in preparation for a scene transition. This is made available only
      * for cooperating directors which may need to coopt the scene transition process. The pending
      * model is only valid immediately following a call to {@link #prepareMoveTo}.
