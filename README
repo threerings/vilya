@@ -2,7 +2,7 @@ The Vilya library
 -----------------
 
 The Vilya library provides various facilities for making networked multiplayer
-games. It's various packages include:
+games. Its various packages include:
 
   * whirled - builds on the crowd framework and defines a scene graph with
     portals to move between scenes and provides hooks for distributing and
