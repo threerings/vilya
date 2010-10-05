@@ -462,6 +462,7 @@ public class SpotSceneDirector extends BasicDirector
 }
 }
 
+import com.threerings.io.TypedArray;
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.whirled.client.SceneDirector;
 import com.threerings.whirled.data.SceneModel;
@@ -491,7 +492,7 @@ class SceneDirectorWrapper
             model :SceneModel) :void {
         _scdir.moveSucceededWithScene(placeId, config, model);
     }
-    
+
     public function moveRequiresServerSwitch (hostname :String, ports :TypedArray) :void {
         _scdir.moveRequiresServerSwitch(hostname, ports);
     }
