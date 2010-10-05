@@ -21,9 +21,12 @@
 
 package com.threerings.whirled.client;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import java.io.IOException;
+
+import com.google.common.collect.Lists;
 
 import com.samskivert.util.LRUHashMap;
 import com.samskivert.util.ResultListener;
@@ -248,6 +251,8 @@ public class SceneDirector extends BasicDirector
 
         // and finally create a display scene instance with the model and the place config
         _scene = _fact.createScene(_model, config);
+
+        handlePendingForcedMove();
     }
 
     // from interface SceneService.SceneMoveListener
@@ -377,14 +382,24 @@ public class SceneDirector extends BasicDirector
     }
 
     // from interface SceneReceiver
-    public void forcedMove (int sceneId)
+    public void forcedMove (final int sceneId)
     {
         // if we're in the middle of a move, we can't abort it or we will screw everything up, so
         // just finish up what we're doing and assume that the repeated move request was the
         // spurious one as it would be in the case of lag causing rapid-fire repeat requests
         if (movePending()) {
-            log.info("Dropping forced move because we have a move pending",
-                "pendId", _pendingSceneId, "reqId", sceneId);
+            if (_pendingSceneId == sceneId) {
+                log.info("Dropping forced move because we have a move pending",
+                    "pendId", _pendingSceneId, "reqId", sceneId);
+            } else {
+                log.info("Delaying forced move because we have a move pending",
+                    "pendId", _pendingSceneId, "reqId", sceneId);
+                addPendingForcedMove(new Runnable() {
+                    public void run () {
+                        forcedMove(sceneId);
+                    }
+                });
+            }
             return;
         }
 
@@ -420,6 +435,8 @@ public class SceneDirector extends BasicDirector
                 moveTo(_previousSceneId);
             }
         }
+
+        handlePendingForcedMove();
     }
 
     protected void sendMoveRequest ()
@@ -502,8 +519,16 @@ public class SceneDirector extends BasicDirector
         _scache.clear();
         _pendingSceneId = -1;
         _pendingModel = null;
+        _pendingForcedMoves.clear();
         _previousSceneId = -1;
         _sservice = null;
+    }
+
+    public void cancelMoveRequest ()
+    {
+        _pendingSceneId = -1;
+        _pendingModel = null;
+        handlePendingForcedMove();
     }
 
     @Override
@@ -517,6 +542,18 @@ public class SceneDirector extends BasicDirector
     {
         // get a handle on our scene service
         _sservice = client.requireService(SceneService.class);
+    }
+
+    public void addPendingForcedMove (Runnable move)
+    {
+        _pendingForcedMoves.add(move);
+    }
+
+    protected void handlePendingForcedMove ()
+    {
+        if (!_pendingForcedMoves.isEmpty()) {
+            _ctx.getClient().getRunQueue().postRunnable(_pendingForcedMoves.remove(0));
+        }
     }
 
     /** Access to general client services. */
@@ -558,4 +595,8 @@ public class SceneDirector extends BasicDirector
 
     /** Reference to our move handler. */
     protected MoveHandler _moveHandler = null;
+
+    /** Forced move actions we should take once we complete the move we're in the middle of. */
+    protected ArrayList<Runnable> _pendingForcedMoves = Lists.newArrayList();
+
 }

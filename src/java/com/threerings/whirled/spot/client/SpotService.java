@@ -36,6 +36,17 @@ import com.threerings.whirled.spot.data.Location;
 public interface SpotService extends InvocationService
 {
     /**
+     * Used to communicate the response to a {@link SceneService#moveTo} request.
+     */
+    public static interface SpotSceneMoveListener extends SceneMoveListener
+    {
+        /**
+         * The request is not going through because it was cancelled due to some other action.
+         */
+        public void requestCancelled ();
+    }
+
+    /**
      * Requests to traverse the specified portal.
      *
      * @param sceneId the player's current scene which is used to sanity
@@ -46,7 +57,7 @@ public interface SpotService extends InvocationService
      */
     public void traversePortal (
         Client client, int sceneId, int portalId, int destSceneVer,
-        SceneMoveListener listener);
+        SpotSceneMoveListener listener);
 
     /**
      * Requests that this client's body be made to move to the specified

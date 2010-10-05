@@ -159,7 +159,7 @@ public class SpotSceneDirector extends BasicDirector
 
         // issue a traversePortal request
         log.info("Issuing traversePortal(" + sceneId + ", " + dest + ", " + sceneVer + ").");
-        _sservice.traversePortal(sceneId, portalId, sceneVer, _scdir);
+        _sservice.traversePortal(sceneId, portalId, sceneVer, new SceneDirectorWrapper(_scdir));
         return true;
     }
 
@@ -460,4 +460,45 @@ public class SpotSceneDirector extends BasicDirector
     /** The cluster chat object for the cluster we currently occupy. */
     protected var _clobj :DObject;
 }
+}
+
+import com.threerings.crowd.data.PlaceConfig;
+import com.threerings.whirled.client.SceneDirector;
+import com.threerings.whirled.data.SceneModel;
+import com.threerings.whirled.spot.client.SpotService_SpotSceneMoveListener;
+
+class SceneDirectorWrapper
+    implements SpotService_SpotSceneMoveListener
+{
+    public function SceneDirectorWrapper (scdir :SceneDirector) {
+        _scdir = scdir;
+    }
+
+    public function requestFailed (cause :String) :void {
+        _scdir.requestFailed(cause);
+    }
+
+    public function moveSucceeded (placeId :int, config :PlaceConfig) :void {
+        _scdir.moveSucceeded(placeId, config);
+    }
+
+    public function moveSucceededWithUpdates (
+            placeId :int, config :PlaceConfig, updates :TypedArray) :void{
+        _scdir.moveSucceededWithUpdates(placeId, config, updates);
+    }
+
+    public function moveSucceededWithScene (placeId :int, config :PlaceConfig,
+            model :SceneModel) :void {
+        _scdir.moveSucceededWithScene(placeId, config, model);
+    }
+    
+    public function moveRequiresServerSwitch (hostname :String, ports :TypedArray) :void {
+        _scdir.moveRequiresServerSwitch(hostname, ports);
+    }
+
+    public function requestCancelled () :void {
+        _scdir.cancelMoveRequest();
+    }
+
+    protected var _scdir :SceneDirector;
 }

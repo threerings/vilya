@@ -27,9 +27,8 @@ import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.data.InvocationMarshaller_ConfirmMarshaller;
 import com.threerings.util.Byte;
 import com.threerings.util.Integer;
-import com.threerings.whirled.client.SceneService_SceneMoveListener;
-import com.threerings.whirled.data.SceneMarshaller_SceneMoveMarshaller;
 import com.threerings.whirled.spot.client.SpotService;
+import com.threerings.whirled.spot.client.SpotService_SpotSceneMoveListener;
 
 /**
  * Provides the implementation of the <code>SpotService</code> interface
@@ -82,9 +81,9 @@ public class SpotMarshaller extends InvocationMarshaller
     public static const TRAVERSE_PORTAL :int = 4;
 
     // from interface SpotService
-    public function traversePortal (arg1 :int, arg2 :int, arg3 :int, arg4 :SceneService_SceneMoveListener) :void
+    public function traversePortal (arg1 :int, arg2 :int, arg3 :int, arg4 :SpotService_SpotSceneMoveListener) :void
     {
-        var listener4 :SceneMarshaller_SceneMoveMarshaller = new SceneMarshaller_SceneMoveMarshaller();
+        var listener4 :SpotMarshaller_SpotSceneMoveMarshaller = new SpotMarshaller_SpotSceneMoveMarshaller();
         listener4.listener = arg4;
         sendRequest(TRAVERSE_PORTAL, [
             Integer.valueOf(arg1), Integer.valueOf(arg2), Integer.valueOf(arg3), listener4

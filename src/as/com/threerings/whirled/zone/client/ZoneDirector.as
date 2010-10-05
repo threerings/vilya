@@ -232,8 +232,16 @@ public class ZoneDirector extends BasicDirector
         // just finish up what we're doing and assume that the repeated move request was the
         // spurious one as it would be in the case of lag causing rapid-fire repeat requests
         if (_scdir.movePending()) {
-            log.info("Dropping forced move because we have a move pending",
-                "pend", _scdir.getPendingModel(), "rzId", zoneId, "rsId", sceneId);
+            if (_scdir.getPendingSceneId() == sceneId) {
+                log.info("Dropping forced move because we have a move pending",
+                    "pend", _scdir.getPendingModel(), "rzId", zoneId, "rsId", sceneId);
+            } else {
+                log.info("Delaying forced move because we have a move pending",
+                    "pend", _scdir.getPendingModel(), "rzId", zoneId, "rsId", sceneId);
+                _scdir.addPendingForcedMove(new function() :void {
+                        forcedMove(zoneId, sceneId);
+                });
+            }
             return;
         }
 

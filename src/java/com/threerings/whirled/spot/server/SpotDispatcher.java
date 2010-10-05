@@ -27,7 +27,7 @@ import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.server.InvocationDispatcher;
 import com.threerings.presents.server.InvocationException;
-import com.threerings.whirled.client.SceneService;
+import com.threerings.whirled.spot.client.SpotService;
 import com.threerings.whirled.spot.data.Location;
 import com.threerings.whirled.spot.data.SpotMarshaller;
 
@@ -79,7 +79,7 @@ public class SpotDispatcher extends InvocationDispatcher<SpotMarshaller>
 
         case SpotMarshaller.TRAVERSE_PORTAL:
             ((SpotProvider)provider).traversePortal(
-                source, ((Integer)args[0]).intValue(), ((Integer)args[1]).intValue(), ((Integer)args[2]).intValue(), (SceneService.SceneMoveListener)args[3]
+                source, ((Integer)args[0]).intValue(), ((Integer)args[1]).intValue(), ((Integer)args[2]).intValue(), (SpotService.SpotSceneMoveListener)args[3]
             );
             return;
 

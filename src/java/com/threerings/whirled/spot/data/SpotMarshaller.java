@@ -23,11 +23,13 @@ package com.threerings.whirled.spot.data;
 
 import javax.annotation.Generated;
 
+import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.InvocationMarshaller;
-import com.threerings.whirled.client.SceneService;
-import com.threerings.whirled.data.SceneMarshaller;
+import com.threerings.presents.dobj.InvocationResponseEvent;
+import com.threerings.whirled.data.SceneModel;
+import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.spot.client.SpotService;
 
 /**
@@ -42,6 +44,113 @@ import com.threerings.whirled.spot.client.SpotService;
 public class SpotMarshaller extends InvocationMarshaller
     implements SpotService
 {
+    /**
+     * Marshalls results to implementations of {@link SpotService.SpotSceneMoveListener}.
+     */
+    public static class SpotSceneMoveMarshaller extends ListenerMarshaller
+        implements SpotSceneMoveListener
+    {
+        /** The method id used to dispatch {@link #moveRequiresServerSwitch}
+         * responses. */
+        public static final int MOVE_REQUIRES_SERVER_SWITCH = 1;
+
+        // from interface SpotSceneMoveMarshaller
+        public void moveRequiresServerSwitch (String arg1, int[] arg2)
+        {
+            _invId = null;
+            omgr.postEvent(new InvocationResponseEvent(
+                               callerOid, requestId, MOVE_REQUIRES_SERVER_SWITCH,
+                               new Object[] { arg1, arg2 }, transport));
+        }
+
+        /** The method id used to dispatch {@link #moveSucceeded}
+         * responses. */
+        public static final int MOVE_SUCCEEDED = 2;
+
+        // from interface SpotSceneMoveMarshaller
+        public void moveSucceeded (int arg1, PlaceConfig arg2)
+        {
+            _invId = null;
+            omgr.postEvent(new InvocationResponseEvent(
+                               callerOid, requestId, MOVE_SUCCEEDED,
+                               new Object[] { Integer.valueOf(arg1), arg2 }, transport));
+        }
+
+        /** The method id used to dispatch {@link #moveSucceededWithScene}
+         * responses. */
+        public static final int MOVE_SUCCEEDED_WITH_SCENE = 3;
+
+        // from interface SpotSceneMoveMarshaller
+        public void moveSucceededWithScene (int arg1, PlaceConfig arg2, SceneModel arg3)
+        {
+            _invId = null;
+            omgr.postEvent(new InvocationResponseEvent(
+                               callerOid, requestId, MOVE_SUCCEEDED_WITH_SCENE,
+                               new Object[] { Integer.valueOf(arg1), arg2, arg3 }, transport));
+        }
+
+        /** The method id used to dispatch {@link #moveSucceededWithUpdates}
+         * responses. */
+        public static final int MOVE_SUCCEEDED_WITH_UPDATES = 4;
+
+        // from interface SpotSceneMoveMarshaller
+        public void moveSucceededWithUpdates (int arg1, PlaceConfig arg2, SceneUpdate[] arg3)
+        {
+            _invId = null;
+            omgr.postEvent(new InvocationResponseEvent(
+                               callerOid, requestId, MOVE_SUCCEEDED_WITH_UPDATES,
+                               new Object[] { Integer.valueOf(arg1), arg2, arg3 }, transport));
+        }
+
+        /** The method id used to dispatch {@link #requestCancelled}
+         * responses. */
+        public static final int REQUEST_CANCELLED = 5;
+
+        // from interface SpotSceneMoveMarshaller
+        public void requestCancelled ()
+        {
+            _invId = null;
+            omgr.postEvent(new InvocationResponseEvent(
+                               callerOid, requestId, REQUEST_CANCELLED,
+                               new Object[] {  }, transport));
+        }
+
+        @Override // from InvocationMarshaller
+        public void dispatchResponse (int methodId, Object[] args)
+        {
+            switch (methodId) {
+            case MOVE_REQUIRES_SERVER_SWITCH:
+                ((SpotSceneMoveListener)listener).moveRequiresServerSwitch(
+                    (String)args[0], (int[])args[1]);
+                return;
+
+            case MOVE_SUCCEEDED:
+                ((SpotSceneMoveListener)listener).moveSucceeded(
+                    ((Integer)args[0]).intValue(), (PlaceConfig)args[1]);
+                return;
+
+            case MOVE_SUCCEEDED_WITH_SCENE:
+                ((SpotSceneMoveListener)listener).moveSucceededWithScene(
+                    ((Integer)args[0]).intValue(), (PlaceConfig)args[1], (SceneModel)args[2]);
+                return;
+
+            case MOVE_SUCCEEDED_WITH_UPDATES:
+                ((SpotSceneMoveListener)listener).moveSucceededWithUpdates(
+                    ((Integer)args[0]).intValue(), (PlaceConfig)args[1], (SceneUpdate[])args[2]);
+                return;
+
+            case REQUEST_CANCELLED:
+                ((SpotSceneMoveListener)listener).requestCancelled(
+                    );
+                return;
+
+            default:
+                super.dispatchResponse(methodId, args);
+                return;
+            }
+        }
+    }
+
     /** The method id used to dispatch {@link #changeLocation} requests. */
     public static final int CHANGE_LOCATION = 1;
 
@@ -83,9 +192,9 @@ public class SpotMarshaller extends InvocationMarshaller
     public static final int TRAVERSE_PORTAL = 4;
 
     // from interface SpotService
-    public void traversePortal (Client arg1, int arg2, int arg3, int arg4, SceneService.SceneMoveListener arg5)
+    public void traversePortal (Client arg1, int arg2, int arg3, int arg4, SpotService.SpotSceneMoveListener arg5)
     {
-        SceneMarshaller.SceneMoveMarshaller listener5 = new SceneMarshaller.SceneMoveMarshaller();
+        SpotMarshaller.SpotSceneMoveMarshaller listener5 = new SpotMarshaller.SpotSceneMoveMarshaller();
         listener5.listener = arg5;
         sendRequest(arg1, TRAVERSE_PORTAL, new Object[] {
             Integer.valueOf(arg2), Integer.valueOf(arg3), Integer.valueOf(arg4), listener5

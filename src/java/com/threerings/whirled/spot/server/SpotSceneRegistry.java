@@ -115,7 +115,7 @@ public class SpotSceneRegistry extends SceneRegistry
 
     // from interface SpotProvider
     public void traversePortal (ClientObject caller, int sceneId, int portalId,
-                                int destSceneVer, SceneService.SceneMoveListener listener)
+                                int destSceneVer, SpotService.SpotSceneMoveListener listener)
         throws InvocationException
     {
         // le sanity check
@@ -125,7 +125,7 @@ public class SpotSceneRegistry extends SceneRegistry
             log.info("Ignoring stale traverse portal request [caller=" + caller.who() +
                      ", oSceneId=" + sceneId + ", portalId=" + portalId +
                      ", cSceneId=" + cSceneId + "].");
-            InvocationMarshaller.setNoResponse(listener);
+            listener.requestCancelled();
             return;
         }
 

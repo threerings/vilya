@@ -43,6 +43,7 @@ import com.threerings.crowd.data.PlaceObject;
 import com.threerings.whirled.client.SceneDirector;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.ScenePlace;
+import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.spot.data.ClusteredBodyObject;
 import com.threerings.whirled.spot.data.Location;
 import com.threerings.whirled.spot.data.Portal;
@@ -161,7 +162,34 @@ public class SpotSceneDirector extends BasicDirector
 
         // issue a traversePortal request
         log.info("Issuing traversePortal(" + sceneId + ", " + dest + ", " + sceneVer + ").");
-        _sservice.traversePortal(_ctx.getClient(), sceneId, portalId, sceneVer, _scdir);
+        _sservice.traversePortal(_ctx.getClient(), sceneId, portalId, sceneVer,
+            new SpotService.SpotSceneMoveListener() {
+                public void requestFailed (String cause) {
+                    _scdir.requestFailed(cause);
+                }
+
+                public void moveSucceeded (int placeId, PlaceConfig config) {
+                    _scdir.moveSucceeded(placeId, config);
+                }
+
+                public void moveSucceededWithUpdates (
+                        int placeId, PlaceConfig config, SceneUpdate[] updates) {
+                    _scdir.moveSucceededWithUpdates(placeId, config, updates);
+                }
+
+                public void moveSucceededWithScene (int placeId, PlaceConfig config,
+                        SceneModel model) {
+                    _scdir.moveSucceededWithScene(placeId, config, model);
+                }
+
+                public void moveRequiresServerSwitch (String hostname, int[] ports) {
+                    _scdir.moveRequiresServerSwitch(hostname, ports);
+                }
+
+                public void requestCancelled () {
+                    _scdir.cancelMoveRequest();
+                }
+            });
         return true;
     }
 

@@ -265,6 +265,8 @@ public class SceneDirector extends BasicDirector
 
         // and finally create a display scene instance with the model and the place config
         _scene = _fact.createScene(_model, config);
+
+        handlePendingForcedMove();
     }
 
     // from interface SceneService_SceneMoveListener
@@ -361,6 +363,8 @@ public class SceneDirector extends BasicDirector
 
         // let our observers know that something has gone horribly awry
         _locdir.failedToMoveTo(sceneId, reason);
+
+        handlePendingForcedMove();
     }
 
     // from interface LocationObserver
@@ -421,8 +425,16 @@ public class SceneDirector extends BasicDirector
         // just finish up what we're doing and assume that the repeated move request was the
         // spurious one as it would be in the case of lag causing rapid-fire repeat requests
         if (movePending()) {
-            log.info("Dropping forced move because we have a move pending",
-                "pendId", _pendingData.sceneId, "reqId", sceneId);
+            if (_pendingData.sceneId == sceneId) {
+                log.info("Dropping forced move because we have a move pending",
+                    "pendId", _pendingData.sceneId, "reqId", sceneId);
+            } else {
+                log.info("Delaying forced move because we have a move pending",
+                    "pendId", _pendingData.sceneId, "reqId", sceneId);
+                addPendingForcedMove(new function() :void {
+                    forcedMove(sceneId);
+                });
+            }
             return;
         }
 
@@ -488,6 +500,12 @@ public class SceneDirector extends BasicDirector
         _sservice = null;
     }
 
+    public function cancelMoveRequest () :void
+    {
+        _pendingData = null;
+        handlePendingForcedMove();
+    }
+
     /**
      * Issues the scene move request using information from the supplied pending data.
      */
@@ -528,6 +546,18 @@ public class SceneDirector extends BasicDirector
         // clear out our references
         _model = null;
         _scene = null;
+    }
+
+    public function addPendingForcedMove (move :Function) :void
+    {
+        _pendingForcedMoves.push(move);
+    }
+
+    protected function handlePendingForcedMove () :void
+    {
+        if (!_pendingForcedMoves.length == 0) {
+            _ctx.getClient().callLater(_pendingForcedMoves.pop());
+        }
     }
 
     /**
@@ -619,5 +649,8 @@ public class SceneDirector extends BasicDirector
 
     /** Reference to our move handler. */
     protected var _moveHandler :SceneDirector_MoveHandler = null;
+
+    /** Forced move actions we should take once we complete the move we're in the middle of. */
+    protected var _pendingForcedMoves :Array = [];
 }
 }

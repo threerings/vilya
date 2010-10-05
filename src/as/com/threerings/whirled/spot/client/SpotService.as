@@ -24,7 +24,6 @@ package com.threerings.whirled.spot.client {
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.client.InvocationService_ConfirmListener;
-import com.threerings.whirled.client.SceneService_SceneMoveListener;
 import com.threerings.whirled.spot.data.Location;
 
 /**
@@ -42,6 +41,6 @@ public interface SpotService extends InvocationService
     function joinCluster (arg1 :int, arg2 :InvocationService_ConfirmListener) :void;
 
     // from Java interface SpotService
-    function traversePortal (arg1 :int, arg2 :int, arg3 :int, arg4 :SceneService_SceneMoveListener) :void;
+    function traversePortal (arg1 :int, arg2 :int, arg3 :int, arg4 :SpotService_SpotSceneMoveListener) :void;
 }
 }

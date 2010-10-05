@@ -253,14 +253,26 @@ public class ZoneDirector extends BasicDirector
     }
 
     // documentation inherited from interface
-    public void forcedMove (int zoneId, int sceneId)
+    public void forcedMove (final int zoneId, final int sceneId)
     {
         // if we're in the middle of a move, we can't abort it or we will screw everything up, so
         // just finish up what we're doing and assume that the repeated move request was the
         // spurious one as it would be in the case of lag causing rapid-fire repeat requests
         if (_scdir.movePending()) {
-            log.info("Dropping forced move because we have a move pending",
-                "pend", _scdir.getPendingModel(), "rzId", zoneId, "rsId", sceneId);
+            if (_scdir.getPendingSceneId() == sceneId) {
+                log.info("Dropping forced move because we have a move pending",
+                    "pend", _scdir.getPendingModel(), "rzId", zoneId, "rsId", sceneId);
+            } else {
+                log.info("Delaying forced move because we have a move pending",
+                    "pend", _scdir.getPendingModel(), "rzId", zoneId, "rsId", sceneId);
+                // We have a move pending to a DIFFERENT scene - we'll do this as soon as that's
+                //  done.
+                _scdir.addPendingForcedMove(new Runnable() {
+                    public void run () {
+                        forcedMove(zoneId, sceneId);
+                    }
+                });
+            }
             return;
         }
 
