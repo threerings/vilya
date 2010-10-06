@@ -22,6 +22,7 @@
 package com.threerings.stage.tools.editor;
 
 import java.util.List;
+import java.util.logging.LogManager;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -97,6 +98,9 @@ public class EditorApp implements Runnable
                     new BufferedOutputStream(new FileOutputStream(dlog)), true);
                 System.setOut(logOut);
                 System.setErr(logOut);
+                // LogManager caches stderr, that's changed, so reconfigure.
+                LogManager.getLogManager().readConfiguration();
+
                 log.info("Opened debug log '" + dlog + "'.");
 
             } catch (IOException ioe) {
