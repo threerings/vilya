@@ -129,7 +129,7 @@ public class Rating
 
         // calculate K, the score multiplier constant
         int K;
-        if (rating.experience < 20) {
+        if (rating.isProvisional()) {
             K = 64;
         } else if (rating.rating < 2100) {
             K = 32; // experience >= 20
