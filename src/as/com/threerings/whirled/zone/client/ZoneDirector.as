@@ -238,7 +238,7 @@ public class ZoneDirector extends BasicDirector
             } else {
                 log.info("Delaying forced move because we have a move pending",
                     "pend", _scdir.getPendingModel(), "rzId", zoneId, "rsId", sceneId);
-                _scdir.addPendingForcedMove(new function() :void {
+                _scdir.addPendingForcedMove(function() :void {
                         forcedMove(zoneId, sceneId);
                 });
             }
