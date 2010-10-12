@@ -170,6 +170,8 @@ public class EditorScenePanel extends StageScenePanel
         super.setBounds(x, y, width, height);
 
         updateScrollArea(_horizRange.getValue(), _vertRange.getValue());
+
+        rethink();
     }
 
     /**
