@@ -79,7 +79,7 @@ import static com.threerings.stage.Log.log;
  * tile to be applied to the scene.
  */
 public class TileInfoPanel extends JSplitPane
-    implements ListSelectionListener, TreeSelectionListener
+    implements ListSelectionListener, TreeSelectionListener, EditorModelListener
 {
     /**
      * Constructs the tile info panel.
@@ -92,6 +92,7 @@ public class TileInfoPanel extends JSplitPane
         registerKeyListener(ctx);
 
         _model = model;
+        _model.addListener(this);
         _ctx = ctx;
 
         // we're going to sort all of the available tilesets into those
@@ -110,7 +111,8 @@ public class TileInfoPanel extends JSplitPane
                 // determine which layer to which this tileset applies
                 int lidx = TileSetUtil.getLayerIndex(set);
                 if (lidx != -1) {
-                    _layerSets.get(lidx).add(new TileSetRecord(lidx, tsid.intValue(), set));
+                    TileSetRecord rec = new TileSetRecord(lidx, tsid.intValue(), set);
+                    _layerSets.get(lidx).add(rec);
                 }
             }
 
@@ -193,6 +195,19 @@ public class TileInfoPanel extends JSplitPane
 
         // The damn splitpane freaks out unless we do this
         setDividerLocation(230);
+    }
+
+    // documentation inherited
+    public void modelChanged (int event)
+    {
+        if (event == TILE_CHANGED && !_settingTileOurselves) {
+            updateTileTable();
+
+            // Find the selected tileset and select it.
+            TreePath path = _idToTreePathMap.get(_model.getTileSetId());
+            _tsettree.setSelectionPath(path);
+            _tsettree.scrollPathToVisible(path);
+        }
     }
 
     /**
@@ -300,7 +315,9 @@ public class TileInfoPanel extends JSplitPane
 
             // update the model to reflect new tile set and select tile
             // zero by default
+            _settingTileOurselves = true;
             _model.setTile(trec.tileSet, trec.tileSetId, 0);
+            _settingTileOurselves = false;
 
             // update the tile table to reflect the new tileset
             updateTileTable();
@@ -342,7 +359,8 @@ public class TileInfoPanel extends JSplitPane
             int lidx = TileSetUtil.getLayerIndex(set);
             if (lidx != -1) {
                 // make up a negative number to refer to this temporary tileset
-                _layerSets.get(lidx).add(new TileSetRecord(lidx, tsid, set));
+                TileSetRecord rec = new TileSetRecord(lidx, tsid, set);
+                _layerSets.get(lidx).add(rec);
             }
 
             if (tileMgr instanceof EditorTileManager) {
@@ -359,6 +377,7 @@ public class TileInfoPanel extends JSplitPane
      */
     public void updateTileSetTree ()
     {
+        _idToTreePathMap.clear();
         // first clear out the tree
         DefaultTreeModel model = (DefaultTreeModel) _tsettree.getModel();
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
@@ -447,6 +466,8 @@ public class TileInfoPanel extends JSplitPane
                     (list[ii].equals(_selected.getUserObject()))) {
                     _selected = item;
                 }
+
+                _idToTreePathMap.put(list[ii].tileSetId, new TreePath(item.getPath()));
 
                 ii++;
 
@@ -537,7 +558,9 @@ public class TileInfoPanel extends JSplitPane
             // otherwise they clicked on the tile table.
             ListSelectionModel lsm = (ListSelectionModel) src;
             if (!lsm.isSelectionEmpty()) {
+                _settingTileOurselves = true;
                 _model.setTileId(lsm.getMinSelectionIndex());
+                _settingTileOurselves = false;
             }
         }
     }
@@ -711,6 +734,9 @@ public class TileInfoPanel extends JSplitPane
     /** An ArrayList of TileSetRecords for each layer. */
     protected Map<Integer,List<TileSetRecord>> _layerSets = Maps.newHashMap();
 
+    /** Map of tileset ID to TreePath. */
+    protected Map<Integer, TreePath> _idToTreePathMap = Maps.newHashMap();
+
     /** The original number of TileSetRecords for each layer. */
     protected int[] _layerLengths;
 
@@ -743,4 +769,6 @@ public class TileInfoPanel extends JSplitPane
 
     /** The tile table data model. */
     protected TileTableModel _tablemodel;
+
+    protected boolean _settingTileOurselves;
 }

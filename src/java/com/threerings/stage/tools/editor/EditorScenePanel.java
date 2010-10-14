@@ -334,6 +334,20 @@ public class EditorScenePanel extends StageScenePanel
         EditorDialogUtil.display(_frame, _objEditor);
     }
 
+    protected void selectTile (int x, int y)
+    {
+        // bail if we're not hovering over a scene object
+        if (_hobject == null || !(_hobject instanceof SceneObject)) {
+            return;
+        }
+
+        SceneObject scObj = (SceneObject)_hobject;
+        int tileSetId = TileUtil.getTileSetId(scObj.info.tileId);
+        int tileIndex = TileUtil.getTileIndex(scObj.info.tileId);
+        _emodel.setTile(scObj.tile.key.tileSet, tileSetId, tileIndex);
+        _emodel.setLayerIndex(EditorModel.OBJECT_LAYER);
+    }
+
     /**
      * Called by the {@link ObjectEditorDialog} when it is dismissed.
      */
@@ -459,8 +473,14 @@ public class EditorScenePanel extends StageScenePanel
         case EditorModel.ACTION_PLACE_TILE:
             switch (e.getButton()) {
             case MouseEvent.BUTTON1:
-                placeTile(tc.x, tc.y);
-                _refreshBox = true;
+                if ((e.getModifiers() & MouseEvent.CTRL_MASK) != 0) {
+                    // They've got ctrl down, let's select that tile instead.
+                    clearTileSelectRegion(tc.x, tc.y);
+                    selectTile(tc.x, tc.y);
+                } else {
+                    placeTile(tc.x, tc.y);
+                    _refreshBox = true;
+                }
                 break;
 
             case MouseEvent.BUTTON2:

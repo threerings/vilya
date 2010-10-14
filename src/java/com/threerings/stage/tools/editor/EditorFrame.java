@@ -525,6 +525,11 @@ public class EditorFrame extends ManagedJFrame
         _svpanel.redo();
     }
 
+    public void updateTileInfo ()
+    {
+        _tpanel.updateTileTable();
+    }
+
     /**
      * Handles a request to open the preferences dialog.
      */
