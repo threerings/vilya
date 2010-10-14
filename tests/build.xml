@@ -27,9 +27,8 @@
              classname="com.threerings.presents.tools.GenDObjectTask"
              classpathref="classpath"/>
     <!-- make sure the dobject class files are all compiled -->
-    <javac srcdir="src/java" destdir="${classes.dir}"
-           debug="on" optimize="${build.optimize}" deprecation="on"
-           source="1.4" target="1.4">
+    <javac srcdir="src/java" destdir="${classes.dir}" includeAntRuntime="false"
+           debug="on" optimize="${build.optimize}" deprecation="on" source="1.5" target="1.5">
       <classpath refid="classpath"/>
       <include name="**/*Object.java"/>
     </javac>
@@ -45,9 +44,8 @@
     <taskdef name="service" classpathref="classpath"
              classname="com.threerings.presents.tools.GenServiceTask"/>
     <!-- make sure the service class files are all compiled -->
-    <javac srcdir="src/java" destdir="${classes.dir}"
-           debug="on" optimize="${build.optimize}" deprecation="on"
-           source="1.5" target="1.5">
+    <javac srcdir="src/java" destdir="${classes.dir}" includeAntRuntime="false"
+           debug="on" optimize="${build.optimize}" deprecation="on" source="1.5" target="1.5">
       <classpath refid="classpath"/>
       <include name="**/*Service.java"/>
       <exclude name="**/InvocationService.java"/>
@@ -64,9 +62,8 @@
     <taskdef name="receiver" classpathref="classpath"
              classname="com.threerings.presents.tools.GenReceiverTask"/>
     <!-- make sure the receiver class files are all compiled -->
-    <javac srcdir="src/java" destdir="${classes.dir}"
-           debug="on" optimize="${build.optimize}" deprecation="on"
-           source="1.5" target="1.5">
+    <javac srcdir="src/java" destdir="${classes.dir}" includeAntRuntime="false"
+           debug="on" optimize="${build.optimize}" deprecation="on" source="1.5" target="1.5">
       <classpath refid="classpath"/>
       <include name="**/*Receiver.java"/>
     </javac>
@@ -95,8 +92,8 @@
 
   <!-- build the java class files -->
   <target name="compile" depends="prepare">
-    <javac srcdir="${src.dir}" destdir="${classes.dir}"
-      debug="on" optimize="off" deprecation="on">
+    <javac srcdir="${src.dir}" destdir="${classes.dir}" includeAntRuntime="false"
+      debug="on" optimize="off" deprecation="on" source="1.5" target="1.5">
       <classpath refid="classpath"/>
       <exclude name="com/threerings/**/tools/xml/**" unless="build.xml"/>
     </javac>
