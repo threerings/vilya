@@ -127,7 +127,7 @@ public class MiCasaClient
         _occdir = new OccupantDirector(_ctx);
         _pardtr = new ParlorDirector(_ctx);
         _msgmgr = new MessageManager(MESSAGE_MANAGER_PREFIX);
-        _chatdir = new ChatDirector(_ctx, _msgmgr, null);
+        _chatdir = new ChatDirector(_ctx, null);
     }
 
     /**
@@ -176,6 +176,11 @@ public class MiCasaClient
             return _chatdir;
         }
 
+        public MessageManager getMessageManager ()
+        {
+            return _msgmgr;
+        }
+
         public ParlorDirector getParlorDirector ()
         {
             return _pardtr;
@@ -195,11 +200,6 @@ public class MiCasaClient
         public MiCasaFrame getFrame ()
         {
             return _frame;
-        }
-
-        public MessageManager getMessageManager ()
-        {
-            return _msgmgr;
         }
     }
 

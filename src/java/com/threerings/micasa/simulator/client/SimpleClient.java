@@ -64,7 +64,7 @@ public class SimpleClient
         _locdir = new LocationDirector(_ctx);
         _occdir = new OccupantDirector(_ctx);
         _pardtr = new ParlorDirector(_ctx);
-        _chatdir = new ChatDirector(_ctx, _msgmgr, null);
+        _chatdir = new ChatDirector(_ctx, null);
 
         // keep this for later
         _frame = frame;
@@ -148,6 +148,11 @@ public class SimpleClient
             return _chatdir;
         }
 
+        public MessageManager getMessageManager ()
+        {
+            return _msgmgr;
+        }
+
         public void setPlaceView (PlaceView view)
         {
             // stick the place view into our frame
@@ -162,11 +167,6 @@ public class SimpleClient
         public MiCasaFrame getFrame ()
         {
             return (MiCasaFrame)_frame;
-        }
-
-        public MessageManager getMessageManager ()
-        {
-            return _msgmgr;
         }
     }
 
