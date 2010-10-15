@@ -130,7 +130,7 @@ public class DropBoard extends Board
     public int getPiece (int col, int row)
     {
         try {
-            return _board[(row*_bwid) + col];
+            return _board[coordsToIndex(col, row)];
         } catch (Exception e) {
             log.warning("Failed getting piece", "col", col, "row", row, e);
             return -1;
@@ -413,7 +413,7 @@ public class DropBoard extends Board
     public boolean setPiece (int col, int row, int piece)
     {
         if (col >= 0 && row >= 0 && col < _bwid && row < _bhei) {
-            _board[(row*_bwid) + col] = piece;
+            _board[coordsToIndex(col, row)] = piece;
             return true;
 
         } else {
@@ -676,7 +676,7 @@ public class DropBoard extends Board
      */
     public void setBoard (int[] board)
     {
-        int size = (_bwid*_bhei);
+        int size = size();
         if (board.length < size) {
             log.warning("Attempt to set board with invalid data size",
                 "len", board.length, "expected", size);
@@ -692,6 +692,30 @@ public class DropBoard extends Board
         DropBoard board = (DropBoard)super.clone();
         board._board = _board.clone();
         return board;
+    }
+
+    /**
+     * Converts from column & row to an index into our board array.
+     */
+    protected int coordsToIndex (int col, int row)
+    {
+        return (row * _bwid) + col;
+    }
+
+    /**
+     * Converts from an index into our board array to a column.
+     */
+    protected int indexToCol (int idx)
+    {
+        return idx % _bwid;
+    }
+
+    /**
+     * Converts from an index into our board array to a row.
+     */
+    protected int indexToRow (int idx)
+    {
+        return idx / _bwid;
     }
 
     /**
