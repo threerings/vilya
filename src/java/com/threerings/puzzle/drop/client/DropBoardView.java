@@ -137,7 +137,7 @@ public abstract class DropBoardView extends PuzzleBoardView
      */
     public void createPiece (int piece, int sx, int sy)
     {
-        if (sx < 0 || sy < 0 || sx >= _bwid || sy >= _bhei) {
+        if (!inBounds(sx, sy)) {
             log.warning("Requested to create piece in invalid location", "sx", sx, "sy", sy,
                         new Exception());
             return;
@@ -164,7 +164,7 @@ public abstract class DropBoardView extends PuzzleBoardView
      */
     public void updatePiece (int piece, int sx, int sy)
     {
-        if (sx < 0 || sy < 0 || sx >= _bwid || sy >= _bhei) {
+        if (!inBounds(sx, sy)) {
             log.warning("Requested to update piece in invalid location",
                 "sx", sx, "sy", sy, new Exception());
             return;
@@ -182,7 +182,7 @@ public abstract class DropBoardView extends PuzzleBoardView
      */
     public void createPiece (int piece, int sx, int sy, int tx, int ty, long duration)
     {
-        if (tx < 0 || ty < 0 || tx >= _bwid || ty >= _bhei) {
+        if (!inBounds(tx, ty)) {
             log.warning("Requested to create and move piece to invalid location",
                 "tx", tx, "ty", ty, new Exception());
             return;
@@ -510,6 +510,15 @@ public abstract class DropBoardView extends PuzzleBoardView
         int wid = _bwid * _pwid;
         int hei = _bhei * _phei;
         return new Dimension(wid, hei);
+    }
+
+    /**
+     * Returns true if the specified coordinate is within the bounds of the board, false if it is
+     * not.
+     */
+    public boolean inBounds (int col, int row)
+    {
+        return (col >= 0 && row >= 0 && col < getWidth() && row < getHeight());
     }
 
     /**
