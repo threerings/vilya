@@ -241,7 +241,7 @@ public class ParlorManager
             invite.config.players = new Name[] { invite.invitee.getVisibleName(),
                                                  invite.inviter.getVisibleName() };
 
-            // create the game manager and begin it's initialization process; the game manager will
+            // create the game manager and begin its initialization process; the game manager will
             // take care of notifying the players that the game has been created
             createGameManager(invite.config);
 

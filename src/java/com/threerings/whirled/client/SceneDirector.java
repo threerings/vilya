@@ -190,7 +190,7 @@ public class SceneDirector extends BasicDirector
             }
         }
 
-        // load up the pending scene so that we can communicate it's most recent version to the
+        // load up the pending scene so that we can communicate its most recent version to the
         // server
         _pendingModel = loadSceneModel(sceneId);
 

@@ -260,7 +260,7 @@ public class DropSprite extends Sprite
      * Puts the drop sprite into (or takes it out of) bouncing mode. Bouncing mode is used to put
      * the sprite into limbo after it lands but before we commit the landing, giving the user a
      * last moment change move or rotate the piece. While the sprite is "bouncing" it will be
-     * rendered one pixel below it's at rest state.
+     * rendered one pixel below its at rest state.
      */
     public void setBouncing (boolean bouncing)
     {

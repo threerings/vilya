@@ -229,7 +229,7 @@ public class EditorApp implements Runnable
             pmode = ModeUtil.getDisplayMode(
                 gd, cmode.getWidth(), cmode.getHeight(), 16, 15);
         } catch (Throwable t) {
-            // Win98 seems to choke on it's own vomit when we attempt to
+            // Win98 seems to choke on its own vomit when we attempt to
             // enumerate the available display modes; yay!
             log.warning("Failed to probe display mode.", t);
         }

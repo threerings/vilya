@@ -132,7 +132,7 @@ public abstract class DropBoardView extends PuzzleBoardView
     }
 
     /**
-     * Creates a new piece sprite and places it directly in it's correct
+     * Creates a new piece sprite and places it directly in its correct
      * position.
      */
     public void createPiece (int piece, int sx, int sy)
