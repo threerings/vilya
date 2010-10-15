@@ -62,19 +62,16 @@ public abstract class SpotSceneRuleSet implements NestableRuleSet
         // create EditablePortal instances when we see <portal>
         digester.addRule(prefix + "/portal", new PortalCreateRule(this));
         digester.addRule(prefix + "/portal", new PortalFieldsRule());
-        digester.addSetNext(prefix + "/portal", "addPortal",
-                            Portal.class.getName());
+        digester.addSetNext(prefix + "/portal", "addPortal", Portal.class.getName());
     }
 
     /**
-     * Create a new instance of the Location class that should be used
-     * with Portals.
+     * Create a new instance of the Location class that should be used with Portals.
      */
     protected abstract Location createLocation ();
 
     /**
-     * A rule used to create the portal but also initialize the Location
-     * property within it.
+     * A rule used to create the portal but also initialize the Location property within it.
      */
     protected static class PortalCreateRule extends ObjectCreateRule
     {
@@ -99,9 +96,8 @@ public abstract class SpotSceneRuleSet implements NestableRuleSet
     }
 
     /**
-     * Set fields in the Portal, or in the Location object
-     * contained therein. If there are ambiguous attribute names then..
-     * well. yeah.
+     * Set fields in the Portal, or in the Location object contained therein. If there are
+     * ambiguous attribute names then...well. yeah.
      */
     protected static class PortalFieldsRule extends Rule
     {
@@ -129,16 +125,14 @@ public abstract class SpotSceneRuleSet implements NestableRuleSet
                     container = portal;
 
                 } catch (NoSuchFieldException nsfe) {
-                    // if we didn't find the field in the Portal, maybe it's
-                    // in the Location
+                    // if we didn't find the field in the Portal, maybe it's in the Location
                     try {
                         field = locClass.getField(lname);
                         container = loc;
 
                     } catch (NoSuchFieldException nsfe2) {
                         digester.getLogger().warn(
-                            "Skipping property '" + lname +
-                            "' for which there is no field.");
+                            "Skipping property '" + lname + "' for which there is no field.");
                         continue;
                     }
                 }
