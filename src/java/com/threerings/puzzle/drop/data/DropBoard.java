@@ -129,6 +129,10 @@ public class DropBoard extends Board
      */
     public int getPiece (int col, int row)
     {
+        if (!inBounds(col, row)) {
+            log.warning("Requested piece from invalid coordinate",
+                "col", col, "row", row, "width", _bwid, "height", _bhei);
+        }
         try {
             return _board[coordsToIndex(col, row)];
         } catch (Exception e) {
