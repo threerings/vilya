@@ -1,7 +1,9 @@
 //
+// $Id$
+//
 // Vilya library - tools for developing networked games
 // Copyright (C) 2002-2010 Three Rings Design, Inc., All Rights Reserved
-// http://www.threerings.net/code/vilya/
+// http://code.google.com/p/vilya/
 //
 // This library is free software; you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as published

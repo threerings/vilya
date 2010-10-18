@@ -1,8 +1,9 @@
-// $Id: ClusterClickedInfo.as 887 2010-01-05 22:12:02Z dhoover $
+//
+// $Id$
 //
 // Vilya library - tools for developing networked games
 // Copyright (C) 2002-2010 Three Rings Design, Inc., All Rights Reserved
-// http://www.threerings.net/code/vilya/
+// http://code.google.com/p/vilya/
 //
 // This library is free software; you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as published
