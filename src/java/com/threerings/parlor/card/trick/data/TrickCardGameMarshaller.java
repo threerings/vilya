@@ -57,7 +57,8 @@ public class TrickCardGameMarshaller extends InvocationMarshaller
     // from interface TrickCardGameService
     public void requestRematch (Client arg1)
     {
-        sendRequest(arg1, REQUEST_REMATCH, new Object[] {});
+        sendRequest(arg1, REQUEST_REMATCH, new Object[] {
+        });
     }
 
     /** The method id used to dispatch {@link #sendCardsToPlayer} requests. */
