@@ -46,8 +46,7 @@
 
   <!-- makes sure our tools are compiled and defines the ant tasks -->
   <target name="preptools" depends="prepare">
-    <taskdef resource="com/threerings/presents/tools.properties"
-             classpath="${libs.dir}/narya-tools-full.jar"/>
+    <taskdef resource="com/threerings/presents/tools.properties" classpathref="classpath"/>
   </target>
 
   <!-- cleans out the intermediate build files -->

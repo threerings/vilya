@@ -10,6 +10,7 @@
     <include name="flexTasks.jar"/>
     <include name="guava.jar"/>
     <include name="guice.jar"/>
+    <include name="javassist.jar"/>
     <include name="jsr250-api.jar"/>
     <include name="junit4.jar"/>
     <include name="narya.jar"/>
