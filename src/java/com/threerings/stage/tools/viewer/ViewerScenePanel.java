@@ -64,8 +64,12 @@ public class ViewerScenePanel extends StageScenePanel
         _charmgr = charmgr;
 
         // create the character descriptors
-        _descUser = CastUtil.getRandomDescriptor("female", ctx.getComponentRepository());
-        _descDecoy = CastUtil.getRandomDescriptor("male", ctx.getComponentRepository());
+        _descUser = CastUtil.getRandomDescriptor(
+            ctx.getComponentRepository(), "female", COMP_CLASSES,
+            ctx.getColorPository(), COLOR_CLASSES);
+        _descDecoy = CastUtil.getRandomDescriptor(
+            ctx.getComponentRepository(), "male", COMP_CLASSES,
+            ctx.getColorPository(), COLOR_CLASSES);
 
         // create the manipulable sprite
         _sprite = createSprite(_descUser);
@@ -250,4 +254,13 @@ public class ViewerScenePanel extends StageScenePanel
 
     /** The test sprites that meander about aimlessly. */
     protected CharacterSprite[] _decoys;
+
+    /** Defines our various character component classes. */
+    protected static final String[] COMP_CLASSES = {
+        "legs", "feet", "hand_left", "hand_right", "torso",
+        "head", "hair", "hat", "eyepatch" };
+
+    /** Defines the colorization classes used in the character component images. */
+    protected static final String[] COLOR_CLASSES = {
+        "skin", "hair", "textile_p", "textile_s" };
 }
