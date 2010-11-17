@@ -22,7 +22,7 @@
     <include name="samskivert.jar"/>
     <include name="xml-writer.jar"/>
     <!-- ActionScript dependencies -->
-    <include name="aspirin.swc"/>
+    <include name="aspirin*.swc"/>
     <include name="naryalib.swc"/>
     <include name="nenyalib.swc"/>
     <include name="as3isolib-fp9.swc"/>
