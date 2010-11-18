@@ -39,21 +39,6 @@
       <pathelement location="${classes.dir}"/>
       <pathelement location="${tclasses.dir}"/>
     </path>
-    <!-- TEMP: needed for ActionScript library build -->
-    <property name="libs.dir" value="lib"/>
-    <copy todir="${deploy.dir}/lib" flatten="true">
-      <fileset dir="${libs.dir}">
-        <include name="aspirin*.swc"/>
-        <include name="naryalib.swc"/>
-        <include name="nenyalib.swc"/>
-        <include name="as3isolib-fp9.swc"/>
-        <!-- Thane dependencies -->
-        <include name="thane-0.0-SNAPSHOT.abc"/>
-        <include name="tamarin-builtin.abc"/>
-        <include name="narya-abc.abc"/>
-      </fileset>
-    </copy>
-    <!-- END TEMP -->
   </target>
 
   <target name="-preptools" depends="-prepare">
@@ -106,6 +91,28 @@
 
   <target name="aslib" unless="no_rebuild_aslib" depends="-checkaslib"
           description="Builds the ActionScript code">
+    <!-- TODO: these don't seem to be needed for the ActionScript library
+               build, why are/where they here -->
+    <property name="libs.dir" value="lib"/>
+    <copy todir="${deploy.dir}/lib" flatten="true">
+      <fileset dir="${libs.dir}">
+        <!-- Thane dependencies -->
+        <include name="thane-0.0-SNAPSHOT.abc"/>
+        <include name="tamarin-builtin.abc"/>
+        <include name="narya-abc.abc"/>
+      </fileset>
+    </copy>
+    <!-- END TODO -->
+
+    <!-- obtain our ActionScript dependencies via Maven -->
+    <artifact:pom id="as-pom" file="as-pom.xml"/>
+    <artifact:dependencies filesetId="aslibs.fileset" pomRefId="as-pom" useScope="compile"/>
+    <copy todir="${deploy.dir}/lib">
+      <fileset dir="lib" includes="as3isolib-*.swc"/>
+      <fileset refid="aslibs.fileset"/>
+      <mapper type="flatten"/>
+    </copy>
+
     <copy file="etc/aslib-config.xml.in" tofile="${deploy.dir}/aslib-config.xml">
       <filterset>
         <filter token="flex_sdk_dir" value="${flexsdk.dir}"/>
@@ -312,6 +319,11 @@
     <artifact:deploy file="${deploy.dir}/${ant.project.name}.jar" uniqueVersion="false">
       <remoteRepository url="${maven.deploy.repo}"/>
       <pom refid="pom"/>
+    </artifact:deploy>
+    <artifact:pom id="as-pom" file="as-pom.xml"/>
+    <artifact:deploy file="${deploy.dir}/${ant.project.name}lib.swc" uniqueVersion="false">
+      <remoteRepository url="${maven.deploy.repo}"/>
+      <pom refid="as-pom"/>
     </artifact:deploy>
   </target>
 </project>
