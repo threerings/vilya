@@ -158,6 +158,8 @@
   </target>
 
   <target name="dist" depends="compile,procstream,aslib" description="Builds jar files.">
+    <jar destfile="${deploy.dir}/${ant.project.name}.jar" basedir="${classes.dir}"/>
+    <!-- also build our various split jar files -->
     <jar destfile="${deploy.dir}/${ant.project.name}-parlor.jar">
       <fileset dir="${classes.dir}" includes="rsrc/i18n/game/**"/>
       <fileset dir="${classes.dir}" includes="com/threerings/parlor/**"/>
