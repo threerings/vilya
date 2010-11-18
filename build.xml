@@ -83,7 +83,7 @@
     </condition>
     <condition property="no_rebuild_aslib"><or>
       <isset property="no_build_aslib"/>
-      <uptodate targetfile="${deploy.dir}/${lib.name}lib.swc">
+      <uptodate targetfile="${deploy.dir}/${ant.project.name}lib.swc">
         <srcfiles dir="${asrc.dir}" includes="**/*.as"/>
       </uptodate>
     </or></condition>
@@ -289,5 +289,14 @@
         <include name="**/stage/data/*.java"/>
       </fileset>
     </genascript>
+  </target>
+
+  <property name="maven.deploy.repo" value="file://${user.home}/.m2/repository"/>
+  <target name="maven-deploy" depends="dist,tests" 
+          description="Deploys our build artifacts to a Maven repository.">
+    <artifact:deploy file="${deploy.dir}/${ant.project.name}.jar" uniqueVersion="false">
+      <remoteRepository url="${maven.deploy.repo}"/>
+      <pom refid="pom"/>
+    </artifact:deploy>
   </target>
 </project>
