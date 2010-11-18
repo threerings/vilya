@@ -164,6 +164,9 @@
           <includes>
             <include>com/threerings/**/*Test.java</include>
           </includes>
+          <systemPropertyVariables>
+            <test_dir>target/test-classes</test_dir>
+          </systemPropertyVariables>
         </configuration>
       </plugin>
       <plugin>
