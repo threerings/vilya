@@ -262,7 +262,7 @@ public abstract class PuzzleBoardView extends VirtualMediaPanel
      *
      * @param score the score text to display.
      * @param color the color of the text.
-     * @param font the font whith which to create the score animation.
+     * @param font the font with which to create the score animation.
      * @param x the x-position at which the score is to be placed.
      * @param y the y-position at which the score is to be placed.
      */
