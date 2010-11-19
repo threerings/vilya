@@ -75,8 +75,8 @@ import com.threerings.stage.tools.xml.StageSceneWriter;
 import static com.threerings.stage.Log.log;
 
 /**
- * A scene editor application that provides facilities for viewing,
- * editing, and saving the scene templates that comprise a game.
+ * A scene editor application that provides facilities for viewing, editing, and saving the scene
+ * templates that comprise a game.
  */
 public class EditorApp implements Runnable
 {
@@ -104,8 +104,7 @@ public class EditorApp implements Runnable
                 log.info("Opened debug log '" + dlog + "'.");
 
             } catch (IOException ioe) {
-                log.warning("Failed to open debug log [path=" + dlog +
-                            ", error=" + ioe + "].");
+                log.warning("Failed to open debug log", "path", dlog, "error", ioe);
             }
         }
 
@@ -153,7 +152,7 @@ public class EditorApp implements Runnable
             }
 
             public void initializationFailed (Exception e) {
-                log.warning("Failed unpacking bundles [e=" + e + "].", e);
+                log.warning("Failed unpacking bundles", "e", e, e);
             }
         };
         // we want our methods called on the AWT thread
@@ -170,11 +169,9 @@ public class EditorApp implements Runnable
         try {
             _tsrepo = new BundledTileSetRepository(_rmgr, _imgr, "tilesets");
             _tilemgr.setTileSetRepository(_tsrepo);
-            _crepo = new BundledComponentRepository(
-                _rmgr, _imgr, "components");
+            _crepo = new BundledComponentRepository(_rmgr, _imgr, "components");
         } catch (IOException e) {
-            log.warning("Exception loading tilesets and and icon manager " +
-                        "[Exception=" + e + "].");
+            log.warning("Exception loading tilesets and and icon manager", "Exception", e);
             return;
         }
 
@@ -197,8 +194,8 @@ public class EditorApp implements Runnable
     }
 
     /**
-     * Given a subdirectory name (that should correspond to the calling
-     * service), returns a file path that can be used to store local data.
+     * Given a subdirectory name (that should correspond to the calling service), returns a file
+     * path that can be used to store local data.
      */
     public static String localDataDir (String subdir)
     {
@@ -218,16 +215,13 @@ public class EditorApp implements Runnable
      */
     public void run ()
     {
-        // enter full-screen exclusive mode if available and if we have
-        // the right display mode
-        GraphicsEnvironment env =
-            GraphicsEnvironment.getLocalGraphicsEnvironment();
+        // enter full-screen exclusive mode if available and if we have the right display mode
+        GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice gd = env.getDefaultScreenDevice();
         DisplayMode pmode = null;
         try {
             DisplayMode cmode = gd.getDisplayMode();
-            pmode = ModeUtil.getDisplayMode(
-                gd, cmode.getWidth(), cmode.getHeight(), 16, 15);
+            pmode = ModeUtil.getDisplayMode(gd, cmode.getWidth(), cmode.getHeight(), 16, 15);
         } catch (Throwable t) {
             // Win98 seems to choke on its own vomit when we attempt to
             // enumerate the available display modes; yay!
@@ -236,8 +230,7 @@ public class EditorApp implements Runnable
 
         if (_viewFullScreen.getValue() && gd.isFullScreenSupported() &&
             pmode != null) {
-            log.info("Switching to screen mode " +
-                     "[mode=" + ModeUtil.toString(pmode) + "].");
+            log.info("Switching to screen mode", "mode", ModeUtil.toString(pmode));
             // set the frame to undecorated, full-screen
             _frame.setUndecorated(true);
             gd.setFullScreenWindow(_frame);
@@ -264,8 +257,7 @@ public class EditorApp implements Runnable
     }
 
     /**
-     * Derived classes can override this method and add additional scene
-     * types.
+     * Derived classes can override this method and add additional scene types.
      */
     protected void enumerateSceneTypes (List<String> types)
     {
@@ -288,9 +280,8 @@ public class EditorApp implements Runnable
     }
 
     /**
-     * The implementation of the EditorContext interface that provides
-     * handles to the config and manager objects that offer commonly
-     * used services.
+     * The implementation of the EditorContext interface that provides handles to the config and
+     * manager objects that offer commonly used services.
      */
     protected class EditorContextImpl implements EditorContext
     {
@@ -333,9 +324,8 @@ public class EditorApp implements Runnable
         public String xlate (String bundle, String message) {
             MessageBundle mbundle = _msgmgr.getBundle(bundle);
             if (mbundle == null) {
-                log.warning("Requested to translate message with " +
-                            "non-existent bundle [bundle=" + bundle +
-                            ", message=" + message + "].");
+                log.warning("Requested to translate message with non-existent bundle",
+                    "bundle", bundle, "message", message);
                 return message;
             } else {
                 return mbundle.xlate(message);

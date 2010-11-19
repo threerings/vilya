@@ -645,8 +645,8 @@ public class DropBoard extends Board
     {
         // make sure the target board is a valid target
         if (board.getWidth() != _bwid || board.getHeight() != _bhei) {
-            log.warning("Can't copy board into destination board with different dimensions " +
-                        "[src=" + this + ", dest=" + board + "].");
+            log.warning("Can't copy board into destination board with different dimensions",
+                "src", this, "dest", board);
             return;
         }
 

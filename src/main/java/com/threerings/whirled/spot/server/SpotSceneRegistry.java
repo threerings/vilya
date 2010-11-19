@@ -101,9 +101,8 @@ public class SpotSceneRegistry extends SceneRegistry
         // look up the scene manager for the specified scene
         SpotSceneManager smgr = (SpotSceneManager)getSceneManager(sceneId);
         if (smgr == null) {
-            log.warning("User requested cluster chat in non-existent scene " +
-                        "[user=" + message.speaker + ", sceneId=" + sceneId +
-                        ", message=" + message + "].");
+            log.warning("User requested cluster chat in non-existent scene",
+                "user", message.speaker, "sceneId", sceneId, "message", message);
             return;
         }
 
@@ -120,9 +119,9 @@ public class SpotSceneRegistry extends SceneRegistry
         BodyObject body = (BodyObject)caller;
         int cSceneId = ScenePlace.getSceneId(body);
         if (cSceneId != sceneId) {
-            log.info("Ignoring stale traverse portal request [caller=" + caller.who() +
-                     ", oSceneId=" + sceneId + ", portalId=" + portalId +
-                     ", cSceneId=" + cSceneId + "].");
+            log.info("Ignoring stale traverse portal request",
+                "caller", caller.who(), "oSceneId", sceneId, "portalId", portalId,
+                "cSceneId", cSceneId);
             listener.requestCancelled();
             return;
         }
@@ -130,9 +129,8 @@ public class SpotSceneRegistry extends SceneRegistry
         // obtain the source scene
         SpotSceneManager srcmgr = (SpotSceneManager)getSceneManager(sceneId);
         if (srcmgr == null) {
-            log.warning("Traverse portal missing source scene " +
-                        "[user=" + body.who() + ", sceneId=" + sceneId +
-                        ", portalId=" + portalId + "].");
+            log.warning("Traverse portal missing source scene",
+                "user", body.who(), "sceneId", sceneId, "portalId", portalId);
             throw new InvocationException(SpotCodes.INTERNAL_ERROR);
         }
 
@@ -148,9 +146,9 @@ public class SpotSceneRegistry extends SceneRegistry
 
         // make sure this portal has valid info
         if (dest == null || !dest.isValid()) {
-            log.warning("Traverse portal with invalid portal", "user", body.who(),
-                        "scene", srcmgr.where(), "pid", portalId, "portal", dest,
-                        "portals", rss.getPortals());
+            log.warning("Traverse portal with invalid portal",
+                "user", body.who(), "scene", srcmgr.where(), "pid", portalId, "portal", dest,
+                "portals", rss.getPortals());
             throw new InvocationException(SpotCodes.NO_SUCH_PORTAL);
         }
 
@@ -167,16 +165,16 @@ public class SpotSceneRegistry extends SceneRegistry
         BodyObject source = (BodyObject)caller;
         int cSceneId = ScenePlace.getSceneId(source);
         if (cSceneId != sceneId) {
-            log.info("Rejecting changeLocation for invalid scene [user=" + source.who() +
-                     ", insid=" + cSceneId + ", wantsid=" + sceneId + ", loc=" + loc + "].");
+            log.info("Rejecting changeLocation for invalid scene",
+                "user", source.who(), "insid", cSceneId, "wantsid", sceneId, "loc", loc);
             throw new InvocationException(SpotCodes.INVALID_LOCATION);
         }
 
         // look up the scene manager for the specified scene
         SpotSceneManager smgr = (SpotSceneManager)getSceneManager(sceneId);
         if (smgr == null) {
-            log.warning("User requested to change location from non-existent scene " +
-                        "[user=" + source.who() + ", sceneId=" + sceneId + ", loc=" + loc +"].");
+            log.warning("User requested to change location from non-existent scene",
+                "user", source.who(), "sceneId", sceneId, "loc", loc);
             throw new InvocationException(SpotCodes.INTERNAL_ERROR);
         }
 
@@ -198,9 +196,8 @@ public class SpotSceneRegistry extends SceneRegistry
         // look up the scene manager for the specified scene
         SpotSceneManager smgr = (SpotSceneManager)getSceneManager(sceneId);
         if (smgr == null) {
-            log.warning("User requested to join cluster from non-existent scene " +
-                        "[user=" + source.who() + ", sceneId=" + sceneId +
-                        ", foid=" + friendOid +"].");
+            log.warning("User requested to join cluster from non-existent scene",
+                "user", source.who(), "sceneId", sceneId, "foid", friendOid);
             throw new InvocationException(SpotCodes.INTERNAL_ERROR);
         }
 

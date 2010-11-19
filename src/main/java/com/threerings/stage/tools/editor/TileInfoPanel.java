@@ -75,8 +75,8 @@ import com.threerings.stage.tools.editor.util.TileSetUtil;
 import static com.threerings.stage.Log.log;
 
 /**
- * The tile info panel presents the user with options to select the
- * tile to be applied to the scene.
+ * The tile info panel presents the user with options to select the tile to be applied to the
+ * scene.
  */
 public class TileInfoPanel extends JSplitPane
     implements ListSelectionListener, TreeSelectionListener, EditorModelListener
@@ -133,21 +133,18 @@ public class TileInfoPanel extends JSplitPane
         _tsettree = new JTree(root);
 
         // don't draw any funny little icons in the tree
-        DefaultTreeCellRenderer cellrend =
-            (DefaultTreeCellRenderer) _tsettree.getCellRenderer();
+        DefaultTreeCellRenderer cellrend = (DefaultTreeCellRenderer) _tsettree.getCellRenderer();
         cellrend.setLeafIcon(null);
         cellrend.setOpenIcon(null);
         cellrend.setClosedIcon(null);
 
         // tree- only let one thing be selected, and let us know when it haps
-        _tsettree.getSelectionModel().setSelectionMode(
-            TreeSelectionModel.SINGLE_TREE_SELECTION);
+        _tsettree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         _tsettree.addTreeSelectionListener(this);
 
         // create a scrollpane to hold the tree
         SafeScrollPane scrolly = new SafeScrollPane(_tsettree);
-        scrolly.setVerticalScrollBarPolicy(
-            SafeScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrolly.setVerticalScrollBarPolicy(SafeScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         DefaultListModel qmodel = new DefaultListModel();
         for (int ii=0; ii < 10; ii++) {
@@ -159,9 +156,7 @@ public class TileInfoPanel extends JSplitPane
         _quickList.setCellRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent (
-                JList list, Object value, int index, boolean isSelected,
-                boolean cellHasFocus)
-            {
+                JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 // put the key number in front of each element
                 Component result = super.getListCellRendererComponent(
                     list, value, index, isSelected, cellHasFocus);
@@ -184,8 +179,7 @@ public class TileInfoPanel extends JSplitPane
 
         // wrap the table in a scrollpane for lengthy tilesets
         _scroller = new SafeScrollPane(_tiletable);
-        _scroller.setVerticalScrollBarPolicy(
-            SafeScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        _scroller.setVerticalScrollBarPolicy(SafeScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         // add the tile table as the entire east side
         setRightComponent(_scroller);
@@ -217,8 +211,7 @@ public class TileInfoPanel extends JSplitPane
     {
         ctx.getKeyDispatcher().addGlobalKeyListener(new KeyAdapter() {
             @Override
-            public void keyTyped (KeyEvent e)
-            {
+            public void keyTyped (KeyEvent e) {
                 char keychar = e.getKeyChar();
                 if ((keychar < '0') || (keychar > '9')) {
                     return;
@@ -232,8 +225,7 @@ public class TileInfoPanel extends JSplitPane
                         return;
                     }
                     _quickList.clearSelection();
-                    DefaultListModel model =
-                        (DefaultListModel) _quickList.getModel();
+                    DefaultListModel model = (DefaultListModel) _quickList.getModel();
                     int olddex = model.indexOf(_curTrec);
                     if (olddex != -1) {
                         model.set(olddex, "");
@@ -292,8 +284,8 @@ public class TileInfoPanel extends JSplitPane
 
             Object uobj = node.getUserObject();
             if (!(uobj instanceof TileSetRecord)) {
-                log.info("Eh? Non-TileSetRecord leaf [obj=" + uobj +
-                         ", class=" + StringUtil.shortClassName(uobj) + "].");
+                log.info("Eh? Non-TileSetRecord leaf",
+                    "obj", uobj, "class", StringUtil.shortClassName(uobj));
                 return;
             }
 
@@ -303,8 +295,7 @@ public class TileInfoPanel extends JSplitPane
     }
 
     /**
-     * Called when a tileset is selected, either via the tree
-     * or the recent list.
+     * Called when a tileset is selected, either via the tree or the recent list.
      */
     protected void tileSetSelected (TileSetRecord trec)
     {
@@ -313,8 +304,7 @@ public class TileInfoPanel extends JSplitPane
             _curTrec = trec;
             _model.setLayerIndex(trec.layer);
 
-            // update the model to reflect new tile set and select tile
-            // zero by default
+            // update the model to reflect new tile set and select tile zero by default
             _settingTileOurselves = true;
             _model.setTile(trec.tileSet, trec.tileSetId, 0);
             _settingTileOurselves = false;
@@ -324,8 +314,7 @@ public class TileInfoPanel extends JSplitPane
 
 //            _quickList.removeListSelectionListener(this);
 //            // add it to the recent list
-//            DefaultListModel recentModel = (DefaultListModel)
-//                _quickList.getModel();
+//            DefaultListModel recentModel = (DefaultListModel) _quickList.getModel();
 //            recentModel.removeElement(trec);
 //            recentModel.add(0, trec);
 //            _quickList.setSelectedIndex(0);
@@ -340,8 +329,7 @@ public class TileInfoPanel extends JSplitPane
     {
         // trim the tilesets back to remove any previous test tiles
         for (int ii=0; ii < 2; ii++) {
-            for (int jj=_layerSets.get(ii).size() - 1; jj >= _layerLengths[ii];
-                    jj--) {
+            for (int jj=_layerSets.get(ii).size() - 1; jj >= _layerLengths[ii]; jj--) {
                 _layerSets.get(ii).remove(jj);
             }
         }
@@ -372,8 +360,7 @@ public class TileInfoPanel extends JSplitPane
     }
 
     /**
-     * The layer has changed, update the tree to reflect the tilesets
-     * now available.
+     * The layer has changed, update the tree to reflect the tilesets now available.
      */
     public void updateTileSetTree ()
     {
@@ -430,14 +417,13 @@ public class TileInfoPanel extends JSplitPane
     /**
      * Recursively add tilesets to the tree.
      *
-     * @param prefix The portion of the full tileset name that we've
-     * already parsed, it corresponds to the node we're adding to.
+     * @param prefix The portion of the full tileset name that we've already parsed, it
+     * corresponds to the node we're adding to.
      * @param position The position in the array from whence to start adding.
      * @return the number of elements added to 'node' from 'list'.
      */
-    protected int addNodes (DefaultMutableTreeNode node,
-                            TileSetRecord[] list, String prefix, int position,
-                            ArrayList<TreePath> expand)
+    protected int addNodes (DefaultMutableTreeNode node, TileSetRecord[] list, String prefix,
+        int position, ArrayList<TreePath> expand)
     {
         int prefixlen = prefix.length();
 
@@ -454,16 +440,13 @@ public class TileInfoPanel extends JSplitPane
             int dex = name.indexOf('/', prefixlen);
             if (dex == -1) {
                 // nope, just add this item to the node.
-                DefaultMutableTreeNode item = new DefaultMutableTreeNode(
-                    list[ii]);
+                DefaultMutableTreeNode item = new DefaultMutableTreeNode(list[ii]);
                 node.add(item);
 
                 // oh, we're so sneaky!
-                // if the item we're adding has the same TileSetRecord
-                // as the previously selected item, we're going to want to
-                // select it..
-                if ((_selected != null) &&
-                    (list[ii].equals(_selected.getUserObject()))) {
+                // if the item we're adding has the same TileSetRecord as the previously selected
+                // item, we're going to want to select it..
+                if ((_selected != null) && (list[ii].equals(_selected.getUserObject()))) {
                     _selected = item;
                 }
 
@@ -474,8 +457,7 @@ public class TileInfoPanel extends JSplitPane
             } else {
                 // new category!
                 String catname = name.substring(prefixlen, dex);
-                DefaultMutableTreeNode category =
-                    new DefaultMutableTreeNode(catname);
+                DefaultMutableTreeNode category = new DefaultMutableTreeNode(catname);
                 node.add(category);
 
                 // if we have further categories below, start expanded
@@ -484,8 +466,7 @@ public class TileInfoPanel extends JSplitPane
                 }
 
                 // recurse..
-                ii += addNodes(category, list, name.substring(0, dex + 1),
-                               ii, expand);
+                ii += addNodes(category, list, name.substring(0, dex + 1), ii, expand);
             }
         }
 
@@ -497,14 +478,12 @@ public class TileInfoPanel extends JSplitPane
      */
     protected void updateTileTable ()
     {
-        // get the table width before we update the table model since
-        // updating the model seems to reset the table width to an
-        // incorrect default
+        // get the table width before we update the table model since updating the model seems to
+        // reset the table width to an incorrect default
         TableColumn tcol = _tiletable.getColumnModel().getColumn(0);
         _tablewid = tcol.getWidth() - (2 * EDGE_TILE_H);
 
-        // clear out the old selection because we're going to change
-        // tilesets
+        // clear out the old selection because we're going to change tilesets
         _tiletable.clearSelection();
 
         // update the table model with the new tile set tiles
@@ -526,7 +505,7 @@ public class TileInfoPanel extends JSplitPane
 
         // select the selected tile
         int tid = _model.getTileId();
-            _tiletable.setRowSelectionInterval(tid, tid);
+        _tiletable.setRowSelectionInterval(tid, tid);
 
         if (_scroller != null) {
             // scroll to the selected tile
@@ -580,8 +559,8 @@ public class TileInfoPanel extends JSplitPane
     }
 
     /**
-     * Returns the height of the given tile image after scaling to fit
-     * within the width of the tile table.
+     * Returns the height of the given tile image after scaling to fit within the width of the
+     * tile table.
      */
     protected int getScaledTileImageHeight (Image img)
     {
@@ -595,46 +574,39 @@ public class TileInfoPanel extends JSplitPane
     }
 
     /**
-     * Extends the {@link AbstractTableModel} to encapsulate the table
-     * layout and display options required when displaying the tiles in
-     * the currently selected tileset.
+     * Extends the {@link AbstractTableModel} to encapsulate the table layout and display options
+     * required when displaying the tiles in the currently selected tileset.
      */
     protected class TileTableModel extends AbstractTableModel
     {
         /**
-         * Called when the tile set associated with the table has been
-         * changed.  Clears the cached image icons used to display each
-         * cell and updates the number of rows in the table to properly
-         * deal with tile sets of varying sizes.
+         * Called when the tile set associated with the table has been changed. Clears the cached
+         * image icons used to display each cell and updates the number of rows in the table to
+         * properly deal with tile sets of varying sizes.
          */
-        public synchronized void updateTileSet ()
-        {
+        public synchronized void updateTileSet () {
             int numTiles = getTileCount();
             _icons = new ImageIcon[numTiles];
             fireTableRowsInserted(0, numTiles);
         }
 
         // documentation inherited
-        public int getColumnCount ()
-        {
+        public int getColumnCount () {
             return 1;
         }
 
         @Override
-        public String getColumnName (int columnIndex)
-        {
+        public String getColumnName (int columnIndex) {
             return null;
         }
 
         // documentation inherited
-        public int getRowCount ()
-        {
+        public int getRowCount () {
             return getTileCount();
         }
 
         // documentation inherited
-        public Object getValueAt (int row, int col)
-        {
+        public Object getValueAt (int row, int col) {
             // return the icon immediately if it's already cached
             if (_icons[row] != null) {
                 return _icons[row];
@@ -646,16 +618,14 @@ public class TileInfoPanel extends JSplitPane
             int hei = getScaledTileImageHeight(img);
 
             if (hei != img.getHeight(null)) {
-                img = img.getScaledInstance(
-                    _tablewid, hei, Image.SCALE_SMOOTH);
+                img = img.getScaledInstance(_tablewid, hei, Image.SCALE_SMOOTH);
             }
 
             return (_icons[row] = new ImageIcon(img));
         }
 
         @Override
-        public Class<?> getColumnClass (int c)
-        {
+        public Class<?> getColumnClass (int c) {
             // return the object associated with the column to force
             // rendering of our icon images rather than straight text
             return getValueAt(0, c).getClass();
@@ -675,8 +645,7 @@ public class TileInfoPanel extends JSplitPane
         public TileSet tileSet;
         public String shortname;
 
-        public TileSetRecord (int layer, int tileSetId, TileSet tileSet)
-        {
+        public TileSetRecord (int layer, int tileSetId, TileSet tileSet) {
             this.layer = layer;
             this.tileSetId = tileSetId;
             this.tileSet = tileSet;
@@ -690,25 +659,21 @@ public class TileInfoPanel extends JSplitPane
             }
         }
 
-        public String fullname ()
-        {
+        public String fullname () {
             return tileSet.getName();
         }
 
         @Override
-        public String toString ()
-        {
+        public String toString () {
             return shortname;
         }
 
-        public int compareTo (TileSetRecord o)
-        {
+        public int compareTo (TileSetRecord o) {
             return fullname().compareToIgnoreCase(o.fullname());
         }
 
         @Override
-        public boolean equals (Object o)
-        {
+        public boolean equals (Object o) {
             if (o instanceof TileSetRecord) {
                 TileSetRecord tsr = (TileSetRecord) o;
                 return ((tsr.layer == layer) && (tsr.tileSetId == tileSetId));
@@ -717,8 +682,7 @@ public class TileInfoPanel extends JSplitPane
         }
 
         @Override
-        public int hashCode ()
-        {
+        public int hashCode () {
             return Objects.hashCode(layer, tileSetId);
         }
     }
@@ -732,7 +696,7 @@ public class TileInfoPanel extends JSplitPane
     protected static final int EDGE_TILE_V = 4;
 
     /** An ArrayList of TileSetRecords for each layer. */
-    protected Map<Integer,List<TileSetRecord>> _layerSets = Maps.newHashMap();
+    protected Map<Integer, List<TileSetRecord>> _layerSets = Maps.newHashMap();
 
     /** Map of tileset ID to TreePath. */
     protected Map<Integer, TreePath> _idToTreePathMap = Maps.newHashMap();

@@ -60,9 +60,8 @@ import com.threerings.stage.data.StageScene;
 import com.threerings.stage.tools.editor.util.EditorContext;
 
 /**
- * The scene info panel presents the user with options to select the
- * scene layer to edit, and whether to display tile coordinates and
- * locations in the scene view.
+ * The scene info panel presents the user with options to select the scene layer to edit, and
+ * whether to display tile coordinates and locations in the scene view.
  */
 public class SceneInfoPanel extends JPanel
     implements ActionListener
@@ -70,8 +69,7 @@ public class SceneInfoPanel extends JPanel
     /**
      * Constructs the scene info panel.
      */
-    public SceneInfoPanel (EditorContext ctx, EditorModel model,
-                           EditorScenePanel svpanel)
+    public SceneInfoPanel (EditorContext ctx, EditorModel model, EditorScenePanel svpanel)
     {
         _ctx = ctx;
         _svpanel = svpanel;
@@ -100,8 +98,7 @@ public class SceneInfoPanel extends JPanel
         ctx.enumerateSceneTypes(types);
         types.sort();
         types.add(0, "");
-        hbox.add(createLabel("Scene type:",
-                     _scenetype = new JComboBox(types.toArray())));
+        hbox.add(createLabel("Scene type:", _scenetype = new JComboBox(types.toArray())));
         _scenetype.addActionListener(this);
 
         vert.add(hbox);
@@ -164,16 +161,14 @@ public class SceneInfoPanel extends JPanel
     }
 
     /**
-     * Prior to the color classes popup popping up, recompute the possible
-     * values.
+     * Prior to the color classes popup popping up, recompute the possible values.
      */
     protected void recomputeColorClasses ()
     {
         // add all possible colorization names to the list
         final TileManager tilemgr = _ctx.getTileManager();
         final TreeSet<String> set = Sets.newTreeSet();
-        StageMisoSceneModel msmodel = StageMisoSceneModel.getSceneModel(
-            _scene.getSceneModel());
+        StageMisoSceneModel msmodel = StageMisoSceneModel.getSceneModel(_scene.getSceneModel());
         msmodel.visitObjects(new ObjectVisitor() {
             public void visit (ObjectInfo info) {
                 int tsid = TileUtil.getTileSetId(info.tileId);
@@ -198,8 +193,7 @@ public class SceneInfoPanel extends JPanel
         });
 
         Object selected = _colorClasses.getSelectedItem();
-        DefaultComboBoxModel model =
-            (DefaultComboBoxModel) _colorClasses.getModel();
+        DefaultComboBoxModel model = (DefaultComboBoxModel) _colorClasses.getModel();
         model.removeAllElements();
         for (String zation : set) {
             model.addElement(zation);
@@ -210,15 +204,14 @@ public class SceneInfoPanel extends JPanel
     }
 
     /**
-     * Show which color Ids are available for the currently selected
-     * colorization class, and select the selected one.
+     * Show which color Ids are available for the currently selected colorization class, and
+     * select the selected one.
      */
     protected void configureColorIds (String cclass)
     {
         _colorIds.removeActionListener(this);
         try {
-            DefaultComboBoxModel model =
-                (DefaultComboBoxModel) _colorIds.getModel();
+            DefaultComboBoxModel model = (DefaultComboBoxModel) _colorIds.getModel();
             model.removeAllElements();
             if (cclass == null) {
                 return;
