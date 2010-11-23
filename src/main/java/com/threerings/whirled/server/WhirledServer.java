@@ -39,7 +39,7 @@ import com.threerings.crowd.server.CrowdServer;
 public abstract class WhirledServer extends CrowdServer
 {
     /** Configures dependencies needed by the Whirled server. */
-    public static class Module extends CrowdServer.Module
+    public static class WhirledModule extends CrowdModule
     {
         @Override protected void configure () {
             super.configure();

@@ -21,7 +21,6 @@
 
 package com.threerings.micasa.server;
 
-import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
@@ -47,14 +46,7 @@ public class MiCasaServer extends CrowdServer
 {
     public static void main (String[] args)
     {
-        Injector injector = Guice.createInjector(new Module());
-        MiCasaServer server = injector.getInstance(MiCasaServer.class);
-        try {
-            server.init(injector);
-            server.run();
-        } catch (Exception e) {
-            log.warning("Unable to initialize server.", e);
-        }
+        runServer(new CrowdModule(), new PresentsServerModule(MiCasaServer.class));
     }
 
     @Override // from CrowdServer

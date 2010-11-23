@@ -40,7 +40,7 @@ import static com.threerings.stage.Log.log;
 public abstract class StageServer extends WhirledServer
 {
     /** Configures dependencies needed by the Stage services. */
-    public static class Module extends WhirledServer.Module
+    public static class StageModule extends WhirledModule
     {
         @Override protected void configure () {
             super.configure();
