@@ -4,7 +4,7 @@
 	<classpathentry excluding="**/.svn/" kind="src" output="tests/dist/classes" path="src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/nenya"/>
-	<classpathentry exported="true" kind="var" path="EXT_LIBS_DIR/commons-beanutils.jar"/>
-	<classpathentry kind="var" path="EXT_LIBS_DIR/jsr250-api.jar"/>
+	<classpathentry kind="var" path="M2_REPO/javax/annotation/jsr250-api/1.0/jsr250-api-1.0.jar" sourcepath="M2_REPO/javax/annotation/jsr250-api/1.0/jsr250-api-1.0-sources.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
