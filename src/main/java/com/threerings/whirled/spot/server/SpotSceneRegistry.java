@@ -116,7 +116,7 @@ public class SpotSceneRegistry extends SceneRegistry
         throws InvocationException
     {
         // le sanity check
-        BodyObject body = (BodyObject)caller;
+        BodyObject body = _locator.forClient(caller);
         int cSceneId = ScenePlace.getSceneId(body);
         if (cSceneId != sceneId) {
             log.info("Ignoring stale traverse portal request",
@@ -162,7 +162,7 @@ public class SpotSceneRegistry extends SceneRegistry
                                 SpotService.ConfirmListener listener)
         throws InvocationException
     {
-        BodyObject source = (BodyObject)caller;
+        BodyObject source = _locator.forClient(caller);
         int cSceneId = ScenePlace.getSceneId(source);
         if (cSceneId != sceneId) {
             log.info("Rejecting changeLocation for invalid scene",
@@ -190,7 +190,7 @@ public class SpotSceneRegistry extends SceneRegistry
                              SpotService.ConfirmListener listener)
         throws InvocationException
     {
-        BodyObject source = (BodyObject)caller;
+        BodyObject source = _locator.forClient(caller);
         int sceneId = ScenePlace.getSceneId(source);
 
         // look up the scene manager for the specified scene
@@ -212,7 +212,7 @@ public class SpotSceneRegistry extends SceneRegistry
     public void clusterSpeak (ClientObject caller, String message, byte mode)
     {
         // ensure the caller has normal chat access
-        BodyObject source = (BodyObject)caller;
+        BodyObject source = _locator.forClient(caller);
         String errmsg = source.checkAccess(ChatCodes.CHAT_ACCESS, null);
         if (errmsg != null) {
             SpeakUtil.sendFeedback(source, MessageManager.GLOBAL_BUNDLE, errmsg);

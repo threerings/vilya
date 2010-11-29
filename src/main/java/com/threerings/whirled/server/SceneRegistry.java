@@ -39,6 +39,7 @@ import com.threerings.presents.server.InvocationManager;
 
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceConfig;
+import com.threerings.crowd.server.BodyLocator;
 import com.threerings.crowd.server.LocationManager;
 import com.threerings.crowd.server.LocationProvider;
 import com.threerings.crowd.server.PlaceManager;
@@ -189,7 +190,7 @@ public class SceneRegistry
     public void moveTo (ClientObject caller, int sceneId, int sceneVer,
                         SceneService.SceneMoveListener listener)
     {
-        BodyObject body = (BodyObject)caller;
+        BodyObject body = _locator.forClient(caller);
         resolveScene(sceneId, new SceneMoveHandler(_locman, body, sceneVer, listener));
     }
 
@@ -338,6 +339,9 @@ public class SceneRegistry
 
     /** The invoker on which we do database operations. */
     @Inject protected @MainInvoker Invoker _invoker;
+
+    /** Used to translate ClientObjects into BodyObjects. */
+    @Inject protected BodyLocator _locator;
 
     /** Provides access to place managers. */
     @Inject protected PlaceRegistry _plreg;

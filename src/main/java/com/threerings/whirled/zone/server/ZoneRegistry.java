@@ -32,6 +32,7 @@ import com.threerings.presents.server.InvocationException;
 import com.threerings.presents.server.InvocationManager;
 
 import com.threerings.crowd.data.BodyObject;
+import com.threerings.crowd.server.BodyLocator;
 import com.threerings.crowd.server.LocationManager;
 import com.threerings.crowd.server.LocationProvider;
 
@@ -152,7 +153,7 @@ public class ZoneRegistry
 
         // look up the caller's current zone id and make sure it is happy about their departure
         // from the current zone
-        BodyObject body = (BodyObject)caller;
+        BodyObject body = _locator.forClient(caller);
         ZoneManager ozmgr = getZoneManager(((ZonedBodyObject)caller).getZoneId());
         if (ozmgr != null) {
             String msg = ozmgr.ratifyBodyExit(body);
@@ -170,8 +171,7 @@ public class ZoneRegistry
         }
 
         // resolve the zone and move the user
-        zmgr.resolveZone(zoneId, createZoneMoveHandler(
-            zmgr, (BodyObject)caller, sceneId, sceneVer, listener));
+        zmgr.resolveZone(zoneId, createZoneMoveHandler(zmgr, body, sceneId, sceneVer, listener));
     }
 
     /**
@@ -192,4 +192,7 @@ public class ZoneRegistry
 
     /** Provides location services. */
     @Inject protected LocationManager _locman;
+
+    /** Used to translate ClientObjects into BodyObjects. */
+    @Inject protected BodyLocator _locator;
 }
