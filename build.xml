@@ -93,7 +93,17 @@
     activate ActionScript library build.
   </echo></target>
 
-  <target name="aslib" unless="no_rebuild_aslib" depends="-checkaslib,-noteaslib"
+  <target name="-asprepare" depends="-checkaslib">
+    <!-- obtain our ActionScript dependencies via Maven -->
+    <artifact:pom id="as-pom" file="as-pom.xml"/>
+    <artifact:dependencies filesetId="aslibs.fileset" pomRefId="as-pom" useScope="compile"/>
+    <copy todir="${deploy.dir}/lib">
+      <fileset refid="aslibs.fileset"/>
+      <mapper type="flatten"/>
+    </copy>
+  </target>
+
+  <target name="aslib" unless="no_rebuild_aslib" depends="-asprepare,-noteaslib"
           description="Builds the ActionScript code">
     <!-- TODO: these don't seem to be needed for the ActionScript library
                build, why are/where they here -->
@@ -107,14 +117,6 @@
       </fileset>
     </copy>
     <!-- END TODO -->
-
-    <!-- obtain our ActionScript dependencies via Maven -->
-    <artifact:pom id="as-pom" file="as-pom.xml"/>
-    <artifact:dependencies filesetId="aslibs.fileset" pomRefId="as-pom" useScope="compile"/>
-    <copy todir="${deploy.dir}/lib">
-      <fileset refid="aslibs.fileset"/>
-      <mapper type="flatten"/>
-    </copy>
 
     <copy file="etc/aslib-config.xml.in" tofile="${deploy.dir}/aslib-config.xml">
       <filterset>
@@ -148,7 +150,7 @@
     </copy>
   </target>
 
-  <target name="asdoc" unless="no_build_aslib" depends="-checkaslib"
+  <target name="asdoc" unless="no_build_aslib" depends="-asprepare"
           description="Builds the ActionScript documention">
     <mkdir dir="${deploy.dir}/asdocs"/>
     <java classpath="${flexsdk.dir}/lib/asdoc.jar" classname="flex2.tools.ASDoc" fork="true">
@@ -157,8 +159,8 @@
       <jvmarg value="-Xbootclasspath/p:${flexsdk.dir}/asdoc/lib/xalan.jar"/>
       <arg value="+flexlib=${flexsdk.dir}/frameworks"/>
       <arg line="-library-path ${flexsdk.dir}/frameworks/libs"/>
-      <arg line="-library-path ${deploy.dir}/lib/naryalib-0.0-SNAPSHOT.swc"/>
-      <arg line="-library-path ${deploy.dir}/lib/nenyalib-0.0-SNAPSHOT.swc"/>
+      <arg line="-library-path ${com.threerings:naryalib:swc}"/>
+      <arg line="-library-path ${com.threerings:nenyalib:swc}"/>
       <arg line="-templates-path ${flexsdk.dir}/asdoc/templates"/>
       <arg line="-doc-sources ${asrc.dir}"/>
       <arg line="-output ${deploy.dir}/asdocs"/>
