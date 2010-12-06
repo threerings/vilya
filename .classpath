@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry excluding="*/.svn/" kind="src" output="dist/classes" path="src/main/java"/>
-	<classpathentry excluding="**/.svn/" kind="src" output="tests/dist/classes" path="src/test/java"/>
+	<classpathentry excluding="**/.svn/" kind="src" output="dist/test-classes" path="src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/nenya"/>
 	<classpathentry kind="var" path="M2_REPO/javax/annotation/jsr250-api/1.0/jsr250-api-1.0.jar" sourcepath="M2_REPO/javax/annotation/jsr250-api/1.0/jsr250-api-1.0-sources.jar"/>
