@@ -206,7 +206,7 @@ public class SceneRegistry
         // then send a forced move notification to their client
         ClientObject clobj = source.getClientObject();
         if (clobj != null) {
-            SceneSender.forcedMove(source, sceneId);
+            SceneSender.forcedMove(clobj, sceneId);
         }
     }
 
