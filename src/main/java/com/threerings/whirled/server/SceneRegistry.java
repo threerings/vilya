@@ -203,11 +203,8 @@ public class SceneRegistry
         // first remove them from their old place
         _locman.leaveOccupiedPlace(source);
 
-        // then send a forced move notification to their client
-        ClientObject clobj = source.getClientObject();
-        if (clobj != null) {
-            SceneSender.forcedMove(clobj, sceneId);
-        }
+        // then send a forced move notification to their client object
+        SceneSender.forcedMove(source.getClientObject(), sceneId);
     }
 
     /**
