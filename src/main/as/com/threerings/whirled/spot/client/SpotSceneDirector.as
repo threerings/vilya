@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 package com.threerings.whirled.spot.client {
-
+import com.threerings.crowd.client.CrowdClient;
 import com.threerings.util.Log;
 import com.threerings.util.ResultListener;
 
@@ -127,8 +127,7 @@ public class SpotSceneDirector extends BasicDirector
 
         // sanity check the server's notion of what scene we're in with our notion of it
         var sceneId :int = _scdir.getScene().getId();
-        var clSceneId :int = ScenePlace.getSceneId(
-            _wctx.getClient().getClientObject() as BodyObject);
+        var clSceneId :int = ScenePlace.getSceneId(CrowdClient(_wctx.getClient()).bodyOf());
         if (sceneId != clSceneId) {
             log.warning("Client and server differ in opinion of what scene we're in " +
                         "[sSceneId=" + clSceneId + ", cSceneId=" + sceneId + "].");
@@ -334,11 +333,11 @@ public class SpotSceneDirector extends BasicDirector
     {
         super.clientDidLogon(event);
 
-        var clientObj :ClientObject = event.getClient().getClientObject();
-        if (clientObj is ClusteredBodyObject) {
-            // listen to the client object
-            clientObj.addListener(this);
-            _self = (clientObj as ClusteredBodyObject);
+        var body :BodyObject = CrowdClient(event.getClient()).bodyOf();
+        if (body is ClusteredBodyObject) {
+            // listen to the body
+            body.addListener(this);
+            _self = (body as ClusteredBodyObject);
 
             // we may need to subscribe to a cluster due to session resumption
             maybeUpdateCluster();
@@ -350,10 +349,12 @@ public class SpotSceneDirector extends BasicDirector
     {
         super.clientObjectDidChange(event);
 
-        // listen to the client object
-        var clientObj :ClientObject = event.getClient().getClientObject();
-        clientObj.addListener(this);
-        _self = (clientObj as ClusteredBodyObject);
+        var body :BodyObject = CrowdClient(event.getClient()).bodyOf();
+        if (body is ClusteredBodyObject) {
+            // listen to the body
+            body.addListener(this);
+            _self = (body as ClusteredBodyObject);
+        }
     }
 
     // documentation inherited
@@ -367,10 +368,9 @@ public class SpotSceneDirector extends BasicDirector
         _sservice = null;
         clearCluster(true);
 
-        // stop listening to the client object
-        var clientObj :ClientObject = event.getClient().getClientObject();
-        if (clientObj != null) {
-            clientObj.removeListener(this);
+        var body :BodyObject = CrowdClient(event.getClient()).bodyOf();
+        if (body is ClusteredBodyObject) {
+            body.removeListener(this);
         }
         _self = null;
     }
@@ -391,7 +391,7 @@ public class SpotSceneDirector extends BasicDirector
         var ssobj :SpotSceneObject = (plobj as SpotSceneObject);
         if (ssobj != null) {
             scloc = ssobj.occupantLocs.get(
-                _wctx.getClient().getClientObject().getOid()) as SceneLocation;
+                CrowdClient(_wctx.getClient()).bodyOf().getOid()) as SceneLocation;
         }
         _location = (scloc == null) ? null : scloc.loc;
     }
