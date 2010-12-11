@@ -124,7 +124,7 @@ public class RatingRepository extends DepotRepository
     public List<RatingRecord> getTopRatings (
         int gameId, int limit, long since, Set<Integer> playerIds)
     {
-        List<SQLExpression> where = Lists.newArrayList();
+        List<SQLExpression<Boolean>> where = Lists.newArrayList();
         where.add(RatingRecord.GAME_ID.eq(gameId));
         if (since > 0L) {
             where.add(RatingRecord.LAST_UPDATED.greaterThan(
@@ -249,7 +249,7 @@ public class RatingRepository extends DepotRepository
         // Without distinct, I must load all ratings and throw out all but the first. They're not
         // that big, but still.
 
-        List<SQLExpression> conditions = Lists.newArrayList();
+        List<SQLExpression<Boolean>> conditions = Lists.newArrayList();
         conditions.add(RatingRecord.PLAYER_ID.in(playerIds));
         if (gameIds != null) {
             conditions.add(RatingRecord.GAME_ID.in(gameIds));
