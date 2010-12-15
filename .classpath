@@ -3,7 +3,6 @@
 	<classpathentry excluding="*/.svn/" kind="src" output="dist/classes" path="src/main/java"/>
 	<classpathentry excluding="**/.svn/" kind="src" output="dist/test-classes" path="src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="var" path="M2_REPO/com/samskivert/depot/1.0/depot-1.0.jar"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/nenya"/>
 	<classpathentry kind="var" path="M2_REPO/javax/annotation/jsr250-api/1.0/jsr250-api-1.0.jar" sourcepath="M2_REPO/javax/annotation/jsr250-api/1.0/jsr250-api-1.0-sources.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0.jar"/>
