@@ -218,7 +218,7 @@
     <taskdef name="grecord" classname="com.samskivert.depot.tools.GenRecordTask"
              classpathref="compile.classpath"/>
     <!-- make sure the record class files are all compiled -->
-    <javac srcdir="${src.dir}" destdir="${classes.dir}"
+    <javac srcdir="${src.dir}" destdir="${classes.dir}" includeAntRuntime="false"
            debug="on" optimize="${build.optimize}" deprecation="on">
       <classpath refid="compile.classpath"/>
       <include name="**/*Record.java"/>
