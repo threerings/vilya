@@ -32,7 +32,7 @@ public class MaxStatCodeRecord extends PersistentRecord {
 
     // AUTO-GENERATED: FIELDS START
     public static final Class<MaxStatCodeRecord> _R = MaxStatCodeRecord.class;
-    public static final ColumnExp MAX_CODE = colexp(_R, "maxCode");
+    public static final ColumnExp<Integer> MAX_CODE = colexp(_R, "maxCode");
     // AUTO-GENERATED: FIELDS END
 
     @Column

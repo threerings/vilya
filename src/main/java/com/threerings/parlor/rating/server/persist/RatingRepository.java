@@ -23,7 +23,6 @@ package com.threerings.parlor.rating.server.persist;
 
 import java.sql.Timestamp;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -37,14 +36,12 @@ import com.google.inject.Singleton;
 
 import com.samskivert.util.IntMap;
 import com.samskivert.util.IntMaps;
+
 import com.samskivert.depot.DepotRepository;
-import com.samskivert.depot.Ops;
 import com.samskivert.depot.PersistenceContext;
 import com.samskivert.depot.PersistentRecord;
-import com.samskivert.depot.clause.Limit;
+import com.samskivert.depot.Query;
 import com.samskivert.depot.clause.OrderBy;
-import com.samskivert.depot.clause.QueryClause;
-import com.samskivert.depot.clause.Where;
 import com.samskivert.depot.expression.SQLExpression;
 
 import com.threerings.parlor.rating.util.Percentiler;
@@ -82,9 +79,8 @@ public class RatingRepository extends DepotRepository
         if (players.length == 0) {
             return Collections.emptyList();
         }
-        return findAll(RatingRecord.class,
-                       new Where(Ops.and(RatingRecord.GAME_ID.eq(gameId),
-                                         RatingRecord.PLAYER_ID.in(players))));
+        return from(RatingRecord.class).where(
+            RatingRecord.GAME_ID.eq(gameId), RatingRecord.PLAYER_ID.in(players)).select();
     }
 
     /**
@@ -97,19 +93,18 @@ public class RatingRepository extends DepotRepository
      */
     public List<RatingRecord> getRatings (int playerId, long since, int count)
     {
-        ArrayList<QueryClause> clauses = Lists.newArrayList();
+        Query<RatingRecord> query = from(RatingRecord.class);
         if (since > 0L) {
             Timestamp when = new Timestamp(System.currentTimeMillis() - since);
-            clauses.add(new Where(Ops.and(RatingRecord.PLAYER_ID.eq(playerId),
-                                          RatingRecord.LAST_UPDATED.greaterThan(when))));
+            query = query.where(RatingRecord.PLAYER_ID.eq(playerId),
+                                RatingRecord.LAST_UPDATED.greaterThan(when));
         } else {
-            clauses.add(new Where(RatingRecord.PLAYER_ID, playerId));
+            query = query.where(RatingRecord.PLAYER_ID, playerId);
         }
         if (count > 0) {
-            clauses.add(new Limit(0, count));
+            query = query.limit(count);
         }
-        clauses.add(OrderBy.descending(RatingRecord.LAST_UPDATED));
-        return findAll(RatingRecord.class, clauses);
+        return query.descending(RatingRecord.LAST_UPDATED).select();
     }
 
     /**
@@ -124,7 +119,7 @@ public class RatingRepository extends DepotRepository
     public List<RatingRecord> getTopRatings (
         int gameId, int limit, long since, Set<Integer> playerIds)
     {
-        List<SQLExpression> where = Lists.newArrayList();
+        List<SQLExpression<?>> where = Lists.newArrayList();
         where.add(RatingRecord.GAME_ID.eq(gameId));
         if (since > 0L) {
             where.add(RatingRecord.LAST_UPDATED.greaterThan(
@@ -135,9 +130,9 @@ public class RatingRepository extends DepotRepository
         }
 
         OrderBy ob = new OrderBy(
-            new SQLExpression[] { RatingRecord.RATING, RatingRecord.LAST_UPDATED },
+            new SQLExpression<?>[] { RatingRecord.RATING, RatingRecord.LAST_UPDATED },
             new OrderBy.Order[] { OrderBy.Order.DESC, OrderBy.Order.DESC });
-        return findAll(RatingRecord.class, new Where(Ops.and(where)), new Limit(0, limit), ob);
+        return from(RatingRecord.class).where(where).limit(limit).orderBy(ob).select();
     }
 
     /**
@@ -175,8 +170,8 @@ public class RatingRepository extends DepotRepository
     public Map<Integer, Percentiler> loadPercentiles (int gameId)
     {
         Map<Integer, Percentiler> tilers = Maps.newHashMap();
-        for (PercentileRecord record : findAll(
-                 PercentileRecord.class, new Where(PercentileRecord.GAME_ID, gameId))) {
+        for (PercentileRecord record : from(PercentileRecord.class).
+                 where(PercentileRecord.GAME_ID, gameId).select()) {
             tilers.put(record.gameMode, new Percentiler(record.data));
         }
         return tilers;
@@ -207,8 +202,8 @@ public class RatingRepository extends DepotRepository
      */
     public void purgeGame (int gameId)
     {
-        deleteAll(RatingRecord.class, new Where(RatingRecord.GAME_ID, gameId), null);
-        deleteAll(PercentileRecord.class, new Where(PercentileRecord.GAME_ID, gameId), null);
+        from(RatingRecord.class).where(RatingRecord.GAME_ID, gameId).delete(null);
+        from(PercentileRecord.class).where(PercentileRecord.GAME_ID, gameId).delete(null);
     }
 
     /**
@@ -216,7 +211,7 @@ public class RatingRepository extends DepotRepository
      */
     public void purgePlayers (Collection<Integer> playerIds)
     {
-        deleteAll(RatingRecord.class, new Where(RatingRecord.PLAYER_ID.in(playerIds)), null);
+        from(RatingRecord.class).where(RatingRecord.PLAYER_ID.in(playerIds)).delete(null);
     }
 
     /**
@@ -249,7 +244,7 @@ public class RatingRepository extends DepotRepository
         // Without distinct, I must load all ratings and throw out all but the first. They're not
         // that big, but still.
 
-        List<SQLExpression> conditions = Lists.newArrayList();
+        List<SQLExpression<?>> conditions = Lists.newArrayList();
         conditions.add(RatingRecord.PLAYER_ID.in(playerIds));
         if (gameIds != null) {
             conditions.add(RatingRecord.GAME_ID.in(gameIds));
@@ -259,8 +254,8 @@ public class RatingRepository extends DepotRepository
                 RatingRecord.GAME_ID.lessThan(0) : RatingRecord.GAME_ID.greaterThan(0));
         }
         IntMap<RatingRecord> ratings = IntMaps.newHashIntMap();
-        for (RatingRecord record : findAll(RatingRecord.class, new Where(Ops.and(conditions)),
-            OrderBy.descending(RatingRecord.LAST_UPDATED))) {
+        for (RatingRecord record : from(RatingRecord.class).where(conditions).
+                 descending(RatingRecord.LAST_UPDATED).select()) {
             if (ratings.containsKey(record.playerId)) {
                 continue;
             }

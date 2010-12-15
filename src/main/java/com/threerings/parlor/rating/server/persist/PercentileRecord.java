@@ -36,9 +36,9 @@ public class PercentileRecord extends PersistentRecord
 {
     // AUTO-GENERATED: FIELDS START
     public static final Class<PercentileRecord> _R = PercentileRecord.class;
-    public static final ColumnExp GAME_ID = colexp(_R, "gameId");
-    public static final ColumnExp GAME_MODE = colexp(_R, "gameMode");
-    public static final ColumnExp DATA = colexp(_R, "data");
+    public static final ColumnExp<Integer> GAME_ID = colexp(_R, "gameId");
+    public static final ColumnExp<Integer> GAME_MODE = colexp(_R, "gameMode");
+    public static final ColumnExp<byte[]> DATA = colexp(_R, "data");
     // AUTO-GENERATED: FIELDS END
 
     /** Increment this value to reflect changes to this object's schema. */

@@ -37,23 +37,23 @@ public class StringCodeRecord extends PersistentRecord
 {
     // AUTO-GENERATED: FIELDS START
     public static final Class<StringCodeRecord> _R = StringCodeRecord.class;
-    public static final ColumnExp STAT_CODE = colexp(_R, "statCode");
-    public static final ColumnExp VALUE = colexp(_R, "value");
-    public static final ColumnExp CODE = colexp(_R, "code");
+    public static final ColumnExp<Integer> STAT_CODE = colexp(_R, "statCode");
+    public static final ColumnExp<String> VALUE = colexp(_R, "value");
+    public static final ColumnExp<Integer> CODE = colexp(_R, "code");
     // AUTO-GENERATED: FIELDS END
 
     public static final int SCHEMA_VERSION = 2;
 
     /** Defines the statCodeValue unique index. */
-    public static ColumnExp[] statCodeValue ()
+    public static ColumnExp<?>[] statCodeValue ()
     {
-        return new ColumnExp[] { STAT_CODE, VALUE };
+        return new ColumnExp<?>[] { STAT_CODE, VALUE };
     }
 
     /** Defines the statCodeCode unique index. */
-    public static ColumnExp[] statCodeCode ()
+    public static ColumnExp<?>[] statCodeCode ()
     {
-        return new ColumnExp[] { STAT_CODE, CODE };
+        return new ColumnExp<?>[] { STAT_CODE, CODE };
     }
 
     /** The code of the stat. */

@@ -33,10 +33,10 @@ public class StatRecord extends PersistentRecord
 {
     // AUTO-GENERATED: FIELDS START
     public static final Class<StatRecord> _R = StatRecord.class;
-    public static final ColumnExp PLAYER_ID = colexp(_R, "playerId");
-    public static final ColumnExp STAT_CODE = colexp(_R, "statCode");
-    public static final ColumnExp STAT_DATA = colexp(_R, "statData");
-    public static final ColumnExp MOD_COUNT = colexp(_R, "modCount");
+    public static final ColumnExp<Integer> PLAYER_ID = colexp(_R, "playerId");
+    public static final ColumnExp<Integer> STAT_CODE = colexp(_R, "statCode");
+    public static final ColumnExp<byte[]> STAT_DATA = colexp(_R, "statData");
+    public static final ColumnExp<Byte> MOD_COUNT = colexp(_R, "modCount");
     // AUTO-GENERATED: FIELDS END
 
     public static final int SCHEMA_VERSION = 4;

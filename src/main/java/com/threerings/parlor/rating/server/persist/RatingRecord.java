@@ -37,11 +37,11 @@ public class RatingRecord extends PersistentRecord
 {
     // AUTO-GENERATED: FIELDS START
     public static final Class<RatingRecord> _R = RatingRecord.class;
-    public static final ColumnExp GAME_ID = colexp(_R, "gameId");
-    public static final ColumnExp PLAYER_ID = colexp(_R, "playerId");
-    public static final ColumnExp RATING = colexp(_R, "rating");
-    public static final ColumnExp EXPERIENCE = colexp(_R, "experience");
-    public static final ColumnExp LAST_UPDATED = colexp(_R, "lastUpdated");
+    public static final ColumnExp<Integer> GAME_ID = colexp(_R, "gameId");
+    public static final ColumnExp<Integer> PLAYER_ID = colexp(_R, "playerId");
+    public static final ColumnExp<Integer> RATING = colexp(_R, "rating");
+    public static final ColumnExp<Integer> EXPERIENCE = colexp(_R, "experience");
+    public static final ColumnExp<Timestamp> LAST_UPDATED = colexp(_R, "lastUpdated");
     // AUTO-GENERATED: FIELDS END
 
     public static final int SCHEMA_VERSION = 4;
