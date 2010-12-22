@@ -42,7 +42,10 @@
   </target>
 
   <target name="-preptools" depends="-prepare">
-    <taskdef resource="com/threerings/presents/tools.properties" classpathref="compile.classpath"/>
+    <artifact:dependencies pathId="tools.classpath">
+      <dependency groupId="com.threerings" artifactId="narya-tools" version="1.2"/>
+    </artifact:dependencies>
+    <taskdef resource="com/threerings/presents/tools.properties" classpathref="tools.classpath"/>
   </target>
 
   <target name="clean" description="Cleans out build results">
