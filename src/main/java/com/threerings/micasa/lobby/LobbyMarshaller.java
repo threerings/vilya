@@ -95,13 +95,12 @@ public class LobbyMarshaller extends InvocationMarshaller
         }
 
         @Override // from InvocationMarshaller
-        @SuppressWarnings("unchecked")
         public void dispatchResponse (int methodId, Object[] args)
         {
             switch (methodId) {
             case GOT_LOBBIES:
                 ((LobbiesListener)listener).gotLobbies(
-                    (List<Lobby>)args[0]);
+                    this.<List<Lobby>>cast(args[0]));
                 return;
 
             default:
