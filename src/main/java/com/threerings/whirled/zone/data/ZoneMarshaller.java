@@ -24,7 +24,6 @@ package com.threerings.whirled.zone.data;
 import javax.annotation.Generated;
 
 import com.threerings.crowd.data.PlaceConfig;
-import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.dobj.InvocationResponseEvent;
 import com.threerings.whirled.data.SceneModel;
@@ -136,12 +135,12 @@ public class ZoneMarshaller extends InvocationMarshaller
     public static final int MOVE_TO = 1;
 
     // from interface ZoneService
-    public void moveTo (Client arg1, int arg2, int arg3, int arg4, ZoneService.ZoneMoveListener arg5)
+    public void moveTo (int arg1, int arg2, int arg3, ZoneService.ZoneMoveListener arg4)
     {
-        ZoneMarshaller.ZoneMoveMarshaller listener5 = new ZoneMarshaller.ZoneMoveMarshaller();
-        listener5.listener = arg5;
-        sendRequest(arg1, MOVE_TO, new Object[] {
-            Integer.valueOf(arg2), Integer.valueOf(arg3), Integer.valueOf(arg4), listener5
+        ZoneMarshaller.ZoneMoveMarshaller listener4 = new ZoneMarshaller.ZoneMoveMarshaller();
+        listener4.listener = arg4;
+        sendRequest(MOVE_TO, new Object[] {
+            Integer.valueOf(arg1), Integer.valueOf(arg2), Integer.valueOf(arg3), listener4
         });
     }
 }

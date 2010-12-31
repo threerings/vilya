@@ -24,7 +24,6 @@ package com.threerings.parlor.tourney.data;
 import javax.annotation.Generated;
 
 import com.threerings.parlor.tourney.client.TourneyService;
-import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.InvocationMarshaller;
 
@@ -44,12 +43,12 @@ public class TourneyMarshaller extends InvocationMarshaller
     public static final int CANCEL = 1;
 
     // from interface TourneyService
-    public void cancel (Client arg1, InvocationService.ConfirmListener arg2)
+    public void cancel (InvocationService.ConfirmListener arg1)
     {
-        InvocationMarshaller.ConfirmMarshaller listener2 = new InvocationMarshaller.ConfirmMarshaller();
-        listener2.listener = arg2;
-        sendRequest(arg1, CANCEL, new Object[] {
-            listener2
+        InvocationMarshaller.ConfirmMarshaller listener1 = new InvocationMarshaller.ConfirmMarshaller();
+        listener1.listener = arg1;
+        sendRequest(CANCEL, new Object[] {
+            listener1
         });
     }
 
@@ -57,12 +56,12 @@ public class TourneyMarshaller extends InvocationMarshaller
     public static final int JOIN = 2;
 
     // from interface TourneyService
-    public void join (Client arg1, InvocationService.ConfirmListener arg2)
+    public void join (InvocationService.ConfirmListener arg1)
     {
-        InvocationMarshaller.ConfirmMarshaller listener2 = new InvocationMarshaller.ConfirmMarshaller();
-        listener2.listener = arg2;
-        sendRequest(arg1, JOIN, new Object[] {
-            listener2
+        InvocationMarshaller.ConfirmMarshaller listener1 = new InvocationMarshaller.ConfirmMarshaller();
+        listener1.listener = arg1;
+        sendRequest(JOIN, new Object[] {
+            listener1
         });
     }
 
@@ -70,12 +69,12 @@ public class TourneyMarshaller extends InvocationMarshaller
     public static final int LEAVE = 3;
 
     // from interface TourneyService
-    public void leave (Client arg1, InvocationService.ConfirmListener arg2)
+    public void leave (InvocationService.ConfirmListener arg1)
     {
-        InvocationMarshaller.ConfirmMarshaller listener2 = new InvocationMarshaller.ConfirmMarshaller();
-        listener2.listener = arg2;
-        sendRequest(arg1, LEAVE, new Object[] {
-            listener2
+        InvocationMarshaller.ConfirmMarshaller listener1 = new InvocationMarshaller.ConfirmMarshaller();
+        listener1.listener = arg1;
+        sendRequest(LEAVE, new Object[] {
+            listener1
         });
     }
 }

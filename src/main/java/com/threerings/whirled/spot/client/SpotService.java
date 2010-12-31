@@ -21,7 +21,6 @@
 
 package com.threerings.whirled.spot.client;
 
-import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 
 import com.threerings.whirled.client.SceneService.SceneMoveListener;
@@ -55,9 +54,8 @@ public interface SpotService extends InvocationService
      * @param destSceneVer the version of the destination scene data that
      * the client has in its local repository.
      */
-    public void traversePortal (
-        Client client, int sceneId, int portalId, int destSceneVer,
-        SpotSceneMoveListener listener);
+    public void traversePortal (int sceneId, int portalId, int destSceneVer,
+                                SpotSceneMoveListener listener);
 
     /**
      * Requests that this client's body be made to move to the specified
@@ -67,8 +65,7 @@ public interface SpotService extends InvocationService
      * @param sceneId the id of the scene in which to change location.
      * @param loc the location to which to move.
      */
-    public void changeLocation (Client client, int sceneId, Location loc,
-                                ConfirmListener listener);
+    public void changeLocation (int sceneId, Location loc, ConfirmListener listener);
 
     /**
      * Requests that this client start or join the specified cluster. They
@@ -79,8 +76,7 @@ public interface SpotService extends InvocationService
      * or target user's cluster, or create a cluster with the target user
      * if they are not already in one.
      */
-    public void joinCluster (Client client, int friendOid,
-                             ConfirmListener listener);
+    public void joinCluster (int friendOid, ConfirmListener listener);
 
     /**
      * Requests that the supplied message be delivered to listeners in the
@@ -90,5 +86,5 @@ public interface SpotService extends InvocationService
      * @param mode an associated mode constant that can be used to
      * identify different kinds of "speech" (emote, thought bubble, etc.).
      */
-    public void clusterSpeak (Client client, String message, byte mode);
+    public void clusterSpeak (String message, byte mode);
 }

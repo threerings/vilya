@@ -23,7 +23,6 @@ package com.threerings.parlor.client;
 
 import com.threerings.util.Name;
 
-import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 
 import com.threerings.parlor.game.data.GameConfig;
@@ -53,13 +52,12 @@ public interface ParlorService extends InvocationService
      * user, requesting that they join the inviting user in a game, the details of which are
      * specified in the supplied game config object.
      *
-     * @param client a connected, operational client instance.
      * @param invitee the username of the user to be invited.
      * @param config a game config object detailing the type and configuration of the game to be
      * created.
      * @param listener will receive and process the response.
      */
-    public void invite (Client client, Name invitee, GameConfig config,
+    public void invite (Name invitee, GameConfig config,
                         InviteListener listener);
 
     /**
@@ -67,7 +65,6 @@ public interface ParlorService extends InvocationService
      * Invitation#accept}, {@link Invitation#refuse}, or {@link Invitation#counter}. Requests that
      * an invitation response be delivered with the specified parameters.
      *
-     * @param client a connected, operational client instance.
      * @param inviteId the unique id previously assigned by the server to this invitation.
      * @param code the response code to use in responding to the invitation.
      * @param arg the argument associated with the response (a string message from the player
@@ -76,21 +73,20 @@ public interface ParlorService extends InvocationService
      * accepted invitation).
      * @param listener will receive and process the response.
      */
-    public void respond (Client client, int inviteId, int code, Object arg,
+    public void respond (int inviteId, int code, Object arg,
                          InvocationListener listener);
 
     /**
      * You probably don't want to call this directly, but want to call {@link
      * Invitation#cancel}. Requests that an outstanding invitation be cancelled.
      *
-     * @param client a connected, operational client instance.
      * @param inviteId the unique id previously assigned by the server to this invitation.
      * @param listener will receive and process the response.
      */
-    public void cancel (Client client, int inviteId, InvocationListener listener);
+    public void cancel (int inviteId, InvocationListener listener);
 
     /**
      * Requests to start a single player game with the specified game configuration.
      */
-    public void startSolitaire (Client client, GameConfig config, ConfirmListener listener);
+    public void startSolitaire (GameConfig config, ConfirmListener listener);
 }

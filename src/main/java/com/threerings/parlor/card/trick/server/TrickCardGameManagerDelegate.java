@@ -364,7 +364,6 @@ public class TrickCardGameManagerDelegate extends TurnGameManagerDelegate
         }
     }
 
-
     /**
      * Returns the number of players currently requesting or accepting a rematch.
      */

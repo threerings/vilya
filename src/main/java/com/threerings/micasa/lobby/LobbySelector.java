@@ -99,7 +99,7 @@ public class LobbySelector extends JPanel
         // get a handle on our lobby service instance
         _lservice = _ctx.getClient().requireService(LobbyService.class);
         // and use them to look up the lobby categories
-        _lservice.getCategories(_ctx.getClient(), this);
+        _lservice.getCategories(this);
     }
 
     /**
@@ -174,7 +174,7 @@ public class LobbySelector extends JPanel
             // make a note that we're loading up this category
             _pendingCategory = category;
             // issue a request to load up the lobbies in this category
-            _lservice.getLobbies(_ctx.getClient(), category, this);
+            _lservice.getLobbies(category, this);
 
         } else {
             log.info("Ignoring category select request because " +

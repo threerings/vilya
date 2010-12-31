@@ -23,7 +23,6 @@ package com.threerings.micasa.lobby;
 
 import javax.annotation.Generated;
 
-import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.dobj.InvocationResponseEvent;
 import java.util.List;
@@ -114,12 +113,12 @@ public class LobbyMarshaller extends InvocationMarshaller
     public static final int GET_CATEGORIES = 1;
 
     // from interface LobbyService
-    public void getCategories (Client arg1, LobbyService.CategoriesListener arg2)
+    public void getCategories (LobbyService.CategoriesListener arg1)
     {
-        LobbyMarshaller.CategoriesMarshaller listener2 = new LobbyMarshaller.CategoriesMarshaller();
-        listener2.listener = arg2;
-        sendRequest(arg1, GET_CATEGORIES, new Object[] {
-            listener2
+        LobbyMarshaller.CategoriesMarshaller listener1 = new LobbyMarshaller.CategoriesMarshaller();
+        listener1.listener = arg1;
+        sendRequest(GET_CATEGORIES, new Object[] {
+            listener1
         });
     }
 
@@ -127,12 +126,12 @@ public class LobbyMarshaller extends InvocationMarshaller
     public static final int GET_LOBBIES = 2;
 
     // from interface LobbyService
-    public void getLobbies (Client arg1, String arg2, LobbyService.LobbiesListener arg3)
+    public void getLobbies (String arg1, LobbyService.LobbiesListener arg2)
     {
-        LobbyMarshaller.LobbiesMarshaller listener3 = new LobbyMarshaller.LobbiesMarshaller();
-        listener3.listener = arg3;
-        sendRequest(arg1, GET_LOBBIES, new Object[] {
-            arg2, listener3
+        LobbyMarshaller.LobbiesMarshaller listener2 = new LobbyMarshaller.LobbiesMarshaller();
+        listener2.listener = arg2;
+        sendRequest(GET_LOBBIES, new Object[] {
+            arg1, listener2
         });
     }
 }

@@ -21,7 +21,6 @@
 
 package com.threerings.whirled.zone.client;
 
-import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 
 import com.threerings.crowd.data.PlaceConfig;
@@ -72,6 +71,5 @@ public interface ZoneService extends InvocationService
      * @param version the version number of the scene object that we have in our local repository.
      * @param listener receives the callback when the request succeeds or fails.
      */
-    public void moveTo (Client client, int zoneId, int sceneId, int version,
-                        ZoneMoveListener listener);
+    public void moveTo (int zoneId, int sceneId, int version, ZoneMoveListener listener);
 }

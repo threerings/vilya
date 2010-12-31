@@ -23,7 +23,6 @@ package com.threerings.micasa.lobby;
 
 import java.util.List;
 
-import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 
 /**
@@ -61,7 +60,7 @@ public interface LobbyService extends InvocationService
      * @param client a connected, operational client instance.
      * @param listener the listener that will receive and process the response.
      */
-    public void getCategories (Client client, CategoriesListener listener);
+    public void getCategories (CategoriesListener listener);
 
     /**
      * Requests information on all active lobbies that match the specified category.
@@ -70,5 +69,5 @@ public interface LobbyService extends InvocationService
      * @param category the category of game for which a list of lobbies is desired.
      * @param listener the listener that will receive and process the response.
      */
-    public void getLobbies (Client client, String category, LobbiesListener listener);
+    public void getLobbies (String category, LobbiesListener listener);
 }

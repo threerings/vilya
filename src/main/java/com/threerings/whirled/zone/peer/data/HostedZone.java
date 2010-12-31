@@ -55,5 +55,4 @@ public class HostedZone extends SimpleStreamableObject
         return zoneId;
     }
 
-
 }

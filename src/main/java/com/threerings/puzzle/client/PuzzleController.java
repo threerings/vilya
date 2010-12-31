@@ -754,12 +754,11 @@ public abstract class PuzzleController extends GameController
             _states.clear();
 
             // send the update progress request
-            _puzobj.puzzleGameService.updateProgressSync(
-                _ctx.getClient(), _puzobj.sessionId, events, states);
+            _puzobj.puzzleGameService.updateProgressSync(_puzobj.sessionId, events, states);
 
         } else {
             // send the update progress request
-            _puzobj.puzzleGameService.updateProgress(_ctx.getClient(), _puzobj.sessionId, events);
+            _puzobj.puzzleGameService.updateProgress(_puzobj.sessionId, events);
         }
     }
 

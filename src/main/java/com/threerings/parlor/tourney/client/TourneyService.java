@@ -21,7 +21,6 @@
 
 package com.threerings.parlor.tourney.client;
 
-import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 
 /**
@@ -33,15 +32,15 @@ public interface TourneyService extends InvocationService
     /**
      * Handles a request to join the tourney.
      */
-    public void join (Client caller, ConfirmListener listener);
+    public void join (ConfirmListener listener);
 
     /**
      * Handles a request to leave the tourney.
      */
-    public void leave (Client caller, ConfirmListener listener);
+    public void leave (ConfirmListener listener);
 
     /**
      * Handles a request to cancel the tourney.
      */
-    public void cancel (Client caller, ConfirmListener listener);
+    public void cancel (ConfirmListener listener);
 }

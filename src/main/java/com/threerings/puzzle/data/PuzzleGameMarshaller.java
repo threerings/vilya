@@ -23,7 +23,6 @@ package com.threerings.puzzle.data;
 
 import javax.annotation.Generated;
 
-import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.puzzle.client.PuzzleGameService;
 
@@ -43,10 +42,10 @@ public class PuzzleGameMarshaller extends InvocationMarshaller
     public static final int UPDATE_PROGRESS = 1;
 
     // from interface PuzzleGameService
-    public void updateProgress (Client arg1, int arg2, int[] arg3)
+    public void updateProgress (int arg1, int[] arg2)
     {
-        sendRequest(arg1, UPDATE_PROGRESS, new Object[] {
-            Integer.valueOf(arg2), arg3
+        sendRequest(UPDATE_PROGRESS, new Object[] {
+            Integer.valueOf(arg1), arg2
         });
     }
 
@@ -54,10 +53,10 @@ public class PuzzleGameMarshaller extends InvocationMarshaller
     public static final int UPDATE_PROGRESS_SYNC = 2;
 
     // from interface PuzzleGameService
-    public void updateProgressSync (Client arg1, int arg2, int[] arg3, Board[] arg4)
+    public void updateProgressSync (int arg1, int[] arg2, Board[] arg3)
     {
-        sendRequest(arg1, UPDATE_PROGRESS_SYNC, new Object[] {
-            Integer.valueOf(arg2), arg3, arg4
+        sendRequest(UPDATE_PROGRESS_SYNC, new Object[] {
+            Integer.valueOf(arg1), arg2, arg3
         });
     }
 }

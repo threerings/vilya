@@ -236,7 +236,6 @@ public class SceneRegistry
         return newList;
     }
 
-
     /**
      * Called when the scene resolution has completed successfully.
      */

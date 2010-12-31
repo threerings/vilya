@@ -21,7 +21,6 @@
 
 package com.threerings.parlor.game.server;
 
-
 import com.threerings.util.Name;
 
 import com.threerings.parlor.game.data.GameAI;

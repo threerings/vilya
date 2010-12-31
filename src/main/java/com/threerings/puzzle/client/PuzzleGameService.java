@@ -21,7 +21,6 @@
 
 package com.threerings.puzzle.client;
 
-import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 
 import com.threerings.puzzle.data.Board;
@@ -37,12 +36,12 @@ public interface PuzzleGameService extends InvocationService, PuzzleCodes
      * Asks the puzzle manager to apply the supplied progress events for the specified puzzle round
      * to the player's state.
      */
-    public void updateProgress (Client client, int sessionId, int[] events);
+    public void updateProgress (int sessionId, int[] events);
 
     /**
      * Debug variant of {@link #updateProgress} that is only used when
      * {@link PuzzlePanel#isSyncingBoards} is true and which includes the board states associated
      * with each event.
      */
-    public void updateProgressSync (Client client, int sessionId, int[] events, Board[] states);
+    public void updateProgressSync (int sessionId, int[] events, Board[] states);
 }

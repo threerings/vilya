@@ -21,7 +21,6 @@
 
 package com.threerings.whirled.client;
 
-import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 
 import com.threerings.crowd.data.PlaceConfig;
@@ -83,5 +82,5 @@ public interface SceneService extends InvocationService
      * @param sceneId the scene id to which we want to move.
      * @param version the version number of the scene object that we have in our local repository.
      */
-    public void moveTo (Client client, int sceneId, int version, SceneMoveListener listener);
+    public void moveTo (int sceneId, int version, SceneMoveListener listener);
 }

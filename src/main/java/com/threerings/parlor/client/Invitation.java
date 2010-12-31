@@ -65,8 +65,7 @@ public class Invitation
     public void accept ()
     {
         // generate the invocation service request
-        _pservice.respond(_ctx.getClient(), inviteId,
-                          INVITATION_ACCEPTED, null, this);
+        _pservice.respond(inviteId, INVITATION_ACCEPTED, null, this);
     }
 
     /**
@@ -79,8 +78,7 @@ public class Invitation
     public void refuse (String message)
     {
         // generate the invocation service request
-        _pservice.respond(_ctx.getClient(), inviteId,
-                          INVITATION_REFUSED, message, this);
+        _pservice.respond(inviteId, INVITATION_REFUSED, message, this);
     }
 
     /**
@@ -96,7 +94,7 @@ public class Invitation
 
         } else {
             // otherwise, generate the invocation service request
-            _pservice.cancel(_ctx.getClient(), inviteId, this);
+            _pservice.cancel(inviteId, this);
             // and remove it from the pending table
             _ctx.getParlorDirector().clearInvitation(this);
         }
@@ -117,8 +115,7 @@ public class Invitation
         _observer = observer;
 
         // generate the invocation service request
-        _pservice.respond(_ctx.getClient(), inviteId,
-                          INVITATION_COUNTERED, config, this);
+        _pservice.respond(inviteId, INVITATION_COUNTERED, config, this);
     }
 
     // documentation inherited from interface
@@ -130,7 +127,7 @@ public class Invitation
         // if the invitation was cancelled before we heard back about
         // it, we need to send off a cancellation request now
         if (_cancelled) {
-            _pservice.cancel(_ctx.getClient(), inviteId, this);
+            _pservice.cancel(inviteId, this);
         } else {
             // otherwise, put it in the pending invites table
             _ctx.getParlorDirector().registerInvitation(this);

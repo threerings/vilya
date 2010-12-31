@@ -21,7 +21,6 @@
 
 package com.threerings.micasa.simulator.client;
 
-import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 
 import com.threerings.parlor.game.data.GameConfig;
@@ -34,11 +33,9 @@ public interface SimulatorService extends InvocationService
     /**
      * Requests that a new game be created.
      *
-     * @param client a connected, operational client instance.
      * @param config the game config for the game to be created.
      * @param simClass the class name of the simulant to create.
      * @param playerCount the number of players in the game.
      */
-    public void createGame (Client client, GameConfig config,
-                            String simClass, int playerCount);
+    public void createGame (GameConfig config, String simClass, int playerCount);
 }

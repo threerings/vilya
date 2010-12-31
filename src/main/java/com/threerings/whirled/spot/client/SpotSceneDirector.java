@@ -162,7 +162,7 @@ public class SpotSceneDirector extends BasicDirector
 
         // issue a traversePortal request
         log.info("Issuing traversePortal(" + sceneId + ", " + dest + ", " + sceneVer + ").");
-        _sservice.traversePortal(_ctx.getClient(), sceneId, portalId, sceneVer,
+        _sservice.traversePortal(sceneId, portalId, sceneVer,
             new SpotService.SpotSceneMoveListener() {
                 public void requestFailed (String cause) {
                     _scdir.requestFailed(cause);
@@ -257,7 +257,7 @@ public class SpotSceneDirector extends BasicDirector
                 }
             }
         };
-        _sservice.changeLocation(_ctx.getClient(), sceneId, loc, clist);
+        _sservice.changeLocation(sceneId, loc, clist);
     }
 
     /**
@@ -282,7 +282,7 @@ public class SpotSceneDirector extends BasicDirector
 
         log.info("Joining cluster", "friend", froid);
 
-        _sservice.joinCluster(_ctx.getClient(), froid, new ConfirmListener() {
+        _sservice.joinCluster(froid, new ConfirmListener() {
             public void requestProcessed () {
                 if (listener != null) {
                     listener.requestCompleted(null);
@@ -334,7 +334,7 @@ public class SpotSceneDirector extends BasicDirector
 
         message = _chatdir.filter(message, null, true);
         if (message != null) {
-            _sservice.clusterSpeak(_ctx.getClient(), message, mode);
+            _sservice.clusterSpeak(message, mode);
         }
         return true;
     }

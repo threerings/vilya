@@ -109,7 +109,7 @@ public class ParlorDirector extends BasicDirector
         // create the invitation record
         Invitation invite = new Invitation(_ctx, _pservice, invitee, config, observer);
         // submit the invitation request to the server
-        _pservice.invite(_ctx.getClient(), invitee, config, invite);
+        _pservice.invite(invitee, config, invite);
         // and return the invitation to the caller
         return invite;
     }
@@ -122,7 +122,7 @@ public class ParlorDirector extends BasicDirector
      */
     public void startSolitaire (GameConfig config, InvocationService.ConfirmListener listener)
     {
-        _pservice.startSolitaire(_ctx.getClient(), config, listener);
+        _pservice.startSolitaire(config, listener);
     }
 
     @Override

@@ -25,7 +25,6 @@ import javax.annotation.Generated;
 
 import com.threerings.parlor.card.data.Card;
 import com.threerings.parlor.card.trick.client.TrickCardGameService;
-import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller;
 
 /**
@@ -44,10 +43,10 @@ public class TrickCardGameMarshaller extends InvocationMarshaller
     public static final int PLAY_CARD = 1;
 
     // from interface TrickCardGameService
-    public void playCard (Client arg1, Card arg2, int arg3)
+    public void playCard (Card arg1, int arg2)
     {
-        sendRequest(arg1, PLAY_CARD, new Object[] {
-            arg2, Integer.valueOf(arg3)
+        sendRequest(PLAY_CARD, new Object[] {
+            arg1, Integer.valueOf(arg2)
         });
     }
 
@@ -55,9 +54,9 @@ public class TrickCardGameMarshaller extends InvocationMarshaller
     public static final int REQUEST_REMATCH = 2;
 
     // from interface TrickCardGameService
-    public void requestRematch (Client arg1)
+    public void requestRematch ()
     {
-        sendRequest(arg1, REQUEST_REMATCH, new Object[] {
+        sendRequest(REQUEST_REMATCH, new Object[] {
         });
     }
 
@@ -65,10 +64,10 @@ public class TrickCardGameMarshaller extends InvocationMarshaller
     public static final int SEND_CARDS_TO_PLAYER = 3;
 
     // from interface TrickCardGameService
-    public void sendCardsToPlayer (Client arg1, int arg2, Card[] arg3)
+    public void sendCardsToPlayer (int arg1, Card[] arg2)
     {
-        sendRequest(arg1, SEND_CARDS_TO_PLAYER, new Object[] {
-            Integer.valueOf(arg2), arg3
+        sendRequest(SEND_CARDS_TO_PLAYER, new Object[] {
+            Integer.valueOf(arg1), arg2
         });
     }
 }

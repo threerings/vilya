@@ -24,7 +24,6 @@ package com.threerings.parlor.tourney.data;
 import javax.annotation.Generated;
 
 import com.threerings.parlor.tourney.client.TourniesService;
-import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.InvocationMarshaller;
 
@@ -44,12 +43,12 @@ public class TourniesMarshaller extends InvocationMarshaller
     public static final int CREATE_TOURNEY = 1;
 
     // from interface TourniesService
-    public void createTourney (Client arg1, TourneyConfig arg2, InvocationService.ResultListener arg3)
+    public void createTourney (TourneyConfig arg1, InvocationService.ResultListener arg2)
     {
-        InvocationMarshaller.ResultMarshaller listener3 = new InvocationMarshaller.ResultMarshaller();
-        listener3.listener = arg3;
-        sendRequest(arg1, CREATE_TOURNEY, new Object[] {
-            arg2, listener3
+        InvocationMarshaller.ResultMarshaller listener2 = new InvocationMarshaller.ResultMarshaller();
+        listener2.listener = arg2;
+        sendRequest(CREATE_TOURNEY, new Object[] {
+            arg1, listener2
         });
     }
 }

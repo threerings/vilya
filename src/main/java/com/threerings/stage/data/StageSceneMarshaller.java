@@ -24,7 +24,6 @@ package com.threerings.stage.data;
 import javax.annotation.Generated;
 
 import com.threerings.miso.data.ObjectInfo;
-import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.stage.client.StageSceneService;
@@ -45,12 +44,12 @@ public class StageSceneMarshaller extends InvocationMarshaller
     public static final int ADD_OBJECT = 1;
 
     // from interface StageSceneService
-    public void addObject (Client arg1, ObjectInfo arg2, InvocationService.ConfirmListener arg3)
+    public void addObject (ObjectInfo arg1, InvocationService.ConfirmListener arg2)
     {
-        InvocationMarshaller.ConfirmMarshaller listener3 = new InvocationMarshaller.ConfirmMarshaller();
-        listener3.listener = arg3;
-        sendRequest(arg1, ADD_OBJECT, new Object[] {
-            arg2, listener3
+        InvocationMarshaller.ConfirmMarshaller listener2 = new InvocationMarshaller.ConfirmMarshaller();
+        listener2.listener = arg2;
+        sendRequest(ADD_OBJECT, new Object[] {
+            arg1, listener2
         });
     }
 
@@ -58,12 +57,12 @@ public class StageSceneMarshaller extends InvocationMarshaller
     public static final int REMOVE_OBJECTS = 2;
 
     // from interface StageSceneService
-    public void removeObjects (Client arg1, ObjectInfo[] arg2, InvocationService.ConfirmListener arg3)
+    public void removeObjects (ObjectInfo[] arg1, InvocationService.ConfirmListener arg2)
     {
-        InvocationMarshaller.ConfirmMarshaller listener3 = new InvocationMarshaller.ConfirmMarshaller();
-        listener3.listener = arg3;
-        sendRequest(arg1, REMOVE_OBJECTS, new Object[] {
-            arg2, listener3
+        InvocationMarshaller.ConfirmMarshaller listener2 = new InvocationMarshaller.ConfirmMarshaller();
+        listener2.listener = arg2;
+        sendRequest(REMOVE_OBJECTS, new Object[] {
+            arg1, listener2
         });
     }
 }

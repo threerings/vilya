@@ -25,7 +25,6 @@ import javax.annotation.Generated;
 
 import com.threerings.micasa.simulator.client.SimulatorService;
 import com.threerings.parlor.game.data.GameConfig;
-import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller;
 
 /**
@@ -44,10 +43,10 @@ public class SimulatorMarshaller extends InvocationMarshaller
     public static final int CREATE_GAME = 1;
 
     // from interface SimulatorService
-    public void createGame (Client arg1, GameConfig arg2, String arg3, int arg4)
+    public void createGame (GameConfig arg1, String arg2, int arg3)
     {
-        sendRequest(arg1, CREATE_GAME, new Object[] {
-            arg2, arg3, Integer.valueOf(arg4)
+        sendRequest(CREATE_GAME, new Object[] {
+            arg1, arg2, Integer.valueOf(arg3)
         });
     }
 }

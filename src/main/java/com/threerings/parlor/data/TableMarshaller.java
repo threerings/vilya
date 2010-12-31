@@ -25,7 +25,6 @@ import javax.annotation.Generated;
 
 import com.threerings.parlor.client.TableService;
 import com.threerings.parlor.game.data.GameConfig;
-import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.util.Name;
@@ -46,12 +45,12 @@ public class TableMarshaller extends InvocationMarshaller
     public static final int BOOT_PLAYER = 1;
 
     // from interface TableService
-    public void bootPlayer (Client arg1, int arg2, Name arg3, InvocationService.InvocationListener arg4)
+    public void bootPlayer (int arg1, Name arg2, InvocationService.InvocationListener arg3)
     {
-        ListenerMarshaller listener4 = new ListenerMarshaller();
-        listener4.listener = arg4;
-        sendRequest(arg1, BOOT_PLAYER, new Object[] {
-            Integer.valueOf(arg2), arg3, listener4
+        ListenerMarshaller listener3 = new ListenerMarshaller();
+        listener3.listener = arg3;
+        sendRequest(BOOT_PLAYER, new Object[] {
+            Integer.valueOf(arg1), arg2, listener3
         });
     }
 
@@ -59,12 +58,12 @@ public class TableMarshaller extends InvocationMarshaller
     public static final int CREATE_TABLE = 2;
 
     // from interface TableService
-    public void createTable (Client arg1, TableConfig arg2, GameConfig arg3, InvocationService.ResultListener arg4)
+    public void createTable (TableConfig arg1, GameConfig arg2, InvocationService.ResultListener arg3)
     {
-        InvocationMarshaller.ResultMarshaller listener4 = new InvocationMarshaller.ResultMarshaller();
-        listener4.listener = arg4;
-        sendRequest(arg1, CREATE_TABLE, new Object[] {
-            arg2, arg3, listener4
+        InvocationMarshaller.ResultMarshaller listener3 = new InvocationMarshaller.ResultMarshaller();
+        listener3.listener = arg3;
+        sendRequest(CREATE_TABLE, new Object[] {
+            arg1, arg2, listener3
         });
     }
 
@@ -72,12 +71,12 @@ public class TableMarshaller extends InvocationMarshaller
     public static final int JOIN_TABLE = 3;
 
     // from interface TableService
-    public void joinTable (Client arg1, int arg2, int arg3, InvocationService.InvocationListener arg4)
+    public void joinTable (int arg1, int arg2, InvocationService.InvocationListener arg3)
     {
-        ListenerMarshaller listener4 = new ListenerMarshaller();
-        listener4.listener = arg4;
-        sendRequest(arg1, JOIN_TABLE, new Object[] {
-            Integer.valueOf(arg2), Integer.valueOf(arg3), listener4
+        ListenerMarshaller listener3 = new ListenerMarshaller();
+        listener3.listener = arg3;
+        sendRequest(JOIN_TABLE, new Object[] {
+            Integer.valueOf(arg1), Integer.valueOf(arg2), listener3
         });
     }
 
@@ -85,12 +84,12 @@ public class TableMarshaller extends InvocationMarshaller
     public static final int LEAVE_TABLE = 4;
 
     // from interface TableService
-    public void leaveTable (Client arg1, int arg2, InvocationService.InvocationListener arg3)
+    public void leaveTable (int arg1, InvocationService.InvocationListener arg2)
     {
-        ListenerMarshaller listener3 = new ListenerMarshaller();
-        listener3.listener = arg3;
-        sendRequest(arg1, LEAVE_TABLE, new Object[] {
-            Integer.valueOf(arg2), listener3
+        ListenerMarshaller listener2 = new ListenerMarshaller();
+        listener2.listener = arg2;
+        sendRequest(LEAVE_TABLE, new Object[] {
+            Integer.valueOf(arg1), listener2
         });
     }
 
@@ -98,12 +97,12 @@ public class TableMarshaller extends InvocationMarshaller
     public static final int START_TABLE_NOW = 5;
 
     // from interface TableService
-    public void startTableNow (Client arg1, int arg2, InvocationService.InvocationListener arg3)
+    public void startTableNow (int arg1, InvocationService.InvocationListener arg2)
     {
-        ListenerMarshaller listener3 = new ListenerMarshaller();
-        listener3.listener = arg3;
-        sendRequest(arg1, START_TABLE_NOW, new Object[] {
-            Integer.valueOf(arg2), listener3
+        ListenerMarshaller listener2 = new ListenerMarshaller();
+        listener2.listener = arg2;
+        sendRequest(START_TABLE_NOW, new Object[] {
+            Integer.valueOf(arg1), listener2
         });
     }
 }

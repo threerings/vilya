@@ -24,7 +24,6 @@ package com.threerings.whirled.data;
 import javax.annotation.Generated;
 
 import com.threerings.crowd.data.PlaceConfig;
-import com.threerings.presents.client.Client;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.dobj.InvocationResponseEvent;
 import com.threerings.whirled.client.SceneService;
@@ -134,12 +133,12 @@ public class SceneMarshaller extends InvocationMarshaller
     public static final int MOVE_TO = 1;
 
     // from interface SceneService
-    public void moveTo (Client arg1, int arg2, int arg3, SceneService.SceneMoveListener arg4)
+    public void moveTo (int arg1, int arg2, SceneService.SceneMoveListener arg3)
     {
-        SceneMarshaller.SceneMoveMarshaller listener4 = new SceneMarshaller.SceneMoveMarshaller();
-        listener4.listener = arg4;
-        sendRequest(arg1, MOVE_TO, new Object[] {
-            Integer.valueOf(arg2), Integer.valueOf(arg3), listener4
+        SceneMarshaller.SceneMoveMarshaller listener3 = new SceneMarshaller.SceneMoveMarshaller();
+        listener3.listener = arg3;
+        sendRequest(MOVE_TO, new Object[] {
+            Integer.valueOf(arg1), Integer.valueOf(arg2), listener3
         });
     }
 }

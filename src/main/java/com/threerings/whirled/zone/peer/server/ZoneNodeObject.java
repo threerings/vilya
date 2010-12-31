@@ -38,7 +38,6 @@ public class ZoneNodeObject extends CrowdNodeObject
     /** Contains info on all zones hosted by this server. */
     public DSet<HostedZone> hostedZones = DSet.newDSet();
 
-
     // AUTO-GENERATED: METHODS START
     /**
      * Requests that the specified entry be added to the

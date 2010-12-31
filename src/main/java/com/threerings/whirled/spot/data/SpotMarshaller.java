@@ -24,7 +24,6 @@ package com.threerings.whirled.spot.data;
 import javax.annotation.Generated;
 
 import com.threerings.crowd.data.PlaceConfig;
-import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.dobj.InvocationResponseEvent;
@@ -155,12 +154,12 @@ public class SpotMarshaller extends InvocationMarshaller
     public static final int CHANGE_LOCATION = 1;
 
     // from interface SpotService
-    public void changeLocation (Client arg1, int arg2, Location arg3, InvocationService.ConfirmListener arg4)
+    public void changeLocation (int arg1, Location arg2, InvocationService.ConfirmListener arg3)
     {
-        InvocationMarshaller.ConfirmMarshaller listener4 = new InvocationMarshaller.ConfirmMarshaller();
-        listener4.listener = arg4;
-        sendRequest(arg1, CHANGE_LOCATION, new Object[] {
-            Integer.valueOf(arg2), arg3, listener4
+        InvocationMarshaller.ConfirmMarshaller listener3 = new InvocationMarshaller.ConfirmMarshaller();
+        listener3.listener = arg3;
+        sendRequest(CHANGE_LOCATION, new Object[] {
+            Integer.valueOf(arg1), arg2, listener3
         });
     }
 
@@ -168,10 +167,10 @@ public class SpotMarshaller extends InvocationMarshaller
     public static final int CLUSTER_SPEAK = 2;
 
     // from interface SpotService
-    public void clusterSpeak (Client arg1, String arg2, byte arg3)
+    public void clusterSpeak (String arg1, byte arg2)
     {
-        sendRequest(arg1, CLUSTER_SPEAK, new Object[] {
-            arg2, Byte.valueOf(arg3)
+        sendRequest(CLUSTER_SPEAK, new Object[] {
+            arg1, Byte.valueOf(arg2)
         });
     }
 
@@ -179,12 +178,12 @@ public class SpotMarshaller extends InvocationMarshaller
     public static final int JOIN_CLUSTER = 3;
 
     // from interface SpotService
-    public void joinCluster (Client arg1, int arg2, InvocationService.ConfirmListener arg3)
+    public void joinCluster (int arg1, InvocationService.ConfirmListener arg2)
     {
-        InvocationMarshaller.ConfirmMarshaller listener3 = new InvocationMarshaller.ConfirmMarshaller();
-        listener3.listener = arg3;
-        sendRequest(arg1, JOIN_CLUSTER, new Object[] {
-            Integer.valueOf(arg2), listener3
+        InvocationMarshaller.ConfirmMarshaller listener2 = new InvocationMarshaller.ConfirmMarshaller();
+        listener2.listener = arg2;
+        sendRequest(JOIN_CLUSTER, new Object[] {
+            Integer.valueOf(arg1), listener2
         });
     }
 
@@ -192,12 +191,12 @@ public class SpotMarshaller extends InvocationMarshaller
     public static final int TRAVERSE_PORTAL = 4;
 
     // from interface SpotService
-    public void traversePortal (Client arg1, int arg2, int arg3, int arg4, SpotService.SpotSceneMoveListener arg5)
+    public void traversePortal (int arg1, int arg2, int arg3, SpotService.SpotSceneMoveListener arg4)
     {
-        SpotMarshaller.SpotSceneMoveMarshaller listener5 = new SpotMarshaller.SpotSceneMoveMarshaller();
-        listener5.listener = arg5;
-        sendRequest(arg1, TRAVERSE_PORTAL, new Object[] {
-            Integer.valueOf(arg2), Integer.valueOf(arg3), Integer.valueOf(arg4), listener5
+        SpotMarshaller.SpotSceneMoveMarshaller listener4 = new SpotMarshaller.SpotSceneMoveMarshaller();
+        listener4.listener = arg4;
+        sendRequest(TRAVERSE_PORTAL, new Object[] {
+            Integer.valueOf(arg1), Integer.valueOf(arg2), Integer.valueOf(arg3), listener4
         });
     }
 }

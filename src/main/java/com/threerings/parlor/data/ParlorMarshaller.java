@@ -25,7 +25,6 @@ import javax.annotation.Generated;
 
 import com.threerings.parlor.client.ParlorService;
 import com.threerings.parlor.game.data.GameConfig;
-import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.dobj.InvocationResponseEvent;
@@ -82,12 +81,12 @@ public class ParlorMarshaller extends InvocationMarshaller
     public static final int CANCEL = 1;
 
     // from interface ParlorService
-    public void cancel (Client arg1, int arg2, InvocationService.InvocationListener arg3)
+    public void cancel (int arg1, InvocationService.InvocationListener arg2)
     {
-        ListenerMarshaller listener3 = new ListenerMarshaller();
-        listener3.listener = arg3;
-        sendRequest(arg1, CANCEL, new Object[] {
-            Integer.valueOf(arg2), listener3
+        ListenerMarshaller listener2 = new ListenerMarshaller();
+        listener2.listener = arg2;
+        sendRequest(CANCEL, new Object[] {
+            Integer.valueOf(arg1), listener2
         });
     }
 
@@ -95,12 +94,12 @@ public class ParlorMarshaller extends InvocationMarshaller
     public static final int INVITE = 2;
 
     // from interface ParlorService
-    public void invite (Client arg1, Name arg2, GameConfig arg3, ParlorService.InviteListener arg4)
+    public void invite (Name arg1, GameConfig arg2, ParlorService.InviteListener arg3)
     {
-        ParlorMarshaller.InviteMarshaller listener4 = new ParlorMarshaller.InviteMarshaller();
-        listener4.listener = arg4;
-        sendRequest(arg1, INVITE, new Object[] {
-            arg2, arg3, listener4
+        ParlorMarshaller.InviteMarshaller listener3 = new ParlorMarshaller.InviteMarshaller();
+        listener3.listener = arg3;
+        sendRequest(INVITE, new Object[] {
+            arg1, arg2, listener3
         });
     }
 
@@ -108,12 +107,12 @@ public class ParlorMarshaller extends InvocationMarshaller
     public static final int RESPOND = 3;
 
     // from interface ParlorService
-    public void respond (Client arg1, int arg2, int arg3, Object arg4, InvocationService.InvocationListener arg5)
+    public void respond (int arg1, int arg2, Object arg3, InvocationService.InvocationListener arg4)
     {
-        ListenerMarshaller listener5 = new ListenerMarshaller();
-        listener5.listener = arg5;
-        sendRequest(arg1, RESPOND, new Object[] {
-            Integer.valueOf(arg2), Integer.valueOf(arg3), arg4, listener5
+        ListenerMarshaller listener4 = new ListenerMarshaller();
+        listener4.listener = arg4;
+        sendRequest(RESPOND, new Object[] {
+            Integer.valueOf(arg1), Integer.valueOf(arg2), arg3, listener4
         });
     }
 
@@ -121,12 +120,12 @@ public class ParlorMarshaller extends InvocationMarshaller
     public static final int START_SOLITAIRE = 4;
 
     // from interface ParlorService
-    public void startSolitaire (Client arg1, GameConfig arg2, InvocationService.ConfirmListener arg3)
+    public void startSolitaire (GameConfig arg1, InvocationService.ConfirmListener arg2)
     {
-        InvocationMarshaller.ConfirmMarshaller listener3 = new InvocationMarshaller.ConfirmMarshaller();
-        listener3.listener = arg3;
-        sendRequest(arg1, START_SOLITAIRE, new Object[] {
-            arg2, listener3
+        InvocationMarshaller.ConfirmMarshaller listener2 = new InvocationMarshaller.ConfirmMarshaller();
+        listener2.listener = arg2;
+        sendRequest(START_SOLITAIRE, new Object[] {
+            arg1, listener2
         });
     }
 }

@@ -23,7 +23,6 @@ package com.threerings.parlor.client;
 
 import com.threerings.util.Name;
 
-import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 
 import com.threerings.parlor.data.TableConfig;
@@ -37,42 +36,39 @@ public interface TableService extends InvocationService
     /**
      * Requests that a new table be created.
      *
-     * @param client a connected, operational client instance.
      * @param tableConfig the table configuration parameters.
      * @param config the game config for the game to be matchmade by the table.
      * @param listener will receive and process the response.
      */
-    public void createTable (Client client, TableConfig tableConfig, GameConfig config,
+    public void createTable (TableConfig tableConfig, GameConfig config,
                              ResultListener listener);
 
     /**
      * Requests that the current user be added to the specified table at the specified position.
      *
-     * @param client a connected, operational client instance.
      * @param tableId the unique id of the table to which this user wishes to be added.
      * @param position the position at the table to which this user desires to be added.
      * @param listener will receive and process the response.
      */
-    public void joinTable (Client client, int tableId, int position, InvocationListener listener);
+    public void joinTable (int tableId, int position, InvocationListener listener);
 
     /**
      * Requests that the current user be removed from the specified table.
      *
-     * @param client a connected, operational client instance.
      * @param tableId the unique id of the table from which this user wishes to be removed.
      * @param listener will receive and process the response.
      */
-    public void leaveTable (Client client, int tableId, InvocationListener listener);
+    public void leaveTable (int tableId, InvocationListener listener);
 
     /**
      * Requests that the specified table be started now, even if all seats are not occupied. This
      * will always fail if called by any other player than that seated in position 0 (usually the
      * creator).
      */
-    public void startTableNow (Client client, int tableId, InvocationListener listener);
+    public void startTableNow (int tableId, InvocationListener listener);
 
     /**
      * Requests that another user be booted from the specified table.
      */
-    public void bootPlayer (Client client, int tableId, Name target, InvocationListener listener);
+    public void bootPlayer (int tableId, Name target, InvocationListener listener);
 }

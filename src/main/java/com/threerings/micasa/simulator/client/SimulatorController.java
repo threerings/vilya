@@ -106,7 +106,7 @@ public class SimulatorController extends Controller
 
             // get the simulator service and use it to request that our game be created
             SimulatorService sservice = client.requireService(SimulatorService.class);
-            sservice.createGame(client, config, _info.simClass, _info.playerCount);
+            sservice.createGame(config, _info.simClass, _info.playerCount);
 
             // our work here is done, as the location manager will move us into the game room
             // straightaway

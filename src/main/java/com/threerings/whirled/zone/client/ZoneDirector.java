@@ -152,7 +152,7 @@ public class ZoneDirector extends BasicDirector
         // issue a moveTo request
         log.info("Issuing zoned moveTo(" + ZoneUtil.toString(_pendingZoneId) +
                  ", " + sceneId + ", " + sceneVers + ").");
-        _zservice.moveTo(_ctx.getClient(), _pendingZoneId, sceneId, sceneVers, this);
+        _zservice.moveTo(_pendingZoneId, sceneId, sceneVers, this);
     }
 
     @Override

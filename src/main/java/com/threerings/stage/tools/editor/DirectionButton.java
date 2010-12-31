@@ -82,7 +82,6 @@ public class DirectionButton extends AbstractButton
                 repaint();
             }
 
-
         });
     }
 

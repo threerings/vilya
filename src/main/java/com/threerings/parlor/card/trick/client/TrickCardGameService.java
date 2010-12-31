@@ -21,7 +21,6 @@
 
 package com.threerings.parlor.card.trick.client;
 
-import com.threerings.presents.client.Client;
 import com.threerings.presents.client.InvocationService;
 
 import com.threerings.parlor.card.data.Card;
@@ -34,26 +33,22 @@ public interface TrickCardGameService extends InvocationService
     /**
      * Sends a group of cards to the player at the specified index.
      *
-     * @param client the client object
      * @param toidx the index of the player to send the cards to
      * @param cards the cards to send
      */
-    public void sendCardsToPlayer (Client client, int toidx, Card[] cards);
+    public void sendCardsToPlayer (int toidx, Card[] cards);
 
     /**
      * Plays a card in the trick.
      *
-     * @param client the client object
      * @param card the card to play
      * @param handSize the size of the player's hand, which is used to verify
      * that the request is for the current trick
      */
-    public void playCard (Client client, Card card, int handSize);
+    public void playCard (Card card, int handSize);
 
     /**
      * A request for a rematch.
-     *
-     * @param client the client object
      */
-    public void requestRematch (Client client);
+    public void requestRematch ();
 }
