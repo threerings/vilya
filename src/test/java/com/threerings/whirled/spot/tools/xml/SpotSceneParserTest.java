@@ -1,9 +1,9 @@
 //
-// $Id: SpotSceneParserTest.java 4143 2006-05-23 23:22:20Z ray $
+// $Id$
 //
-// Narya library - tools for developing networked games
-// Copyright (C) 2002-2010 Three Rings Design, Inc., All Rights Reserved
-// http://www.threerings.net/code/narya/
+// Vilya library - tools for developing networked games
+// Copyright (C) 2002-2011 Three Rings Design, Inc., All Rights Reserved
+// http://code.google.com/p/vilya/
 //
 // This library is free software; you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as published
