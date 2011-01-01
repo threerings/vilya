@@ -33,9 +33,8 @@ import com.threerings.presents.net.UsernamePasswordCreds;
 import static com.threerings.micasa.Log.log;
 
 /**
- * The micasa app is the main point of entry for the MiCasa client
- * application. It creates and initializes the myriad components of the
- * client and sets all the proper wheels in motion.
+ * The micasa app is the main point of entry for the MiCasa client application. It creates and
+ * initializes the myriad components of the client and sets all the proper wheels in motion.
  */
 public class MiCasaApp
 {
@@ -59,8 +58,7 @@ public class MiCasaApp
         try {
             _client = (MiCasaClient)Class.forName(cclass).newInstance();
         } catch (Exception e) {
-            log.warning("Unable to instantiate client class " +
-                        "[cclass=" + cclass + "].", e);
+            log.warning("Unable to instantiate client class", "cclass", cclass, e);
         }
 
         // initialize our client instance
@@ -76,14 +74,13 @@ public class MiCasaApp
 
         Client client = _client.getContext().getClient();
 
-        log.info("Using [server=" + server + ".");
+        log.info("Using", "server", server);
         client.setServer(server, Client.DEFAULT_SERVER_PORTS);
 
         // configure the client with some credentials and logon
         if (username != null && password != null) {
             // create and set our credentials
-            client.setCredentials(
-                new UsernamePasswordCreds(new Name(username), password));
+            client.setCredentials(new UsernamePasswordCreds(new Name(username), password));
             client.logon();
         }
     }

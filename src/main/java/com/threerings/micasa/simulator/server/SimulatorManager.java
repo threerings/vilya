@@ -73,8 +73,7 @@ public class SimulatorManager
     public class CreateGameTask
     {
         public CreateGameTask (BodyObject source, GameConfig config, String simClass,
-                               int playerCount)
-        {
+                               int playerCount) {
             // save off game request info
             _source = source;
             _config = config;
@@ -94,7 +93,7 @@ public class SimulatorManager
                 _gmgr = (GameManager)_plreg.createPlace(config);
 
             } catch (Exception e) {
-                log.warning("Unable to create game manager [e=" + e + "].", e);
+                log.warning("Unable to create game manager", "e", e, e);
                 return;
             }
 
@@ -115,8 +114,7 @@ public class SimulatorManager
             }
 
             // resolve the simulant body objects
-            ClientResolutionListener listener = new ClientResolutionListener()
-            {
+            ClientResolutionListener listener = new ClientResolutionListener() {
                 public void clientResolved (Name username, ClientObject clobj) {
                     // hold onto the body object for later game creation
                     _sims.add(clobj);
@@ -126,7 +124,7 @@ public class SimulatorManager
                     }
                 }
                 public void resolutionFailed (Name username, Exception cause) {
-                    log.warning("Unable to create simulant body object [error=" + cause + "].");
+                    log.warning("Unable to create simulant body object", "error", cause);
                 }
             };
 
@@ -141,8 +139,7 @@ public class SimulatorManager
          * Called when all simulant body objects are present and the simulants are ready to be
          * created.
          */
-        protected void createSimulants ()
-        {
+        protected void createSimulants () {
             // finish setting up the simulants
             for (int ii = 1; ii < _playerCount; ii++) {
                 // create the simulant object
@@ -150,8 +147,7 @@ public class SimulatorManager
                 try {
                     sim = (Simulant)Class.forName(_simClass).newInstance();
                 } catch (Exception e) {
-                    log.warning("Unable to create simulant " +
-                                "[class=" + _simClass + "].");
+                    log.warning("Unable to create simulant", "class", _simClass);
                     return;
                 }
 
@@ -167,8 +163,7 @@ public class SimulatorManager
                 try {
                     _locman.moveTo(bobj, _gobj.getOid());
                 } catch (Exception e) {
-                    log.warning("Failed to move simulant into room " +
-                                "[e=" + e + "].");
+                    log.warning("Failed to move simulant into room", "e", e);
                     return;
                 }
             }
