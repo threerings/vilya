@@ -34,6 +34,7 @@ import com.threerings.parlor.game.server.GameManager;
 import com.threerings.puzzle.data.Board;
 import com.threerings.puzzle.data.BoardSummary;
 import com.threerings.puzzle.data.PuzzleCodes;
+import com.threerings.puzzle.data.PuzzleGameMarshaller;
 import com.threerings.puzzle.data.PuzzleObject;
 
 import static com.threerings.puzzle.Log.log;
@@ -157,7 +158,7 @@ public abstract class PuzzleManager extends GameManager
         _puzobj = (PuzzleObject)_gameobj;
 
         // create and fill in our game service object
-        _puzobj.setPuzzleGameService(addDispatcher(new PuzzleGameDispatcher(this)));
+        _puzobj.setPuzzleGameService(addProvider(this, PuzzleGameMarshaller.class));
     }
 
     @Override

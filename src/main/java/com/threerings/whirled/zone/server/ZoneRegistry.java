@@ -39,6 +39,7 @@ import com.threerings.crowd.server.LocationProvider;
 import com.threerings.whirled.server.SceneRegistry;
 import com.threerings.whirled.zone.client.ZoneService;
 import com.threerings.whirled.zone.data.ZoneCodes;
+import com.threerings.whirled.zone.data.ZoneMarshaller;
 import com.threerings.whirled.zone.data.ZonedBodyObject;
 import com.threerings.whirled.zone.util.ZoneUtil;
 
@@ -56,7 +57,7 @@ public class ZoneRegistry
      */
     @Inject public ZoneRegistry (InvocationManager invmgr)
     {
-        invmgr.registerDispatcher(new ZoneDispatcher(this), ZoneCodes.WHIRLED_GROUP);
+        invmgr.registerProvider(this, ZoneMarshaller.class, ZoneCodes.WHIRLED_GROUP);
     }
 
     /**

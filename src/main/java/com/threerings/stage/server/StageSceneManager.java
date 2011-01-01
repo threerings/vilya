@@ -63,6 +63,7 @@ import com.threerings.stage.data.StageLocation;
 import com.threerings.stage.data.StageMisoSceneModel;
 import com.threerings.stage.data.StageOccupantInfo;
 import com.threerings.stage.data.StageScene;
+import com.threerings.stage.data.StageSceneMarshaller;
 import com.threerings.stage.data.StageSceneModel;
 import com.threerings.stage.data.StageSceneObject;
 import com.threerings.stage.util.StageSceneUtil;
@@ -257,7 +258,7 @@ public class StageSceneManager extends SpotSceneManager
         _ssobj = (StageSceneObject)_plobj;
 
         // register and fill in our stage scene service
-        _ssobj.setStageSceneService(addDispatcher(new StageSceneDispatcher(this)));
+        _ssobj.setStageSceneService(addProvider(this, StageSceneMarshaller.class));
     }
 
     @Override

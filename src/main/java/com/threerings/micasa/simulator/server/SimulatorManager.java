@@ -27,6 +27,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import com.threerings.micasa.simulator.data.SimulatorMarshaller;
 import com.threerings.util.Name;
 
 import com.threerings.presents.data.ClientObject;
@@ -57,7 +58,7 @@ public class SimulatorManager
     {
         // register our simulator provider
         SimulatorProvider sprov = new SimulatorProvider(this);
-        invmgr.registerDispatcher(new SimulatorDispatcher(sprov), InvocationCodes.GLOBAL_GROUP);
+        invmgr.registerProvider(sprov, SimulatorMarshaller.class, InvocationCodes.GLOBAL_GROUP);
     }
 
     /**

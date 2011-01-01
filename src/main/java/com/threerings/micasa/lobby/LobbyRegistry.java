@@ -42,6 +42,7 @@ import com.threerings.presents.server.InvocationManager;
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.server.PlaceRegistry;
 
+import com.threerings.micasa.lobby.LobbyMarshaller;
 import com.threerings.micasa.lobby.LobbyService.CategoriesListener;
 import com.threerings.micasa.lobby.LobbyService.LobbiesListener;
 import com.threerings.micasa.server.MiCasaConfig;
@@ -100,7 +101,7 @@ public class LobbyRegistry
     @Inject public LobbyRegistry (InvocationManager invmgr)
     {
         // register ourselves as an invocation service handler
-        invmgr.registerDispatcher(new LobbyDispatcher(this), InvocationCodes.GLOBAL_GROUP);
+        invmgr.registerProvider(this, LobbyMarshaller.class, InvocationCodes.GLOBAL_GROUP);
     }
 
     /**

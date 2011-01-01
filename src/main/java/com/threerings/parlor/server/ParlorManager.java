@@ -38,6 +38,7 @@ import com.threerings.crowd.server.PlaceRegistry;
 
 import com.threerings.parlor.client.ParlorService;
 import com.threerings.parlor.data.ParlorCodes;
+import com.threerings.parlor.data.ParlorMarshaller;
 import com.threerings.parlor.game.data.GameConfig;
 
 import static com.threerings.parlor.Log.log;
@@ -53,7 +54,7 @@ public class ParlorManager
 {
     @Inject public ParlorManager (InvocationManager invmgr)
     {
-        invmgr.registerDispatcher(new ParlorDispatcher(this), PARLOR_GROUP);
+        invmgr.registerProvider(this, ParlorMarshaller.class, PARLOR_GROUP);
     }
 
     // from interface ParlorProvider

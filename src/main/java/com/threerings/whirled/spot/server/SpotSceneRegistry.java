@@ -43,6 +43,7 @@ import com.threerings.whirled.spot.client.SpotService;
 import com.threerings.whirled.spot.data.Location;
 import com.threerings.whirled.spot.data.Portal;
 import com.threerings.whirled.spot.data.SpotCodes;
+import com.threerings.whirled.spot.data.SpotMarshaller;
 import com.threerings.whirled.spot.data.SpotScene;
 
 import static com.threerings.whirled.spot.Log.log;
@@ -60,7 +61,7 @@ public class SpotSceneRegistry extends SceneRegistry
     @Inject public SpotSceneRegistry (InvocationManager invmgr)
     {
         super(invmgr);
-        invmgr.registerDispatcher(new SpotDispatcher(this), SceneCodes.WHIRLED_GROUP);
+        invmgr.registerProvider(this, SpotMarshaller.class, SceneCodes.WHIRLED_GROUP);
     }
 
     /**

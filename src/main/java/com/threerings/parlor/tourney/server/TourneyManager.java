@@ -38,6 +38,7 @@ import com.threerings.crowd.server.BodyLocator;
 import com.threerings.parlor.tourney.data.Participant;
 import com.threerings.parlor.tourney.data.TourneyCodes;
 import com.threerings.parlor.tourney.data.TourneyConfig;
+import com.threerings.parlor.tourney.data.TourneyMarshaller;
 import com.threerings.parlor.tourney.data.TourneyObject;
 
 /**
@@ -58,7 +59,7 @@ public abstract class TourneyManager
 
         // creare and configure our Tourney object
         _trobj = _omgr.registerObject(new TourneyObject());
-        _trobj.setTourneyService(_invmgr.registerDispatcher(new TourneyDispatcher(this)));
+        _trobj.setTourneyService(_invmgr.registerProvider(this, TourneyMarshaller.class));
 
         _trobj.config = config;
 

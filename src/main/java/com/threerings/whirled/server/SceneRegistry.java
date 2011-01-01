@@ -48,6 +48,7 @@ import com.threerings.crowd.server.PlaceRegistry;
 import com.threerings.whirled.client.SceneService;
 import com.threerings.whirled.data.Scene;
 import com.threerings.whirled.data.SceneCodes;
+import com.threerings.whirled.data.SceneMarshaller;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.server.persist.SceneRepository;
 import com.threerings.whirled.util.NoSuchSceneException;
@@ -110,7 +111,7 @@ public class SceneRegistry
     @Inject public SceneRegistry (InvocationManager invmgr)
     {
         // register our scene service
-        invmgr.registerDispatcher(new SceneDispatcher(this), SceneCodes.WHIRLED_GROUP);
+        invmgr.registerProvider(this, SceneMarshaller.class, SceneCodes.WHIRLED_GROUP);
     }
 
     /**

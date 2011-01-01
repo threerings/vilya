@@ -54,6 +54,7 @@ import com.threerings.parlor.data.ParlorCodes;
 import com.threerings.parlor.data.Table;
 import com.threerings.parlor.data.TableConfig;
 import com.threerings.parlor.data.TableLobbyObject;
+import com.threerings.parlor.data.TableMarshaller;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.parlor.game.data.GameObject;
 import com.threerings.parlor.game.server.GameManager;
@@ -92,7 +93,7 @@ public class TableManager
 
         // set up our object references
         _tlobj = (TableLobbyObject)tableObject;
-        _tlobj.setTableService(_invmgr.registerDispatcher(new TableDispatcher(this)));
+        _tlobj.setTableService(_invmgr.registerProvider(this, TableMarshaller.class));
         _dobj = tableObject;
 
         // if our table is in a "place" add ourselves as a listener so that we can tell if a user
