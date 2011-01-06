@@ -61,7 +61,7 @@ public class ClusterObject extends DObject
     @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void addToOccupants (int oid)
     {
-        requestOidAdd(OCCUPANTS, oid);
+        requestOidAdd(OCCUPANTS, occupants, oid);
     }
 
     /**
@@ -72,7 +72,7 @@ public class ClusterObject extends DObject
     @Generated(value={"com.threerings.presents.tools.GenDObjectTask"})
     public void removeFromOccupants (int oid)
     {
-        requestOidRemove(OCCUPANTS, oid);
+        requestOidRemove(OCCUPANTS, occupants, oid);
     }
     // AUTO-GENERATED: METHODS END
 }
