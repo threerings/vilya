@@ -22,6 +22,7 @@
 package com.threerings.stats.server.persist;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -133,6 +134,15 @@ public class StatRepository extends DepotRepository
      * first loaded. Exceptions that occur while writing the stats will be caught and logged.
      */
     public void writeModified (int playerId, Stat[] stats)
+    {
+        writeModified(playerId, Arrays.asList(stats));
+    }
+
+    /**
+     * Writes out any of the stats in the supplied iterable that have been modified since they were
+     * first loaded. Exceptions that occur while writing the stats will be caught and logged.
+     */
+    public void writeModified (int playerId, Iterable<Stat> stats)
     {
         for (Stat stat : stats) {
             try {
