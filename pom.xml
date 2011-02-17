@@ -4,7 +4,7 @@
   <groupId>com.threerings</groupId>
   <artifactId>vilya</artifactId>
   <packaging>jar</packaging>
-  <version>1.2-SNAPSHOT</version>
+  <version>1.2</version>
   <name>vilya</name>
   <description>Facilities for making networked multiplayer games.</description>
   <url>http://code.google.com/p/vilya/</url>
@@ -35,11 +35,9 @@
   </developers>
 
   <scm>
-    <connection>scm:svn:http://vilya.googlecode.com/svn/trunk/</connection>
-    <developerConnection>
-      scm:svn:svn+ssh://src.earth.threerings.net/vilya/trunk/
-    </developerConnection>
-    <url>http://vilya.googlecode.com/svn/trunk/</url>
+    <connection>scm:svn:http://vilya.googlecode.com/svn/tags/vilya-1.2</connection>
+    <developerConnection>scm:svn:svn+ssh://src.earth.threerings.net/vilya/tags/vilya-1.2</developerConnection>
+    <url>http://vilya.googlecode.com/svn/tags/vilya-1.2</url>
   </scm>
 
   <dependencies>
@@ -64,7 +62,7 @@
     <dependency>
       <groupId>com.threerings</groupId>
       <artifactId>narya</artifactId>
-      <version>1.5-SNAPSHOT</version>
+      <version>1.5</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
