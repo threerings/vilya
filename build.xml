@@ -34,7 +34,7 @@
     <taskdef resource="com/threerings/presents/tools.properties" classpathref="tools.classpath"/>
   </target>
 
-  <target name="clean" description="Cleans out build results">
+  <target name="clean" depends="-init-ooo" description="Cleans out build results">
     <delete dir="${classes.dir}"/>
     <delete dir="${tclasses.dir}"/>
     <delete dir="${deploy.dir}/docs"/>
@@ -56,6 +56,7 @@
         classpathref="compile.path"/>
 
     <mkdir dir="${tclasses.dir}"/>
+    <copy todir="${tclasses.dir}"><fileset dir="src/test/resources" includes="**"/></copy>
     <ooojavac srcdir="${tsrc.dir}" destdir="${tclasses.dir}" version="1.5"
         classpathref="test.classpath"/>
   </target>
