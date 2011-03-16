@@ -39,7 +39,7 @@ import com.threerings.parlor.util.ParlorContext;
  * properly to allow the user to configure an instance of their game.
  *
  * <p> Clients that use the game configurator will want to instantiate one based on the class
- * returned from the {@link GameConfig} and then initialize it with a call to {@link #init}.
+ * returned from the {@link GameConfig} and then initialize it with a call to {@link #init}. </p>
  */
 public /*abstract*/ class FlexGameConfigurator extends GameConfigurator
 {

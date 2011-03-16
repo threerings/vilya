@@ -29,7 +29,7 @@ import com.threerings.crowd.data.PlaceConfig;
  *
  * <p> Note that this place config won't even work on the client side because it instantiates a
  * SceneController which is an abstract class. It is used only for testing the server side and as a
- * placeholder in case standard scene configuration information is one day needed.
+ * placeholder in case standard scene configuration information is one day needed. </p>
  */
 public class DefaultSceneConfig extends PlaceConfig
 {

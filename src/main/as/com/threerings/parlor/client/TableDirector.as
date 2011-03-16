@@ -56,10 +56,10 @@ import com.threerings.parlor.util.ParlorContext;
  * views) to handle the table matchmaking services.
  *
  * <p> Entites that do so, will need to implement the {@link TableObserver} interface so that the
- * table director can notify them when table related things happen.
+ * table director can notify them when table related things happen. </p>
  *
  * <p> The table services expect that the place object being used as a lobby in which the table
- * matchmaking takes place implements the {@link TableLobbyObject} interface.
+ * matchmaking takes place implements the {@link TableLobbyObject} interface. </p>
  */
 public class TableDirector extends BasicDirector
     implements SetListener, InvocationService_ResultListener

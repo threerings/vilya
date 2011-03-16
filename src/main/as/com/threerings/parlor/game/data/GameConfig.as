@@ -47,7 +47,7 @@ import com.threerings.parlor.game.client.GameConfigurator;
  * overrides {@link #createController} and {@link #getManagerClassName}, returning the appropriate
  * game controller and manager class for that game. Thus the entire chain of events that causes a
  * particular game to be created is the construction of the appropriate game config instance which
- * is provided to the server as part of an invitation or via some other matchmaking mechanism.
+ * is provided to the server as part of an invitation or via some other matchmaking mechanism. </p>
  */
 public /*abstract*/ class GameConfig extends PlaceConfig
     implements Cloneable, Hashable
