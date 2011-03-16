@@ -40,7 +40,7 @@ public class LobbyMarshaller extends InvocationMarshaller
     implements LobbyService
 {
     /**
-     * Marshalls results to implementations of {@link LobbyService.CategoriesListener}.
+     * Marshalls results to implementations of {@code LobbyService.CategoriesListener}.
      */
     public static class CategoriesMarshaller extends ListenerMarshaller
         implements CategoriesListener
@@ -75,7 +75,7 @@ public class LobbyMarshaller extends InvocationMarshaller
     }
 
     /**
-     * Marshalls results to implementations of {@link LobbyService.LobbiesListener}.
+     * Marshalls results to implementations of {@code LobbyService.LobbiesListener}.
      */
     public static class LobbiesMarshaller extends ListenerMarshaller
         implements LobbiesListener

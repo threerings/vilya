@@ -44,7 +44,7 @@ public class SpotMarshaller extends InvocationMarshaller
     implements SpotService
 {
     /**
-     * Marshalls results to implementations of {@link SpotService.SpotSceneMoveListener}.
+     * Marshalls results to implementations of {@code SpotService.SpotSceneMoveListener}.
      */
     public static class SpotSceneMoveMarshaller extends ListenerMarshaller
         implements SpotSceneMoveListener
