@@ -75,7 +75,7 @@ public class StatRepository extends DepotRepository
 
     /**
      * Applies a modification to a single stat. If the stat in question does not exist, a blank
-     * instance will be created via {@link Stat.Type#newStat}.
+     * instance will be created via {@link com.threerings.stats.data.Stat.Type#newStat}.
      *
      * @return the modified Stat, if any modification took place; or null if the modification had
      * no effect on the stat's data.

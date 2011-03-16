@@ -57,7 +57,6 @@ public interface LobbyService extends InvocationService
      * Requests the list of lobby categories that are available on this
      * server.
      *
-     * @param client a connected, operational client instance.
      * @param listener the listener that will receive and process the response.
      */
     public void getCategories (CategoriesListener listener);
@@ -65,7 +64,6 @@ public interface LobbyService extends InvocationService
     /**
      * Requests information on all active lobbies that match the specified category.
      *
-     * @param client a connected, operational client instance.
      * @param category the category of game for which a list of lobbies is desired.
      * @param listener the listener that will receive and process the response.
      */

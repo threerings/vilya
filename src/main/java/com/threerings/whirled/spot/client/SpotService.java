@@ -23,7 +23,7 @@ package com.threerings.whirled.spot.client;
 
 import com.threerings.presents.client.InvocationService;
 
-import com.threerings.whirled.client.SceneService.SceneMoveListener;
+import com.threerings.whirled.client.SceneService;
 import com.threerings.whirled.spot.data.Location;
 
 /**
@@ -37,7 +37,7 @@ public interface SpotService extends InvocationService
     /**
      * Used to communicate the response to a {@link SceneService#moveTo} request.
      */
-    public static interface SpotSceneMoveListener extends SceneMoveListener
+    public static interface SpotSceneMoveListener extends SceneService.SceneMoveListener
     {
         /**
          * The request is not going through because it was cancelled due to some other action.

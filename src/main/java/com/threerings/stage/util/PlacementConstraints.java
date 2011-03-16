@@ -447,8 +447,8 @@ public class PlacementConstraints
     }
 
     /**
-     * Populates the supplied {@link DirectionHeight} object with the direction
-     * and height of the constraint identified by the given prefix.
+     * Populates the supplied {@link ObjectData} object with the direction and height of the
+     * constraint identified by the given prefix.
      *
      * @return true if the object was successfully populated, false if there is
      * no such constraint
