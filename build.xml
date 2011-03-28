@@ -116,7 +116,7 @@
     </unit>
   </target>
 
-  <target name="dist" depends="compile,procstream,aslib" description="Builds jar files.">
+  <target name="dist" depends="compile,procstream" description="Builds jar files.">
     <jar destfile="${deploy.dir}/${ant.project.name}.jar" basedir="${classes.dir}"/>
     <!-- also build our various split jar files -->
     <jar destfile="${deploy.dir}/${ant.project.name}-parlor.jar">
@@ -150,11 +150,10 @@
     <taskdef name="grecord" classname="com.samskivert.depot.tools.GenRecordTask"
              classpathref="compile.path"/>
     <!-- make sure the record class files are all compiled -->
-    <javac srcdir="${src.dir}" destdir="${classes.dir}" includeAntRuntime="false"
-           debug="on" optimize="${build.optimize}" deprecation="on">
-      <classpath refid="built.classpath"/>
+    <ooojavac srcdir="${src.dir}" destdir="${classes.dir}" version="1.5"
+      classpathref="built.classpath">
       <include name="**/*Record.java"/>
-    </javac>
+    </ooojavac>
     <!-- now update the source files -->
     <grecord classpathref="built.classpath">
       <fileset dir="${src.dir}" includes="**/*Record.java"/>
@@ -164,11 +163,10 @@
   <target name="gendobj" depends="-preptools"
           description="Generates additional methods for distributed object classes">
     <!-- make sure the dobject class files are all compiled -->
-    <javac srcdir="${src.dir}" destdir="${classes.dir}" includeAntRuntime="false"
-           debug="on" optimize="${build.optimize}" deprecation="on"
-           source="1.5" target="1.5" classpathref="built.classpath">
+    <ooojavac srcdir="${src.dir}" destdir="${classes.dir}" version="1.5"
+      classpathref="built.classpath">
       <include name="**/*Object.java"/>
-    </javac>
+    </ooojavac>
     <!-- now generate the associated files -->
     <gendobj classpathref="built.classpath">
       <fileset dir="${src.dir}" includes="**/*Object.java"/>
@@ -178,13 +176,11 @@
   <target name="genservice" depends="-preptools"
           description="Generates marshaller and dispatcher classes for all invocation services">
     <!-- make sure the service class files are all compiled -->
-    <javac srcdir="${src.dir}" destdir="${classes.dir}" includeAntRuntime="false"
-           debug="on" optimize="${build.optimize}" deprecation="on"
-           source="1.5" target="1.5">
-      <classpath refid="built.classpath"/>
+    <ooojavac srcdir="${src.dir}" destdir="${classes.dir}" version="1.5"
+      classpathref="built.classpath">
       <include name="**/*Service.java"/>
       <exclude name="**/InvocationService.java"/>
-    </javac>
+    </ooojavac>
     <!-- generate our services that have no ActionScript counterpart -->
     <genservice header="lib/SOURCE_HEADER" classpathref="built.classpath">
       <fileset dir="${src.dir}">
@@ -209,13 +205,11 @@
   <target name="genreceiver" depends="-preptools"
           description="Generates sender and decoder classes for all invocation receivers">
     <!-- make sure the receiver class files are all compiled -->
-    <javac srcdir="${src.dir}" destdir="${classes.dir}" includeAntRuntime="false"
-           debug="on" optimize="${build.optimize}" deprecation="on"
-           source="1.5" target="1.5">
-      <classpath refid="built.classpath"/>
+    <ooojavac srcdir="${src.dir}" destdir="${classes.dir}" version="1.5"
+      classpathref="built.classpath">
       <include name="**/*Receiver.java"/>
       <exclude name="**/InvocationReceiver.java"/>
-    </javac>
+    </ooojavac>
     <!-- now generate the associated files -->
     <genreceiver header="lib/SOURCE_HEADER" classpathref="built.classpath">
       <fileset dir="${src.dir}" includes="**/*Receiver.java"
@@ -241,19 +235,10 @@
     </genascript>
   </target>
 
-  <property name="maven.deploy.repo" value="file://${user.home}/.m2/repository"/>
-  <target name="maven-deploy" depends="dist,tests" 
+  <target name="maven-deploy" depends="dist,aslib"
           description="Deploys our build artifacts to a Maven repository.">
     <jar basedir="${src.dir}" destfile="${deploy.dir}/${ant.project.name}-sources.jar"/>
-    <artifact:deploy file="${deploy.dir}/${ant.project.name}.jar" uniqueVersion="false">
-      <remoteRepository url="${maven.deploy.repo}"/>
-      <pom refid="pom"/>
-      <attach file="${deploy.dir}/${ant.project.name}-sources.jar" classifier="sources"/>
-    </artifact:deploy>
-    <artifact:pom id="as-pom" file="etc/as-pom.xml"/>
-    <artifact:deploy file="${deploy.dir}/${ant.project.name}lib.swc" uniqueVersion="false">
-      <remoteRepository url="${maven.deploy.repo}"/>
-      <pom refid="as-pom"/>
-    </artifact:deploy>
+    <mavendeploy file="${deploy.dir}/${ant.project.name}.jar" srcdir="${src.dir}" pom="pom.xml"/>
+    <mavendeploy file="${deploy.dir}/${ant.project.name}lib.swc" pom="etc/as-pom.xml"/>
   </target>
 </project>
