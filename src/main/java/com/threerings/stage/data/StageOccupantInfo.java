@@ -35,11 +35,6 @@ public class StageOccupantInfo extends OccupantInfo
         super(body);
     }
 
-    /** Creates a blank instance for unserialization. */
-    public StageOccupantInfo ()
-    {
-    }
-
     /**
      * Should return true if the occupant in question is available to be
      * clustered with, false if they are "busy". This means that a user

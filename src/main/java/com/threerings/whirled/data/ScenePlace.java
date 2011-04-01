@@ -48,11 +48,6 @@ public class ScenePlace extends Place
         return getSceneId(bobj.location);
     }
 
-    /** Used when unserializing. */
-    public ScenePlace ()
-    {
-    }
-
     /**
      * Creates a scene place with the supplied {@link SceneObject} oid and scene id.
      */
