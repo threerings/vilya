@@ -55,10 +55,7 @@ public class ZoneMarshaller extends InvocationMarshaller
         // from interface ZoneMoveMarshaller
         public void moveRequiresServerSwitch (String arg1, int[] arg2)
         {
-            _invId = null;
-            omgr.postEvent(new InvocationResponseEvent(
-                               callerOid, requestId, MOVE_REQUIRES_SERVER_SWITCH,
-                               new Object[] { arg1, arg2 }, transport));
+            sendResponse(MOVE_REQUIRES_SERVER_SWITCH, new Object[] { arg1, arg2 });
         }
 
         /** The method id used to dispatch {@link #moveSucceeded}
@@ -68,10 +65,7 @@ public class ZoneMarshaller extends InvocationMarshaller
         // from interface ZoneMoveMarshaller
         public void moveSucceeded (int arg1, PlaceConfig arg2, ZoneSummary arg3)
         {
-            _invId = null;
-            omgr.postEvent(new InvocationResponseEvent(
-                               callerOid, requestId, MOVE_SUCCEEDED,
-                               new Object[] { Integer.valueOf(arg1), arg2, arg3 }, transport));
+            sendResponse(MOVE_SUCCEEDED, new Object[] { Integer.valueOf(arg1), arg2, arg3 });
         }
 
         /** The method id used to dispatch {@link #moveSucceededWithScene}
@@ -81,10 +75,7 @@ public class ZoneMarshaller extends InvocationMarshaller
         // from interface ZoneMoveMarshaller
         public void moveSucceededWithScene (int arg1, PlaceConfig arg2, ZoneSummary arg3, SceneModel arg4)
         {
-            _invId = null;
-            omgr.postEvent(new InvocationResponseEvent(
-                               callerOid, requestId, MOVE_SUCCEEDED_WITH_SCENE,
-                               new Object[] { Integer.valueOf(arg1), arg2, arg3, arg4 }, transport));
+            sendResponse(MOVE_SUCCEEDED_WITH_SCENE, new Object[] { Integer.valueOf(arg1), arg2, arg3, arg4 });
         }
 
         /** The method id used to dispatch {@link #moveSucceededWithUpdates}
@@ -94,10 +85,7 @@ public class ZoneMarshaller extends InvocationMarshaller
         // from interface ZoneMoveMarshaller
         public void moveSucceededWithUpdates (int arg1, PlaceConfig arg2, ZoneSummary arg3, SceneUpdate[] arg4)
         {
-            _invId = null;
-            omgr.postEvent(new InvocationResponseEvent(
-                               callerOid, requestId, MOVE_SUCCEEDED_WITH_UPDATES,
-                               new Object[] { Integer.valueOf(arg1), arg2, arg3, arg4 }, transport));
+            sendResponse(MOVE_SUCCEEDED_WITH_UPDATES, new Object[] { Integer.valueOf(arg1), arg2, arg3, arg4 });
         }
 
         @Override // from InvocationMarshaller

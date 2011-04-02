@@ -52,10 +52,7 @@ public class LobbyMarshaller extends InvocationMarshaller
         // from interface CategoriesMarshaller
         public void gotCategories (String[] arg1)
         {
-            _invId = null;
-            omgr.postEvent(new InvocationResponseEvent(
-                               callerOid, requestId, GOT_CATEGORIES,
-                               new Object[] { arg1 }, transport));
+            sendResponse(GOT_CATEGORIES, new Object[] { arg1 });
         }
 
         @Override // from InvocationMarshaller
@@ -87,10 +84,7 @@ public class LobbyMarshaller extends InvocationMarshaller
         // from interface LobbiesMarshaller
         public void gotLobbies (List<Lobby> arg1)
         {
-            _invId = null;
-            omgr.postEvent(new InvocationResponseEvent(
-                               callerOid, requestId, GOT_LOBBIES,
-                               new Object[] { arg1 }, transport));
+            sendResponse(GOT_LOBBIES, new Object[] { arg1 });
         }
 
         @Override // from InvocationMarshaller

@@ -55,10 +55,7 @@ public class ParlorMarshaller extends InvocationMarshaller
         // from interface InviteMarshaller
         public void inviteReceived (int arg1)
         {
-            _invId = null;
-            omgr.postEvent(new InvocationResponseEvent(
-                               callerOid, requestId, INVITE_RECEIVED,
-                               new Object[] { Integer.valueOf(arg1) }, transport));
+            sendResponse(INVITE_RECEIVED, new Object[] { Integer.valueOf(arg1) });
         }
 
         @Override // from InvocationMarshaller

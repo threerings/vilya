@@ -53,10 +53,7 @@ public class SceneMarshaller extends InvocationMarshaller
         // from interface SceneMoveMarshaller
         public void moveRequiresServerSwitch (String arg1, int[] arg2)
         {
-            _invId = null;
-            omgr.postEvent(new InvocationResponseEvent(
-                               callerOid, requestId, MOVE_REQUIRES_SERVER_SWITCH,
-                               new Object[] { arg1, arg2 }, transport));
+            sendResponse(MOVE_REQUIRES_SERVER_SWITCH, new Object[] { arg1, arg2 });
         }
 
         /** The method id used to dispatch {@link #moveSucceeded}
@@ -66,10 +63,7 @@ public class SceneMarshaller extends InvocationMarshaller
         // from interface SceneMoveMarshaller
         public void moveSucceeded (int arg1, PlaceConfig arg2)
         {
-            _invId = null;
-            omgr.postEvent(new InvocationResponseEvent(
-                               callerOid, requestId, MOVE_SUCCEEDED,
-                               new Object[] { Integer.valueOf(arg1), arg2 }, transport));
+            sendResponse(MOVE_SUCCEEDED, new Object[] { Integer.valueOf(arg1), arg2 });
         }
 
         /** The method id used to dispatch {@link #moveSucceededWithScene}
@@ -79,10 +73,7 @@ public class SceneMarshaller extends InvocationMarshaller
         // from interface SceneMoveMarshaller
         public void moveSucceededWithScene (int arg1, PlaceConfig arg2, SceneModel arg3)
         {
-            _invId = null;
-            omgr.postEvent(new InvocationResponseEvent(
-                               callerOid, requestId, MOVE_SUCCEEDED_WITH_SCENE,
-                               new Object[] { Integer.valueOf(arg1), arg2, arg3 }, transport));
+            sendResponse(MOVE_SUCCEEDED_WITH_SCENE, new Object[] { Integer.valueOf(arg1), arg2, arg3 });
         }
 
         /** The method id used to dispatch {@link #moveSucceededWithUpdates}
@@ -92,10 +83,7 @@ public class SceneMarshaller extends InvocationMarshaller
         // from interface SceneMoveMarshaller
         public void moveSucceededWithUpdates (int arg1, PlaceConfig arg2, SceneUpdate[] arg3)
         {
-            _invId = null;
-            omgr.postEvent(new InvocationResponseEvent(
-                               callerOid, requestId, MOVE_SUCCEEDED_WITH_UPDATES,
-                               new Object[] { Integer.valueOf(arg1), arg2, arg3 }, transport));
+            sendResponse(MOVE_SUCCEEDED_WITH_UPDATES, new Object[] { Integer.valueOf(arg1), arg2, arg3 });
         }
 
         @Override // from InvocationMarshaller

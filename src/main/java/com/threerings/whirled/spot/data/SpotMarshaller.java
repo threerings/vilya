@@ -56,10 +56,7 @@ public class SpotMarshaller extends InvocationMarshaller
         // from interface SpotSceneMoveMarshaller
         public void moveRequiresServerSwitch (String arg1, int[] arg2)
         {
-            _invId = null;
-            omgr.postEvent(new InvocationResponseEvent(
-                               callerOid, requestId, MOVE_REQUIRES_SERVER_SWITCH,
-                               new Object[] { arg1, arg2 }, transport));
+            sendResponse(MOVE_REQUIRES_SERVER_SWITCH, new Object[] { arg1, arg2 });
         }
 
         /** The method id used to dispatch {@link #moveSucceeded}
@@ -69,10 +66,7 @@ public class SpotMarshaller extends InvocationMarshaller
         // from interface SpotSceneMoveMarshaller
         public void moveSucceeded (int arg1, PlaceConfig arg2)
         {
-            _invId = null;
-            omgr.postEvent(new InvocationResponseEvent(
-                               callerOid, requestId, MOVE_SUCCEEDED,
-                               new Object[] { Integer.valueOf(arg1), arg2 }, transport));
+            sendResponse(MOVE_SUCCEEDED, new Object[] { Integer.valueOf(arg1), arg2 });
         }
 
         /** The method id used to dispatch {@link #moveSucceededWithScene}
@@ -82,10 +76,7 @@ public class SpotMarshaller extends InvocationMarshaller
         // from interface SpotSceneMoveMarshaller
         public void moveSucceededWithScene (int arg1, PlaceConfig arg2, SceneModel arg3)
         {
-            _invId = null;
-            omgr.postEvent(new InvocationResponseEvent(
-                               callerOid, requestId, MOVE_SUCCEEDED_WITH_SCENE,
-                               new Object[] { Integer.valueOf(arg1), arg2, arg3 }, transport));
+            sendResponse(MOVE_SUCCEEDED_WITH_SCENE, new Object[] { Integer.valueOf(arg1), arg2, arg3 });
         }
 
         /** The method id used to dispatch {@link #moveSucceededWithUpdates}
@@ -95,10 +86,7 @@ public class SpotMarshaller extends InvocationMarshaller
         // from interface SpotSceneMoveMarshaller
         public void moveSucceededWithUpdates (int arg1, PlaceConfig arg2, SceneUpdate[] arg3)
         {
-            _invId = null;
-            omgr.postEvent(new InvocationResponseEvent(
-                               callerOid, requestId, MOVE_SUCCEEDED_WITH_UPDATES,
-                               new Object[] { Integer.valueOf(arg1), arg2, arg3 }, transport));
+            sendResponse(MOVE_SUCCEEDED_WITH_UPDATES, new Object[] { Integer.valueOf(arg1), arg2, arg3 });
         }
 
         /** The method id used to dispatch {@link #requestCancelled}
@@ -108,10 +96,7 @@ public class SpotMarshaller extends InvocationMarshaller
         // from interface SpotSceneMoveMarshaller
         public void requestCancelled ()
         {
-            _invId = null;
-            omgr.postEvent(new InvocationResponseEvent(
-                               callerOid, requestId, REQUEST_CANCELLED,
-                               new Object[] {  }, transport));
+            sendResponse(REQUEST_CANCELLED, new Object[] {  });
         }
 
         @Override // from InvocationMarshaller
