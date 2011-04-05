@@ -369,6 +369,5 @@ public class TableDirector extends BasicDirector
     protected Table _ourTable;
 
     /** An array of entities that want to hear about when we stand up or sit down. */
-    protected ObserverList<SeatednessObserver> _seatedObservers =
-        new ObserverList<SeatednessObserver>(ObserverList.FAST_UNSAFE_NOTIFY);
+    protected ObserverList<SeatednessObserver> _seatedObservers = ObserverList.newFastUnsafe();
 }

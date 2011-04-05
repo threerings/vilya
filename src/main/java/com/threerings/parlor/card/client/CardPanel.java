@@ -1088,8 +1088,7 @@ public abstract class CardPanel extends VirtualMediaPanel
 
     /** Observers of hand card selection/deselection. */
     protected ObserverList<CardSelectionObserver> _handSelectionObservers =
-        new ObserverList<CardSelectionObserver>(
-                ObserverList.FAST_UNSAFE_NOTIFY);
+        ObserverList.newFastUnsafe();
 
     /** The location of the center of the hand's upper edge. */
     protected Point _handLocation = new Point();
