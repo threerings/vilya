@@ -40,6 +40,13 @@
     <url>http://github.com/threerings/vilya/</url>
   </scm>
 
+  <repositories>
+    <repository>
+      <id>ooo-repo</id>
+      <url>http://threerings.github.com/maven-repo</url>
+    </repository>
+  </repositories>
+
   <dependencies>
     <dependency>
       <groupId>com.google.guava</groupId>
