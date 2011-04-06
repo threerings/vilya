@@ -7,9 +7,9 @@
   <version>1.4-SNAPSHOT</version>
   <name>vilya</name>
   <description>Facilities for making networked multiplayer games.</description>
-  <url>http://code.google.com/p/vilya/</url>
+  <url>http://github.com/threerings/vilya/</url>
   <issueManagement>
-    <url>http://code.google.com/p/vilya/issues/list</url>
+    <url>http://github.com/threerings/vilya/issues</url>
   </issueManagement>
 
   <parent>
@@ -35,9 +35,9 @@
   </developers>
 
   <scm>
-    <connection>scm:svn:http://vilya.googlecode.com/svn/trunk/</connection>
-    <developerConnection>scm:svn:svn+ssh://src.earth.threerings.net/vilya/trunk/</developerConnection>
-    <url>http://vilya.googlecode.com/svn/trunk/</url>
+    <connection>scm:git:git://github.com/threerings/vilya.git</connection>
+    <developerConnection>scm:git:git@github.com:threerings/vilya.git</developerConnection>
+    <url>http://github.com/threerings/vilya/</url>
   </scm>
 
   <dependencies>
