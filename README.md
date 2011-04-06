@@ -42,8 +42,8 @@ Maven project, add the following to your `pom.xml`:
 
     <repositories>
       <repository>
-        <id>vilya-repo</id>
-        <url>http://threerings.github.com/vilya/maven</url>
+        <id>ooo-repo</id>
+        <url>http://threerings.github.com/maven-repo</url>
       </repository>
     </repositories>
     <dependencies>
@@ -59,8 +59,8 @@ remove the vast majority of the boilerplate above.
 
 If you prefer to download pre-built binaries, those can be had here:
 
-* [vilya-1.3.jar](http://threerings.github.com/vilya/maven/com/threerings/vilya/1.3/vilya-1.3.jar)
-* [vilyalib-1.3.swc](http://threerings.github.com/vilya/maven/com/threerings/vilyalib/1.3/vilyalib-1.3.swc)
+* [vilya-1.3.jar](http://threerings.github.com/maven-repo/com/threerings/vilya/1.3/vilya-1.3.jar)
+* [vilyalib-1.3.swc](http://threerings.github.com/maven-repo/com/threerings/vilyalib/1.3/vilyalib-1.3.swc)
 
 Distribution
 ------------
