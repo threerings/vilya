@@ -16,7 +16,7 @@ games. Its various packages include:
   for multiplayer games
 
 Documentation is somewhat sparse at the moment, but inspection of the code in
-the `src/main/tests/` directory shows examples of use of many features of the
+the `src/test/java/` directory shows examples of use of many features of the
 library.
 
 Building
