@@ -74,7 +74,7 @@ Contact
 Questions, comments, and other worldly endeavors can be handled via the [Three
 Rings Libraries](http://groups.google.com/group/ooo-libs) Google Group.
 
-Vilya is actively developed by the scurvy dogs a
+Vilya is actively developed by the scurvy dogs at
 [Three Rings](http://www.threerings.net) Contributions are welcome.
 
 [whirled]: http://threerings.github.com/vilya/apidocs/com/threerings/whirled/package-summary.html
