@@ -57,8 +57,10 @@ Maven project, add the following to your `pom.xml`:
 To add it to an Ivy, SBT, or other Maven repository using project, simply
 remove the vast majority of the boilerplate above.
 
-If you prefer to download a jar file, that can be found
-[here](http://threerings.github.com/vilya/maven/com/threerings/vilya/).
+If you prefer to download pre-built binaries, those can be had here:
+
+* [vilya-1.3.jar](http://threerings.github.com/vilya/maven/com/threerings/vilya/1.3/vilya-1.3.jar)
+* [vilyalib-1.3.swc](http://threerings.github.com/vilya/maven/com/threerings/vilyalib/1.3/vilyalib-1.3.swc)
 
 Distribution
 ------------
