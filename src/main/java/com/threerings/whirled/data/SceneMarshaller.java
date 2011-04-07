@@ -25,7 +25,6 @@ import javax.annotation.Generated;
 
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.presents.data.InvocationMarshaller;
-import com.threerings.presents.dobj.InvocationResponseEvent;
 import com.threerings.whirled.client.SceneService;
 
 /**
