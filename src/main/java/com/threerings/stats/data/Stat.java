@@ -87,9 +87,7 @@ public abstract class Stat
     public static int initType (Type type, Stat prototype)
     {
         // compute a code for this stat using the CRC32 hash of its name
-        _crc.reset();
-        _crc.update(type.name().getBytes());
-        int code = (int)_crc.getValue();
+        int code = crc32(type.name());
 
         // make sure the code does not collide
         if (_codeToType.containsKey(code)) {
@@ -104,6 +102,16 @@ public abstract class Stat
         // map the stat by its code
         _codeToType.put(code, type);
         return code;
+    }
+
+    /**
+     * Computes and returns the CRC32 hash of the specified string.
+     */
+    public static int crc32 (String string)
+    {
+        _crc.reset();
+        _crc.update(string.getBytes());
+        return (int)_crc.getValue();
     }
 
     /**
