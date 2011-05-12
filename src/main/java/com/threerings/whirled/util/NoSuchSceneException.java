@@ -27,16 +27,16 @@ package com.threerings.whirled.util;
  */
 public class NoSuchSceneException extends Exception
 {
-    public NoSuchSceneException (int sceneid)
+    public NoSuchSceneException (int sceneId)
     {
-        super("No such scene [sceneid=" + sceneid + "]");
-        _sceneid = sceneid;
+        super("No such scene [sceneId=" + sceneId + "]");
+        _sceneId = sceneId;
     }
 
     public int getSceneId ()
     {
-        return _sceneid;
+        return _sceneId;
     }
 
-    protected int _sceneid;
+    protected int _sceneId;
 }
