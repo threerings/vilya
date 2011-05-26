@@ -397,7 +397,7 @@ public abstract class PuzzleController extends GameController
         }
 
         // refuse to start the action if our puzzle view is hidden
-        if (_pidx != -1 && !_panel.getBoardView().isShowing()) {
+        if (_pidx != -1 && !_pview.isShowing()) {
             log.warning("Refusing to start action on hidden puzzle.", new Exception());
             return;
         }
