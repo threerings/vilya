@@ -66,7 +66,7 @@ Distribution
 ------------
 
 The Vilya library is released under the LGPL. The most recent version of the
-library is available at http://github.com/threerings/vilya.
+library is available at http://github.com/threerings/vilya
 
 Contact
 -------
