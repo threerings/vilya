@@ -44,7 +44,7 @@ import static com.threerings.parlor.Log.log;
  * The game controller manages the flow and control of a game on the client side. This class serves
  * as the root of a hierarchy of controller classes that aim to provide functionality shared
  * between various similar games. The base controller provides functionality for starting and
- * ending the game and for calculating ratings adjustements when a game ends normally. It also
+ * ending the game and for calculating ratings adjustments when a game ends normally. It also
  * handles the basic house keeping like subscription to the game object and dispatch of commands
  * and distributed object events.
  */
