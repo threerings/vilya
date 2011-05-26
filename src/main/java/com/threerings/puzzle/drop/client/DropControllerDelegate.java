@@ -281,7 +281,6 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
         updateSelfSummary();
     }
 
-    // documentation inherited
     protected boolean handleBlockAction (ActionEvent action)
     {
         String cmd = action.getActionCommand();
