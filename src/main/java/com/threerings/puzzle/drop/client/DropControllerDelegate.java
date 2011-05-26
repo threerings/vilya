@@ -332,7 +332,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
 
         // if the sprite has made it to the bottom of the board then we don't want to allow it to
         // "virtually" fall any further because of the bounce interval
-         float pctdone = (row >= (_bhei - 1)) ? 0 :
+        float pctdone = (row >= (_bhei - 1)) ? 0 :
              _blocksprite.getPercentDone(_dview.getTimeStamp());
 
         // get the drop block position resulting from the move
@@ -1140,8 +1140,7 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
     };
 
     /** A piece operation that will update piece sprites as board positions are updated. */
-    protected DropBoard.PieceOperation _updateBoardOp =
-        new DropBoard.PieceOperation() {
+    protected DropBoard.PieceOperation _updateBoardOp = new DropBoard.PieceOperation() {
         public boolean execute (DropBoard board, int col, int row) {
             _dview.updatePiece(col, row);
             return true;

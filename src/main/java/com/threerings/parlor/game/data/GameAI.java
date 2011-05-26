@@ -28,8 +28,7 @@ import com.threerings.io.SimpleStreamableObject;
  */
 public class GameAI extends SimpleStreamableObject
 {
-    /** The "personality" of the AI, which can be interpreted by
-     * each puzzle. */
+    /** The "personality" of the AI, which can be interpreted by each puzzle. */
     public int personality;
 
     /** The skill level of the AI. */
@@ -41,8 +40,7 @@ public class GameAI extends SimpleStreamableObject
     }
 
     /**
-     * Constructs an AI with the specified (game-interpreted) skill and
-     * personality.
+     * Constructs an AI with the specified (game-interpreted) skill and personality.
      */
     public GameAI (int personality, int skill)
     {

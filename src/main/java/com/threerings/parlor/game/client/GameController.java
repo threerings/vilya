@@ -198,8 +198,7 @@ public abstract class GameController extends PlaceController
         if (event.getName().equals(GameObject.STATE)) {
             int newState = event.getIntValue();
             if (!stateDidChange(newState)) {
-                log.warning("Game transitioned to unknown state [gobj=" + _gobj +
-                            ", state=" + newState + "].");
+                log.warning("Game transitioned to unknown state", "gobj", _gobj, "state", newState);
             }
         }
     }

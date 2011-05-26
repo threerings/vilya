@@ -91,8 +91,8 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
     {
         // sanity check
         if (_turnIdx < 0 || _turnIdx >= _turnGame.getPlayers().length) {
-            log.warning("startTurn() called with invalid turn index [game=" + where() +
-                        ", turnIdx=" + _turnIdx + "].");
+            log.warning("startTurn() called with invalid turn index", "game", where(),
+                "turnIdx", _turnIdx);
             // abort, abort
             return;
         }
@@ -223,8 +223,8 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
             if (_turnIdx == oturnIdx) {
                 // if we've wrapped all the way around, stop where we are even if the current
                 // player is not active.
-                log.warning("1 or less active players. Unable to properly change turn. " +
-                            "[game=" + where() + "].");
+                log.warning("1 or less active players. Unable to properly change turn.",
+                    "game", where());
                 break;
             }
         } while (!_tgmgr.isActivePlayer(_turnIdx));
@@ -241,8 +241,8 @@ public class TurnGameManagerDelegate extends GameManagerDelegate
             while (!_tgmgr.isActivePlayer(_turnIdx)) {
                 _turnIdx = (_turnIdx + 1) % size;
                 if (_turnIdx == firstPick) {
-                    log.warning("No players eligible for randomly-assigned turn. Choking. " +
-                                "[game=" + where() + "].");
+                    log.warning("No players eligible for randomly-assigned turn. Choking.",
+                        "game", where());
                     return;
                 }
             }
