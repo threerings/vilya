@@ -21,7 +21,7 @@
 
 package com.threerings.whirled.spot.data {
 
-import com.threerings.util.ArrayUtil;
+import com.threerings.util.Arrays;
 import com.threerings.util.ClassUtil;
 
 import com.threerings.io.ObjectInputStream;
@@ -75,7 +75,7 @@ public class SpotSceneModel extends SimpleStreamableObject
      */
     public function removePortal (portal :Portal) :void
     {
-        ArrayUtil.removeFirst(portals, portal);
+        Arrays.removeFirst(portals, portal);
     }
 
     /**

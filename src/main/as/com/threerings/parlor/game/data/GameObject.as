@@ -21,7 +21,7 @@
 
 package com.threerings.parlor.game.data {
 
-import com.threerings.util.ArrayUtil;
+import com.threerings.util.Arrays;
 import com.threerings.util.Integer;
 import com.threerings.util.Joiner;
 import com.threerings.util.langBoolean;
@@ -157,7 +157,7 @@ public class GameObject extends PlaceObject
      */
     public function getPlayerIndex (username :Name) :int
     {
-        return ArrayUtil.indexOf(players, username);
+        return Arrays.indexOf(players, username);
     }
 
     /**
@@ -218,7 +218,7 @@ public class GameObject extends PlaceObject
      */
     public function getWinnerIndex () :int
     {
-        return ArrayUtil.indexOf(winners, true);
+        return Arrays.indexOf(winners, true);
     }
 
     /**

@@ -21,7 +21,7 @@
 
 package com.threerings.parlor.client {
 
-import com.threerings.util.ArrayUtil;
+import com.threerings.util.Arrays;
 import com.threerings.util.Log;
 import com.threerings.util.Name;
 import com.threerings.util.ObserverList;
@@ -376,7 +376,7 @@ public class TableDirector extends BasicDirector
 
         // look for our username in the players array
         var self :BodyObject = (_pctx.getClient().getClientObject() as BodyObject);
-        if (ArrayUtil.contains(table.players, self.getVisibleName())) {
+        if (Arrays.contains(table.players, self.getVisibleName())) {
             _ourTable = table;
         }
 

@@ -21,7 +21,7 @@
 
 package com.threerings.parlor.client {
 
-import com.threerings.util.ArrayUtil;
+import com.threerings.util.Arrays;
 import com.threerings.util.Map;
 import com.threerings.util.Maps;
 import com.threerings.util.Log;
@@ -93,7 +93,7 @@ public class ParlorDirector extends BasicDirector
      */
     public function removeGameReadyObserver (observer :GameReadyObserver) :void
     {
-        ArrayUtil.removeFirst(_grobs, observer);
+        Arrays.removeFirst(_grobs, observer);
     }
 
     /**

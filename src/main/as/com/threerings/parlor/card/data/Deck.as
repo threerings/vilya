@@ -21,7 +21,7 @@
 
 package com.threerings.parlor.card.data {
 
-import com.threerings.util.ArrayUtil;
+import com.threerings.util.Arrays;
 import com.threerings.util.StreamableArrayList;
 
 /**
@@ -101,7 +101,7 @@ public class Deck extends StreamableArrayList
      */
     public function shuffle () :void
     {
-        ArrayUtil.shuffle(_array);
+        Arrays.shuffle(_array);
     }
 }
 }

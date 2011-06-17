@@ -21,7 +21,7 @@
 
 package com.threerings.parlor.data {
 
-import com.threerings.util.ArrayUtil;
+import com.threerings.util.Arrays;
 import com.threerings.util.ClassUtil;
 import com.threerings.util.Hashable;
 import com.threerings.util.Joiner;
@@ -133,7 +133,7 @@ public class Table
             for (var jj :int = 0; jj < subTeams.length; jj++) {
                 var occ :Name = (players[(subTeams[jj] as int)] as Name);
                 if (occ != null) {
-                    newSubTeams.push(ArrayUtil.indexOf(players, occ));
+                    newSubTeams.push(Arrays.indexOf(players, occ));
                 }
             }
             newSubTeams.sort(null, Array.NUMERIC);
