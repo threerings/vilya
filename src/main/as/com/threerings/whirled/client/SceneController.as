@@ -46,6 +46,14 @@ public /*abstract*/ class SceneController extends PlaceController
     {
         super.init(ctx, config);
         _wctx = WhirledContext(ctx);
+
+        _updateListener = new MessageAdapter(
+            function (event :MessageEvent) :void {
+                if (event.getName() == SceneCodes.SCENE_UPDATE) {
+                    sceneUpdated(event.getArgs()[0] as SceneUpdate);
+                }
+            }
+        );
     }
 
     // documentation inherited
@@ -75,13 +83,7 @@ public /*abstract*/ class SceneController extends PlaceController
     }
 
     /** Used to listen for scene updates. */
-    protected var _updateListener :MessageListener = new MessageAdapter(
-        function (event :MessageEvent) :void {
-            if (event.getName() == SceneCodes.SCENE_UPDATE) {
-                sceneUpdated(event.getArgs()[0] as SceneUpdate);
-            }
-        }
-    );
+    protected var _updateListener :MessageListener;
 
     protected var _wctx :WhirledContext;
 }
