@@ -26,6 +26,7 @@ import com.threerings.io.ObjectOutputStream;
 
 import com.threerings.presents.dobj.DSet;
 import com.threerings.presents.dobj.DSet_Entry;
+
 import com.threerings.whirled.data.SceneObject;
 import com.threerings.whirled.spot.data.SceneLocation;
 

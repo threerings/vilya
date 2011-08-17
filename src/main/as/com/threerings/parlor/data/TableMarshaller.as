@@ -21,16 +21,17 @@
 
 package com.threerings.parlor.data {
 
-import com.threerings.parlor.client.TableService;
-import com.threerings.parlor.game.data.GameConfig;
-import com.threerings.presents.client.Client;
+import com.threerings.util.Integer;
+import com.threerings.util.Name;
+
 import com.threerings.presents.client.InvocationService_InvocationListener;
 import com.threerings.presents.client.InvocationService_ResultListener;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.data.InvocationMarshaller_ListenerMarshaller;
 import com.threerings.presents.data.InvocationMarshaller_ResultMarshaller;
-import com.threerings.util.Integer;
-import com.threerings.util.Name;
+
+import com.threerings.parlor.client.TableService;
+import com.threerings.parlor.game.data.GameConfig;
 
 /**
  * Provides the implementation of the <code>TableService</code> interface

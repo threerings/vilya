@@ -22,6 +22,7 @@
 package com.threerings.whirled.client {
 
 import com.threerings.presents.client.InvocationDecoder;
+
 import com.threerings.whirled.client.SceneReceiver;
 
 /**

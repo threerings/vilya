@@ -25,9 +25,10 @@ import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 import com.threerings.io.TypedArray;
 
-import com.threerings.whirled.data.SceneUpdate;
-import com.threerings.whirled.data.SceneModel;
 import com.threerings.miso.data.ObjectInfo;
+
+import com.threerings.whirled.data.SceneModel;
+import com.threerings.whirled.data.SceneUpdate;
 
 /**
  * A scene update that is broadcast when objects have been added to or removed

@@ -24,8 +24,8 @@ package com.threerings.stage.data {
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 
-import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.data.SceneModel;
+import com.threerings.whirled.data.SceneUpdate;
 
 /**
  * Update to change the default colorization for objects in a scene which

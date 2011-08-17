@@ -22,10 +22,11 @@
 package com.threerings.stage.client {
 
 import com.threerings.io.TypedArray;
-import com.threerings.miso.data.ObjectInfo;
-import com.threerings.presents.client.Client;
+
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.client.InvocationService_ConfirmListener;
+
+import com.threerings.miso.data.ObjectInfo;
 
 /**
  * An ActionScript version of the Java StageSceneService interface.

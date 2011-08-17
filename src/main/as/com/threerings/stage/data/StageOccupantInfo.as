@@ -21,11 +21,7 @@
 
 package com.threerings.stage.data {
 
-import com.threerings.io.ObjectInputStream;
-import com.threerings.io.ObjectOutputStream;
-
 import com.threerings.crowd.data.OccupantInfo;
-import com.threerings.crowd.data.BodyObject;
 
 /**
  * Extends the standard occupant info with stage specific business.

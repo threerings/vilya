@@ -21,15 +21,15 @@
 
 package com.threerings.parlor.game.data {
 
-import com.threerings.util.Arrays;
-import com.threerings.util.Integer;
-import com.threerings.util.Joiner;
-import com.threerings.util.langBoolean;
-import com.threerings.util.Name;
-
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 import com.threerings.io.TypedArray;
+
+import com.threerings.util.Arrays;
+import com.threerings.util.Integer;
+import com.threerings.util.Joiner;
+import com.threerings.util.Name;
+import com.threerings.util.langBoolean;
 
 import com.threerings.crowd.data.PlaceObject;
 

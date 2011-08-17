@@ -23,9 +23,9 @@ package com.threerings.whirled.spot.data {
 
 import com.threerings.util.ArrayIterator;
 import com.threerings.util.Iterator;
+import com.threerings.util.Log;
 import com.threerings.util.Map;
 import com.threerings.util.Maps;
-import com.threerings.util.Log;
 
 /**
  * An implementation of the {@link SpotScene} interface.

@@ -21,11 +21,9 @@
 
 package com.threerings.parlor.client {
 
-import com.threerings.parlor.util.ParlorContext;
-
 import com.threerings.parlor.data.TableConfig;
-
 import com.threerings.parlor.game.client.GameConfigurator;
+import com.threerings.parlor.util.ParlorContext;
 
 /**
  * This should be implemented some user-interface element that allows

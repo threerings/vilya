@@ -22,11 +22,13 @@
 package com.threerings.stage.data {
 
 import com.threerings.io.TypedArray;
-import com.threerings.miso.data.ObjectInfo;
-import com.threerings.presents.client.Client;
+
 import com.threerings.presents.client.InvocationService_ConfirmListener;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.data.InvocationMarshaller_ConfirmMarshaller;
+
+import com.threerings.miso.data.ObjectInfo;
+
 import com.threerings.stage.client.StageSceneService;
 
 /**

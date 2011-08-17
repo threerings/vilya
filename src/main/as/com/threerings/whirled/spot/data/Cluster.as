@@ -21,13 +21,11 @@
 
 package com.threerings.whirled.spot.data {
 
-import flash.geom.Rectangle;
-
-import com.threerings.util.Hashable;
-
-import com.threerings.io.Streamable;
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
+import com.threerings.io.Streamable;
+
+import com.threerings.util.Hashable;
 
 import com.threerings.presents.dobj.DSet_Entry;
 

@@ -21,14 +21,18 @@
 
 package com.threerings.stage.client {
 
+import com.threerings.util.Log;
+
 import com.threerings.crowd.client.PlaceView;
 import com.threerings.crowd.util.CrowdContext;
+
 import com.threerings.miso.util.MisoSceneMetrics;
-import com.threerings.stage.data.StageLocation;
-import com.threerings.stage.util.StageContext;
-import com.threerings.util.Log;
+
 import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.spot.client.SpotSceneController;
+
+import com.threerings.stage.data.StageLocation;
+import com.threerings.stage.util.StageContext;
 
 public class StageSceneController extends SpotSceneController
 {

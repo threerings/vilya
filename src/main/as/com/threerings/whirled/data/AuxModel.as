@@ -21,9 +21,9 @@
 
 package com.threerings.whirled.data {
 
-import com.threerings.util.Cloneable;
-
 import com.threerings.io.Streamable;
+
+import com.threerings.util.Cloneable;
 
 /**
  * An interface that must be implemented by auxiliary scene models.

@@ -22,9 +22,9 @@
 package com.threerings.parlor.client {
 
 import com.threerings.util.Arrays;
+import com.threerings.util.Log;
 import com.threerings.util.Map;
 import com.threerings.util.Maps;
-import com.threerings.util.Log;
 import com.threerings.util.Name;
 
 import com.threerings.presents.client.BasicDirector;

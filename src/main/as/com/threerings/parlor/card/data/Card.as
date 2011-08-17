@@ -27,8 +27,6 @@ import com.threerings.io.ObjectOutputStream;
 import com.threerings.util.Byte;
 import com.threerings.util.Comparable;
 import com.threerings.util.Hashable;
-import com.threerings.util.Integer;
-import com.threerings.util.Joiner;
 
 import com.threerings.presents.dobj.DSet;
 import com.threerings.presents.dobj.DSet_Entry;

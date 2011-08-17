@@ -21,9 +21,10 @@
 
 package com.threerings.whirled.data {
 
-import com.threerings.presents.client.Client;
-import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.util.Integer;
+
+import com.threerings.presents.data.InvocationMarshaller;
+
 import com.threerings.whirled.client.SceneService;
 import com.threerings.whirled.client.SceneService_SceneMoveListener;
 

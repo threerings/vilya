@@ -21,9 +21,12 @@
 
 package com.threerings.whirled.spot.data {
 
-import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.io.TypedArray;
+
 import com.threerings.presents.data.InvocationMarshaller_ListenerMarshaller;
+
+import com.threerings.crowd.data.PlaceConfig;
+
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.spot.client.SpotService_SpotSceneMoveListener;
 

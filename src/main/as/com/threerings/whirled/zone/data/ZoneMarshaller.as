@@ -21,9 +21,10 @@
 
 package com.threerings.whirled.zone.data {
 
-import com.threerings.presents.client.Client;
-import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.util.Integer;
+
+import com.threerings.presents.data.InvocationMarshaller;
+
 import com.threerings.whirled.zone.client.ZoneService;
 import com.threerings.whirled.zone.client.ZoneService_ZoneMoveListener;
 

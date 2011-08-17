@@ -21,12 +21,12 @@
 
 package com.threerings.whirled.zone.data {
 
-import com.threerings.util.Name;
-
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 import com.threerings.io.SimpleStreamableObject;
 import com.threerings.io.TypedArray;
+
+import com.threerings.util.Name;
 
 /**
  * The zone summary contains information on a zone, including its name and

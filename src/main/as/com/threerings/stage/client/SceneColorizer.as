@@ -21,16 +21,19 @@
 
 package com.threerings.stage.client {
 
+import com.threerings.util.Log;
+import com.threerings.util.Map;
+import com.threerings.util.Maps;
+
 import com.threerings.media.image.ClassRecord;
 import com.threerings.media.image.ColorPository;
 import com.threerings.media.image.ColorRecord;
 import com.threerings.media.image.Colorization;
-import com.threerings.stage.data.StageScene;
-import com.threerings.miso.data.ObjectInfo;
 import com.threerings.media.tile.Colorizer;
-import com.threerings.util.Log;
-import com.threerings.util.Maps;
-import com.threerings.util.Map;
+
+import com.threerings.miso.data.ObjectInfo;
+
+import com.threerings.stage.data.StageScene;
 
 /**
  * Handles colorization of object tiles in a scene.
@@ -135,10 +138,12 @@ public class SceneColorizer implements Colorizer
 }
 }
 
-import com.threerings.media.image.Colorization;
 import com.threerings.media.image.ColorPository;
+import com.threerings.media.image.Colorization;
 import com.threerings.media.tile.Colorizer;
+
 import com.threerings.miso.data.ObjectInfo;
+
 import com.threerings.stage.client.SceneColorizer;
 
 class BaseColorizer implements Colorizer {

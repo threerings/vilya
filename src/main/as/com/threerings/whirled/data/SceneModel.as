@@ -21,13 +21,13 @@
 
 package com.threerings.whirled.data {
 
-import com.threerings.util.ClassUtil;
-import com.threerings.util.Cloneable;
-
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 import com.threerings.io.SimpleStreamableObject;
 import com.threerings.io.TypedArray;
+
+import com.threerings.util.ClassUtil;
+import com.threerings.util.Cloneable;
 
 /**
  * The scene model is the bare bones representation of the data for a

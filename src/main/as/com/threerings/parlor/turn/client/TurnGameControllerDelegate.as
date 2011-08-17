@@ -23,8 +23,8 @@ package com.threerings.parlor.turn.client {
 
 import com.threerings.util.Name;
 
-import com.threerings.presents.dobj.AttributeChangedEvent;
 import com.threerings.presents.dobj.AttributeChangeListener;
+import com.threerings.presents.dobj.AttributeChangedEvent;
 
 import com.threerings.crowd.data.BodyObject;
 import com.threerings.crowd.data.PlaceConfig;
@@ -34,7 +34,6 @@ import com.threerings.crowd.util.CrowdContext;
 import com.threerings.parlor.game.client.GameController;
 import com.threerings.parlor.game.client.GameControllerDelegate;
 import com.threerings.parlor.game.data.GameObject;
-
 import com.threerings.parlor.turn.data.TurnGameObject;
 
 /**

@@ -21,13 +21,13 @@
 
 package com.threerings.whirled.spot.data {
 
-import com.threerings.util.Arrays;
-import com.threerings.util.ClassUtil;
-
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 import com.threerings.io.SimpleStreamableObject;
 import com.threerings.io.TypedArray;
+
+import com.threerings.util.Arrays;
+import com.threerings.util.ClassUtil;
 
 import com.threerings.whirled.data.AuxModel;
 import com.threerings.whirled.data.SceneModel;

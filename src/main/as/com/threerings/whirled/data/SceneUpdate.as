@@ -23,13 +23,12 @@ package com.threerings.whirled.data {
 
 import flash.errors.IllegalOperationError;
 
-import com.threerings.util.Joiner;
-
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 import com.threerings.io.Streamable;
 
 import com.threerings.util.Cloneable;
+import com.threerings.util.Joiner;
 import com.threerings.util.Log;
 
 /**

@@ -20,7 +20,6 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 package com.threerings.whirled.spot.client {
-import com.threerings.crowd.client.CrowdClient;
 import com.threerings.util.Log;
 import com.threerings.util.ResultListener;
 
@@ -28,7 +27,6 @@ import com.threerings.presents.client.BasicDirector;
 import com.threerings.presents.client.Client;
 import com.threerings.presents.client.ClientEvent;
 import com.threerings.presents.client.ConfirmAdapter;
-import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.dobj.AttributeChangeListener;
 import com.threerings.presents.dobj.AttributeChangedEvent;
 import com.threerings.presents.dobj.DObject;
@@ -38,6 +36,7 @@ import com.threerings.presents.dobj.Subscriber;
 
 import com.threerings.crowd.chat.client.ChatDirector;
 import com.threerings.crowd.chat.data.ChatCodes;
+import com.threerings.crowd.client.CrowdClient;
 import com.threerings.crowd.client.LocationAdapter;
 import com.threerings.crowd.client.LocationDirector;
 import com.threerings.crowd.data.BodyObject;
@@ -46,8 +45,6 @@ import com.threerings.crowd.data.PlaceObject;
 import com.threerings.whirled.client.SceneDirector;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.ScenePlace;
-import com.threerings.whirled.util.WhirledContext;
-
 import com.threerings.whirled.spot.data.ClusteredBodyObject;
 import com.threerings.whirled.spot.data.Location;
 import com.threerings.whirled.spot.data.Portal;
@@ -56,6 +53,7 @@ import com.threerings.whirled.spot.data.SpotCodes;
 import com.threerings.whirled.spot.data.SpotMarshaller;
 import com.threerings.whirled.spot.data.SpotScene;
 import com.threerings.whirled.spot.data.SpotSceneObject;
+import com.threerings.whirled.util.WhirledContext;
 
 /**
  * Extends the standard scene director with facilities to move between locations within a scene.
@@ -463,7 +461,9 @@ public class SpotSceneDirector extends BasicDirector
 }
 
 import com.threerings.io.TypedArray;
+
 import com.threerings.crowd.data.PlaceConfig;
+
 import com.threerings.whirled.client.SceneDirector;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.spot.client.SpotService_SpotSceneMoveListener;

@@ -22,6 +22,7 @@
 package com.threerings.whirled.zone.client {
 
 import com.threerings.io.TypedArray;
+
 import com.threerings.util.Log;
 import com.threerings.util.ResultListener;
 
@@ -38,11 +39,9 @@ import com.threerings.whirled.client.SceneDirector_MoveHandler;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.SceneUpdate;
 import com.threerings.whirled.util.WhirledContext;
-
 import com.threerings.whirled.zone.client.ZoneService_ZoneMoveListener;
 import com.threerings.whirled.zone.data.ZoneSummary;
 import com.threerings.whirled.zone.util.ZoneUtil;
-
 
 public class ZoneDirector extends BasicDirector
     implements ZoneReceiver, ZoneService_ZoneMoveListener, SceneDirector_MoveHandler

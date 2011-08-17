@@ -22,6 +22,7 @@
 package com.threerings.whirled.util {
 
 import com.threerings.crowd.data.PlaceConfig;
+
 import com.threerings.whirled.data.Scene;
 import com.threerings.whirled.data.SceneModel;
 

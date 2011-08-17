@@ -23,22 +23,23 @@ package com.threerings.stage.client {
 
 import flash.display.DisplayObject;
 
-import com.threerings.miso.client.MisoScenePanel;
-import com.threerings.miso.util.MisoContext;
-import com.threerings.miso.util.MisoSceneMetrics;
-import com.threerings.miso.util.MisoUtil;
-import com.threerings.miso.client.SceneBlock;
-import com.threerings.miso.data.MisoSceneModel;
-import com.threerings.util.Iterator;
-import com.threerings.util.MathUtil;
-import com.threerings.whirled.spot.data.Portal;
-import com.threerings.whirled.spot.data.SpotScene;
-import com.threerings.whirled.spot.data.SpotSceneModel;
-import com.threerings.stage.data.StageLocation;
-
 import as3isolib.display.IsoSprite;
 import as3isolib.display.IsoView;
 import as3isolib.display.scene.IsoScene;
+
+import com.threerings.util.Iterator;
+
+import com.threerings.miso.client.MisoScenePanel;
+import com.threerings.miso.client.SceneBlock;
+import com.threerings.miso.data.MisoSceneModel;
+import com.threerings.miso.util.MisoContext;
+import com.threerings.miso.util.MisoSceneMetrics;
+import com.threerings.miso.util.MisoUtil;
+
+import com.threerings.whirled.spot.data.Portal;
+import com.threerings.whirled.spot.data.SpotScene;
+
+import com.threerings.stage.data.StageLocation;
 
 public class StageSceneBlock extends SceneBlock
 {

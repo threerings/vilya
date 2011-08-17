@@ -21,17 +21,18 @@
 
 package com.threerings.stage.data {
 
+import com.threerings.io.ObjectInputStream;
+import com.threerings.io.ObjectOutputStream;
+import com.threerings.io.SimpleStreamableObject;
+
 import com.threerings.util.ClassUtil;
 import com.threerings.util.DirectionCodes;
 import com.threerings.util.DirectionUtil;
 import com.threerings.util.Hashable;
 
-import com.threerings.io.SimpleStreamableObject;
-import com.threerings.io.ObjectInputStream;
-import com.threerings.io.ObjectOutputStream;
+import com.threerings.whirled.spot.data.Location;
 
 import com.threerings.stage.data.StageLocation;
-import com.threerings.whirled.spot.data.Location;
 
 /**
  * Contains information on a scene occupant's position and orientation.

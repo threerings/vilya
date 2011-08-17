@@ -21,15 +21,15 @@
 
 package com.threerings.parlor.game.data {
 
+import com.threerings.io.ObjectInputStream;
+import com.threerings.io.ObjectOutputStream;
+import com.threerings.io.TypedArray;
+
 import com.threerings.util.ClassUtil;
 import com.threerings.util.Cloneable;
 import com.threerings.util.Hashable;
 import com.threerings.util.Name;
 import com.threerings.util.StringUtil;
-
-import com.threerings.io.ObjectInputStream;
-import com.threerings.io.ObjectOutputStream;
-import com.threerings.io.TypedArray;
 
 import com.threerings.crowd.data.PlaceConfig;
 

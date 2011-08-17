@@ -21,19 +21,13 @@
 
 package com.threerings.parlor.client {
 
-import mx.containers.Grid;
-
 import mx.controls.CheckBox;
 import mx.controls.ComboBox;
 import mx.controls.Label;
 
-import com.threerings.flex.GridUtil;
-
 import com.threerings.parlor.data.RangeParameter;
 import com.threerings.parlor.data.TableConfig;
 import com.threerings.parlor.data.ToggleParameter;
-import com.threerings.parlor.util.ParlorContext;
-
 import com.threerings.parlor.game.client.FlexGameConfigurator;
 import com.threerings.parlor.game.data.GameConfig;
 

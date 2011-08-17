@@ -24,19 +24,20 @@ package com.threerings.stage.client {
 import flash.display.DisplayObject;
 import flash.display.Sprite;
 
-import com.threerings.cast.CharacterSprite;
+import as3isolib.display.IsoSprite;
+
 import com.threerings.util.DirectionCodes;
-import com.threerings.media.Tickable;
+
 import com.threerings.media.util.Path;
 import com.threerings.media.util.Pathable;
+
+import com.threerings.cast.CharacterSprite;
+
 import com.threerings.miso.client.PriorityIsoDisplayObject;
 import com.threerings.miso.util.MisoSceneMetrics;
 import com.threerings.miso.util.MisoUtil;
-import com.threerings.stage.data.StageLocation;
 
-import as3isolib.display.IsoSprite;
-import as3isolib.display.scene.IsoScene;
-import as3isolib.graphics.SolidColorFill;
+import com.threerings.stage.data.StageLocation;
 
 public class CharacterIsoSprite extends IsoSprite
     implements Pathable, PriorityIsoDisplayObject

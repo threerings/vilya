@@ -21,11 +21,10 @@
 
 package com.threerings.stage.data {
 
-import com.threerings.crowd.data.PlaceConfig;
-import com.threerings.io.ObjectInputStream;
-import com.threerings.io.ObjectOutputStream;
-import com.threerings.stage.client.StageSceneController;
 import com.threerings.crowd.client.PlaceController;
+import com.threerings.crowd.data.PlaceConfig;
+
+import com.threerings.stage.client.StageSceneController;
 
 /**
  * Place configuration for the main isometric scenes in Stage.

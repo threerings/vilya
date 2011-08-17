@@ -21,20 +21,17 @@
 
 package com.threerings.parlor.data {
 
-import com.threerings.util.Arrays;
-import com.threerings.util.ClassUtil;
-import com.threerings.util.Hashable;
-import com.threerings.util.Joiner;
-import com.threerings.util.Name;
-
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 import com.threerings.io.TypedArray;
 
+import com.threerings.util.Arrays;
+import com.threerings.util.Hashable;
+import com.threerings.util.Joiner;
+import com.threerings.util.Name;
+
 import com.threerings.presents.dobj.DSet;
 import com.threerings.presents.dobj.DSet_Entry;
-
-import com.threerings.crowd.data.BodyObject;
 
 import com.threerings.parlor.game.data.GameConfig;
 

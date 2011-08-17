@@ -21,13 +21,14 @@
 
 package com.threerings.parlor.client {
 
-import com.threerings.parlor.data.TableConfig;
-import com.threerings.parlor.game.data.GameConfig;
-import com.threerings.presents.client.Client;
+import com.threerings.util.Name;
+
 import com.threerings.presents.client.InvocationService;
 import com.threerings.presents.client.InvocationService_InvocationListener;
 import com.threerings.presents.client.InvocationService_ResultListener;
-import com.threerings.util.Name;
+
+import com.threerings.parlor.data.TableConfig;
+import com.threerings.parlor.game.data.GameConfig;
 
 /**
  * An ActionScript version of the Java TableService interface.

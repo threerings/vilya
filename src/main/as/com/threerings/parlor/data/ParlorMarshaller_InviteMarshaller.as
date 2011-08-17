@@ -21,8 +21,9 @@
 
 package com.threerings.parlor.data {
 
-import com.threerings.parlor.client.ParlorService_InviteListener;
 import com.threerings.presents.data.InvocationMarshaller_ListenerMarshaller;
+
+import com.threerings.parlor.client.ParlorService_InviteListener;
 
 /**
  * Marshalls instances of the ParlorService_InviteMarshaller interface.

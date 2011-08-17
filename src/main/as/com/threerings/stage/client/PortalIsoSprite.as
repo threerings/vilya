@@ -22,14 +22,13 @@
 package com.threerings.stage.client {
 
 import flash.display.Bitmap;
-import flash.display.BitmapData;
 import flash.display.DisplayObject;
-
 import flash.geom.Point;
 
 import as3isolib.display.IsoSprite;
 
 import com.threerings.miso.client.PriorityIsoDisplayObject;
+
 import com.threerings.whirled.spot.data.Portal;
 
 public class PortalIsoSprite extends IsoSprite

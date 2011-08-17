@@ -24,11 +24,13 @@ package com.threerings.stage.data {
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 
-import com.threerings.stage.data.StageSceneModel;
 import com.threerings.util.Integer;
 import com.threerings.util.StreamableHashMap;
-import com.threerings.whirled.spot.data.SpotSceneModel;
+
 import com.threerings.whirled.data.SceneModel;
+import com.threerings.whirled.spot.data.SpotSceneModel;
+
+import com.threerings.stage.data.StageSceneModel;
 
 /**
  * Extends the basic scene model with the notion of a scene type and

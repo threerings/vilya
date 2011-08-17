@@ -21,17 +21,18 @@
 
 package com.threerings.parlor.data {
 
-import com.threerings.parlor.client.ParlorService;
-import com.threerings.parlor.client.ParlorService_InviteListener;
-import com.threerings.parlor.game.data.GameConfig;
-import com.threerings.presents.client.Client;
+import com.threerings.util.Integer;
+import com.threerings.util.Name;
+
 import com.threerings.presents.client.InvocationService_ConfirmListener;
 import com.threerings.presents.client.InvocationService_InvocationListener;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.presents.data.InvocationMarshaller_ConfirmMarshaller;
 import com.threerings.presents.data.InvocationMarshaller_ListenerMarshaller;
-import com.threerings.util.Integer;
-import com.threerings.util.Name;
+
+import com.threerings.parlor.client.ParlorService;
+import com.threerings.parlor.client.ParlorService_InviteListener;
+import com.threerings.parlor.game.data.GameConfig;
 
 /**
  * Provides the implementation of the <code>ParlorService</code> interface

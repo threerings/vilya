@@ -22,6 +22,7 @@
 package com.threerings.stage.data {
 
 import com.threerings.io.ObjectInputStream;
+
 import com.threerings.whirled.spot.data.SpotSceneObject;
 
 public class StageSceneObject extends SpotSceneObject

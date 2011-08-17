@@ -21,48 +21,47 @@
 
 package com.threerings.stage.client {
 
-import flash.display.DisplayObject;
-
-import flash.geom.Point;
-import flash.geom.Rectangle;
-
 import flash.events.Event;
 import flash.events.MouseEvent;
+import flash.geom.Point;
 
-import com.threerings.cast.CharacterSprite;
-import com.threerings.crowd.client.OccupantObserver;
+import as3isolib.geom.Pt;
 
-import com.threerings.crowd.data.OccupantInfo;
-import com.threerings.crowd.data.PlaceObject;
-import com.threerings.media.Tickable;
-import com.threerings.media.util.LineSegmentPath;
-import com.threerings.media.util.Path;
 import com.threerings.util.Controller;
-import com.threerings.util.Integer;
 import com.threerings.util.Iterator;
 import com.threerings.util.Log;
 import com.threerings.util.Map;
 import com.threerings.util.Maps;
 import com.threerings.util.MathUtil;
 import com.threerings.util.StringUtil;
+
+import com.threerings.presents.dobj.EntryUpdatedEvent;
+import com.threerings.presents.dobj.SetAdapter;
+import com.threerings.presents.dobj.SetListener;
+
+import com.threerings.crowd.client.OccupantObserver;
+import com.threerings.crowd.data.OccupantInfo;
+import com.threerings.crowd.data.PlaceObject;
+import com.threerings.crowd.util.CrowdContext;
+
+import com.threerings.media.Tickable;
+import com.threerings.media.util.LineSegmentPath;
+import com.threerings.media.util.Path;
+
+import com.threerings.cast.CharacterSprite;
+
+import com.threerings.miso.util.MisoSceneMetrics;
+import com.threerings.miso.util.MisoUtil;
+
 import com.threerings.whirled.spot.data.Location;
 import com.threerings.whirled.spot.data.Portal;
 import com.threerings.whirled.spot.data.SceneLocation;
 import com.threerings.whirled.spot.data.SpotCodes;
 import com.threerings.whirled.spot.data.SpotSceneObject;
-import com.threerings.whirled.util.WhirledContext;
-import com.threerings.stage.data.StageSceneObject;
+
 import com.threerings.stage.data.StageLocation;
+import com.threerings.stage.data.StageSceneObject;
 import com.threerings.stage.util.StageContext;
-import com.threerings.crowd.util.CrowdContext;
-import com.threerings.presents.dobj.EntryUpdatedEvent;
-import com.threerings.presents.dobj.SetAdapter;
-import com.threerings.presents.dobj.SetListener;
-
-import com.threerings.miso.util.MisoSceneMetrics;
-import com.threerings.miso.util.MisoUtil;
-
-import as3isolib.geom.Pt;
 
 public class CrowdStageScenePanel extends StageScenePanel
     implements OccupantObserver, Tickable

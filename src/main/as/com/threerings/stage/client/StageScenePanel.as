@@ -23,25 +23,26 @@ package com.threerings.stage.client {
 
 import flash.display.DisplayObject;
 
+import as3isolib.display.IsoSprite;
+import as3isolib.display.scene.IsoScene;
+
 import com.threerings.util.Controller;
-import com.threerings.util.Iterator;
 import com.threerings.util.Log;
-import com.threerings.whirled.data.SceneUpdate;
-import com.threerings.whirled.spot.data.Portal;
+
 import com.threerings.media.tile.Colorizer;
-import com.threerings.media.tile.Tile;
+
 import com.threerings.miso.client.MisoScenePanel;
 import com.threerings.miso.client.PriorityIsoDisplayObject;
 import com.threerings.miso.client.SceneBlock;
-import com.threerings.miso.client.TileIsoSprite;
 import com.threerings.miso.data.ObjectInfo;
 import com.threerings.miso.util.MisoSceneMetrics;
+
+import com.threerings.whirled.data.SceneUpdate;
+import com.threerings.whirled.spot.data.Portal;
+
 import com.threerings.stage.data.StageMisoSceneModel;
 import com.threerings.stage.data.StageScene;
 import com.threerings.stage.util.StageContext;
-
-import as3isolib.display.IsoSprite;
-import as3isolib.display.scene.IsoScene;
 
 /**
  * Eventually responsible for rendering a stage scene - but for now it's a stub.

@@ -21,13 +21,14 @@
 
 package com.threerings.stage.data {
 
+import com.threerings.util.Integer;
+
 import com.threerings.miso.data.SparseMisoSceneModel;
+import com.threerings.miso.data.SparseMisoSceneModel_Section;
+
 import com.threerings.whirled.data.AuxModel;
 import com.threerings.whirled.data.SceneModel;
-import com.threerings.io.ObjectInputStream;
-import com.threerings.io.ObjectOutputStream;
-import com.threerings.miso.data.SparseMisoSceneModel_Section;
-import com.threerings.util.Integer;
+
 import com.threerings.stage.data.StageMisoSceneModel;
 
 /**

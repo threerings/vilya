@@ -22,6 +22,7 @@
 package com.threerings.parlor.util {
 
 import com.threerings.crowd.util.CrowdContext;
+
 import com.threerings.parlor.client.ParlorDirector;
 
 /**

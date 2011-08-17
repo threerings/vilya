@@ -21,8 +21,10 @@
 
 package com.threerings.stage.data {
 
-import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.util.Iterator;
+
+import com.threerings.crowd.data.PlaceConfig;
+
 import com.threerings.whirled.data.SceneImpl;
 import com.threerings.whirled.spot.data.Portal;
 import com.threerings.whirled.spot.data.SpotScene;

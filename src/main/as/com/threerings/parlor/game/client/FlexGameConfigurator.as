@@ -21,17 +21,15 @@
 
 package com.threerings.parlor.game.client {
 
-import mx.core.Container;
-import mx.core.UIComponent;
-
 import mx.containers.Grid;
 import mx.containers.GridItem;
 import mx.containers.GridRow;
-
-import com.threerings.flex.GridUtil;
+import mx.core.Container;
+import mx.core.UIComponent;
 
 import com.threerings.parlor.game.data.GameConfig;
-import com.threerings.parlor.util.ParlorContext;
+
+import com.threerings.flex.GridUtil;
 
 /**
  * Provides the base from which interfaces can be built to configure games prior to starting them.

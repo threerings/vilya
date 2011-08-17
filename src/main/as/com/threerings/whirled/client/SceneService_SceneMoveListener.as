@@ -21,9 +21,12 @@
 
 package com.threerings.whirled.client {
 
-import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.io.TypedArray;
+
 import com.threerings.presents.client.InvocationService_InvocationListener;
+
+import com.threerings.crowd.data.PlaceConfig;
+
 import com.threerings.whirled.data.SceneModel;
 
 /**

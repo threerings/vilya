@@ -21,16 +21,14 @@
 
 package com.threerings.whirled.spot.data {
 
-import com.threerings.util.ClassUtil;
-import com.threerings.util.Cloneable;
-import com.threerings.util.Hashable;
-import com.threerings.util.Joiner;
-
 import com.threerings.io.ObjectInputStream;
 import com.threerings.io.ObjectOutputStream;
 import com.threerings.io.SimpleStreamableObject;
 
+import com.threerings.util.ClassUtil;
+import com.threerings.util.Cloneable;
 import com.threerings.util.Hashable;
+import com.threerings.util.Joiner;
 
 /**
  * Represents an exit to another scene. A body sprite would walk over to a

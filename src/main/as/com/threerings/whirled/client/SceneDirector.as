@@ -24,12 +24,12 @@ package com.threerings.whirled.client {
 import flash.errors.IOError;
 import flash.errors.IllegalOperationError;
 
+import com.threerings.io.TypedArray;
+
 import com.threerings.util.Log;
 import com.threerings.util.Map;
 import com.threerings.util.Maps;
 import com.threerings.util.ResultListener;
-
-import com.threerings.io.TypedArray;
 
 import com.threerings.presents.client.BasicDirector;
 import com.threerings.presents.client.Client;
