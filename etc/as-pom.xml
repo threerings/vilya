@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.threerings</groupId>
   <artifactId>vilyalib</artifactId>
   <packaging>swc</packaging>
   <version>1.4-SNAPSHOT</version>
-  <name>vilya</name>
+
+  <name>Vilya for ActionScript</name>
   <description>Facilities for making networked multiplayer games.</description>
   <url>http://code.google.com/p/vilya/</url>
   <issueManagement>
@@ -26,30 +29,20 @@
   <dependencies>
     <dependency>
       <groupId>com.threerings</groupId>
-      <artifactId>aspirin</artifactId>
-      <version>1.6</version>
-      <scope>compile</scope>
-      <type>swc</type>
-    </dependency>
-    <dependency>
-      <groupId>as3isolib</groupId>
-      <artifactId>as3isolib-fp9</artifactId>
-      <version>r298</version>
-      <scope>compile</scope>
-      <type>swc</type>
-    </dependency>
-    <dependency>
-      <groupId>com.threerings</groupId>
       <artifactId>naryalib</artifactId>
-      <version>1.8</version>
-      <scope>compile</scope>
+      <version>1.9</version>
       <type>swc</type>
     </dependency>
     <dependency>
       <groupId>com.threerings</groupId>
       <artifactId>nenyalib</artifactId>
       <version>1.2</version>
-      <scope>compile</scope>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>as3isolib</groupId>
+      <artifactId>as3isolib-fp9</artifactId>
+      <version>r298</version>
       <type>swc</type>
     </dependency>
   </dependencies>

@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.threerings</groupId>
-  <artifactId>vilya</artifactId>
-  <packaging>jar</packaging>
-  <version>1.4-SNAPSHOT</version>
-  <name>vilya</name>
-  <description>Facilities for making networked multiplayer games.</description>
-  <url>http://github.com/threerings/vilya/</url>
-  <issueManagement>
-    <url>http://github.com/threerings/vilya/issues</url>
-  </issueManagement>
-
   <parent>
     <groupId>org.sonatype.oss</groupId>
     <artifactId>oss-parent</artifactId>
     <version>7</version>
   </parent>
+
+  <groupId>com.threerings</groupId>
+  <artifactId>vilya</artifactId>
+  <packaging>jar</packaging>
+  <version>1.4-SNAPSHOT</version>
+
+  <name>Vilya</name>
+  <description>Facilities for making networked multiplayer games.</description>
+  <url>http://github.com/threerings/vilya/</url>
+  <issueManagement>
+    <url>http://github.com/threerings/vilya/issues</url>
+  </issueManagement>
 
   <licenses>
     <license>
@@ -36,7 +39,7 @@
 
   <scm>
     <connection>scm:git:git://github.com/threerings/vilya.git</connection>
-    <developerConnection>scm:git:git@github.com:threerings/vilya.git</developerConnection>
+    <developerConnection>scm:svn:svn+ssh://src.earth.threerings.net/vilya/trunk</developerConnection>
     <url>http://github.com/threerings/vilya/</url>
   </scm>
 
@@ -48,79 +51,73 @@
   </repositories>
 
   <dependencies>
+    <!-- exported dependencies -->
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
       <version>10.0</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.google.inject</groupId>
       <artifactId>guice</artifactId>
       <version>2.0</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.samskivert</groupId>
       <artifactId>samskivert</artifactId>
-      <version>1.3</version>
-      <scope>compile</scope>
+      <version>1.5</version>
     </dependency>
     <dependency>
       <groupId>com.threerings</groupId>
       <artifactId>narya</artifactId>
-      <version>1.8</version>
-      <scope>compile</scope>
+      <version>1.9</version>
     </dependency>
     <dependency>
       <groupId>com.threerings</groupId>
       <artifactId>nenya</artifactId>
       <version>1.2</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>javax.annotation</groupId>
       <artifactId>jsr250-api</artifactId>
       <version>1.0</version>
-      <scope>compile</scope>
     </dependency>
 
+    <!-- optional dependencies -->
     <dependency>
       <groupId>commons-digester</groupId>
       <artifactId>commons-digester</artifactId>
       <version>2.0</version>
-      <scope>compile</scope>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>com.samskivert</groupId>
       <artifactId>depot</artifactId>
-      <version>1.2</version>
-      <scope>compile</scope>
+      <version>1.5</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>javassist</groupId>
       <artifactId>javassist</artifactId>
       <version>3.8.0.GA</version>
-      <scope>compile</scope>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>com.megginson.sax</groupId>
       <artifactId>xml-writer</artifactId>
       <version>0.2</version>
-      <scope>compile</scope>
       <optional>true</optional>
     </dependency>
 
+    <!-- test dependencies -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.8.1</version>
+      <version>4.10</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
+
   <build>
     <plugins>
       <plugin>
@@ -157,7 +154,6 @@
             <link>http://depot.googlecode.com/svn/apidocs/</link>
             <link>http://docs.guava-libraries.googlecode.com/git/javadoc/</link>
             <link>http://google-web-toolkit.googlecode.com/svn/javadoc/2.1/</link>
-            <link>http://evgeny-goldin.org/ant/api/</link>
           </links>
         </configuration>
       </plugin>
