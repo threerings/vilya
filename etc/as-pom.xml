@@ -6,7 +6,7 @@
   <groupId>com.threerings</groupId>
   <artifactId>vilyalib</artifactId>
   <packaging>swc</packaging>
-  <version>1.4</version>
+  <version>1.5-SNAPSHOT</version>
 
   <name>Vilya for ActionScript</name>
   <description>Facilities for making networked multiplayer games.</description>
