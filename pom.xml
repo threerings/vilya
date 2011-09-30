@@ -10,7 +10,7 @@
   <groupId>com.threerings</groupId>
   <artifactId>vilya</artifactId>
   <packaging>jar</packaging>
-  <version>1.4</version>
+  <version>1.5-SNAPSHOT</version>
 
   <name>Vilya</name>
   <description>Facilities for making networked multiplayer games.</description>
@@ -36,9 +36,9 @@
   </developers>
 
   <scm>
-    <connection>scm:git:git://github.com/threerings/vilya.git/tags/vilya-1.4</connection>
-    <developerConnection>scm:svn:svn+ssh://src.earth.threerings.net/vilya/tags/vilya-1.4</developerConnection>
-    <url>http://github.com/threerings/vilya/tags/vilya-1.4</url>
+    <connection>scm:git:git://github.com/threerings/vilya.git</connection>
+    <developerConnection>scm:svn:svn+ssh://src.earth.threerings.net/vilya/trunk</developerConnection>
+    <url>http://github.com/threerings/vilya/</url>
   </scm>
 
   <repositories>
