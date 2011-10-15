@@ -7,7 +7,7 @@
   <property name="classes.dir"  location="${deploy.dir}/classes"/>
   <property name="tclasses.dir" location="${deploy.dir}/test-classes"/>
 
-  <property name="ooo-build.vers" value="2.5"/>
+  <property name="ooo-build.vers" value="2.9"/>
   <ant antfile="etc/bootstrap.xml"/>
   <import file="${user.home}/.m2/ooo-build/${ooo-build.vers}/ooo-build.xml"/>
 
@@ -235,10 +235,16 @@
     </genascript>
   </target>
 
-  <target name="maven-deploy" depends="dist,aslib"
+  <target name="install" depends="dist,aslib"
+          description="Installs artifacts to local Maven repository.">
+    <maveninstall file="${deploy.dir}/${ant.project.name}.jar" pom="pom.xml"/>
+    <maveninstall file="${deploy.dir}/${ant.project.name}lib.swc" pom="etc/as-pom.xml"/>
+  </target>
+
+  <target name="deploy" depends="dist,aslib,tests,javadoc"
           description="Deploys our build artifacts to a Maven repository.">
-    <jar basedir="${src.dir}" destfile="${deploy.dir}/${ant.project.name}-sources.jar"/>
-    <mavendeploy file="${deploy.dir}/${ant.project.name}.jar" srcdir="${src.dir}" pom="pom.xml"/>
+    <mavendeploy file="${deploy.dir}/${ant.project.name}.jar" pom="pom.xml"
+                 srcdir="${src.dir}" docdir="${deploy.dir}/docs"/>
     <mavendeploy file="${deploy.dir}/${ant.project.name}lib.swc" pom="etc/as-pom.xml"/>
   </target>
 </project>
