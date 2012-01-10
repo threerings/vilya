@@ -158,7 +158,7 @@ public class SimulatorApp
         // wholly independent thread to wait for the server to be ready as
         // in normal circumstances they are entirely different processes;
         // so we just wait half a second which does the job
-        new Interval() {
+        new Interval(Interval.RUN_DIRECT) {
             @Override
             public void expired () {
                 _client.getParlorContext().getClient().logon();

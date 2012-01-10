@@ -52,6 +52,7 @@ public class RobotPlayer extends Interval
      */
     public RobotPlayer (Component target, KeyTranslator xlate)
     {
+        super(Interval.RUN_DIRECT);
         // save off references
         _target = target;
         _xlate = xlate;
