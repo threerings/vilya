@@ -51,34 +51,19 @@
   <dependencies>
     <!-- exported dependencies -->
     <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>11.0.1</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.inject</groupId>
-      <artifactId>guice</artifactId>
-      <version>2.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.samskivert</groupId>
-      <artifactId>samskivert</artifactId>
-      <version>1.5</version>
+      <groupId>com.threerings</groupId>
+      <artifactId>ooo-util</artifactId>
+      <version>1.1</version>
     </dependency>
     <dependency>
       <groupId>com.threerings</groupId>
       <artifactId>narya</artifactId>
-      <version>1.9</version>
+      <version>1.10</version>
     </dependency>
     <dependency>
       <groupId>com.threerings</groupId>
       <artifactId>nenya</artifactId>
       <version>1.2</version>
-    </dependency>
-    <dependency>
-      <groupId>javax.annotation</groupId>
-      <artifactId>jsr250-api</artifactId>
-      <version>1.0</version>
     </dependency>
 
     <!-- optional dependencies -->
