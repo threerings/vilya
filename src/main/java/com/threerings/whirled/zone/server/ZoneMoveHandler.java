@@ -86,7 +86,7 @@ public class ZoneMoveHandler extends AbstractSceneMoveHandler
         int ploid = scmgr.getPlaceObject().getOid();
         PlaceConfig config = _locman.moveTo(_body, ploid);
 
-        // now that we've moved, we can update the user object with the new scene and zone ids
+        // now that we've moved, we can update the user object with the and zone id
         ((ZonedBodyObject)_body).setZoneId(_summary.zoneId);
 
         // check to see if they need a newer version of the scene data
