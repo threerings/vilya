@@ -87,12 +87,7 @@ public class ZoneMoveHandler extends AbstractSceneMoveHandler
         PlaceConfig config = _locman.moveTo(_body, ploid);
 
         // now that we've moved, we can update the user object with the new scene and zone ids
-        _body.startTransaction();
-        try {
-            ((ZonedBodyObject)_body).setZoneId(_summary.zoneId);
-        } finally {
-            _body.commitTransaction();
-        }
+        ((ZonedBodyObject)_body).setZoneId(_summary.zoneId);
 
         // check to see if they need a newer version of the scene data
         ZoneService.ZoneMoveListener listener = (ZoneService.ZoneMoveListener)_listener;
