@@ -27,6 +27,16 @@
     </path>
   </target>
 
+  <target name="-prepare-as" depends="-prepare">
+    <maventaskdef groupId="com.threerings.ant" artifactId="actionscript" version="1.4"/>
+    <checkflex/> <!-- if flexsdk.dir is not already set, tries to infer it -->
+    <if><not><isset property="flexsdk.dir"/></not><then>
+      <echo>***</echo>
+      <echo>Not compiling Nenya ActionScript library. Set flexsdk.dir to enable.</echo>
+      <echo>***</echo>
+    </then></if>
+  </target>
+
   <target name="-preptools" depends="-prepare">
     <artifact:dependencies pathId="tools.classpath">
       <dependency groupId="com.threerings" artifactId="narya-tools" version="1.11"/>
@@ -70,7 +80,8 @@
     </instream>
   </target>
 
-  <target name="aslib" depends="-prepare" description="Builds the ActionScript code">
+  <target name="aslib" depends="-prepare-as" if="flexsdk.dir"
+          description="Builds the ActionScript code">
     <maventaskdef groupId="com.threerings.ant" artifactId="actionscript" version="1.4"/>
     <compc srcdir="${asrc.dir}" libpath="${aslib.path}"
         dest="${deploy.dir}/${ant.project.name}lib.swc"/>
@@ -235,16 +246,20 @@
     </genascript>
   </target>
 
-  <target name="install" depends="dist,aslib"
-          description="Installs artifacts to local Maven repository.">
-    <maveninstall file="${deploy.dir}/${ant.project.name}.jar" pom="pom.xml"/>
+  <target name="-as-install" depends="aslib" if="flexsdk.dir">
     <maveninstall file="${deploy.dir}/${ant.project.name}lib.swc" pom="etc/as-pom.xml"/>
   </target>
+  <target name="install" depends="dist,-as-install"
+          description="Installs artifacts to local Maven repository.">
+    <maveninstall file="${deploy.dir}/${ant.project.name}.jar" pom="pom.xml"/>
+  </target>
 
+  <target name="-as-deploy" depends="aslib" if="flexsdk.dir">
+    <mavendeploy file="${deploy.dir}/${ant.project.name}lib.swc" pom="etc/as-pom.xml"/>
+  </target>
   <target name="deploy" depends="dist,aslib,tests,javadoc"
           description="Deploys our build artifacts to a Maven repository.">
     <mavendeploy file="${deploy.dir}/${ant.project.name}.jar" pom="pom.xml"
                  srcdir="${src.dir}" docdir="${deploy.dir}/docs"/>
-    <mavendeploy file="${deploy.dir}/${ant.project.name}lib.swc" pom="etc/as-pom.xml"/>
   </target>
 </project>
