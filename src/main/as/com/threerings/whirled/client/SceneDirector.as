@@ -431,7 +431,7 @@ public class SceneDirector extends BasicDirector
             } else {
                 log.info("Delaying forced move because we have a move pending",
                     "pendId", _pendingData.sceneId, "reqId", sceneId);
-                addPendingForcedMove(new function() :void {
+                addPendingForcedMove(function() :void {
                     forcedMove(sceneId);
                 });
             }
