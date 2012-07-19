@@ -696,9 +696,9 @@ public class GameManager extends PlaceManager
     }
 
     @Override
-    protected boolean handleManagerCalls ()
+    protected boolean allowManagerCall (String method)
     {
-        return true;
+        return "playerReady".equals(method) || super.allowManagerCall(method);
     }
 
     /**
