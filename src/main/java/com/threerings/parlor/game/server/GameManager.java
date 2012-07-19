@@ -695,6 +695,12 @@ public class GameManager extends PlaceManager
         return (player instanceof BodyObject) ? (BodyObject) player : null;
     }
 
+    @Override
+    protected boolean handleManagerCalls ()
+    {
+        return true;
+    }
+
     /**
      * Returns true if this game requires a no-show timer. The default implementation returns true
      * for non-party games and false for party games. Derived classes may wish to change or augment
