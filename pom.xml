@@ -10,7 +10,7 @@
   <groupId>com.threerings</groupId>
   <artifactId>vilya</artifactId>
   <packaging>jar</packaging>
-  <version>1.5-SNAPSHOT</version>
+  <version>1.4.2</version>
 
   <name>Vilya</name>
   <description>Facilities for making networked multiplayer games.</description>
