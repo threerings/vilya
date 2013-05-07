@@ -68,6 +68,12 @@
 
     <!-- optional dependencies -->
     <dependency>
+      <groupId>com.threerings</groupId>
+      <artifactId>nenya-tools</artifactId>
+      <version>1.5</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
       <groupId>commons-digester</groupId>
       <artifactId>commons-digester</artifactId>
       <version>2.0</version>
