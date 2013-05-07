@@ -37,7 +37,7 @@
 
   <scm>
     <connection>scm:git:git://github.com/threerings/vilya.git</connection>
-    <developerConnection>scm:svn:svn+ssh://src.earth.threerings.net/vilya/trunk</developerConnection>
+    <developerConnection>scm:git:git@github.com:threerings/vilya.git</developerConnection>
     <url>http://github.com/threerings/vilya/</url>
   </scm>
 
