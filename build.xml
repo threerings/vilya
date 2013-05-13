@@ -1,9 +1,9 @@
 <?xml version="1.0" standalone="yes"?>
 <project name="vilya" default="compile" basedir="." xmlns:artifact="urn:maven-artifact-ant">
   <property name="deploy.dir"  location="dist"/>
-  <property name="src.dir"     location="src/main/java"/>
-  <property name="asrc.dir"    location="src/main/as"/>
-  <property name="tsrc.dir"    location="src/test/java"/>
+  <property name="src.dir"     location="core/src/main/java"/>
+  <property name="asrc.dir"    location="aslib/src/main/as"/>
+  <property name="tsrc.dir"    location="core/src/test/java"/>
   <property name="classes.dir"  location="${deploy.dir}/classes"/>
   <property name="tclasses.dir" location="${deploy.dir}/test-classes"/>
 
@@ -12,9 +12,14 @@
   <import file="${user.home}/.m2/ooo-build/${ooo-build.vers}/ooo-build.xml"/>
 
   <target name="-prepare" depends="-init-ooo">
-    <mavendep pom="pom.xml" id="compile"/>
-    <mavendep pom="etc/as-pom.xml" pathProp="aslib.path"/>
-    <mavendep pom="pom.xml" id="test" scope="test"/>
+    <mavendep pom="core/pom.xml" id="compile"/>
+    <!-- we can't use <mavendep> here because we need to exclude our pom depends -->
+    <artifact:dependencies filesetId="aslib.fileset" cacheDependencyRefs="true" type="swc"
+      dependencyRefsBuildFile="${deploy.dir}/aslib-pom.dependencies">
+      <pom file="aslib/pom.xml"/>
+    </artifact:dependencies>
+    <pathconvert pathsep="," property="aslib.path" refid="aslib.fileset"/>
+    <mavendep pom="core/pom.xml" id="test" scope="test"/>
     <mkdir dir="${deploy.dir}"/>
     <path id="built.classpath">
       <path refid="compile.path"/>
@@ -50,8 +55,8 @@
     <delete dir="${deploy.dir}/docs"/>
     <delete failonerror="false"><fileset dir="${deploy.dir}" includes="*.jar"/></delete>
     <delete failonerror="false"><fileset dir="${deploy.dir}" includes="*.swc"/></delete>
-    <cleanmavendepcache pom="pom.xml"/>
-    <cleanmavendepcache pom="etc/as-pom.xml"/>
+    <cleanmavendepcache pom="core/pom.xml"/>
+    <cleanmavendepcache pom="aslib/pom.xml"/>
     <cleanmavendepcache id="test"/>
   </target>
 
@@ -61,12 +66,12 @@
 
   <target name="compile" depends="-prepare" description="Builds the Java code.">
     <mkdir dir="${classes.dir}"/>
-    <copy todir="${classes.dir}"><fileset dir="src/main/resources" includes="**"/></copy>
+    <copy todir="${classes.dir}"><fileset dir="core/src/main/resources" includes="**"/></copy>
     <ooojavac version="1.5" srcdir="${src.dir}" destdir="${classes.dir}"
         classpathref="compile.path"/>
 
     <mkdir dir="${tclasses.dir}"/>
-    <copy todir="${tclasses.dir}"><fileset dir="src/test/resources" includes="**"/></copy>
+    <copy todir="${tclasses.dir}"><fileset dir="core/src/test/resources" includes="**"/></copy>
     <ooojavac srcdir="${tsrc.dir}" destdir="${tclasses.dir}" version="1.5"
         classpathref="test.classpath"/>
   </target>
@@ -247,18 +252,20 @@
   </target>
 
   <target name="-as-install" depends="aslib" if="flexsdk.dir">
-    <maveninstall file="${deploy.dir}/${ant.project.name}lib.swc" pom="etc/as-pom.xml"/>
+    <maveninstall file="${deploy.dir}/${ant.project.name}lib.swc" pom="aslib/pom.xml"/>
   </target>
   <target name="install" depends="dist,-as-install"
           description="Installs artifacts to local Maven repository.">
-    <maveninstall file="${deploy.dir}/${ant.project.name}.jar" pom="pom.xml"/>
+    <maveninstall file="pom.xml" pom="pom.xml"/>
+    <maveninstall file="${deploy.dir}/${ant.project.name}.jar" pom="core/pom.xml"/>
   </target>
 
   <target name="-as-deploy" depends="aslib" if="flexsdk.dir">
-    <mavendeploy file="${deploy.dir}/${ant.project.name}lib.swc" pom="etc/as-pom.xml"/>
+    <mavendeploy file="${deploy.dir}/${ant.project.name}lib.swc" pom="aslib/pom.xml"/>
   </target>
   <target name="deploy" depends="dist,-as-deploy,tests,javadoc"
           description="Deploys our build artifacts to a Maven repository.">
+    <mavendeploy file="pom.xml" pom="pom.xml"/>
     <mavendeploy file="${deploy.dir}/${ant.project.name}.jar" pom="pom.xml"
                  srcdir="${src.dir}" docdir="${deploy.dir}/docs"/>
   </target>
