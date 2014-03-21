@@ -26,6 +26,7 @@ import com.threerings.presents.dobj.DObject;
 import com.threerings.presents.dobj.OidList;
 
 import com.threerings.crowd.chat.data.SpeakObject;
+import com.threerings.crowd.chat.data.UserMessage;
 
 /**
  * Used to dispatch chat in clusters.
@@ -48,8 +49,14 @@ public class ClusterObject extends DObject
     public void applyToListeners (ListenerOp op)
     {
         for (int ii = 0, ll = occupants.size(); ii < ll; ii++) {
-            op.apply(occupants.get(ii));
+            op.apply(this, occupants.get(ii));
         }
+    }
+
+    // from SpeakObject
+    public String getChatIdentifier (UserMessage msg)
+    {
+        return SpeakObject.DEFAULT_IDENTIFIER;
     }
 
     // AUTO-GENERATED: METHODS START
