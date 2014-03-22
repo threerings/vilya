@@ -266,7 +266,7 @@
   <target name="deploy" depends="dist,-as-deploy,tests,javadoc"
           description="Deploys our build artifacts to a Maven repository.">
     <mavendeploy file="pom.xml" pom="pom.xml"/>
-    <mavendeploy file="${deploy.dir}/${ant.project.name}.jar" pom="pom.xml"
+    <mavendeploy file="${deploy.dir}/${ant.project.name}.jar" pom="core/pom.xml"
                  srcdir="${src.dir}" docdir="${deploy.dir}/docs"/>
   </target>
 </project>
