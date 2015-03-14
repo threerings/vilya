@@ -24,8 +24,6 @@ package com.threerings.whirled.spot.tools.xml;
 import junit.framework.Test;
 import junit.framework.TestCase;
 
-import com.samskivert.test.TestUtil;
-
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.spot.data.Location;
 import com.threerings.whirled.tools.xml.SceneParser;
@@ -50,8 +48,8 @@ public class SpotSceneParserTest extends TestCase
                     return new StageLocation(); // breaks package, but ok
                 }
             });
-            String tspath = TestUtil.getResourcePath(TEST_SCENE_PATH);
-            SceneModel scene = parser.parseScene(tspath);
+            SceneModel scene = parser.parseScene(
+                getClass().getClassLoader().getResourceAsStream(TEST_SCENE_PATH));
             System.out.println("Parsed " + scene + ".");
 
         } catch (Exception e) {

@@ -23,6 +23,7 @@ package com.threerings.whirled.tools.xml;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.xml.sax.SAXException;
 
@@ -90,15 +91,23 @@ public class SceneParser
     }
 
     /**
-     * Parses the XML file at the specified path into a scene model
-     * instance.
+     * Parses the XML file at the specified path into a scene model instance.
      */
     public SceneModel parseScene (String path)
         throws IOException, SAXException
     {
+        return parseScene(new FileInputStream(path));
+    }
+
+    /**
+     * Parses the XML file provided by {@code scene} into a scene model instance.
+     */
+    public SceneModel parseScene (InputStream scene)
+        throws IOException, SAXException
+    {
         _model = null;
         _digester.push(this);
-        _digester.parse(new FileInputStream(path));
+        _digester.parse(scene);
         return _model;
     }
 

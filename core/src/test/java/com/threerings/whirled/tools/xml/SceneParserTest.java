@@ -24,8 +24,6 @@ package com.threerings.whirled.tools.xml;
 import junit.framework.Test;
 import junit.framework.TestCase;
 
-import com.samskivert.test.TestUtil;
-
 import com.threerings.whirled.data.SceneModel;
 
 public class SceneParserTest extends TestCase
@@ -40,8 +38,8 @@ public class SceneParserTest extends TestCase
     {
         try {
             SceneParser parser = new SceneParser("scene");
-            String tspath = TestUtil.getResourcePath(TEST_SCENE_PATH);
-            SceneModel scene = parser.parseScene(tspath);
+            SceneModel scene = parser.parseScene(
+                getClass().getClassLoader().getResourceAsStream(TEST_SCENE_PATH));
             System.out.println("Parsed " + scene + ".");
 
         } catch (Exception e) {
