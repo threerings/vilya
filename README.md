@@ -50,7 +50,7 @@ Maven project, add the following to your `pom.xml`:
       <dependency>
         <groupId>com.threerings</groupId>
         <artifactId>vilya</artifactId>
-        <version>1.3</version>
+        <version>1.6</version>
       </dependency>
     </dependencies>
 
@@ -59,8 +59,8 @@ remove the vast majority of the boilerplate above.
 
 If you prefer to download pre-built binaries, those can be had here:
 
-* [vilya-1.3.jar](http://threerings.github.com/maven-repo/com/threerings/vilya/1.3/vilya-1.3.jar)
-* [vilyalib-1.3.swc](http://threerings.github.com/maven-repo/com/threerings/vilyalib/1.3/vilyalib-1.3.swc)
+* [vilya-1.6.jar](http://threerings.github.com/maven-repo/com/threerings/vilya/1.6/vilya-1.6.jar)
+* [vilyalib-1.6.swc](http://threerings.github.com/maven-repo/com/threerings/vilyalib/1.6/vilyalib-a1.6.swc)
 
 Distribution
 ------------
