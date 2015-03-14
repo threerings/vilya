@@ -40,12 +40,6 @@ A Maven repository containing released versions of the Vilya Java and
 ActionScript artifacts are maintained here. To add a Vilya dependency to a
 Maven project, add the following to your `pom.xml`:
 
-    <repositories>
-      <repository>
-        <id>ooo-repo</id>
-        <url>http://threerings.github.com/maven-repo</url>
-      </repository>
-    </repositories>
     <dependencies>
       <dependency>
         <groupId>com.threerings</groupId>
