@@ -57,7 +57,7 @@ import static com.threerings.micasa.Log.log;
  * <p> Presently, the lobby registry is configured with lobbies via the server configuration. An
  * example configuration follows:
  *
- * <pre>
+ * <pre>{@code
  * lobby_ids = foolobby, barlobby, bazlobby
  *
  * foolobby.mgrclass = com.threerings.micasa.lobby.LobbyManager
@@ -70,7 +70,7 @@ import static com.threerings.micasa.Log.log;
  * barlobby.ugi = <universal game identifier>
  * barlobby.name = <human readable lobby name>
  * ...
- * </pre>
+ * }</pre>
  *
  * This information will be loaded from the MiCasa server configuration which means that it should
  * live in <code>rsrc/config/micasa/server.properties</code> somwhere in the classpath where it
@@ -80,11 +80,11 @@ import static com.threerings.micasa.Log.log;
  * identify every type of game and also to classify it according to meaningful keywords. It is best
  * described with a few examples:
  *
- * <pre>
+ * <pre>{@code
  * backgammon,board,strategy
  * spades,card,partner
  * yahtzee,dice
- * </pre>
+ * }</pre>
  *
  * As you can see, a UGI should start with an identifier uniquely identifying the type of game and
  * can be followed by a list of keywords that classify it as a member of a particular category of

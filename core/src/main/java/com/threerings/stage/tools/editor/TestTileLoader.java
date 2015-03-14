@@ -76,7 +76,7 @@ public class TestTileLoader implements TileSetIDBroker
      * will be used to create tilesets for all the .png files in the same
      * directory.
      *
-     * @return a HashIntMap containing a TileSetId -> TileSet mapping for
+     * @return a HashIntMap containing a {@code TileSetId -> TileSet} mapping for
      * all the tilesets we create.
      */
     public HashIntMap<TileSet> loadTestTiles ()

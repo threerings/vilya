@@ -96,7 +96,7 @@ public class Rating
      * Computes a ratings adjustment for the given player, using a modified
      * version of the FIDE Chess rating system as:
      *
-     * <pre>
+     * <pre>{@code
      * adjustment = K(W - We)
      *
      * where:
@@ -112,7 +112,7 @@ public class Rating
      * We = expected score (win expectancy) as determined by:
      *
      *     We = 1 / (10^(dR/400) + 1)
-     * </pre>
+     * }</pre>
      *
      * @param W the win value the game in question (1.0 means the player won,
      * 0.5 means they drew, 0 means they lost).
@@ -144,8 +144,8 @@ public class Rating
     }
 
     /**
-    * Returns true if this rating is provisional (experience < 20).
-    */
+     * Returns true if this rating is provisional ({@code experience < 20}).
+     */
     public boolean isProvisional ()
     {
         return (experience < 20);

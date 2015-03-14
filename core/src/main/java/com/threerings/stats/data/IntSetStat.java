@@ -46,7 +46,7 @@ public class IntSetStat extends SetStat<Integer>
     /**
      * Constructs a new IntSetStat that will store up to maxSize ints.
      *
-     * @param maxSize the maximum number of ints to store in the IntSetStat. Must be <= 255.
+     * @param maxSize the maximum number of ints to store in the IntSetStat. Must be {@code <= 255}.
      */
     public IntSetStat (int maxSize)
     {
