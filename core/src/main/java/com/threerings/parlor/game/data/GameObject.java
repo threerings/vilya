@@ -238,6 +238,11 @@ public class GameObject extends PlaceObject
         return -1;
     }
 
+    @SuppressWarnings("deprecation")
+    public void sendPlayerReady  () {
+        manager.invoke("playerReady");
+    }
+
     /**
      * Used by {@link #isActivePlayer} to determine if the supplied status is associated with an
      * active player (one that has not resigned from the game and/or left the game room).
