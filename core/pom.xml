@@ -16,24 +16,24 @@
     <dependency>
       <groupId>com.threerings</groupId>
       <artifactId>ooo-util</artifactId>
-      <version>1.4.1</version>
+      <version>1.5-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.threerings</groupId>
       <artifactId>narya</artifactId>
-      <version>1.15</version>
+      <version>1.17-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.threerings</groupId>
       <artifactId>nenya</artifactId>
-      <version>1.6</version>
+      <version>1.7-SNAPSHOT</version>
     </dependency>
 
     <!-- optional dependencies -->
     <dependency>
       <groupId>com.threerings</groupId>
       <artifactId>nenya-tools</artifactId>
-      <version>1.6</version>
+      <version>1.7-SNAPSHOT</version>
       <optional>true</optional>
     </dependency>
     <dependency>
@@ -45,7 +45,7 @@
     <dependency>
       <groupId>com.samskivert</groupId>
       <artifactId>depot</artifactId>
-      <version>1.7</version>
+      <version>1.8-SNAPSHOT</version>
       <optional>true</optional>
     </dependency>
     <dependency>
