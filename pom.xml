@@ -5,7 +5,7 @@
   <groupId>com.threerings</groupId>
   <artifactId>vilya-parent</artifactId>
   <packaging>pom</packaging>
-  <version>1.7</version>
+  <version>1.8-SNAPSHOT</version>
 
   <name>Vilya</name>
   <description>Facilities for making networked multiplayer games.</description>
@@ -34,7 +34,7 @@
     <connection>scm:git:git://github.com/threerings/vilya.git</connection>
     <developerConnection>scm:git:git@github.com:threerings/vilya.git</developerConnection>
     <url>https://github.com/threerings/vilya/</url>
-    <tag>vilya-1.7</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <modules>
