@@ -22,9 +22,12 @@
 package com.threerings.whirled.spot.data;
 
 import java.awt.Rectangle;
+import java.io.IOException;
 
 import com.samskivert.util.StringUtil;
 
+import com.threerings.io.ObjectInputStream;
+import com.threerings.io.ObjectOutputStream;
 import com.threerings.util.ActionScript;
 
 import com.threerings.presents.dobj.DSet;
@@ -46,6 +49,31 @@ public class Cluster extends Rectangle
             _key = Integer.valueOf(clusterOid);
         }
         return _key;
+    }
+
+    /**
+     * Writes our streamable fields. This is needed because we can no longer reflectively access the
+     * internals of java.awt.Rectangle.
+     */
+    public void writeObject (ObjectOutputStream out)
+        throws IOException
+    {
+        out.writeInt(this.x);
+        out.writeInt(this.y);
+        out.writeInt(this.width);
+        out.writeInt(this.height);
+        out.writeInt(this.clusterOid);
+    }
+
+    /**
+     * Reads our streamable fields. This is needed because we can no longer reflectively access the
+     * internals of java.awt.Rectangle.
+     */
+    public void readObject (ObjectInputStream in)
+        throws IOException, ClassNotFoundException
+    {
+        this.setBounds(in.readInt(), in.readInt(), in.readInt(), in.readInt());
+        this.clusterOid = in.readInt();
     }
 
     @Override
