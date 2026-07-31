@@ -21,6 +21,7 @@
 
 package com.threerings.whirled.data;
 
+import com.threerings.crowd.client.PlaceController;
 import com.threerings.crowd.data.PlaceConfig;
 
 import com.threerings.whirled.client.SceneController;
@@ -41,5 +42,13 @@ public class DefaultSceneConfig extends PlaceConfig
     public String getManagerClassName ()
     {
         return "com.threerings.whirled.server.SceneManager";
+    }
+
+    @Override
+    public PlaceController createController ()
+    {
+        // matches the pre-abstract PlaceConfig default: this class is a placeholder that
+        // was never meant to construct a real (abstract) SceneController
+        throw new RuntimeException("DefaultSceneConfig.createController() must be overridden.");
     }
 }
