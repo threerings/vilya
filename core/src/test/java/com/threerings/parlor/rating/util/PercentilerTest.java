@@ -70,7 +70,7 @@ public class PercentilerTest
     {
         // create a percentiler
         Percentiler tiler = new Percentiler();
-        Random rando = new Random();
+        Random rando = new Random(42);
 
         // add some random values
         for (int ii = 0; ii < 500; ii++) {
