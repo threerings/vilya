@@ -25,6 +25,7 @@ import javax.annotation.processing.Generated;
 
 import com.threerings.micasa.simulator.client.SimulatorService;
 import com.threerings.parlor.game.data.GameConfig;
+import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.data.InvocationMarshaller;
 
 /**
@@ -36,7 +37,7 @@ import com.threerings.presents.data.InvocationMarshaller;
  */
 @Generated(value={"com.threerings.presents.tools.GenServiceTask"},
            comments="Derived from SimulatorService.java.")
-public class SimulatorMarshaller extends InvocationMarshaller
+public class SimulatorMarshaller extends InvocationMarshaller<ClientObject>
     implements SimulatorService
 {
     /** The method id used to dispatch {@link #createGame} requests. */

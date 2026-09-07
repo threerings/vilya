@@ -25,6 +25,7 @@ import javax.annotation.processing.Generated;
 
 import com.threerings.parlor.card.data.Card;
 import com.threerings.parlor.card.trick.client.TrickCardGameService;
+import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.data.InvocationMarshaller;
 
 /**
@@ -36,7 +37,7 @@ import com.threerings.presents.data.InvocationMarshaller;
  */
 @Generated(value={"com.threerings.presents.tools.GenServiceTask"},
            comments="Derived from TrickCardGameService.java.")
-public class TrickCardGameMarshaller extends InvocationMarshaller
+public class TrickCardGameMarshaller extends InvocationMarshaller<ClientObject>
     implements TrickCardGameService
 {
     /** The method id used to dispatch {@link #playCard} requests. */

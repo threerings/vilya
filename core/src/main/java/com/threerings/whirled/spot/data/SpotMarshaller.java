@@ -25,6 +25,7 @@ import javax.annotation.processing.Generated;
 
 import com.threerings.crowd.data.PlaceConfig;
 import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.SceneUpdate;
@@ -39,7 +40,7 @@ import com.threerings.whirled.spot.client.SpotService;
  */
 @Generated(value={"com.threerings.presents.tools.GenServiceTask"},
            comments="Derived from SpotService.java.")
-public class SpotMarshaller extends InvocationMarshaller
+public class SpotMarshaller extends InvocationMarshaller<ClientObject>
     implements SpotService
 {
     /**

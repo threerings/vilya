@@ -24,6 +24,7 @@ package com.threerings.whirled.zone.data;
 import javax.annotation.processing.Generated;
 
 import com.threerings.crowd.data.PlaceConfig;
+import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.whirled.data.SceneModel;
 import com.threerings.whirled.data.SceneUpdate;
@@ -38,7 +39,7 @@ import com.threerings.whirled.zone.client.ZoneService;
  */
 @Generated(value={"com.threerings.presents.tools.GenServiceTask"},
            comments="Derived from ZoneService.java.")
-public class ZoneMarshaller extends InvocationMarshaller
+public class ZoneMarshaller extends InvocationMarshaller<ClientObject>
     implements ZoneService
 {
     /**

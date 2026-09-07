@@ -22,13 +22,14 @@
 package com.threerings.stage.client;
 
 import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.data.ClientObject;
 
 import com.threerings.miso.data.ObjectInfo;
 
 /**
  * Provides services relating to Stage scenes.
  */
-public interface StageSceneService extends InvocationService
+public interface StageSceneService extends InvocationService<ClientObject>
 {
     /**
      * Requests to add the supplied object to the current scene.

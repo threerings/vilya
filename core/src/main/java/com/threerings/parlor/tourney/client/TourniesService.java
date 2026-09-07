@@ -22,13 +22,14 @@
 package com.threerings.parlor.tourney.client;
 
 import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.data.ClientObject;
 
 import com.threerings.parlor.tourney.data.TourneyConfig;
 
 /**
  * Provices services for creating/modifying tournies.
  */
-public interface TourniesService extends InvocationService
+public interface TourniesService extends InvocationService<ClientObject>
 {
     /**
      * Creates a new tourney.

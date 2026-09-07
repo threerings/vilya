@@ -24,6 +24,7 @@ package com.threerings.parlor.client;
 import com.threerings.util.Name;
 
 import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.data.ClientObject;
 
 import com.threerings.parlor.game.data.GameConfig;
 
@@ -33,7 +34,7 @@ import com.threerings.parlor.game.data.GameConfig;
  * direct use of this class, instead they would make use of the programmatic interface provided by
  * the {@link ParlorDirector}.
  */
-public interface ParlorService extends InvocationService
+public interface ParlorService extends InvocationService<ClientObject>
 {
     /**
      * Used to communicate responses to {@link ParlorService#invite} requests.

@@ -25,6 +25,7 @@ import javax.annotation.processing.Generated;
 
 import com.threerings.parlor.tourney.client.TourniesService;
 import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.data.InvocationMarshaller;
 
 /**
@@ -36,7 +37,7 @@ import com.threerings.presents.data.InvocationMarshaller;
  */
 @Generated(value={"com.threerings.presents.tools.GenServiceTask"},
            comments="Derived from TourniesService.java.")
-public class TourniesMarshaller extends InvocationMarshaller
+public class TourniesMarshaller extends InvocationMarshaller<ClientObject>
     implements TourniesService
 {
     /** The method id used to dispatch {@link #createTourney} requests. */

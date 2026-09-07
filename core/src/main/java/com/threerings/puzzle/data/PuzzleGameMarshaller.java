@@ -23,6 +23,7 @@ package com.threerings.puzzle.data;
 
 import javax.annotation.processing.Generated;
 
+import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.puzzle.client.PuzzleGameService;
 
@@ -35,7 +36,7 @@ import com.threerings.puzzle.client.PuzzleGameService;
  */
 @Generated(value={"com.threerings.presents.tools.GenServiceTask"},
            comments="Derived from PuzzleGameService.java.")
-public class PuzzleGameMarshaller extends InvocationMarshaller
+public class PuzzleGameMarshaller extends InvocationMarshaller<ClientObject>
     implements PuzzleGameService
 {
     /** The method id used to dispatch {@link #updateProgress} requests. */

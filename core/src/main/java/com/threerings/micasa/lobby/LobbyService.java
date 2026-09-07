@@ -24,12 +24,13 @@ package com.threerings.micasa.lobby;
 import java.util.List;
 
 import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.data.ClientObject;
 
 /**
  * Provides an interface to the various parlor services that are directly
  * invokable by the client (by means of the invocation services).
  */
-public interface LobbyService extends InvocationService
+public interface LobbyService extends InvocationService<ClientObject>
 {
     /**
      * Used to communicate the results of a {@link LobbyService#getCategories} request.

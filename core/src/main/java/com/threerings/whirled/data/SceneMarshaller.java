@@ -24,6 +24,7 @@ package com.threerings.whirled.data;
 import javax.annotation.processing.Generated;
 
 import com.threerings.crowd.data.PlaceConfig;
+import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.whirled.client.SceneService;
 
@@ -36,7 +37,7 @@ import com.threerings.whirled.client.SceneService;
  */
 @Generated(value={"com.threerings.presents.tools.GenServiceTask"},
            comments="Derived from SceneService.java.")
-public class SceneMarshaller extends InvocationMarshaller
+public class SceneMarshaller extends InvocationMarshaller<ClientObject>
     implements SceneService
 {
     /**
