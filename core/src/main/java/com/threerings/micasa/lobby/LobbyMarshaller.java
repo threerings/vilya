@@ -23,6 +23,7 @@ package com.threerings.micasa.lobby;
 
 import javax.annotation.processing.Generated;
 
+import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.data.InvocationMarshaller;
 import java.util.List;
 
@@ -35,7 +36,7 @@ import java.util.List;
  */
 @Generated(value={"com.threerings.presents.tools.GenServiceTask"},
            comments="Derived from LobbyService.java.")
-public class LobbyMarshaller extends InvocationMarshaller
+public class LobbyMarshaller extends InvocationMarshaller<ClientObject>
     implements LobbyService
 {
     /**

@@ -26,6 +26,7 @@ import javax.annotation.processing.Generated;
 import com.threerings.parlor.client.ParlorService;
 import com.threerings.parlor.game.data.GameConfig;
 import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.util.Name;
 
@@ -38,7 +39,7 @@ import com.threerings.util.Name;
  */
 @Generated(value={"com.threerings.presents.tools.GenServiceTask"},
            comments="Derived from ParlorService.java.")
-public class ParlorMarshaller extends InvocationMarshaller
+public class ParlorMarshaller extends InvocationMarshaller<ClientObject>
     implements ParlorService
 {
     /**

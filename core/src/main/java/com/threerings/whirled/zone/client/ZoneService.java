@@ -22,6 +22,7 @@
 package com.threerings.whirled.zone.client;
 
 import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.data.ClientObject;
 
 import com.threerings.crowd.data.PlaceConfig;
 
@@ -32,7 +33,7 @@ import com.threerings.whirled.zone.data.ZoneSummary;
 /**
  * The client interface for zone related invocation services (e.g. moving between zones).
  */
-public interface ZoneService extends InvocationService
+public interface ZoneService extends InvocationService<ClientObject>
 {
     /** Used to deliver responses to {@link ZoneService#moveTo} requests. */
     public static interface ZoneMoveListener extends InvocationListener

@@ -22,6 +22,7 @@
 package com.threerings.puzzle.client;
 
 import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.data.ClientObject;
 
 import com.threerings.puzzle.data.Board;
 import com.threerings.puzzle.data.PuzzleCodes;
@@ -30,7 +31,7 @@ import com.threerings.puzzle.data.PuzzleCodes;
  * Provides services used by puzzle game clients to request that actions be taken by the puzzle
  * manager.
  */
-public interface PuzzleGameService extends InvocationService, PuzzleCodes
+public interface PuzzleGameService extends InvocationService<ClientObject>, PuzzleCodes
 {
     /**
      * Asks the puzzle manager to apply the supplied progress events for the specified puzzle round

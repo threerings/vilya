@@ -22,6 +22,7 @@
 package com.threerings.whirled.spot.client;
 
 import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.data.ClientObject;
 
 import com.threerings.whirled.client.SceneService;
 import com.threerings.whirled.spot.data.Location;
@@ -32,7 +33,7 @@ import com.threerings.whirled.spot.data.Location;
  * account). These services should not be used directly, but instead
  * should be accessed via the {@link SpotSceneDirector}.
  */
-public interface SpotService extends InvocationService
+public interface SpotService extends InvocationService<ClientObject>
 {
     /**
      * Used to communicate the response to a {@link SceneService#moveTo} request.

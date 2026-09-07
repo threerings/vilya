@@ -22,12 +22,13 @@
 package com.threerings.parlor.tourney.client;
 
 import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.data.ClientObject;
 
 /**
  * Provides tourney management services for the particular tourney this
  * service is attached to.
  */
-public interface TourneyService extends InvocationService
+public interface TourneyService extends InvocationService<ClientObject>
 {
     /**
      * Handles a request to join the tourney.

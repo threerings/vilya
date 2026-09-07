@@ -22,13 +22,14 @@
 package com.threerings.micasa.simulator.client;
 
 import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.data.ClientObject;
 
 import com.threerings.parlor.game.data.GameConfig;
 
 /**
  * Provides access to simulator invocation services.
  */
-public interface SimulatorService extends InvocationService
+public interface SimulatorService extends InvocationService<ClientObject>
 {
     /**
      * Requests that a new game be created.

@@ -25,6 +25,7 @@ import javax.annotation.processing.Generated;
 
 import com.threerings.miso.data.ObjectInfo;
 import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.data.ClientObject;
 import com.threerings.presents.data.InvocationMarshaller;
 import com.threerings.stage.client.StageSceneService;
 
@@ -37,7 +38,7 @@ import com.threerings.stage.client.StageSceneService;
  */
 @Generated(value={"com.threerings.presents.tools.GenServiceTask"},
            comments="Derived from StageSceneService.java.")
-public class StageSceneMarshaller extends InvocationMarshaller
+public class StageSceneMarshaller extends InvocationMarshaller<ClientObject>
     implements StageSceneService
 {
     /** The method id used to dispatch {@link #addObject} requests. */

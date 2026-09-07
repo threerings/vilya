@@ -22,13 +22,14 @@
 package com.threerings.parlor.card.trick.client;
 
 import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.data.ClientObject;
 
 import com.threerings.parlor.card.data.Card;
 
 /**
  * Service calls related to trick card games.
  */
-public interface TrickCardGameService extends InvocationService
+public interface TrickCardGameService extends InvocationService<ClientObject>
 {
     /**
      * Sends a group of cards to the player at the specified index.

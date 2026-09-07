@@ -24,6 +24,7 @@ package com.threerings.parlor.client;
 import com.threerings.util.Name;
 
 import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.data.ClientObject;
 
 import com.threerings.parlor.data.TableConfig;
 import com.threerings.parlor.game.data.GameConfig;
@@ -31,7 +32,7 @@ import com.threerings.parlor.game.data.GameConfig;
 /**
  * Provides table lobbying services.
  */
-public interface TableService extends InvocationService
+public interface TableService extends InvocationService<ClientObject>
 {
     /**
      * Requests that a new table be created.

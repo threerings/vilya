@@ -22,6 +22,7 @@
 package com.threerings.whirled.client;
 
 import com.threerings.presents.client.InvocationService;
+import com.threerings.presents.data.ClientObject;
 
 import com.threerings.crowd.data.PlaceConfig;
 
@@ -32,7 +33,7 @@ import com.threerings.whirled.data.SceneUpdate;
  * The scene service class provides the client interface to the scene related invocation services
  * (e.g. moving from scene to scene).
  */
-public interface SceneService extends InvocationService
+public interface SceneService extends InvocationService<ClientObject>
 {
     /**
      * Used to communicate the response to a {@link SceneService#moveTo} request.
