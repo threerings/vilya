@@ -30,6 +30,7 @@ import com.samskivert.util.IntListUtil;
 
 import com.threerings.crowd.client.PlaceController;
 import com.threerings.crowd.data.PlaceConfig;
+import com.threerings.crowd.data.PlaceObject;
 import com.threerings.crowd.util.CrowdContext;
 
 import com.threerings.media.FrameParticipant;
@@ -232,6 +233,16 @@ public abstract class DropControllerDelegate extends PuzzleControllerDelegate
         _fastDrop = false;
 
         // remove ourselves as a frame participant
+        _ctx.getFrameManager().removeFrameParticipant(this);
+    }
+
+    @Override
+    public void didLeavePlace (PlaceObject plobj)
+    {
+        super.didLeavePlace(plobj);
+
+        // a clear the controller left pending while the board was still settling never completes
+        // once the board is gone, so clearAction() can't be relied on to take us out of the ticks
         _ctx.getFrameManager().removeFrameParticipant(this);
     }
 

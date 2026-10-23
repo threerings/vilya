@@ -283,6 +283,10 @@ public abstract class PuzzleController extends GameController
         // clean up and clear out
         clearAction();
 
+        // a clear left pending (the board still settling) never completes once we've left, so the
+        // updater can't wait to see ACTION_CLEARED before it takes itself out of the ticks
+        _pctx.getFrameManager().removeFrameParticipant(_updater);
+
         // stop listening to key events..
         _pctx.getKeyDispatcher().removeGlobalKeyListener(_globalKeyListener);
 
