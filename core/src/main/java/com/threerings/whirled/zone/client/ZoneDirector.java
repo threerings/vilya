@@ -310,10 +310,10 @@ public class ZoneDirector extends BasicDirector
         // let our observers know that all is well on the western front
         for (ZoneObserver obs : _observers) {
             try {
-                if (data instanceof Integer) {
-                    obs.zoneWillChange(((Integer)data).intValue());
-                } else if (data instanceof ZoneSummary) {
-                    obs.zoneDidChange((ZoneSummary)data);
+                if (data instanceof Integer zoneId) {
+                    obs.zoneWillChange(zoneId.intValue());
+                } else if (data instanceof ZoneSummary summary) {
+                    obs.zoneDidChange(summary);
                 } else {
                     obs.zoneChangeFailed((String)data);
                 }

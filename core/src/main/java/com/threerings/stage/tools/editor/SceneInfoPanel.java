@@ -179,8 +179,8 @@ public class SceneInfoPanel extends JPanel
                     return;
                 }
                 String[] zations;
-                if (tset instanceof RecolorableTileSet) {
-                    zations = ((RecolorableTileSet) tset).getColorizations();
+                if (tset instanceof RecolorableTileSet rtset) {
+                    zations = rtset.getColorizations();
                 } else {
                     return;
                 }

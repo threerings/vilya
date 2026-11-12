@@ -289,8 +289,8 @@ public class EditorScenePanel extends StageScenePanel
 
             } else {
                 // delete the object tile over which the mouse is hovering
-                if (_hobject instanceof SceneObject) {
-                    deleteObject((SceneObject)_hobject);
+                if (_hobject instanceof SceneObject scobj) {
+                    deleteObject(scobj);
                 }
             }
             break;
@@ -319,7 +319,7 @@ public class EditorScenePanel extends StageScenePanel
         markCheckpoint();
 
         // bail if we're not hovering over a scene object
-        if (_hobject == null || !(_hobject instanceof SceneObject)) {
+        if (!(_hobject instanceof SceneObject scobj)) {
             return;
         }
 
@@ -329,7 +329,7 @@ public class EditorScenePanel extends StageScenePanel
         }
 
         // prepare and display our object editor dialog
-        _eobject = (SceneObject)_hobject;
+        _eobject = scobj;
         _objEditor.prepare(_eobject);
         EditorDialogUtil.display(_frame, _objEditor);
     }
@@ -337,11 +337,10 @@ public class EditorScenePanel extends StageScenePanel
     protected void selectTile (int x, int y)
     {
         // bail if we're not hovering over a scene object
-        if (_hobject == null || !(_hobject instanceof SceneObject)) {
+        if (!(_hobject instanceof SceneObject scObj)) {
             return;
         }
 
-        SceneObject scObj = (SceneObject)_hobject;
         int tileSetId = TileUtil.getTileSetId(scObj.info.tileId);
         int tileIndex = TileUtil.getTileIndex(scObj.info.tileId);
         _emodel.setTile(scObj.tile.key.tileSet, tileSetId, tileIndex);
@@ -517,8 +516,8 @@ public class EditorScenePanel extends StageScenePanel
         if (_ptile != null) {
             boolean changed;
 
-            if (_ptile instanceof ObjectTile) {
-                changed = updateObjectTileCoords(x, y, _ppos, (ObjectTile)_ptile);
+            if (_ptile instanceof ObjectTile otile) {
+                changed = updateObjectTileCoords(x, y, _ppos, otile);
                 if (changed) {
                     _pscobj.relocateObject(_metrics, _ppos.x, _ppos.y);
                 }
@@ -597,12 +596,10 @@ public class EditorScenePanel extends StageScenePanel
         super.hoverObjectChanged(oldHover, newHover);
 
         // we always repaint our objects when the hover changes
-        if (oldHover instanceof SceneObject) {
-            SceneObject oldhov = (SceneObject)oldHover;
+        if (oldHover instanceof SceneObject oldhov) {
             _remgr.invalidateRegion(oldhov.getObjectFootprint().getBounds());
         }
-        if (newHover instanceof SceneObject) {
-            SceneObject newhov = (SceneObject)newHover;
+        if (newHover instanceof SceneObject newhov) {
             _remgr.invalidateRegion(newhov.getObjectFootprint().getBounds());
         }
     }
@@ -734,8 +731,8 @@ public class EditorScenePanel extends StageScenePanel
 
         // if this is an object tile, create a temporary scene object we
         // can use to perform calculations with the object while placing
-        if (_ptile instanceof ObjectTile) {
-            _pscobj = new SceneObject(this, new ObjectInfo(0, _ppos.x, _ppos.y), (ObjectTile)tile);
+        if (tile instanceof ObjectTile otile) {
+            _pscobj = new SceneObject(this, new ObjectInfo(0, _ppos.x, _ppos.y), otile);
         } else {
             _pscobj = null;
         }
@@ -844,8 +841,7 @@ public class EditorScenePanel extends StageScenePanel
     {
         Polygon hpoly = null;
 
-        if (_hobject != null && _hobject instanceof SceneObject) {
-            SceneObject scobj = (SceneObject)_hobject;
+        if (_hobject instanceof SceneObject scobj) {
             hpoly = scobj.getObjectFootprint();
 
         }
@@ -885,8 +881,8 @@ public class EditorScenePanel extends StageScenePanel
         super.paintExtras(gfx, dirty);
 
         // we don't want to paint the 'extras' stuff to the copy..
-        if (gfx instanceof TGraphics2D) {
-            gfx = ((TGraphics2D) gfx).getPrimary();
+        if (gfx instanceof TGraphics2D tgfx) {
+            gfx = tgfx.getPrimary();
         }
 
         paintPortals(gfx);
@@ -1038,9 +1034,9 @@ public class EditorScenePanel extends StageScenePanel
      */
     protected boolean isTilePlacementValid (int x, int y, Tile tile)
     {
-        if (tile instanceof ObjectTile) {
+        if (tile instanceof ObjectTile otile) {
             // create a temporary scene object for this tile
-            SceneObject nobj = new SceneObject(this, new ObjectInfo(0, x, y), (ObjectTile)tile);
+            SceneObject nobj = new SceneObject(this, new ObjectInfo(0, x, y), otile);
             // report invalidity if overlaps any existing objects
             int ocount = _vizobjs.size();
             for (int ii = 0; ii < ocount; ii++) {

@@ -146,7 +146,7 @@ public class ZoneRegistry
                         int sceneVer, ZoneService.ZoneMoveListener listener)
         throws InvocationException
     {
-        if (!(caller instanceof ZonedBodyObject)) {
+        if (!(caller instanceof ZonedBodyObject zbody)) {
             log.warning("Request to switch zones by non-ZonedBodyObject",
                 "clobj", caller.getClass());
             throw new InvocationException(ZoneCodes.INTERNAL_ERROR);
@@ -155,7 +155,7 @@ public class ZoneRegistry
         // look up the caller's current zone id and make sure it is happy about their departure
         // from the current zone
         BodyObject body = _locator.forClient(caller);
-        ZoneManager ozmgr = getZoneManager(((ZonedBodyObject)caller).getZoneId());
+        ZoneManager ozmgr = getZoneManager(zbody.getZoneId());
         if (ozmgr != null) {
             String msg = ozmgr.ratifyBodyExit(body);
             if (msg != null) {

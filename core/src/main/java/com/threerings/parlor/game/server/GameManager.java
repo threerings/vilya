@@ -662,8 +662,7 @@ public class GameManager extends PlaceManager
     public boolean isPlayer (ClientObject client)
     {
         // players must have bodies
-        if (client != null && client instanceof BodyObject) {
-            BodyObject body = (BodyObject) client;
+        if (client instanceof BodyObject body) {
 
             // players must be occupants
             if (_gameobj.occupants.contains(body.getOid())) {
@@ -692,7 +691,7 @@ public class GameManager extends PlaceManager
     {
         // subclasses can be more restrictive here
         DObject player = _omgr.getObject(playerId);
-        return (player instanceof BodyObject) ? (BodyObject) player : null;
+        return (player instanceof BodyObject body) ? body : null;
     }
 
     @Override

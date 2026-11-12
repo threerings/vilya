@@ -378,10 +378,10 @@ public class SpotSceneDirector extends BasicDirector
         super.clientDidLogon(client);
 
         ClientObject clientObj = client.getClientObject();
-        if (clientObj instanceof ClusteredBodyObject) {
+        if (clientObj instanceof ClusteredBodyObject cbody) {
             // listen to the client object
             clientObj.addListener(this);
-            _self = (ClusteredBodyObject) clientObj;
+            _self = cbody;
 
             // we may need to subscribe to a cluster due to session resumption
             maybeUpdateCluster();

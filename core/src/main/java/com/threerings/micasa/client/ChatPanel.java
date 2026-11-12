@@ -249,8 +249,7 @@ public class ChatPanel extends JPanel
     // documentation inherited from interface ChatDisplay
     public boolean displayMessage (ChatMessage message, boolean displayed)
     {
-        if (message instanceof UserMessage) {
-            UserMessage msg = (UserMessage) message;
+        if (message instanceof UserMessage msg) {
             if (msg.localtype == ChatCodes.USER_CHAT_TYPE) {
                 append("[" + msg.speaker + " whispers] ", _nameStyle);
                 append(msg.message + "\n", _msgStyle);

@@ -37,7 +37,7 @@ public class ScenePlace extends Place
      */
     public static int getSceneId (Place place)
     {
-        return (place instanceof ScenePlace) ? ((ScenePlace)place).sceneId : -1;
+        return (place instanceof ScenePlace splace) ? splace.sceneId : -1;
     }
 
     /**

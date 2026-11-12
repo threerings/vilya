@@ -283,13 +283,13 @@ public class TileInfoPanel extends JSplitPane
             _selected = node;
 
             Object uobj = node.getUserObject();
-            if (!(uobj instanceof TileSetRecord)) {
+            if (!(uobj instanceof TileSetRecord tsr)) {
                 log.info("Eh? Non-TileSetRecord leaf",
                     "obj", uobj, "class", StringUtil.shortClassName(uobj));
                 return;
             }
 
-            tileSetSelected((TileSetRecord) uobj);
+            tileSetSelected(tsr);
             _quickList.clearSelection();
         }
     }
@@ -335,8 +335,8 @@ public class TileInfoPanel extends JSplitPane
         }
 
         TileManager tileMgr = _ctx.getTileManager();
-        if (tileMgr instanceof EditorTileManager) {
-            ((EditorTileManager)tileMgr).clearTestTileSets();
+        if (tileMgr instanceof EditorTileManager etmgr) {
+            etmgr.clearTestTileSets();
         }
 
         // insert the new test tiles
@@ -351,8 +351,8 @@ public class TileInfoPanel extends JSplitPane
                 _layerSets.get(lidx).add(rec);
             }
 
-            if (tileMgr instanceof EditorTileManager) {
-                ((EditorTileManager)tileMgr).addTestTileSet(tsid, set);
+            if (tileMgr instanceof EditorTileManager etmgr) {
+                etmgr.addTestTileSet(tsid, set);
             }
         }
 
@@ -527,8 +527,8 @@ public class TileInfoPanel extends JSplitPane
         Object src = e.getSource();
         if (src == _quickList) {
             Object o = _quickList.getSelectedValue();
-            if (o instanceof TileSetRecord) {
-                tileSetSelected((TileSetRecord) o);
+            if (o instanceof TileSetRecord tsr) {
+                tileSetSelected(tsr);
                 if (o != _selected.getUserObject()) {
                     _tsettree.clearSelection();
                 }
@@ -674,8 +674,7 @@ public class TileInfoPanel extends JSplitPane
 
         @Override
         public boolean equals (Object o) {
-            if (o instanceof TileSetRecord) {
-                TileSetRecord tsr = (TileSetRecord) o;
+            if (o instanceof TileSetRecord tsr) {
                 return ((tsr.layer == layer) && (tsr.tileSetId == tileSetId));
             }
             return false;

@@ -149,8 +149,8 @@ public class Card implements DSet.Entry, Comparable<Card>, CardCodes
     @Override
     public boolean equals (Object other)
     {
-        if (other instanceof Card) {
-            return _value == ((Card)other)._value;
+        if (other instanceof Card ocard) {
+            return _value == ocard._value;
         }
         else {
             return false;

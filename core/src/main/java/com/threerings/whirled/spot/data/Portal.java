@@ -100,8 +100,7 @@ public class Portal extends SimpleStreamableObject
     @Override
     public boolean equals (Object other)
     {
-        return (other instanceof Portal) &&
-            ((Portal) other).portalId == portalId;
+        return (other instanceof Portal oportal) && oportal.portalId == portalId;
     }
 
     /**

@@ -51,8 +51,8 @@ public class Participant extends SimpleStreamableObject
     @Override
     public boolean equals (Object other)
     {
-        if (other instanceof Participant) {
-            return ((Participant) other).username.equals(username);
+        if (other instanceof Participant opart) {
+            return opart.username.equals(username);
         }
         return false;
     }

@@ -312,14 +312,13 @@ public class SpotSceneManager extends SceneManager
 
         // otherwise see if they sent us the user's oid
         DObject tobj = _omgr.getObject(targetOid);
-        if (!(tobj instanceof BodyObject)) {
+        if (!(tobj instanceof BodyObject friend)) {
             log.info("Can't join cluster, missing target",
                 "creator", joiner.who(), "targetOid", targetOid);
             throw new InvocationException(NO_SUCH_CLUSTER);
         }
 
         // make sure we're in the same scene as said user
-        BodyObject friend = (BodyObject)tobj;
         if (friend.getPlaceOid() != joiner.getPlaceOid()) {
             log.info("Refusing cluster join from non-proximate user",
                 "joiner", joiner.who(), "jloc", joiner.location, "target", friend.who(),
@@ -384,8 +383,8 @@ public class SpotSceneManager extends SceneManager
     protected ClusterRecord getCluster (int bodyOid)
     {
         BodyObject bobj = (BodyObject)_omgr.getObject(bodyOid);
-        if (bobj instanceof ClusteredBodyObject) {
-            return _clusters.get(((ClusteredBodyObject)bobj).getClusterOid());
+        if (bobj instanceof ClusteredBodyObject cbody) {
+            return _clusters.get(cbody.getClusterOid());
         } else {
             return null;
         }

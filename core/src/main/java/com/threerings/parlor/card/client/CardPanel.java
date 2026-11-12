@@ -825,8 +825,7 @@ public abstract class CardPanel extends VirtualMediaPanel
         Sprite newHighestHit = _spritemgr.getHighestHitSprite(
             _mouseEvent.getX(), _mouseEvent.getY());
 
-        CardSprite newActiveCardSprite =
-            (newHighestHit instanceof CardSprite ? (CardSprite)newHighestHit : null);
+        CardSprite newActiveCardSprite = (newHighestHit instanceof CardSprite cs) ? cs : null;
 
         if (_activeCardSprite != newActiveCardSprite) {
             if (_activeCardSprite != null && isManaged(_activeCardSprite)) {
@@ -986,9 +985,8 @@ public abstract class CardPanel extends VirtualMediaPanel
 
         public boolean apply (Object observer)
         {
-            if (observer instanceof CardSpriteObserver) {
-                ((CardSpriteObserver)observer).cardSpriteClicked(_sprite,
-                    _me);
+            if (observer instanceof CardSpriteObserver cobs) {
+                cobs.cardSpriteClicked(_sprite, _me);
             }
             return true;
         }
@@ -1009,8 +1007,8 @@ public abstract class CardPanel extends VirtualMediaPanel
 
         public boolean apply (Object observer)
         {
-            if (observer instanceof CardSpriteObserver) {
-                ((CardSpriteObserver)observer).cardSpriteEntered(_sprite, _me);
+            if (observer instanceof CardSpriteObserver cobs) {
+                cobs.cardSpriteEntered(_sprite, _me);
             }
             return true;
         }
@@ -1031,8 +1029,8 @@ public abstract class CardPanel extends VirtualMediaPanel
 
         public boolean apply (Object observer)
         {
-            if (observer instanceof CardSpriteObserver) {
-                ((CardSpriteObserver)observer).cardSpriteExited(_sprite, _me);
+            if (observer instanceof CardSpriteObserver cobs) {
+                cobs.cardSpriteExited(_sprite, _me);
             }
             return true;
         }
@@ -1053,9 +1051,8 @@ public abstract class CardPanel extends VirtualMediaPanel
 
         public boolean apply (Object observer)
         {
-            if (observer instanceof CardSpriteObserver) {
-                ((CardSpriteObserver)observer).cardSpriteDragged(_sprite,
-                    _me);
+            if (observer instanceof CardSpriteObserver cobs) {
+                cobs.cardSpriteDragged(_sprite, _me);
             }
             return true;
         }

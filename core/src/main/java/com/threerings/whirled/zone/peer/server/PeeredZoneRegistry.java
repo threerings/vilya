@@ -111,12 +111,11 @@ public abstract class PeeredZoneRegistry extends ZoneRegistry
         int sceneVer, ZoneService.ZoneMoveListener listener)
         throws InvocationException
     {
-        if (!(caller instanceof BodyObject)) {
+        if (!(caller instanceof BodyObject body)) {
             log.warning("Request to switch zones by non-BodyObject " +
                         "[clobj=" + caller.getClass() + "].");
             throw new InvocationException(ZoneCodes.INTERNAL_ERROR);
         }
-        BodyObject body = (BodyObject)caller;
 
         PeerZoneMoveHandler handler = createMoveHandler(_locman, getZoneManager(zoneId),
             _screg, body, sceneId, sceneVer, listener);

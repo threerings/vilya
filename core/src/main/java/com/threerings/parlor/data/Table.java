@@ -421,7 +421,7 @@ public class Table
     @Override
     public boolean equals (Object other)
     {
-        return (other instanceof Table) && (tableId == ((Table) other).tableId);
+        return (other instanceof Table otable) && (tableId == otable.tableId);
     }
 
     @Override

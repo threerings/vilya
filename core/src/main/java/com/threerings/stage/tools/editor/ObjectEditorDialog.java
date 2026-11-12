@@ -125,8 +125,8 @@ public class ObjectEditorDialog extends EditorDialog
         Object[] qzations = null;
         if (tset != null) {
             String[] zations = null;
-            if (tset instanceof RecolorableTileSet) {
-                zations = ((RecolorableTileSet)tset).getColorizations();
+            if (tset instanceof RecolorableTileSet rtset) {
+                zations = rtset.getColorizations();
             }
             if (zations != null) {
                 pzations = computeZations(zations, 0);

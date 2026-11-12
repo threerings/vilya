@@ -66,8 +66,7 @@ public class SceneLocation extends SimpleStreamableObject
     @Override
     public boolean equals (Object other)
     {
-        return (other instanceof SceneLocation) &&
-            this.loc.equals(((SceneLocation) other).loc);
+        return (other instanceof SceneLocation oloc) && this.loc.equals(oloc.loc);
     }
 
     @Override

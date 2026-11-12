@@ -204,8 +204,7 @@ public class TableManager
 
         // if we're managing tables in a place, make sure the creator is an occupant of the place
         // in which they are requesting to create a table
-        if (_dobj instanceof PlaceObject &&
-            !((PlaceObject)_dobj).occupants.contains(creator.getOid())) {
+        if (_dobj instanceof PlaceObject plobj && !plobj.occupants.contains(creator.getOid())) {
             log.warning("Requested to create a table in a place not occupied by the creator",
                 "creator", creator, "ploid", _dobj.getOid());
             throw new InvocationException(INTERNAL_ERROR);

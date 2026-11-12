@@ -374,7 +374,7 @@ public class StageScenePanel extends MisoScenePanel
 
         dirtyCluster(shape);
         // clear out the hover object if this cluster was it
-        if (_hobject instanceof Cluster && ((Cluster)_hobject).clusterOid == clusterOid) {
+        if (_hobject instanceof Cluster cluster && cluster.clusterOid == clusterOid) {
             _hobject = null;
         }
         return true;
@@ -389,11 +389,11 @@ public class StageScenePanel extends MisoScenePanel
     {
         super.hoverObjectChanged(oldHover, newHover);
 
-        if (oldHover instanceof Cluster) {
-            dirtyCluster((Cluster)oldHover);
+        if (oldHover instanceof Cluster oldcluster) {
+            dirtyCluster(oldcluster);
         }
-        if (newHover instanceof Cluster) {
-            dirtyCluster((Cluster)newHover);
+        if (newHover instanceof Cluster newcluster) {
+            dirtyCluster(newcluster);
         }
     }
 
@@ -424,8 +424,7 @@ public class StageScenePanel extends MisoScenePanel
         }
 
         // if the current hover object is a cluster, see if we're still in that cluster
-        if (_hobject instanceof Cluster) {
-            Cluster cluster = (Cluster)_hobject;
+        if (_hobject instanceof Cluster cluster) {
             if (containsPoint(cluster, mx, my)) {
                 return cluster;
             }
@@ -521,9 +520,9 @@ public class StageScenePanel extends MisoScenePanel
                 drawCluster(gfx, clip, cluster);
             }
 
-        } else if (_hobject instanceof Cluster) {
+        } else if (_hobject instanceof Cluster cluster) {
             // or just draw the active cluster
-            drawCluster(gfx, clip, (Cluster)_hobject);
+            drawCluster(gfx, clip, cluster);
         }
 
         // put back daddy's things

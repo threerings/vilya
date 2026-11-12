@@ -495,8 +495,8 @@ public class DropSprite extends Sprite
         }
 
         public boolean apply (Object observer) {
-            if (observer instanceof DropSpriteObserver) {
-                ((DropSpriteObserver)observer).pieceMoved(_sprite, _when, _col, _row);
+            if (observer instanceof DropSpriteObserver dobs) {
+                dobs.pieceMoved(_sprite, _when, _col, _row);
             }
             return true;
         }

@@ -84,8 +84,8 @@ public class SpotSceneModel extends SimpleStreamableObject
     public static SpotSceneModel getSceneModel (SceneModel model)
     {
         for (AuxModel auxModel : model.auxModels) {
-            if (auxModel instanceof SpotSceneModel) {
-                return (SpotSceneModel)auxModel;
+            if (auxModel instanceof SpotSceneModel smodel) {
+                return smodel;
             }
         }
         return null;
