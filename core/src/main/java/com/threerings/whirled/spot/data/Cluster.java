@@ -80,11 +80,7 @@ public class Cluster extends Rectangle
     @ActionScript(omit=true)
     public boolean equals (Object other)
     {
-        if (other instanceof Cluster ocluster) {
-            return ocluster.clusterOid == clusterOid;
-        } else {
-            return false;
-        }
+        return other instanceof Cluster ocluster && ocluster.clusterOid == clusterOid;
     }
 
     @Override

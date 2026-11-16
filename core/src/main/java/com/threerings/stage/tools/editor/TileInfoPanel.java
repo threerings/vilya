@@ -674,10 +674,8 @@ public class TileInfoPanel extends JSplitPane
 
         @Override
         public boolean equals (Object o) {
-            if (o instanceof TileSetRecord tsr) {
-                return ((tsr.layer == layer) && (tsr.tileSetId == tileSetId));
-            }
-            return false;
+            return o instanceof TileSetRecord tsr &&
+                tsr.layer == layer && tsr.tileSetId == tileSetId;
         }
 
         @Override

@@ -94,12 +94,7 @@ public class StageLocation extends SimpleStreamableObject
     @Override
     public boolean equals (Object other)
     {
-        if (other instanceof StageLocation that) {
-            return (this.x == that.x) && (this.y == that.y);
-
-        } else {
-            return false;
-        }
+        return other instanceof StageLocation that && this.x == that.x && this.y == that.y;
     }
 
     /**

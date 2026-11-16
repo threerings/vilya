@@ -132,10 +132,8 @@ public abstract class GameConfig extends PlaceConfig
     @Override
     public boolean equals (Object other)
     {
-        if (!(other instanceof GameConfig that)) {
-            return false;
-        }
-        return (this.getGameId() == that.getGameId()) && (this.rated == that.rated);
+        return other instanceof GameConfig that &&
+            this.getGameId() == that.getGameId() && this.rated == that.rated;
     }
 
     /**
